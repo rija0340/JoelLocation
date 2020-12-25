@@ -4,10 +4,7 @@
 
 {% block body %}
 
-<div class="site">
-        
-
-        
+<div class="site">    
         <header>
             <div class="container">
                 <div class="row">
@@ -20,28 +17,30 @@
                         <div class="right-nav">
                             <span class="search-icon fa fa-search"></span>
                             <form action="#" class="search-form">
-                                <input type="search" placeholder="search now">
+                                <input type="search" placeholder="Rechercher">
                                 <button type="submit"><i class="fa fa-search"></i></button>
                             </form>
-                            <div class="header-social">
+                            <!-- <div class="header-social">
                                 <a href="#" class="fa fa-facebook"></a>
                                 <a href="#" class="fa fa-twitter"></a>
                                 <a href="#" class="fa fa-github"></a>
-                            </div>
+                            </div> -->
                         </div>
                         <nav id="menu" class="d-none d-lg-block">
                             <ul>
-                                <li class="current-menu-item has-child">
+                                <!-- <li class="current-menu-item has-child">
                                     <a href="index.html">Home</a>
                                     <ul class="sub-menu">
                                         <li><a href="index.html">Home - 01</a></li>
                                         <li><a href="index-2.html">Home - 02</a></li>
                                         <li><a href="index-3.html">Home - 03</a></li>
                                     </ul>
-                                </li>
-                                <li><a href="about.html">About</a></li>
-                                <li><a href="portfolio.html">Portfolio</a></li>
-                                <li class="has-child">
+                                </li> -->
+                                <li><a href="#">Accueil</a></li>
+                                <li><a href="#">A propos</a></li>
+                                <li><a href="#">Nos véhicule</a></li>
+                                <li><a href="#">Mon compte</a></li>
+                                <!-- <li class="has-child">
                                     <a href="#">Pages</a>
                                     <ul class="sub-menu">
                                         <li><a href="404.html">404</a></li>
@@ -56,8 +55,8 @@
                                         <li><a href="team.html">Team</a></li>
                                         <li><a href="testimonial.html">Testimonial</a></li>
                                     </ul>
-                                </li>
-                                <li><a href="contact.html">Contact</a></li>
+                                </li> -->
+                                <li><a href="#">Contact</a></li>
                             </ul>
                         </nav>
                     </div>
@@ -156,7 +155,8 @@
             </div>
         </div>
     </div>
-</div><div class="service-area bg2 sp">
+</div>
+<!-- <div class="service-area bg2 sp">
     <div class="container">
         <div class="section-title">
             <h2>Our Service</h2>
@@ -243,11 +243,12 @@
             </div>
         </div>
     </div>
-</div><div class="portfolio-area sp">
+</div> -->
+<div class="portfolio-area sp">
     <div class="container">
         <div class="section-title">
-            <h2>Latest Work</h2>
-            <p>Malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae.</p>
+            <h2>Nos Véhicules</h2>
+            <p>Vous pouvez choisir parmis les véhicules que nous offrons</p>
         </div>
         <div class="row">
             <div class="single-portfolio col-md-4">
@@ -349,15 +350,16 @@
         </div>
         <div class="row">
             <div class="col-12 text-center" data-margin="40px 0 0">
-                <a href="#" class="button">More Works</a>
+                <a href="#" class="button">Plus de véhicule</a>
             </div>
         </div>
     </div>
-</div><div class="testimonial-area sp bg1">
+</div>
+<div class="testimonial-area sp bg1">
     <div class="container">
         <div class="section-title white">
-            <h2>Clients Review</h2>
-            <p>Malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae.</p>
+            <h2>A propos de nous</h2>
+            <p>Les services apportés à nos clients sont notre priorité. Votre satisfaction compte.</p>
         </div>
         <div class="testimonial-slider">
             <div class="single-slide">
@@ -421,43 +423,29 @@
 </div><div class="faq-area sp bg2">
     <div class="container">
         <div class="section-title">
-            <h2>Frequently Asked Questions</h2>
-            <p>Malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae.</p>
+            <h2>Nous contactez</h2>
+            <p>Vous pouvez nous envoyer un message ici</p>
         </div>
         <div class="row">
-            <div class="col-md-6">
-                <div class="faq">
-                    <div class="single-item">
-                        <h4>Low Cost Advertising Available or Not?</h4>
-                        <div class="content">
-                            Pellentesque habitant morbi tristique senectus et netus et malesu ada fames and reply to all.
-                        </div>
+            <form action="#" class="contact-form">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <input type="text" placeholder="Name">
                     </div>
-                    <div class="single-item">
-                        <h4>What Is The Big R For Marketing Your Business?</h4>
-                        <div class="content">
-                            Pellentesque habitant morbi tristique senectus et netus et malesu ada fames and reply to all.
-                        </div>
+                    <div class="col-lg-6">
+                        <input type="email" placeholder="Email">
                     </div>
-                    <div class="single-item">
-                        <h4>Does Using Banner Stands Increase Trade Show Traffic?</h4>
-                        <div class="content">
-                            Pellentesque habitant morbi tristique senectus et netus et malesu ada fames and reply to all.
-                        </div>
+                    <div class="col-lg-12">
+                        <input type="text" placeholder="Subject">
                     </div>
-                    <div class="single-item">
-                        <h4>How To Write Better Advertising Copy?</h4>
-                        <div class="content">
-                            Pellentesque habitant morbi tristique senectus et netus et malesu ada fames and reply to all.
-                        </div>
+                    <div class="col-lg-12">
+                        <textarea placeholder="Message"></textarea>
+                    </div>
+                    <div class="col-lg-12">
+                        <input class="button" type="submit" value="Send Message">
                     </div>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="faq-img text-center">
-                    <img src="assets/img/fag-img.png" alt="faq">
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 </div><footer>
@@ -466,7 +454,7 @@
             <div class="row">
                 <div class="col-md-6 col-lg-3 footer_widget">
                     <div class="inner">
-                        <h4>About</h4>
+                        <h4>A propos</h4>
                         <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
                         <p>Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, antesenectus et netus et malesuada fames ac turpis egestas.</p>
                     </div>
@@ -487,7 +475,7 @@
                 </div>
                 <div class="col-md-6 col-lg-3 footer_widget">
                     <div class="inner">
-                        <h4>Recent Posts</h4>
+                        <h4>Activité récente</h4>
                         <div class="media">
                             <a href="#">
                                 <img src="assets/img/recent1.jpg" class="d-flex mr-3" alt="">
@@ -525,14 +513,14 @@
                 </div>
                 <div class="col-md-6 col-lg-3 footer_widget">
                     <div class="inner">
-                        <h4>Address</h4>
-                        <h5>Flat Pro, Inc.</h5>
+                        <h4>Adresse</h4>
+                        <h5>Joel Location</h5>
                         <p>649 Folsom Ave, Suite 400 <br>San Francisco, CA 63105 <br>P: (123) 456-7890</p>
-                        <h4>Newsletter</h4>
+                        <!-- <h4>Newsletter</h4>
                         <form action="#" class="nw_form">
                             <input placeholder="Enter your email" type="email">
                             <button><i class="fa fa-paper-plane"></i></button>
-                        </form>
+                        </form> -->
                     </div>
                 </div>
             </div>
@@ -543,16 +531,15 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="copyright-txt">
-                        © 2017 Flat Pro. All Rights Reserved.
+                        © 2020 Joel Location. All Rights Reserved.
                     </div>
                 </div>
                 <div class="col-lg-6 text-right">
                     <div class="footer-nav">
-                        <a href="#">Home</a>
-                        <a href="#">Portfolio</a>
-                        <a href="#">Pages</a>
-                        <a href="#">Shortcode</a>
-                        <a href="#">Blog</a>
+                        <a href="#">Accueil</a>
+                        <a href="#">A propos</a>
+                        <a href="#">Nos véhicule</a>
+                        <a href="#">Contact</a>
                     </div>
                 </div>
             </div>
