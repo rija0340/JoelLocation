@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}EtatReservation index{% endblock %}
+
+{% block body %}
+    <h1>EtatReservation index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Libelle</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for etat_reservation in etat_reservations %}
+            <tr>
+                <td>{{ etat_reservation.id }}</td>
+                <td>{{ etat_reservation.libelle }}</td>
+                <td>
+                    <a href="{{ path('etat_reservation_show', {'id': etat_reservation.id}) }}">show</a>
+                    <a href="{{ path('etat_reservation_edit', {'id': etat_reservation.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('etat_reservation_new') }}">Create new</a>
+{% endblock %}
