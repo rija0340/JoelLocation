@@ -1,0 +1,422 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="wrapper">
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+                <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i> PAGES D'APPLICATION DE JOEL LOCATION </a>
+                </li>                    
+            </ul>
+            {% if is_granted("ROLE_USER") %}
+                <ul class="navbar-nav ml-auto">
+                    <li>
+                        {% set pht = '' %}
+                        {% for photo in app.user.utilisateur.photos %}  
+                            {% set pht = photo %}
+                        {% endfor %}                                
+                            <img src="/photos/{{ pht }}" width="45px" height="45px" alt="{{ app.user.utilisateur }}" class="brand-image img-circle elevation-3" style="opacity: .8">
+                        {# {{ app.user.utilisateur.photos.photo }} #} {{ app.user.utilisateur }} &nbsp;
+                    </li>
+                    <li>
+                        <a href="{{ path('app_logout') }}" class="btn btn-light"> <i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+                    </li>
+                </ul>
+            {% endif %}                
+        </nav>
+        <!-- /.navbar -->
+        <!-- Main Sidebar Container -->
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <!-- Brand Logo -->
+            <a href="#" class="brand-link">
+            <img src="/images/blank_profile.png" alt="DGSR Logo" class="brand-image img-circle elevation-3"
+                style="opacity: .8">
+            <span class="brand-text font-weight-light">JOEL LOCATION</span>
+            </a>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+            <!-- Sidebar user panel (optional) -->
+            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                <div class="image">
+                    {% if is_granted("ROLE_USER") %}
+                        {% set pht = '' %}
+                        {% for photo in app.user.utilisateur.photos %}  
+                            {% set pht = photo %}
+                        {% endfor %}                              
+                            <img src="/photos/{{ pht }}" width="40px" height="40px" alt="{{ app.user.utilisateur }}" class="brand-image img-circle elevation-3" style="opacity: .8">
+                    {% else %}
+                        <img src="/dist/img/avatar5.png" class="img-circle elevation-2" alt="User Image">
+                    {% endif %} 
+                </div>
+                <div class="info" width="250px">
+                    <a href="#" class="d-block">
+                        {% if is_granted("ROLE_USER") %}
+                            {{ app.user.getUsername() }}
+                        {% else %}
+                            Anonymous user
+                        {% endif %} 
+                    </a>
+                </div>
+            </div>
+
+            <!-- Sidebar Menu -->
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                    <!-- Add icons to the links using the .nav-icon class
+                        with font-awesome or any other icon font library -->
+                    {% if is_granted("ROLE_USER") %}
+                        <li class="nav-item has-treeview menu-open">
+                            <a href="{{ path('dash_board') }}" class="nav-link active">
+                            <i class="nav-icon fas fa-tachometer-alt"></i>
+                            <p>
+                                Dashboard
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                            </a>                        
+                        </li>
+                    {% endif %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-th"></i>
+                                <p>
+                                    ADMINISTRATEUR
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ path('decorations_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Décoration
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('domaine_diplome_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Domaine diplôme
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('niveau_diplome_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Niveau diplôme
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('grades_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Grade
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('droits_pensions_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Droit pension
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('punitions_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Punition
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('fonctions_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Fonction
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('motifs_radiations_controles_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Motif radiation
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('details_motifs_radiations_controles_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Détail motif radiation
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('user_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-image"></i>
+                                        <p>
+                                            Utilisateurs
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('logo') }}" class="nav-link">
+                                        <i class="nav-icon far fa-image"></i>
+                                        <p>
+                                            Logo
+                                        </p>
+                                    </a>
+                                </li>
+                                {# <li class="nav-item">
+                                    <a href="{{ path('roles_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-image"></i>
+                                        <p>
+                                            Rôles
+                                        </p>
+                                    </a>
+                                </li> #}
+                                <li class="nav-item">
+                                    <a href="{{ path('unites_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Unité
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('regions_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Region
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('provinces_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-image"></i>
+                                        <p>
+                                            Province
+                                        </p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    {% endif %}
+                    {% if is_granted('ROLE_USER') %}
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-th"></i>
+                                <p>
+                                    GESTION RH
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                {% if is_granted("ROLE_MILITAIRE") %}
+                                    <li class="nav-item">
+                                        <a href="{{ path('nominations_personnels_index') }}" class="nav-link">
+                                            <i class="nav-icon far fa-calendar-alt"></i>
+                                            <p>
+                                                Nomination personnel
+                                            </p>
+                                        </a>
+                                    </li>
+                                {% endif %}                                    
+                                <li class="nav-item">
+                                    <a href="{{ path('decisions_affectations_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Décision affectation
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('decisions_promotions_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Décision promotion
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('decisions_radiations_controles_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Décision radiation
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('affectations_personnels_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Affectation personnel
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('radiations_personnels_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Radiation personnel
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('personnels_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Personnel
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('conjoints_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Conjoint
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('enfants_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Enfant
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('ex_conjoints_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Ex-Conjoint
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('diplomes_personnels_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Diplôme personnel
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('decorations_personnels_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Décoration personnel
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('notes_personnels_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Note personnel
+                                        </p>
+                                    </a>
+                                </li>
+                                {% if is_granted("ROLE_SUPERVISEUR") %}
+                                    <li class="nav-item">
+                                        <a href="{{ path('notes_p_o_s_index') }}" class="nav-link">
+                                            <i class="nav-icon far fa-calendar-alt"></i>
+                                            <p>
+                                                Note P.O.S
+                                            </p>
+                                        </a>
+                                    </li>
+                                {% endif %}                                    
+                                <li class="nav-item">
+                                    <a href="{{ path('permissions_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Permission
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('fonctions_conjoints_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Fonction conjoint
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('photos_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Photo
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('diplomes_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Diplôme
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('types_contrats_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Type de contrat
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('communes_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Commune
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('types_communes_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Type de Commune
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('districts_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            District
+                                        </p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    {% endif %}                    
+                </ul>
+            </nav>
+            <!-- /.sidebar-menu -->
+            </div>
+            <!-- /.sidebar -->
+        </aside>
+        <div class="content-wrapper" style="padding:10px">{% block content %}{% endblock %}</div>
+        <!-- /.content-wrapper -->
+        <footer class="main-footer">
+            <strong>Copyright &copy; 2020 Joel Location.</strong>
+            All rights reserved.
+            <div class="float-right d-none d-sm-inline-block">
+            <b>Version</b> 1.0.0
+            </div>
+        </footer>
+    </div>
+{% endblock %}

@@ -1,0 +1,25 @@
+table thead tr th {
+    border: 0;
+}
+
+table tbody tr td {
+    border: 1px solid #ccc;
+}
+
+.tableau {
+    border-collapse: collapse;
+    border-spacing: 0px;
+    border: 1px solid black;
+}
+
+.tableau thead tr th,
+.tableau tbody tr td {
+    border: 1px solid black;
+}
+
+th {
+    background: rgb(90, 90, 90);
+    height: 20px;
+    vertical-align: center;
+    vertical-align: middle;
+}
