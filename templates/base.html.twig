@@ -3,7 +3,8 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>Joel Location {% block title %}{% endblock %}</title>
+        <title>JOEL LOCATION - {% block title %}{% endblock %}</title>
+        <link rel="icon" type="image/x-icon" href="/images/Joel-Location-new.png" />
 
             <!-- Required CSS files -->
         <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i" rel="stylesheet">
@@ -51,9 +52,90 @@
         <div class="preloader">
             <span class="preloader-spin"></span>
         </div>
-        {% block body %}{% endblock %}
 
+        <div class="site"> 
+            <header>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-6 col-sm-3 logo-column">
+                            <a href="index.html" class="logo">
+                                <img src="images/Joel-Location-new.png" alt="JOEL LOCATION" height="2000px">
+                            </a>
+                        </div>
+                        <div class="col-6 col-sm-9 nav-column clearfix">
+                            <div class="right-nav">
+                                <span class="search-icon fa fa-search"></span>
+                                <form action="#" class="search-form">
+                                    <input type="search" placeholder="Rechercher">
+                                    <button type="submit"><i class="fa fa-search"></i></button>
+                                </form>
+                            </div>
+                            <nav id="menu" class="d-none d-lg-block">
+                                <ul>
+                                    <li><a href="{{ path('accueil') }}">Accueil</a></li>
+                                    <li><a href="{{ path('quisommenous') }}">A propos</a></li>
+                                    <li><a href="{{ path('accueil') }}#vehicule">Nos véhicule</a></li>
+                                    <li><a href="#">Mon compte</a></li>
+                                    <li><a href="{{ path('accueil') }}#contact">Contact</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </header> 
+            {% block body %}{% endblock %}
+            <footer>
+                <div class="footer-top">
+                    <div class="container">
+                        <div class="row">                
+                            <div class="col-6 footer_widget">
+                                <div class="inner">
+                                    <h4>Adresse</h4>
+                                    <h5>JOEL LOCATION</h5>
+                                    <p>94 Chemin De La Hache<br>
+                                    97160 Le Moule (Guadeloupe)<br>
+                                    Tel : 06 90 73 76 74 /  07 67 32 14 47<br>
+                                    Email : joel@joellocation.com</p>
 
+                                </div>
+                            </div>
+                            {# <div class="col-6 footer_widget">
+                                <div class="inner">
+                                    <h4>MENTION LEGAL</h4>    
+                                    <h5>JOEL LOCATION</h5>
+                                    <p>94 CHEMIN DE LA HACHE,97160 LE MOULE<br>
+                                    0690 73 76 74 /  07 67 32 14 47<br>
+                                    JOEL@JOELLOCATION.COM<br>
+                                    SASU AU CAPTAL DE 1000€<br>
+                                    GERANT  JOEL MANDRET<br>
+                                    SIRET 87868990000016  RCS  POINTRE A PITRE<br>
+                                    N° INTRACOMMUNAUTAIRE  FR40878689900</p>
+                                </div>
+                            </div> #}
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="copyright-txt">
+                                    © 2020 Joel Location. All Rights Reserved.
+                                </div>
+                            </div>
+                            <div class="col-lg-6 text-right">
+                                <div class="footer-nav">
+                                    <a href="{{ path('accueil') }}">Accueil</a>
+                                    <a href="{{ path('quisommenous') }}">A propos</a>
+                                    <a href="{{ path('accueil') }}#vehicule">Nos véhicule</a>
+                                    <a href="{{ path('accueil') }}#contact">Contact</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer> 
+        </div>
 
             <!--Required JS files-->
         <script src="assets/js/jquery-2.2.4.min.js"></script>
