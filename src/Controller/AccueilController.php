@@ -31,6 +31,50 @@ class AccueilController extends AbstractController
 
     
     /**
+     * @Route("/capture", name="capture")
+     */
+    public function captur(): Response
+    {
+        return $this->render('accueil/capture.html.twig', [
+            'controller_name' => 'CaptureController',
+        ]);
+    }
+
+    
+    /**
+     * @Route("/clio", name="clio")
+     */
+    public function clio(): Response
+    {
+        return $this->render('accueil/clio.html.twig', [
+            'controller_name' => 'ClioController',
+        ]);
+    }
+
+    
+    /**
+     * @Route("/twingo", name="twingo")
+     */
+    public function twingo(): Response
+    {
+        return $this->render('accueil/twingo.html.twig', [
+            'controller_name' => 'TwingoController',
+        ]);
+    }
+
+    
+    /**
+     * @Route("/mentionlegale", name="mentionlegale")
+     */
+    public function mentionLegale(): Response
+    {
+        return $this->render('accueil/mentionlegale.html.twig', [
+            'controller_name' => 'MentionLegaleController',
+        ]);
+    }
+
+    
+    /**
      * @Route("/teste", name="teste")
      */
     public function teste(): Response
