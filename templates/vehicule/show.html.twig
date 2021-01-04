@@ -1,9 +1,9 @@
-{% extends 'base.html.twig' %}
+{% extends 'base2.html.twig' %}
 
 {% block title %}Vehicule{% endblock %}
 
 {% block body %}
-    <h1>Vehicule</h1>
+    <h1>Véhicule</h1>
 
     <table class="table">
         <tbody>
@@ -16,31 +16,31 @@
                 <td>{{ vehicule.immatriculation }}</td>
             </tr>
             <tr>
-                <th>Date_mise_service</th>
+                <th>Date de mise en service</th>
                 <td>{{ vehicule.dateMiseService ? vehicule.dateMiseService|date('Y-m-d') : '' }}</td>
             </tr>
             <tr>
-                <th>Date_mise_location</th>
+                <th>Date de mise en location</th>
                 <td>{{ vehicule.dateMiseLocation ? vehicule.dateMiseLocation|date('Y-m-d') : '' }}</td>
             </tr>
             <tr>
-                <th>Modele</th>
+                <th>Modèle</th>
                 <td>{{ vehicule.modele }}</td>
             </tr>
             <tr>
-                <th>Prix_acquisition</th>
+                <th>Prix d'acquisition</th>
                 <td>{{ vehicule.prixAcquisition }}</td>
             </tr>
             <tr>
-                <th>Tarif_journaliere</th>
+                <th>Tarif journalière</th>
                 <td>{{ vehicule.tarifJournaliere }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('vehicule_index') }}">back to list</a>
+    <a href="{{ path('vehicule_index') }}">retour</a>
 
-    <a href="{{ path('vehicule_edit', {'id': vehicule.id}) }}">edit</a>
+    <a href="{{ path('vehicule_edit', {'id': vehicule.id}) }}">Modifier</a>
 
     {{ include('vehicule/_delete_form.html.twig') }}
 {% endblock %}

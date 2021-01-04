@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'base2.html.twig' %}
 
 {% block title %}Reservation{% endblock %}
 
@@ -16,15 +16,15 @@
                 <td>{{ reservation.type }}</td>
             </tr>
             <tr>
-                <th>Date_reservation</th>
+                <th>Date de reservation</th>
                 <td>{{ reservation.dateReservation ? reservation.dateReservation|date('Y-m-d') : '' }}</td>
             </tr>
             <tr>
-                <th>Date_debut</th>
+                <th>Date de début</th>
                 <td>{{ reservation.dateDebut ? reservation.dateDebut|date('Y-m-d') : '' }}</td>
             </tr>
             <tr>
-                <th>Date_fin</th>
+                <th>Date de fin</th>
                 <td>{{ reservation.dateFin ? reservation.dateFin|date('Y-m-d') : '' }}</td>
             </tr>
             <tr>
@@ -32,15 +32,15 @@
                 <td>{{ reservation.lieu }}</td>
             </tr>
             <tr>
-                <th>Code_reservation</th>
+                <th>Code reservation</th>
                 <td>{{ reservation.codeReservation }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('reservation_index') }}">back to list</a>
+    <a href="{{ path('reservation_index') }}">retour</a>
 
-    <a href="{{ path('reservation_edit', {'id': reservation.id}) }}">edit</a>
+    <a href="{{ path('reservation_edit', {'id': reservation.id}) }}">Modifier</a>
 
     {{ include('reservation/_delete_form.html.twig') }}
 {% endblock %}

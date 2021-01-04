@@ -1,18 +1,18 @@
-{% extends 'base.html.twig' %}
+{% extends 'base2.html.twig' %}
 
 {% block title %}Agence index{% endblock %}
 
 {% block body %}
-    <h1>Agence index</h1>
+    <h1>Liste des Agences</h1>
 
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
                 <th>Nom</th>
-                <th>Presentation</th>
+                <th>Présentation</th>
                 <th>Mail</th>
-                <th>Telephone</th>
+                <th>Téléphone</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -25,17 +25,17 @@
                 <td>{{ agence.mail }}</td>
                 <td>{{ agence.telephone }}</td>
                 <td>
-                    <a href="{{ path('agence_show', {'id': agence.id}) }}">show</a>
-                    <a href="{{ path('agence_edit', {'id': agence.id}) }}">edit</a>
+                    <a href="{{ path('agence_show', {'id': agence.id}) }}">Visionner</a>
+                    <a href="{{ path('agence_edit', {'id': agence.id}) }}">Modifier</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="6">no records found</td>
+                <td colspan="6">Aucun enregistrement trouver</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('agence_new') }}">Create new</a>
+    <a href="{{ path('agence_new') }}">Ajouter</a>
 {% endblock %}

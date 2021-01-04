@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'base2.html.twig' %}
 
 {% block title %}Paiement{% endblock %}
 
@@ -16,7 +16,7 @@
                 <td>{{ paiement.montant }}</td>
             </tr>
             <tr>
-                <th>Date_paiement</th>
+                <th>Date de paiement</th>
                 <td>{{ paiement.datePaiement ? paiement.datePaiement|date('Y-m-d') : '' }}</td>
             </tr>
             <tr>
@@ -26,9 +26,9 @@
         </tbody>
     </table>
 
-    <a href="{{ path('paiement_index') }}">back to list</a>
+    <a href="{{ path('paiement_index') }}">retour</a>
 
-    <a href="{{ path('paiement_edit', {'id': paiement.id}) }}">edit</a>
+    <a href="{{ path('paiement_edit', {'id': paiement.id}) }}">Modifier</a>
 
     {{ include('paiement/_delete_form.html.twig') }}
 {% endblock %}

@@ -1,9 +1,9 @@
-{% extends 'base.html.twig' %}
+{% extends 'base2.html.twig' %}
 
 {% block title %}ModeReservation{% endblock %}
 
 {% block body %}
-    <h1>ModeReservation</h1>
+    <h1>Mode de reservation</h1>
 
     <table class="table">
         <tbody>
@@ -12,15 +12,15 @@
                 <td>{{ mode_reservation.id }}</td>
             </tr>
             <tr>
-                <th>Libelle</th>
+                <th>Libellé</th>
                 <td>{{ mode_reservation.libelle }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('mode_reservation_index') }}">back to list</a>
+    <a href="{{ path('mode_reservation_index') }}">retour</a>
 
-    <a href="{{ path('mode_reservation_edit', {'id': mode_reservation.id}) }}">edit</a>
+    <a href="{{ path('mode_reservation_edit', {'id': mode_reservation.id}) }}">Modifier</a>
 
     {{ include('mode_reservation/_delete_form.html.twig') }}
 {% endblock %}

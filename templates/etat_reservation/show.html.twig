@@ -1,9 +1,9 @@
-{% extends 'base.html.twig' %}
+{% extends 'base2.html.twig' %}
 
 {% block title %}EtatReservation{% endblock %}
 
 {% block body %}
-    <h1>EtatReservation</h1>
+    <h1>Etat de la reservation</h1>
 
     <table class="table">
         <tbody>
@@ -12,15 +12,15 @@
                 <td>{{ etat_reservation.id }}</td>
             </tr>
             <tr>
-                <th>Libelle</th>
+                <th>Libellé</th>
                 <td>{{ etat_reservation.libelle }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('etat_reservation_index') }}">back to list</a>
+    <a href="{{ path('etat_reservation_index') }}">retour</a>
 
-    <a href="{{ path('etat_reservation_edit', {'id': etat_reservation.id}) }}">edit</a>
+    <a href="{{ path('etat_reservation_edit', {'id': etat_reservation.id}) }}">Modifier</a>
 
     {{ include('etat_reservation/_delete_form.html.twig') }}
 {% endblock %}

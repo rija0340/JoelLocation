@@ -1,11 +1,11 @@
-{% extends 'base.html.twig' %}
+{% extends 'base2.html.twig' %}
 
 {% block title %}New ModeReservation{% endblock %}
 
 {% block body %}
-    <h1>Create new ModeReservation</h1>
+    <h1>Nouvelle mode de reservation</h1>
 
     {{ include('mode_reservation/_form.html.twig') }}
 
-    <a href="{{ path('mode_reservation_index') }}">back to list</a>
+    <a href="{{ path('mode_reservation_index') }}">retour</a>
 {% endblock %}

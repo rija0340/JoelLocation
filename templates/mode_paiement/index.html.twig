@@ -1,15 +1,15 @@
-{% extends 'base.html.twig' %}
+{% extends 'base2.html.twig' %}
 
 {% block title %}ModePaiement index{% endblock %}
 
 {% block body %}
-    <h1>ModePaiement index</h1>
+    <h1>Liste de mode de paiement</h1>
 
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Libelle</th>
+                <th>Libellé</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -19,17 +19,17 @@
                 <td>{{ mode_paiement.id }}</td>
                 <td>{{ mode_paiement.libelle }}</td>
                 <td>
-                    <a href="{{ path('mode_paiement_show', {'id': mode_paiement.id}) }}">show</a>
-                    <a href="{{ path('mode_paiement_edit', {'id': mode_paiement.id}) }}">edit</a>
+                    <a href="{{ path('mode_paiement_show', {'id': mode_paiement.id}) }}">Visionner</a>
+                    <a href="{{ path('mode_paiement_edit', {'id': mode_paiement.id}) }}">Modifier</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="3">no records found</td>
+                <td colspan="3">Aucun enregistrement trouver</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('mode_paiement_new') }}">Create new</a>
+    <a href="{{ path('mode_paiement_new') }}">Ajouter</a>
 {% endblock %}

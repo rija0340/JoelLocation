@@ -1,15 +1,15 @@
-{% extends 'base.html.twig' %}
+{% extends 'base2.html.twig' %}
 
 {% block title %}ModeReservation index{% endblock %}
 
 {% block body %}
-    <h1>ModeReservation index</h1>
+    <h1>Liste de mode de reservation</h1>
 
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Libelle</th>
+                <th>Libellé</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -19,17 +19,17 @@
                 <td>{{ mode_reservation.id }}</td>
                 <td>{{ mode_reservation.libelle }}</td>
                 <td>
-                    <a href="{{ path('mode_reservation_show', {'id': mode_reservation.id}) }}">show</a>
-                    <a href="{{ path('mode_reservation_edit', {'id': mode_reservation.id}) }}">edit</a>
+                    <a href="{{ path('mode_reservation_show', {'id': mode_reservation.id}) }}">Visionner</a>
+                    <a href="{{ path('mode_reservation_edit', {'id': mode_reservation.id}) }}">Modifier</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="3">no records found</td>
+                <td colspan="3">Aucun enregistrement trouver</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('mode_reservation_new') }}">Create new</a>
+    <a href="{{ path('mode_reservation_new') }}">Ajouter</a>
 {% endblock %}

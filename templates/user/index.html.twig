@@ -1,25 +1,25 @@
-{% extends 'base.html.twig' %}
+{% extends 'base2.html.twig' %}
 
 {% block title %}User index{% endblock %}
 
 {% block body %}
-    <h1>User index</h1>
+    <h1>Liste des utilisateurs</h1>
 
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Username</th>
+                <th>Nom d'utilisateur</th>
                 <th>Roles</th>
                 <th>Password</th>
                 <th>Nom</th>
-                <th>Prenom</th>
+                <th>Prénom</th>
                 <th>Adresse</th>
                 <th>Mail</th>
-                <th>Telephone</th>
+                <th>Téléphone</th>
                 <th>Portable</th>
-                <th>Presence</th>
-                <th>Date_inscription</th>
+                <th>Présence</th>
+                <th>Date d'inscription</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -39,17 +39,17 @@
                 <td>{{ user.presence ? 'Yes' : 'No' }}</td>
                 <td>{{ user.dateInscription ? user.dateInscription|date('Y-m-d') : '' }}</td>
                 <td>
-                    <a href="{{ path('user_show', {'id': user.id}) }}">show</a>
-                    <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
+                    <a href="{{ path('user_show', {'id': user.id}) }}">Visionner</a>
+                    <a href="{{ path('user_edit', {'id': user.id}) }}">Modifier</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="13">no records found</td>
+                <td colspan="13">Aucun enregistrement trouver</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('user_new') }}">Create new</a>
+    <a href="{{ path('user_new') }}">Ajouter</a>
 {% endblock %}
