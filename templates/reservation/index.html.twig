@@ -1,20 +1,20 @@
-{% extends 'base.html.twig' %}
+{% extends 'base2.html.twig' %}
 
 {% block title %}Reservation index{% endblock %}
 
 {% block body %}
-    <h1>Reservation index</h1>
+    <h1>Liste des reservations</h1>
 
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
                 <th>Type</th>
-                <th>Date_reservation</th>
-                <th>Date_debut</th>
-                <th>Date_fin</th>
+                <th>Date de reservation</th>
+                <th>Date de début</th>
+                <th>Date de fin</th>
                 <th>Lieu</th>
-                <th>Code_reservation</th>
+                <th>Code reservation</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -29,17 +29,17 @@
                 <td>{{ reservation.lieu }}</td>
                 <td>{{ reservation.codeReservation }}</td>
                 <td>
-                    <a href="{{ path('reservation_show', {'id': reservation.id}) }}">show</a>
-                    <a href="{{ path('reservation_edit', {'id': reservation.id}) }}">edit</a>
+                    <a href="{{ path('reservation_show', {'id': reservation.id}) }}">Visionner</a>
+                    <a href="{{ path('reservation_edit', {'id': reservation.id}) }}">Modifier</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="8">no records found</td>
+                <td colspan="8">Aucune reservation trouver</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('reservation_new') }}">Create new</a>
+    <a href="{{ path('reservation_new') }}">Ajouter</a>
 {% endblock %}

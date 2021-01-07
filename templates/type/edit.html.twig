@@ -1,13 +1,13 @@
-{% extends 'base.html.twig' %}
+{% extends 'base2.html.twig' %}
 
 {% block title %}Edit Type{% endblock %}
 
 {% block body %}
-    <h1>Edit Type</h1>
+    <h1>Modification du type</h1>
 
-    {{ include('type/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('type/_form.html.twig', {'button_label': 'Modifer'}) }}
 
-    <a href="{{ path('type_index') }}">back to list</a>
+    <a href="{{ path('type_index') }}">retour</a>
 
     {{ include('type/_delete_form.html.twig') }}
 {% endblock %}

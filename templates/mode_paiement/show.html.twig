@@ -1,9 +1,9 @@
-{% extends 'base.html.twig' %}
+{% extends 'base2.html.twig' %}
 
 {% block title %}ModePaiement{% endblock %}
 
 {% block body %}
-    <h1>ModePaiement</h1>
+    <h1>mode paiement</h1>
 
     <table class="table">
         <tbody>
@@ -12,15 +12,15 @@
                 <td>{{ mode_paiement.id }}</td>
             </tr>
             <tr>
-                <th>Libelle</th>
+                <th>Libellé</th>
                 <td>{{ mode_paiement.libelle }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('mode_paiement_index') }}">back to list</a>
+    <a href="{{ path('mode_paiement_index') }}">retour</a>
 
-    <a href="{{ path('mode_paiement_edit', {'id': mode_paiement.id}) }}">edit</a>
+    <a href="{{ path('mode_paiement_edit', {'id': mode_paiement.id}) }}">Modifier</a>
 
     {{ include('mode_paiement/_delete_form.html.twig') }}
 {% endblock %}

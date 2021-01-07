@@ -1,20 +1,20 @@
-{% extends 'base.html.twig' %}
+{% extends 'base2.html.twig' %}
 
 {% block title %}Vehicule index{% endblock %}
 
 {% block body %}
-    <h1>Vehicule index</h1>
+    <h1>Liste des véhicules</h1>
 
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
                 <th>Immatriculation</th>
-                <th>Date_mise_service</th>
-                <th>Date_mise_location</th>
-                <th>Modele</th>
-                <th>Prix_acquisition</th>
-                <th>Tarif_journaliere</th>
+                <th>Date de mise en service</th>
+                <th>Date de mise en location</th>
+                <th>Modèle</th>
+                <th>Prix d'acquisition</th>
+                <th>Tarif journalière</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -29,17 +29,17 @@
                 <td>{{ vehicule.prixAcquisition }}</td>
                 <td>{{ vehicule.tarifJournaliere }}</td>
                 <td>
-                    <a href="{{ path('vehicule_show', {'id': vehicule.id}) }}">show</a>
-                    <a href="{{ path('vehicule_edit', {'id': vehicule.id}) }}">edit</a>
+                    <a href="{{ path('vehicule_show', {'id': vehicule.id}) }}">Visionner</a>
+                    <a href="{{ path('vehicule_edit', {'id': vehicule.id}) }}">Modifier</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="8">no records found</td>
+                <td colspan="8">Aucun enregistrement trouver</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('vehicule_new') }}">Create new</a>
+    <a href="{{ path('vehicule_new') }}"> Ajouter</a>
 {% endblock %}

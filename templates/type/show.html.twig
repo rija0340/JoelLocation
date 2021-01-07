@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'base2.html.twig' %}
 
 {% block title %}Type{% endblock %}
 
@@ -12,15 +12,15 @@
                 <td>{{ type.id }}</td>
             </tr>
             <tr>
-                <th>Libelle</th>
+                <th>Libellé</th>
                 <td>{{ type.libelle }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('type_index') }}">back to list</a>
+    <a href="{{ path('type_index') }}">retour</a>
 
-    <a href="{{ path('type_edit', {'id': type.id}) }}">edit</a>
+    <a href="{{ path('type_edit', {'id': type.id}) }}">Modifier</a>
 
     {{ include('type/_delete_form.html.twig') }}
 {% endblock %}

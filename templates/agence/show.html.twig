@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'base2.html.twig' %}
 
 {% block title %}Agence{% endblock %}
 
@@ -16,7 +16,7 @@
                 <td>{{ agence.nom }}</td>
             </tr>
             <tr>
-                <th>Presentation</th>
+                <th>Présentation</th>
                 <td>{{ agence.presentation }}</td>
             </tr>
             <tr>
@@ -24,15 +24,15 @@
                 <td>{{ agence.mail }}</td>
             </tr>
             <tr>
-                <th>Telephone</th>
+                <th>Téléphone</th>
                 <td>{{ agence.telephone }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('agence_index') }}">back to list</a>
+    <a href="{{ path('agence_index') }}">retour</a>
 
-    <a href="{{ path('agence_edit', {'id': agence.id}) }}">edit</a>
+    <a href="{{ path('agence_edit', {'id': agence.id}) }}">Modifier</a>
 
     {{ include('agence/_delete_form.html.twig') }}
 {% endblock %}

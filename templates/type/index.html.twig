@@ -1,15 +1,15 @@
-{% extends 'base.html.twig' %}
+{% extends 'base2.html.twig' %}
 
 {% block title %}Type index{% endblock %}
 
 {% block body %}
-    <h1>Type index</h1>
+    <h1>Liste des types</h1>
 
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Libelle</th>
+                <th>Libellé</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -19,17 +19,17 @@
                 <td>{{ type.id }}</td>
                 <td>{{ type.libelle }}</td>
                 <td>
-                    <a href="{{ path('type_show', {'id': type.id}) }}">show</a>
-                    <a href="{{ path('type_edit', {'id': type.id}) }}">edit</a>
+                    <a href="{{ path('type_show', {'id': type.id}) }}">Visionner</a>
+                    <a href="{{ path('type_edit', {'id': type.id}) }}">Modifier</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="3">no records found</td>
+                <td colspan="3">Aucun enregistrement trouver</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('type_new') }}">Create new</a>
+    <a href="{{ path('type_new') }}">Ajouter</a>
 {% endblock %}
