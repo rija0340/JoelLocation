@@ -255,7 +255,7 @@ header {
   padding: 18px 0; }
 
 .logo-column a.logo {
-  height: 35px;
+  height: 100px;
   padding: 5px 0; }
   .logo-column a.logo img {
     max-height: 100%; }
@@ -408,7 +408,7 @@ form.search-form button {
       height: auto;
       padding: 60px 30px 100px;
       z-index: 1; }
-      .hero-slider .single-slide::after {
+     /* .hero-slider .single-slide::after {
         content: "";
         height: 100%;
         width: 100%;
@@ -416,7 +416,7 @@ form.search-form button {
         z-index: -1;
         left: 0;
         top: 0;
-        position: absolute; } }
+      position: absolute; }*/ }
   @media only screen and (max-width: 767px) {
     .hero-slider .single-slide {
       font-size: 18px;

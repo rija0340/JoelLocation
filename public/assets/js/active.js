@@ -1,6 +1,6 @@
 /* jshint esnext: true */
 var document,
-    window;
+window;
 (function ($) {
     'use stict';
 
@@ -59,7 +59,7 @@ var document,
 
     flat.wlPlugins = () => {
         if ($.fn.isotope) {
-            
+
             flat.portfolio_isotope = $('.portfolio-isotope');
             flat.portfolio_menu = $('.isotope-menu li');
             flat.portfolio_isotope.isotope({
@@ -103,8 +103,8 @@ var document,
                 nav: true,
                 autoHeight:true,
                 navText: [
-                    '<i class="fa fa-angle-left"></i>',
-                    '<i class="fa fa-angle-right"></i>'
+                '<i class="fa fa-angle-left"></i>',
+                '<i class="fa fa-angle-right"></i>'
                 ]
             });
 
@@ -118,8 +118,8 @@ var document,
                 dots: false,
                 nav: true,
                 navText: [
-                    '<i class="fa fa-arrow-left"></i>',
-                    '<i class="fa fa-arrow-right"></i>'
+                '<i class="fa fa-arrow-left"></i>',
+                '<i class="fa fa-arrow-right"></i>'
                 ],
                 responsive: {
                     0: {

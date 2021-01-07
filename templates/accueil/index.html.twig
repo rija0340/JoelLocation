@@ -2,95 +2,100 @@
 
 {% block title %}Accueil{% endblock %}
 
-{% block body %}          
-    <div class="hero-slider">
-        <div class="single-slide" style="background-image: url(images/JOELLOCATION1.jpg)">
-            <div class="inner">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="slide-content">
-                                <h2></h2>
-                                <p></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="single-slide" style="background-image: url(images/JOELLOCATION2.jpg)">
-            <div class="inner">
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-6 text-center">
-                            <div class="slide-content">
-                                <h2></h2>
-                                <p></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="single-slide" style="background-image: url(images/JOELLOCATION3.jpg)">
-            <div class="inner">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="slide-content">
-                                <h2></h2>
-                                <p></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="portfolio-area sp">
-        <div class="container" id="vehicule">
-            <div class="section-title">
-                <h2>Nos Véhicules</h2>
-                <p>Vous pouvez choisir parmis les véhicules que nous offrons</p>
-            </div>
-            <div class="row">
-                <div class="single-portfolio col-md-4">
-                    <div class="inner">
-                        <div class="portfolio-img">
-                            <img src="images/capture 1.jpg" alt="portfolio-image">
-                            <div class="hover-content">
-                                <div>
-                                    <a href="{{ path('capture') }}" class="button">Voir plus de détails</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="single-portfolio col-md-4">
-                    <div class="inner">
-                        <div class="portfolio-img">
-                            <img src="images/clio 4a.jpg" alt="portfolio-image">
-                            <div class="hover-content">
-                                <div>
-                                    <a href="{{ path('clio') }}" class="button">Voir plus de détails</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="single-portfolio col-md-4">
-                    <div class="inner">
-                        <div class="portfolio-img">
-                            <img src="images/twingo2.jpg" alt="portfolio-image">
-                            <div class="hover-content">
-                                <div>
-                                    <a href="{{ path('twingo') }}" class="button">Voir plus de détails</a>
+    {% block stylesheets %}
+        <link rel="stylesheet" href="css/style_index.css">
+
+    {% endblock %}
+
+    {% block body %}          
+        <div class="hero-slider">
+            <div class="single-slide" style="background-image: url(images/JOELLOCATION1.jpg)">
+                <div class="inner">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="slide-content">
+                                    <h2></h2>
+                                    <p></p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="single-slide" style="background-image: url(images/JOELLOCATION2.jpg)">
+                <div class="inner">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-6 text-center">
+                                <div class="slide-content">
+                                    <h2></h2>
+                                    <p></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="single-slide" style="background-image: url(images/JOELLOCATION3.jpg)">
+                <div class="inner">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="slide-content">
+                                    <h2></h2>
+                                    <p></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="portfolio-area sp">
+            <div class="container" id="vehicule">
+                <div class="section-title">
+                    <h2>Nos Véhicules</h2>
+                    <p>Vous pouvez choisir parmi les véhicules que nous offrons</p>
+                </div>
+                <div class="row">
+                    <div class="single-portfolio col-md-4">
+                        <div class="inner">
+                            <div class="portfolio-img">
+                                <img src="images/capture 1.jpg" alt="portfolio-image">
+                                <div class="hover-content">
+                                    <div>
+                                        <a href="{{ path('capture') }}" class="button">Voir plus de détails</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="single-portfolio col-md-4">
+                        <div class="inner">
+                            <div class="portfolio-img">
+                                <img src="images/clio 4a.jpg" alt="portfolio-image">
+                                <div class="hover-content">
+                                    <div>
+                                        <a href="{{ path('clio') }}" class="button">Voir plus de détails</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="single-portfolio col-md-4">
+                        <div class="inner">
+                            <div class="portfolio-img">
+                                <img src="images/twingo2.jpg" alt="portfolio-image">
+                                <div class="hover-content">
+                                    <div>
+                                        <a href="{{ path('twingo') }}" class="button">Voir plus de détails</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             {# <div class="row">
                 <div class="col-12 text-center" data-margin="40px 0 0">
                     <a href="#" class="button">Plus de véhicule</a>
@@ -98,68 +103,71 @@
             </div> #}
         </div>
     </div>
-    <div class="testimonial-area sp bg1">
+
+    <div class="service-area sp bg1">
         <div class="container">
             <div class="section-title white">
                 <h2>A propos de nous</h2>
                 <p>Les services apportés à nos clients sont notre priorité. Votre satisfaction compte.</p>
             </div>
-            <div class="testimonial-slider">
-                <div class="single-slide">
-                    <div class="inner">
-                        <p><strong>Qui sommes-nous ?</strong><br>
-                            Joellocation est une société de location de voitures en Guadeloupe.
-                            Services adaptés pour chaque besoin à des tarifs très abordables.
-                            Véhicules bien entretenues et soumises à des inspections d’experts.
-                            Voitures livrées dès votre arrivée à l’aéroport.
-                        </p>                    
-                    </div>
-                </div>
-                <div class="single-slide">
-                    <div class="inner">
-                        <p></p>
-                    </div>
-                </div>
-                <div class="single-slide">
-                    <div class="inner">
-                        <p><strong>Mentions légales</strong><br>
-                            SASU AU CAPTAL DE 1000€
-                            GERANT : JOEL MANDRET
-                            SIRET : 87868990000016 RCS POINTRE A PITRE
-                            N° TVA INTRACOMMUNAUTAIRE : FR40878689900
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="faq-area sp bg2">
-        <div class="container" id="contact">
-            <div class="section-title">
-                <h2>Nous contactez</h2>
-                <p>Vous pouvez nous envoyer un message ici</p>
-            </div>
             <div class="row">
-                <form action="#" class="contact-form">
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <input type="text" placeholder="Name">
+                <div class="col-lg-6 col-md-6 single-service bordered">
+                    <div class="inner">
+                        <div class="title">
+
+                            <h4>Qui sommes-nous ?</h4>
                         </div>
-                        <div class="col-lg-6">
-                            <input type="email" placeholder="Email">
-                        </div>
-                        <div class="col-lg-12">
-                            <input type="text" placeholder="Subject">
-                        </div>
-                        <div class="col-lg-12">
-                            <textarea placeholder="Message"></textarea>
-                        </div>
-                        <div class="col-lg-12">
-                            <input class="button" type="submit" value="Send Message">
+                        <div class="content">
+                            <p> Joellocation est une société de location de voitures en Guadeloupe.
+                                Services adaptés pour chaque besoin à des tarifs très abordables.
+                                Véhicules bien entretenues et soumises à des inspections d’experts.
+                                Voitures livrées dès votre arrivée à l’aéroport.</p>
+                            </div>
                         </div>
                     </div>
-                </form>
+                    <div class="col-lg-6 col-md-6 single-service bordered">
+                        <div class="inner">
+                            <div class="title">
+
+                                <h4>Mentions légales</h4>
+                            </div>
+                            <div class="content">
+                                <p>SASU AU CAPTAL DE 1000€
+                                    GERANT : JOEL MANDRET
+                                    SIRET : 87868990000016 RCS POINTRE A PITRE
+                                    N° TVA INTRACOMMUNAUTAIRE : FR40878689900</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div> 
+            <div class="faq-area sp bg2">
+                <div class="container" id="contact">
+                    <div class="section-title">
+                        <h2>Nous contacter</h2>
+                        <p>Vous pouvez nous envoyer un message ici</p>
+                    </div>
+                    <form action="#" class="contact-form">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <input type="text" placeholder="Nom">
+                            </div>
+                            <div class="col-lg-6">
+                                <input type="email" placeholder="Email">
+                            </div>
+                            <div class="col-lg-12">
+                                <input type="text" placeholder="Objet">
+                            </div>
+                            <div class="col-lg-12">
+                                <textarea placeholder="Message"></textarea>
+                            </div>
+                            <div class="col-lg-12">
+                                <input class="button" type="submit" value="Envoyer Message">
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </div>
-    </div>
-{% endblock %}
+        {% endblock %}

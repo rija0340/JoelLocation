@@ -1,0 +1,6 @@
+/*nos véhicules*/
+
+.single-portfolio .inner .portfolio-img:hover .hover-content {
+	opacity: 0.5;
+	visibility: visible; 
+}
