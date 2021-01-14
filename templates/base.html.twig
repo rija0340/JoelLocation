@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/slicknav.css">
     <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="css/style_index.css">
+    
 
     <link href="http://hayageek.github.io/jQuery-Upload-File/4.0.11/uploadfile.css" rel="stylesheet">
     <link href="/dist/css/select2.css" rel="stylesheet"/>
@@ -54,51 +56,67 @@
         </div>
 
         <div class="site"> 
-            <header>
+            <header class=" d-flex align-items-center">
+
                 <div class="container">
-                    <div class="row">
-                        <div class="col-6 col-sm-3 logo-column">
-                            <a href="index.html" class="logo">
-                                <img src="images/Joel-Location-new.png" alt="JOEL LOCATION" >
-                            </a>
-                        </div>
-                        <div class="col-6 col-sm-9 nav-column clearfix">
-                           {#  <div class="right-nav">
-                                <span class="search-icon fa fa-search"></span>
-                                <form action="#" class="search-form">
-                                    <input type="search" placeholder="Rechercher">
-                                    <button type="submit"><i class="fa fa-search"></i></button>
-                                </form>
-                            </div> #}
-                            <nav id="menu" class="d-none d-lg-block">
-                                <ul>
-                                    <li><a href="{{ path('accueil') }}">Accueil</a></li>
-                                    <li><a href="{{ path('quisommenous') }}">A propos</a></li>
-                                    <li><a href="{{ path('accueil') }}#vehicule">Nos véhicules</a></li>
-                                    <li><a href="#">Mon compte</a></li>
-                                    <li><a href="{{ path('accueil') }}#contact">Contact</a></li>
-                                </ul>
-                            </nav>
-                        </div>
+                    <div class="d-flex">
+                       <div class=" mr-auto logo-column">
+                        <a href="index.html" class="logo" style="height:100px;width:100px">
+                            <img src="images/Joel-Location-new.png" alt="JOEL LOCATION">
+                        </a>
+                    </div> 
+                    <div class=" nav-column d-flex align-items-center">
+                        <nav id="menu" class="d-none d-lg-block ">
+                            <ul>
+                                <li class="{% if app.request.attributes.get('_route') starts with 'accueil' %}current-menu-item{% endif %}"><a href="{{ path('accueil') }}">Accueil</a></li>
+                                <li class="{% if app.request.attributes.get('_route') starts with 'quisommenous' %}current-menu-item{% endif %}"><a href="{{ path('quisommenous') }}">A propos</a></li>
+                                <li class="{% if app.request.attributes.get('_route') starts with 'accueil#vehicule' %}current-menu-item{% endif %}"><a href="{{ path('accueil') }}#vehicule">Nos véhicules</a></li>
+                                <li class="{% if app.request.attributes.get('_route') starts with 'accueil#vehicule' %}current-menu-item{% endif %}"><a href="#">Mon compte</a></li>
+                                <li class="{% if app.request.attributes.get('_route') starts with 'accueil#contact' %}current-menu-item{% endif %}"><a href="{{ path('accueil') }}#contact">Contact</a></li>
+                            </ul>
+                        </nav>
                     </div>
                 </div>
-            </header> 
-            {% block body %}{% endblock %}
-                <footer>
-                    <div class="footer-top">
-                        <div class="container">
-                            <div class="row">                
-                                <div class="col-6 footer_widget">
-                                    <div class="inner">
-                                        <h4>Adresse</h4>
-                                        <h5>JOEL LOCATION</h5>
-                                        <p>94 Chemin De La Hache<br>
-                                            97160 Le Moule (Guadeloupe)<br>
-                                            Tel : 06 90 73 76 74 /  07 67 32 14 47<br>
-                                            Email : joel@joellocation.com</p>
+            </div>
+        </header> 
 
-                                        </div>
-                                    </div>
+
+        {# ceci est pour tester code bootstrap pour centrer des items #}
+{#             <div class="d-flex align-items-center bd-highlight " style="height: 100px">
+                <div class="container">
+                    <div class=" d-flex bd-highlight mb-3">
+                      <div class="mr-auto p-2 bd-highlight">Flex item</div>
+                      <div class="p-2 bd-highlight">Flex item</div>
+                      <div class="p-2 bd-highlight">Flex item</div>
+                  </div>
+              </div>
+          </div>
+          <div class="d-flex align-items-center bd-highlight " style="height: 100px">
+           <div class="d-flex bd-highlight mb-3">
+              <div class="mr-auto p-2 bd-highlight">Flex item</div>
+              <div class="p-2 bd-highlight">Flex item</div>
+              <div class="p-2 bd-highlight">Flex item</div>
+          </div>
+      </div> #}
+
+      {% block body %}
+
+      {% endblock %}
+      <footer>
+        <div class="footer-top">
+            <div class="container">
+                <div class="row">                
+                    <div class="col-6 footer_widget">
+                        <div class="inner">
+                            <h4>Adresse</h4>
+                            <h5>JOEL LOCATION</h5>
+                            <p>94 Chemin De La Hache<br>
+                                97160 Le Moule (Guadeloupe)<br>
+                                Tel : 06 90 73 76 74 /  07 67 32 14 47<br>
+                                Email : joel@joellocation.com</p>
+
+                            </div>
+                        </div>
                             {# <div class="col-6 footer_widget">
                                 <div class="inner">
                                     <h4>MENTION LEGAL</h4>    
@@ -146,7 +164,8 @@
         <script src="assets/js/vendor/isotope.pkgd.min.js"></script>
         <script src="assets/js/vendor/jquery.barfiller.js"></script>
         <script src="assets/js/vendor/loopcounter.js"></script>
-        <script src="assets/js/vendor/slicknav.min.js"></script>
+        {# // <script src="assets/js/vendor/slicknav.min.js"></script> #}
+        <script src="assets/js/vendor/jquery.slicknav.js"></script>
         <script src="assets/js/active.js"></script>
 
         <!-- jQuery -->
@@ -166,7 +185,7 @@
         <script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
         <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
         <script>
-        $.widget.bridge('uibutton', $.ui.button)
+        // $.widget.bridge('uibutton', $.ui.button)
         </script>
         <!-- Bootstrap 4 -->
         <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
