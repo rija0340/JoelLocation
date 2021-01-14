@@ -10,7 +10,7 @@
 
 header{
 	height: 105px;
-	background-color: #ffffff;
+	background-color: #EFE7DB;
 
 }
 
@@ -18,12 +18,16 @@ header{
 .nav-column a, .nav-column span {
 	vertical-align: middle;
 	color: black;
+	width: auto;
 }
 
 .current-menu-item > a {
 	color: #b5c3d4; 
 }
 
+.slicknav_menu{
+	background-color: #EFE7DB;
+}
 
 
 /*media query pour responsive design*/
@@ -65,10 +69,11 @@ header{
 	.slicknav_brand > a > img {
 		width: auto;
 		height: 50px;
+		margin: 1px;
 	}
 
 	.slicknav_brand > a  {
-		width: 100px;
+		width: auto;
 		height: 50px;
 	}
 	
@@ -97,7 +102,7 @@ header{
 	}
 
 	.slicknav_brand > a  {
-		width: 100px;
+		width: auto;
 		height: 50px;
 	}
 
@@ -125,7 +130,7 @@ header{
 	}
 
 	.slicknav_brand > a  {
-		width: 100px;
+		width: auto;
 		height: 50px;
 	}
 	
