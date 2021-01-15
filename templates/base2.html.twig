@@ -1,4 +1,54 @@
-{% extends 'base.html.twig' %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>JOEL LOCATION - {% block title %}{% endblock %}</title>
+    <link rel="icon" type="image/x-icon" href="/images/Joel-Location-new.png" />
+
+    <!-- Required CSS files -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/owl.carousel.css">
+    <link rel="stylesheet" href="assets/css/barfiller.css">
+    <link rel="stylesheet" href="assets/css/animate.css">
+    <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/slicknav.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+
+    <link href="http://hayageek.github.io/jQuery-Upload-File/4.0.11/uploadfile.css" rel="stylesheet">
+    <link href="/dist/css/select2.css" rel="stylesheet"/>
+    <link href="/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    {# <link rel="stylesheet" href="/css/style.css"> #}
+    <link rel="stylesheet" href="/css/notif.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Tempusdominus Bbootstrap 4 -->
+    <link rel="stylesheet" href="/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- JQVMap -->
+    <link rel="stylesheet" href="/plugins/jqvmap/jqvmap.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/dist/css/adminlte.min.css">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker.css">
+    <!-- summernote -->
+    <link rel="stylesheet" href="/plugins/summernote/summernote-bs4.css">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker-standalone.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    {% block stylesheets %}{% endblock %}
+    </head>
+<body>
 {% block body %}
     <div class="wrapper">
         <!-- Navbar -->
@@ -82,128 +132,80 @@
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-th"></i>
                                 <p>
-                                    ADMINISTRATEUR
+                                    ADMINISTRATEUR JOEL LOCATION
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ path('decorations_index') }}" class="nav-link">
-                                        <i class="nav-icon far fa-calendar-alt"></i>
-                                        <p>
-                                            Décoration
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ path('domaine_diplome_index') }}" class="nav-link">
-                                        <i class="nav-icon far fa-calendar-alt"></i>
-                                        <p>
-                                            Domaine diplôme
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ path('niveau_diplome_index') }}" class="nav-link">
-                                        <i class="nav-icon far fa-calendar-alt"></i>
-                                        <p>
-                                            Niveau diplôme
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ path('grades_index') }}" class="nav-link">
-                                        <i class="nav-icon far fa-calendar-alt"></i>
-                                        <p>
-                                            Grade
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ path('droits_pensions_index') }}" class="nav-link">
-                                        <i class="nav-icon far fa-calendar-alt"></i>
-                                        <p>
-                                            Droit pension
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ path('punitions_index') }}" class="nav-link">
-                                        <i class="nav-icon far fa-calendar-alt"></i>
-                                        <p>
-                                            Punition
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ path('fonctions_index') }}" class="nav-link">
-                                        <i class="nav-icon far fa-calendar-alt"></i>
-                                        <p>
-                                            Fonction
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ path('motifs_radiations_controles_index') }}" class="nav-link">
-                                        <i class="nav-icon far fa-calendar-alt"></i>
-                                        <p>
-                                            Motif radiation
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ path('details_motifs_radiations_controles_index') }}" class="nav-link">
-                                        <i class="nav-icon far fa-calendar-alt"></i>
-                                        <p>
-                                            Détail motif radiation
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
                                     <a href="{{ path('user_index') }}" class="nav-link">
-                                        <i class="nav-icon far fa-image"></i>
-                                        <p>
-                                            Utilisateurs
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ path('logo') }}" class="nav-link">
-                                        <i class="nav-icon far fa-image"></i>
-                                        <p>
-                                            Logo
-                                        </p>
-                                    </a>
-                                </li>
-                                {# <li class="nav-item">
-                                    <a href="{{ path('roles_index') }}" class="nav-link">
-                                        <i class="nav-icon far fa-image"></i>
-                                        <p>
-                                            Rôles
-                                        </p>
-                                    </a>
-                                </li> #}
-                                <li class="nav-item">
-                                    <a href="{{ path('unites_index') }}" class="nav-link">
                                         <i class="nav-icon far fa-calendar-alt"></i>
                                         <p>
-                                            Unité
+                                            Utilisateur
                                         </p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ path('regions_index') }}" class="nav-link">
+                                    <a href="{{ path('agence_index') }}" class="nav-link">
                                         <i class="nav-icon far fa-calendar-alt"></i>
                                         <p>
-                                            Region
+                                            Agence
                                         </p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ path('provinces_index') }}" class="nav-link">
-                                        <i class="nav-icon far fa-image"></i>
+                                    <a href="{{ path('message_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
                                         <p>
-                                            Province
+                                            Message
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('contact_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Contact
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('type_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Type
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('avis_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Avis
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('mode_paiement_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Mode de paiement
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('mode_reservation_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Mode de réservation
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('marque_index') }}" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>
+                                            Marque
                                         </p>
                                     </a>
                                 </li>
@@ -215,188 +217,40 @@
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-th"></i>
                                 <p>
-                                    GESTION RH
+                                    GESTION JOEL LOCATION
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
-                            <ul class="nav nav-treeview">
-                                {% if is_granted("ROLE_MILITAIRE") %}
-                                    <li class="nav-item">
-                                        <a href="{{ path('nominations_personnels_index') }}" class="nav-link">
-                                            <i class="nav-icon far fa-calendar-alt"></i>
-                                            <p>
-                                                Nomination personnel
-                                            </p>
-                                        </a>
-                                    </li>
-                                {% endif %}                                    
+                            <ul class="nav nav-treeview">   
                                 <li class="nav-item">
-                                    <a href="{{ path('decisions_affectations_index') }}" class="nav-link">
+                                    <a href="{{ path('vehicule_index') }}" class="nav-link">
                                         <i class="nav-icon far fa-calendar-alt"></i>
                                         <p>
-                                            Décision affectation
+                                            Véhicule
                                         </p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ path('decisions_promotions_index') }}" class="nav-link">
+                                    <a href="{{ path('reservation_index') }}" class="nav-link">
                                         <i class="nav-icon far fa-calendar-alt"></i>
                                         <p>
-                                            Décision promotion
+                                            Réservation
                                         </p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ path('decisions_radiations_controles_index') }}" class="nav-link">
+                                    <a href="{{ path('paiement_index') }}" class="nav-link">
                                         <i class="nav-icon far fa-calendar-alt"></i>
                                         <p>
-                                            Décision radiation
+                                            Paiement
                                         </p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ path('affectations_personnels_index') }}" class="nav-link">
+                                    <a href="{{ path('etat_reservation_index') }}" class="nav-link">
                                         <i class="nav-icon far fa-calendar-alt"></i>
                                         <p>
-                                            Affectation personnel
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ path('radiations_personnels_index') }}" class="nav-link">
-                                        <i class="nav-icon far fa-calendar-alt"></i>
-                                        <p>
-                                            Radiation personnel
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ path('personnels_index') }}" class="nav-link">
-                                        <i class="nav-icon far fa-calendar-alt"></i>
-                                        <p>
-                                            Personnel
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ path('conjoints_index') }}" class="nav-link">
-                                        <i class="nav-icon far fa-calendar-alt"></i>
-                                        <p>
-                                            Conjoint
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ path('enfants_index') }}" class="nav-link">
-                                        <i class="nav-icon far fa-calendar-alt"></i>
-                                        <p>
-                                            Enfant
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ path('ex_conjoints_index') }}" class="nav-link">
-                                        <i class="nav-icon far fa-calendar-alt"></i>
-                                        <p>
-                                            Ex-Conjoint
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ path('diplomes_personnels_index') }}" class="nav-link">
-                                        <i class="nav-icon far fa-calendar-alt"></i>
-                                        <p>
-                                            Diplôme personnel
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ path('decorations_personnels_index') }}" class="nav-link">
-                                        <i class="nav-icon far fa-calendar-alt"></i>
-                                        <p>
-                                            Décoration personnel
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ path('notes_personnels_index') }}" class="nav-link">
-                                        <i class="nav-icon far fa-calendar-alt"></i>
-                                        <p>
-                                            Note personnel
-                                        </p>
-                                    </a>
-                                </li>
-                                {% if is_granted("ROLE_SUPERVISEUR") %}
-                                    <li class="nav-item">
-                                        <a href="{{ path('notes_p_o_s_index') }}" class="nav-link">
-                                            <i class="nav-icon far fa-calendar-alt"></i>
-                                            <p>
-                                                Note P.O.S
-                                            </p>
-                                        </a>
-                                    </li>
-                                {% endif %}                                    
-                                <li class="nav-item">
-                                    <a href="{{ path('permissions_index') }}" class="nav-link">
-                                        <i class="nav-icon far fa-calendar-alt"></i>
-                                        <p>
-                                            Permission
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ path('fonctions_conjoints_index') }}" class="nav-link">
-                                        <i class="nav-icon far fa-calendar-alt"></i>
-                                        <p>
-                                            Fonction conjoint
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ path('photos_index') }}" class="nav-link">
-                                        <i class="nav-icon far fa-calendar-alt"></i>
-                                        <p>
-                                            Photo
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ path('diplomes_index') }}" class="nav-link">
-                                        <i class="nav-icon far fa-calendar-alt"></i>
-                                        <p>
-                                            Diplôme
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ path('types_contrats_index') }}" class="nav-link">
-                                        <i class="nav-icon far fa-calendar-alt"></i>
-                                        <p>
-                                            Type de contrat
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ path('communes_index') }}" class="nav-link">
-                                        <i class="nav-icon far fa-calendar-alt"></i>
-                                        <p>
-                                            Commune
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ path('types_communes_index') }}" class="nav-link">
-                                        <i class="nav-icon far fa-calendar-alt"></i>
-                                        <p>
-                                            Type de Commune
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ path('districts_index') }}" class="nav-link">
-                                        <i class="nav-icon far fa-calendar-alt"></i>
-                                        <p>
-                                            District
+                                            Etat de réservation
                                         </p>
                                     </a>
                                 </li>
@@ -420,3 +274,64 @@
         </footer>
     </div>
 {% endblock %}
+
+        <!--Required JS files-->
+        <script src="assets/js/jquery-2.2.4.min.js"></script>
+        <script src="assets/js/vendor/popper.min.js"></script>
+        <script src="assets/js/vendor/bootstrap.min.js"></script>
+        <script src="assets/js/vendor/owl.carousel.min.js"></script>
+        <script src="assets/js/vendor/isotope.pkgd.min.js"></script>
+        <script src="assets/js/vendor/jquery.barfiller.js"></script>
+        <script src="assets/js/vendor/loopcounter.js"></script>
+        <script src="assets/js/vendor/slicknav.min.js"></script>
+        <script src="assets/js/active.js"></script>
+
+        <!-- jQuery -->
+        <script src="plugins/jquery/jquery.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="http://hayageek.github.io/jQuery-Upload-File/4.0.11/jquery.uploadfile.min.js"></script>
+        <script src="/dist/js/select2.js"></script>
+        <script src="/dist/js/up.js"></script>
+        <script src="/dist/js/bootstrap.min.js"></script>
+        <script src="/dist/js/jquery.uploadfile.js"></script>
+        <!-- inject:js -->
+        <script src="/js/off-canvas.js"></script>
+        <script src="/js/misc.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
+        <script src="/js/notif.js"></script>
+        <!-- jQuery UI 1.11.4 -->
+        <script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
+        <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+        <script>
+        $.widget.bridge('uibutton', $.ui.button)
+        </script>
+        <!-- Bootstrap 4 -->
+        <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <!-- ChartJS -->
+        <script src="/plugins/chart.js/Chart.min.js"></script>
+        <!-- Sparkline -->
+        <script src="/plugins/sparklines/sparkline.js"></script>
+        <!-- JQVMap -->
+        <script src="/plugins/jqvmap/jquery.vmap.min.js"></script>
+        <script src="/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+        <!-- jQuery Knob Chart -->
+        <script src="/plugins/jquery-knob/jquery.knob.min.js"></script>
+        <!-- daterangepicker -->
+        <script src="/plugins/moment/moment.min.js"></script>
+        <script src="/plugins/daterangepicker/daterangepicker.js"></script>
+        <!-- Tempusdominus Bootstrap 4 -->
+        <script src="/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+        <!-- Summernote -->
+        <script src="/plugins/summernote/summernote-bs4.min.js"></script>
+        <!-- overlayScrollbars -->
+        <script src="/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+        <!-- AdminLTE App -->
+        <script src="/dist/js/adminlte.js"></script>
+        <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+        <script src="/dist/js/pages/dashboard.js"></script>
+        <!-- AdminLTE for demo purposes -->
+        <script src="/dist/js/demo.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+        {% block javascripts %}{% endblock %}
+</body>
