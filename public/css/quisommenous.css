@@ -1,0 +1,51 @@
+.pourquoi1{
+    height: 200px;
+}
+
+/*media query pour responsive design*/
+
+/*extra large device*/
+@media (min-width: 1200px) {
+
+
+	
+}
+
+
+/* larges devices */
+
+@media  (min-width: 992px)and (max-width: 1199.98px) {
+    .pourquoi1{
+        height: auto;
+    }
+
+}
+
+/*  medium device(tablets) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .pourquoi1{
+        height: auto;
+    }
+	
+}
+
+
+/* small device */
+@media (min-width: 576px) and (max-width: 767.98px) {
+
+    .pourquoi1{
+        height: auto;
+    }
+
+}
+
+/*extra small device */
+@media (max-width: 575.98px) {
+    .pourquoi1{
+        height: auto;
+    }
+
+}
+
+
+

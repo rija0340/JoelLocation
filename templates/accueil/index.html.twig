@@ -1,172 +1,189 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil{% endblock %}
+{% block title %}Accueil
+{% endblock %}
 
-    {% block stylesheets %}
+{% block stylesheets %}{% endblock %}
 
-    {% endblock %}
+{% block body %}
+	<div class="hero-slider">
+		<div class="single-slide" style="background-image: url(images/JOELLOCATION1.jpg)">
+			<div class="inner">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="slide-content">
+								<h2></h2>
+								<p></p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="single-slide" style="background-image: url(images/JOELLOCATION2.jpg)">
+			<div class="inner">
+				<div class="container">
+					<div class="row justify-content-center">
+						<div class="col-lg-6 text-center">
+							<div class="slide-content">
+								<h2></h2>
+								<p></p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="single-slide" style="background-image: url(images/JOELLOCATION3.jpg)">
+			<div class="inner">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="slide-content">
+								<h2></h2>
+								<p></p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="about-area ">
+		<div class="container">
+			<div class=" d-flex justify-content-center">
+				<div class="logo_roulez">
+					<div class="about-img">
+						<img style="width:auto; height:150px;" src="images/Joel-Location-new.png" alt="JOEL LOCATION">
+					</div>
+				</div>
+				<div class="texte_roulez">
+					<div class="about-content rouler">
+						<p>Roulez en voiture de location en Guadeloupe
+							<br>
+							en toute tranquillité à des prix imbattables.
+						</p>
+					</div>
+				</div>
 
-    {% block body %}          
-        <div class="hero-slider">
-            <div class="single-slide" style="background-image: url(images/JOELLOCATION1.jpg)">
-                <div class="inner">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="slide-content">
-                                    <h2></h2>
-                                    <p></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="single-slide" style="background-image: url(images/JOELLOCATION2.jpg)">
-                <div class="inner">
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-lg-6 text-center">
-                                <div class="slide-content">
-                                    <h2></h2>
-                                    <p></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="single-slide" style="background-image: url(images/JOELLOCATION3.jpg)">
-                <div class="inner">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="slide-content">
-                                    <h2></h2>
-                                    <p></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="portfolio-area sp">
-            <div class="container" id="vehicule">
-                <div class="section-title">
-                    <h2>Nos Véhicules</h2>
-                    <p>Vous pouvez choisir parmi les véhicules que nous offrons</p>
-                </div>
-                <div class="row">
-                    <div class="single-portfolio col-md-4">
-                        <div class="inner">
-                            <div class="portfolio-img">
-                                <img src="images/capture 1.jpg" alt="portfolio-image">
-                                <div class="hover-content">
-                                    <div>
-                                        <a href="{{ path('capture') }}" class="button">Voir plus de détails</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="single-portfolio col-md-4">
-                        <div class="inner">
-                            <div class="portfolio-img">
-                                <img src="images/clio 4a.jpg" alt="portfolio-image">
-                                <div class="hover-content">
-                                    <div>
-                                        <a href="{{ path('clio') }}" class="button">Voir plus de détails</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="single-portfolio col-md-4">
-                        <div class="inner">
-                            <div class="portfolio-img">
-                                <img src="images/twingo2.jpg" alt="portfolio-image">
-                                <div class="hover-content">
-                                    <div>
-                                        <a href="{{ path('twingo') }}" class="button">Voir plus de détails</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            {# <div class="row">
-                <div class="col-12 text-center" data-margin="40px 0 0">
-                    <a href="#" class="button">Plus de véhicule</a>
-                </div>
-            </div> #}
-        </div>
-    </div>
+			</div>
+		</div>
+	</div>
+	<div class="portfolio-area sp">
+		<div class="container" id="vehicule">
+			<div class="section-title">
+				<h2>Nos Véhicules</h2>
+				<p>Vous pouvez choisir parmi les véhicules que nous offrons</p>
+			</div>
+			<div class="row">
+				<div class="single-portfolio col-md-4">
+					<div class="inner">
+						<div class="portfolio-img">
+							<img src="images/capture 1.jpg" alt="portfolio-image">
+							<div class="hover-content">
+								<div>
+									<a href="{{ path('capture') }}" class="button">Voir plus de détails</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="single-portfolio col-md-4">
+					<div class="inner">
+						<div class="portfolio-img">
+							<img src="images/clio 4a.jpg" alt="portfolio-image">
+							<div class="hover-content">
+								<div>
+									<a href="{{ path('clio') }}" class="button">Voir plus de détails</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="single-portfolio col-md-4">
+					<div class="inner">
+						<div class="portfolio-img">
+							<img src="images/twingo2.jpg" alt="portfolio-image">
+							<div class="hover-content">
+								<div>
+									<a href="{{ path('twingo') }}" class="button">Voir plus de détails</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			{# <div class="row">
+																																																																																																																																													                <div class="col-12 text-center" data-margin="40px 0 0">
+																																																																																																																																													                    <a href="#" class="button">Plus de véhicule</a>
+																																																																																																																																													                </div>
+																																																																																																																																													            </div> #}
+		</div>
+	</div>
 
-    <div class="service-area sp bg1">
-        <div class="container">
-            <div class="section-title white">
-                <h2>A propos de nous</h2>
-                <p>Les services apportés à nos clients sont notre priorité. Votre satisfaction compte.</p>
-            </div>
-            <div class="row">
-                <div class="col-lg-6 col-md-6 single-service bordered">
-                    <div class="inner">
-                        <div class="title">
+	<div class="service-area sp bg1">
+		<div class="container">
+			<div class="section-title white">
+				<h2>A propos de nous</h2>
+				<p>Les services apportés à nos clients sont notre priorité. Votre satisfaction compte.</p>
+			</div>
+			<div class="row">
+				<div class="col-lg-6 col-md-6 single-service bordered">
+					<div class="inner">
+						<div class="title">
 
-                            <h4>Qui sommes-nous ?</h4>
-                        </div>
-                        <div class="content">
-                            <p> Joellocation est une société de location de voitures en Guadeloupe.
-                                Services adaptés pour chaque besoin à des tarifs très abordables.
-                                Véhicules bien entretenues et soumises à des inspections d’experts.
-                                Voitures livrées dès votre arrivée à l’aéroport.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6 single-service bordered">
-                        <div class="inner">
-                            <div class="title">
+							<h4>Qui sommes-nous ?</h4>
+						</div>
+						<div class="content">
+							<p>Joellocation est une société de location de voitures en Guadeloupe. Services adaptés pour chaque besoin à des tarifs très abordables.Véhicules bien entretenues et soumises à des inspections d’experts.
+																																																																															Voitures livrées dès votre arrivée à l’aéroport.</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6 col-md-6 single-service bordered">
+					<div class="inner">
+						<div class="title">
 
-                                <h4>Mentions légales</h4>
-                            </div>
-                            <div class="content">
-                                <p>SASU AU CAPTAL DE 1000€
-                                    GERANT : JOEL MANDRET
-                                    SIRET : 87868990000016 RCS POINTRE A PITRE
-                                    N° TVA INTRACOMMUNAUTAIRE : FR40878689900</p>
-                                </div>
-                            </div>
-                        </div>
+							<h4>Mentions légales</h4>
+						</div>
+						<div class="content">
+							<p>SASU AU CAPTAL DE 1000€
+																																																																																																																																																																																																																																																																																																																																																																																						                                    GERANT : JOEL MANDRET
+																																																																																																																																																																																																																																																																																																																																																																																						                                    SIRET : 87868990000016 RCS POINTRE A PITRE
+																																																																																																																																																																																																																																																																																																																																																																																						                                    N° TVA INTRACOMMUNAUTAIRE : FR40878689900</p>
+						</div>
+					</div>
+				</div>
 
-                    </div>
-                </div>
-            </div> 
-            <div class="faq-area sp bg2">
-                <div class="container" id="contact">
-                    <div class="section-title">
-                        <h2>Nous contacter</h2>
-                        <p>Vous pouvez nous envoyer un message ici</p>
-                    </div>
-                    <form action="#" class="contact-form">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <input type="text" placeholder="Nom">
-                            </div>
-                            <div class="col-lg-6">
-                                <input type="email" placeholder="Email">
-                            </div>
-                            <div class="col-lg-12">
-                                <input type="text" placeholder="Objet">
-                            </div>
-                            <div class="col-lg-12">
-                                <textarea placeholder="Message"></textarea>
-                            </div>
-                            <div class="col-lg-12">
-                                <input class="button" type="submit" value="Envoyer Message">
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        {% endblock %}
+			</div>
+		</div>
+	</div>
+	<div class="faq-area sp bg-white">
+		<div class="container" id="contact">
+			<div class="section-title">
+				<h2>Nous contacter</h2>
+				<p>Vous pouvez nous envoyer un message ici</p>
+			</div>
+			<form action="#" class="contact-form">
+				<div class="row">
+					<div class="col-lg-6">
+						<input type="text" placeholder="Nom">
+					</div>
+					<div class="col-lg-6">
+						<input type="email" placeholder="Email">
+					</div>
+					<div class="col-lg-12">
+						<input type="text" placeholder="Objet">
+					</div>
+					<div class="col-lg-12">
+						<textarea placeholder="Message"></textarea>
+					</div>
+					<div class="col-lg-12">
+						<input class="button" type="submit" value="Envoyer Message">
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+{% endblock %}

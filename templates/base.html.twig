@@ -103,25 +103,6 @@
 					</div>
 				</header>
 
-
-				{# ceci est pour tester code bootstrap pour centrer des items #}
-				{#             <div class="d-flex align-items-center bd-highlight " style="height: 100px">
-								                <div class="container">
-								                    <div class=" d-flex bd-highlight mb-3">
-								                      <div class="mr-auto p-2 bd-highlight">Flex item</div>
-								                      <div class="p-2 bd-highlight">Flex item</div>
-								                      <div class="p-2 bd-highlight">Flex item</div>
-								                  </div>
-								              </div>
-								          </div>
-								          <div class="d-flex align-items-center bd-highlight " style="height: 100px">
-								           <div class="d-flex bd-highlight mb-3">
-								              <div class="mr-auto p-2 bd-highlight">Flex item</div>
-								              <div class="p-2 bd-highlight">Flex item</div>
-								              <div class="p-2 bd-highlight">Flex item</div>
-								          </div>
-								      </div> #}
-
 				{% block body %}{% endblock %}
 				<footer>
 					<div class="footer-top">
@@ -138,19 +119,7 @@
 
 									</div>
 								</div>
-								{# <div class="col-6 footer_widget">
-																                                <div class="inner">
-																                                    <h4>MENTION LEGAL</h4>    
-																                                    <h5>JOEL LOCATION</h5>
-																                                    <p>94 CHEMIN DE LA HACHE,97160 LE MOULE<br>
-																                                    0690 73 76 74 /  07 67 32 14 47<br>
-																                                    JOEL@JOELLOCATION.COM<br>
-																                                    SASU AU CAPTAL DE 1000€<br>
-																                                    GERANT  JOEL MANDRET<br>
-																                                    SIRET 87868990000016  RCS  POINTRE A PITRE<br>
-																                                    N° INTRACOMMUNAUTAIRE  FR40878689900</p>
-																                                </div>
-																                            </div> #}
+
 							</div>
 						</div>
 					</div>
@@ -185,7 +154,7 @@
 			<script src="assets/js/vendor/isotope.pkgd.min.js"></script>
 			<script src="assets/js/vendor/jquery.barfiller.js"></script>
 			<script src="assets/js/vendor/loopcounter.js"></script>
-			{# // <script src="assets/js/vendor/slicknav.min.js"></script> #}
+			<!--<script src="assets/js/vendor/slicknav.min.js"></script>-->
 			<script src="assets/js/vendor/jquery.slicknav.js"></script>
 			<script src="assets/js/active.js"></script>
 
@@ -205,41 +174,32 @@
 			<!-- jQuery UI 1.11.4 -->
 			<script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
 			<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-			<script>
-				// $.widget.bridge('uibutton', $.ui.button)</script>
-<!-- Bootstrap 4 --> <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-				<!-- ChartJS -->
-				<!-- ChartJS -->
-				<script src="/plugins/chart.js/Chart.min.js"></script>
-				<!-- Sparkline -->
-				<script src="/plugins/sparklines/sparkline.js"></script>
-				<!-- JQVMap -->
-				<script src="/plugins/jqvmap/jquery.vmap.min.js"></script>
-				<script src="/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
-				<!-- jQuery Knob Chart -->
-				<script src="/plugins/jquery-knob/jquery.knob.min.js"></script>
-				<!-- daterangepicker -->
-				<script src="/plugins/moment/moment.min.js"></script>
-				<script src="/plugins/daterangepicker/daterangepicker.js"></script>
-				<!-- Tempusdominus Bootstrap 4 -->
-				<script src="/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-				<!-- Summernote -->
-				<script src="/plugins/summernote/summernote-bs4.min.js"></script>
-				<!-- overlayScrollbars -->
-				<script src="/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-				<!-- AdminLTE App -->
-				<script src="/dist/js/adminlte.js"></script>
-				<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-				<script src="/dist/js/pages/dashboard.js"></script>
-				<!-- AdminLTE for demo purposes -->
-				<script src="/dist/js/demo.js"></script>
-				<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
-				<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
-				{
-				% block javascripts %
-			}
-				{
-				% endblock %
-			}</body>
+			<!-- <script>$.widget.bridge('uibutton', $.ui.button)</script>-->
+			<!-- Bootstrap 4 --><script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"> </script>
+			<script src="/plugins/chart.js/Chart.min.js"></script>
+			<script src="/plugins/sparklines/sparkline.js"></script>
+			<script src="/plugins/jqvmap/jquery.vmap.min.js"></script>
+			<script src="/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+
+			<script src="/plugins/jquery-knob/jquery.knob.min.js"></script>
+			<!-- daterangepicker -->
+			<script src="/plugins/moment/moment.min.js"></script>
+			<script src="/plugins/daterangepicker/daterangepicker.js"></script>
+			<!-- Tempusdominus Bootstrap 4 -->
+			<script src="/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+			<!-- Summernote -->
+			<script src="/plugins/summernote/summernote-bs4.min.js"></script>
+			<!-- overlayScrollbars -->
+			<script src="/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+			<!-- AdminLTE App -->
+			<script src="/dist/js/adminlte.js"></script>
+			<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+			<script src="/dist/js/pages/dashboard.js"></script>
+			<!-- AdminLTE for demo purposes -->
+			<script src="/dist/js/demo.js"></script>
+			<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+			{% block javascripts %}{% endblock %}
 		</body>
 	</html>
+</body></html>

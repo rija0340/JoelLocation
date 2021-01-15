@@ -1,42 +1,122 @@
 {% extends 'base.html.twig' %}
+{% block title %}Accueil
+{% endblock %}
+{% block stylesheets %}
+	<link rel="stylesheet" href="css/quisommenous.css">
+{% endblock %}
 
-{% block title %}Accueil{% endblock %}
+{% block body %}
 
-	{% block body %}
-		
-		<div class="section-title">
-			<h2>À propos de Joel Location</h2>
-		</div>
-
-		<div class="container">
-			<div class="text-justify">
-				<p>Joellocation est une société de location de voitures en Guadeloupe dédiée à fournir des services de location de voitures incroyables à des tarifs très abordables. Étant une jeune entreprise indépendante, l'entreprise s'est forgé une bonne réputation grâce à sa diligence et son dévouement dans le service qu'elle fournit. Chez Joellocation, notre objectif premier est de faire en sorte que les visiteurs de la Guadeloupe bénéficient du meilleur de leurs vacances, avec une réactivité réellement fiable et sans pareil. La société propose plusieurs types différents de voitures à louer. Ceux qui peuvent contenir une famille complète, une mini-voiture pour se promener dans la ville, un véhicule tout chemin pour galoper à travers plusieurs sites tout en faisant du tourisme. L'entreprise s'assure de mener des inspections d'experts sur tous ses véhicules avant et après la location afin d'assurer la sécurité continue de ses clients. L’entretien irréprochable des véhicules est important pour Joellocation.</p>
-				<p>Joellocation met à votre disposition une large gamme de voitures, en parfait état, adaptées au terrain et aux itinéraires de la Guadeloupe. Ces voitures sont livrées à des prix imbattables, couplées au fait qu'elles peuvent facilement être mises à votre disposition à l'aéroport à tout moment de la journée. Être une agence locale nous permet de mieux nous connecter avec nos clients et nos résidents de la Guadeloupe, apportant ainsi un degré d'excellence à nos services.</p>
-				<p>Joellocation dispose d'une page Web de réservation en ligne avancée sur laquelle les clients peuvent facilement réserver les voitures de leur choix, à des tarifs vraiment abordables. La transparence est l'un des mots d'ordre de notre agence et à ce titre, les prix sont clairement indiqués sur les pages de réservation avec les détails et les conditions de location. La société dispose d'un cadre et d'un personnel dévoués au service client. Le personnel est formé pour être tolérant, respectueux et particulièrement serviable envers les clients de tout horizon, y compris les non-francophones.</p>
-
-				<div align="center"><h3>Pourquoi louer une voiture avec Joellocation ?</h3></div>
-				<h4><i class="fa fa-map-marker" aria-hidden="true"></i> Agence de location locale</h4>
-				<p>Joellocation est une société à taille humaine, indépendante, locale. Pendant votre séjour, Joellocation reste toujours à votre service. Vous ne serez pas face à une plateforme téléphonique quand vous contactez Joellocation. </p>
-				<h4><i class="fa fa-key" aria-hidden="true"></i> Livraison</h4>
-				<p>Votre véhicule sera livré dès votre arrivée à l’aéroport afin de vous faire gagner un temps précieux sur votre séjour. Il est tout à fait aussi possible de récupérer votre voiture sur votre lieu de résidence s’il est situé sur la grand terre. Merci de préciser lors de la réservation.</p>
-				<h4><i class="fa fa-users" aria-hidden="true"></i> Conducteur additionnel</h4>
-				<p>A Joellocation, nous savons que les longs trajets peuvent être fatiguant, surtout après un bon bain de mer. C’est pour cela, que nous vous proposons l’ajout d’un deuxième conducteur gratuitement. De plus, les assurances tous risques sont inclus dans votre forfait "location de voiture".  </p>
-
-				<h4><i class="fa fa-road" aria-hidden="true"></i> Kilométrages illimités</h4>
-				<p>Chez Joellocation, le kilométrage est illimité !</p>
-
-				<h4><i class="fa fa-user-o" aria-hidden="true"></i> Siège bébé / enfant</h4>
-				<p>Nous mettons à votre disposition des sièges bébé et nourrissons, homologués NF, pour seulement 30 euros TTC. Les rehausseurs pour les enfants de + de 15kg sont totalement gratuits !</p>
-
-
-				<div align="center"><h3>Notre mission</h3></div>
-				<p>
-					•	Satisfaire nos clients grâce à notre professionnalisme et notre savoir faire<br>
-					•	Offrir des prix imbattables sur des voitures de qualité<br>
-					•	Assurer la sécurité et le confort de nos clients en proposant des services de location de voitures hors-pair<br>
-				</p>
+	<div class="portfolio-area sp">
+		<div class="container" id="propos">
+			<div class="section-title">
+				<h2>À propos de Joel Location</h2>
+				<p>Vous pouvez choisir parmi les véhicules que nous offrons</p>
 			</div>
 
-		</div>
+			<div class="mb-3">
+				<div class="float-left mr-3">
+					<img style="width:auto; height:300px;" src="images/iStock-1065238562.jpg" alt="JOEL LOCATION">
 
-	{% endblock %}
+				</div>
+				<div class="text-justify ">
+					<p>Joellocation est une société de location de voitures en Guadeloupe dédiée à fournir des services de location de voitures incroyables à des tarifs très abordables. Étant une jeune entreprise indépendante, l'entreprise s'est forgé une bonne réputation grâce à sa diligence et son dévouement dans le service qu'elle fournit. Chez Joellocation, notre objectif premier est de faire en sorte que les visiteurs de la Guadeloupe bénéficient du meilleur de leurs vacances, avec une réactivité réellement fiable et sans pareil. La société propose plusieurs types différents de voitures à louer. Ceux qui peuvent contenir une famille complète, une mini-voiture pour se promener dans la ville, un véhicule tout chemin pour galoper à travers plusieurs sites tout en faisant du tourisme. L'entreprise s'assure de mener des inspections d'experts sur tous ses véhicules avant et après la location afin d'assurer la sécurité continue de ses clients. L’entretien irréprochable des véhicules est important pour Joellocation.</p>
+					<p>Joellocation met à votre disposition une large gamme de voitures, en parfait état, adaptées au terrain et aux itinéraires de la Guadeloupe.Ces voitures sont livrées à des prix imbattables, couplées au fait qu'elles peuvent facilement être mises à votre disposition à l'aéroport à tout moment de la journée ou même être livrées sur votre lieu de résidence s’il est situé sur la Grande-Terre. Être une agence locale nous permet de mieux nous connecter avec nos clients et nos résidents de la Guadeloupe, apportant ainsi un degré d'excellence à nos services.</p>
+					<p>Joellocation dispose d'une page Web de réservation en ligne avancée sur laquelle les clients peuvent facilement réserver les voitures de leur choix, à des tarifs vraiment abordables. La transparence est l'un des mots d'ordre de notre agence et à ce titre, les prix sont clairement indiqués sur les pages de réservation avec les détails et les conditions de location. La société dispose d'un cadre et d'un personnel dévoués au service client. Le personnel est formé pour être tolérant, respectueux et particulièrement serviable envers les clients de tout horizon, y compris les non-francophones.</p>
+				</div>
+			</div>
+
+			<div class="d-flex justify-content-center mt-5">
+				<div>
+					<a href="{{ path('accueil') }}#vehicule" class="button">Nos véhicules</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="service-area bg2 sp">
+		<div class="container">
+			<div class="section-title">
+				<h2>Pourquoi louer une voiture avec Joellocation ?</h2>
+			</div>
+			<div class="row">
+				<div class="col-lg-4 col-md-12 single-service">
+					<div class="inner">
+						<div class="title">
+							<div class="icon">
+								<i class="fa fa-map-marker"></i>
+							</div>
+							<h4>Agence de location locale</h4>
+						</div>
+						<div class="content text-justify pourquoi1">
+							<p>Joellocation est une société à taille humaine, indépendante, locale. Pendant votre séjour, Joellocation reste toujours à votre service. Vous ne serez pas face à une plateforme téléphonique quand vous contactez Joellocation.</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-12 single-service">
+					<div class="inner">
+						<div class="title">
+							<div class="icon">
+								<i class="fa fa-key"></i>
+							</div>
+							<h4>Livraison</h4>
+						</div>
+						<div class="content text-justify pourquoi1">
+							<p>Votre véhicule sera livré dès votre arrivée à l’aéroport afin de vous faire gagner un temps précieux sur votre séjour. Il est tout à fait aussi possible de récupérer votre voiture sur votre lieu de résidence s’il est situé sur la grand terre. Merci de préciser lors de la réservation.</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-12 single-service">
+					<div class="inner">
+						<div class="title">
+							<div class="icon">
+								<i class="fa fa-users"></i>
+							</div>
+							<h4>Conducteur additionnel</h4>
+						</div>
+						<div class="content text-justify pourquoi1">
+							<p>A Joellocation, nous savons que les longs trajets peuvent être fatiguant, surtout après un bon bain de mer. C’est pour cela, que nous vous proposons l’ajout d’un deuxième conducteur gratuitement. De plus, les assurances responsabilités civiles et accidents causés aux tiers sont inclus dans votre forfait "location de voiture".</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-6 col-md-12 single-service">
+					<div class="inner">
+						<div class="title">
+							<div class="icon">
+								<i class="fa fa-road"></i>
+							</div>
+							<h4>Kilométrages illimités</h4>
+						</div>
+						<div class="content" style="height:90px">
+							<p>Chez Joellocation, le kilométrage est illimité !</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6 col-md-12 single-service">
+					<div class="inner">
+						<div class="title">
+							<div class="icon">
+								<i class="fas fa-baby"></i>
+							</div>
+							<h4>Siège bébé / enfant</h4>
+						</div>
+						<div class="content" style="height:90px">
+							<p>Nous mettons à votre disposition des sièges bébé et nourrissons, homologués NF, pour seulement 30 euros TTC. Les rehausseurs pour les enfants de + de 15kg sont totalement gratuits !</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div></div></div><div class="d-flex justify-content-center"><div>
+<a href="#" class="button">Demander un avis</a></div></div><div class="portfolio-area sp"><div class="container" id="mission">
+<div class="section-title">
+	<h2>Notre mission</h2>
+</div>
+•	Satisfaire nos clients grâce à notre professionnalisme et notre savoir faire<br>
+•	Offrir des prix imbattables sur des voitures de qualité<br>
+•	Assurer la sécurité et le confort de nos clients en proposant des services de location de voitures hors-pair<br></div></div>{% endblock %}

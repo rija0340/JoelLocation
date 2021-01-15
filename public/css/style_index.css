@@ -1,3 +1,46 @@
+/***************************** *****************************
+ *   00 - common & reset css changement de theme en Rouge
+ ***************************** *****************************
+ *
+ */
+ .c1 {
+	color: #af0000; }
+  
+  .c1-bg {
+	background-color: #af0000; }
+  
+  .c1-bo {
+	border-color: #af0000 !important; }
+  
+  .c2 {
+	color: #af0000; }
+  
+  .c2-bg {
+	background-color: #af0000; }
+  
+  .c2-bo {
+	border-color: #af0000 !important; }
+  
+  .c3, #menu ul ul li a:hover, .single-service.bordered .inner:hover .icon, .bordered.single-service-2 .inner:hover .icon, .bordered.single-service-3 .inner:hover .icon,
+  .single-service.bordered .inner:hover h4,
+  .bordered.single-service-2 .inner:hover h4,
+  .bordered.single-service-3 .inner:hover h4, .single-service-3 .inner:hover .title .icon, .isotope-menu li.active, .isotope-menu li:hover, .single-portfolio .inner .portfolio-img .hover-content .button, .single-portfolio .inner .portfolio-content h3:hover, .faq-sidebar li a, .single-pricing .inner a.button:hover, .single-pricing-2 .inner a.button:hover, .single-pricing-2.active .inner a.button {
+	color: #af0000; }
+  
+  .c3-bg, .bg1, .button, .hero-slider .owl-dots .owl-dot.active, .single-service-2:hover .inner, .single-portfolio .inner .portfolio-img .hover-content, .faq .single-item.active, .single-faq h2 span, .footer_widget .nw_form button, .tabs-area .tabs-nav li a.active, .single-team .inner .team-img::after, .single-pricing.active .inner, .active.single-pricing-2 .inner, .single-pricing-2.active .inner .title .price {
+	background-color: #af0000; }
+  
+  .c3-bo, .button, .single-service.bordered .inner:hover, .bordered.single-service-2 .inner:hover, .bordered.single-service-3 .inner:hover, .testimonial-slider .single-slide, .tabs-area .tabs-nav li a::after, .tabs-area .tabs-nav li a.active, .contact-form input:not([type="submit"]):focus,
+  .contact-form textarea:focus {
+	border-color: #af0000 !important; }
+
+	.bg2 {
+		background-color: #af0000; 
+	}
+
+/*******************************/
+
+
 /*nos véhicules*/
 
 .single-portfolio .inner .portfolio-img:hover .hover-content {
@@ -21,9 +64,9 @@ header{
 	width: auto;
 }
 
-.current-menu-item > a {
-	color: #b5c3d4; 
-}
+
+#menu ul > li.current-menu-item > a {
+	color: #af0000; }
 
 .slicknav_menu{
 	background-color: #EFE7DB;
@@ -39,8 +82,33 @@ header{
 	.site > header{
 		display: block;
 	}
+	/* hero slider (carousel) custom*/
+.hero-slider .single-slide {
+	height: 400px;
 }
+
+
 }
+
+/* section roulez */
+
+.rouler p{
+	font-size: 26px;
+}
+
+.logo_roulez{
+	margin: 5px;
+}
+.texte_roulez{
+	margin: 5px;
+
+}
+.rouler{
+color: black;
+}
+
+
+
 
 
 /* larges devices */
