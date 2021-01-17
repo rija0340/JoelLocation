@@ -149,6 +149,16 @@ class AccueilController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/client", name="client")
+     */
+    public function client(): Response
+    {
+        return $this->render('accueil/client.html.twig', [
+            'controller_name' => 'AccueilController',
+        ]);
+    }
+
     
     /**
      * @Route("/teste", name="teste")
