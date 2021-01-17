@@ -10,9 +10,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class AccueilController extends AbstractController
 {
+    private $passwordEncoder;
+
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $this->passwordEncoder = $passwordEncoder;
+    }
+
     /**
      * @Route("/", name="accueil")
      */
@@ -89,11 +98,18 @@ class AccueilController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user->setRoles(['ROLE_CLIENT']);
+            $user->setPassword($this->passwordEncoder->encodePassword(
+                $user,
+                $user->getPassword()
+            ));
+            $user->setPresence(1);
+            $user->setDateInscription(new \DateTime('now'));
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->redirectToRoute('accueil');
+            return $this->redirectToRoute('login');
         }
         return $this->render('accueil/inscription.html.twig', [
             'controller_name' => 'InscriptionController',
@@ -104,20 +120,27 @@ class AccueilController extends AbstractController
 
     
     /**
-     * @Route("/login", name="login")
+     * @Route("/login_client", name="login")
      */
-    public function login(Request $request): Response
+    public function login(Request $request, AuthenticationUtils $authenticationUtils): Response
     {
         $user = new User();
         $form = $this->createForm(LoginType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+            //$entityManager = $this->getDoctrine()->getManager();
             //$entityManager->persist($user);
             //$entityManager->flush();
-
-            return $this->redirectToRoute('accueil');
+            $userreq = new User();
+            $username = $user->getUsername();
+            $userpass = $this->passwordEncoder->encodePassword($user, $user->getPassword());
+            $userreq = $this->getDoctrine()->getRepository(User::class)->findOneBy(['username' => $username, 'password' => $userpass]);
+            if($userreq != null){ 
+                //if($user->setPassword($this->passwordEncoder->encodePassword($user,$user->getPassword())) == $userreq->getPassword()){ 
+                    return $this->redirectToRoute('accueil');
+                //}
+            }
         }
         return $this->render('accueil/login.html.twig', [
             'controller_name' => 'LoginController',

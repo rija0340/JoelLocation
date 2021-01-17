@@ -92,7 +92,8 @@
 											<a href="{{ path('accueil') }}#vehicule">Nos véhicules</a>
 										</li>
 										<li class="{% if app.request.attributes.get('_route') starts with 'accueil#vehicule' %}current-menu-item{% endif %}">
-											<a href="#">Mon compte</a>
+											{# mbola asiana condition eto arak'araka ny olona connecter #}
+											<a href="{{ path('app_login') }}">Mon compte</a>
 										</li>
 										<li class="{% if app.request.attributes.get('_route') starts with 'accueil#contact' %}current-menu-item{% endif %}">
 											<a href="{{ path('accueil') }}#contact">Contact</a>
