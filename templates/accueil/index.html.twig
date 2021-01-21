@@ -6,7 +6,7 @@
 {% block stylesheets %}{% endblock %}
 
 {% block body %}
-	<div class="hero-slider" style="height:400px; position:relative;overflow:hidden;">
+	<div class="hero-slider">
 		<div class="single-slide" style="background-image: url(images/JOELLOCATION1.jpg)">
 			<div class="inner">
 				<div class="container">
@@ -52,25 +52,22 @@
 	</div>
 	<div class="about-area ">
 		<div class="container">
-			<div class=" d-flex justify-content-center">
-				<div class="logo_roulez">
+			<div class=" d-flex justify-content-center div_roulez">
+				<div class="logo_roulez d-flex align-items-center">
 					<div class="about-img">
-						<img style="width:auto; height:150px;" src="images/Joel-Location-new.png" alt="JOEL LOCATION">
+						<img src="images/Joel-Location-new.png" alt="JOEL LOCATION">
 					</div>
 				</div>
 				<div class="texte_roulez">
-					<div class="about-content rouler">
-						<p>Roulez en voiture de location en Guadeloupe
-							<br>
-							en toute tranquillité à des prix imbattables.
-						</p>
+					<div class="about-content roulez">
+						<p>Roulez en voiture de location en Guadeloupe en toute tranquillité à des prix imbattables.</p>
 					</div>
 				</div>
 
 			</div>
 		</div>
 	</div>
-	<div class="portfolio-area sp">
+	<div class="portfolio-area">
 		<div class="container" id="vehicule">
 			<div class="section-title">
 				<h2>Nos Véhicules</h2>
@@ -115,10 +112,10 @@
 				</div>
 			</div>
 			{# <div class="row">
-																																																																																																																																																			                <div class="col-12 text-center" data-margin="40px 0 0">
-																																																																																																																																																			                    <a href="#" class="button">Plus de véhicule</a>
-																																																																																																																																																			                </div>
-																																																																																																																																																			            </div> #}
+																																																																																																																																																																																																																																																																								                <div class="col-12 text-center" data-margin="40px 0 0">
+																																																																																																																																																																																																																																																																								                    <a href="#" class="button">Plus de véhicule</a>
+																																																																																																																																																																																																																																																																								                </div>
+																																																																																																																																																																																																																																																																								            </div> #}
 		</div>
 	</div>
 
@@ -135,9 +132,9 @@
 
 							<h4>Qui sommes-nous ?</h4>
 						</div>
-						<div class="content">
+						<div class="content description">
 							<p>Joellocation est une société de location de voitures en Guadeloupe. Services adaptés pour chaque besoin à des tarifs très abordables.Véhicules bien entretenues et soumises à des inspections d’experts.
-																																																																																															Voitures livrées dès votre arrivée à l’aéroport.</p>
+																																																																																																																																																																																																																																																																																																																																																																																																																							Voitures livrées dès votre arrivée à l’aéroport.</p>
 						</div>
 					</div>
 				</div>
@@ -147,11 +144,11 @@
 
 							<h4>Mentions légales</h4>
 						</div>
-						<div class="content">
+						<div class="content mentions_legales">
 							<p>SASU AU CAPTAL DE 1000€
-																																																																																																																																																																																																																																																																																																																																																																																																						                                    GERANT : JOEL MANDRET
-																																																																																																																																																																																																																																																																																																																																																																																																						                                    SIRET : 87868990000016 RCS POINTRE A PITRE
-																																																																																																																																																																																																																																																																																																																																																																																																						                                    N° TVA INTRACOMMUNAUTAIRE : FR40878689900</p>
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																														                                    GERANT : JOEL MANDRET
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																														                                    SIRET : 87868990000016 RCS POINTRE A PITRE
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																														                                    N° TVA INTRACOMMUNAUTAIRE : FR40878689900</p>
 						</div>
 					</div>
 				</div>
@@ -160,12 +157,12 @@
 		</div>
 	</div>
 	<div class="faq-area sp bg-white">
-		<div class="container" id="contact" style="background-image: url('images/iStock-177820652.jpg');background-size: cover;">
-			<div class="section-title">
-				<h2>Nous contacter</h2>
-				<p>Vous pouvez nous envoyer un message ici</p>
-			</div>
-			<form action="#" class="contact-form">
+		<div class="section-title">
+			<h2>Nous contacter</h2>
+			<p>Vous pouvez nous envoyer un message ici</p>
+		</div>
+		<div class="container" id="contact">
+			<form style="background-image: url('images/iStock-177820652.jpg');background-size: cover;" action="#" class="contact-form">
 				<div class="row">
 					<div class="col-lg-6">
 						<input type="text" placeholder="Nom*">
@@ -180,16 +177,17 @@
 						<input type="email" placeholder="Adresse*">
 					</div>
 					{# <div class="col-lg-12">
-						<input type="text" placeholder="Objet*">
-					</div> #}
-					<label for="Objet">Objet* : </label>
+																																																																																																																																																																																																									<input type="text" placeholder="Objet*">
+																																																																																																																																																																																																								</div> #}
+					<label for="Objet">Objet* :
+					</label>
 					<select name="Objet" id="Objet">
 						<option value="devis">Demande de devis</option>
 						<option value="renseignement">Demande de renseignement</option>
 						<option value="autre">Autre</option>
 					</select>
 					<div class="col-lg-12">
-						<textarea placeholder="Message*"></textarea>
+						<textarea placeholder="Pour une demande de devis, veuillez préciser vos dates de retrait et de retour ainsi que si c’est à l’aéroport ou autre "></textarea>
 					</div>
 					<div class="col-lg-12">
 						<input class="button" type="submit" value="Envoyer Message">

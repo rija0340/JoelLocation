@@ -1,0 +1,46 @@
+<div class="container d-flex align-items-center">
+	<div class=" mr-auto logo-column">
+		<a href="index.html" class="logo" style="height:100px;width:100px">
+			<img src="images/Joel-Location-new.png" alt="JOEL LOCATION">
+		</a>
+		<span style="font-family:'Monotype corsiva'">Sa Ka Woulé</span>
+	</div>
+	<div class="nav-column">
+		<nav id="menu" class="d-none d-lg-block ">
+			<ul>
+				<li class="{% if app.request.attributes.get('_route') starts with 'accueil' %}current-menu-item{% endif %}">
+					<a href="{{ path('accueil') }}">Accueil</a>
+				</li>
+				<li class="{% if app.request.attributes.get('_route') starts with 'quisommenous' %}current-menu-item{% endif %}">
+					<a href="{{ path('quisommenous') }}">A propos</a>
+				</li>
+				<li class="{% if app.request.attributes.get('_route') starts with 'accueil#vehicule' %}current-menu-item{% endif %}">
+					<a href="{{ path('accueil') }}#vehicule">Nos véhicules</a>
+				</li>
+				<li class="{% if app.request.attributes.get('_route') starts with 'accueil#vehicule' %}current-menu-item{% endif %}">
+					{% if is_granted("ROLE_CLIENT") %}
+						<a href="{{ path('client') }}">Mon compte</a>
+					{% elseif is_granted("ROLE_PERSONNEL") %}
+						<a href="#">Mon compte</a>
+					{% else %}
+						<a href="{{ path('app_login') }}">Mon compte</a>
+					{% endif %}
+				</li>
+				<li class="{% if app.request.attributes.get('_route') starts with 'accueil#contact' %}current-menu-item{% endif %}">
+					<a href="{{ path('accueil') }}#contact">Contact</a>
+				</li>
+			</ul>
+		</nav>
+	</div>
+	<div class="header-social">
+		<a href="https://www.facebook.com/joellocation" class="fab fa-facebook" target="_blank"></a>
+		<a href="https://www.instagram.com/accounts/login/" class="fab fa-instagram" target="_blank"></a>
+		<a href="#" class="fab fa-youtube" target="_blank"></a>
+	</div>
+	<div class="header-social-tablet hidden">
+		<a href="https://www.facebook.com/joellocation" class="fab fa-facebook" target="_blank"></a>
+		<a href="https://www.instagram.com/accounts/login/" class="fab fa-instagram" target="_blank"></a>
+		<a href="#" class="fab fa-youtube" target="_blank"></a>
+	</div>
+
+</div>

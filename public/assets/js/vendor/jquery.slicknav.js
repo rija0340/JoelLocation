@@ -24,7 +24,7 @@
             removeIds: true,
             removeClasses: false,
             removeStyles: false,
-            brand: '<a href="#"><img src="images/Joel-Location-new.png" alt="JOEL LOCATION" alt="Logo" title="Logo" /></a>Sa Ka Woulé ',
+            brand: '<a class="logo_mobile" href="#"><img src="images/Joel-Location-new.png" alt="JOEL LOCATION" alt="Logo" title="Logo" /></a><span class="sakawoule">Sa Ka Woulé</span> ',
             animations: 'jquery',
             init: function () { },
             beforeOpen: function () { },

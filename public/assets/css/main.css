@@ -107,8 +107,8 @@ span {
   background-color: #f3f6fa; }
 
 .sp {
-  padding-top: 90px;
-  padding-bottom: 90px; }
+  padding-top: 45px;
+  padding-bottom: 45px; }
 
 .spt {
   padding-top: 90px; }
@@ -205,17 +205,31 @@ span {
   font-size: 16px;
   color: #7d91aa;
   font-weight: 300;
-  margin-bottom: 30px; }
+  margin-bottom: 30px; 
+  margin-top: 30px; 
+}
   .section-title h2 {
     margin: 0 0 5px;
     font-size: 40px;
     font-weight: 700;
-    color: #222538; }
+    color: #222538; 
+  }
   .section-title.white {
-    color: #ffffff; }
-    .section-title.white h2 {
-      color: #fff; }
+    color: #ffffff; 
+  }
+  .section-title.white h2 {
+    color: #fff;
+  }
 
+  .section-title.red {
+    color: #af0000; 
+  }  
+  .section-title.red h2 {
+    color: #af0000; 
+  }
+  .section-title.noir {
+    color: black; 
+  }
 /* page-title */
 .page-title {
   font-size: 16px;

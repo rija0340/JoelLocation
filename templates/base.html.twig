@@ -19,6 +19,8 @@
 		<link rel="stylesheet" href="assets/css/slicknav.css">
 		<link rel="stylesheet" href="assets/css/main.css">
 		<link rel="stylesheet" href="css/style_index.css">
+		<link rel="stylesheet" href="css/style_site.css">
+		<link rel="stylesheet" href="css/nav.css">
 
 
 		<link href="http://hayageek.github.io/jQuery-Upload-File/4.0.11/uploadfile.css" rel="stylesheet">
@@ -60,100 +62,31 @@
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker-standalone.min.css" rel="stylesheet">
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 
-		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"> 
-        {% block stylesheets %}{% endblock %}
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"> {% block stylesheets %}{% endblock %}
 		</head>
 		<body>
-			{% if is_granted("ROLE_CLIENT") or is_granted("ROLE_PERSONNEL") %} 
-				<p style="align:right;text-align:right;"><a href="{{ path('app_logout') }}">Déconnecter</a></p>
+			{% if is_granted("ROLE_CLIENT") or is_granted("ROLE_PERSONNEL") %}
+				<p style="align:right;text-align:right;">
+					<a href="{{ path('app_logout') }}">Déconnecter</a>
+				</p>
 			{% endif %}
 			<div class="preloader">
 				<span class="preloader-spin"></span>
 			</div>
 
 			<div class="site">
-				<header class=" d-flex align-items-center">
 
-					<div class="container">
-						<div class="d-flex">
-							<div class=" mr-auto logo-column">
-								<a href="index.html" class="logo" style="height:100px;width:100px">
-									<img src="images/Joel-Location-new.png" alt="JOEL LOCATION">
-								</a>
-								<span style="font-family:'Monotype corsiva'">Sa Ka Woulé</span>
-							</div>
-							<div class=" nav-column d-flex align-items-center">
-								<nav id="menu" class="d-none d-lg-block ">
-									<ul>
-										<li class="{% if app.request.attributes.get('_route') starts with 'accueil' %}current-menu-item{% endif %}">
-											<a href="{{ path('accueil') }}">Accueil</a>
-										</li>
-										<li class="{% if app.request.attributes.get('_route') starts with 'quisommenous' %}current-menu-item{% endif %}">
-											<a href="{{ path('quisommenous') }}">A propos</a>
-										</li>
-										<li class="{% if app.request.attributes.get('_route') starts with 'accueil#vehicule' %}current-menu-item{% endif %}">
-											<a href="{{ path('accueil') }}#vehicule">Nos véhicules</a>
-										</li>
-										<li class="{% if app.request.attributes.get('_route') starts with 'accueil#vehicule' %}current-menu-item{% endif %}">
-											{% if is_granted("ROLE_CLIENT") %}
-												<a href="{{ path('client') }}">Mon compte</a>
-											{% elseif is_granted("ROLE_PERSONNEL") %}
-												<a href="#">Mon compte</a>
-											{% else %}
-												<a href="{{ path('app_login') }}">Mon compte</a>
-											{% endif %}
-										</li>
-										<li class="{% if app.request.attributes.get('_route') starts with 'accueil#contact' %}current-menu-item{% endif %}">
-											<a href="{{ path('accueil') }}#contact">Contact</a>
-										</li>
-									</ul>
-								</nav>
-							</div>
-						</div>
-					</div>
+				<header class="d-flex align-items-center">
+					{% block nav %}
+					{% include 'accueil/layouts/nav.html.twig' %}
+					{%endblock%}
 				</header>
 
 				{% block body %}{% endblock %}
-				<footer>
-					<div class="footer-top" style="background-color:red;color:black">
-						<div class="container">
-							<div class="row">
-								<div class="col-6 footer_widget">
-									<div class="inner">
-										<h4>Adresse</h4>
-										<h5>JOEL LOCATION</h5>
-										<p>94 Chemin De La Hache<br>
-											97160 Le Moule (Guadeloupe)<br>
-											Tel : <span>06 90 73 76 74</span> /  <span>07 67 32 14 47</span><br>
-											Email : joel@joellocation.com</p>
+				{% block footer %}
+				{% include 'accueil/layouts/footer.html.twig' %}
+				{%endblock%}
 
-									</div>
-								</div>
-
-							</div>
-						</div>
-					</div>
-					<div class="footer-bottom" style="background-color:black">
-						<div class="container">
-							<div class="row">
-								<div class="col-lg-6">
-									<div class="copyright-txt">
-										© 2020 Joel Location. Tous droits réservés.
-									</div>
-								</div>
-								<div class="col-lg-6 text-right">
-									<div class="footer-nav">
-										<a href="{{ path('accueil') }}">Accueil</a>
-										<a href="{{ path('quisommenous') }}">A propos</a>
-										<a href="{{ path('accueil') }}#vehicule">Nos véhicules</a>
-										<a href="{{ path('mentionlegale') }}">Mention Legale</a>
-										<a href="{{ path('accueil') }}#contact">Contact</a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</footer>
 			</div>
 
 			<!--Required JS files-->
@@ -209,7 +142,8 @@
 			<script src="/dist/js/demo.js"></script>
 			<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
 			<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+			<script src="/js/custom/nav.js"></script>
 			{% block javascripts %}{% endblock %}
 		</body>
 	</html>
-</body></html>
+</body></body></body></html>
