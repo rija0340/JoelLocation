@@ -41,7 +41,7 @@ color: black;
 
 /* a propos de nous */
 .mentions_legales{
-	height: 80px;
+	height: 105px;
 }
 .description{
 	text-align: justify;
@@ -111,6 +111,11 @@ color: black;
 		padding-top: 15px;
 
 	}
+		/* a propos de nous */
+.mentions_legales{
+	height: 155px;
+}
+
 
 }
 
@@ -130,6 +135,7 @@ color: black;
 		padding-top: 15px;
 
 	}
+
 
 
 }

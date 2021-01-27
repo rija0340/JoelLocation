@@ -1,3 +1,37 @@
+/*header et menu */
+
+#menu ul > li.current-menu-item > a {
+    color: #af0000; }
+
+header{
+	height: 70px;
+	background-color: #EFE7DB;
+
+}
+
+.nav-column a, .nav-column span {
+	vertical-align: middle;
+	color: black;
+	width: auto;
+}
+
+/* slicknav */
+
+.slicknav_nav a {
+    text-decoration: none;
+    color: black;
+}
+
+.slicknav_menu{
+	background-color: #EFE7DB;
+}
+
+.slicknav_btn{
+	background-color:black;
+}
+
+
+
 /* icon header */
 .header-social{
 	margin-left: 10px;
@@ -15,9 +49,15 @@
 
 .header-social-tablet{
     display: inline-block;
-    margin-top: 10px;
+    margin-top: 14px;
     margin-left: 20px;
 }
+
+.slicknav_menutxt{
+	font-size: 12px;
+	color:red;
+}
+
 
 /*media query pour responsive design*/
 
@@ -133,7 +173,23 @@
     .sakawoule{
         display: none !important;
     } */
+    .slicknav_menu .slicknav_icon:before {
+        width: 0.3em;
+        height: .3em;
+    }
+	.slicknav_menu .slicknav_menutxt {
+		line-height: 1.188em;
+		font-weight: 500;
+		text-shadow: 0 1px 3px #000;
 
+	}
+		.slicknav_menu .slicknav_icon {
+			float: left;
+			width: 1em;
+			height: .5em;
+			margin: .15em 0 0 .3em;
+		}
+	
 }
 
 

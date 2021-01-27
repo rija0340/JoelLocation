@@ -1,3 +1,6 @@
+body{
+	background-color: white;
+}
 /***************************** *****************************
  *   00 - common & reset css changement de theme en Rouge
  ***************************** *****************************
@@ -40,31 +43,6 @@
 
 /*******************************/
 
-/*header et menu */
-
-#menu ul > li.current-menu-item > a {
-    color: #af0000; }
-
-header{
-	height: 70px;
-	background-color: #EFE7DB;
-
-}
-
-.nav-column a, .nav-column span {
-	vertical-align: middle;
-	color: black;
-	width: auto;
-}
-
-.slicknav_nav a {
-    text-decoration: none;
-    color: black;
-}
-
-.slicknav_menu{
-	background-color: #EFE7DB;
-}
 
 /* style footer */
 .footer-top{

@@ -7,10 +7,10 @@
 
 {% block body %}
 
-	<div class="portfolio-area sp">
+	<div class="portfolio-area sp" style="background-color:white">
 		<div class="container" id="propos">
-			<div class="section-title" style="color:blue">
-				<h2 style="color:blue">À propos de Joel Location</h2>
+			<div class="section-title">
+				<h2>À propos de Joel Location</h2>
 				<p>Vous pouvez choisir parmi les véhicules que nous offrons</p>
 			</div>
 
@@ -39,14 +39,13 @@
 		</div>
 	</div>
 
-
-	<div class="service-area bg2 sp">
-		<div class="container">
-			<div class="section-title">
+	<div class="service-area bg1 sp avecbgimage">
+		<div class="container ">
+			<div class="section-title white">
 				<h2>Pourquoi louer une voiture avec Joellocation ?</h2>
 			</div>
-			<div class="row">
-				<div class="col-lg-4 col-md-12 single-service">
+			<div class="row row-pourquoi">
+				<div class="col-lg-4 col-md-6 single-service-3 ">
 					<div class="inner">
 						<div class="title">
 							<div class="icon">
@@ -54,12 +53,13 @@
 							</div>
 							<h4>Agence de location locale</h4>
 						</div>
-						<div class="content text-justify pourquoi1">
-							<p>Joellocation est une société à taille humaine, indépendante, locale. Pendant votre séjour, Joellocation reste toujours à votre service. Vous ne serez pas face à une plateforme téléphonique quand vous contactez Joellocation.</p>
+						<div class="content ">
+							<p>Joellocation est une société à taille humaine, indépendante, locale. Pendant votre séjour, Joellocation reste toujours à votre service. Vous ne serez pas face à une plateforme téléphonique quand vous contactez Joellocation.
+							</p>
 						</div>
 					</div>
 				</div>
-				<div class="col-lg-4 col-md-12 single-service">
+				<div class="col-lg-4 col-md-6 single-service-3">
 					<div class="inner">
 						<div class="title">
 							<div class="icon">
@@ -67,12 +67,13 @@
 							</div>
 							<h4>Livraison</h4>
 						</div>
-						<div class="content text-justify pourquoi1">
-							<p>Votre véhicule sera livré dès votre arrivée à l’aéroport afin de vous faire gagner un temps précieux sur votre séjour. Il est tout à fait aussi possible de récupérer votre voiture sur votre lieu de résidence s’il est situé sur la Grande-Terre. Merci de préciser lors de la réservation.</p>
+						<div class="content ">
+							<p>Votre véhicule sera livré dès votre arrivée à l’aéroport afin de vous faire gagner un temps précieux sur votre séjour. Il est tout à fait aussi possible de récupérer votre voiture sur votre lieu de résidence s’il est situé sur la Grande-Terre. Merci de préciser lors de la réservation.
+							</p>
 						</div>
 					</div>
 				</div>
-				<div class="col-lg-4 col-md-12 single-service">
+				<div class="col-lg-4 col-md-6 single-service-3">
 					<div class="inner">
 						<div class="title">
 							<div class="icon">
@@ -80,14 +81,13 @@
 							</div>
 							<h4>Conducteur additionnel</h4>
 						</div>
-						<div class="content text-justify pourquoi1">
-							<p>A Joellocation, nous savons que les longs trajets peuvent être fatiguant, surtout après un bon bain de mer. C’est pour cela, que nous vous proposons l’ajout d’un deuxième conducteur gratuitement. De plus, les assurances responsabilités civiles et accidents causés aux tiers sont inclus dans votre forfait "location de voiture".</p>
+						<div class="content">
+							<p>A Joellocation, nous savons que les longs trajets peuvent être fatiguant, surtout après un bon bain de mer. C’est pour cela, que nous vous proposons l’ajout d’un deuxième conducteur gratuitement. De plus, les assurances responsabilités civiles et accidents causés aux tiers sont inclus dans votre forfait "location de voiture".
+							</p>
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="row">
-				<div class="col-lg-6 col-md-12 single-service">
+				<div class="col-lg-4 col-md-6 single-service-3">
 					<div class="inner">
 						<div class="title">
 							<div class="icon">
@@ -95,12 +95,12 @@
 							</div>
 							<h4>Kilométrages illimités</h4>
 						</div>
-						<div class="content" style="height:90px">
+						<div class="content">
 							<p>Chez Joellocation, le kilométrage est illimité !</p>
 						</div>
 					</div>
 				</div>
-				<div class="col-lg-6 col-md-12 single-service">
+				<div class="col-lg-4 col-md-6 single-service-3">
 					<div class="inner">
 						<div class="title">
 							<div class="icon">
@@ -108,21 +108,66 @@
 							</div>
 							<h4>Siège bébé / enfant</h4>
 						</div>
-						<div class="content" style="height:90px">
+						<div class="content">
 							<p>Nous mettons à votre disposition des sièges bébé et nourrissons, homologués NF, pour seulement 30 euros TTC. Les rehausseurs pour les enfants de + de 15kg sont totalement gratuits !</p>
 						</div>
 					</div>
 				</div>
+
+			</div>
+		</div>
+		<div class="d-flex justify-content-center">
+			<div>
+				<a href="{{ path('accueil') }}#contact" class="button">Demander un avis</a>
 			</div>
 		</div>
 	</div>
-</div></div></div><div class="d-flex justify-content-center"><div>
-<a href="{{ path('accueil') }}#contact" class="button">Demander un avis</a></div></div><div class="portfolio-area sp"><div class="container" id="mission">
-<div class="section-title">
+	{# fin essai #}
+</div></div></div><div class="service-area spt mission" style="background-color:white"><div class="container">
+
+<div class="section-title" data-margin="0 0 40px">
 	<h2>Notre mission</h2>
 </div>
-•	Satisfaire nos clients grâce à notre professionnalisme et notre savoir faire<br>
-•	Offrir des
-<strong>prix imbattables</strong>
-sur des voitures de qualité<br>
-•	Assurer la sécurité et le confort de nos clients en proposant des services de location de voitures hors-pair<br></div></div>{% endblock %}
+<div class="row ">
+	<div class="col-md-4 single-service-2">
+		<div class="inner">
+			<div class="title">
+				<div class="icon">
+					<i class="fa fa-smile-o"></i>
+				</div>
+				{# <h4>Video Making</h4> #}
+			</div>
+			<div class="content">
+				<p>Satisfaire nos clients grâce à notre professionnalisme et notre savoir faire</p>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-4 single-service-2">
+		<div class="inner">
+			<div class="title">
+				<div class="icon">
+					<i class="fa fa-money"></i>
+				</div>
+				{# <h4>Photography</h4> #}
+			</div>
+			<div class="content">
+				<p>Offrir des
+					<span class="imbattables" style="font-weight:bold">prix imbattables</span>
+				</p>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-4 single-service-2">
+		<div class="inner">
+			<div class="title">
+				<div class="icon">
+					<i class="fa fa-road "></i>
+				</div>
+				{# <h4>Music Composing</h4> #}
+			</div>
+			<div class="content">
+				<p>Assurer la sécurité et le confort de nos clients en proposant des services de location de voitures hors-pair</p>
+			</div>
+		</div>
+	</div>
+</div></div></div>{% endblock %}
