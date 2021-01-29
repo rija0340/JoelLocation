@@ -16,33 +16,8 @@ class ClientType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username', null,[
-                'label' => "Nom d'utilisateur",
-            ])
+            ->add('username')
             //->add('roles')
-<<<<<<< HEAD
-            ->add('password', PasswordType::class,[
-                'label' => "Mot de passe",
-            ])
-            ->add('nom', null,[
-                'label' => "Nom",
-            ])
-            ->add('prenom', null,[
-                'label' => "Prénom",
-            ])
-            ->add('adresse', null,[
-                'label' => "Adresse",
-            ])
-            ->add('mail', null,[
-                'label' => "Email",
-            ])
-            ->add('telephone', null,[
-                'label' => "Téléphone",
-            ])
-            ->add('portable', null,[
-                'label' => "Portable",
-            ])
-=======
             ->add('password', PasswordType::class)
             ->add('nom')
             ->add('prenom')
@@ -50,7 +25,6 @@ class ClientType extends AbstractType
             ->add('mail', EmailType::class)
             ->add('telephone', TelType::class)
             ->add('portable', TelType::class)
->>>>>>> remarque2
             //->add('presence')
             //->add('date_inscription')
         ;
