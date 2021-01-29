@@ -145,7 +145,7 @@
     }
     /* icon */
     .avecbgimage .inner .title .icon{
-        font-size: 30px;
+        font-size: 25px;
     }
     .avecbgimage .inner .title .icon {
         width: 50px;
@@ -155,7 +155,24 @@
       .single-service-3 .inner:hover .title .icon {
         background-color: #fff; }
 
-        
+        .single-service-3 .inner .content, .single-service-3 .inner .title h4 {
+            padding-left: 70px;
+        }
+        .single-service-3 .inner .title h4 {
+            font-size: 20px;
+        }
+        .single-service-3 {
+            margin: 10px 0;
+        }
+        .apropos_img{
+            margin-bottom: 10px;
+
+        }
+        .apropos{
+
+            padding: 10px;
+
+        }
 
 }
 

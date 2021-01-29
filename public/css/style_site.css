@@ -76,6 +76,11 @@ footer{
 	display: block;
 }
 
+/* footer */
+.footer-top{
+	padding: 10px;
+}
+
 
 /*media query pour responsive design*/
 
@@ -126,6 +131,12 @@ footer{
 		padding-bottom: 30px; 
 	}
 
+		/* footer */
+	.footer-top{
+		padding: 5px;
+	}
+
+
 /* section title */
 .section-title {
 	text-align: center;
@@ -148,6 +159,12 @@ footer{
 	h4{
 		font-size: 14px;
 	}
+	/* footer */
+.footer-top{
+	padding: 5px;
+}
+
+
 	
 
 }

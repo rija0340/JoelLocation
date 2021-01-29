@@ -45,10 +45,10 @@ color: black;
 	padding-left: 0;
 }
 .mentions_legales{
-	height: 105px;
 }
 .description{
 	text-align: justify;
+	height: 105px;
 }
 
 /* margin boutton */
@@ -175,9 +175,10 @@ form{
 
 	}
 		/* a propos de nous */
-.mentions_legales{
-	height: 155px;
-}
+		.description{
+			text-align: justify;
+			height: 130px;
+		}
 
 
 }
@@ -213,6 +214,7 @@ form{
 	/* deuxième logo en bas du carousel */
 	.roulez p{
 		font-size: 14px;
+		margin: 0;
 	}
 	.logo_roulez{
 		width:25%;
@@ -220,7 +222,12 @@ form{
 	.texte_roulez{
 		text-align: top;
 	}
-	.logo_roulez >.about-img > img{
+	.logo_roulez .about-img {
+
+		width:75px; 
+		height:75px;
+	}
+	.logo_roulez .about-img  img{
 		width:auto; 
 		height:75px;
 	}
