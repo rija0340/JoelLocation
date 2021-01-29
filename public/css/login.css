@@ -6,3 +6,56 @@
 .is-focused .form-control {
   background-image: linear-gradient(to top, #747171 2px, rgba(156, 39, 176, 0) 2px), linear-gradient(to top, #726e6e 1px, rgba(210, 210, 210, 0) 1px);
 }
+
+.login_form{
+  margin-top: 40px;
+
+}
+
+/*media query pour responsive design*/
+
+/*extra large device*/
+@media (min-width: 1200px) {
+
+
+}
+
+
+
+
+/* larges devices */
+
+@media  (min-width: 992px)and (max-width: 1199.98px) {
+	
+}
+
+/*  medium device(tablets) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+
+	
+}
+
+
+/* small device */
+@media (min-width: 576px) and (max-width: 767.98px) {
+
+  .login_form{
+    margin-top: 20px;
+  
+  }
+
+
+}
+
+/*extra small device */
+@media (max-width: 575.98px) {
+ 
+  .login_form{
+    margin-top: 20px;
+  
+  }
+
+}
+
+
+

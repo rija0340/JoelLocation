@@ -143,6 +143,19 @@
     .mission .single-service-2 .inner {
         height: auto;
     }
+    /* icon */
+    .avecbgimage .inner .title .icon{
+        font-size: 30px;
+    }
+    .avecbgimage .inner .title .icon {
+        width: 50px;
+        height: 60px;
+        
+     }
+      .single-service-3 .inner:hover .title .icon {
+        background-color: #fff; }
+
+        
 
 }
 

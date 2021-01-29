@@ -41,9 +41,23 @@ body{
 		background-color: #af0000; 
 	}
 
+
 /*******************************/
 
-
+.section-title {
+	text-align: center;
+	font-size: 12px;
+	color: #000000;
+	font-weight: 100;
+	margin-bottom: 10px; 
+	margin-top: 10px; 
+  }
+	.section-title h3 {
+	  margin: 0 0 1px;
+	  font-size: 20px;
+	  font-weight: 500;
+	  color: #000000; 
+	}
 /* style footer */
 .footer-top{
 	background-color: #af0000;
@@ -123,13 +137,16 @@ footer{
   }
 	.section-title h2 {
 	  margin: 0 0 1px;
-	  font-size: 20px;
-	  font-weight: 500;
+	  font-size: 22px;
+	  font-weight: 600;
 	  color: #222538; 
 	}
 
 	p{
 		font-size: 12px;
+	}
+	h4{
+		font-size: 14px;
 	}
 	
 

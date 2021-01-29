@@ -10,7 +10,7 @@
 /* section roulez */
 
 .roulez p{
-	font-size: 26px;
+	font-size: 24px;
 }
 
 .logo_roulez{
@@ -212,7 +212,7 @@ form{
 	}	
 	/* deuxième logo en bas du carousel */
 	.roulez p{
-		font-size: 12px;
+		font-size: 14px;
 	}
 	.logo_roulez{
 		width:25%;
