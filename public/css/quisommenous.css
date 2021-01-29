@@ -95,6 +95,16 @@
     .pourquoi1{
         height: auto;
     }
+    .mission .single-service-2 .inner {
+        padding: 20px 10px;
+    }
+    .mission .single-service-2 .inner .title .icon {
+        font-size: 40px;
+        margin-bottom: 5px;
+    }
+    .single-service .inner .title{
+        margin-bottom: 0;
+    }
 	
 }
 
@@ -105,12 +115,32 @@
     .pourquoi1{
         height: auto;
     }
+    .mission .single-service-2 .inner {
+        padding: 20px 10px;
+    }
+    .mission .single-service-2 .inner .title .icon {
+        font-size: 40px;
+        margin-bottom: 10px;
+    }
+    .mission .single-service-2 .inner {
+        height: auto;
+    }
 
 }
 
 /*extra small device */
 @media (max-width: 575.98px) {
     .pourquoi1{
+        height: auto;
+    }
+    .mission .single-service-2 .inner {
+        padding: 20px 10px;
+    }
+    .mission .single-service-2 .inner .title .icon {
+        font-size: 40px;
+        margin-bottom: 10px;
+    }
+    .mission .single-service-2 .inner {
         height: auto;
     }
 

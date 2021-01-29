@@ -1,11 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil{% endblock %}
+{% block title %}Accueil
+{% endblock %}
 
-{% block body %} 
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <button class="button">{{ button_label|default('Connecter') }}</button>&nbsp;&nbsp;&nbsp;<a href="{{ path('inscription') }}" class="button">S'inscrire</a>
-    {{ form_end(form) }}    
-    <br>
+{% block body %}
+	<div class="container">
+		{{ form_start(form) }}
+		{{ form_widget(form) }}
+		<button class="button">{{ button_label|default('Connecter') }}</button>&nbsp;&nbsp;&nbsp;<a href="{{ path('inscription') }}" class="button">S'inscrire</a>
+		{{ form_end(form) }}
+		<br>
+	</div>
 {% endblock %}
