@@ -3,9 +3,15 @@
 {% block title %}Accueil{% endblock %}
 
 {% block body %} 
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <button class="button">{{ button_label|default('Enregistrer') }}</button>
-    {{ form_end(form) }}
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-6">
+            {{ form_start(form) }}
+                <h1 class="h3 mb-3 font-weight-normal" align="center">Inscription</h1>
+                {{ form_widget(form) }}
+                <button class="button">{{ button_label|default('Enregistrer') }}</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
     <br>
 {% endblock %}
