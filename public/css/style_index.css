@@ -1,6 +1,4 @@
 
-
-
 /*nos véhicules*/
 
 .single-portfolio .inner .portfolio-img:hover .hover-content {
@@ -33,6 +31,9 @@
 .roulez{
 color: black;
 }
+.about-content {
+	margin: 0;
+}
 
 .div_roulez{
 	padding-left:175px;
@@ -40,6 +41,9 @@ color: black;
 }
 
 /* a propos de nous */
+.title h4{
+	padding-left: 0;
+}
 .mentions_legales{
 	height: 105px;
 }
@@ -52,6 +56,60 @@ color: black;
 	margin-top: 20px;
 }
 
+/* formulaire nous contacter */
+form{
+	background-image:linear-gradient(
+		rgba(0, 0, 0, 0.5),
+		rgba(0, 0, 0, 0.5)
+	  ), url('../images/iStock-177820652.jpg');
+	  background-size: 100% 100%;
+}
+
+										
+.labelObjet{
+	margin-right: 5px;
+}
+.formTextarea{
+	margin-top: 10px;
+}
+
+/* form material class modif */
+.form-control::placeholder {
+	color: #d6d6d6;
+	opacity: 1;
+}
+.form-group .bmd-label-floating {
+	color: #ffffff;
+}
+.bmd-form-group .bmd-label-static{
+	  color: #ffffff;
+
+  }
+
+  /* couleur police après perte efocus */
+  .form-control {
+	color: #ffffff;
+}
+
+.form-group label{
+	  color: #ffffff;
+	  
+  }
+
+/* coulergb(255, 255, 255)t champ */
+.form-control,
+.is-focused .form-control {
+  background-image: linear-gradient(to top, #747171 2px, rgba(156, 39, 176, 0) 2px), linear-gradient(to top, #ffffff 1px, rgba(210, 210, 210, 0) 1px);
+}
+
+/* couleur police entrée */
+.form-control:focus {
+	color: #ffffff;
+	/* background-color: rgba(0, 0, 0, 0);
+	border-color: #d176e1;
+	outline: 0;
+	box-shadow: none, 0 0 0 0.2rem rgba(156, 39, 176, 0.25); */
+  }
 
 /*media query pour responsive design*/
 
@@ -61,6 +119,10 @@ color: black;
 	/* hero slider (carousel) custom*/
 .hero-slider .single-slide {
 	height: 400px;
+}
+.roulez p{
+	margin-top: 10px;
+	line-height: 1.6;
 }
 
 
@@ -85,6 +147,7 @@ color: black;
 		width:40%;
 	}
 	.roulez p{
+		margin-top: 10px;
 		font-size: 20px;
 	}
 	.roulez{
@@ -124,11 +187,11 @@ color: black;
 @media (min-width: 576px) and (max-width: 767.98px) {
 
 	.div_roulez{
-		padding-left:100px;
-		padding-right:100px;
+		padding-left:0px;
+		padding-right:0px;
 	}
 	.logo_roulez{
-		width:40%;
+		width:50%;
 	}
 	
 	.roulez{
@@ -159,7 +222,7 @@ color: black;
 	}
 	.logo_roulez >.about-img > img{
 		width:auto; 
-		height:50px;
+		height:75px;
 	}
 	.div_roulez{
 		padding-left:0;

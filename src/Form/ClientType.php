@@ -4,9 +4,12 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class ClientType extends AbstractType
 {
@@ -17,6 +20,7 @@ class ClientType extends AbstractType
                 'label' => "Nom d'utilisateur",
             ])
             //->add('roles')
+<<<<<<< HEAD
             ->add('password', PasswordType::class,[
                 'label' => "Mot de passe",
             ])
@@ -38,6 +42,15 @@ class ClientType extends AbstractType
             ->add('portable', null,[
                 'label' => "Portable",
             ])
+=======
+            ->add('password', PasswordType::class)
+            ->add('nom')
+            ->add('prenom')
+            ->add('adresse')
+            ->add('mail', EmailType::class)
+            ->add('telephone', TelType::class)
+            ->add('portable', TelType::class)
+>>>>>>> remarque2
             //->add('presence')
             //->add('date_inscription')
         ;

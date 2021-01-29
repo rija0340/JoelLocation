@@ -1,13 +1,32 @@
 /*header et menu */
 
 #menu ul > li.current-menu-item > a {
-    color: #af0000; }
+	color: #af0000; }
+	
+#menu ul > li > a {
+    font-weight:normal }
 
 header{
-	height: 70px;
+	height: 90px;
 	background-color: #EFE7DB;
 
 }
+.logo-column a.logo img {
+	width: auto ;
+height: 150px;
+
+}
+.logo-column a.logo  {
+width: 150px ;
+height: 150px;
+
+}
+
+
+/* .logo-column a.logo img{
+	height:150px;
+	width:150px;
+} */
 
 .nav-column a, .nav-column span {
 	vertical-align: middle;
@@ -145,6 +164,7 @@ header{
 	.site >header{
 		display: none !important;
 	}
+	/* logo size on mobile */
 	.slicknav_brand
 	{
 		float:left;
@@ -155,15 +175,18 @@ header{
 		height:44px
 	}
 
-	.slicknav_brand > a > img {
-		width: auto;
-		height: 50px;
-	}
-
-	.slicknav_brand > a  {
+	.slicknav_brand  a  {
 		width: auto;  
 		height: 50px;
+		
     }
+	.slicknav_brand  a  img {
+		width: auto;
+		height: 50px;
+		
+	}
+
+
     .sakawoule{
         font-size: 10px;
     }
