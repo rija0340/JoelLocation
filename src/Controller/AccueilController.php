@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Reservation;
 use App\Form\ClientType;
 use App\Form\LoginType;
 use App\Repository\UserRepository;
+use App\Repository\ReservationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -154,8 +156,23 @@ class AccueilController extends AbstractController
      */
     public function client(): Response
     {
+        $client = $this->getUser();
+        $date = new \DateTime('now');
+        //récupération des réservations effectuée
+        $reservationEffectuers = $this->getDoctrine()->getRepository(Reservation::class)->findReservationEffectuers( $client, $date);
+
+        //récupération des réservations en cours
+        $reservationEncours = $this->getDoctrine()->getRepository(Reservation::class)->findReservationEncours( $client, $date);
+
+        //récupération des réservation en attente
+        $reservationEnAttentes = $this->getDoctrine()->getRepository(Reservation::class)->findReservationEnAttente( $client, $date);
+
         return $this->render('accueil/client.html.twig', [
             'controller_name' => 'AccueilController',
+            'client' => $client->getUsername(),
+            'reservation_effectuers' => $reservationEffectuers,
+            'reservation_en_cours' => $reservationEncours,
+            'reservation_en_attentes' => $reservationEnAttentes,
         ]);
     }
 

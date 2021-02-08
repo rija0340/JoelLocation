@@ -19,6 +19,51 @@ class ReservationRepository extends ServiceEntityRepository
         parent::__construct($registry, Reservation::class);
     }
 
+    /**
+     * @return Reservation[] Returns an array of Reservation objects
+     */
+    public function findReservationEffectuers($client, $date)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.client = :client AND r.date_fin < :date')
+            ->setParameter('client', $client)
+            ->setParameter('date', $date)
+            ->orderBy('r.id', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @return Reservation[] Returns an array of Reservation objects
+     */
+    public function findReservationEncours($client, $date)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.client = :client AND r.date_fin > :date AND r.date_debut < :date')
+            ->setParameter('client', $client)
+            ->setParameter('date', $date)
+            ->orderBy('r.id', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @return Reservation[] Returns an array of Reservation objects
+     */
+    public function findReservationEnAttente($client, $date)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.client = :client AND r.date_debut > :date')
+            ->setParameter('client', $client)
+            ->setParameter('date', $date)
+            ->orderBy('r.id', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return Reservation[] Returns an array of Reservation objects
     //  */
