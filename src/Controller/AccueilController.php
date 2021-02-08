@@ -4,10 +4,15 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Reservation;
+use App\Entity\ModeReservation;
+use App\Entity\EtatReservation;
 use App\Form\ClientType;
 use App\Form\LoginType;
+use App\Form\ReservationclientType;
 use App\Repository\UserRepository;
 use App\Repository\ReservationRepository;
+use App\Repository\ModeReservationRepository;
+use App\Repository\EtatReservationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -154,18 +159,38 @@ class AccueilController extends AbstractController
     /**
      * @Route("/client", name="client")
      */
-    public function client(): Response
+    public function client(Request $request): Response
     {
         $client = $this->getUser();
         $date = new \DateTime('now');
+        $message_reservation = '';
+        $reservation = new Reservation();
+        $mode_reservation = $this->getDoctrine()->getRepository(ModeReservation::class)->findOneBy(['id' => 3]);
+        $etat_reservation = $this->getDoctrine()->getRepository(EtatReservation::class)->findOneBy(['id' => 1]);
+        $form = $this->createForm(ReservationclientType::class, $reservation);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $reservation->setDateReservation($date);
+            $reservation->setCodeReservation("123");
+            $reservation->setClient($client);
+            $reservation->setUtilisateur($client);
+            $reservation->setModeReservation($mode_reservation);
+            $reservation->setEtatReservation($etat_reservation);
+            $entityManager->persist($reservation);
+            $entityManager->flush();
+            $message_reservation = 'reservation enregister avec sussès';
+        }
+
         //récupération des réservations effectuée
-        $reservationEffectuers = $this->getDoctrine()->getRepository(Reservation::class)->findReservationEffectuers( $client, $date);
+        $reservationEffectuers = $this->getDoctrine()->getRepository(Reservation::class)->findReservationEffectuers($client, $date);
 
         //récupération des réservations en cours
-        $reservationEncours = $this->getDoctrine()->getRepository(Reservation::class)->findReservationEncours( $client, $date);
+        $reservationEncours = $this->getDoctrine()->getRepository(Reservation::class)->findReservationEncours($client, $date);
 
         //récupération des réservation en attente
-        $reservationEnAttentes = $this->getDoctrine()->getRepository(Reservation::class)->findReservationEnAttente( $client, $date);
+        $reservationEnAttentes = $this->getDoctrine()->getRepository(Reservation::class)->findReservationEnAttente($client, $date);
 
         return $this->render('accueil/client.html.twig', [
             'controller_name' => 'AccueilController',
@@ -173,6 +198,8 @@ class AccueilController extends AbstractController
             'reservation_effectuers' => $reservationEffectuers,
             'reservation_en_cours' => $reservationEncours,
             'reservation_en_attentes' => $reservationEnAttentes,
+            'message' => $message_reservation,
+            'form' => $form->createView(),
         ]);
     }
 

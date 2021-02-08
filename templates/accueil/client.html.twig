@@ -9,7 +9,50 @@
         </div>
         <div>
             <div class="row">
-               <h3>effectuer une reservation</h3>
+               <div class="row"><h3>effectuer une reservation</h3></div>
+               {# <div class="row">{{ include('reservation/_form.html.twig') }}</div> #}
+               <div class="col-12 ml-auto mr-auto">
+                    <form action="#" method="POST">
+                        <div class="row">
+                            {{ form_start(form) }}
+
+                            <div class="col-lg-12" class="bmd-label-floating">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Type :</label>
+                                    {{form_widget(form.type) }}
+                                </div>
+                            </div>
+                            <div class="col-lg-12" class="bmd-label-floating">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Date de début :</label>
+                                    {{form_widget(form.date_debut ) }}
+                                </div>
+                            </div>
+                            <div class="col-lg-12" class="bmd-label-floating">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Date de fin :</label>
+                                    {{form_widget(form.date_fin)}}
+                                </div>
+                            </div>
+                            <div class="col-lg-12" class="bmd-label-floating">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Lieu :</label>
+                                    {{form_widget(form.lieu )}}
+                                </div>
+                            </div>
+                            <div class="col-lg-12" class="bmd-label-floating">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Véhicule :</label>
+                                    {{form_widget(form.vehicule	)}}
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <input class="button" type="submit" value="Enregistrer">
+                            </div>
+                        </div>
+                        {{ form_end(form) }}
+                    </form>
+                </div>
             </div>
             <hr>
             <div class="row">

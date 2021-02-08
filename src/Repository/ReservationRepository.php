@@ -28,7 +28,7 @@ class ReservationRepository extends ServiceEntityRepository
             ->andWhere('r.client = :client AND r.date_fin < :date')
             ->setParameter('client', $client)
             ->setParameter('date', $date)
-            ->orderBy('r.id', 'DESC')
+            ->orderBy('r.date_fin', 'DESC')
             ->getQuery()
             ->getResult()
         ;
@@ -43,7 +43,7 @@ class ReservationRepository extends ServiceEntityRepository
             ->andWhere('r.client = :client AND r.date_fin > :date AND r.date_debut < :date')
             ->setParameter('client', $client)
             ->setParameter('date', $date)
-            ->orderBy('r.id', 'DESC')
+            ->orderBy('r.date_debut', 'DESC')
             ->getQuery()
             ->getResult()
         ;
@@ -58,7 +58,7 @@ class ReservationRepository extends ServiceEntityRepository
             ->andWhere('r.client = :client AND r.date_debut > :date')
             ->setParameter('client', $client)
             ->setParameter('date', $date)
-            ->orderBy('r.id', 'DESC')
+            ->orderBy('r.date_debut', 'DESC')
             ->getQuery()
             ->getResult()
         ;
