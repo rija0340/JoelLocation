@@ -3,4 +3,153 @@
 {% block title %}page client{% endblock %}
 
 {% block body %} 
+	<div class="container">
+		<div class="section-title red">
+            <h2>Espace client de {{ client }}</h2>
+        </div>
+        <div>
+            <div class="row">
+               <div class="row"><h3>effectuer une reservation</h3></div>
+               {# <div class="row">{{ include('reservation/_form.html.twig') }}</div> #}
+               <div class="col-12 ml-auto mr-auto">
+                    <form action="#" method="POST">
+                        <div class="row">
+                            {{ form_start(form) }}
+
+                            <div class="col-lg-12" class="bmd-label-floating">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Type :</label>
+                                    {{form_widget(form.type) }}
+                                </div>
+                            </div>
+                            <div class="col-lg-12" class="bmd-label-floating">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Date de début :</label>
+                                    {{form_widget(form.date_debut ) }}
+                                </div>
+                            </div>
+                            <div class="col-lg-12" class="bmd-label-floating">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Date de fin :</label>
+                                    {{form_widget(form.date_fin)}}
+                                </div>
+                            </div>
+                            <div class="col-lg-12" class="bmd-label-floating">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Lieu :</label>
+                                    {{form_widget(form.lieu )}}
+                                </div>
+                            </div>
+                            <div class="col-lg-12" class="bmd-label-floating">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Véhicule :</label>
+                                    {{form_widget(form.vehicule	)}}
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <input class="button" type="submit" value="Enregistrer">
+                            </div>
+                        </div>
+                        {{ form_end(form) }}
+                    </form>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <h3>reservation en cours</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Date de reservation</th>
+                            <th>Date de début</th>
+                            <th>Date de fin</th>
+                            <th>Lieu</th>
+                            <th>Code reservation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for reservation_en_cours in reservation_en_cours %}
+                        <tr>
+                            <td>{{ reservation_en_cours.type }}</td>
+                            <td>{{ reservation_en_cours.dateReservation ? reservation_en_cours.dateReservation|date('d / m / Y') : '' }}</td>
+                            <td>{{ reservation_en_cours.dateDebut ? reservation_en_cours.dateDebut|date('d / m / Y') : '' }}</td>
+                            <td>{{ reservation_en_cours.dateFin ? reservation_en_cours.dateFin|date('d / m / Y') : '' }}</td>
+                            <td>{{ reservation_en_cours.lieu }}</td>
+                            <td>{{ reservation_en_cours.codeReservation }}</td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="8">Aucune reservation en cours</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <hr>
+            <div class="row">
+                <h3>reservation en attente</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Date de reservation</th>
+                            <th>Date de début</th>
+                            <th>Date de fin</th>
+                            <th>Lieu</th>
+                            <th>Code reservation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for reservation_en_attente in reservation_en_attentes %}
+                        <tr>
+                            <td>{{ reservation_en_attente.type }}</td>
+                            <td>{{ reservation_en_attente.dateReservation ? reservation_en_attente.dateReservation|date('d / m / Y') : '' }}</td>
+                            <td>{{ reservation_en_attente.dateDebut ? reservation_en_attente.dateDebut|date('d / m / Y') : '' }}</td>
+                            <td>{{ reservation_en_attente.dateFin ? reservation_en_attente.dateFin|date('d / m / Y') : '' }}</td>
+                            <td>{{ reservation_en_attente.lieu }}</td>
+                            <td>{{ reservation_en_attente.codeReservation }}</td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="8">Aucune reservation en attente</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <hr>
+            <div class="row">
+                <h3>reservation réaliser</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Date de reservation</th>
+                            <th>Date de début</th>
+                            <th>Date de fin</th>
+                            <th>Lieu</th>
+                            <th>Code reservation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for reservation_effectuer in reservation_effectuers %}
+                        <tr>
+                            <td>{{ reservation_effectuer.type }}</td>
+                            <td>{{ reservation_effectuer.dateReservation ? reservation_effectuer.dateReservation|date('d / m / Y') : '' }}</td>
+                            <td>{{ reservation_effectuer.dateDebut ? reservation_effectuer.dateDebut|date('d / m / Y') : '' }}</td>
+                            <td>{{ reservation_effectuer.dateFin ? reservation_effectuer.dateFin|date('d / m / Y') : '' }}</td>
+                            <td>{{ reservation_effectuer.lieu }}</td>
+                            <td>{{ reservation_effectuer.codeReservation }}</td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="8">Aucune reservation réaliser</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 {% endblock %}
