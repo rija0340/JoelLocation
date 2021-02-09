@@ -2,48 +2,80 @@
 
 {% block title %}renault capture
 {% endblock %}
+{% block stylesheets %}
+	<link rel="stylesheet" href="css/vehicules.css">
+{% endblock %}
 
 {% block body %}
-	<div class="container">
+	<div class="container ">
 		<div class="section-title red">
 			<h2>Renault Capture</h2>
 		</div>
-		<div class="mb-3">
-			<div class="float-left col-6" style="height:500px;">
+		<div class="mb-3 pl-3 d-flex">
+			<div class="image_voiture">
 				<img src="images/CAPTURE NOIR.png" alt="portfolio-image">
 			</div>
-			<div class="text-justify">
-				<p>
+			<div class="texte">
+				<p class="text-justify">
 					Avec le Renault Captur, vous pouvez parcourir des kilomètres en Guadeloupe. Cette voiture est idéale pour tous vos déplacements touristiques en famille et entre amis avec suﬃsamment de place pour tout le monde. Quel que soit l’itinéraire que vous empruntiez, entre les villes de Grande-Terre ou de Basse-Terre, notre Renault Captur est le choix parfait pour des promenades sereines.
 				</p>
-				<div>Conditions de location Renault Captur</div>
-				<p>
-					<span style="color:red">•</span>
-					Kilométrage illimité<br>
-					<span style="color:red">•</span>
-					Âge minimum : 21 ans<br>
-					<span style="color:red">•</span>
-					Plus de 2 ans de permis de conduire<br>
-					<span style="color:red">•</span>
-					Possibilité de régler en plusieurs fois<br>
-					<span style="color:red">•</span>
-					Caution : 800 €</p>
-
-				<div>Caractéristiques de Renault Captur</div>
-				<p>
-					<i class="fa fa-battery-full" aria-hidden="true"></i>
-					Carburant : Essence<br>
-					<i class="fa fa-sun-o" aria-hidden="true"></i>
-					Boite de vitesse : Manuelle<br>
-					<i class="fa fa-shopping-bag" aria-hidden="true"></i>
-					Nombre max de bagages : 3
-					<br>
-					<i class="fa fa-car" aria-hidden="true"></i>
-					Nombre de portes : 5<br>
-					<i class="fa fa-users" aria-hidden="true"></i>
-					Max passagers: 5<br>
-					<i class="fa fa-rss" aria-hidden="true"></i>
-					Atouts : autoradio, climatisation, fermeture centralisée</p>
+				<div>
+					<h4>
+						Conditions de location Renault Captur
+					</h4>
+				</div>
+				<div class="conditions">
+					<ul>
+						<li>
+							Kilométrage illimité
+						</li>
+						<li>
+							Âge minimum : 21 ans
+						</li>
+						<li>
+							Plus de 2 ans de permis de conduire
+						</li>
+						<li>
+							Possibilité de régler en plusieurs fois
+						</li>
+						<li>
+							Caution : 800 €
+						</li>
+					</ul>
+				</div>
+				<div>
+					<h4>
+						Caractéristiques de Renault Captur
+					</h4>
+				</div>
+				<div class="caracteristiques">
+					<ul>
+						<li>
+							<i class="fa fa-battery-full"></i>
+							Carburant : Essence
+						</li>
+						<li>
+							<i class="fa fa-sun-o" aria-hidden="true"></i>
+							Boite de vitesse : Manuelle
+						</li>
+						<li>
+							<i class="fa fa-shopping-bag" aria-hidden="true"></i>
+							Nombre max de bagages : 3
+						</li>
+						<li>
+							<i class="fa fa-car" aria-hidden="true"></i>
+							Nombre de portes : 5
+						</li>
+						<li>
+							<i class="fa fa-users" aria-hidden="true"></i>
+							Max passagers: 5
+						</li>
+						<li>
+							<i class="fa fa-rss" aria-hidden="true"></i>
+							Atouts : autoradio, climatisation, fermeture centralisée
+						</li>
+					</ul>
+				</div>
 			</div>
 		</div>
 		<div class="d-flex justify-content-center">
@@ -51,6 +83,6 @@
 				<a href="{{ path('accueil') }}#contact" class="button">Demander un devis</a>
 			</div>
 		</div>
-	</div>
 
+	</div>
 {% endblock %}

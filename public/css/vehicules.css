@@ -1,0 +1,118 @@
+ul{
+    padding:0px;
+    margin-left: 10px;
+    /* border: 1px solid black; */
+}
+
+.image_voiture{
+    width: 2000px;
+    /* border: 1px solid black; */
+}
+.image_voiture_twigo{
+    width: 1500px;
+    /* border: 1px solid black; */
+}
+.conditions{
+    margin-left: 10px;
+}
+.caracteristiques{
+    margin-left: 8px;
+}
+.caracteristiques ul{
+
+    list-style: none;
+}
+
+.conditions ul {
+    list-style: none;
+}
+.conditions li::before {
+    content: "•"; 
+    margin-right: 5px;
+    color: red;
+}
+
+.section-title{
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+.texte{
+    padding: 5px;
+}
+
+
+/*media query pour responsive design*/
+
+/*extra large device*/
+@media (min-width: 1200px) {
+	
+
+    .caracteristiques ul li i{
+        width: 25px;
+    }
+    
+}
+
+
+
+
+/* larges devices */
+
+@media  (min-width: 992px)and (max-width: 1199.98px) {
+		/* hero slider (carousel) custom*/
+
+
+}
+
+/*  medium device(tablets) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .section-title{
+        margin-top: 25px;
+        margin-bottom: 25px;
+    }
+
+
+}
+
+
+/* small device */
+@media (min-width: 576px) and (max-width: 767.98px) {
+    h4{
+        font-size: 18px;
+    }
+	ul li{
+        font-size: 12px;
+    }
+    .caracteristiques ul li i{
+        width: 15px;
+    }
+    .section-title{
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+
+
+}
+
+/*extra small device */
+@media (max-width: 575.98px) {
+
+    h4{
+        font-size: 18px;
+    }
+	
+	ul li{
+        font-size: 12px;
+    }
+    .caracteristiques ul li i{
+        width: 15px;
+    }
+    .section-title{
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    
+
+}
+
