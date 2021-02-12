@@ -50,7 +50,9 @@ color: black;
 	text-align: justify;
 	height: 105px;
 }
-
+.quisommesnous_ul ul{
+	padding-left: 30px;
+}
 /* margin boutton */
 .button{
 	margin-top: 20px;
@@ -154,6 +156,13 @@ form{
 		padding-top: 15px;
 
 	}
+	/* a propos */
+	.mentions_legales{
+		height: 135px;
+	}
+	.description{
+		height: 135px;
+	}
 
 }
 
@@ -177,7 +186,7 @@ form{
 		/* a propos de nous */
 		.description{
 			text-align: justify;
-			height: 130px;
+			height: 155px;
 		}
 
 
@@ -191,13 +200,21 @@ form{
 		padding-left:0px;
 		padding-right:0px;
 	}
+	.roulez p{
+		font-size: 16px;
+		margin: 0;
+	}
 	.logo_roulez{
 		width:50%;
 	}
 	
 	.roulez{
-		padding-top: 15px;
 
+
+	}
+	.description{
+		text-align: justify;
+		height: auto;
 	}
 
 
@@ -234,6 +251,10 @@ form{
 	.div_roulez{
 		padding-left:0;
 		padding-right:0;
+	}
+	.description{
+		text-align: justify;
+		height: auto;
 	}
 
 	
