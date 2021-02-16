@@ -28,9 +28,10 @@ body{
   .single-service.bordered .inner:hover h4,
   .bordered.single-service-2 .inner:hover h4,
   .bordered.single-service-3 .inner:hover h4, .single-service-3 .inner:hover .title .icon, .isotope-menu li.active, .isotope-menu li:hover, .single-portfolio .inner .portfolio-img .hover-content .button, .single-portfolio .inner .portfolio-content h3:hover, .faq-sidebar li a, .single-pricing .inner a.button:hover, .single-pricing-2 .inner a.button:hover, .single-pricing-2.active .inner a.button {
-	color: #af0000; }
+	color: #af0000;
+ }
   
-  .c3-bg, .bg1, .button, .hero-slider .owl-dots .owl-dot.active, .single-service-2:hover .inner, .single-portfolio .inner .portfolio-img .hover-content, .faq .single-item.active, .single-faq h2 span, .footer_widget .nw_form button, .tabs-area .tabs-nav li a.active, .single-team .inner .team-img::after, .single-pricing.active .inner, .active.single-pricing-2 .inner, .single-pricing-2.active .inner .title .price {
+  .c3-bg, .bg1, .button, .hero-slider .owl-dots .owl-dot.active, .single-service-2:hover .inner, .faq .single-item.active, .single-faq h2 span, .footer_widget .nw_form button, .tabs-area .tabs-nav li a.active, .single-team .inner .team-img::after, .single-pricing.active .inner, .active.single-pricing-2 .inner, .single-pricing-2.active .inner .title .price {
 	background-color: #af0000; }
   
   .c3-bo, .button, .single-service.bordered .inner:hover, .bordered.single-service-2 .inner:hover, .bordered.single-service-3 .inner:hover, .testimonial-slider .single-slide, .tabs-area .tabs-nav li a::after, .tabs-area .tabs-nav li a.active, .contact-form input:not([type="submit"]):focus,
@@ -39,6 +40,11 @@ body{
 
 	.bg2 {
 		background-color: #af0000; 
+	}
+	.single-portfolio .inner .portfolio-img .hover-content {
+	background-color: #11ffee00; }
+
+
 	}
 
 
@@ -158,6 +164,9 @@ footer{
 	}
 	h4{
 		font-size: 14px;
+	}
+	h3{
+		font-size: 16px;
 	}
 	/* footer */
 .footer-top{
