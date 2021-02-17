@@ -20,6 +20,15 @@ class VehiculeType extends AbstractType
             ->add('tarif_journaliere')
             ->add('marque')
             ->add('type')
+            ->add('details')
+            ->add('carburation')
+            ->add('caution')
+            ->add('vitesse')
+            ->add('bagages')
+            ->add('portes')
+            ->add('passagers')
+            ->add('atouts')
+            ->add('image')
         ;
     }
 

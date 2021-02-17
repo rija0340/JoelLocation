@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\Reservation;
 use App\Entity\ModeReservation;
 use App\Entity\EtatReservation;
+use App\Entity\Vehicule;
 use App\Form\ClientType;
 use App\Form\LoginType;
 use App\Form\ReservationclientType;
@@ -13,6 +14,7 @@ use App\Repository\UserRepository;
 use App\Repository\ReservationRepository;
 use App\Repository\ModeReservationRepository;
 use App\Repository\EtatReservationRepository;
+use App\Repository\VehiculeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -200,6 +202,18 @@ class AccueilController extends AbstractController
             'reservation_en_attentes' => $reservationEnAttentes,
             'message' => $message_reservation,
             'form' => $form->createView(),
+        ]);
+    }
+
+    
+    /**
+     * @Route("/vehicules", name="vehicules")
+     */
+    public function vehicules(): Response
+    {
+        $vehicule = $this->getDoctrine()->getRepository(Vehicule::class)->findAll([]); //new Vehicule();
+        return $this->render('accueil/nosvehicule.html.twig', [
+            'controller_name' => 'Vehicule Controller',
         ]);
     }
 

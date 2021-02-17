@@ -66,6 +66,51 @@ class Vehicule
      */
     private $reservations;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $details;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $carburation;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $caution;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $vitesse;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $bagages;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $portes;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $passagers;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $atouts;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $image;
+
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
@@ -209,5 +254,113 @@ class Vehicule
     public function __toString()
     {
         return $this->getImmatriculation();
+    }
+
+    public function getDetails(): ?string
+    {
+        return $this->details;
+    }
+
+    public function setDetails(?string $details): self
+    {
+        $this->details = $details;
+
+        return $this;
+    }
+
+    public function getCarburation(): ?string
+    {
+        return $this->carburation;
+    }
+
+    public function setCarburation(?string $carburation): self
+    {
+        $this->carburation = $carburation;
+
+        return $this;
+    }
+
+    public function getCaution(): ?float
+    {
+        return $this->caution;
+    }
+
+    public function setCaution(?float $caution): self
+    {
+        $this->caution = $caution;
+
+        return $this;
+    }
+
+    public function getVitesse(): ?string
+    {
+        return $this->vitesse;
+    }
+
+    public function setVitesse(?string $vitesse): self
+    {
+        $this->vitesse = $vitesse;
+
+        return $this;
+    }
+
+    public function getBagages(): ?string
+    {
+        return $this->bagages;
+    }
+
+    public function setBagages(?string $bagages): self
+    {
+        $this->bagages = $bagages;
+
+        return $this;
+    }
+
+    public function getPortes(): ?string
+    {
+        return $this->portes;
+    }
+
+    public function setPortes(?string $portes): self
+    {
+        $this->portes = $portes;
+
+        return $this;
+    }
+
+    public function getPassagers(): ?string
+    {
+        return $this->passagers;
+    }
+
+    public function setPassagers(?string $passagers): self
+    {
+        $this->passagers = $passagers;
+
+        return $this;
+    }
+
+    public function getAtouts(): ?string
+    {
+        return $this->atouts;
+    }
+
+    public function setAtouts(?string $atouts): self
+    {
+        $this->atouts = $atouts;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
+
+        return $this;
     }
 }
