@@ -207,13 +207,27 @@ class AccueilController extends AbstractController
 
     
     /**
-     * @Route("/vehicules", name="vehicules")
+     * @Route("/nosvehicules", name="nosvehicules")
      */
-    public function vehicules(): Response
+    public function noVehicules(): Response
     {
-        $vehicule = $this->getDoctrine()->getRepository(Vehicule::class)->findAll([]); //new Vehicule();
+        $vehicules = $this->getDoctrine()->getRepository(Vehicule::class)->findAll([]); //new Vehicule();
         return $this->render('accueil/nosvehicule.html.twig', [
-            'controller_name' => 'Vehicule Controller',
+            'controller_name' => 'AccueilController',
+            'vehicules' => $vehicules,
+        ]);
+    }
+
+    
+    /**
+     * @Route("/{id}", name="notrevehicule")
+     */
+    public function notreVehicule($id): Response
+    {
+        $vehicule = $this->getDoctrine()->getRepository(Vehicule::class)->findOneBy(['id' => $id]); //new Vehicule();
+        return $this->render('accueil/notrevehicule.html.twig', [
+            'controller_name' => 'AccueilController',
+            'vehicule' => $vehicule,
         ]);
     }
 

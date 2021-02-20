@@ -15,7 +15,7 @@
 					<a href="{{ path('quisommenous') }}">A propos</a>
 				</li>
 				<li class="{% if app.request.attributes.get('_route') starts with 'accueil#vehicule' %}current-menu-item{% endif %}">
-					<a href="{{ path('accueil') }}#vehicule">Nos véhicules</a>
+					<a href="{{ path('nosvehicules') }}">Nos véhicules</a>
 				</li>
 				<li class="{% if app.request.attributes.get('_route') starts with 'accueil#vehicule' %}current-menu-item{% endif %}">
 					{% if is_granted("ROLE_CLIENT") %}
