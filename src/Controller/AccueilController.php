@@ -36,8 +36,19 @@ class AccueilController extends AbstractController
      */
     public function index(): Response
     {
+        $troisvehicules[] = new Vehicule();
+        $vehicules = $this->getDoctrine()->getRepository(Vehicule::class)->findAll(["id" => "DESC"]);        
+        $i = 0;
+        foreach($vehicules as $vehicule){
+            if($i >= 3){
+                exit;
+            }
+            $troisvehicules[$i] = $vehicule;
+            $i++;
+        }
         return $this->render('accueil/index.html.twig', [
             'controller_name' => 'AccueilController',
+            'vehicules' => $troisvehicules,
         ]);
     }
 
@@ -211,7 +222,7 @@ class AccueilController extends AbstractController
      */
     public function noVehicules(): Response
     {
-        $vehicules = $this->getDoctrine()->getRepository(Vehicule::class)->findAll([]); //new Vehicule();
+        $vehicules = $this->getDoctrine()->getRepository(Vehicule::class)->findAll(["id" => "DESC"]); //new Vehicule();
         return $this->render('accueil/nosvehicule.html.twig', [
             'controller_name' => 'AccueilController',
             'vehicules' => $vehicules,
