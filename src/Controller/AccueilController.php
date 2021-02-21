@@ -222,7 +222,7 @@ class AccueilController extends AbstractController
      */
     public function noVehicules(): Response
     {
-        $vehicules = $this->getDoctrine()->getRepository(Vehicule::class)->findAll(["id" => "DESC"]); //new Vehicule();
+        $vehicules = $this->getDoctrine()->getRepository(Vehicule::class)->findAll(["id" => "DESC"]);
         return $this->render('accueil/nosvehicule.html.twig', [
             'controller_name' => 'AccueilController',
             'vehicules' => $vehicules,
@@ -231,11 +231,11 @@ class AccueilController extends AbstractController
 
     
     /**
-     * @Route("/{id}", name="notrevehicule")
+     * @Route("/notrevehicule{id}", name="notrevehicule")
      */
-    public function notreVehicule($id): Response
+    public function notreVehicule(int $id): Response
     {
-        $vehicule = $this->getDoctrine()->getRepository(Vehicule::class)->findOneBy(['id' => $id]); //new Vehicule();
+        $vehicule = $this->getDoctrine()->getRepository(Vehicule::class)->findOneBy(['id' => $id]);
         return $this->render('accueil/notrevehicule.html.twig', [
             'controller_name' => 'AccueilController',
             'vehicule' => $vehicule,
