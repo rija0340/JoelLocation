@@ -28,7 +28,7 @@
 
     <a href="{{ path('paiement_index') }}" class="btn btn-primary"><i class="fa fa-arrow-left" aria-hidden="true"></i> retour</a>
 
-    <a href="{{ path('paiement_edit', {'id': paiement.id}) }}">Modifier</a>
+    <a href="{{ path('paiement_edit', {'id': paiement.id}) }}" class="btn btn-success"><i class="fa fa-book" aria-hidden="true"></i> Modifier</a>
 
     {{ include('paiement/_delete_form.html.twig') }}
 {% endblock %}

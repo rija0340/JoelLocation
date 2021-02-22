@@ -24,7 +24,7 @@
 
     <a href="{{ path('faq_index') }}" class="btn btn-primary"><i class="fa fa-arrow-left" aria-hidden="true"></i> retour</a>
 
-    <a href="{{ path('faq_edit', {'id': faq.id}) }}">Modifier</a>
+    <a href="{{ path('faq_edit', {'id': faq.id}) }}" class="btn btn-success"><i class="fa fa-book" aria-hidden="true"></i> Modifier</a>
 
     {{ include('faq/_delete_form.html.twig') }}
 {% endblock %}

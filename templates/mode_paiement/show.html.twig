@@ -20,7 +20,7 @@
 
     <a href="{{ path('mode_paiement_index') }}" class="btn btn-primary"><i class="fa fa-arrow-left" aria-hidden="true"></i> retour</a>
 
-    <a href="{{ path('mode_paiement_edit', {'id': mode_paiement.id}) }}">Modifier</a>
+    <a href="{{ path('mode_paiement_edit', {'id': mode_paiement.id}) }}" class="btn btn-success"><i class="fa fa-book" aria-hidden="true"></i> Modifier</a>
 
     {{ include('mode_paiement/_delete_form.html.twig') }}
 {% endblock %}

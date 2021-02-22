@@ -20,7 +20,7 @@
 
     <a href="{{ path('marque_index') }}" class="btn btn-primary"><i class="fa fa-arrow-left" aria-hidden="true"></i> retour</a>
 
-    <a href="{{ path('marque_edit', {'id': marque.id}) }}">Modifier</a>
+    <a href="{{ path('marque_edit', {'id': marque.id}) }}" class="btn btn-success"><i class="fa fa-book" aria-hidden="true"></i> Modifier</a>
 
     {{ include('marque/_delete_form.html.twig') }}
 {% endblock %}

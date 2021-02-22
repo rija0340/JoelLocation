@@ -20,7 +20,7 @@
 
     <a href="{{ path('etat_reservation_index') }}" class="btn btn-primary"><i class="fa fa-arrow-left" aria-hidden="true"></i> retour</a>
 
-    <a href="{{ path('etat_reservation_edit', {'id': etat_reservation.id}) }}">Modifier</a>
+    <a href="{{ path('etat_reservation_edit', {'id': etat_reservation.id}) }}" class="btn btn-success"><i class="fa fa-book" aria-hidden="true"></i> Modifier</a>
 
     {{ include('etat_reservation/_delete_form.html.twig') }}
 {% endblock %}

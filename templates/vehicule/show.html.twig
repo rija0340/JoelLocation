@@ -40,7 +40,7 @@
 
     <a href="{{ path('vehicule_index') }}" class="btn btn-primary"><i class="fa fa-arrow-left" aria-hidden="true"></i> retour</a>
 
-    <a href="{{ path('vehicule_edit', {'id': vehicule.id}) }}">Modifier</a>
+    <a href="{{ path('vehicule_edit', {'id': vehicule.id}) }}" class="btn btn-success"><i class="fa fa-book" aria-hidden="true"></i> Modifier</a>
 
     {{ include('vehicule/_delete_form.html.twig') }}
 {% endblock %}

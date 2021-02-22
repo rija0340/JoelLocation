@@ -32,7 +32,7 @@
 
     <a href="{{ path('contact_index') }}" class="btn btn-primary"><i class="fa fa-arrow-left" aria-hidden="true"></i> retour</a>
 
-    <a href="{{ path('contact_edit', {'id': contact.id}) }}">Modifier</a>
+    <a href="{{ path('contact_edit', {'id': contact.id}) }}" class="btn btn-success"><i class="fa fa-book" aria-hidden="true"></i> Modifier</a>
 
     {{ include('contact/_delete_form.html.twig') }}
 {% endblock %}

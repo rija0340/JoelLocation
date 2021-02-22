@@ -20,7 +20,7 @@
 
     <a href="{{ path('type_index') }}" class="btn btn-primary"><i class="fa fa-arrow-left" aria-hidden="true"></i> retour</a>
 
-    <a href="{{ path('type_edit', {'id': type.id}) }}">Modifier</a>
+    <a href="{{ path('type_edit', {'id': type.id}) }}" class="btn btn-success"><i class="fa fa-book" aria-hidden="true"></i> Modifier</a>
 
     {{ include('type/_delete_form.html.twig') }}
 {% endblock %}
