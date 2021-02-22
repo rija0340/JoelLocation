@@ -25,8 +25,8 @@
                 <td>{{ agence.mail }}</td>
                 <td>{{ agence.telephone }}</td>
                 <td>
-                    <a href="{{ path('agence_show', {'id': agence.id}) }}">Visionner</a>
-                    <a href="{{ path('agence_edit', {'id': agence.id}) }}">Modifier</a>
+                    <a href="{{ path('agence_show', {'id': agence.id}) }}" class="btn btn-success"><i class="fa fa-book" aria-hidden="true"></i> Visionner</a>
+                    <a href="{{ path('agence_edit', {'id': agence.id}) }}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> Modifier</a>
                 </td>
             </tr>
         {% else %}
@@ -37,5 +37,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('agence_new') }}">Ajouter</a>
+    <a href="{{ path('agence_new') }}" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> Ajouter</a>
 {% endblock %}

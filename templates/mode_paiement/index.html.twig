@@ -19,8 +19,8 @@
                 <td>{{ mode_paiement.id }}</td>
                 <td>{{ mode_paiement.libelle }}</td>
                 <td>
-                    <a href="{{ path('mode_paiement_show', {'id': mode_paiement.id}) }}">Visionner</a>
-                    <a href="{{ path('mode_paiement_edit', {'id': mode_paiement.id}) }}">Modifier</a>
+                    <a href="{{ path('mode_paiement_show', {'id': mode_paiement.id}) }}" class="btn btn-success"><i class="fa fa-book" aria-hidden="true"></i> Visionner</a>
+                    <a href="{{ path('mode_paiement_edit', {'id': mode_paiement.id}) }}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> Modifier</a>
                 </td>
             </tr>
         {% else %}
@@ -31,5 +31,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('mode_paiement_new') }}">Ajouter</a>
+    <a href="{{ path('mode_paiement_new') }}" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> Ajouter</a>
 {% endblock %}

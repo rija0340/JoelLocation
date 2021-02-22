@@ -23,8 +23,8 @@
                 <td>{{ paiement.datePaiement ? paiement.datePaiement|date('Y-m-d') : '' }}</td>
                 <td>{{ paiement.motif }}</td>
                 <td>
-                    <a href="{{ path('paiement_show', {'id': paiement.id}) }}">Visionner</a>
-                    <a href="{{ path('paiement_edit', {'id': paiement.id}) }}">Modifier</a>
+                    <a href="{{ path('paiement_show', {'id': paiement.id}) }}" class="btn btn-success"><i class="fa fa-book" aria-hidden="true"></i> Visionner</a>
+                    <a href="{{ path('paiement_edit', {'id': paiement.id}) }}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> Modifier</a>
                 </td>
             </tr>
         {% else %}
@@ -35,5 +35,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('paiement_new') }}">Ajouter</a>
+    <a href="{{ path('paiement_new') }}" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> Ajouter</a>
 {% endblock %}

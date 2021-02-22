@@ -19,8 +19,8 @@
                 <td>{{ etat_reservation.id }}</td>
                 <td>{{ etat_reservation.libelle }}</td>
                 <td>
-                    <a href="{{ path('etat_reservation_show', {'id': etat_reservation.id}) }}">Visionner</a>
-                    <a href="{{ path('etat_reservation_edit', {'id': etat_reservation.id}) }}">Modifier</a>
+                    <a href="{{ path('etat_reservation_show', {'id': etat_reservation.id}) }}" class="btn btn-success"><i class="fa fa-book" aria-hidden="true"></i> Visionner</a>
+                    <a href="{{ path('etat_reservation_edit', {'id': etat_reservation.id}) }}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> Modifier</a>
                 </td>
             </tr>
         {% else %}
@@ -31,5 +31,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('etat_reservation_new') }}">Ajouter</a>
+    <a href="{{ path('etat_reservation_new') }}" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> Ajouter</a>
 {% endblock %}

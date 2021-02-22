@@ -19,8 +19,8 @@
                 <td>{{ type.id }}</td>
                 <td>{{ type.libelle }}</td>
                 <td>
-                    <a href="{{ path('type_show', {'id': type.id}) }}">Visionner</a>
-                    <a href="{{ path('type_edit', {'id': type.id}) }}">Modifier</a>
+                    <a href="{{ path('type_show', {'id': type.id}) }}" class="btn btn-success"><i class="fa fa-book" aria-hidden="true"></i> Visionner</a>
+                    <a href="{{ path('type_edit', {'id': type.id}) }}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> Modifier</a>
                 </td>
             </tr>
         {% else %}
@@ -31,5 +31,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('type_new') }}">Ajouter</a>
+    <a href="{{ path('type_new') }}" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> Ajouter</a>
 {% endblock %}
