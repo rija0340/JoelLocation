@@ -9,6 +9,7 @@ use App\Entity\EtatReservation;
 use App\Entity\Vehicule;
 use App\Entity\ModePaiement;
 use App\Entity\Paiement;
+use App\Entity\Faq;
 use App\Form\ClientType;
 use App\Form\LoginType;
 use App\Form\ReservationclientType;
@@ -292,6 +293,19 @@ class AccueilController extends AbstractController
         $entityManager->persist($paiement);
         $entityManager->flush();
         return $this->redirectToRoute('client');
+    }
+
+    
+    /**
+     * @Route("/foireauxquestion", name="foireauxquestion")
+     */
+    public function foireauxquestion(): Response
+    {
+        $faqs = $this->getDoctrine()->getRepository(Faq::class)->findAll();
+        return $this->render('accueil/faq.html.twig', [
+            'controller_name' => 'FoireAuxQuestions',
+            'faqs' => $faqs,
+        ]);
     }
 
     
