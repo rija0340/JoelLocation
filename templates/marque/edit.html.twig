@@ -7,7 +7,7 @@
 
     {{ include('marque/_form.html.twig', {'button_label': 'Modifier'}) }}
 
-    <a href="{{ path('marque_index') }}">retour</a>
+    <a href="{{ path('marque_index') }}" class="btn btn-primary"><i class="fa fa-arrow-left" aria-hidden="true"></i> retour</a>
 
     {{ include('marque/_delete_form.html.twig') }}
 {% endblock %}
