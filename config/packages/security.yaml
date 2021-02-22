@@ -44,3 +44,28 @@ security:
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/client, roles: ROLE_CLIENT }
+        - { path: ^/carte, roles: ROLE_CLIENT }
+        - { path: ^/payement, roles: ROLE_CLIENT }
+        - { path: ^/vehicule, roles: ROLE_PERSONNEL }
+        - { path: ^/reservation, roles: ROLE_PERSONNEL }
+        - { path: ^/paiement, roles: ROLE_PERSONNEL }
+        - { path: ^/user, roles: ROLE_ADMIN }
+        - { path: ^/agence, roles: ROLE_ADMIN }
+        - { path: ^/message, roles: ROLE_ADMIN }
+        - { path: ^/contact, roles: ROLE_ADMIN }
+        - { path: ^/type, roles: ROLE_ADMIN }
+        - { path: ^/avis, roles: ROLE_ADMIN }
+        - { path: ^/mode, roles: ROLE_ADMIN }        
+        - { path: ^/mode/paiement, roles: ROLE_ADMIN }
+        - { path: ^/mode/reservation, roles: ROLE_ADMIN }
+        - { path: ^/marque, roles: ROLE_ADMIN }
+        - { path: ^/etat, roles: ROLE_ADMIN }
+        - { path: ^/etat/reservation, roles: ROLE_ADMIN }        
+        - { path: ^/faq, roles: ROLE_ADMIN }
+        # - { path: ^/payement/{id}/edit, roles: ROLE_ADMIN }
+        # - { path: ^/payement/, roles: ROLE_ADMIN }
+        # - { path: ^/vehicule/{id}/edit, roles: ROLE_ADMIN }
+        # - { path: ^/vehicule/, roles: ROLE_ADMIN }
+        # - { path: ^/reservation/{id}/edit, roles: ROLE_ADMIN }
+        # - { path: ^/reservation/, roles: ROLE_ADMIN }
