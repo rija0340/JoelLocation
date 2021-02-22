@@ -27,8 +27,10 @@
     </table>
 
     <a href="{{ path('paiement_index') }}" class="btn btn-primary"><i class="fa fa-arrow-left" aria-hidden="true"></i> retour</a>
-
-    <a href="{{ path('paiement_edit', {'id': paiement.id}) }}" class="btn btn-success"><i class="fa fa-book" aria-hidden="true"></i> Modifier</a>
-
-    {{ include('paiement/_delete_form.html.twig') }}
+    {% if is_granted("ROLE_ADMIN") %}
+        <a href="{{ path('paiement_edit', {'id': paiement.id}) }}" class="btn btn-success"><i class="fa fa-book" aria-hidden="true"></i> Modifier</a>
+    {% endif %}
+    {% if is_granted("ROLE_ADMIN") %}
+        {{ include('paiement/_delete_form.html.twig') }}
+    {% endif %}
 {% endblock %}

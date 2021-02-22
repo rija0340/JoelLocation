@@ -20,7 +20,9 @@
                 <td>{{ mode_reservation.libelle }}</td>
                 <td>
                     <a href="{{ path('mode_reservation_show', {'id': mode_reservation.id}) }}" class="btn btn-success"><i class="fa fa-book" aria-hidden="true"></i> Visionner</a>
-                    <a href="{{ path('mode_reservation_edit', {'id': mode_reservation.id}) }}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> Modifier</a>
+                    {% if is_granted("ROLE_ADMIN") %}
+                        <a href="{{ path('mode_reservation_edit', {'id': mode_reservation.id}) }}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> Modifier</a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}

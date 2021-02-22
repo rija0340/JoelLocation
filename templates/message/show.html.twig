@@ -19,8 +19,10 @@
     </table>
 
     <a href="{{ path('message_index') }}" class="btn btn-primary"><i class="fa fa-arrow-left" aria-hidden="true"></i> retour</a>
-
-    <a href="{{ path('message_edit', {'id': message.id}) }}" class="btn btn-success"><i class="fa fa-book" aria-hidden="true"></i> Modifier</a>
-
-    {{ include('message/_delete_form.html.twig') }}
+    {% if is_granted("ROLE_ADMIN") %}
+        <a href="{{ path('message_edit', {'id': message.id}) }}" class="btn btn-success"><i class="fa fa-book" aria-hidden="true"></i> Modifier</a>
+    {% endif %}
+    {% if is_granted("ROLE_ADMIN") %}
+        {{ include('message/_delete_form.html.twig') }}
+    {% endif %}
 {% endblock %}

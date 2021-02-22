@@ -20,7 +20,9 @@
                 <td>{{ message.message }}</td>
                 <td>
                     <a href="{{ path('message_show', {'id': message.id}) }}" class="btn btn-success"><i class="fa fa-book" aria-hidden="true"></i> Visionner</a>
-                    <a href="{{ path('message_edit', {'id': message.id}) }}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> Modifier</a>
+                    {% if is_granted("ROLE_ADMIN") %}
+                        <a href="{{ path('message_edit', {'id': message.id}) }}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> Modifier</a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}

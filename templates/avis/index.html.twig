@@ -30,7 +30,9 @@
                 <td>{{ avi.date ? avi.date|date('Y-m-d') : '' }}</td>
                 <td>
                     <a href="{{ path('avis_show', {'id': avi.id}) }}" class="btn btn-success"><i class="fa fa-book" aria-hidden="true"></i> Visionner</a>
-                    <a href="{{ path('avis_edit', {'id': avi.id}) }}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> Modifier</a>
+                    {% if is_granted("ROLE_ADMIN") %}
+                        <a href="{{ path('avis_edit', {'id': avi.id}) }}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> Modifier</a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
