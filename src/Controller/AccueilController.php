@@ -7,6 +7,8 @@ use App\Entity\Reservation;
 use App\Entity\ModeReservation;
 use App\Entity\EtatReservation;
 use App\Entity\Vehicule;
+use App\Entity\ModePaiement;
+use App\Entity\Paiement;
 use App\Form\ClientType;
 use App\Form\LoginType;
 use App\Form\ReservationclientType;
@@ -257,6 +259,12 @@ class AccueilController extends AbstractController
      * @Route("/payement", name="payement", methods={"POST"})
      */
     public function payement(Request $request){
+        $client = $this->getUser();
+        $reservation = $this->getDoctrine()->getRepository(Reservation::class)->findOneBy(["client" => $client], ["id" => "DESC"]);
+        $modePaiement = $this->getDoctrine()->getRepository(ModePaiement::class)->findOneBy(["id" => 1]);
+        $vehicule = new Vehicule();
+        $vehicule = $reservation->getVehicule();
+        $caution = $vehicule->getCaution() * 100;
         // Set your secret key. Remember to switch to your live secret key in production.
         // See your keys here: https://dashboard.stripe.com/account/apikeys
         \Stripe\Stripe::setApiKey('sk_test_51INCSpLWsPgEVX5UZKrH0YIs7H7PF8Boao1VcYHEks40it5a39h5KJzcwWxSWUIV6ODWkPS7txKsRyKeSfBknDFC00PAHEBwVP');
@@ -266,12 +274,23 @@ class AccueilController extends AbstractController
         //$token = $_POST['stripeToken'];
         $token = $request->request->get('stripeToken');
         $charge = \Stripe\Charge::create([
-            'amount' => 70000,
+            'amount' => $caution,
             'currency' => 'eur',
             'source' => $token,
-            'description' => 'caution',
+            'description' => 'caution pour le véhicule '.$vehicule->getMarque().' '.$vehicule->getModele(),
         ]);
 
+        $paiement = new Paiement();
+        $paiement->setReservation($reservation);
+        $paiement->setModePaiement($modePaiement);
+        $paiement->setUtilisateur($client);
+        $paiement->setClient($client);
+        $paiement->setMontant($vehicule->getCaution());
+        $paiement->setDatePaiement(new \DateTime('now'));
+        $paiement->setMotif('caution pour le véhicule '.$vehicule->getMarque().' '.$vehicule->getModele());
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($paiement);
+        $entityManager->flush();
         return $this->redirectToRoute('client');
     }
 
