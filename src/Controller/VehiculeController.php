@@ -12,6 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @Route("/vehicule")
@@ -28,10 +29,15 @@ class VehiculeController extends AbstractController
     /**
      * @Route("/", name="vehicule_index", methods={"GET"})
      */
-    public function index(VehiculeRepository $vehiculeRepository): Response
+    public function index(VehiculeRepository $vehiculeRepository, Request $request, PaginatorInterface $paginator): Response
     {
+        $pagination = $paginator->paginate(
+            $vehiculeRepository->findBy([], ["id" => "DESC"]), /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            20/*limit per page*/
+        );
         return $this->render('vehicule/index.html.twig', [
-            'vehicules' => $vehiculeRepository->findAll(),
+            'vehicules' => $pagination,
         ]);
     }
 

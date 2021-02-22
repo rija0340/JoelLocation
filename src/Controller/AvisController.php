@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @Route("/avis")
@@ -18,10 +19,15 @@ class AvisController extends AbstractController
     /**
      * @Route("/", name="avis_index", methods={"GET"})
      */
-    public function index(AvisRepository $avisRepository): Response
+    public function index(AvisRepository $avisRepository, Request $request, PaginatorInterface $paginator): Response
     {
+        $pagination = $paginator->paginate(
+            $avisRepository->findBy([], ["id" => "DESC"]), /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            20/*limit per page*/
+        );
         return $this->render('avis/index.html.twig', [
-            'avis' => $avisRepository->findAll(),
+            'avis' => $pagination,
         ]);
     }
 

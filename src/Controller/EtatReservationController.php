@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @Route("/etat/reservation")
@@ -18,10 +19,15 @@ class EtatReservationController extends AbstractController
     /**
      * @Route("/", name="etat_reservation_index", methods={"GET"})
      */
-    public function index(EtatReservationRepository $etatReservationRepository): Response
+    public function index(EtatReservationRepository $etatReservationRepository, Request $request, PaginatorInterface $paginator): Response
     {
+        $pagination = $paginator->paginate(
+            $etatReservationRepository->findBy([], ["id" => "DESC"]), /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            5/*limit per page*/
+        );
         return $this->render('etat_reservation/index.html.twig', [
-            'etat_reservations' => $etatReservationRepository->findAll(),
+            'etat_reservations' => $pagination,
         ]);
     }
 
