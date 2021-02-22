@@ -194,6 +194,7 @@ class AccueilController extends AbstractController
             $entityManager->persist($reservation);
             $entityManager->flush();
             $message_reservation = 'reservation enregister avec sussès';
+            return $this->redirectToRoute('carte');
         }
 
         //récupération des réservations effectuée
@@ -240,6 +241,38 @@ class AccueilController extends AbstractController
             'controller_name' => 'AccueilController',
             'vehicule' => $vehicule,
         ]);
+    }
+
+
+    /**
+     * @Route("/carte", name="carte")
+     */
+    public function carte(){
+        return $this->render('accueil/paiement.html.twig',[
+            'controller_name' => 'carte bancaire'
+        ]);
+    }
+
+    /**
+     * @Route("/payement", name="payement", methods={"POST"})
+     */
+    public function payement(Request $request){
+        // Set your secret key. Remember to switch to your live secret key in production.
+        // See your keys here: https://dashboard.stripe.com/account/apikeys
+        \Stripe\Stripe::setApiKey('sk_test_51INCSpLWsPgEVX5UZKrH0YIs7H7PF8Boao1VcYHEks40it5a39h5KJzcwWxSWUIV6ODWkPS7txKsRyKeSfBknDFC00PAHEBwVP');
+
+        // Token is created using Stripe Checkout or Elements!
+        // Get the payment token ID submitted by the form:
+        //$token = $_POST['stripeToken'];
+        $token = $request->request->get('stripeToken');
+        $charge = \Stripe\Charge::create([
+            'amount' => 70000,
+            'currency' => 'eur',
+            'source' => $token,
+            'description' => 'caution',
+        ]);
+
+        return $this->redirectToRoute('client');
     }
 
     
