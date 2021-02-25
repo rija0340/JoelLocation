@@ -19,7 +19,6 @@ height: 150px;
 .logo-column a.logo  {
 width: 150px ;
 height: 150px;
-
 }
 
 
@@ -78,20 +77,78 @@ height: 150px;
 }
 
 
+#menu2 ul {
+	text-align: right;
+	margin: 0; }
+	#menu2 ul li.has-child > a::after {
+	  content: "";
+	  font-family: "fontawesome";
+	  margin-left: 4px; }
+	#menu2 ul > li {
+	  display: inline-block;
+	  position: relative; }
+	  #menu2 ul > li > a {
+		padding: 0 15px;
+		font-weight: 500;
+		line-height: 25px; }
+		#menu2 ul > li > a:hover {
+		  color: #b5c3d4; }
+	  #menu2 ul > li.current-menu-item > a {
+		color: #b5c3d4; }
+  
+  #menu2 ul ul {
+	position: absolute;
+	background-color: #fff;
+	left: 0;
+	top: calc(100% + 23px);
+	z-index: 2;
+	width: 220px;
+	text-align: left;
+	padding: 15px 20px;
+	opacity: 0;
+	visibility: hidden;
+	box-shadow: 0 2px 3px rgba(0, 0, 0, 0.15); }
+	#menu2 ul ul::after {
+	  content: "";
+	  border: 8px solid transparent;
+	  border-bottom-color: #fff;
+	  left: 25px;
+	  top: -16px;
+	  position: absolute; }
+	#menu2 ul ul::before {
+	  content: "";
+	  position: absolute;
+	  height: 20px;
+	  width: 100%;
+	  left: 0;
+	  top: -20px; }
+	#menu2 ul ul li {
+	  display: block; }
+	  #menu2 ul ul li a {
+		display: block;
+		font-weight: 300;
+		color: #222538;
+		font-size: 13px;
+		padding: 0;
+		margin: 5px 0; }
+  
+  #menu2 ul li:hover > ul {
+	opacity: 1;
+	visibility: visible; }
+
 /*media query pour responsive design*/
 
 /*extra large device*/
 @media (min-width: 1200px) {
-
-
 	.site > header{
 		display: block;
 	}
+	#menu ul li.profil_mobile{
+		
+		display: none !important;
+	}
 
 }
-
-
-
 
 /* larges devices */
 
@@ -99,11 +156,31 @@ height: 150px;
 	.site > header{
 		display: block;
 	}
+	#menu ul li.profil_mobile{
+		
+		display: none !important;
+	}
+	/* sa ka woulé doesn't appear */
+	.logo-column  { 
+		width: 130px ;
+		height: 130px;
+		}
+		.logo-column a.logo img{
+			height: 120px;
+			width: auto;
+		
+		}
+	
 }
 
 /*  medium device(tablets) */
 @media (min-width: 768px) and (max-width: 991.98px) {
 	.site >header{
+		display: none !important;
+	}
+	/* hide mobile profile  */
+	.site > .profil_mobile{
+		
 		display: none !important;
 	}
 	/* logo size on mobile */
@@ -126,8 +203,6 @@ height: 150px;
 	.sakawoule{
         font-size: 14px;
     }
-	
-	
 }
 
 
@@ -137,6 +212,11 @@ height: 150px;
 	.site >header{
 		display: none !important;
 	}
+		/* hide mobile profile  */
+		.site > #profil_desktop{
+		
+			display: none !important;
+		}
 	/* logo size on mobile */
 
 	.slicknav_brand    {
@@ -157,9 +237,6 @@ height: 150px;
 	.sakawoule{
         font-size: 14px;
     }
-
-
-
 
 }
 

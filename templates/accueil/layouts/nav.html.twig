@@ -3,7 +3,7 @@
 		<a href="{{ path('accueil') }}" class="logo">
 			<img src="images/Joel-Location-new.png" alt="JOEL LOCATION">
 		</a>
-		<span style="font-family:'Monotype corsiva';font-size='10px';">Sa Ka Woulé</span>
+		<span style="font-family:'Monotype corsiva';">Sa Ka Woulé</span>
 	</div>
 	<div class="nav-column">
 		<nav id="menu" class="d-none d-lg-block ">
@@ -29,6 +29,21 @@
 				<li class="{% if app.request.attributes.get('_route') starts with 'accueil#contact' %}current-menu-item{% endif %}">
 					<a href="{{ path('accueil') }}#contact">Contact</a>
 				</li>
+				<li class="{% if app.request.attributes.get('_route') starts with 'foireauxquestion' %}current-menu-item{% endif %}">
+					<a href="{{ path('foireauxquestion') }}">FAQ</a>
+				</li>
+				{% if is_granted("ROLE_CLIENT") or is_granted("ROLE_PERSONNEL") %}
+					<li class="current-menu-item has-child profil_mobile">
+						<a href="index.html">
+							<img src="/images/blank_profile.png" alt="DGSR Logo" class="brand-image img-circle elevation-3" style="opacity: .8; height:30px; width:auto;">
+						</a>
+						<ul class="sub-menu">
+							<li>
+								<a href="{{ path('app_logout') }}">Déconnecter</a>
+							</li>
+						</ul>
+					</li>
+				{% endif %}
 			</ul>
 		</nav>
 	</div>
@@ -43,6 +58,25 @@
 		<a href="{{ path('accueil') }}#whatsapp" class="fab fa-whatsapp p-0" target="_blank"></a>
 		{# <a href="https://www.instagram.com/accounts/login/" class="fab fa-instagram" target="_blank"></a> #}
 		<a href="#" class="fab fa-youtube" target="_blank"></a>
+	</div>
+	<div class="profil_desktop ">
+		{% if is_granted("ROLE_CLIENT") or is_granted("ROLE_PERSONNEL") %}
+			<nav id="menu2">
+				<ul>
+					<li class="current-menu-item has-child">
+						<a href="index.html">
+							<img src="/images/blank_profile.png" alt="DGSR Logo" class="brand-image img-circle elevation-3" style="opacity: .8; height:30px; width:auto;">
+						</a>
+						<ul class="sub-menu">
+							<li>
+								<a href="{{ path('app_logout') }}">Déconnecter</a>
+							</li>
+
+						</ul>
+					</li>
+				</ul>
+			</nav>
+		{% endif %}
 	</div>
 
 </div>

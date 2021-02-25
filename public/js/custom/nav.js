@@ -12,16 +12,16 @@
 
 $(window).ready(function () {
 
+    // mobile version
     if (320 <= $(window).width() <= 767) {
 
         console.log("test");
-        $(".header-social-tablet").removeClass("hidden")
+        $(".header-social-tablet").removeClass("hidden");
         $(".header-social-tablet").insertAfter(".slicknav_brand");
 
     } else {
-        $(".header-social-tablet").addClass("hidden")
-
-
+        $(".header-social-tablet").addClass("hidden");
+        $(".profil_mobile").addClass("hidden");
     }
 
 });

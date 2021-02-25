@@ -1,19 +1,41 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}login
+{% block title %}Foire aux questions
 {% endblock %}
 
 {% block body %}
-    <div class="container">
+	<div class="container">
 		<div class="section-title red">
 			<h2>Foire aux questions</h2>
 		</div>
-        {% for faq in faqs %}
-            <div class="row">
-                <strong><h3>{{ loop.index }} - {{ faq.question }}</h3></strong><br>
-                {{ faq.reponse }}
-            </div>
-            <hr>
-        {% endfor %}
-    </div>
+		<div class="row">
+			<div class="col-md-8">
+				{% for faq in faqs %}
+
+					<div class="single-faq">
+						<h2>
+							<span>{{ loop.index }}</span>
+							{{ faq.question }}</h2>
+						<p>{{ faq.reponse }}</p>
+					</div>
+
+				{% endfor %}
+			</div>
+
+			<div class="col-md-4">
+				<div class="faq-sidebar-wrap">
+					<h3>Index</h3>
+					{% for faq in faqs %}
+						<ul class="faq-sidebar">
+							<li>
+								<a href="#">
+									<span>{{ loop.index }}.</span>
+									{{ faq.question }}</a>
+							</li>
+						</ul>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}
