@@ -40,10 +40,10 @@ class AccueilController extends AbstractController
     public function index(): Response
     {
         $troisvehicules[] = new Vehicule();
-        $vehicules = $this->getDoctrine()->getRepository(Vehicule::class)->findBy([], ["id" => "DESC"]);        
+        $vehicules = $this->getDoctrine()->getRepository(Vehicule::class)->findBy([], ["id" => "DESC"]);
         $i = 0;
-        foreach($vehicules as $vehicule){
-            if($i >= 3){
+        foreach ($vehicules as $vehicule) {
+            if ($i >= 3) {
                 exit;
             }
             $troisvehicules[$i] = $vehicule;
@@ -55,7 +55,7 @@ class AccueilController extends AbstractController
         ]);
     }
 
-    
+
     /**
      * @Route("/quisommenous", name="quisommenous")
      */
@@ -66,7 +66,7 @@ class AccueilController extends AbstractController
         ]);
     }
 
-    
+
     /**
      * @Route("/capture", name="capture")
      */
@@ -77,7 +77,7 @@ class AccueilController extends AbstractController
         ]);
     }
 
-    
+
     /**
      * @Route("/clio", name="clio")
      */
@@ -88,7 +88,7 @@ class AccueilController extends AbstractController
         ]);
     }
 
-    
+
     /**
      * @Route("/twingo", name="twingo")
      */
@@ -99,7 +99,7 @@ class AccueilController extends AbstractController
         ]);
     }
 
-    
+
     /**
      * @Route("/mentionlegale", name="mentionlegale")
      */
@@ -110,7 +110,7 @@ class AccueilController extends AbstractController
         ]);
     }
 
-    
+
     /**
      * @Route("/inscription", name="inscription")
      */
@@ -141,7 +141,7 @@ class AccueilController extends AbstractController
         ]);
     }
 
-    
+
     /**
      * @Route("/login_client", name="login")
      */
@@ -159,9 +159,9 @@ class AccueilController extends AbstractController
             $username = $user->getUsername();
             $userpass = $this->passwordEncoder->encodePassword($user, $user->getPassword());
             $userreq = $this->getDoctrine()->getRepository(User::class)->findOneBy(['username' => $username, 'password' => $userpass]);
-            if($userreq != null){ 
+            if ($userreq != null) {
                 //if($user->setPassword($this->passwordEncoder->encodePassword($user,$user->getPassword())) == $userreq->getPassword()){ 
-                    return $this->redirectToRoute('accueil');
+                return $this->redirectToRoute('accueil');
                 //}
             }
         }
@@ -220,7 +220,7 @@ class AccueilController extends AbstractController
         ]);
     }
 
-    
+
     /**
      * @Route("/nosvehicules", name="nosvehicules")
      */
@@ -233,7 +233,7 @@ class AccueilController extends AbstractController
         ]);
     }
 
-    
+
     /**
      * @Route("/notrevehicule{id}", name="notrevehicule")
      */
@@ -250,8 +250,9 @@ class AccueilController extends AbstractController
     /**
      * @Route("/carte", name="carte")
      */
-    public function carte(){
-        return $this->render('accueil/paiement.html.twig',[
+    public function carte()
+    {
+        return $this->render('accueil/paiement.html.twig', [
             'controller_name' => 'carte bancaire'
         ]);
     }
@@ -259,7 +260,8 @@ class AccueilController extends AbstractController
     /**
      * @Route("/payement", name="payement", methods={"POST"})
      */
-    public function payement(Request $request){
+    public function payement(Request $request)
+    {
         $client = $this->getUser();
         $reservation = $this->getDoctrine()->getRepository(Reservation::class)->findOneBy(["client" => $client], ["id" => "DESC"]);
         $modePaiement = $this->getDoctrine()->getRepository(ModePaiement::class)->findOneBy(["id" => 1]);
@@ -278,7 +280,7 @@ class AccueilController extends AbstractController
             'amount' => $caution,
             'currency' => 'eur',
             'source' => $token,
-            'description' => 'caution pour le véhicule '.$vehicule->getMarque().' '.$vehicule->getModele(),
+            'description' => 'caution pour le véhicule ' . $vehicule->getMarque() . ' ' . $vehicule->getModele(),
         ]);
 
         $paiement = new Paiement();
@@ -288,14 +290,14 @@ class AccueilController extends AbstractController
         $paiement->setClient($client);
         $paiement->setMontant($vehicule->getCaution());
         $paiement->setDatePaiement(new \DateTime('now'));
-        $paiement->setMotif('caution pour le véhicule '.$vehicule->getMarque().' '.$vehicule->getModele());
+        $paiement->setMotif('caution pour le véhicule ' . $vehicule->getMarque() . ' ' . $vehicule->getModele());
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($paiement);
         $entityManager->flush();
         return $this->redirectToRoute('client');
     }
 
-    
+
     /**
      * @Route("/foireauxquestion", name="foireauxquestion")
      */
@@ -307,8 +309,16 @@ class AccueilController extends AbstractController
             'faqs' => $faqs,
         ]);
     }
+    /**
+     * @Route("/cgu", name="cgu")
+     */
+    public function cgu(): Response
+    {
+        return $this->render('accueil/cgu.html.twig');
+    }
 
-    
+
+
     /**
      * @Route("/teste", name="teste")
      */
