@@ -23,28 +23,34 @@
 	</div>
 	<div class="footer-bottom" style="background-color:black">
 		<div class="container">
-			<div class="row">
-				<div class="col-lg-4">
+			<div class="d-flex text-center">
+				<div class="signature mr-auto">
 					<div class="copyright-txt" style="color:white;">
 						© 2020 Joel Location. Tous droits réservés.
 					</div>
 				</div>
-				<div class="col-lg-6 text-right">
-					<div class="footer-nav">
-						<a href="{{ path('accueil') }}">Accueil</a>
-						<a href="{{ path('quisommenous') }}">A propos</a>
-						<a href="{{ path('accueil') }}#vehicule">Nos véhicules</a>
-						<a href="{{ path('mentionlegale') }}">Mentions Légales</a>
-						<a href="{{ path('accueil') }}#contact">Contact</a>
 
+				<div class="">
+					<div class="">
+						<div class="footer-nav">
+							<a class="{% if app.request.attributes.get('_route') starts with 'accueil' %}current-menu-item{% endif %}" href="{{ path('accueil') }}">Accueil</a>
+							<a href="{{ path('quisommenous') }}">A propos</a>
+							<a href="{{ path('accueil') }}#vehicule">Nos véhicules</a>
+							<a href="{{ path('mentionlegale') }}">Mentions Légales</a>
+							<a href="{{ path('accueil') }}#contact">Contact</a>
+							<a href="{{ path('foireauxquestion') }}">FAQ</a>
+						</div>
 					</div>
+
 				</div>
-				<div class="col-lg-2">
-					<div class="header-social">
-						<a href="https://www.facebook.com/joellocation" class="fab fa-facebook p-0" target="_blank"></a>
-						<a href="https://wa.me/0767321447" class="fab fa-whatsapp p-0" target="_blank"></a>
-						{# <a href="https://www.instagram.com/accounts/login/" class="fab fa-instagram p-0" target="_blank"></a> #}
-						<a href="#" class="fab fa-youtube p-0" target="_blank"></a>
+				<div class="">
+					<div class="">
+						<div class="header-social">
+							<a href="https://www.facebook.com/joellocation" class="fab fa-facebook p-0" target="_blank"></a>
+							<a href="https://wa.me/0767321447" class="fab fa-whatsapp p-0" target="_blank"></a>
+							<a href="https://www.instagram.com/accounts/login/" class="fab fa-instagram p-0" target="_blank"></a>
+							<a href="https://youtube.com/channel/UCMZZRNgOmDBIghZwg4tTQJQ" class="fab fa-youtube p-0" target="_blank"></a>
+						</div>
 					</div>
 				</div>
 			</div>

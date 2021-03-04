@@ -14,10 +14,10 @@
 				<li class="{% if app.request.attributes.get('_route') starts with 'quisommenous' %}current-menu-item{% endif %}">
 					<a href="{{ path('quisommenous') }}">A propos</a>
 				</li>
-				<li class="{% if app.request.attributes.get('_route') starts with 'accueil#vehicule' %}current-menu-item{% endif %}">
+				<li class="{% if app.request.attributes.get('_route') starts with 'nosvehicules' %}current-menu-item{% endif %}">
 					<a href="{{ path('nosvehicules') }}">Nos véhicules</a>
 				</li>
-				<li class="{% if app.request.attributes.get('_route') starts with 'accueil#vehicule' %}current-menu-item{% endif %}">
+				<li class="{% if app.request.attributes.get('_route') starts with 'app_login' %}current-menu-item{% endif %}">
 					{% if is_granted("ROLE_CLIENT") %}
 						<a href="{{ path('client') }}">Mon compte</a>
 					{% elseif is_granted("ROLE_PERSONNEL") %}
@@ -49,15 +49,15 @@
 	</div>
 	<div class="header-social">
 		<a href="https://www.facebook.com/joellocation" class="fab fa-facebook" target="_blank"></a>
-		<a href="{{ path('accueil') }}#whatsapp" class="fab fa-whatsapp p-0" target="_blank"></a>
-		{# <a href="https://www.instagram.com/accounts/login/" class="fab fa-instagram" target="_blank"></a> #}
-		<a href="#" class="fab fa-youtube" target="_blank"></a>
+		<a href="https://wa.me/0767321447" class="fab fa-whatsapp p-0" target="_blank"></a>
+		<a href="https://www.instagram.com/accounts/login/" class="fab fa-instagram" target="_blank"></a>
+		<a href="https://youtube.com/channel/UCMZZRNgOmDBIghZwg4tTQJQ" class="fab fa-youtube" target="_blank"></a>
 	</div>
 	<div class="header-social-tablet hidden">
 		<a href="https://www.facebook.com/joellocation" class="fab fa-facebook" target="_blank"></a>
-		<a href="{{ path('accueil') }}#whatsapp" class="fab fa-whatsapp p-0" target="_blank"></a>
-		{# <a href="https://www.instagram.com/accounts/login/" class="fab fa-instagram" target="_blank"></a> #}
-		<a href="#" class="fab fa-youtube" target="_blank"></a>
+		<a href="https://wa.me/0767321447" class="fab fa-whatsapp p-0" target="_blank"></a>
+		<a href="https://www.instagram.com/accounts/login/" class="fab fa-instagram" target="_blank"></a>
+		<a href="https://youtube.com/channel/UCMZZRNgOmDBIghZwg4tTQJQ " class="fab fa-youtube" target="_blank"></a>
 	</div>
 	<div class="profil_desktop ">
 		{% if is_granted("ROLE_CLIENT") or is_granted("ROLE_PERSONNEL") %}

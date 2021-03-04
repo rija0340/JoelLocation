@@ -1,7 +1,9 @@
 .pourquoi1{
     height: 200px;
 }
-
+.apropos ul{
+    margin-left: 400px;
+}
 
 .avecbgimage .content p{
     /* background-color: rgba(255, 255, 255, 0.2); */
@@ -105,6 +107,10 @@
     .single-service .inner .title{
         margin-bottom: 0;
     }
+    .apropos ul{
+        margin-left: 20px;
+    }
+    
 	
 }
 
@@ -124,6 +130,9 @@
     }
     .mission .single-service-2 .inner {
         height: auto;
+    }
+    .apropos ul{
+        margin-left: 20px;
     }
 
 }
@@ -150,7 +159,6 @@
     .avecbgimage .inner .title .icon {
         width: 50px;
         height: 60px;
-        
      }
       .single-service-3 .inner:hover .title .icon {
         background-color: #fff; }
@@ -166,14 +174,14 @@
         }
         .apropos_img{
             margin-bottom: 10px;
-
         }
-        .apropos{
-
-            padding: 10px;
-
+     
+        .apropos > ul > li{
+            font-size: 12px;
         }
-
+        .apropos ul{
+            margin-left: 20px;
+        }
 }
 
 

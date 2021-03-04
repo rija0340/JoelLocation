@@ -36,6 +36,9 @@ body{
  .faq-sidebar li a:hover{
 	color : #af0000;
 }
+.faq .single-item {
+    background-color : #f3f6fa;
+ }
   
   .c3-bg, .bg1, .button, .hero-slider .owl-dots .owl-dot.active, .single-service-2:hover .inner, .faq .single-item.active, .single-faq h2 span, .footer_widget .nw_form button, .tabs-area .tabs-nav li a.active, .single-team .inner .team-img::after, .single-pricing.active .inner, .active.single-pricing-2 .inner, .single-pricing-2.active .inner .title .price {
 	background-color: #af0000; }
@@ -51,7 +54,10 @@ body{
 	background-color: #11ffee00; }
 
 
+	.footer-bottom a:hover{
+		color: #af0000;
 	}
+	
 
 
 /*******************************/
@@ -174,6 +180,7 @@ footer{
 	h3{
 		font-size: 16px;
 	}
+
 	/* footer */
 .footer-top{
 	padding: 5px;

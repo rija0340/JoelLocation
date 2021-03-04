@@ -161,15 +161,16 @@ height: 150px;
 		display: none !important;
 	}
 	/* sa ka woulé doesn't appear */
-	.logo-column  { 
-		width: 130px ;
-		height: 130px;
-		}
-		.logo-column a.logo img{
-			height: 120px;
-			width: auto;
-		
-		}
+	.logo-column a.logo img {
+		width: auto ;
+	height: 130px;
+	
+	}
+	.logo-column a.logo  {
+	width: 130px ;
+	height: 130px;
+	}
+	
 	
 }
 

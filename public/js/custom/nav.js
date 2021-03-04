@@ -15,7 +15,6 @@ $(window).ready(function () {
     // mobile version
     if (320 <= $(window).width() <= 767) {
 
-        console.log("test");
         $(".header-social-tablet").removeClass("hidden");
         $(".header-social-tablet").insertAfter(".slicknav_brand");
 
