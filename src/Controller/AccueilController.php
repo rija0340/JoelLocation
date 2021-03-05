@@ -319,16 +319,6 @@ class AccueilController extends AbstractController
         return $this->render('accueil/cgu.html.twig');
     }
 
-    
-    /**
-     * @Route("/cgl", name="cgl")
-     */
-    public function cgl(): Response
-    {
-        return $this->render('accueil/cgl.html.twig');
-    }
-
-
 
     /**
      * @Route("/teste", name="teste")
