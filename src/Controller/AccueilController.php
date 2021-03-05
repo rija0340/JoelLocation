@@ -309,12 +309,23 @@ class AccueilController extends AbstractController
             'faqs' => $faqs,
         ]);
     }
+
+
     /**
      * @Route("/cgu", name="cgu")
      */
     public function cgu(): Response
     {
         return $this->render('accueil/cgu.html.twig');
+    }
+
+    
+    /**
+     * @Route("/cgl", name="cgl")
+     */
+    public function cgl(): Response
+    {
+        return $this->render('accueil/cgl.html.twig');
     }
 
 
