@@ -19,12 +19,12 @@ div h2{
 ul{
     margin-left: 20px;
 }
-span.url{
-    color: blue;
-    font-weight: bold;
-    text-decoration: underline;
+span.url a{
+    text-decoration: inherit;
+    color : black;
+
 }
 span.mail{
     color : #af0000;
-  
+
 }
