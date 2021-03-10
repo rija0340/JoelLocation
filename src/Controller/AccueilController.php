@@ -319,6 +319,16 @@ class AccueilController extends AbstractController
         return $this->render('accueil/cgu.html.twig');
     }
 
+      /**
+     * @Route("/formulaire-contact", name="formulaire-contact")
+     */
+      public function formcontact(): Response
+      {
+        return $this->render('accueil/contact.html.twig');
+    }
+
+
+
 
     /**
      * @Route("/teste", name="teste")
