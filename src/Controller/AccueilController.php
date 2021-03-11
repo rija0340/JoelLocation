@@ -319,12 +319,37 @@ class AccueilController extends AbstractController
         return $this->render('accueil/cgu.html.twig');
     }
 
-      /**
+
+    /**
      * @Route("/formulaire-contact", name="formulaire-contact")
      */
-      public function formcontact(): Response
-      {
+    public function formcontact(): Response
+    {
         return $this->render('accueil/contact.html.twig');
+    }
+
+    
+    /**
+     * @Route("/redirection", name="redirection")
+     */
+    public function redirection()
+    {
+        $user = new User();
+        $user = $this->getUser();
+        if(in_array("ROLE_CLIENT", $user->getRoles())){ 
+            return $this->redirectToRoute('client');
+        }
+        if(in_array("ROLE_PERSONNEL", $user->getRoles())){ 
+            return $this->redirectToRoute('reservation_index');
+        }
+        if(in_array("ROLE_ADMIN", $user->getRoles())){ 
+            return $this->redirectToRoute('reservation_index');
+        }
+        if(in_array("ROLE_SUPER_ADMIN", $user->getRoles())){ 
+            return $this->redirectToRoute('reservation_index');
+        }
+        return $this->redirectToRoute('app_logout');
+        //return $this->render('accueil/contact.html.twig');
     }
 
 
