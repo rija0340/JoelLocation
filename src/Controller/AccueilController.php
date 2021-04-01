@@ -340,13 +340,13 @@ class AccueilController extends AbstractController
             return $this->redirectToRoute('client');
         }
         if(in_array("ROLE_PERSONNEL", $user->getRoles())){ 
-            return $this->redirectToRoute('reservation_index');
+            return $this->redirectToRoute('admin_index');
         }
         if(in_array("ROLE_ADMIN", $user->getRoles())){ 
-            return $this->redirectToRoute('reservation_index');
+            return $this->redirectToRoute('admin_index');
         }
         if(in_array("ROLE_SUPER_ADMIN", $user->getRoles())){ 
-            return $this->redirectToRoute('reservation_index');
+            return $this->redirectToRoute('admin_index');
         }
         return $this->redirectToRoute('app_logout');
         //return $this->render('accueil/contact.html.twig');

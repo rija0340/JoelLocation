@@ -2,50 +2,50 @@
 
 {% block title %}Vehicule index{% endblock %}
 
-{% block content %}
-    <h1>Liste des véhicules</h1>
+    {% block content %}
+        <h1>Liste des véhicules</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Immatriculation</th>
-                <th>Date de mise en service</th>
-                <th>Date de mise en location</th>
-                <th>Modèle</th>
-                <th>Prix d'acquisition</th>
-                <th>Tarif journalière</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for vehicule in vehicules %}
-            <tr>
-                <td>{{ vehicule.id }}</td>
-                <td>{{ vehicule.immatriculation }}</td>
-                <td>{{ vehicule.dateMiseService ? vehicule.dateMiseService|date('Y-m-d') : '' }}</td>
-                <td>{{ vehicule.dateMiseLocation ? vehicule.dateMiseLocation|date('Y-m-d') : '' }}</td>
-                <td>{{ vehicule.modele }}</td>
-                <td>{{ vehicule.prixAcquisition }}</td>
-                <td>{{ vehicule.tarifJournaliere }}</td>
-                <td>
-                    <a href="{{ path('vehicule_show', {'id': vehicule.id}) }}" class="btn btn-success"><i class="fa fa-book" aria-hidden="true"></i> Visionner</a>
-                    {% if is_granted("ROLE_ADMIN") %}
-                        <a href="{{ path('vehicule_edit', {'id': vehicule.id}) }}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> Modifier</a>
-                    {% endif %}
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="8">Aucun enregistrement trouver</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Immatriculation</th>
+                    <th>Date de mise en service</th>
+                    <th>Date de mise en location</th>
+                    <th>Modèle</th>
+                    <th>Prix d'acquisition</th>
+                    <th>Tarif journalière</th>
+                    <th>actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for vehicule in vehicules %}
+                    <tr>
+                        <td>{{ vehicule.id }}</td>
+                        <td>{{ vehicule.immatriculation }}</td>
+                        <td>{{ vehicule.dateMiseService ? vehicule.dateMiseService|date('Y-m-d') : '' }}</td>
+                        <td>{{ vehicule.dateMiseLocation ? vehicule.dateMiseLocation|date('Y-m-d') : '' }}</td>
+                        <td>{{ vehicule.modele }}</td>
+                        <td>{{ vehicule.prixAcquisition }}</td>
+                        <td>{{ vehicule.tarifJournaliere }}</td>
+                        <td>
+                            <a href="{{ path('vehicule_show', {'id': vehicule.id}) }}" class="btn btn-success"><i class="fa fa-book" aria-hidden="true"></i> Visionner</a>
+                            {% if is_granted("ROLE_ADMIN") %}
+                                <a href="{{ path('vehicule_edit', {'id': vehicule.id}) }}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> Modifier</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="8">Aucun enregistrement trouver</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-    <div class="navigation">
-        {{ knp_pagination_render(vehicules) }}
-    </div>
+        <div class="navigation">
+            {{ knp_pagination_render(vehicules) }}
+        </div>
 
-    <a href="{{ path('vehicule_new') }}" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> Ajouter</a>
-{% endblock %}
+        <a href="{{ path('vehicule_new') }}" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> Ajouter</a>
+    {% endblock %}

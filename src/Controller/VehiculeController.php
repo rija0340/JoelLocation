@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Vehicule;
 use App\Form\VehiculeType;
-use App\Form\VehiculeEditType;
 use App\Repository\VehiculeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,7 +12,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
-use Symfony\Component\HttpFoundation\File\File;
 use Knp\Component\Pager\PaginatorInterface;
 
 /**
@@ -94,11 +92,11 @@ class VehiculeController extends AbstractController
      */
     public function edit(Request $request, Vehicule $vehicule): Response
     {
-        $form = $this->createForm(VehiculeEditType::class, $vehicule);
+        $form = $this->createForm(VehiculeType::class, $vehicule);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            /* $imageFile = $form->get('image')->getData();
+            $imageFile = $form->get('image')->getData();
             if($imageFile){
                 $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
                 //$safeFilename = $slugger->slug($originalFilename);
@@ -110,7 +108,7 @@ class VehiculeController extends AbstractController
                     );
                 } catch (FileException $e) {}
             }
-            $vehicule->setImage($newFilename); */
+            $vehicule->setImage($newFilename);
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('vehicule_index');

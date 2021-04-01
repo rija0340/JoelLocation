@@ -22,7 +22,7 @@
 					{% if is_granted("ROLE_CLIENT") %}
 						<a href="{{ path('client') }}">Mon compte</a>
 					{% elseif is_granted("ROLE_PERSONNEL") %}
-						<a href="{{ path('reservation_index') }}">Mon compte</a>
+						<a href="{{ path('admin_index') }}">Mon compte</a>
 					{% else %}
 						<a href="{{ path('app_login') }}">Mon compte</a>
 					{% endif %}
@@ -55,10 +55,10 @@
 		<a href="https://youtube.com/channel/UCMZZRNgOmDBIghZwg4tTQJQ" class="fab fa-youtube" target="_blank"></a>
 	</div>
 	<div class="header-social-tablet hidden">
-		<a href="https://www.facebook.com/joellocation" class="fab fa-facebook" target="_blank"></a>
-		<a href="https://wa.me/+330767321447" class="fab fa-whatsapp p-0" target="_blank"></a>
-		<a href="https://www.instagram.com/joel.location/" class="fab fa-instagram" target="_blank"></a>
-		<a href="https://youtube.com/channel/UCMZZRNgOmDBIghZwg4tTQJQ " class="fab fa-youtube" target="_blank"></a>
+		<a href="https://www.facebook.com/joellocation" class="fab fa-facebook" target="_blank" style="margin-right:4px;"></a>
+		<a href="https://wa.me/+330767321447" class="fab fa-whatsapp p-0" target="_blank" style="margin-right:4px;"></a>
+		<a href="https://www.instagram.com/joel.location/" class="fab fa-instagram" target="_blank" style="margin-right:4px;"></a>
+		<a href="https://youtube.com/channel/UCMZZRNgOmDBIghZwg4tTQJQ " class="fab fa-youtube" target="_blank" style="margin-right:4px;"></a>
 	</div>
 	<div class="profil_desktop ">
 		{% if is_granted("ROLE_CLIENT") or is_granted("ROLE_PERSONNEL") %}
