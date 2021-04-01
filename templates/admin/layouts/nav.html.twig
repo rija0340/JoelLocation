@@ -1,0 +1,239 @@
+      <div class="col-md-3 left_col">
+        <div class="left_col scroll-view">
+          <div class="navbar nav_title" style="border: 0;">
+            <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>Saka Woulé</span></a>
+          </div>
+
+          <div class="clearfix"></div>
+
+          <!-- menu profile quick info -->
+          <div class="profile clearfix">
+            <div class="profile_pic">
+              <img src="../../images/blank_profile.png" alt="..." class="img-circle profile_img">
+            </div>
+            <div class="profile_info">
+              <span>Welcome,</span>
+              <h2>Joel</h2>
+            </div>
+          </div>
+          <!-- /menu profile quick info -->
+
+          <br />
+
+          <!-- sidebar menu -->
+          <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+            <div class="menu_section">
+              <ul class="nav side-menu">
+                <li><a href="{{ path('admin_index') }}"><i class="fa fa-home"></i> Tableau de Bord <span class="fa fa-chevron-down"></span></a>
+                </li>
+              </ul>
+            </div>
+            <div class="menu_section">
+              <h3>Planning</h3>
+              <ul class="nav side-menu">
+                <li><a href="{{ path('planGen') }}"><i class="fa fa-home"></i> Planning général <span class="fa fa-chevron-down"></span></a>
+                </li>
+                <li><a href=" {{ path('planJour') }}"><i class="fa fa-edit"></i> Planning journalier <span class="fa fa-chevron-down"></span></a>
+                </li>
+                <li><a href=" {{ path('planPerio') }}"><i class="fa fa-desktop"></i>Planning périodique <span class="fa fa-chevron-down"></span></a>
+                </li>
+                <li><a href="{{ path ('vehiculeDispo') }}"><i class="fa fa-table"></i> Véhicule disponible <span class="fa fa-chevron-down"></span></a>
+                </li>
+              </ul>
+            </div>
+            <div class="menu_section">
+              <h3>RESERVATIONS</h3>
+              <ul class="nav side-menu">
+                <li><a href="{{ path('rechercher_res') }}"><i class="fa fa-bug"></i> Rechercher une résa <span class="fa fa-chevron-down"></span></a>
+                </li>
+                <li><a><i class="fa fa-windows"></i> Réservations <span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu">
+                    <li><a href="{{ path('reservation_new') }}">Nouvelle réservation</a></li>
+                    <li><a href="form_advanced.html">Sans véhicule</a></li>
+                    <li><a href="form_validation.html">Echec de paiement</a></li>
+                    <li><a href="form_wizards.html">Report</a></li>
+                    <li><a href="form_upload.html">Annulation</a></li>
+                    <li><a href="form_buttons.html">Devis</a></li>
+                    <li><a href="{{path('contrats_en_cours')}}">contrats en cours</a></li>
+                    <li><a href="{{path('contrats_termines')}}">contrats terminés</a></li>
+                  </ul>
+                </li>
+                <li><a><i class="fa fa-windows"></i> Vente comptoir <span class="fa fa-chevron-down"></span></a>
+                </li> 
+                <li><a><i class="fa fa-windows"></i> Avis client <span class="fa fa-chevron-down"></span></a>
+                </li>  
+                <li><a><i class="fa fa-windows"></i> Appel à paiment <span class="fa fa-chevron-down"></span></a>
+                </li>
+              </ul>
+            </div>
+            <div class="menu_section">
+              <h3>ACTIVITE</h3>
+              <ul class="nav side-menu">
+                <li><a><i class="fa fa-bug"></i> chiffre d'affaire <span class="fa fa-chevron-down"></span></a>
+                </li>
+                <li><a><i class="fa fa-windows"></i> Résas non soldées<span class="fa fa-chevron-down"></span></a>
+                </li>
+                <li><a><i class="fa fa-windows"></i> Paiements <span class="fa fa-chevron-down"></span></a>
+                </li> 
+                <li><a><i class="fa fa-windows"></i> Performances véhicules <span class="fa fa-chevron-down"></span></a>
+                </li>  
+                <li><a><i class="fa fa-windows"></i> Occupation familles <span class="fa fa-chevron-down"></span></a>
+                </li>
+                <li><a><i class="fa fa-windows"></i> Occupation catégories <span class="fa fa-chevron-down"></span></a>
+                </li>
+
+
+              </ul>
+            </div>
+            <div class="menu_section">
+              <h3>ADMINISTRATION</h3>
+              <ul class="nav side-menu">
+                <li><a href="{{ path('user_index') }}"><i class="fa fa-bug"></i> clients/Prospects <span class="fa fa-chevron-down"></span></a>
+                </li>
+              </ul>
+            </div>
+
+            <div class="menu_section">
+              <h3>MA FLOTTE</h3>
+              <ul class="nav side-menu">
+                <li><a href="{{ path('vehicule_index') }}"><i class="fa fa-bug"></i> Flotte Véhicules <span class="fa fa-chevron-down"></span></a>
+                </li>  
+                <li><a><i class="fa fa-bug"></i> Catégories corporate <span class="fa fa-chevron-down"></span></a>
+                </li> 
+                <li><a href="{{ path('vehicule_new')}}"><i class="fa fa-bug"></i> Ajouter véhicule <span class="fa fa-chevron-down"></span></a>
+                </li>  
+                <li><a><i class="fa fa-bug"></i> Stop sales véhicules <span class="fa fa-chevron-down"></span></a>
+                </li>
+              </ul>
+            </div>
+
+            <div class="menu_section">
+              <h3>MON AGENCE</h3>
+              <ul class="nav side-menu">
+                <li><a><i class="fa fa-bug"></i> Paramètres agence <span class="fa fa-chevron-down"></span></a>
+                </li>  
+                <li><a href="{{path('agence_new')}}"><i class="fa fa-bug"></i> Présentation agence <span class="fa fa-chevron-down"></span></a>
+                </li> 
+                <li><a><i class="fa fa-bug"></i> Affiliés <span class="fa fa-chevron-down"></span></a>
+                </li>  
+                <li><a><i class="fa fa-bug"></i> Réservation affiliés <span class="fa fa-chevron-down"></span></a>
+                </li>
+                <li><a><i class="fa fa-users"></i> Comptes utilisateurs <span class="fa fa-chevron-down"></span></a>
+                </li>
+              </ul>
+            </div>
+
+          </div>
+          <!-- /sidebar menu -->
+
+          <!-- /menu footer buttons -->
+          <div class="sidebar-footer hidden-small">
+            <a data-toggle="tooltip" data-placement="top" title="Settings">
+              <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+            </a>
+            <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+              <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+            </a>
+            <a data-toggle="tooltip" data-placement="top" title="Lock">
+              <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+            </a>
+            <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
+              <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+            </a>
+          </div>
+          <!-- /menu footer buttons -->
+        </div>
+      </div>
+
+      <!-- top navigation -->
+      <div class="top_nav">
+        <div class="nav_menu">
+          <div class="nav toggle">
+            <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+          </div>
+          <nav class="nav navbar-nav">
+            <ul class=" navbar-right">
+              <li class="nav-item dropdown open" style="padding-left: 15px;">
+                <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
+                  <img src="../../images/blank_profile.png" alt="">Joel
+                </a>
+                <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item"  href="javascript:;"> Profile</a>
+                  <a class="dropdown-item"  href="javascript:;">
+                    <span class="badge bg-red pull-right">50%</span>
+                    <span>Settings</span>
+                  </a>
+                  <a class="dropdown-item"  href="javascript:;">Help</a>
+                  <a class="dropdown-item"  href="login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
+                </div>
+              </li>
+
+              <li role="presentation" class="nav-item dropdown open">
+                <a href="javascript:;" class="dropdown-toggle info-number" id="navbarDropdown1" data-toggle="dropdown" aria-expanded="false">
+                  <i class="fa fa-envelope-o"></i>
+                  <span class="badge bg-green">6</span>
+                </a>
+                <ul class="dropdown-menu list-unstyled msg_list" role="menu" aria-labelledby="navbarDropdown1">
+                  <li class="nav-item">
+                    <a class="dropdown-item">
+                      <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                      <span>
+                        <span>John Smith</span>
+                        <span class="time">3 mins ago</span>
+                      </span>
+                      <span class="message">
+                        Film festivals used to be do-or-die moments for movie makers. They were where...
+                      </span>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="dropdown-item">
+                      <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                      <span>
+                        <span>John Smith</span>
+                        <span class="time">3 mins ago</span>
+                      </span>
+                      <span class="message">
+                        Film festivals used to be do-or-die moments for movie makers. They were where...
+                      </span>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="dropdown-item">
+                      <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                      <span>
+                        <span>John Smith</span>
+                        <span class="time">3 mins ago</span>
+                      </span>
+                      <span class="message">
+                        Film festivals used to be do-or-die moments for movie makers. They were where...
+                      </span>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="dropdown-item">
+                      <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                      <span>
+                        <span>John Smith</span>
+                        <span class="time">3 mins ago</span>
+                      </span>
+                      <span class="message">
+                        Film festivals used to be do-or-die moments for movie makers. They were where...
+                      </span>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <div class="text-center">
+                      <a class="dropdown-item">
+                        <strong>See All Alerts</strong>
+                        <i class="fa fa-angle-right"></i>
+                      </a>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+      <!-- /top navigation -->

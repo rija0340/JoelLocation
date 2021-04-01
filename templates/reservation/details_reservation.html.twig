@@ -1,0 +1,143 @@
+  {% extends 'base2.html.twig' %}
+
+  {% block title %}Reservation index{% endblock %}
+
+  	
+  	{% block stylesheets %}
+  		<!-- Datatables -->
+  		<link href="../../admin/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+  		<link href="../../admin/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+  		<link href="../../admin/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+  		<link href="../../admin/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+  		<link href="../../admin/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+      <!-- Font Awesome -->
+      <link href="../../admin/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+
+    {% endblock %}
+
+    {% block content %}
+      <!-- top tiles -->
+      <div class="x_panel">
+        <div class="x_title">
+          <h2><i class="fa fa-chevron-right"></i>INFORMATIONS CLIENTS </h2>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+          <button type="button" class="btn btn-outline-primary">KILOMETRAGE</button>
+          <button type="button" class="btn btn-outline-secondary">GENERAL LE DETAIL</button>
+          <button type="button" class="btn btn-outline-success">GENERER LE CONTRAT</button>
+          <button type="button" class="btn btn-outline-danger">GENERER LE VOUCHER</button>
+          <button type="button" class="btn btn-outline-warning">ENVOYER VOUCHER</button>
+          <button type="button" class="btn btn-outline-info">GENERER LA FACTURE</button>
+          <button type="button" class="btn btn-outline-dark">ENVOYER FACTURE</button>
+        </div>
+
+        <div class="row">
+          <div class="col-md-2">
+            <img src="../../images/capture 1.jpg" alt="" style="width:90%;">
+          </div>
+          <div class="col-md-10">
+            <div class="row">
+              <div class="col-md-4">client :</div>
+              <div class="col-md-4">Email :</div>
+              <div class="col-md-4">Téléphone(s):</div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                adresse:
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">Référence :</div>
+              <div class="col-md-4">Date de création :</div>
+              <div class="col-md-4">Catégorie :</div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4">Véhicule :</div>
+              <div class="col-md-4">Code affilié :</div>
+              <div class="col-md-4">Code partenaire :</div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4">Partenaire :</div>
+              <div class="col-md-4">Destination :</div>
+            </div>
+            <div class="row">
+              <div class="col-md-3">Km départ :</div>
+              <div class="col-md-3">Km retour :</div>
+              <div class="col-md-3">Date mise à jour km :</div>
+              <div class="col-md-3">Km saisie par :</div>
+            </div>
+
+            <div class=" text-center">
+
+              <button type="button" class="btn btn-primary text-nowrap"><i class="fa fa-home"></i>Modifier les informations</button>
+              <button type="button" class="btn btn-secondary text-nowrap"><i class="fa fa-mail-reply (alias)"></i>Retour anticipé</button>
+              <button type="button" class="btn btn-success text-nowrap">Modifier la réservation</button>
+              <button type="button" class="btn btn-danger text-nowrap">Modifier les options & garanties</button>
+              <button type="button" class="btn btn-warning text-nowrap">Envoyer les identifians de connexion</button>
+
+            </div>
+          </div>
+          
+        </div>
+
+        SOIT X JOURS DE LOCATION
+
+        <div class="x_title">
+          <h2><i class="fa fa-chevron-right"></i>OPTIONS ET GARANTIES SOUSCRITES </h2>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+          <p>
+            option(s) souscrite(s):
+          </p>
+          <p>
+            Garantie(s) souscrite(s):
+          </p>
+          <p>
+            Taxes de dépassement horaire
+          </p>
+
+        </div>
+
+
+        <div class="x_title">
+          <h2><i class="fa fa-chevron-right"></i>INFORMATIONS CONDUCTEUR(S) </h2>
+
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+          <div class="row">
+            <div class="col-md-6">Départ :</div>
+            <div class="col-md-6">Retour :</div>
+            <div class="col-md-6">Vol arrivée :</div>
+            <div class="col-md-6">Vol retour :</div>
+            <div class="col-md-6">Nombre de personne :</div>
+            <div class="col-md-6">Note client :</div>
+            <div class="col-md-6">Informations internes :</div>
+          </div>
+        </div>
+      </div>
+    {% endblock %}
+
+    {% block javascripts %}
+     <!-- Datatables -->
+     <script src="../../admin/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+     <script src="../../admin/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+     <script src="../../admin/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+     <script src="../../admin/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+     <script src="../../admin/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+     <script src="../../admin/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+     <script src="../../admin/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+     <script src="../../admin/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+     <script src="../../admin/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+     <script src="../../admin/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+     <script src="../../admin/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+     <script src="../../admin/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+     <script src="../../admin/vendors/jszip/dist/jszip.min.js"></script>
+     <script src="../../admin/vendors/pdfmake/build/pdfmake.min.js"></script>
+     <script src="../../admin/vendors/pdfmake/build/vfs_fonts.js"></script>
+
+   {% endblock  %}
