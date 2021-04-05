@@ -20,21 +20,30 @@
 {% block content %}
 	<!-- top tiles -->
 	<div class="x_panel">
+		<div class="alert alert-danger" role="alert">
+			<div class="text-center">
+				<button class=" btn btn-light">
+					<i class="fa fa-arrows-h"></i>
+					Affecter un véhicule</button>
+			</div>
+		</div>
 		<div class="x_title">
-			<h2>
-				<i class="fa fa-chevron-right"></i>INFORMATIONS CLIENTS
-			</h2>
+			<div class="row ">
+				<div class="col-auto mr-auto">
+					<h2>
+						<i class="fa fa-chevron-right"></i>INFORMATIONS CLIENTS
+					</h2>
+				</div>
+				<div class="col-auto">
+					<button type="button" class="btn btn-outline-secondary">GENERER LE DETAIL</button>
+					<button type="button" class="btn btn-outline-info">GENERER LA FACTURE</button>
+					<button type="button" class="btn btn-outline-dark">ENVOYER FACTURE</button>
+				</div>
+			</div>
+
 			<div class="clearfix"></div>
 		</div>
-		<div class="x_content">
-			<button type="button" class="btn btn-outline-primary">KILOMETRAGE</button>
-			<button type="button" class="btn btn-outline-secondary">GENERAL LE DETAIL</button>
-			<button type="button" class="btn btn-outline-success">GENERER LE CONTRAT</button>
-			<button type="button" class="btn btn-outline-danger">GENERER LE VOUCHER</button>
-			<button type="button" class="btn btn-outline-warning">ENVOYER VOUCHER</button>
-			<button type="button" class="btn btn-outline-info">GENERER LA FACTURE</button>
-			<button type="button" class="btn btn-outline-dark">ENVOYER FACTURE</button>
-		</div>
+		{# <div class="x_content"></div> #}
 
 		<div class="row">
 			<div class="col-md-2">
@@ -73,24 +82,71 @@
 					<div class="col-md-3">Date mise à jour km :</div>
 					<div class="col-md-3">Km saisie par :</div>
 				</div>
-
 				<div class=" text-center">
-
 					<button type="button" class="btn btn-primary text-nowrap">
 						<i class="fa fa-home"></i>Modifier les informations</button>
-					<button type="button" class="btn btn-secondary text-nowrap">
-						<i class="fa fa-mail-reply (alias)"></i>Retour anticipé</button>
 					<button type="button" class="btn btn-success text-nowrap">Modifier la réservation</button>
 					<button type="button" class="btn btn-danger text-nowrap">Modifier les options & garanties</button>
 					<button type="button" class="btn btn-warning text-nowrap">Envoyer les identifians de connexion</button>
-
 				</div>
 			</div>
+		</div>
+
+		<div class="x_title">
+			<h2>
+				<i class="fa fa-chevron-right"></i>INFORMATIONS CONDUCTEUR(S)
+			</h2>
+
+			<div class="clearfix"></div>
+		</div>
+		<div class="x_content text-center">
+
+			<button class="btn btn-primary">
+				<i class="fa fa-plus"></i>
+				Ajouter un conducteur</button>
 
 		</div>
 
-		SOIT X JOURS DE LOCATION
+		{# périod de location #}
+		<div class="x_title">
+			<h2>
+				<i class="fa fa-chevron-right"></i>PERIODE DE LOCATION
+			</h2>
 
+			<div class="clearfix"></div>
+		</div>
+		<div class="x_content">
+			<div class="row">
+				<div class="col-md-6">
+					<span style="font-weight : bold">Départ :</span>
+					<p>Le Moule
+						<br>21 Décembre 2020 - 15H30</p>
+				</div>
+				<div class="col-md-6">Retour :
+					<p>Le Moule
+						<br>30 Décembre 2020 - 18H30</p>
+
+				</div>
+				<div class="col-md-6">Vol arrivée :</div>
+				<div class="col-md-6">Vol retour :</div>
+				<div class="col-md-6">Nombre de personne :</div>
+				<div class="col-md-6">Note client :
+					<div class="alert alert-secondary" role="alert"></div>
+				</div>
+				<div class="col-md-6">Informations internes :
+					<div class="alert alert-secondary" role="alert"></div>
+				</div>
+
+			</div>
+			<div>
+				<h3 class="text-center">
+					SOIT
+					<span style="color:red">11 JOURS</span>
+					DE LOCATION
+				</h3>
+			</div>
+		</div>
+		{# options et garanties souscrites #}
 		<div class="x_title">
 			<h2>
 				<i class="fa fa-chevron-right"></i>OPTIONS ET GARANTIES SOUSCRITES
@@ -110,23 +166,110 @@
 
 		</div>
 
-
+		{# Montant de la reservation #}
 		<div class="x_title">
-			<h2>
-				<i class="fa fa-chevron-right"></i>INFORMATIONS CONDUCTEUR(S)
-			</h2>
-
+			<div class="row">
+				<div class="col-auto">
+					<h2>
+						<i class="fa fa-chevron-right"></i>MONTANT DE LA RESERVATION
+					</h2>
+				</div>
+				<div class="col-auto ml-auto d-flex align-items-center">
+					<div class="">
+						300.00 €
+					</div>
+				</div>
+			</div>
 			<div class="clearfix"></div>
 		</div>
 		<div class="x_content">
 			<div class="row">
-				<div class="col-md-6">Départ :</div>
-				<div class="col-md-6">Retour :</div>
-				<div class="col-md-6">Vol arrivée :</div>
-				<div class="col-md-6">Vol retour :</div>
-				<div class="col-md-6">Nombre de personne :</div>
-				<div class="col-md-6">Note client :</div>
-				<div class="col-md-6">Informations internes :</div>
+				<div class="col-md-8 col-sm-8 col-xs-8">
+					<i class="fa fa-chevron-right"></i>Location NDMR 11 jours
+				</div>
+				<div class="col-md-4 col-sm-4 col-xs-4">
+					<div class="text-right">
+						300.00€
+					</div>
+				</div>
+
+				<div class="col-md-8 col-sm-8 col-xs-8">
+					<i class="fa fa-chevron-right"></i>Total dépassements horaires
+				</div>
+				<div class="col-md-4 col-sm-4 col-xs-4">
+					<div class="text-right">
+						300.00€
+					</div>
+				</div>
+
+				<div class="col-md-8 col-sm-8 col-xs-8">
+					<i class="fa fa-chevron-right"></i>Total options souscrites
+				</div>
+				<div class="col-md-4 col-sm-4 col-xs-4">
+					<div class="text-right">
+						300.00€
+					</div>
+				</div>
+
+				<div class="col-md-8 col-sm-8 col-xs-8">
+					<i class="fa fa-chevron-right"></i>Total garanties souscrites
+
+				</div>
+				<div class="col-md-4 col-sm-4 col-xs-4">
+					<div class="text-right">
+						300.00€
+					</div>
+				</div>
+
+				<div class="col-md-8 col-sm-8 col-xs-8">
+					<i class="fa fa-chevron-right"></i>Montant de la remise
+				</div>
+				<div class="col-md-4 col-sm-4 col-xs-4">
+					<div class="text-right">
+						300.00€
+					</div>
+				</div>
+
+				<div class="col-md-8 col-sm-8 col-xs-8">
+					<i class="fa fa-chevron-right"></i>Montant à régler
+				</div>
+				<div class="col-md-4 col-sm-4 col-xs-4">
+					<div class="text-right">
+						300.00€
+					</div>
+				</div>
+
+
+			</div>
+
+		</div>
+
+		{# options et garanties souscrites #}
+		<div class="x_title">
+			<h2>
+				<i class="fa fa-chevron-right"></i>REGLEMENT(S)
+			</h2>
+			<div class="clearfix"></div>
+		</div>
+		<div class="x_content">
+			<div class="row">
+				<div class="col-md-8 col-sm-8 col-xs-8">
+					<i class="fa fa-chevron-right"></i>Montant de la remise
+				</div>
+				<div class="col-md-4 col-sm-4 col-xs-4">
+					<div class="text-right">
+						300.00€
+					</div>
+				</div>
+
+				<div class="col-md-8 col-sm-8 col-xs-8">
+					<i class="fa fa-chevron-right"></i>Montant à régler
+				</div>
+				<div class="col-md-4 col-sm-4 col-xs-4">
+					<div class="text-right">
+						300.00€
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

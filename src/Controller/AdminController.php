@@ -77,4 +77,28 @@ class AdminController extends AbstractController
   {
     return $this->render('reservation/reserv_non_solde.html.twig');
   }
+
+  /**
+   * @Route("/sans_vehicule", name="sans_vehicule", methods={"GET"})
+   */
+  public function sans_vehicule(): Response
+  {
+    return $this->render('reservation/sans_vehicule.html.twig');
+  }
+
+  /**
+   * @Route("/echec_paiement", name="echec_paiement", methods={"GET"})
+   */
+  public function echec_paiement(): Response
+  {
+    return $this->render('reservation/paiement/echec_paiement.html.twig');
+  }
+
+  /**
+   * @Route("/details_echec_paiement", name="details_echec_paiement", methods={"GET"})
+   */
+  public function details_echec_paiement(): Response
+  {
+    return $this->render('reservation/paiement/details_echec_paiement.html.twig');
+  }
 }

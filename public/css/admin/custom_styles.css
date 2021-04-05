@@ -1,0 +1,9 @@
+.x_title h2 {
+    margin: 5px 0 6px;
+    float: left;
+    display: block;
+    /* text-overflow: ; */
+    overflow: hidden;
+    word-wrap: break-word;
+    width: auto;
+}

@@ -1,6 +1,6 @@
 {% extends 'base2.html.twig' %}
 
-{% block title %}Nouvelle Reservation
+{% block title %}Sans véhicule
 {% endblock %}
 
 
@@ -72,7 +72,11 @@
 									<td>2011/06/27</td>
 									<td>$183,000</td>
 									<td>$183,000</td>
-									<td>$183,000</td>
+									<td class="text-center">
+										<a href="{{ path('details_echec_paiement') }}">
+											<i class=" fa fa-info-circle" style="font-size: 2em !important;"></i>
+										</a>
+									</td>
 								</tr>
 								<tr>
 									<td>Donna Snider</td>
@@ -82,7 +86,12 @@
 									<td>2011/01/25</td>
 									<td>2011/01/25</td>
 									<td>2011/01/25</td>
-									<td>$112,000</td>
+									<td class="text-center">
+										<a href="{{ path('details_echec_paiement') }}">
+
+											<i class=" fa fa-info-circle" style="font-size: 2em !important;"></i>
+										</a>
+									</td>
 								</tr>
 							</tbody>
 						</table>
@@ -111,30 +120,6 @@
 	<script src="../../admin/vendors/jszip/dist/jszip.min.js"></script>
 	<script src="../../admin/vendors/pdfmake/build/pdfmake.min.js"></script>
 	<script src="../../admin/vendors/pdfmake/build/vfs_fonts.js"></script>
-	<script>
-
-		$('#test').DataTable({
-dom: 'Bfrtip',
-buttons: [
-{
-extend: 'copyHtml5',
-text: '<i class="fa fa-files-o"></i>',
-titleAttr: 'Copy'
-}, {
-extend: 'excelHtml5',
-text: '<i class="fa fa-file-excel-o"></i>',
-titleAttr: 'Excel'
-}, {
-extend: 'csvHtml5',
-text: '<i class="fa fa-file-text-o"></i>',
-titleAttr: 'CSV'
-}, {
-extend: 'pdfHtml5',
-text: '<i class="fa fa-file-pdf-o"></i>',
-titleAttr: 'PDF'
-}
-]
-});
-	</script>
+	<script></script>
 
 {% endblock  %}

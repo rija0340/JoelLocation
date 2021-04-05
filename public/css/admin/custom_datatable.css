@@ -19,6 +19,8 @@ table.dataTable thead .sorting_desc_disabled:after {
 table.dataTable thead th {
     position: relative;
     background-image: none !important;
+    background-color: #444444;
+    color: #ffffff;
 }
   
 table.dataTable thead th.sorting:after,
@@ -32,13 +34,17 @@ table.dataTable thead th.sorting_desc:after {
 }
 table.dataTable thead th.sorting:after {
     content: "\f0dc" !important;
-    color: #ddd !important;
-    font-size: 0.8em !important;
+    color: #ffffff !important;
+    font-size: 0.9em !important;
     padding-top: 0.12em !important;
 }
 table.dataTable thead th.sorting_asc:after {
     content: "\f0de" !important;
+    color: white !important;
+
 }
 table.dataTable thead th.sorting_desc:after {
     content: "\f0dd" !important;
+    color: #ffffff !important;
+
 }
