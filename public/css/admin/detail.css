@@ -1,0 +1,24 @@
+.x_title .info_client button.btn{
+ margin-bottom: 0;
+}
+
+.x_content .fa-chevron-right{
+    padding-right: 5px;
+}
+
+.col-md-8 {
+    padding-bottom: 10px;
+}
+.label_client{
+    font-weight: 800;
+}
+.info_client .row{
+    padding-bottom: 15px;
+}
+.label_periode{
+    font-weight: 800;
+}
+
+.periode_location .col-md-6{
+    padding-bottom: 10px;
+}

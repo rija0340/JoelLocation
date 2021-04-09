@@ -53,12 +53,12 @@
 							<span class="fa fa-chevron-down"></span>
 						</a>
 					</li>
-					<li>
-						<a href=" {{ path('planPerio') }}">
-							<i class="fa fa-desktop"></i>Planning périodique
-							<span class="fa fa-chevron-down"></span>
-						</a>
-					</li>
+					{# <li>
+																										<a href=" {{ path('planPerio') }}">
+																											<i class="fa fa-desktop"></i>Planning périodique
+																											<span class="fa fa-chevron-down"></span>
+																										</a>
+																									</li> #}
 					<li>
 						<a href="{{ path ('vehiculeDispo') }}">
 							<i class="fa fa-table"></i>
@@ -98,10 +98,10 @@
 								<a href="{{ path('report_reservation')}}">Report</a>
 							</li>
 							<li>
-								<a href="form_upload.html">Annulation</a>
+								<a href="{{ path('annulation_reservation') }}">Annulation</a>
 							</li>
 							<li>
-								<a href="form_buttons.html">Devis</a>
+								<a href="{{ path('devis_reservation')}}">Devis</a>
 							</li>
 							<li>
 								<a href="{{path('contrats_en_cours')}}">contrats en cours</a>
@@ -112,7 +112,7 @@
 						</ul>
 					</li>
 					<li>
-						<a>
+						<a href="{{path('vente_comptoir')}}">
 							<i class="fa fa-windows"></i>
 							Vente comptoir
 							<span class="fa fa-chevron-down"></span>
@@ -157,29 +157,6 @@
 							<span class="fa fa-chevron-down"></span>
 						</a>
 					</li>
-					<li>
-						<a>
-							<i class="fa fa-windows"></i>
-							Performances véhicules
-							<span class="fa fa-chevron-down"></span>
-						</a>
-					</li>
-					<li>
-						<a>
-							<i class="fa fa-windows"></i>
-							Occupation familles
-							<span class="fa fa-chevron-down"></span>
-						</a>
-					</li>
-					<li>
-						<a>
-							<i class="fa fa-windows"></i>
-							Occupation catégories
-							<span class="fa fa-chevron-down"></span>
-						</a>
-					</li>
-
-
 				</ul>
 			</div>
 			<div class="menu_section">
@@ -205,13 +182,7 @@
 							<span class="fa fa-chevron-down"></span>
 						</a>
 					</li>
-					<li>
-						<a>
-							<i class="fa fa-bug"></i>
-							Catégories corporate
-							<span class="fa fa-chevron-down"></span>
-						</a>
-					</li>
+
 					<li>
 						<a href="{{ path('vehicule_new')}}">
 							<i class="fa fa-bug"></i>
@@ -243,20 +214,6 @@
 						<a href="{{path('agence_new')}}">
 							<i class="fa fa-bug"></i>
 							Présentation agence
-							<span class="fa fa-chevron-down"></span>
-						</a>
-					</li>
-					<li>
-						<a>
-							<i class="fa fa-bug"></i>
-							Affiliés
-							<span class="fa fa-chevron-down"></span>
-						</a>
-					</li>
-					<li>
-						<a>
-							<i class="fa fa-bug"></i>
-							Réservation affiliés
 							<span class="fa fa-chevron-down"></span>
 						</a>
 					</li>

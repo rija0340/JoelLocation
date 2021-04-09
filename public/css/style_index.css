@@ -8,8 +8,6 @@
 	/* border: 1px solid black; */
 
 }
-	
-
 	 .single-portfolio .inner .portfolio-img .hover-content .button:hover {
 		background-color: #af0000;
 		color: #fff;
@@ -141,6 +139,10 @@ form{
 	outline: 0;
 	box-shadow: none, 0 0 0 0.2rem rgba(156, 39, 176, 0.25); */
   }
+
+  .aproposdenous .inner{
+	width: 425px;
+}
 
 /*media query pour responsive design*/
 
@@ -302,7 +304,12 @@ form{
 		text-align: justify;
 		height: auto;
 	}
-
+video{
+	width:  350px;
+}
+.aproposdenous .inner{
+	width: 300px;
+}
 	
 
 }

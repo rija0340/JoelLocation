@@ -38,23 +38,33 @@ class AdminController extends AbstractController
    */
   public function contrats_en_cours(): Response
   {
-    return $this->render('reservation/contrats_en_cours.html.twig');
+    return $this->render('reservation/contrat/en_cours/index.html.twig');
+  }
+
+  /**
+   * @Route("/detail_contrats_en_cours", name="detail_contrats_en_cours", methods={"GET"})
+   */
+  public function detail_contrats_en_cours(): Response
+  {
+    return $this->render('reservation/contrat/en_cours/detail.html.twig');
   }
 
   /**
    * @Route("/contrats_termines", name="contrats_termines", methods={"GET"})
    */
-  public function contrats_terminés(): Response
+  public function contrats_termines(): Response
   {
-    return $this->render('reservation/contrats_termines.html.twig');
+    return $this->render('reservation/contrat/termine/index.html.twig');
   }
+
   /**
-   * @Route("/details_reservation", name="details_reservation", methods={"GET"})
+   * @Route("/detail_contrat_termine", name="detail_contrat_termine", methods={"GET"})
    */
-  public function details_reservation(): Response
+  public function detail_contrat_termine(): Response
   {
-    return $this->render('reservation/contrats_en_cours/details_reservation.html.twig');
+    return $this->render('reservation/contrat/termine/detail.html.twig');
   }
+
   /**
    * @Route("/nouvelle_reservation", name="nouvelle_reservation", methods={"GET"})
    */
@@ -91,14 +101,55 @@ class AdminController extends AbstractController
    */
   public function echec_paiement(): Response
   {
-    return $this->render('reservation/paiement/echec_paiement.html.twig');
+    return $this->render('reservation/echec_paiement/index.html.twig');
   }
 
   /**
-   * @Route("/details_echec_paiement", name="details_echec_paiement", methods={"GET"})
+   * @Route("/detail_echec_paiement", name="detail_echec_paiement", methods={"GET"})
    */
-  public function details_echec_paiement(): Response
+  public function detail_echec_paiement(): Response
   {
-    return $this->render('reservation/paiement/details_echec_paiement.html.twig');
+    return $this->render('reservation/echec_paiement/detail.html.twig');
+  }
+
+  /**
+   * @Route("/devis_reservation", name="devis_reservation", methods={"GET"})
+   */
+  public function devis_reservation(): Response
+  {
+    return $this->render('reservation/devis/index.html.twig');
+  }
+
+  /**
+   * @Route("/detail_devis", name="detail_devis", methods={"GET"})
+   */
+  public function detail_devis(): Response
+  {
+    return $this->render('reservation/detail.html.twig');
+  }
+
+  /**
+   * @Route("/annulation_reservation", name="annulation_reservation", methods={"GET"})
+   */
+  public function annulation_reservation(): Response
+  {
+    return $this->render('reservation/annulation/index.html.twig');
+  }
+
+
+  /**
+   * @Route("/annulation_attente", name="annulation_attente", methods={"GET"})
+   */
+  public function annulation_attente(): Response
+  {
+    return $this->render('reservation/annulation/attente.html.twig');
+  }
+
+  /**
+   * @Route("/vente_comptoir", name="vente_comptoir", methods={"GET"})
+   */
+  public function vente_comptoir(): Response
+  {
+    return $this->render('vente_comptoir/index.html.twig');
   }
 }

@@ -1,3 +1,7 @@
+.x_title{
+    padding-left: 0;
+    padding-bottom: 0;
+}
 .x_title h2 {
     margin: 5px 0 6px;
     float: left;
@@ -7,3 +11,29 @@
     word-wrap: break-word;
     width: auto;
 }
+
+h2 i{
+    margin-right: 5px;
+}
+
+h2 .fa-chevron-right{
+    color : blue;
+    font-size: 22px;
+}
+
+/* custom button */
+
+.btn-violet {
+    color: #fff;
+    background-color: #5c4ac7;
+    border-color: #5c4ac7;
+  }
+
+  .btn-outline-violet{
+
+        color: #5c4ac7;
+        background-color: transparent;
+        background-image: none;
+        border-color: #5c4ac7;
+
+  }

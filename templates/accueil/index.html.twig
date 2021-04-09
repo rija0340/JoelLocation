@@ -54,6 +54,7 @@
 			</div>
 		</div>
 	</div>
+
 	<div class="about-area ">
 		<div class="container">
 			<div class=" d-flex justify-content-center div_roulez">
@@ -71,6 +72,7 @@
 			</div>
 		</div>
 	</div>
+
 	<div class="portfolio-area">
 		<div class="container" id="vehicule">
 			<div class="section-title">
@@ -86,7 +88,8 @@
 
 								<div class="hover-content">
 									<figcaption>
-										<h3 class="m-0 p-0 text-center">{{ vehicule.marque }} {{ vehicule.modele }}</h3>
+										<h3 class="m-0 p-0 text-center">{{ vehicule.marque }}
+											{{ vehicule.modele }}</h3>
 									</figcaption>
 									<div>
 										<a href="{{ path('notrevehicule', {'id': vehicule.id}) }}" class="button">Voir plus de détails</a>
@@ -99,56 +102,52 @@
 			</div>
 		</div>
 	</div>
-</div>
 
-<div class="service-area sp bg1 aproposdenous">
-	<div class="container">
-		<div class="section-title white">
-			<h2>A propos de nous</h2>
-			<p>Les services apportés à nos clients sont notre priorité. Votre satisfaction compte.</p>
-		</div>
-		<div class="row">
-			<div class="col-lg-6 col-md-6 single-service bordered">
-				<div class="inner">
-					<div class=" text-center">
+	<div class="service-area sp bg1 aproposdenous">
+		<div class="container">
+			<div class="section-title white">
+				<h2>A propos de nous</h2>
+				<p>Les services apportés à nos clients sont notre priorité. Votre satisfaction compte.</p>
+			</div>
+			<div class="row">
+				<div class="col-lg-6 col-md-12 col-sm-12 single-service bordered pb-0 d-flex justify-content-center">
+					<div class="d-flex align-items-center">
 
-						<h4 class="pl-0">Qui sommes-nous ?</h4>
-					</div>
-					<div class="content description">
-						<p class="m-0">Joel Location est une société de location de voitures en Guadeloupe. Notre oﬀre :
-						</p>
-						<div class="quisommesnous_ul">
-							<ul>
-								<li>
-									Services adaptés pour chaque besoins
-								</li>
-								<li>
-									Tarifs très abordables
-								</li>
-								<li>
-									Véhicules bien entretenus, soumis à des inspections d’experts.
-								</li>
-							</ul>
+						<div class=" inner pb-5">
+							<div class=" text-center">
+								<h4 class="pl-0">Qui sommes-nous ?</h4>
+							</div>
+							<div class="content description">
+								<p class="m-0">Joel Location est une société de location de voitures en Guadeloupe. Notre oﬀre :
+								</p>
+								<div class="quisommesnous_ul">
+									<ul>
+										<li>
+											Services adaptés pour chaque besoins
+										</li>
+										<li>
+											Tarifs très abordables
+										</li>
+										<li>
+											Véhicules bien entretenus, soumis à des inspections d’experts.
+										</li>
+									</ul>
+								</div>
+							</div>
+
+
 						</div>
-
-
 					</div>
 				</div>
-			</div>
-			<div class="col-lg-6 col-md-6 single-service bordered">
-				<div class="inner">
-					<div class=" text-center">
-
-						<h4 class="pl-0">Mentions légales</h4>
-					</div>
-					<div class="content mentions_legales">
-						<p>SASU AU CAPTAL DE 1000€
-							<br>
-							GERANT : JOEL MANDRET
-							<br>
-							SIRET : 87868990000016 RCS POINTRE A PITRE
-							<br>
-							N° TVA INTRACOMMUNAUTAIRE : FR40878689900</p>
+				<div class="col-lg-6 col-md-12 col-sm-12  single-service d-flex justify-content-center">
+					<div class="d-flex align-items-center ">
+						<div>
+							<video width="425" controls autoplay loop>
+								<source
+								src="../../videos/voiture 3d JOELLOCATION 2.0.mp4" type="video/mp4">
+								{# <source src="../../videos/voiture 3d JOELLOCATION 2.0.mp4" type="video/ogg"> #}
+								Your browser does not support HTML video.
+							</video>
 						</div>
 					</div>
 				</div>
@@ -157,6 +156,8 @@
 	</div>
 
 
-{% endblock %}{% block javascripts %}
-<script src="js/custom/material/bootstrap-material-design.min.js" type="text/javascript"></script>
-<script src="js/custom/material/material-kit.js?v=2.0.7" type="text/javascript"></script>{% endblock %}
+{% endblock %}
+{% block javascripts %}
+	<script src="js/custom/material/bootstrap-material-design.min.js" type="text/javascript"></script>
+	<script src="js/custom/material/material-kit.js?v=2.0.7" type="text/javascript"></script>
+{% endblock %}
