@@ -18,28 +18,30 @@
 
 	<link href="../../admin/vendors/cropper/dist/cropper.min.css" rel="stylesheet">
 	<link href="../../css/admin/vente_comptoir.css" rel="stylesheet">
+{# <link href="https://fr.allfont.net/allfont.css?fonts=futura-normal" rel="stylesheet" type="text/css"/> #}
+	{# <link rel="preconnect" href="https://fonts.gstatic.com">
+				<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300&display=swap" rel="stylesheet"> #}
 {% endblock %}
 
 {% block content %}
 	<div class="x_panel">
 		<div class="x_title">
-			<h2>Form Wizards
-				<small>Sessions</small>
+			<h2 class="testfont">Réservation comptoir
 			</h2>
 			<div class="clearfix"></div>
 		</div>
 		<div
 			class="x_content">
 			<!-- Smart Wizard -->
-			<p>This is a basic form wizard example that inherits the colors from the selected scheme.</p>
+			<p class="testfont">Veillez suivre les différentes étapes de validation</p>
 			<div id="wizard" class="form_wizard wizard_horizontal">
 				<ul class="wizard_steps">
 					<li>
 						<a href="#step-1">
 							<span class="step_no">1</span>
 							<span class="step_descr">
-								Step 1<br/>
-								<small>Step 1 description</small>
+								1. Agences & Dates
+								{# <small>Step 1 description</small> #}
 							</span>
 						</a>
 					</li>
@@ -47,8 +49,8 @@
 						<a href="#step-2">
 							<span class="step_no">2</span>
 							<span class="step_descr">
-								Step 2<br/>
-								<small>Step 2 description</small>
+								2. Véhicules
+								{# <small>Step 2 description</small> #}
 							</span>
 						</a>
 					</li>
@@ -56,8 +58,8 @@
 						<a href="#step-3">
 							<span class="step_no">3</span>
 							<span class="step_descr">
-								Step 3<br/>
-								<small>Step 3 description</small>
+								3. Options & Garanties
+								{# <small>Step 3 description</small> #}
 							</span>
 						</a>
 					</li>
@@ -65,8 +67,8 @@
 						<a href="#step-4">
 							<span class="step_no">4</span>
 							<span class="step_descr">
-								Step 4<br/>
-								<small>Step 4 description</small>
+								4. Récapitulatif
+								{# <small>Step 4 description</small> #}
 							</span>
 						</a>
 					</li>
@@ -353,19 +355,76 @@ input.type = 'text';
 						<div class="col-md-3">
 							<div class="alert alert-secondary btn-block h-100">
 								<div class="x_title">
-									Votre réservation
+									<h3>
+										<i class="fa fa-chevron-right"></i>
+										Votre réservation
+									</h3>
 								</div>
 								<img src="../../images/capture 1.jpg" alt="" style="width:100%;">
-								<div>
-									<h4>Agence départ
-									</h4>
-									<p>
-										<i class="fa fa-map-marker"></i>
-										Aéroport Guadeloupe via Navette
-									</p>
-									<p>09 Octobre 2020 - 06H00</p>
-								</div>
 
+								<div>
+									<h3 class="heading">Agence départ
+									</h3>
+									<div class="content_depart">
+										<p>
+											<i class="fa fa-map-marker"></i>
+											<span>
+												Aéroport Guadeloupe via Navette
+											</span><br>
+											<span>
+												09 Octobre 2020 - 06H00
+											</span>
+										</p>
+									</div>
+									<h3 class="heading">Agence retour
+									</h3>
+									<div class="content_retour">
+										<p>
+											<i class="fa fa-map-marker"></i>
+											<span>
+												Aéroport Guadeloupe via Navette
+											</span><br>
+											<span>
+												09 Octobre 2020 - 13H00
+											</span>
+										</p>
+									</div>
+									<p>
+										Soit
+										<span>X</span>
+										jours de location</p>
+
+									<h3 class="heading">Prix de base de location</h3>
+									<div class="prix_location">
+										<span class="prix">16.20 EUR</span><br>
+										soit 16.20 euro/jour
+									</div>
+									<div class="prestation">
+										<h3 class="heading">Presations incluses</h3>
+										<ul class="pl-2">
+											<li>
+												<i class="fa fa-check"></i>
+												Kilométrage Illimité
+											</li>
+											<li>
+												<i class="fa fa-check"></i>
+												Assurance accidents causés aux tiers
+											</li>
+											<li>
+												<i class="fa fa-check"></i>
+												Assurance responsabilité civile
+											</li>
+											<li>
+												<i class="fa fa-check"></i>
+												Assurance collision (CDW)
+											</li>
+											<li>
+												<i class="fa fa-check"></i>
+												TVA 8.5 %
+											</li>
+										</ul>
+									</div>
+								</div>
 							</div>
 						</div>
 						<div class="col-md-9">
@@ -544,30 +603,191 @@ input.type = 'text';
 					</div>
 
 				</div>
-				<div id="step-4">
-					<h2 class="StepTitle">Step 4 Content</h2>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																															                          Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-					</p>
-					<p>
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																															                          in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-					</p>
-					<p>
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																															                          in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-					</p>
+				<div
+					id="step-4">
+					{# step 4 #}
+					<div class="row">
+						<div class="col-md-3">
+							<div class="alert alert-secondary btn-block h-100">
+								<div class="x_title">
+									<h3>
+										<i class="fa fa-chevron-right"></i>
+										Votre réservation
+									</h3>
+								</div>
+								<img src="../../images/capture 1.jpg" alt="" style="width:100%;">
+								<div>
+									<h3 class="heading">Agence départ
+									</h3>
+									<div class="content_depart">
+										<p>
+											<i class="fa fa-map-marker"></i>
+											<span>
+												Aéroport Guadeloupe via Navette
+											</span><br>
+											<span>
+												09 Octobre 2020 - 06H00
+											</span>
+										</p>
+									</div>
+									<h3 class="heading">Agence retour
+									</h3>
+									<div class="content_retour">
+										<p>
+											<i class="fa fa-map-marker"></i>
+											<span>
+												Aéroport Guadeloupe via Navette
+											</span><br>
+											<span>
+												09 Octobre 2020 - 13H00
+											</span>
+										</p>
+									</div>
+									<p>
+										Soit
+										<span>X</span>
+										jours de location</p>
+
+									<h3 class="heading">Prix de base de location</h3>
+									<div class="prix_location">
+										<span class="prix">16.20 EUR</span><br>
+										soit 16.20 euro/jour
+									</div>
+									<div class="prestation">
+										<h3 class="heading">Presations incluses</h3>
+										<ul class="pl-2">
+											<li>
+												<i class="fa fa-check"></i>
+												Kilométrage Illimité
+											</li>
+											<li>
+												<i class="fa fa-check"></i>
+												Assurance accidents causés aux tiers
+											</li>
+											<li>
+												<i class="fa fa-check"></i>
+												Assurance responsabilité civile
+											</li>
+											<li>
+												<i class="fa fa-check"></i>
+												Assurance collision (CDW)
+											</li>
+											<li>
+												<i class="fa fa-check"></i>
+												TVA 8.5 %
+											</li>
+										</ul>
+									</div>
+								</div>
+
+							</div>
+						</div>
+						<div class="col-md-9">
+							<div class="x_title">
+								<i class="fa fa-search"></i>
+								Rechercher un client existant
+							</div>
+							<div class="x_content">
+								<form>
+									<div
+										class="form-group">
+										{# <label for="formGroupExampleInput">Example label</label> #}
+										<input type="text" class="form-control" id="formGroupExampleInput" placeholder="Nom ou email du client">
+									</div>
+									<form></div>
+									<div class="x_title">
+										<h4>
+											<i class="fa  fa-newspaper-o"></i>
+											Créer un nouveau client
+										</h4>
+
+
+									</div>
+									<div class="x_content">
+										<form>
+											<div class="row">
+												<div class="col-md-6">
+
+													<div class="form-group row">
+														<label for="inputEmail3" class="col-sm-2 col-form-label">Nom</label>
+														<div class="col-sm-10">
+															<input type="text" class="form-control" id="inputEmail3">
+														</div>
+													</div>
+													<div class="form-group row">
+														<label for="inputPassword3" class="col-sm-2 col-form-label">Prénom</label>
+														<div class="col-sm-10">
+															<input type="text" class="form-control" id="inputPassword3">
+														</div>
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="form-group row">
+														<label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
+														<div class="col-sm-10">
+															<input type="email" class="form-control" id="inputEmail3">
+														</div>
+													</div>
+													<div class="form-group row">
+														<label for="inputPassword3" class="col-sm-2 col-form-label">Téléphone</label>
+														<div class="col-sm-10">
+															<input type="tel" class="form-control" id="inputPassword3">
+														</div>
+													</div>
+												</div>
+											</div>
+
+
+										</form>
+
+										<div class="row justify-content-md-center mt-4">
+											<div class="col-auto pr-0 pl-0">
+												<button class="btn btn-warning">
+													<i class="fa fa-file-pdf-o"></i>Enregistrer le devis</button>
+											</div>
+											<div class="col-auto pr-0 pl-0">
+												<button class="btn btn-primary">
+													<i class="fa fa-envelope"></i>Enregistrer le devis + envoi au client</button>
+											</div>
+											<div class="col-auto pr-0 pl-0">
+												<button class="btn btn-violet">
+													<i class="fa fa-check"></i>Enregistrer le devis</button>
+											</div>
+										</div>
+									</div>
+
+								</div>
+							</div>
+							{# end step 4 #}
+						</div>
+
+					</div>
+					<!-- End SmartWizard Content -->
+
 				</div>
-
 			</div>
-			<!-- End SmartWizard Content -->
-
-		</div>
-	</div>
-{% endblock %}
-{% block javascripts %}<!-- FastClick --><script src="../../admin/vendors/fastclick/lib/fastclick.js"></script><!-- jQuery Smart Wizard --><script src="../../admin/vendors/jQuery-Smart-Wizard/js/jquery.smartWizard.js"></script><!-- bootstrap-daterangepicker --><script src="../../admin/vendors/moment/min/moment.min.js"></script>
-	<script src="../../admin/vendors/bootstrap-daterangepicker/daterangepicker.js"></script><!-- bootstrap-datetimepicker --><script src="../../admin/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script><!-- Ion.RangeSlider --><script src="../../admin/vendors/ion.rangeSlider/js/ion.rangeSlider.min.js"></script><!-- Bootstrap Colorpicker --><script src="../../admin/vendors/mjolnic-bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js"></script><!-- jquery.inputmask --><script src="../../admin/vendors/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js"></script><!-- jQuery Knob --><script src="../../admin/vendors/jquery-knob/dist/jquery.knob.min.js"></script><!-- Initialize datetimepicker --><script type="text/javascript">
-		$(function () {
+		{% endblock %}
+		{% block javascripts %}
+			<!-- FastClick -->
+			<script src="../../admin/vendors/fastclick/lib/fastclick.js"></script>
+			<!-- jQuery Smart Wizard -->
+			<script src="../../admin/vendors/jQuery-Smart-Wizard/js/jquery.smartWizard.js"></script>
+			<!-- bootstrap-daterangepicker -->
+			<script src="../../admin/vendors/moment/min/moment.min.js"></script>
+			<script src="../../admin/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+			<!-- bootstrap-datetimepicker -->
+			<script src="../../admin/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+			<!-- Ion.RangeSlider -->
+			<script src="../../admin/vendors/ion.rangeSlider/js/ion.rangeSlider.min.js"></script>
+			<!-- Bootstrap Colorpicker -->
+			<script src="../../admin/vendors/mjolnic-bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js"></script>
+			<!-- jquery.inputmask -->
+			<script src="../../admin/vendors/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
+			<!-- jQuery Knob -->
+			<script src="../../admin/vendors/jquery-knob/dist/jquery.knob.min.js"></script>
+			<!-- Initialize datetimepicker -->
+			<script type="text/javascript">
+				$(function () {
 $('#myDatepicker').datetimepicker();
 });
 
@@ -588,6 +808,6 @@ $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
 $("#datetimepicker7").on("dp.change", function (e) {
 $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
 });
-	</script>
-	<script src="../../js/admin/vente_comptoir.js"></script>
-{% endblock %}
+			</script>
+			<script src="../../js/admin/vente_comptoir.js"></script>
+		{% endblock %}

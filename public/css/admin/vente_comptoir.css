@@ -1,3 +1,4 @@
+@import url('../../fonts/poppins/poppins_font.css');
 
 .groupe_boutons .col-auto {
     padding-left:  0px;
@@ -58,4 +59,29 @@
   
 
 /* fin style incrementer */
+.heading{
 
+  font-weight: 600;
+  font-size: 20px;
+  /* margin: 0;
+  cursor: pointer;
+  margin-bottom: 10px;
+  line-height: 100%;  */
+}
+
+.prestation ul{
+  list-style: none;
+}
+
+.prix_location, .content_depart, .content_retour{
+  padding-left: 0.5rem !important;
+}
+
+.prix_location .prix{
+  font-size: 20px;
+}
+
+.testfont{
+  font-family: 'Poppins', sans-serif;
+  color: black;
+}
