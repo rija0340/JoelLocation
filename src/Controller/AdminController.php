@@ -152,4 +152,66 @@ class AdminController extends AbstractController
   {
     return $this->render('vente_comptoir/index.html.twig');
   }
+
+  /**
+   * @Route("/appel_paiement", name="appel_paiement", methods={"GET"})
+   */
+  public function appel_paiement(): Response
+  {
+    return $this->render('appel_paiement/index.html.twig');
+  }
+
+  /**
+   * @Route("/chiffre_affaire", name="chiffre_affaire", methods={"GET"})
+   */
+  public function chiffre_affaire(): Response
+  {
+    return $this->render('chiffre_affaire/index.html.twig');
+  }
+
+  /**
+   * @Route("/paiement", name="paiement", methods={"GET"})
+   */
+  public function paiement(): Response
+  {
+    return $this->render('paiement/index.html.twig');
+  }
+
+  /**
+   * @Route("/clients_prospects", name="clients_prospects", methods={"GET"})
+   */
+  public function clients_prospects(): Response
+  {
+    return $this->render('clients_prospects/index.html.twig');
+  }
+
+  /**
+   * @Route("/stop_sales", name="stop_sales", methods={"GET"})
+   */
+  public function stop_sales(): Response
+  {
+    return $this->render('stop_sales_vehicules/index.html.twig');
+  }
+
+  /**
+   * @Route("/parametre_agence", name="parametre_agence", methods={"GET"})
+   */
+  public function parametre_agence(): Response
+  {
+    return $this->render('parametre_agence/index.html.twig');
+  }
+  /**
+   * @Route("/presentation_agence", name="presentation_agence", methods={"GET"})
+   */
+  public function presentation_agence(): Response
+  {
+    return $this->render('presentation_agence/index.html.twig');
+  }
+  /**
+   * @Route("/comptes_utilisateurs", name="comptes_utilisateurs", methods={"GET"})
+   */
+  public function comptes_utilisateurs(): Response
+  {
+    return $this->render('comptes_utilisateurs/index.html.twig');
+  }
 }

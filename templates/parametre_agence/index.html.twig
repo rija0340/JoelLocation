@@ -1,0 +1,141 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}Paramètres agence
+{% endblock %}
+
+
+{% block stylesheets %}
+	<!-- Ion.RangeSlider -->
+	<link href="../../admin/vendors/normalize-css/normalize.css" rel="stylesheet">
+	<link href="../../admin/vendors/ion.rangeSlider/css/ion.rangeSlider.css" rel="stylesheet">
+	<link href="../../admin/vendors/ion.rangeSlider/css/ion.rangeSlider.skinFlat.css" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+	<!-- top tiles -->
+	<div class="x_panel">
+		<div class="x_title">
+			<h2>
+				<i class="fa  fa-gears (alias) mr-1"></i>
+				Paramétrage de votre agence
+			</h2>
+			<div class="clearfix"></div>
+		</div>
+		<div class="x_content">
+			<div class="x_title">
+				<div class="row">
+					<div class="col-auto  ">
+						<h2>
+							Informations :
+						</h2>
+					</div>
+					<div class="col-auto ml-auto">
+						<button class="btn btn-primary m-0">
+							Paramétrage transfert</button>
+					</div>
+				</div>
+			</div>
+
+			Votre lien de partage vers la plateforme de réservation :
+
+			{# form #}
+
+			<form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left mt-4">
+				<div class="row">
+					<div class="col-md-6 ">
+
+						<div class="item form-group">
+							<label class="col-form-label col-md-3 col-sm-3 " for="marque">
+								Marque :
+							</label>
+							<div class="col-md-9 col-sm-9 ">
+								<input type="text" id="first-name" required="required" class="form-control ">
+							</div>
+						</div>
+						<div class="item form-group">
+							<label class="col-form-label col-md-3 col-sm-3 " for="marque">
+								Marque :
+							</label>
+							<div class="col-md-9 col-sm-9 ">
+								<input type="text" id="first-name" required="required" class="form-control ">
+							</div>
+						</div>
+						<div class="item form-group">
+							<label class="col-form-label col-md-3 col-sm-3 " for="marque">
+								Marque :
+							</label>
+							<div class="col-md-9 col-sm-9 ">
+								<input type="text" id="first-name" required="required" class="form-control ">
+							</div>
+						</div>
+
+					</div>
+					<div class="col-md-6">
+
+						<div class="item form-group">
+							<label class="col-form-label col-md-3 col-sm-3 " for="marque">
+								Marque :
+							</label>
+							<div class="col-md-9 col-sm-9 ">
+								<input type="text" id="first-name" required="required" class="form-control ">
+							</div>
+						</div>
+
+						<div class="item form-group">
+							<label class="col-form-label col-md-3 col-sm-3 " for="marque">
+								Marque :
+							</label>
+							<div class="col-md-9 col-sm-9 ">
+								<input type="text" id="first-name" required="required" class="form-control ">
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+
+			</form>
+			{# fin form #}
+			<div class="row grid_slider mt-4">
+				<div class="col-md-3 col-sm-3  ">
+					<p>Coefficient tarif comptoir (%) :</p>
+				</div>
+				<div class="col-md-9 col-sm-9  ">
+					<input type="text" class="range_time24" value="" name="range"/>
+				</div>
+				<div class="col-md-3 col-sm-3  ">
+					<p>Nombre d'heures entre 2 locations :
+					</p>
+				</div>
+				<div class="col-md-9 col-sm-9  ">
+					<input type="text" class="range_time24" value="" name="range"/>
+				</div>
+				<div class="col-md-3 col-sm-3  ">
+					<p>Horaires intervention :</p>
+				</div>
+				<div class="col-md-9 col-sm-9  ">
+					<input type="text" id="range" value="" name="range"/>
+				</div>
+
+			</div>
+
+			<div class="item form-group justify-content-center mt-4">
+				<button class="btn btn btn-light" type="reset">
+					<i class="fa  fa-close (alias) mr-1"></i>
+					Annuler</button>
+				<button type="submit" class="btn btn-primary">
+					<i class="fa fa-save mr-1"></i>
+					Valider</button>
+			</div>
+
+		</div>
+	</div>
+{% endblock %}
+{% block javascripts %}
+	<!-- bootstrap-daterangepicker -->
+	<script src="../../admin/vendors/moment/min/moment.min.js"></script>
+	<script src="../../admin/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+	<!-- Ion.RangeSlider -->
+	<script src="../../admin/vendors/ion.rangeSlider/js/ion.rangeSlider.min.js"></script>
+{% endblock  %}

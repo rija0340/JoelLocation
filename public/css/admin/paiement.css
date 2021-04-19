@@ -1,0 +1,15 @@
+#reportrange_right{
+    height: 38px;
+}
+.badge:empty{
+    display: block;
+}
+span.badge{
+    border-radius: 0%;
+    height: 20px;
+    width: 20px;
+}
+/* .legende .col-auto{
+    padding-left: 0;
+    padding-right: 0;
+} */

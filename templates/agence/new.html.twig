@@ -1,11 +1,23 @@
 {% extends 'base2.html.twig' %}
 
-{% block title %}New Agence{% endblock %}
+{% block title %}New Agence
+{% endblock %}
 
 {% block content %}
-    <h1>Nouvelle Agence</h1>
+	<div class="x_panel">
+		<div class="x_title">
+			<h2>
+				<i class="fa fa-list"></i>Présentation de votre agence</h2>
+			<div class="clearfix"></div>
+		</div>
 
-    {{ include('agence/_form.html.twig') }}
+		<div class="x_content">
+			{{ include('agence/_form.html.twig') }}
 
-    <a href="{{ path('agence_index') }}" class="btn btn-primary"><i class="fa fa-arrow-left" aria-hidden="true"></i> retour</a>
+			<a href="{{ path('agence_index') }}" class="btn btn-primary">
+				<i class="fa fa-arrow-left" aria-hidden="true"></i>
+				retour</a>
+		</div>
+
+	</div>
 {% endblock %}

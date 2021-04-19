@@ -1,4 +1,4 @@
-{% extends 'base2.html.twig' %}
+{# {% extends 'base2.html.twig' %}
 
 {% block title %}Paiement index{% endblock %}
 
@@ -42,4 +42,211 @@
     </div>
 
     <a href="{{ path('paiement_new') }}" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> Ajouter</a>
+{% endblock %} #}
+
+
+{% extends 'base2.html.twig' %}
+
+{% block title %}Echec de paiement
 {% endblock %}
+
+
+{% block stylesheets %}
+	<!-- Datatables -->
+	<link href="../../admin/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+	<link href="../../admin/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+	<link href="../../admin/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+	<link href="../../admin/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+	<link href="../../admin/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+	<link href="../../css/admin/paiement.css" rel="stylesheet">
+
+
+{% endblock %}
+
+{% block content %}
+	<!-- top tiles -->
+	<div class="x_panel">
+		<div class="text-center">
+			<h4>PAIEMENT DES RESERVATIONS</h4>
+			<h4 style="color:red;">DU
+				<span>09 SEPTEMBRE 2020</span>
+				AU
+				<span>08 OCTOBRE 2020</span>
+			</h4>
+		</div>
+		<div class="alert alert-info">
+			<i class="mr-2 fa fa-info-circle"></i>
+			Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut corrupti voluptatem quaerat a autem dolor necessitatibus tempora ducimus assumenda ipsam, nesciunt maiores porro debitis molestiae similique nostrum numquam, illum temporibus?
+		</div>
+
+		{# datepicker range #}
+		<div class="row mb-4">
+			<div class="col-auto">
+				<div class="row">
+					<div class="col-auto">
+						<label for="periode">Période :</label>
+					</div>
+					<!-- Force next columns to break to new line -->
+					<div class="w-100"></div>
+					<div class="col-auto">
+						<div class="row">
+							<div class="col-auto">
+								<div id="reportrange_right" class="pull-left" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+									<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+									<span>December 30, 2014 - January 28, 2015</span>
+									<b class="caret"></b>
+								</div>
+							</div>
+							<div class="col-auto">
+								<button class="btn btn-primary">
+									<i class="fa fa-search mr-2"></i>Calculer</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="col-auto ml-auto">
+				<div class="form-group">
+					<label for="select">Filtres :</label>
+					<select id="heard" class="form-control" required>
+						<option value="">Choose..</option>
+						<option value="press">Press</option>
+						<option value="net">Internet</option>
+						<option value="mouth">Word of mouth</option>
+					</select>
+				</div>
+			</div>
+
+		</div>
+
+		{# fin datepicker #}
+
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="card-box table-responsive">
+
+					<table id="datatable" class="table table-striped table-bordered" style="width:100%">
+						<thead>
+							<tr>
+								<th>Réservation
+								</th>
+								<th class="text-nowrap">Client
+								</th>
+								<th class="text-nowrap">Montant</th>
+								<th></th>
+								<th class="text-nowrap">Type</th>
+								<th>Date</th>
+								<th>ACTION</th>
+							</tr>
+						</thead>
+
+
+						<tbody>
+							<tr>
+								<td>Michael Bruce</td>
+								<td>Javascript Developer</td>
+								<td>Singapore</td>
+								<td>
+									<div class="d-flex justify-content-center">
+										<span class="badge badge-warning"></span>
+									</div>
+								</td>
+								<td>2011/06/27</td>
+								<td>$183,000</td>
+								<td class="text-center">
+									<a href="{{ path('detail_echec_paiement') }}">
+										<i class=" fa fa-info-circle" style="font-size: 2em !important;"></i>
+									</a>
+								</td>
+							</tr>
+							<tr>
+								<td>Donna Snider</td>
+								<td>Customer Support</td>
+								<td>New York</td>
+								<td>
+									<div class="d-flex justify-content-center">
+										<span class="badge badge-primary"></span>
+									</div>
+								</td>
+								<td>2011/01/25</td>
+								<td>2011/01/25</td>
+								<td class="text-center">
+									<a href="{{ path('detail_echec_paiement') }}">
+
+										<i class=" fa fa-info-circle" style="font-size: 2em !important;"></i>
+									</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		{# légende badge #}
+		<div class="row mt-5 legende">
+			<div class="col-auto ">
+				<label for="légende">Légendes</label>
+			</div>
+			<div class="w-100"></div>
+			<div class="col-auto">
+				<div class="row">
+					<div class="col-auto">
+						<div class="row">
+							<div class="col-auto pr-0">
+								<span class="badge badge-success"></span>
+							</div>
+							<div class="col-auto pl-1">Paiement</div>
+						</div>
+					</div>
+					<div class="col-auto">
+						<div class="row">
+							<div class="col-auto pr-0">
+								<span class="badge badge-warning"></span>
+							</div>
+							<div class="col-auto pl-1">Acompte</div>
+						</div>
+					</div>
+					<div class="col-auto">
+						<div class="row">
+							<div class="col-auto pr-0">
+								<span class="badge badge-info"></span>
+							</div>
+							<div class="col-auto pl-1">Remboursement</div>
+						</div>
+
+
+					</div>
+				</div>
+			</div>
+
+
+		</div>
+
+		<div class="alert alert-primary mt-5">
+			Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi porro commodi ipsam, id quidem ducimus quod, reiciendis optio deleniti est maxime quia voluptates corrupti dolores. Autem obcaecati eius numquam alias.
+
+		</div>
+	</div>
+{% endblock %}
+{% block javascripts %}
+
+	<!-- Datatables -->
+	<script src="../../admin/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+	<script src="../../admin/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+	<script src="../../admin/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+	<script src="../../admin/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+	<script src="../../admin/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+	<script src="../../admin/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+	<script src="../../admin/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+	<script src="../../admin/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+	<script src="../../admin/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+	<script src="../../admin/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+	<script src="../../admin/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+	<script src="../../admin/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+	<script src="../../admin/vendors/jszip/dist/jszip.min.js"></script>
+	<script src="../../admin/vendors/pdfmake/build/pdfmake.min.js"></script>
+	<script src="../../admin/vendors/pdfmake/build/vfs_fonts.js"></script>
+	<script></script>
+{% endblock  %}

@@ -1,0 +1,99 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}Appel paiement
+{% endblock %}
+
+
+{% block stylesheets %}
+	<!-- bootstrap-wysiwyg -->
+	<link
+	href="../../admin/vendors/google-code-prettify/bin/prettify.min.css" rel="stylesheet">
+	<!-- Select2 -->
+	<link
+	href="../../admin/vendors/select2/dist/css/select2.min.css" rel="stylesheet">
+	<!-- Switchery -->
+	<link
+	href="../../admin/vendors/switchery/dist/switchery.min.css" rel="stylesheet">
+	<!-- starrr -->
+	<link
+	href="../../admin/vendors/starrr/dist/starrr.css" rel="stylesheet">
+	<!-- bootstrap-daterangepicker -->
+	<link href="../../admin/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+
+	<link
+	href="../../admin/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+	<!-- bootstrap-datetimepicker -->
+	<link
+	href="../../admin/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
+	<!-- Ion.RangeSlider -->
+	<link href="../../admin/vendors/normalize-css/normalize.css" rel="stylesheet">
+	<link href="../../admin/vendors/ion.rangeSlider/css/ion.rangeSlider.css" rel="stylesheet">
+	<link href="../../admin/vendors/ion.rangeSlider/css/ion.rangeSlider.skinFlat.css" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+	<div class="x_panel">
+		<div class="x_title">
+			<h2>Bordered table
+				<small>Bordered table subtitle</small>
+			</h2>
+			<div class="clearfix"></div>
+		</div>
+		<div class="x_content">
+			<div class="row">
+				<div
+					class="col-auto">
+					{# <div class="well" style="overflow: auto"> #}
+					<div id="reportrange_right" class="pull-left" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+						<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+						<span>December 30, 2014 - January 28, 2015</span>
+						<b class="caret"></b>
+					</div>
+				</div>
+				{# </div> #}
+				<div class="col-auto">
+					<button class="btn btn-primary">
+						<i class="fa fa-search mr-2"></i>Calculer</button>
+				</div>
+			</div>
+			<table class="table table-bordered simpletable">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>First Name</th>
+						<th>Last Name</th>
+						<th>Username</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th scope="row">1</th>
+						<td>Mark</td>
+						<td>Otto</td>
+						<td>@mdo</td>
+					</tr>
+					<tr>
+						<th scope="row">2</th>
+						<td>Jacob</td>
+						<td>Thornton</td>
+						<td>@fat</td>
+					</tr>
+					<tr>
+						<th scope="row">3</th>
+						<td>Larry</td>
+						<td>the Bird</td>
+						<td>@twitter</td>
+					</tr>
+				</tbody>
+			</table>
+
+		</div>
+	</div>
+{% endblock %}
+
+{% block javascripts %}<!-- bootstrap-daterangepicker --><script src="../../admin/vendors/moment/min/moment.min.js"></script>
+	<script src="../../admin/vendors/bootstrap-daterangepicker/daterangepicker.js"></script><!-- bootstrap-wysiwyg --><script src="../../admin/vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js"></script>
+	<script src="../../admin/vendors/jquery.hotkeys/jquery.hotkeys.js"></script>
+	<script src="../../admin/vendors/google-code-prettify/src/prettify.js"></script><!-- jQuery Tags Input --><script src="../../admin/vendors/jquery.tagsinput/src/jquery.tagsinput.js"></script><!-- Switchery --><script src="../../admin/vendors/switchery/dist/switchery.min.js"></script><!-- Select2 --><script src="../../admin/vendors/select2/dist/js/select2.full.min.js"></script><!-- Parsley --><script src="../../admin/vendors/parsleyjs/dist/parsley.min.js"></script><!-- Autosize --><script src="../../admin/vendors/autosize/dist/autosize.min.js"></script><!-- jQuery autocomplete --><script src="../../admin/vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js"></script><!-- starrr --><script src="../../admin/vendors/starrr/dist/starrr.js"></script><!-- Custom Theme Scripts --><script src="../../admin/build/js/custom.min.js"></script>
+{% endblock  %}

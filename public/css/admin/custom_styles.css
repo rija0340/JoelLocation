@@ -1,3 +1,11 @@
+@import url('../../fonts/poppins/poppins_font.css');
+body{
+    font-family: 'Poppins', sans-serif;
+}
+/* taille de police pour les btn */
+.btn {
+    font-size : 13px;
+}
 .x_title{
     padding-left: 0;
     padding-bottom: 0;
@@ -35,5 +43,21 @@ h2 .fa-chevron-right{
         background-color: transparent;
         background-image: none;
         border-color: #5c4ac7;
+
+  }
+
+  /* custom bg color */
+
+  
+  .bg-violet {
+    background-color: #5c4ac7 !important;
+}
+
+.bg-primary2{
+      background-color: #29b6f6 !important;
+
+  }
+  .bg-success2{
+      background-color: #26dad2 !important;
 
   }

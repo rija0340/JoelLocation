@@ -48,3 +48,10 @@ table.dataTable thead th.sorting_desc:after {
     color: #ffffff !important;
 
 }
+
+table.simpletable thead th {
+    position: relative;
+    background-image: none !important;
+    background-color: #444444;
+    color: #ffffff;
+}
