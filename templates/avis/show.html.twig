@@ -1,48 +1,55 @@
 {% extends 'base2.html.twig' %}
 
-{% block title %}Avis{% endblock %}
+{% block title %}Avis Clients
+{% endblock %}
 
 {% block content %}
-    <h1>Avis</h1>
+	<h1>Avis</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ avi.id }}</td>
-            </tr>
-            <tr>
-                <th>Global</th>
-                <td>{{ avi.global }}</td>
-            </tr>
-            <tr>
-                <th>Ponctualité</th>
-                <td>{{ avi.ponctualite }}</td>
-            </tr>
-            <tr>
-                <th>Accueil</th>
-                <td>{{ avi.accueil }}</td>
-            </tr>
-            <tr>
-                <th>Service</th>
-                <td>{{ avi.service }}</td>
-            </tr>
-            <tr>
-                <th>Commentaire</th>
-                <td>{{ avi.commentaire }}</td>
-            </tr>
-            <tr>
-                <th>Date</th>
-                <td>{{ avi.date ? avi.date|date('Y-m-d') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+	<table class="table">
+		<tbody>
+			<tr>
+				<th>Id</th>
+				<td>{{ avi.id }}</td>
+			</tr>
+			<tr>
+				<th>Global</th>
+				<td>{{ avi.global }}</td>
+			</tr>
+			<tr>
+				<th>Ponctualité</th>
+				<td>{{ avi.ponctualite }}</td>
+			</tr>
+			<tr>
+				<th>Accueil</th>
+				<td>{{ avi.accueil }}</td>
+			</tr>
+			<tr>
+				<th>Service</th>
+				<td>{{ avi.service }}</td>
+			</tr>
+			<tr>
+				<th>Commentaire</th>
+				<td>{{ avi.commentaire }}</td>
+			</tr>
+			<tr>
+				<th>Date</th>
+				<td>{{ avi.date ? avi.date|date('Y-m-d') : '' }}</td>
+			</tr>
+		</tbody>
+	</table>
 
-    <a href="{{ path('avis_index') }}" class="btn btn-primary"><i class="fa fa-arrow-left" aria-hidden="true"></i> retour</a>
-    {% if is_granted("ROLE_ADMIN") %}
-        <a href="{{ path('avis_edit', {'id': avi.id}) }}" class="btn btn-success"><i class="fa fa-book" aria-hidden="true"></i> Modifier</a>
-    {% endif %}
-    {% if is_granted("ROLE_ADMIN") %}
-        {{ include('avis/_delete_form.html.twig') }}
-    {% endif %}
+	<a href="{{ path('avis_index') }}" class="btn btn-primary">
+		<i class="fa fa-arrow-left" aria-hidden="true"></i>
+		retour</a>
+	{% if is_granted("ROLE_ADMIN") %}
+		<a href="{{ path('avis_edit', {'id': avi.id}) }}" class="btn btn-success">
+			<i class="fa fa-book" aria-hidden="true"></i>
+			Modifier</a>
+	{% endif %}
+	{% if is_granted("ROLE_ADMIN") %}
+		{{ include('avis/_delete_form.html.twig') }}
+	{% endif %}
+
+
 {% endblock %}

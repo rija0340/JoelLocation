@@ -46,9 +46,19 @@ h2 .fa-chevron-right{
 
   }
 
-  /* custom bg color */
+  .current_page h2{
+      font-weight: bold;
+  }
+
+  .current_page div{
+    font-weight: bold;
+}
+
+
+  /* custom elemets bootstrap */
 
   
+
   .bg-violet {
     background-color: #5c4ac7 !important;
 }
@@ -59,5 +69,27 @@ h2 .fa-chevron-right{
   }
   .bg-success2{
       background-color: #26dad2 !important;
+
+  }
+
+  .alert-rose{
+      background-color: #f8d7da ! important;
+  }
+ .alert-warning2{
+      background-color: #fff3cd ! important;
+  }
+
+  .text-danger {
+    color: #ff0b09 !important;
+  }
+
+  .text-success {
+    color: #59b611 !important;
+}
+
+.badge-danger{
+      color: #fff;
+  background-color: #ff0000;
+  border-radius: 0%;
 
   }

@@ -17,12 +17,22 @@
 	<link href="../../css/admin/detail.css" rel="stylesheet">
 
 {% endblock %}
+{% block current_page_right %}
+	<p class="mb-0 pb-0">
+		<i class="fa fa-dashboard"></i>
+		Tableau de bord >
+
+		<i class="fa fa-folder"></i>
+		Détail de la réservation
+
+	</p>
+{% endblock %}
 
 {% block content %}
 	<!-- top tiles -->
 	<div class="x_panel">
 		<div class="btn-group mb-1">
-			<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<button type="button" class="btn btn-warning dropdown-toggle text-white font-weight-bold" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 				Réservation
 			</button>
 			<div class="dropdown-menu">
@@ -33,10 +43,14 @@
 				<a class="dropdown-item" href="#">Archiver la réservation</a>
 			</div>
 		</div>
-		<div class="alert alert-danger" role="alert">
+		<div class="alert alert-rose" role="alert">
 			<div class="text-center">
+				<p class="text-danger">
+					<i class="fa fa-warning (alias)"></i>
+					Attention, il n'y a aucun véhicule affecté à cette réservation
+				</p>
 				<button class=" btn btn-light">
-					<i class="fa fa-arrows-h"></i>
+					<i class="fa fa-exchange"></i>
 					Affecter un véhicule</button>
 			</div>
 		</div>
@@ -44,20 +58,20 @@
 
 			<div class="row info_client">
 				<div class="col-auto pl-2">
-					<h2 style="margin-top:12px;">
-						<i class="fa fa-chevron-right"></i>INFORMATIONS CLIENTS
+					<h2 style="margin-top:10px;" class=" font-weight-bold">
+						<i class=" fa fa-chevron-right"></i>INFORMATIONS CLIENTS
 					</h2>
 				</div>
-				<div class="col-auto ml-auto pr-0">
-					<button type="button" class="btn btn-outline-secondary">
+				<div class="col-auto ml-auto pr-0 ">
+					<button type="button" class="btn btn-outline-violet text-uppercase mb-0">
 						<i class="fa  fa-file-pdf-o"></i>
-						GENERER LE DETAIL</button>
-					<button type="button" class="btn btn-outline-info">
+						générer le détail</button>
+					<button type="button" class="btn btn-outline-primary text-uppercase  mb-0">
 						<i class="fa fa-file-archive-o"></i>
-						GENERER LA FACTURE</button>
-					<button type="button" class="btn btn-outline-dark">
+						générer la facture</button>
+					<button type="button" class="btn btn-outline-success text-uppercase  mb-0">
 						<i class="fa fa-send (alias)"></i>
-						ENVOYER FACTURE</button>
+						envoyer facture</button>
 				</div>
 			</div>
 			<div class="clearfix"></div>
@@ -80,13 +94,13 @@
 						<span>robert.sandrine2@club-internet.fr</span>
 					</div>
 					<div class="col-md-4">
-						<span class="label_client">Téléphone(s):</span>
+						<span class="label_client">Téléphone(s) :</span>
 						<span>000000000</span>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-md-12">
-						<span class="label_client">adresse:</span>
+						<span class="label_client">adresse :</span>
 					</div>
 				</div>
 				<div class="row">
@@ -136,15 +150,15 @@
 					</div>
 				</div>
 				<div class=" text-center">
-					<button type="button" class="btn btn-primary text-nowrap">
-						<i class="fa fa-home"></i>Modifier les informations</button>
-					<button type="button" class="btn btn-success text-nowrap">
+					<button type="button" class="btn btn-primary text-nowrap font-weight-bold">
+						<i class="fa fa-user mr-1"></i>Modifier les informations</button>
+					<button type="button" class="btn btn-warning text-nowrap font-weight-bold">
 						<i class="fa fa-cog"></i>
 						Modifier la réservation</button>
-					<button type="button" class="btn btn-danger text-nowrap">
+					<button type="button" class="btn btn-danger text-nowrap font-weight-bold">
 						<i class="fa fa-edit (alias)"></i>
 						Modifier les options & garanties</button>
-					<button type="button" class="btn btn-warning text-nowrap">
+					<button type="button" class="btn btn-violet text-nowrap font-weight-bold">
 						<i class="fa  fa-send-o (alias)"></i>
 						Envoyer les identifians de connexion</button>
 				</div>
@@ -152,15 +166,18 @@
 		</div>
 
 		<div class="x_title">
-			<h2>
+			<h2 class=" font-weight-bold">
 				<i class="fa fa-chevron-right"></i>INFORMATIONS CONDUCTEUR(S)
 			</h2>
 
 			<div class="clearfix"></div>
 		</div>
 		<div class="x_content text-center">
-
-			<button class="btn btn-primary">
+			<p class="text-danger mb-0">
+				<i class="fa fa-warning (alias)"></i>
+				Aucun conducteur n'a été enregistré
+			</p>
+			<button class="btn btn-primary font-weight-bold">
 				<i class="fa fa-plus"></i>
 				Ajouter conducteur</button>
 
@@ -168,8 +185,8 @@
 
 		{# périod de location #}
 		<div class="x_title">
-			<h2>
-				<i class="fa fa-chevron-right"></i>PERIODE DE LOCATION
+			<h2 class=" font-weight-bold text-uppercase">
+				<i class="fa fa-chevron-right"></i>période de location
 			</h2>
 
 			<div class="clearfix"></div>
@@ -217,21 +234,24 @@
 		</div>
 		{# options et garanties souscrites #}
 		<div class="x_title">
-			<h2>
+			<h2 class=" font-weight-bold">
 				<i class="fa fa-chevron-right"></i>OPTIONS ET GARANTIES SOUSCRITES
 			</h2>
 			<div class="clearfix"></div>
 		</div>
 		<div class="x_content">
-			<p>
-				option(s) souscrite(s):
+			<p class="font-weight-bold mb-0">
+				Option(s) souscrite(s) :
 			</p>
-			<p>
-				Garantie(s) souscrite(s):
+			<p class="font-italic">Aucune option souscrite</p>
+			<p class="font-weight-bold mb-0">
+				Garantie(s) souscrite(s) :
 			</p>
-			<p>
+			<p class="font-italic">Aucune garantie souscrite</p>
+			<p class="font-weight-bold mb-0">
 				Taxes de dépassement horaire
 			</p>
+			<p class="font-italic">Pas de dépassement d'horaire</p>
 
 		</div>
 
@@ -239,8 +259,8 @@
 		<div class="x_title">
 			<div class="row">
 				<div class="col-auto pl-2">
-					<h2>
-						<i class="fa fa-chevron-right"></i>MONTANT DE LA RESERVATION
+					<h2 class=" font-weight-bold text-uppercase">
+						<i class="fa fa-chevron-right"></i>Montant total de la réservation
 					</h2>
 				</div>
 				<div class="col-auto ml-auto d-flex align-items-center">
@@ -315,7 +335,7 @@
 
 		{# options et garanties souscrites #}
 		<div class="x_title">
-			<h2>
+			<h2 class="font-weight-bold">
 				<i class="fa fa-chevron-right"></i>REGLEMENT(S)
 			</h2>
 			<div class="clearfix"></div>
@@ -323,8 +343,8 @@
 		<div class="x_content">
 			<div class="d-flex justify-content-end">
 				<div class="btn-group mb-1">
-					<button type="button" class="btn btn-danger dropdown-toggle " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Autre réglement
+					<button type="button" class="btn btn-danger dropdown-toggle font-weight-bold" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Action réglement
 					</button>
 					<div class="dropdown-menu">
 						<a class="dropdown-item" href="#">Reporter la réservation</a>
@@ -358,7 +378,6 @@
 		</div>
 	</div>
 {% endblock %}
-
 {% block javascripts %}
 	<!-- Datatables -->
 	<script src="../../admin/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
@@ -376,5 +395,4 @@
 	<script src="../../admin/vendors/jszip/dist/jszip.min.js"></script>
 	<script src="../../admin/vendors/pdfmake/build/pdfmake.min.js"></script>
 	<script src="../../admin/vendors/pdfmake/build/vfs_fonts.js"></script>
-
 {% endblock  %}

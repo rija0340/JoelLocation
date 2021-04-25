@@ -1,14 +1,6 @@
 {% extends 'base2.html.twig' %}
 
-{% block title %}Réservation report
-{% endblock %}
-
-{% block current_page %}
-
-	<h2>
-		<i class="fa fa-calendar-o"></i>
-		Réservation
-	</h2>
+{% block title %}Reservation index
 {% endblock %}
 
 
@@ -21,60 +13,61 @@
 	<link href="../../admin/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
 
 {% endblock %}
+{% block current_page %}
+
+	<h2>
+		<i class="fa fa-credit-card"></i>Réservation non soldées</h2>
+
+{% endblock %}
 
 {% block content %}
 	<!-- top tiles -->
 	<div class="x_panel">
-		<div class="x_title">
-			<h2>
-				<i class="fa fa-calendar-o"></i>
-				Liste des réservations
-			</h2>
-
-			<div class="clearfix"></div>
+		<div class=" text-center">
+			<h2 class="text-uppercase font-weight-bold">Réservations non soldées</h2>
+			<h2 class="text-danger text-uppercase font-weight-bold">antérieur au 08 octobre 2020</h2>
 		</div>
 		<div class="x_content">
 			<div class="row">
 				<div class="col-sm-12">
 					<div class="card-box table-responsive">
-
-						<table id="datatable" class="table table-striped table-bordered" style="width:100%">
+						<div class="alert alert-info">
+							<i class="fa fa-info-circle"></i>
+							The Buttons extension for DataTables provides a common set of options, API methods and styling to display buttons on a page that will interact with a DataTable. The core library provides the based framework upon which plug-ins can built.
+						</div>
+						<table id="datatable" class="table table-striped table-bordered text-center" style="width:100%">
 							<thead class="text-uppercase">
 								<tr>
-									<th>paiement</th>
-									<th class="text-nowrap">date création</th>
+									<th>date création
+									</th>
+									<th>référence</th>
 									<th>client</th>
-									<th class="text-nowrap">réservation / véhicule</th>
-									<th class="text-nowrap">dates / durées</th>
-									<th>prix</th>
-									<th>code</th>
+									<th>départ</th>
+									<th>retour</th>
+									<th>total</th>
+									<th>payé</th>
+									<th>solde</th>
 									<th>action</th>
 								</tr>
 							</thead>
-
-
 							<tbody>
 								<tr>
-									<td>Tiger Nixon</td>
-									<td>System Architect</td>
-									<td>Edinburgh</td>
-									<td>61</td>
-									<td>2011/04/25</td>
-									<td>$320,800</td>
-									<td>$320,800</td>
-									<td>$320,800</td>
+									<td>Donna Snider</td>
+									<td>Customer Support</td>
+									<td>New York</td>
+									<td>27</td>
+									<td>2011/01/25</td>
+									<td>$112,000</td>
+									<td>$112,000</td>
+									<td>$112,000</td>
+									<td>
+										<button class="btn btn-primary">
+											<a href="{{path('reserv_non_solde_detail')}}">
+												<i class="fa fa-info"></i>
+											</a>
+										</button>
+									</td>
 								</tr>
-								<tr>
-									<td>Garrett Winters</td>
-									<td>Garrett Winters</td>
-									<td>Garrett Winters</td>
-									<td>Accountant</td>
-									<td>Tokyo</td>
-									<td>63</td>
-									<td>2011/07/25</td>
-									<td>$170,750</td>
-								</tr>
-
 							</tbody>
 						</table>
 					</div>
@@ -99,4 +92,5 @@
 				<script src="../../admin/vendors/pdfmake/build/pdfmake.min.js"></script>
 				<script src="../../admin/vendors/pdfmake/build/vfs_fonts.js"></script>
 				<script src="../../js/admin/datatable.fr.js"></script>
+
 			{% endblock  %}

@@ -18,13 +18,33 @@
 
 {% endblock %}
 
+{% block current_page %}
+	<div class="text-info">
+		<i class="fa fa-folder-open"></i>
+		Détails de la réservation -
+		<br>
+		<span>WEBGP2020FEV865396</span>
+	</div>
+{% endblock %}
+
+{% block current_page_right %}
+	<div class="font-weight-bold ">
+		<span class="text-info">
+			<i class="fa fa-dashboard"></i>
+			Tableau de bord
+		</span>
+		> Détail de la réservation
+	</div>
+{% endblock %}
+
+
 {% block content %}
 	<!-- top tiles -->
 	<div class="x_panel">
 		<div class="row">
 			<div class="col-auto">
 				<div class="btn-group mb-1">
-					<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<button type="button" class="btn btn-warning dropdown-toggle text-white font-weight-bold" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						Réservation
 					</button>
 					<div class="dropdown-menu">
@@ -36,16 +56,21 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-auto">
-				<h4>annulation avec avoir</h4>
-
+			<div class="col ">
+				<div class="text-center">
+					<h4 class="text-uppercase text-danger font-weight-bold">annulation avec avoir</h4>
+				</div>
 			</div>
 		</div>
 
-		<div class="alert alert-danger" role="alert">
+		<div class="alert alert-rose" role="alert">
 			<div class="text-center">
+				<p class="text-danger mb-0">
+					<i class="fa fa-warning"></i>
+					Attention, il n'y a aucun véhicule affecté à cette réservation
+				</p>
 				<button class=" btn btn-light">
-					<i class="fa fa-arrows-h"></i>
+					<i class="fa fa-exchange"></i>
 					Affecter un véhicule</button>
 			</div>
 		</div>
@@ -58,13 +83,13 @@
 					</h2>
 				</div>
 				<div class="col-auto ml-auto pr-0">
-					<button type="button" class="btn btn-outline-secondary">
+					<button type="button" class="btn btn-outline-violet text-uppercase">
 						<i class="fa  fa-file-pdf-o"></i>
-						Générer le détai</button>
-					<button type="button" class="btn btn-outline-info">
+						Générer le détail</button>
+					<button type="button" class="btn btn-outline-info text-uppercase">
 						<i class="fa fa-file-archive-o"></i>
 						Générer la facture</button>
-					<button type="button" class="btn btn-outline-dark">
+					<button type="button" class="btn btn-outline-success text-uppercase">
 						<i class="fa fa-send (alias)"></i>
 						Envoyer facture</button>
 				</div>
@@ -146,16 +171,16 @@
 				</div>
 				<div class=" text-center">
 					<button type="button" class="btn btn-primary text-nowrap">
-						<i class="fa fa-home"></i>Modifier les informations</button>
+						<i class="fa fa-user mr-1"></i>Modifier les informations</button>
 					<button type="button" class="btn btn-dark text-nowrap">
-						<i class="fa fa-reply-all"></i>Retour anticipé</button>
-					<button type="button" class="btn btn-success text-nowrap">
+						<i class="fa fa-reply-all mr-1"></i>Retour anticipé</button>
+					<button type="button" class="btn btn-warning text-nowrap">
 						<i class="fa fa-cog"></i>
 						Modifier la réservation</button>
 					<button type="button" class="btn btn-danger text-nowrap">
 						<i class="fa fa-edit (alias)"></i>
 						Modifier les options & garanties</button>
-					<button type="button" class="btn btn-warning text-nowrap">
+					<button type="button" class="btn btn-violet text-nowrap">
 						<i class="fa  fa-send-o (alias)"></i>
 						Envoyer les identifians de connexion</button>
 				</div>
@@ -177,10 +202,10 @@
 			</div>
 
 			<div class="x_title">
-				<h4>Conducteur n°1</h4>
+				<h4 class="text-danger font-weight-bold mb-0">Conducteur n°1</h4>
 			</div>
-			<p>Conducteur principal</p>
-			<div class="row">
+			<p class="text-success font-weight-bold font-italic">Conducteur principal</p>
+			<div class="row info_conducteur">
 				<div class="col-md-3">
 					<span class="label_conducteur">Nom/Prénom :</span>
 				</div>
@@ -271,20 +296,23 @@
 		{# options et garanties souscrites #}
 		<div class="x_title">
 			<h2>
-				<i class="fa fa-chevron-right"></i>OPTIONS ET GARANTIES SOUSCRITES
+				<i class="fa fa-chevron-right"></i>options et garanties souscrites
 			</h2>
 			<div class="clearfix"></div>
 		</div>
-		<div class="x_content">
-			<p>
-				option(s) souscrite(s):
+		<div class="x_content options_garanties">
+			<p class="font-weight-bold label">
+				Option(s) souscrite(s):
 			</p>
-			<p>
+			<p class="font-italic">Aucune option souscrite.</p>
+			<p class="font-weight-bold label">
 				Garantie(s) souscrite(s):
 			</p>
-			<p>
+			<p class="font-italic">Aucune garantie souscrite.</p>
+			<p class="font-weight-bold label">
 				Taxes de dépassement horaire
 			</p>
+			<p class="font-italic">Pas de dépassement d'horaire</p>
 
 		</div>
 
@@ -293,7 +321,7 @@
 			<div class="row">
 				<div class="col-auto pl-2">
 					<h2>
-						<i class="fa fa-chevron-right"></i>Montant de la réservation
+						<i class="fa fa-chevron-right"></i>montant de la réservation
 					</h2>
 				</div>
 				<div class="col-auto ml-auto d-flex align-items-center">
@@ -376,7 +404,7 @@
 		<div class="x_content">
 			<div class="d-flex justify-content-end">
 				<div class="btn-group mb-1">
-					<button type="button" class="btn btn-danger dropdown-toggle " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<button type="button" class="btn btn-danger dropdown-toggle font-weight-bold " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						Autre réglement
 					</button>
 					<div class="dropdown-menu">
@@ -390,7 +418,7 @@
 			</div>
 			<table class="table table-bordered text-center">
 				<thead class="table-dark">
-					<tr>
+					<tr class="text-uppercase font-weight-bold">
 						<th>date</th>
 						<th>type</th>
 						<th>méthode</th>

@@ -2,6 +2,13 @@
 
 {% block title %}Rechercher une résa
 {% endblock %}
+{% block current_page %}
+	<h2>
+		<i class="fa fa-search"></i>
+		Rechercher une réservation
+	</h2>
+
+{% endblock %}
 
 {% block stylesheets %}
 	<!-- bootstrap-wysiwyg -->
@@ -23,32 +30,19 @@
 {% block content %}
 	<div class="x_panel">
 		<div class="x_title">
-			<h2>Recherche simple
+			<h2>
+				<i class="fa fa-search"></i>
+				Recherche simple
 			</h2>
-			<ul class="nav navbar-right panel_toolbox">
-				<li>
-					<a class="collapse-link">
-						<i class="fa fa-chevron-up"></i>
-					</a>
-				</li>
 
-				<li>
-					<a class="close-link">
-						<i class="fa fa-close"></i>
-					</a>
-				</li>
-			</ul>
 			<div class="clearfix"></div>
 		</div>
 		<div class="x_content">
 			<p>
 				Chercher une réservation en saisissant sa référence
 			</p>
-
 			<form class="form-horizontal form-label-left">
-
 				<div class="form-group ">
-
 					<div>
 						<input type="text" id="last-name2" name="last-name" required="required" class="form-control col-md-12 " placeholder="Saisir une référence ou le nom d'un client">
 					</div>
@@ -56,37 +50,23 @@
 			</form>
 		</div>
 	</div>
-
 	<div class="x_panel">
 		<div class="x_title">
-			<h2>Recherche par immatriculation</h2>
-			<ul class="nav navbar-right panel_toolbox">
-				<li>
-					<a class="collapse-link">
-						<i class="fa fa-chevron-up"></i>
-					</a>
-				</li>
-
-				<li>
-					<a class="close-link">
-						<i class="fa fa-close"></i>
-					</a>
-				</li>
-			</ul>
+			<h2>
+				<i class="fa fa-car"></i>
+				Recherche par immatriculation</h2>
 			<div class="clearfix"></div>
 		</div>
 		<div class="x_content">
 			<p>
 				Chercher une réservation en sélectionnant une immatriculation et une date
 			</p>
-
 			<div class="row">
 				<div class="col-md-4">
-
 					<div class="form-group ">
 						<div class="">
 							<select class="form-control">
-								<option>Choose option</option>
+								<option>Sélectionnez une immatriculation</option>
 								<option>Option one</option>
 								<option>Option two</option>
 								<option>Option three</option>
@@ -95,13 +75,11 @@
 						</div>
 					</div>
 				</div>
-
 				<div class="col-md-3">
-
 					<div
 						class="item form-group">
 						{#  <label class="col-form-label col-md-3 col-sm-3 label-align">Date Of Birth <span class="required">*</span>
-																																																                   </label> #}
+																																																																																																																																																																																																						                   </label> #}
 						<div class=" ">
 							<input id="birthday" class="date-picker form-control" placeholder="dd-mm-yyyy" type="text" required="required" type="text" onfocus="this.type='date'" onmouseover="this.type='date'" onclick="this.type='date'" onblur="this.type='text'" onmouseout="timeFunctionLong(this)">
 							<script>
@@ -113,32 +91,22 @@ input.type = 'text';
 							</script>
 						</div>
 					</div>
-
 				</div>
 				<div class="col-md-2">
-					<button class="btn btn-danger" type="button">Rechercher</button>
+					<button class="btn btn-danger" type="button">
+						<i class="fa fa-search"></i>
+						Chercher</button>
 				</div>
 			</div>
 		</div>
 	</div>
-
-
 	<div class="x_panel">
 		<div class="x_title">
-			<h2>Recherche avancée
+			<h2>
+				<i class="fa fa-search-plus"></i>
+				Recherche avancée
 			</h2>
-			<ul class="nav navbar-right panel_toolbox">
-				<li>
-					<a class="collapse-link">
-						<i class="fa fa-chevron-up"></i>
-					</a>
-				</li>
-				<li>
-					<a class="close-link">
-						<i class="fa fa-close"></i>
-					</a>
-				</li>
-			</ul>
+
 			<div class="clearfix"></div>
 		</div>
 		<div class="x_content">
@@ -161,7 +129,7 @@ input.type = 'text';
 				</div>
 				<div class="col-4">
 					<p>
-						Début période
+						Début période:
 					</p>
 					<div>
 						<input id="debut_periode" class="date-picker form-control" placeholder="dd-mm-yyyy" type="text" required="required" type="text" onfocus="this.type='date'" onmouseover="this.type='date'" onclick="this.type='date'" onblur="this.type='text'" onmouseout="timeFunctionLong(this)">
@@ -177,7 +145,7 @@ input.type = 'text';
 				<div class="col-4">
 
 					<p>
-						Fin période
+						Fin période:
 					</p>
 					<div>
 						<input id="fin_periode" class="date-picker form-control" placeholder="dd-mm-yyyy" type="text" required="required" type="text" onfocus="this.type='date'" onmouseover="this.type='date'" onclick="this.type='date'" onblur="this.type='text'" onmouseout="timeFunctionLong(this)">
@@ -224,7 +192,7 @@ input.type = 'text';
 				</div>
 				<div class="col-4">
 					<p>
-						Code promo
+						Code promo:
 					</p>
 					<form class="form-horizontal form-label-left">
 
@@ -240,15 +208,39 @@ input.type = 'text';
 			<div class="ln_solid"></div>
 			<div class="item form-group">
 				<div class="col-md-6 col-sm-6 offset-md-5">
-					<button class="btn btn-primary" type="button">Annuler</button>
-					<button type="button" class="btn btn-danger">Rechercher</button>
+					<button class="btn border-dark" type="button">
+						<i class="fa fa-close"></i>
+						Annuler</button>
+					<button type="button" class="btn btn-danger">
+						<i class="fa fa-search mr-1"></i>Rechercher</button>
 				</div>
 			</div>
 		</div>
 	</div>
 {% endblock %}
-{% block javascripts %}<!-- bootstrap-daterangepicker --><script src="../../admin/vendors/moment/min/moment.min.js"></script>
-	<script src="../../admin/vendors/bootstrap-daterangepicker/daterangepicker.js"></script><!-- bootstrap-wysiwyg --><script src="../../admin/vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js"></script>
+{% block javascripts %}
+	<!-- bootstrap-daterangepicker -->
+	<script src="../../admin/vendors/moment/min/moment.min.js"></script>
+	<script src="../../admin/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+	<!-- bootstrap-wysiwyg -->
+	<script src="../../admin/vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js"></script>
 	<script src="../../admin/vendors/jquery.hotkeys/jquery.hotkeys.js"></script>
-	<script src="../../admin/vendors/google-code-prettify/src/prettify.js"></script><!-- jQuery Tags Input --><script src="../../admin/vendors/jquery.tagsinput/src/jquery.tagsinput.js"></script><!-- Switchery --><script src="../../admin/vendors/switchery/dist/switchery.min.js"></script><!-- Select2 --><script src="../../admin/vendors/select2/dist/js/select2.full.min.js"></script><!-- Parsley --><script src="../../admin/vendors/parsleyjs/dist/parsley.min.js"></script><!-- Autosize --><script src="../../admin/vendors/autosize/dist/autosize.min.js"></script><!-- jQuery autocomplete --><script src="../../admin/vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js"></script><!-- starrr --><script src="../../admin/vendors/starrr/dist/starrr.js"></script><!-- Custom Theme Scripts --><script src="../../admin/build/js/custom.min.js"></script>
+	<script src="../../admin/vendors/google-code-prettify/src/prettify.js"></script>
+	<!-- jQuery Tags Input -->
+	<script src="../../admin/vendors/jquery.tagsinput/src/jquery.tagsinput.js"></script>
+	<!-- Switchery -->
+	<script src="../../admin/vendors/switchery/dist/switchery.min.js"></script>
+	<!-- Select2 -->
+	<script src="../../admin/vendors/select2/dist/js/select2.full.min.js"></script>
+	<!-- Parsley -->
+	<script src="../../admin/vendors/parsleyjs/dist/parsley.min.js"></script>
+	<!-- Autosize -->
+	<script src="../../admin/vendors/autosize/dist/autosize.min.js"></script>
+	<!-- jQuery autocomplete -->
+	<script src="../../admin/vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js"></script>
+	<!-- starrr -->
+	<script src="../../admin/vendors/starrr/dist/starrr.js"></script>
+	<!-- Custom Theme Scripts -->
+	<script src="../../admin/build/js/custom.min.js"></script>
+
 {% endblock  %}

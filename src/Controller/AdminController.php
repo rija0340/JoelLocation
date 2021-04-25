@@ -85,7 +85,15 @@ class AdminController extends AbstractController
    */
   public function reserv_non_solde(): Response
   {
-    return $this->render('reservation/reserv_non_solde.html.twig');
+    return $this->render('reservation/non_solde/reserv_non_solde.html.twig');
+  }
+
+  /**
+   * @Route("/reserv_non_solde_detail", name="reserv_non_solde_detail", methods={"GET"})
+   */
+  public function reserv_non_solde_detail(): Response
+  {
+    return $this->render('reservation/non_solde/detail.html.twig');
   }
 
   /**
@@ -125,7 +133,7 @@ class AdminController extends AbstractController
    */
   public function detail_devis(): Response
   {
-    return $this->render('reservation/detail.html.twig');
+    return $this->render('reservation/devis/detail.html.twig');
   }
 
   /**
@@ -144,6 +152,15 @@ class AdminController extends AbstractController
   {
     return $this->render('reservation/annulation/attente.html.twig');
   }
+
+  /**
+   * @Route("/annulation_avoir", name="annulation_avoir", methods={"GET"})
+   */
+  public function annulation_avoir(): Response
+  {
+    return $this->render('reservation/annulation/avec_avoir.html.twig');
+  }
+
 
   /**
    * @Route("/vente_comptoir", name="vente_comptoir", methods={"GET"})

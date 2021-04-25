@@ -19,6 +19,21 @@
     font-weight: 800;
 }
 
+.label_conducteur{
+    font-weight: 800;
+}
+
+.info_conducteur{
+    line-height: 40px;
+}
+h2{
+  text-transform: uppercase !important;
+  font-weight: 900;
+}
+.options_garanties .label{
+    margin-bottom: 0;
+}
+
 .periode_location .col-md-6{
     padding-bottom: 10px;
 }

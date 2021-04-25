@@ -85,3 +85,22 @@
   font-family: 'Poppins', sans-serif;
   color: black;
 }
+
+.bootstrap-datetimepicker-widget.dropdown-menu {
+  display: block;
+  margin: 2px 0;
+  padding: 4px;
+  width: 19em;
+  position: absolute;
+  z-index: 100;
+}
+.wizard_horizontal ul.wizard_steps  {
+  display: table;
+  list-style: none;
+  position: relative;
+  width: 100%;
+ 
+}
+.wizard_horizontal .stepContainer{
+  z-index: 1;
+}

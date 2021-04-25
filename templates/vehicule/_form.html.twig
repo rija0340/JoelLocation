@@ -1,4 +1,17 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn btn-success"><i class="fa fa-book" aria-hidden="true"></i> {{ button_label|default('Enregistrer') }}</button>
+<div class="row">
+	<div class="col-md-6">
+		<label for="">Immatriculation</label>
+		{{ form_widget(form.immatriculation) }}
+	</div>
+	<div class="col-md-6">
+		<label for="">Immatriculation</label>
+		{{ form_widget(form.date_mise_service) }}
+
+	</div>
+</div>
+
+<button class="btn btn-success">
+	<i class="fa fa-book" aria-hidden="true"></i>
+	{{ button_label|default('Enregistrer') }}</button>
 {{ form_end(form) }}

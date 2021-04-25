@@ -91,10 +91,10 @@
 					<div class="col-auto">
 						<div class="row">
 							<div class="col-auto">
-								<div id="reportrange_right" class="pull-left" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
-									<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-									<span>December 30, 2014 - January 28, 2015</span>
-									<b class="caret"></b>
+								<div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+									<i class="fa fa-calendar"></i>&nbsp;
+									<span></span>
+									<i class="fa fa-caret-down"></i>
 								</div>
 							</div>
 							<div class="col-auto">
@@ -127,8 +127,8 @@
 			<div class="col-sm-12">
 				<div class="card-box table-responsive">
 
-					<table id="datatable" class="table table-striped table-bordered" style="width:100%">
-						<thead>
+					<table id="datatable" class="table table-striped table-bordered text-center" style="width:100%">
+						<thead class="text-uppercase">
 							<tr>
 								<th>Réservation
 								</th>
@@ -156,7 +156,7 @@
 								<td>2011/06/27</td>
 								<td>$183,000</td>
 								<td class="text-center">
-									<a href="{{ path('detail_echec_paiement') }}">
+									<a href="">
 										<i class=" fa fa-info-circle" style="font-size: 2em !important;"></i>
 									</a>
 								</td>
@@ -173,7 +173,7 @@
 								<td>2011/01/25</td>
 								<td>2011/01/25</td>
 								<td class="text-center">
-									<a href="{{ path('detail_echec_paiement') }}">
+									<a href="">
 
 										<i class=" fa fa-info-circle" style="font-size: 2em !important;"></i>
 									</a>
@@ -224,14 +224,12 @@
 
 		</div>
 
-		<div class="alert alert-primary mt-5">
+		<div class="alert alert-warning mt-5">
 			Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi porro commodi ipsam, id quidem ducimus quod, reiciendis optio deleniti est maxime quia voluptates corrupti dolores. Autem obcaecati eius numquam alias.
-
 		</div>
 	</div>
 {% endblock %}
 {% block javascripts %}
-
 	<!-- Datatables -->
 	<script src="../../admin/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
 	<script src="../../admin/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
@@ -248,5 +246,88 @@
 	<script src="../../admin/vendors/jszip/dist/jszip.min.js"></script>
 	<script src="../../admin/vendors/pdfmake/build/pdfmake.min.js"></script>
 	<script src="../../admin/vendors/pdfmake/build/vfs_fonts.js"></script>
-	<script></script>
+	<script src="../../js/admin/datatable.fr.js"></script>
+
+	<!-- bootstrap-daterangepicker -->
+
+	<script src="../../admin/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+	<!--bootstrap-wysiwyg-->
+	<script src="../../admin/vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js"></script>
+	<script src="../../admin/vendors/jquery.hotkeys/jquery.hotkeys.js"></script>
+	<script src="../../admin/vendors/google-code-prettify/src/prettify.js"></script>
+	<!-- jQuery Tags Input -->
+	<script src="../../admin/vendors/jquery.tagsinput/src/jquery.tagsinput.js"></script>
+	<!-- Switchery -->
+	<script src="../../admin/vendors/switchery/dist/switchery.min.js"></script>
+	<!-- Select2 -->
+	<script src="../../admin/vendors/select2/dist/js/select2.full.min.js"></script>
+	<!-- Parsley -->
+	<script src="../../admin/vendors/parsleyjs/dist/parsley.min.js"></script>
+	<!-- Autosize -->
+	<script src="../../admin/vendors/autosize/dist/autosize.min.js"></script>
+	<!-- jQuery autocomplete -->
+	<script src="../../admin/vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js"></script>
+	<!-- starrr -->
+	<script src="../../admin/vendors/starrr/dist/starrr.js"></script>
+	<!-- Custom Theme Scripts -->
+	<script src="../../admin/build/js/custom.min.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+	<script src="../../admin/vendors/moment/moment.js"></script>
+	{# manova anle langue ho francais amle moment #}
+	<script src="../../plugins/moment/locale/fr.js"></script>
+	<script type="text/javascript" src="../../admin\vendors\bootstrap-daterangepicker\daterangepicker.js"></script>
+	<script src="../../plugins/daterangepicker/daterangepicker.js"></script>
+	<script src="../../js/admin/bootstrap-datepicker.fr.min.js"></script>
+	<script type="text/javascript">
+
+
+		$(function () {
+
+var start = moment().subtract(29, 'days');
+var end = moment();
+
+
+function cb(start, end) {
+$('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+}
+
+$('#reportrange').daterangepicker({
+
+startDate: start, endDate: end,
+// showDropdowns: true,
+// esoria le oe 1 mois fona ny intervalle
+// linkedCalendars: false,
+
+// maxYear: parseInt(moment().format('YYYY'), 10),
+// maxMouth: parseInt(moment().format('MMMM'), 10),
+ranges: {
+'Today': [
+moment(), moment()
+],
+'Yesterday': [
+moment().subtract(1, 'days'),
+moment().subtract(1, 'days')
+],
+'Last 7 Days': [
+moment().subtract(6, 'days'),
+moment()
+],
+'Last 30 Days': [
+moment().subtract(29, 'days'),
+moment()
+],
+'This Month': [
+moment().startOf('month'), moment().endOf('month')
+],
+'Last Month': [
+moment().subtract(1, 'month').startOf('month'),
+moment().subtract(1, 'month').endOf('month')
+]
+}
+}, cb);
+
+cb(start, end);
+
+});
+	</script>
 {% endblock  %}

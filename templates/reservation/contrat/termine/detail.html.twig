@@ -18,159 +18,157 @@
 
 {% endblock %}
 
+{% block current_page %}
+	<div class="text-info">
+		<i class="fa fa-folder-open"></i>
+		Détails de la réservation -
+		<br>
+		<span>WEBGP2020FEV865396</span>
+	</div>
+{% endblock %}
+
+{% block current_page_right %}
+	<div class="font-weight-bold">
+		<span class="text-info">
+			<i class="fa fa-dashboard"></i>
+			Tableau de bord
+		</span>
+		> Détail de la réservation
+	</div>
+{% endblock %}
+
+
 {% block content %}
 	<!-- top tiles -->
 	<div class="x_panel">
-		<div class="row">
-			<div class="col-auto">
-				<div class="btn-group mb-1">
-					<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Réservation
-					</button>
-					<div class="dropdown-menu">
-						<a class="dropdown-item" href="#">Reporter la réservation</a>
-						<a class="dropdown-item" href="#">Mail de confirmation</a>
-						<a class="dropdown-item" href="#">Annuler la réservation</a>
-						<a class="dropdown-item" href="#">Fermer le contrat</a>
-						<a class="dropdown-item" href="#">Archiver la réservation</a>
-					</div>
-				</div>
-			</div>
-			<div class="col-auto"></div>
-		</div>
 
-		<div class="alert alert-danger" role="alert">
-			<div class="text-center">
-				<button class=" btn btn-light">
-					<i class="fa fa-exchange"></i>
-					Affecter un véhicule</button>
+		<div class="btn-group mb-4">
+			<button type="button" class="btn btn-warning dropdown-toggle text-white font-weight-bold" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				Réservation
+			</button>
+			<div class="dropdown-menu">
+				<a class="dropdown-item" href="#">Reporter la réservation</a>
+				<a class="dropdown-item" href="#">Mail de confirmation</a>
+				<a class="dropdown-item" href="#">Annuler la réservation</a>
+				<a class="dropdown-item" href="#">Fermer le contrat</a>
+				<a class="dropdown-item" href="#">Archiver la réservation</a>
 			</div>
 		</div>
-		<div class="info_client">
-			<div class="x_title mb-0">
-				<h2>
-					<i class="fa fa-chevron-right"></i>informations client
-				</h2>
 
-				<div class="clearfix"></div>
-
-			</div>
-
-			{# butons en dessous titre #}
-			<button type="button" class="btn btn-outline-dark">
-				<i class="fa fa-car"></i>
+		<div class="x_title mb-0">
+			<h2>
+				<i class="fa fa-chevron-right"></i>INFORMATIONS CLIENT
+			</h2>
+			<div class="clearfix"></div>
+		</div>
+		{# <div class="x_content"></div> #}
+		<div>
+			<button type="button" class="btn btn-outline-dark text-uppercase p-1">
+				<i class="fa  fa-car"></i>
 				kilometrage</button>
-			<button type="button" class="btn btn-outline-violet">
-				<i class="fa  fa-file-pdf-o"></i>
-				Générer le détail</button>
-			<button type="button" class="btn btn-outline-danger">
+			<button type="button" class="btn btn-outline-violet text-uppercase p-1">
+				<i class="fa fa-file-pdf-o"></i>
+				Générer détail</button>
+			<button type="button" class="btn btn-outline-danger text-uppercase p-1">
 				<i class="fa fa-newspaper-o"></i>
 				Générer le contrat</button>
-			<button type="button" class="btn btn-outline-warning">
-				<i class="fa fa-arrows-h"></i>
+			<button type="button" class="btn btn-outline-warning text-uppercase p-1">
+				<i class="fa  fa-exchange"></i>
 				Générer le voucher</button>
-			<button type="button" class="btn btn-outline-dark">
+			<button type="button" class="btn btn-outline-dark text-uppercase p-1">
 				<i class="fa fa-send (alias)"></i>
-				Envoyer le voucher</button>
-			<button type="button" class="btn btn-outline-info">
-				<i class="fa fa-file-zip-o (alias)"></i>
-				Générer la facture</button>
-			<button type="button" class="btn btn-outline-success">
+				Envoyer voucher</button>
+			<button type="button" class="btn btn-outline-info text-uppercase p-1">
 				<i class="fa fa-send (alias)"></i>
-				Envoyer la facture</button>
-
-			<div
-				class="x_content">
-
-
-				{# fin bouton #}
+				générer facture</button>
+			<button type="button" class="btn btn-outline-success text-uppercase p-1">
+				<i class="fa fa-send (alias)"></i>
+				Envoyer facture</button>
+		</div>
+		<div class="row mt-3">
+			<div class="col-md-2">
+				<img src="../../images/capture 1.jpg" alt="" style="width:90%;">
+			</div>
+			<div class="col-md-10 info_client">
+				<div class="row">
+					<div class="col-md-4">
+						<span class="label_client">Client :</span>
+						<span>CADOCE Jimmy</span>
+					</div>
+					<div class="col-md-4">
+						<span class="label_client">Email :</span>
+						<span>robert.sandrine2@club-internet.fr</span>
+					</div>
+					<div class="col-md-4">
+						<span class="label_client">Téléphone(s):</span>
+						<span>000000000</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<span class="label_client">adresse:</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4">
+						<span class="label_client">Référence :</span>
+					</div>
+					<div class="col-md-4">
+						<span class="label_client">Date de création :</span>
+					</div>
+					<div class="col-md-4">
+						<span class="label_client">Catégorie :</span>
+					</div>
+				</div>
 
 				<div class="row">
-					<div class="col-md-2">
-						<img src="../../images/capture 1.jpg" alt="" style="width:90%;">
+					<div class="col-md-4">
+						<span class="label_client">Véhicule :</span>
 					</div>
-					<div class="col-md-10 info_client">
-						<div class="row">
-							<div class="col-md-4">
-								<span class="label_client">Client :</span>
-								<span>CADOCE Jimmy</span>
-							</div>
-							<div class="col-md-4">
-								<span class="label_client">Email :</span>
-								<span>robert.sandrine2@club-internet.fr</span>
-							</div>
-							<div class="col-md-4">
-								<span class="label_client">Téléphone(s):</span>
-								<span>000000000</span>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								<span class="label_client">adresse:</span>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-4">
-								<span class="label_client">Référence :</span>
-							</div>
-							<div class="col-md-4">
-								<span class="label_client">Date de création :</span>
-							</div>
-							<div class="col-md-4">
-								<span class="label_client">Catégorie :</span>
-							</div>
-						</div>
-
-						<div class="row">
-							<div class="col-md-4">
-								<span class="label_client">Véhicule :</span>
-							</div>
-							<div class="col-md-4">
-								<span class="label_client">Code affilié :</span>
-							</div>
-							<div class="col-md-4">
-								<span class="label_client">Code partenaire :</span>
-							</div>
-						</div>
-
-						<div class="row">
-							<div class="col-md-4">
-								<span class="label_client">Partenaire :</span>
-							</div>
-							<div class="col-md-4">
-								<span class="label_client">Destination :</span>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-3">
-								<span class="label_client">Km départ :</span>
-							</div>
-							<div class="col-md-3">
-								<span class="label_client">Km retour :</span>
-							</div>
-							<div class="col-md-3">
-								<span class="label_client">Date mise à jour km :</span>
-							</div>
-							<div class="col-md-3">
-								<span class="label_client">Km saisie par :</span>
-							</div>
-						</div>
-						<div class=" text-center">
-							<button type="button" class="btn btn-primary text-nowrap">
-								<i class="fa fa-home"></i>Modifier les informations</button>
-							<button type="button" class="btn btn-dark text-nowrap">
-								<i class="fa fa-reply-all"></i>Retour anticipé</button>
-							<button type="button" class="btn btn-success text-nowrap">
-								<i class="fa fa-cog"></i>
-								Modifier la réservation</button>
-							<button type="button" class="btn btn-danger text-nowrap">
-								<i class="fa fa-edit (alias)"></i>
-								Modifier les options & garanties</button>
-							<button type="button" class="btn btn-warning text-nowrap">
-								<i class="fa  fa-send-o (alias)"></i>
-								Envoyer les identifians de connexion</button>
-						</div>
+					<div class="col-md-4">
+						<span class="label_client">Code affilié :</span>
 					</div>
+					<div class="col-md-4">
+						<span class="label_client">Code partenaire :</span>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-4">
+						<span class="label_client">Partenaire :</span>
+					</div>
+					<div class="col-md-4">
+						<span class="label_client">Destination :</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-3">
+						<span class="label_client">Km départ :</span>
+					</div>
+					<div class="col-md-3">
+						<span class="label_client">Km retour :</span>
+					</div>
+					<div class="col-md-3">
+						<span class="label_client">Date mise à jour km :</span>
+					</div>
+					<div class="col-md-3">
+						<span class="label_client">Km saisie par :</span>
+					</div>
+				</div>
+				<div class=" text-center">
+					<button type="button" class="btn btn-primary text-nowrap">
+						<i class="fa fa-user mr-1"></i>Modifier les informations</button>
+					<button type="button" class="btn btn-dark text-nowrap">
+						<i class="fa fa-reply-all mr-1"></i>Retour anticipé</button>
+					<button type="button" class="btn btn-warning text-nowrap">
+						<i class="fa fa-cog"></i>
+						Modifier la réservation</button>
+					<button type="button" class="btn btn-danger text-nowrap">
+						<i class="fa fa-edit (alias)"></i>
+						Modifier les options & garanties</button>
+					<button type="button" class="btn btn-violet text-nowrap">
+						<i class="fa  fa-send-o (alias)"></i>
+						Envoyer les identifians de connexion</button>
 				</div>
 			</div>
 		</div>
@@ -190,10 +188,10 @@
 			</div>
 
 			<div class="x_title">
-				<h4>Conducteur n°1</h4>
+				<h4 class="text-danger font-weight-bold mb-0">Conducteur n°1</h4>
 			</div>
-			<p>Conducteur principal</p>
-			<div class="row">
+			<p class="text-success font-weight-bold font-italic">Conducteur principal</p>
+			<div class="row info_conducteur">
 				<div class="col-md-3">
 					<span class="label_conducteur">Nom/Prénom :</span>
 				</div>
@@ -231,7 +229,7 @@
 		{# périod de location #}
 		<div class="x_title">
 			<h2>
-				<i class="fa fa-chevron-right"></i>PERIODE DE LOCATION
+				<i class="fa fa-chevron-right"></i>période de location
 			</h2>
 
 			<div class="clearfix"></div>
@@ -284,20 +282,23 @@
 		{# options et garanties souscrites #}
 		<div class="x_title">
 			<h2>
-				<i class="fa fa-chevron-right"></i>OPTIONS ET GARANTIES SOUSCRITES
+				<i class="fa fa-chevron-right"></i>options et garanties souscrites
 			</h2>
 			<div class="clearfix"></div>
 		</div>
-		<div class="x_content">
-			<p>
-				option(s) souscrite(s):
+		<div class="x_content options_garanties">
+			<p class="font-weight-bold label">
+				Option(s) souscrite(s):
 			</p>
-			<p>
+			<p class="font-italic">Aucune option souscrite.</p>
+			<p class="font-weight-bold label">
 				Garantie(s) souscrite(s):
 			</p>
-			<p>
+			<p class="font-italic">Aucune garantie souscrite.</p>
+			<p class="font-weight-bold label">
 				Taxes de dépassement horaire
 			</p>
+			<p class="font-italic">Pas de dépassement d'horaire</p>
 
 		</div>
 
@@ -306,7 +307,7 @@
 			<div class="row">
 				<div class="col-auto pl-2">
 					<h2>
-						<i class="fa fa-chevron-right"></i>MONTANT DE LA RESERVATION
+						<i class="fa fa-chevron-right"></i>montant de la réservation
 					</h2>
 				</div>
 				<div class="col-auto ml-auto d-flex align-items-center">
@@ -379,7 +380,7 @@
 
 		</div>
 
-		{# options et garanties souscrites #}
+		{# réglement(s) #}
 		<div class="x_title">
 			<h2>
 				<i class="fa fa-chevron-right"></i>réglement(s)
@@ -389,7 +390,7 @@
 		<div class="x_content">
 			<div class="d-flex justify-content-end">
 				<div class="btn-group mb-1">
-					<button type="button" class="btn btn-danger dropdown-toggle " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<button type="button" class="btn btn-danger dropdown-toggle font-weight-bold " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						Autre réglement
 					</button>
 					<div class="dropdown-menu">
@@ -402,7 +403,7 @@
 				</div>
 			</div>
 			<table class="table table-bordered text-center">
-				<thead class="table-dark">
+				<thead class="bg-dark text-white text-uppercase">
 					<tr>
 						<th>date</th>
 						<th>type</th>
@@ -415,17 +416,22 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>Mark</td>
-						<td>Mark</td>
-						<td>Mark</td>
-						<td>Mark</td>
+						<th scope="row">1</th>
 						<td>Mark</td>
 						<td>Otto</td>
 						<td>@mdo</td>
+						<td>@mdo</td>
+						<td>@mdo</td>
+						<td>
+							<button class="btn btn-danger">
+								<i class="fa fa-trash"></i>
+								Supprimer</button>
+						</td>
 					</tr>
 
 				</tbody>
 			</table>
+
 
 			<div class="row">
 				<div class="col-md-8 col-sm-8 col-xs-8">
@@ -447,6 +453,17 @@
 				</div>
 			</div>
 		</div>
+		{# avis clients #}
+		<div class="x_title">
+			<h2>
+				<i class="fa fa-chevron-right"></i>avic client
+			</h2>
+			<div class="clearfix"></div>
+		</div>
+		<div class="x_content">
+			avis client ici
+		</div>
+
 	</div>
 {% endblock %}
 {% block javascripts %}

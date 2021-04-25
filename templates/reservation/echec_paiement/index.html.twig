@@ -14,33 +14,22 @@
 
 {% endblock %}
 
+{% block current_page %}
+	<h2>
+		<i class="fa fa-shopping-cart"></i>
+		Réservations
+	</h2>
+
+{% endblock %}
 {% block content %}
 	<!-- top tiles -->
 	<div class="x_panel">
 		<div class="x_title">
-			<h2>Liste des réservations
+			<h2>
+				<i class="fa fa-shopping-cart"></i>
+				Liste des réservations
 			</h2>
-			<ul class="nav navbar-right panel_toolbox">
-				<li>
-					<a class="collapse-link">
-						<i class="fa fa-chevron-up"></i>
-					</a>
-				</li>
-				<li class="dropdown">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-						<i class="fa fa-wrench"></i>
-					</a>
-					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-						<a class="dropdown-item" href="#">Settings 1</a>
-						<a class="dropdown-item" href="#">Settings 2</a>
-					</div>
-				</li>
-				<li>
-					<a class="close-link">
-						<i class="fa fa-close"></i>
-					</a>
-				</li>
-			</ul>
+
 			<div class="clearfix"></div>
 		</div>
 		<div class="x_content">
@@ -65,7 +54,12 @@
 
 							<tbody>
 								<tr>
-									<td>Michael Bruce</td>
+									<td class="text-center">
+										<div class="">
+											<span class="badge badge-danger p-2">NOT</span>
+										</div>
+
+									</td>
 									<td>Javascript Developer</td>
 									<td>Singapore</td>
 									<td>29</td>
@@ -79,7 +73,12 @@
 									</td>
 								</tr>
 								<tr>
-									<td>Donna Snider</td>
+									<td class="text-center">
+										<div class="">
+											<span class="badge badge-danger p-2">NOT</span>
+										</div>
+
+									</td>
 									<td>Customer Support</td>
 									<td>New York</td>
 									<td>27</td>

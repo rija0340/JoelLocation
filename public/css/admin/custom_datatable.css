@@ -55,3 +55,7 @@ table.simpletable thead th {
     background-color: #444444;
     color: #ffffff;
 }
+
+td span{
+    line-height: 0;
+}

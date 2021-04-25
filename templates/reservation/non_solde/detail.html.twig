@@ -1,6 +1,6 @@
 {% extends 'base2.html.twig' %}
 
-{% block title %}Reservation index
+{% block title %}Résas Non soldées
 {% endblock %}
 
 
@@ -28,7 +28,7 @@
 {% endblock %}
 
 {% block current_page_right %}
-	<div class="font-weight-bold ">
+	<div class="font-weight-bold">
 		<span class="text-info">
 			<i class="fa fa-dashboard"></i>
 			Tableau de bord
@@ -41,65 +41,51 @@
 {% block content %}
 	<!-- top tiles -->
 	<div class="x_panel">
-		<div class="row">
-			<div class="col-auto">
-				<div class="btn-group mb-1">
-					<button type="button" class="btn btn-warning dropdown-toggle text-white font-weight-bold" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Réservation
-					</button>
-					<div class="dropdown-menu">
-						<a class="dropdown-item" href="#">Reporter la réservation</a>
-						<a class="dropdown-item" href="#">Mail de confirmation</a>
-						<a class="dropdown-item" href="#">Annuler la réservation</a>
-						<a class="dropdown-item" href="#">Fermer le contrat</a>
-						<a class="dropdown-item" href="#">Archiver la réservation</a>
-					</div>
-				</div>
-			</div>
-			<div class="col-auto text-center">
-				<div>
-					<h4 class="text-uppercase text-danger font-weight-bold">annulation avec attente de décision du client</h4>
-				</div>
+
+		<div class="btn-group mb-4">
+			<button type="button" class="btn btn-warning dropdown-toggle text-white font-weight-bold" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				Réservation
+			</button>
+			<div class="dropdown-menu">
+				<a class="dropdown-item" href="#">Reporter la réservation</a>
+				<a class="dropdown-item" href="#">Mail de confirmation</a>
+				<a class="dropdown-item" href="#">Annuler la réservation</a>
+				<a class="dropdown-item" href="#">Fermer le contrat</a>
+				<a class="dropdown-item" href="#">Archiver la réservation</a>
 			</div>
 		</div>
 
-		<div class="alert alert-rose" role="alert">
-			<div class="text-center">
-				<p class="text-danger mb-0">
-					<i class="fa fa-warning"></i>
-					Attention, il n'y a aucun véhicule affecté à cette réservation
-				</p>
-				<button class=" btn btn-light">
-					<i class="fa fa-exchange"></i>
-					Affecter un véhicule</button>
-			</div>
-		</div>
-		<div class="x_title">
-
-			<div class="row info_client">
-				<div class="col-auto pl-2">
-					<h2 style="margin-top:12px;">
-						<i class="fa fa-chevron-right"></i>INFORMATIONS CLIENTS
-					</h2>
-				</div>
-				<div class="col-auto ml-auto pr-0">
-					<button type="button" class="btn btn-outline-violet text-uppercase">
-						<i class="fa  fa-file-pdf-o"></i>
-						Générer le détail</button>
-					<button type="button" class="btn btn-outline-info text-uppercase">
-						<i class="fa fa-file-archive-o"></i>
-						Générer la facture</button>
-					<button type="button" class="btn btn-outline-success text-uppercase">
-						<i class="fa fa-send (alias)"></i>
-						Envoyer facture</button>
-				</div>
-			</div>
+		<div class="x_title mb-0">
+			<h2>
+				<i class="fa fa-chevron-right"></i>INFORMATIONS CLIENT
+			</h2>
 			<div class="clearfix"></div>
-
 		</div>
 		{# <div class="x_content"></div> #}
-
-		<div class="row">
+		<div>
+			<button type="button" class="btn btn-outline-dark text-uppercase p-1">
+				<i class="fa  fa-car"></i>
+				kilometrage</button>
+			<button type="button" class="btn btn-outline-violet text-uppercase p-1">
+				<i class="fa fa-file-pdf-o"></i>
+				Générer détail</button>
+			<button type="button" class="btn btn-outline-danger text-uppercase p-1">
+				<i class="fa fa-newspaper-o"></i>
+				Générer le contrat</button>
+			<button type="button" class="btn btn-outline-warning text-uppercase p-1">
+				<i class="fa  fa-exchange"></i>
+				Générer le voucher</button>
+			<button type="button" class="btn btn-outline-dark text-uppercase p-1">
+				<i class="fa fa-send (alias)"></i>
+				Envoyer voucher</button>
+			<button type="button" class="btn btn-outline-info text-uppercase p-1">
+				<i class="fa fa-send (alias)"></i>
+				générer facture</button>
+			<button type="button" class="btn btn-outline-success text-uppercase p-1">
+				<i class="fa fa-send (alias)"></i>
+				Envoyer facture</button>
+		</div>
+		<div class="row mt-3">
 			<div class="col-md-2">
 				<img src="../../images/capture 1.jpg" alt="" style="width:90%;">
 			</div>
@@ -417,8 +403,8 @@
 				</div>
 			</div>
 			<table class="table table-bordered text-center">
-				<thead class="table-dark">
-					<tr class="text-uppercase font-weight-bold">
+				<thead class="bg-dark text-white text-uppercase">
+					<tr>
 						<th>date</th>
 						<th>type</th>
 						<th>méthode</th>
@@ -430,17 +416,22 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>Mark</td>
-						<td>Mark</td>
-						<td>Mark</td>
-						<td>Mark</td>
+						<th scope="row">1</th>
 						<td>Mark</td>
 						<td>Otto</td>
 						<td>@mdo</td>
+						<td>@mdo</td>
+						<td>@mdo</td>
+						<td>
+							<button class="btn btn-danger">
+								<i class="fa fa-trash"></i>
+								Supprimer</button>
+						</td>
 					</tr>
 
 				</tbody>
 			</table>
+
 
 			<div class="row">
 				<div class="col-md-8 col-sm-8 col-xs-8">
@@ -464,7 +455,6 @@
 		</div>
 	</div>
 {% endblock %}
-
 {% block javascripts %}
 	<!-- Datatables -->
 	<script src="../../admin/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
@@ -482,5 +472,4 @@
 	<script src="../../admin/vendors/jszip/dist/jszip.min.js"></script>
 	<script src="../../admin/vendors/pdfmake/build/pdfmake.min.js"></script>
 	<script src="../../admin/vendors/pdfmake/build/vfs_fonts.js"></script>
-
 {% endblock  %}
