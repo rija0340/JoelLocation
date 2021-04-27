@@ -209,6 +209,7 @@ class AccueilController extends AbstractController
         //récupération des réservation en attente
         $reservationEnAttentes = $this->getDoctrine()->getRepository(Reservation::class)->findReservationEnAttente($client, $date);
 
+        // page client.html auparavant
         return $this->render('accueil/client.html.twig', [
             'controller_name' => 'AccueilController',
             'client' => $client->getUsername(),
@@ -328,7 +329,7 @@ class AccueilController extends AbstractController
         return $this->render('accueil/contact.html.twig');
     }
 
-    
+
     /**
      * @Route("/redirection", name="redirection")
      */
@@ -336,16 +337,16 @@ class AccueilController extends AbstractController
     {
         $user = new User();
         $user = $this->getUser();
-        if(in_array("ROLE_CLIENT", $user->getRoles())){ 
+        if (in_array("ROLE_CLIENT", $user->getRoles())) {
             return $this->redirectToRoute('client');
         }
-        if(in_array("ROLE_PERSONNEL", $user->getRoles())){ 
+        if (in_array("ROLE_PERSONNEL", $user->getRoles())) {
             return $this->redirectToRoute('admin_index');
         }
-        if(in_array("ROLE_ADMIN", $user->getRoles())){ 
+        if (in_array("ROLE_ADMIN", $user->getRoles())) {
             return $this->redirectToRoute('admin_index');
         }
-        if(in_array("ROLE_SUPER_ADMIN", $user->getRoles())){ 
+        if (in_array("ROLE_SUPER_ADMIN", $user->getRoles())) {
             return $this->redirectToRoute('admin_index');
         }
         return $this->redirectToRoute('app_logout');

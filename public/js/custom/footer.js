@@ -35,7 +35,7 @@ $(function () {
 
         // elem.classList.add('flex-column');
         // elem.classList.remove('flex-column');
-        console.log(" la réponse est " + test);
+        // console.log(" la réponse est " + test);
         // console.log(window.innerHeight);
         // console.log(window.innerWidth);
     }

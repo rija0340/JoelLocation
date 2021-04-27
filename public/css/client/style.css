@@ -1,0 +1,19 @@
+table thead th {
+    background-color: black;
+}
+table thead th {
+    color: white;
+}
+
+table tbody tr td {
+    background-color: white;
+}
+
+tr:nth-child(even) td {
+    border-color: rgb(255, 255, 255);
+}
+
+.table td {
+    border: 1px solid rgb(255, 255, 255);
+}
+

@@ -1,0 +1,162 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}page client
+{% endblock %}
+{% block stylesheets %}
+	<link rel="stylesheet" href="css/client/style.css">
+{% endblock %}
+
+{% block nav %}
+	{% include "client/layouts/nav.html.twig" %}
+{% endblock %}
+{% block body %}
+	<div
+		class="container">
+		{# test #}
+		<div class="row mt-5">
+			<div class="col-3">
+				<div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+					<a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">
+						<i class="fa fa-newspaper-o"></i>
+						Mes informations</a>
+					<a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">
+						<div class="d-flex">
+							<span>
+								<i class="fa fa-list"></i>
+								Mes réservations
+							</span>
+							<span class="badge badge-danger ml-auto">4</span>
+						</div>
+					</a>
+					<a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">
+						<div class="d-flex">
+							<span>
+								<i class="fa fa-user-friends"></i>
+								Mes conducteurs
+							</span>
+							<span class="badge badge-danger ml-auto">0</span>
+						</div>
+					</a>
+					<div class="mt-3">
+						<button class="btn btn-danger w-100">
+							<i class="fa fa-start"></i>
+							Deconnexion
+						</button>
+						<button class="btn btn-warning w-100 mt-2">Aller sur le site Joellocation</button>
+					</div>
+				</div>
+			</div>
+			<div class="col-9">
+				<div class="tab-content" id="v-pills-tabContent">
+					<div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+						<h5>
+							<i class="fa fa-newspaper"></i>
+							MES INFORMATIONS</h5>
+						<div class="clearfix"></div>
+						<div class="form">
+
+							<form>
+								<div class="row">
+									<div class="form-group col-md-6">
+										<label for="">Nom :</label>
+										<input type="text" class="form-control" id="">
+									</div>
+									<div class="form-group col-md-6">
+										<label for="">Prénom :</label>
+										<input type="text" class="form-control" id="">
+									</div>
+
+									<div class="form-group col-md-6">
+										<label for="">Adresse email :</label>
+										<input type="mail" class="form-control" id="" placeholder="">
+									</div>
+									<div class="form-group col-md-3">
+										<label for="">Téléphone 1 :</label>
+										<input type="text" class="form-control" id="" placeholder="">
+									</div>
+									<div class="form-group col-md-3">
+										<label for="">Téléphone 2 :</label>
+										<input type="text" class="form-control" id="" placeholder="">
+									</div>
+									<div class="form-group col-md-6">
+										<label for="">Adresse :</label>
+										<input type="text" class="form-control" id="" placeholder="">
+									</div>
+									<div class="form-group col-md-6">
+										<label for="">Complément adresse :</label>
+										<input type="text" class="form-control" id="" placeholder="">
+									</div>
+									<div class="form-group col-md-6">
+										<label for="">Code postal :</label>
+										<input type="text" class="form-control" id="" placeholder="">
+									</div>
+
+									<div class="form-group col-md-6">
+										<label for="">Ville :</label>
+										<input type="text" class="form-control" id="" placeholder="">
+									</div>
+								</div>
+								<div class="text-center">
+									<button type="submit" class="btn btn-success">
+										<i class="fa fa-save"></i>
+										Valider</button>
+									<button type="submit" class="btn btn-dark">
+										<i class="fa fa-close"></i>
+										Annuler</button>
+								</div>
+							</form>
+
+						</div>
+					</div>
+					<div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+
+						<a href="{{path('reservation_new')}}" class="btn btn-danger">
+							<i class="fa fa-plus"></i>
+							Nouvelle reservation</a>
+
+
+					</div>
+					<div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+
+						<table class="table text-center">
+							<thead class="bg-dark text-uppercase">
+								<tr>
+									<th>nom</th>
+									<th>prénom</th>
+									<th>permis</th>
+									<th>action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Mark</td>
+									<td>Otto</td>
+									<td>
+										<p class="mb-0">
+											Numéro de permis:
+										</p>
+										<p class="mb-0">
+											Date de délivrance:
+										</p>
+										<p class="mb-0">
+											Ville de délivrance:
+										</p>
+
+									</td>
+									<td>
+										<button class="btn btn-danger">
+											<i class="fa fa-edit"></i>
+										</button>
+									</td>
+								</tr>
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+{% endblock %}
