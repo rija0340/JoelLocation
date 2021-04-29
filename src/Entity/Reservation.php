@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\ReservationRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ReservationRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ReservationRepository::class)
@@ -16,37 +17,44 @@ class Reservation
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups("reserv:read")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("reserv:read")
      */
     private $type;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="reservations")
      * @ORM\JoinColumn(nullable=false)
+     * 
      */
     private $client;
 
     /**
      * @ORM\Column(type="date")
+     * 
      */
     private $date_reservation;
 
     /**
      * @ORM\Column(type="date")
+     * @Groups("reserv:read")
      */
     private $date_debut;
 
     /**
      * @ORM\Column(type="date")
+     * @Groups("reserv:read")
      */
     private $date_fin;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * 
      */
     private $lieu;
 
@@ -58,6 +66,7 @@ class Reservation
 
     /**
      * @ORM\Column(type="string", length=255)
+     * 
      */
     private $code_reservation;
 
@@ -292,9 +301,9 @@ class Reservation
     }
 
     /**
-    * toString
-    * @return string
-    */
+     * toString
+     * @return string
+     */
     public function __toString()
     {
         return $this->getCodeReservation();

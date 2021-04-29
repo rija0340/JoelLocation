@@ -1,0 +1,13 @@
+.badge:empty{
+    display: block;
+}
+span.badge{
+    border-radius: 0%;
+    height: 20px;
+    width: 30px;
+}
+.legende .col-auto{
+    padding-right: 0;
+    margin-bottom: 3px;
+}
+
