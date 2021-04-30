@@ -1,68 +1,108 @@
 {% extends 'base2.html.twig' %}
 
-{% block title %}User{% endblock %}
+{% block title %}User
+{% endblock %}
+{% block stylesheets %}
+	<link rel="stylesheet" href="../../css/admin/user.css">
+
+{% endblock %}
+{% block current_page %}
+	<h2>
+		<i class="fa fa-list"></i>
+		Informations client
+	</h2>
+
+{% endblock %}
 
 {% block content %}
-    <h1>utilisateur</h1>
+	<div class="x_panel">
+		<div class="x_title">
+			<h2>
+				<i class="fa fa-list"></i>
+				Informations client
+			</h2>
+			<div class="clearfix"></div>
+		</div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ user.id }}</td>
-            </tr>
-            <tr>
-                <th>Nom d'utilisateur</th>
-                <td>{{ user.username }}</td>
-            </tr>
-            <tr>
-                <th>Roles</th>
-                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-            </tr>
-            <tr>
-                <th>Mot de passe</th>
-                <td>{{ user.password }}</td>
-            </tr>
-            <tr>
-                <th>Nom</th>
-                <td>{{ user.nom }}</td>
-            </tr>
-            <tr>
-                <th>Prénom</th>
-                <td>{{ user.prenom }}</td>
-            </tr>
-            <tr>
-                <th>Adresse</th>
-                <td>{{ user.adresse }}</td>
-            </tr>
-            <tr>
-                <th>Mail</th>
-                <td>{{ user.mail }}</td>
-            </tr>
-            <tr>
-                <th>Téléphone</th>
-                <td>{{ user.telephone }}</td>
-            </tr>
-            <tr>
-                <th>Portable</th>
-                <td>{{ user.portable }}</td>
-            </tr>
-            <tr>
-                <th>Présence</th>
-                <td>{{ user.presence ? 'Yes' : 'No' }}</td>
-            </tr>
-            <tr>
-                <th>Date d'inscription</th>
-                <td>{{ user.dateInscription ? user.dateInscription|date('Y-m-d') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+		<form>
+			<div class="row form-group">
+				<div class="form-group col-md-6">
+					<label for="">Nom :</label>
+					<input class="form-control-plaintext" type="text" placeholder={{ user.nom }} readonly>
 
-    <a href="{{ path('user_index') }}" class="btn btn-primary"><i class="fa fa-arrow-left" aria-hidden="true"></i> retour</a>
-    {% if is_granted("ROLE_ADMIN") %}
-        <a href="{{ path('user_edit', {'id': user.id}) }}" class="btn btn-success"><i class="fa fa-book" aria-hidden="true"></i> Modification</a>
-    {% endif %}
-    {% if is_granted("ROLE_ADMIN") %}
-        {{ include('user/_delete_form.html.twig') }}
-    {% endif %}
+				</div>
+				<div class="form-group col-md-6">
+					<label for="">Prénom :</label>
+					<input class="form-control-plaintext" type="text" placeholder={{ user.prenom }} readonly>
+
+
+				</div>
+				<div class="form-group col-md-6">
+					<label for="">Username :</label>
+					<input class="form-control-plaintext" type="text" placeholder={{ user.username }} readonly>
+				</div>
+
+				<div class="form-group col-md-6">
+					<label for="">Rôle :</label>
+					<input class="form-control-plaintext" type="text" placeholder={{ user.roles ? user.roles|json_encode }} readonly>
+				</div>
+
+
+				<div class="form-group col-md-6">
+					<label for="">Mot de passe :</label>
+					<input class="form-control-plaintext" type="text" placeholder={{ user.password }} readonly>
+
+				</div>
+				<div class="form-group col-md-6">
+					<label for="">Adresse email :</label>
+					<input class="form-control-plaintext" type="text" placeholder={{ user.mail }} readonly>
+
+				</div>
+				<div class="form-group col-md-3">
+					<label for="">Téléphone :</label><br>
+					{{ user.telephone }}
+
+				</div>
+				<div class="form-group col-md-3">
+					<label for="">Portable :</label>
+					<p>
+						{{ user.portable }}
+					</p>
+
+				</div>
+				<div class="form-group col-md-3">
+					<label for="">Date d'inscription :</label>
+					<input class="form-control-plaintext" type="text" placeholder={{ user.dateInscription ? user.dateInscription|date('d-m-Y') }} readonly>
+
+				</div>
+				<div class="form-group col-md-3">
+					<label for="">Presence :</label><br>
+
+					<input class="form-control-plaintext" type="text" {% if user.presence == 1 %} placeholder="Oui" {% else %} placeholder="Non" {% endif %} readonly>
+
+				</div>
+				<div class="form-group col-md-6">
+					<label for="">Adresse :</label>
+					<input class="form-control-plaintext" type="text" placeholder={{ user.adresse }} readonly>
+
+				</div>
+			</div>
+		</form>
+
+		<a href="{{ path('user_index') }}" class="btn btn-primary">
+			<i class="fa fa-arrow-left" aria-hidden="true"></i>
+			retour</a>
+		<div>
+			{% if is_granted("ROLE_ADMIN") %}
+				<a href="{{ path('user_edit', {'id': user.id}) }}" class="btn btn-success">
+					<i class="fa fa-book" aria-hidden="true"></i>
+					Modification</a>
+			{% endif %}
+		</div>
+		<div>
+			{% if is_granted("ROLE_ADMIN") %}
+				{{ include('user/_delete_form.html.twig') }}
+			{% endif %}
+		</div>
+	</div>
 {% endblock %}

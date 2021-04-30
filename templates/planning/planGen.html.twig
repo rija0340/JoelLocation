@@ -4,8 +4,7 @@
 {% endblock %}
 {% block stylesheets %}
 	<link rel="stylesheet" href="Gantt/dhtmlxgantt.css?v=7.1.2">
-	<script src="Gantt/dhtmlxgantt.js?v=7.1.2"></script>
-	<script src="../../js/admin/plangen_ajax.js"></script>
+
 	<link href="../../css/admin/planGen.css" rel="stylesheet">
 
 
@@ -114,10 +113,36 @@
 		</div>
 	</div>
 	<div class="x_panel" style="width:100%; height:100%;">
+		<div class="row">
+			<div class="col-auto">
+				<a href="" class="btn btn-primary">7jours</a>
+			</div>
+			<div class="col-auto">
+				<a href="" class="btn btn-primary">14jours</a>
+			</div>
+			<div class="col-auto">
+				<a href="" class="btn btn-primary">1 mois</a>
+			</div>
+			<div class="col-auto">
+				<a href="" class="btn btn-primary">2 mois</a>
+			</div>
 
-		<div id="gantt_here" style="width:100%; height:500px;"></div>
+		</div>
+		<div class="row">
+			<div class="col-md-2">
+				<label for="">Date de début</label>
+				<input type="date" id="datedebutplanning" onchange="handler(event);"/>
+			</div>
+			<div class="col-md-10">
+				<div id="gantt_here" style="width:100%; height:500px;"></div>
+			</div>
+		</div>
+
 	</div>
 
 {% endblock %}
 
-{% block javascripts %}{% endblock %}
+{% block javascripts %}
+	<script src="Gantt/dhtmlxgantt.js?v=7.1.2"></script>
+	{# // <script src="../../js/admin/plangen_ajax.js"></script> #}
+{% endblock %}

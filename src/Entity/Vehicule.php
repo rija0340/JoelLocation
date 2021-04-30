@@ -248,9 +248,9 @@ class Vehicule
     }
 
     /**
-    * toString
-    * @return string
-    */
+     * toString
+     * @return string
+     */
     public function __toString()
     {
         return $this->getImmatriculation();

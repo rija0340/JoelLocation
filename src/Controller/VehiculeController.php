@@ -14,9 +14,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 
-/**
- * @Route("/vehicule")
- */
+
 class VehiculeController extends AbstractController
 {
     private $slugger;
@@ -27,7 +25,7 @@ class VehiculeController extends AbstractController
     }
 
     /**
-     * @Route("/", name="vehicule_index", methods={"GET"})
+     * @Route("/vehicule", name="vehicule_index", methods={"GET"})
      */
     public function index(VehiculeRepository $vehiculeRepository, Request $request, PaginatorInterface $paginator): Response
     {
@@ -42,7 +40,7 @@ class VehiculeController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="vehicule_new", methods={"GET","POST"})
+     * @Route("/vehicule/new", name="vehicule_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
@@ -52,16 +50,17 @@ class VehiculeController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $imageFile = $form->get('image')->getData();
-            if($imageFile){
+            if ($imageFile) {
                 $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
                 //$safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $this->generateUniqueFileName().'.'.$imageFile->guessExtension();
+                $newFilename = $this->generateUniqueFileName() . '.' . $imageFile->guessExtension();
                 try {
                     $imageFile->move(
                         $this->getParameter('vehicules_directory'),
                         $newFilename
                     );
-                } catch (FileException $e) {}
+                } catch (FileException $e) {
+                }
             }
             $vehicule->setImage($newFilename);
             $entityManager = $this->getDoctrine()->getManager();
@@ -78,7 +77,7 @@ class VehiculeController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="vehicule_show", methods={"GET"})
+     * @Route("/vehicule/{id}", name="vehicule_show", methods={"GET"})
      */
     public function show(Vehicule $vehicule): Response
     {
@@ -88,7 +87,7 @@ class VehiculeController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="vehicule_edit", methods={"GET","POST"})
+     * @Route("/vehicule/{id}/edit", name="vehicule_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Vehicule $vehicule): Response
     {
@@ -97,16 +96,17 @@ class VehiculeController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $imageFile = $form->get('image')->getData();
-            if($imageFile){
+            if ($imageFile) {
                 $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
                 //$safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $this->generateUniqueFileName().'.'.$imageFile->guessExtension();
+                $newFilename = $this->generateUniqueFileName() . '.' . $imageFile->guessExtension();
                 try {
                     $imageFile->move(
                         $this->getParameter('vehicules_directory'),
                         $newFilename
                     );
-                } catch (FileException $e) {}
+                } catch (FileException $e) {
+                }
             }
             $vehicule->setImage($newFilename);
             $this->getDoctrine()->getManager()->flush();
@@ -121,11 +121,11 @@ class VehiculeController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="vehicule_delete", methods={"DELETE"})
+     * @Route("/vehicule/{id}", name="vehicule_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Vehicule $vehicule): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$vehicule->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $vehicule->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($vehicule);
             $entityManager->flush();

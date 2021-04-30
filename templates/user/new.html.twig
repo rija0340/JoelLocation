@@ -1,11 +1,32 @@
 {% extends 'base2.html.twig' %}
 
-{% block title %}New User{% endblock %}
+{% block title %}New User
+{% endblock %}
+{% block current_page %}
+	<h2>
+		<i class="fa fa-plus"></i>
+		Ajout utilisateur
+	</h2>
+
+{% endblock %}
 
 {% block content %}
-    <h1>Ajout utilisateur</h1>
+	<div class="x_panel">
+		<div class="x_title">
+			<h2>
+				<i class="fa fa-plus"></i>
+				Ajout utilisateur
+			</h2>
+			<div class="clearfix"></div>
+		</div>
 
-    {{ include('user/_form.html.twig') }}
+		<div class="x_content">
 
-    <a href="{{ path('user_index') }}" class="btn btn-primary"><i class="fa fa-arrow-left" aria-hidden="true"></i> retour</a>
+			{{ include('user/_form.html.twig') }}
+
+			<a href="{{ path('user_index') }}" class="btn btn-primary">
+				<i class="fa fa-arrow-left" aria-hidden="true"></i>
+				retour</a>
+		</div>
+	</div>
 {% endblock %}

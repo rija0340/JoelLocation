@@ -394,9 +394,9 @@ class User implements UserInterface
     }
 
     /**
-    * toString
-    * @return string
-    */
+     * toString
+     * @return string
+     */
     public function __toString()
     {
         return $this->getUsername();
