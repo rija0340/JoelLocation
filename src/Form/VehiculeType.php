@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Vehicule;
 use Symfony\Component\Form\AbstractType;
+use Vich\UploaderBundle\Form\Type\VichFileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -37,7 +38,10 @@ class VehiculeType extends AbstractType
             ->add('portes')
             ->add('passagers')
             ->add('atouts')
-            ->add('image', HiddenType::class);
+            ->add('image', FileType::class, [
+                'required' => false,
+
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

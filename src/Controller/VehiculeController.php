@@ -14,7 +14,9 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 
-
+/**
+ * @Route("/vehicule")
+ */
 class VehiculeController extends AbstractController
 {
     private $slugger;
@@ -25,7 +27,7 @@ class VehiculeController extends AbstractController
     }
 
     /**
-     * @Route("/vehicule", name="vehicule_index", methods={"GET"})
+     * @Route("/", name="vehicule_index", methods={"GET"})
      */
     public function index(VehiculeRepository $vehiculeRepository, Request $request, PaginatorInterface $paginator): Response
     {
@@ -40,15 +42,16 @@ class VehiculeController extends AbstractController
     }
 
     /**
-     * @Route("/vehicule/new", name="vehicule_new", methods={"GET","POST"})
+     * @Route("/new", name="vehicule_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
+
         $vehicule = new Vehicule();
         $form = $this->createForm(VehiculeType::class, $vehicule);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
+
             $imageFile = $form->get('image')->getData();
             if ($imageFile) {
                 $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
@@ -63,6 +66,7 @@ class VehiculeController extends AbstractController
                 }
             }
             $vehicule->setImage($newFilename);
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($vehicule);
             $entityManager->flush();
@@ -77,7 +81,7 @@ class VehiculeController extends AbstractController
     }
 
     /**
-     * @Route("/vehicule/{id}", name="vehicule_show", methods={"GET"})
+     * @Route("/{id}", name="vehicule_show", methods={"GET"})
      */
     public function show(Vehicule $vehicule): Response
     {
@@ -87,7 +91,7 @@ class VehiculeController extends AbstractController
     }
 
     /**
-     * @Route("/vehicule/{id}/edit", name="vehicule_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="vehicule_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Vehicule $vehicule): Response
     {
@@ -121,7 +125,7 @@ class VehiculeController extends AbstractController
     }
 
     /**
-     * @Route("/vehicule/{id}", name="vehicule_delete", methods={"DELETE"})
+     * @Route("/{id}", name="vehicule_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Vehicule $vehicule): Response
     {

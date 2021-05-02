@@ -6,6 +6,7 @@ use App\Entity\Reservation;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 
 class ReservationType extends AbstractType
 {
@@ -13,17 +14,22 @@ class ReservationType extends AbstractType
     {
         $builder
             ->add('type')
-            ->add('date_reservation')
-            ->add('date_debut')
-            ->add('date_fin')
+            ->add('date_reservation', DateType::class, [
+                'widget' => 'single_text',
+            ])
+            ->add('date_debut', DateType::class, [
+                'widget' => 'single_text',
+            ])
+            ->add('date_fin', DateType::class, [
+                'widget' => 'single_text',
+            ])
             ->add('lieu')
             ->add('code_reservation')
             ->add('client')
             ->add('vehicule')
             ->add('utilisateur')
             ->add('mode_reservation')
-            ->add('etat_reservation')
-        ;
+            ->add('etat_reservation');
     }
 
     public function configureOptions(OptionsResolver $resolver)

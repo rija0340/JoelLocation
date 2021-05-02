@@ -47,7 +47,7 @@ $(window).load(function () {
         for (var i = 0; i < len; i++) {
             arrData.push({
                 id: data[i].id,
-                text: data[i].text + " " + data[i].start_date + " - " + data[i].end_date,
+                text: data[i].text,
                 start_date: data[i].start_date,
                 end_date: data[i].end_date
             });

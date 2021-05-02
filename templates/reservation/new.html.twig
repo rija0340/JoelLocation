@@ -1,11 +1,25 @@
 {% extends 'base2.html.twig' %}
 
-{% block title %}New Reservation{% endblock %}
-
+{% block title %}New Reservation
+{% endblock %}
+{% block current_page %}
+	<h2>
+		<i class="fa fa-plus"></i>Nouvelle résérvation</h2>
+{% endblock %}
 {% block content %}
-    <h1>Nouvelle reservation</h1>
 
-    {{ include('reservation/_form.html.twig') }}
+	<div class="x_panel">
+		<div class="x_title">
+			<h2>
+				<i class="fa fa-plus"></i>Nouvelle résérvation</h2>
+			<div class="clearfix"></div>
+		</div>
 
-    <a href="{{ path('reservation_index') }}" class="btn btn-primary"><i class="fa fa-arrow-left" aria-hidden="true"></i> retour</a>
+		{{ include('reservation/_form.html.twig') }}
+		<a href="{{ path('reservation_index') }}" class="btn btn-primary">
+			<i class="fa fa-arrow-left" aria-hidden="true"></i>
+			retour</a>
+	</div>
+
+
 {% endblock %}

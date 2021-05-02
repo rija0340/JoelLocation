@@ -2,13 +2,18 @@
 
 namespace App\Entity;
 
-use App\Repository\VehiculeRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+
 use Doctrine\ORM\Mapping as ORM;
+use Vich\UploaderBundle\Entity\File;
+use App\Repository\VehiculeRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * @ORM\Entity(repositoryClass=VehiculeRepository::class)
+ * 
  */
 class Vehicule
 {
@@ -110,6 +115,8 @@ class Vehicule
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $image;
+
+
 
     public function __construct()
     {
@@ -351,7 +358,6 @@ class Vehicule
 
         return $this;
     }
-
     public function getImage(): ?string
     {
         return $this->image;
