@@ -4,16 +4,17 @@ namespace App\Entity;
 
 
 use Doctrine\ORM\Mapping as ORM;
-use Vich\UploaderBundle\Entity\File;
+// use Vich\UploaderBundle\Entity\File;
 use App\Repository\VehiculeRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\File\File;
+// use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * @ORM\Entity(repositoryClass=VehiculeRepository::class)
- * 
+ * @Vich\Uploadable()
  */
 class Vehicule
 {
@@ -116,7 +117,16 @@ class Vehicule
      */
     private $image;
 
+    /**
+     * @var File|null
+     * @Vich\UploadableField(mapping="vehicules_image", fileNameProperty="image")
+     */
+    private $imageFile;
 
+    /**
+     * @ORM\Column(type="datetime", nullable = true)
+     */
+    private $updated_at;
 
     public function __construct()
     {
@@ -366,6 +376,46 @@ class Vehicule
     public function setImage(?string $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * @param null|File $imageFile
+     *
+     * @return Vehicule
+     */
+    public function setImageFile(?File $imageFile): Vehicule
+    {
+        $this->imageFile = $imageFile;
+
+        if ($this->imageFile instanceof File) {
+            $this->updated_at = new \Datetime('now');
+        }
+        return $this;
+    }
+
+    /**
+     * @return null|File
+     */
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updated_at;
+    }
+
+    /**
+     * @param null|Datetime 
+     *
+     * @return self
+     */
+    public function setUpdatedAt(\DateTimeInterface $updated_at): self
+    {
+        $this->updated_at = $updated_at;
 
         return $this;
     }

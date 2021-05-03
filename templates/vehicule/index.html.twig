@@ -134,9 +134,9 @@
 													<form method="post" action="{{ path('vehicule_delete', {'id': vehicule.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer cet utilisateur?');">
 														<input type="hidden" name="_method" value="DELETE">
 														<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ vehicule.id) }}">
-														<a class="">
+														<button class="">
 															<i class="fa fa-trash" aria-hidden="true"></i>
-														</a>
+														</button>
 													</form>
 												</div>
 											</div>

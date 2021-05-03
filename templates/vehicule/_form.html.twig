@@ -1,6 +1,100 @@
-{{ form_start(form) }}
+{# {{ form_start(form) }}
 {{ form_widget(form) }}
 <button class="btn btn-success">
 	<i class="fa fa-book" aria-hidden="true"></i>
 	{{ button_label|default('Enregistrer') }}</button>
+{{ form_end(form) }} #}
+
+{{ form_start(form) }}
+<div class="row">
+	<div class="form-group col-md-6">
+		<label for="">Modèle :</label>
+		{{ form_widget(form.modele) }}
+	</div>
+	<div class="form-group col-md-6">
+		<label for="">Date mise en service :</label>
+		{{ form_widget(form.date_mise_service) }}
+	</div>
+	<div class="form-group col-md-6">
+		<label for="">Date mise en location :</label>
+		{{ form_widget(form.date_mise_location) }}
+
+	</div>
+
+	<div class="form-group col-md-6">
+		<label for="">Marque :</label>
+		{{ form_widget(form.marque) }}
+
+	</div>
+	<div class="form-group col-md-6">
+		<label for="">Type :</label>
+		{{ form_widget(form.type) }}
+
+	</div>
+	<div class="form-group col-md-6">
+		<label for="">Détails :</label>
+		{{ form_widget(form.details) }}
+
+	</div>
+	<div class="form-group col-md-3">
+		<label for="">Carburation :</label>
+		{{ form_widget(form.carburation) }}
+
+	</div>
+	<div class="form-group col-md-3">
+		<label for="">Caution:</label>
+		{{ form_widget(form.caution) }}
+	</div>
+	<div class="form-group col-md-3">
+		<label for="">Vitesse :</label>
+		{{ form_widget(form.vitesse) }}
+
+	</div>
+	<div class="form-group col-md-3">
+		<label for="">Bagages :</label>
+		{{ form_widget(form.bagages) }}
+
+	</div>
+	<div class="form-group col-md-3">
+		<label for="">Portes :</label>
+		{{ form_widget(form.portes) }}
+
+	</div>
+	<div class="form-group col-md-3">
+		<label for="">Passagers :</label>
+		{{ form_widget(form.passagers) }}
+
+	</div>
+	<div class="form-group col-md-6">
+		<label for="">Atouts :</label>
+		{{ form_widget(form.atouts) }}
+
+	</div>
+	<div class="form-group col-md-3">
+		<label for="">Immatriculation :</label>
+		{{ form_widget(form.immatriculation) }}
+
+	</div>
+	<div class="form-group col-md-3">
+		<label for="">Prix acquisition :</label>
+		{{ form_widget(form.prix_acquisition) }}
+
+	</div>
+	<div class="form-group col-md-3">
+		<label for="">Tarif journalier :</label>
+		{{ form_widget(form.tarif_journaliere) }}
+
+	</div>
+	<div class="form-group col-md-3">
+		<label for="">Image :</label>
+		{{ form_widget(form.imageFile) }}
+
+	</div>
+</div>
+<div class="">
+	<button class="btn btn-success">
+		<i class="fa fa-book" aria-hidden="true"></i>
+		{{ button_label|default('Enregistrer') }}
+	</button>
+</div>
 {{ form_end(form) }}

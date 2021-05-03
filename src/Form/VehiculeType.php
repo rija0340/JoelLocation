@@ -38,7 +38,7 @@ class VehiculeType extends AbstractType
             ->add('portes')
             ->add('passagers')
             ->add('atouts')
-            ->add('image', FileType::class, [
+            ->add('imageFile', VichFileType::class, [
                 'required' => false,
 
             ]);

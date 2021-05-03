@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 class ReservationType extends AbstractType
 {
@@ -14,13 +15,13 @@ class ReservationType extends AbstractType
     {
         $builder
             ->add('type')
-            ->add('date_reservation', DateType::class, [
+            ->add('date_reservation', DateTimeType::class, [
                 'widget' => 'single_text',
             ])
-            ->add('date_debut', DateType::class, [
+            ->add('date_debut', DateTimeType::class, [
                 'widget' => 'single_text',
             ])
-            ->add('date_fin', DateType::class, [
+            ->add('date_fin', DateTimeType::class, [
                 'widget' => 'single_text',
             ])
             ->add('lieu')

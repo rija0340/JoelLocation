@@ -35,19 +35,19 @@ class Reservation
     private $client;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="datetime")
      * 
      */
     private $date_reservation;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="datetime")
      * @Groups("reserv:read")
      */
     private $date_debut;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="datetime")
      * @Groups("reserv:read")
      */
     private $date_fin;

@@ -34,8 +34,11 @@ class PlanningController extends AbstractController
         foreach ($reservations as $key => $reservation) {
             $datas[$key]['id'] = $reservation->getId();
             $datas[$key]['text'] = $reservation->getType();
-            $datas[$key]['start_date'] = $reservation->getDateDebut()->format('d/m/Y');
-            $datas[$key]['end_date'] = $reservation->getDateFin()->format('d/m/Y');
+            $datas[$key]['start_date_formated'] = $reservation->getDateDebut()->format('d/m/Y');
+            $datas[$key]['end_date_formated'] = $reservation->getDateFin()->format('d/m/Y');
+            $datas[$key]['start_date'] = $reservation->getDateDebut();
+            $datas[$key]['end_date'] = $reservation->getDateFin();
+            $datas[$key]['client_name'] = $reservation->getClient()->getNom() . " " .  $reservation->getClient()->getPrenom();
         }
 
         return new JsonResponse($datas);

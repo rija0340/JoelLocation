@@ -11,3 +11,10 @@ span.badge{
     margin-bottom: 3px;
 }
 
+.weekend{
+    background: #f4f7f4;
+} 
+
+.hide{
+    display: none !important;
+}

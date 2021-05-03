@@ -1,51 +1,100 @@
 {% extends 'base2.html.twig' %}
 
-{% block title %}Reservation index{% endblock %}
+{% block title %}Reservation index
+{% endblock %}
+{% block current_page %}
+	<h2>
+		<i class="fa fa-shopping-cart"></i>
+		Réservations
+	</h2>
+{% endblock %}
+{% block content %}
+	{# test table  #}
+	<div class="x_panel">
+		<div class="x_title">
+			<h2>
+				<i class="fa fa-shopping-cart"></i>
+				Liste des réservations
+			</h2>
+			<div class="clearfix"></div>
+		</div>
+		<div class="x_content">
+			<a href="{{ path('reservation_new') }}" class="btn btn-danger">
+				<i class="fa fa-plus" aria-hidden="true"></i>
+				Ajouter une réservation</a>
 
-    {% block content %}
-        <h1>Liste des reservations</h1>
+			<table id="datatable" class="table table-striped table-bordered" style="width:100%">
+				<thead class="text-uppercase bg-dark text-white text-center">
+					<tr>
+						<th>paiement</th>
+						<th class="text-nowrap">date création</th>
+						<th>client</th>
+						<th class="text-nowrap">résérvation / véhicule</th>
+						<th class="text-nowrap">dates / durées</th>
+						<th>prix</th>
+						<th>code</th>
+						<th>action</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for reservation in reservations %}
+						<tr>
+							<td></td>
+							<td>{{ reservation.dateReservation ? reservation.dateReservation|date('d-m-Y') : '' }}</td>
+							<td>{{ reservation.client.nom }}</td>
+							<td>{{ reservation.vehicule.marque}}
+								{{ reservation.vehicule.modele}}</td>
+							<td>{{ reservation.dateDebut ? reservation.dateDebut|date('d-m-Y ') : '' }}
+								<br>
+								-
+								<br>
+								{{ reservation.dateFin ? reservation.dateFin|date('d-m-Y ') : '' }}</td>
+							<td></td>
+							<td>{{ reservation.codeReservation }}</td>
+							<td>
+								<div class="row">
+									<div class="col-auto">
+										<a href="{{ path('reservation_edit', {'id': reservation.id}) }}">
+											<i class="fa  fa-gear (alias)"></i>
+										</a>
+									</div>
+									<div class="col-auto">
+										<a href="">
+											<i class="fa  fa-power-off"></i>
+										</a>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-auto">
+										<a href="{{ path('reservation_show', {'id': reservation.id}) }}">
+											<i class="fa  fa-list-ul"></i>
+										</a>
+									</div>
+									<div class="col-auto">
+										<form method="post" action="{{ path('reservation_delete', {'id': reservation.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer cet utilisateur?');">
+											<input type="hidden" name="_method" value="DELETE">
+											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ reservation.id) }}">
+											<button class="">
+												<i class="fa fa-trash" aria-hidden="true"></i>
+											</button>
+										</form>
+									</div>
+								</div>
+							</td>
+						</tr>
+					{% else %}
+						<tr>
+							<td colspan="8">Aucune reservation trouver</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Type</th>
-                    <th>Date de reservation</th>
-                    <th>Date de début</th>
-                    <th>Date de fin</th>
-                    <th>Lieu</th>
-                    <th>Code reservation</th>
-                    <th>actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for reservation in reservations %}
-                    <tr>
-                        <td>{{ reservation.id }}</td>
-                        <td>{{ reservation.type }}</td>
-                        <td>{{ reservation.dateReservation ? reservation.dateReservation|date('Y-m-d') : '' }}</td>
-                        <td>{{ reservation.dateDebut ? reservation.dateDebut|date('Y-m-d') : '' }}</td>
-                        <td>{{ reservation.dateFin ? reservation.dateFin|date('Y-m-d') : '' }}</td>
-                        <td>{{ reservation.lieu }}</td>
-                        <td>{{ reservation.codeReservation }}</td>
-                        <td>
-                            <a href="{{ path('reservation_show', {'id': reservation.id}) }}" class="btn btn-success"><i class="fa fa-book" aria-hidden="true"></i> Visionner</a>
-                            {% if is_granted("ROLE_ADMIN") %}
-                                <a href="{{ path('reservation_edit', {'id': reservation.id}) }}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> Modifier</a>
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="8">Aucune reservation trouver</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+			<div class="navigation">
+				{{ knp_pagination_render(reservations) }}
+			</div>
 
-        <div class="navigation">
-            {{ knp_pagination_render(reservations) }}
-        </div>
 
-        <a href="{{ path('reservation_new') }}" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> Ajouter</a>
-    {% endblock %}
+		</div>
+	</div>
+{% endblock %}
