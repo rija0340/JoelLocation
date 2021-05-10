@@ -4,18 +4,88 @@ namespace App\Controller;
 
 use App\Entity\Reservation;
 use App\Form\ReservationType;
+use App\Repository\VehiculeRepository;
 use App\Repository\ReservationRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/reservation")
  */
 class ReservationController extends AbstractController
 {
+    private $reservationRepo;
+    private $dateTimestamp;
+    private $vehiculeRepo;
+
+
+    public function __construct(ReservationRepository $reservationRepo, VehiculeRepository $vehiculeRepo)
+    {
+
+        $this->reservationRepo = $reservationRepo;
+        $this->vehiculeRepo = $vehiculeRepo;
+    }
+
+    /**
+     * @Route("/vehiculeDispoFonctionDates", name="vehiculeDispoFonctionDates",methods={"GET","POST"}))
+     */
+    public function vehiculeDispoFonctionDates(Request $request)
+    {
+
+        // avy any amin'ny request ity (AJAX)
+        $dateDebutAjax = $request->query->get('dateDebut');
+        // convert date string to timestamp
+        $timeDebut = strtotime($dateDebutAjax);
+        $dateDebutStr = date('Y-m-d', $timeDebut);
+        //convert a string to date php
+        $dateDebut = new \DateTime($dateDebutStr);
+
+        // avy any amin'ny request ity (AJAX)
+        $dateFinAjax = $request->query->get('dateFin');
+        // convert date string to timestamp
+        $timeFin = strtotime($dateFinAjax);
+        $dateFinStr = date('Y-m-d', $timeFin);
+        //convert a string to date php
+        $dateFin = new \DateTime($dateFinStr);
+        // dd($this->reservationRepo->findReservationIncludeDates($dateDebut, $dateFin));
+
+        $datas = array();
+        foreach ($this->getVehiculesDispo($dateDebut, $dateFin) as $key => $vehicule) {
+            $datas[$key]['marque'] = $vehicule->getMarque()->getLibelle();
+            $datas[$key]['modele'] = $vehicule->getModele();
+            $datas[$key]['immatriculation'] = $vehicule->getImmatriculation();
+        }
+
+        return new JsonResponse($datas);
+    }
+    public function getVehiculesDispo($dateDebut, $dateFin)
+    {
+        $vehicules = $this->vehiculeRepo->findAll();
+        $reservations = $this->reservationRepo->findReservationIncludeDates($dateDebut, $dateFin);
+        dd($reservations);
+
+        $i = 0;
+        $vehiculeDispo = [];
+
+        // code pour vehicule avec reservation , mila manao condition ame tsy misy reservation mihitsy
+        foreach ($vehicules as $vehicule) {
+            foreach ($reservations as $reservation) {
+                if ($vehicule == $reservation->getVehicule()) {
+                    $i++;
+                }
+            }
+            if ($i == 0) {
+                $vehiculeDispo[] = $vehicule;
+            }
+            $i = 0;
+        }
+        return $vehiculeDispo;
+    }
+
     /**
      * @Route("/", name="reservation_index", methods={"GET"})
      */
@@ -89,7 +159,7 @@ class ReservationController extends AbstractController
      */
     public function delete(Request $request, Reservation $reservation): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$reservation->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $reservation->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($reservation);
             $entityManager->flush();
@@ -97,9 +167,4 @@ class ReservationController extends AbstractController
 
         return $this->redirectToRoute('reservation_index');
     }
-
-
-    
-
-
 }

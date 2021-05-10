@@ -22,7 +22,6 @@ getElements();
 addEventListner();
 
 
-
 $(window).load(function () {
 
     ganttInit();
@@ -268,8 +267,8 @@ function changeScale2mois() {
 }
 
 function addTextPeriode(startDate, endDate) {
-    spanElemStartDate.innerText = startDate;
-    spanElemEndDate.innerText = endDate;
+    spanElemStartDate.innerText = "< " + startDate + " au ";
+    spanElemEndDate.innerText = endDate + " > ";
 }
 
 function dateToShortFormat(date) {

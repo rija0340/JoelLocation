@@ -30,8 +30,7 @@ class ReservationRepository extends ServiceEntityRepository
             ->setParameter('date', $date)
             ->orderBy('r.date_fin', 'DESC')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
     /**
@@ -45,8 +44,7 @@ class ReservationRepository extends ServiceEntityRepository
             ->setParameter('date', $date)
             ->orderBy('r.date_debut', 'DESC')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
     /**
@@ -60,9 +58,73 @@ class ReservationRepository extends ServiceEntityRepository
             ->setParameter('date', $date)
             ->orderBy('r.date_debut', 'DESC')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
+
+    /**
+     * @return Reservation[] Returns an array of Reservation objects
+     */
+    public function findReservationIncludeDate($date)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere(' r.date_fin > :date')
+            ->andWhere('r.date_debut < :date')
+            ->setParameter('date', $date)
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    /**
+     * @return Reservation[] Returns an array of Reservation objects
+     */
+    public function findReservationIncludeDates($dateDebut, $dateFin)
+    {
+        return $this->createQueryBuilder('r')
+            ->where(' r.date_fin > :dateDebut AND r.date_debut < :dateDebut')
+            ->orWhere('r.date_fin > :dateFin AND r.date_debut < :dateFin')
+            ->orWhere('r.date_debut < :dateDebut AND  :dateFin < r.date_fin ')
+            ->orWhere('r.date_debut > :dateDebut AND  :dateFin > r.date_fin ')
+            // ->andWhere(' r.date_fin > :dateFin AND r.date_debut < :dateFin')
+            ->setParameter('dateDebut', $dateDebut)
+            ->setParameter('dateFin', $dateFin)
+            ->getQuery()
+            ->getResult();
+    }
+
+
+
+    /**
+     * @return Reservation[] Returns an array of Reservation objects
+     * 
+     */
+    public function findLastReservations($vehicule, $date)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere(' r.vehicule = :vehicule')
+            ->andWhere('r.date_fin < :date')
+            ->setParameter('vehicule', $vehicule)
+            ->setParameter('date', $date)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Reservation[] Returns an array of Reservation objects
+     */
+    public function findNextReservations($vehicule, $date)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere(' r.vehicule = :vehicule')
+            ->andWhere('r.date_debut > :date')
+            ->setParameter('vehicule', $vehicule)
+            ->setParameter('date', $date)
+            ->getQuery()
+            ->getResult();
+    }
+
+
+
 
     // /**
     //  * @return Reservation[] Returns an array of Reservation objects

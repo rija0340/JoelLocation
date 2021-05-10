@@ -35,7 +35,7 @@
 			<h2 class="text-uppercase text-center">
 				<i class="fa fa-car"></i>
 				véhicules disponibles le
-				<span class="date">LE 09 octobre 2020</span>
+				<span id="dateSpanElem"></span>
 			</h2>
 
 
@@ -44,51 +44,27 @@
 					<label for="date" class="font-weight-bold text-black">Date de recherche :</label>
 				</div>
 				<div class="w-100"></div>
-				<div class="col-auto">
+				<div class="col-auto mb-3">
 					<div class="row">
 						<div class="col-auto pr-0">
-							<input id="birthday" class="date-picker " placeholder="dd-mm-yyyy" type="text" required="required" type="text" onfocus="this.type='date'" onmouseover="this.type='date'" onclick="this.type='date'" onblur="this.type='text'" onmouseout="timeFunctionLong(this)">
+							<input id="dateInputElem" class="date-picker " type="date">
 						</div>
-						<div class="col-auto pr-0">
-							<button class="btn btn-warning">
-								<i class="fa fa-search"></i>
-								Valider</button>
-						</div>
-						<div class="col-auto ">
-							<button class="btn btn-warning">
-								<i class="fa fa-file"></i>
-								Export Csv</button>
-						</div>
+
 					</div>
 
 				</div>
 
 			</div>
-			<table class="table table-hover">
-				<thead class="bg-dark text-white text-uppercase">
+			<table id="vehiculeDispoDatatable" class="table table-hover" style="width : 100%">
+				<thead class="bg-dark text-white text-uppercase text-center">
 					<tr>
 						<th>Immatriculation</th>
-						<th>partenaire</th>
 						<th>modèle</th>
-						<th>catégorie</th>
-						<th>famille</th>
-						<th>dernière réservation</th>
-						<th>prochaine réservation</th>
+						<th class="text-nowrap">dernière réservation</th>
+						<th class="text-nowrap">prochaine réservation</th>
 						<th>action</th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr>
-						<th scope="row">1</th>
-						<td>Mark</td>
-						<td>Otto</td>
-						<td>@mdo</td>
-						<td>@mdo</td>
-						<td>@mdo</td>
-						<td>@mdo</td>
-						<td>@mdo</td>
-					</tr>
-				</tbody>
 			</table>
 		{% endblock %}
 
@@ -109,5 +85,5 @@
 			<script src="../../admin/vendors/jszip/dist/jszip.min.js"></script>
 			<script src="../../admin/vendors/pdfmake/build/pdfmake.min.js"></script>
 			<script src="../../admin/vendors/pdfmake/build/vfs_fonts.js"></script>
-
+			<script src="../../js/admin/vehiculeDispo_ajax.js"></script>
 		{% endblock  %}

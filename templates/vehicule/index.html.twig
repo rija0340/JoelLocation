@@ -76,9 +76,9 @@
 {% block content %}
 	<!-- top tiles -->
 	<div class="x_panel">
-		<p class="text-center">
+		<p class="text-center font-weight-bold">
 			<i class="fa fa-info mr-1"></i>Pour ajouter un nouveau véhicule, veuillez cliquer
-			<a href="{{path('vehicule_new')}}">ici</a>
+			<a href="{{path('vehicule_new')}}" class="text-red">ici</a>
 		</p>
 		<div class="x_content">
 			<div class="row">
@@ -113,20 +113,20 @@
 										<td></td>
 										<td class="text-center">
 											<div class="row">
-												<div class="col-auto">
-													<a href="{{ path('vehicule_edit', {'id': vehicule.id}) }}">
+												<div class="col-auto ">
+													<a href="{{ path('vehicule_edit', {'id': vehicule.id}) }}" class="btn btn-link">
 														<i class="fa  fa-gear (alias)"></i>
 													</a>
 												</div>
 												<div class="col-auto">
-													<a href="">
+													<a href="" class="btn btn-link">
 														<i class="fa  fa-power-off"></i>
 													</a>
 												</div>
 											</div>
 											<div class="row">
 												<div class="col-auto">
-													<a href="{{ path('vehicule_show', {'id': vehicule.id}) }}">
+													<a href="{{ path('vehicule_show', {'id': vehicule.id}) }}" class="btn btn-link">
 														<i class="fa  fa-list-ul"></i>
 													</a>
 												</div>
@@ -134,7 +134,7 @@
 													<form method="post" action="{{ path('vehicule_delete', {'id': vehicule.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer cet utilisateur?');">
 														<input type="hidden" name="_method" value="DELETE">
 														<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ vehicule.id) }}">
-														<button class="">
+														<button class="btn btn-link">
 															<i class="fa fa-trash" aria-hidden="true"></i>
 														</button>
 													</form>

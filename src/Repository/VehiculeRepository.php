@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Vehicule;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Validator\Constraints\Date;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Vehicule|null find($id, $lockMode = null, $lockVersion = null)
@@ -18,6 +19,26 @@ class VehiculeRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Vehicule::class);
     }
+
+    /**
+     * @return Vehicule[] Returns an array of Reservation objects
+     */
+    public function findSomething($date)
+    {
+        return $this->createQueryBuilder('v')
+            ->andWhere('v.date_mise_service = :date')
+            ->setParameter('date', $date)
+            ->orderBy('v.date_mise_service', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    /***
+     * @return Vehicule[]
+     * 
+     */
+
 
     // /**
     //  * @return Vehicule[] Returns an array of Vehicule objects

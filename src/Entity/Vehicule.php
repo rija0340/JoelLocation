@@ -11,9 +11,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
 // use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 /**
  * @ORM\Entity(repositoryClass=VehiculeRepository::class)
+ * @UniqueEntity("immatriculation") 
  * @Vich\Uploadable()
  */
 class Vehicule
@@ -27,6 +30,7 @@ class Vehicule
 
     /**
      * @ORM\Column(type="string", length=255)
+     * 
      */
     private $immatriculation;
 

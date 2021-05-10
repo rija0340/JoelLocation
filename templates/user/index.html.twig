@@ -22,9 +22,17 @@
 {% block content %}
 	<div class="x_panel">
 		<div class="x_title">
-			<h2>
-				<i class="fa fa-list"></i>Clients / Prospects</h2>
-			<div class="clearfix"></div>
+			<div class="row">
+				<h2>
+					<i class="fa fa-list"></i>Clients / Prospects</h2>
+				<div class="clearfix"></div>
+				<div class="col-auto ml-auto">
+					<a href="{{ path('user_new') }}" class="btn btn-primary">
+						<i class="fa fa-plus" aria-hidden="true"></i>
+						Ajouter</a>
+
+				</div>
+			</div>
 		</div>
 		<table class="table text-center" id="datatable">
 			<thead class="text-uppercase ">
@@ -65,11 +73,11 @@
 						{% endfor %}
 						{{ i }}
 							</td>
-								<td> <a href="{{ path('user_show', {'id': user.id}) }}"class="btn btn-success"> <i class="fa fa-book" aria-hidden="true"></i>
-								Visionner</a>
+								<td> <a href="{{ path('user_show', {'id': user.id}) }}"class="btn btn-dark"> <i class="fa fa-book" aria-hidden="true"></i>
+								Voir</a>
 							{% if is_granted("ROLE_ADMIN") %}
 								<a href="{{ path('user_edit', {'id': user.id}) }}" class="btn btn-danger">
-									<i class="fa fa-trash" aria-hidden="true"></i>
+									<i class="fa fa-edit" aria-hidden="true"></i>
 									Modifier</a>
 							{% endif %}
 						</td>
@@ -86,9 +94,7 @@
 			{{ knp_pagination_render(users) }}
 		</div>
 
-		<a href="{{ path('user_new') }}" class="btn btn-primary">
-			<i class="fa fa-plus" aria-hidden="true"></i>
-			Ajouter</a>
+
 	</div>
 {% endblock %}
 {% block javascripts %}
