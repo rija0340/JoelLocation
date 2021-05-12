@@ -22,7 +22,6 @@ class ReservationController extends AbstractController
     private $dateTimestamp;
     private $vehiculeRepo;
 
-
     public function __construct(ReservationRepository $reservationRepo, VehiculeRepository $vehiculeRepo)
     {
 
@@ -36,25 +35,31 @@ class ReservationController extends AbstractController
     public function vehiculeDispoFonctionDates(Request $request)
     {
 
-        // avy any amin'ny request ity (AJAX)
-        $dateDebutAjax = $request->query->get('dateDebut');
-        // convert date string to timestamp
-        $timeDebut = strtotime($dateDebutAjax);
-        $dateDebutStr = date('Y-m-d', $timeDebut);
-        //convert a string to date php
-        $dateDebut = new \DateTime($dateDebutStr);
+        $dateDebutday = $request->query->get('dateDebutday');
+        $dateDebutmonth = $request->query->get('dateDebutmonth');
+        $dateDebutyear = $request->query->get('dateDebutyear');
+        $dateDebuthours = $request->query->get('dateDebuthours');
+        $dateDebutminutes = $request->query->get('dateDebutminutes');
+        $dateFinday = $request->query->get('dateFinday');
+        $dateFinmonth = $request->query->get('dateFinmonth');
+        $dateFinyear = $request->query->get('dateFinyear');
+        $dateFinhours = $request->query->get('dateFinhours');
+        $dateFinminutes = $request->query->get('dateFinminutes');
 
-        // avy any amin'ny request ity (AJAX)
-        $dateFinAjax = $request->query->get('dateFin');
-        // convert date string to timestamp
-        $timeFin = strtotime($dateFinAjax);
-        $dateFinStr = date('Y-m-d', $timeFin);
-        //convert a string to date php
-        $dateFin = new \DateTime($dateFinStr);
+        $dateDebut = date("Y-m-d H:i", mktime($dateDebuthours, $dateDebutminutes, 00, $dateDebutmonth, $dateDebutday, $dateDebutyear));
+        $dateFin = date("Y-m-d H:i", mktime($dateFinhours, $dateFinminutes, 00, $dateFinmonth, $dateFinday, $dateFinyear));
+
+
+        $dateDebut = new \DateTime($dateDebut);
+
+
+        $dateFin = new \DateTime($dateFin);
+        // dd($dateDebut, $dateFin);
         // dd($this->reservationRepo->findReservationIncludeDates($dateDebut, $dateFin));
 
         $datas = array();
         foreach ($this->getVehiculesDispo($dateDebut, $dateFin) as $key => $vehicule) {
+            $datas[$key]['id'] = $vehicule->getId();
             $datas[$key]['marque'] = $vehicule->getMarque()->getLibelle();
             $datas[$key]['modele'] = $vehicule->getModele();
             $datas[$key]['immatriculation'] = $vehicule->getImmatriculation();
@@ -66,7 +71,7 @@ class ReservationController extends AbstractController
     {
         $vehicules = $this->vehiculeRepo->findAll();
         $reservations = $this->reservationRepo->findReservationIncludeDates($dateDebut, $dateFin);
-        dd($reservations);
+        // dd($reservations);
 
         $i = 0;
         $vehiculeDispo = [];
@@ -91,6 +96,7 @@ class ReservationController extends AbstractController
      */
     public function index(ReservationRepository $reservationRepository, Request $request, PaginatorInterface $paginator): Response
     {
+        dump($reservationRepository->findBy([], ["id" => "DESC"]));
         $pagination = $paginator->paginate(
             $reservationRepository->findBy([], ["id" => "DESC"]), /* query NOT result */
             $request->query->getInt('page', 1)/*page number*/,
@@ -104,14 +110,17 @@ class ReservationController extends AbstractController
     /**
      * @Route("/new", name="reservation_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, VehiculeRepository $vehiculeRepository): Response
     {
         $reservation = new Reservation();
         $form = $this->createForm(ReservationType::class, $reservation);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $vehicule = $vehiculeRepository->find($request->request->get('select'));
             $entityManager = $this->getDoctrine()->getManager();
+            $reservation->setVehicule($vehicule);
             $entityManager->persist($reservation);
             $entityManager->flush();
 
@@ -143,6 +152,8 @@ class ReservationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $vehicule = $this->vehiculeRepo->find($request->request->get('select'));
+            $reservation->setVehicule($vehicule);
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('reservation_index');

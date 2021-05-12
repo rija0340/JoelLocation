@@ -93,6 +93,20 @@ class ReservationRepository extends ServiceEntityRepository
     }
 
 
+    /**
+     * @return Reservation[] Returns an array of Reservation objects
+     */
+    public function findReservationExludeDates($dateDebut, $dateFin)
+    {
+        return $this->createQueryBuilder('r')
+            ->where('   :dateFin < r.date_debut  AND :dateDebut < r.date_debut ')
+            ->orWhere('r.date_fin < :dateDebut AND r.date_debut < :dateDebut ')
+            ->setParameter('dateDebut', $dateDebut)
+            ->setParameter('dateFin', $dateFin)
+            ->getQuery()
+            ->getResult();
+    }
+
 
     /**
      * @return Reservation[] Returns an array of Reservation objects

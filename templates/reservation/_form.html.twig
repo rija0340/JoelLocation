@@ -8,6 +8,26 @@
 
 {{ form_start(form) }}
 <div class="row">
+
+	<div class="form-group col-md-3">
+		<label for="">Date résérvation :</label>
+		{{ form_widget(form.date_reservation) }}
+	</div>
+	<div class="form-group col-md-3">
+		<label for="">Date début:</label>
+		{# <input name="date_debut" id="dateDebut" type="text" date="date_debut" class="form-control" placeholder="jj/mm/aaaaa hh:mm" onfocus="(this.type='datetime-local')" onblur="(this.type='text')"> #}
+		{{ form_widget(form.date_debut) }}
+	</div>
+	<div class="form-group col-md-3">
+		<label for="">Date fin :</label>
+		{# <input name="date_fin" id="dateFin" type="text" date="date_debut" class="form-control" placeholder="jj/mm/aaaaa hh:mm" onfocus="(this.type='datetime-local')" onblur="(this.type='text')"> #}
+		{{ form_widget(form.date_fin) }}
+	</div>
+	<div class="form-group col-md-3">
+		<label for="">Mode résérvation :</label>
+		{{ form_widget(form.mode_reservation) }}
+
+	</div>
 	<div class="form-group col-md-6">
 		<label for="">Type :</label>
 		{{ form_widget(form.type) }}
@@ -15,25 +35,6 @@
 	<div class="form-group col-md-6">
 		<label for="">Client :</label>
 		{{ form_widget(form.client) }}
-
-	</div>
-	<div class="form-group col-md-3">
-		<label for="">Date résérvation :</label>
-		{{ form_widget(form.date_reservation) }}
-	</div>
-	<div class="form-group col-md-3">
-		<label for="">Date début:</label>
-		{{ form_widget(form.date_debut) }}
-
-	</div>
-	<div class="form-group col-md-3">
-		<label for="">Date fin :</label>
-		{{ form_widget(form.date_fin) }}
-
-	</div>
-	<div class="form-group col-md-3">
-		<label for="">Mode résérvation :</label>
-		{{ form_widget(form.mode_reservation) }}
 
 	</div>
 	<div class="form-group col-md-3">
@@ -47,7 +48,8 @@
 	</div>
 	<div class="form-group col-md-3">
 		<label for="">Véhicule :</label>
-		{{ form_widget(form.vehicule) }}
+		<select name="select" id="selectVehicule" class="form-control"></select>
+		{# {{ form_widget(form.vehicule) }} #}
 
 	</div>
 	<div class="form-group col-md-6">

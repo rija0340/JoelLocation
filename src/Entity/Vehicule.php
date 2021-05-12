@@ -5,12 +5,13 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 // use Vich\UploaderBundle\Entity\File;
+use Doctrine\ORM\Mapping\JoinColumn;
 use App\Repository\VehiculeRepository;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
+use Doctrine\Common\Collections\ArrayCollection;
 // use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 
@@ -73,6 +74,7 @@ class Vehicule
 
     /**
      * @ORM\OneToMany(targetEntity=Reservation::class, mappedBy="vehicule", orphanRemoval=true)
+     * 
      */
     private $reservations;
 

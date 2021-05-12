@@ -1,25 +1,93 @@
-var dateInputElem;
-var dateSpanElem;
-var dateInput;
-var day;
-var month;
-var fullyear;
-var dateInputValue;
-var dateToPhp;
-var dateDay;
-var dateMonth;
-var dateYear;
-var dateHours;
-var dateMinutes;
+var dateDebutElem;
+var dateDebutValue;
+var dateFinElem;
+var dateFinValue;
+var dateDebutToPhp;
+var dateFintToPhp;
+var dateFintToPhp;
+var btnRechercherElem;
+var reservation2Elem;
+var dateDebutDay;
+var dateDebutMonth;
+var dateDebutYear;
+var dateDebutHours;
+var dateDebutMinutes;
+var dateFinDay;
+var dateFinMonth;
+var dateFinYear;
+var dateFinHours;
+var dateFinMinutes;
 
 getElements();
-addEventListener();
+addEventListener()
 
-$(window).load(function () {
 
-    formatDateForAjax(Date.now());
+function getElements() {
+    dateDebutElem = document.getElementById("reservation_date_debut");
+    dateFinElem = document.getElementById("reservation_date_fin");
+    // btnRechercherElem = document.getElementById("rechercherVehicules");
+    reservation2Elem = document.getElementById("reservation2");
+}
+
+function addEventListener() {
+    dateDebutElem.addEventListener('change', getDateDebutValue, false);
+    dateFinElem.addEventListener('change', getDateFinValue, false);
+    // btnRechercherElem.addEventListener('click', getDatesValues, false);
+}
+
+function getDatesValues() {
+    console.log(document.getElementById("reservation_date_debut").value);
+    console.log(document.getElementById("reservation_date_fin").value);
     retrieveDataAjax();
-});
+}
+
+function getDateDebutValue() {
+    dateDebutValue = this.value;
+    console.log('ity ilay date ' + dateDebutValue);
+}
+
+function getDateFinValue() {
+
+    dateFinValue = this.value;
+    if ((dateFinValue = this.value) != null && dateDebutValue != null) {
+
+        if (dateToTimestamp(dateFinValue) > dateToTimestamp(dateDebutValue)) {
+
+            setParamDateDebutForAjax();
+
+            retrieveDataAjax();
+
+        } else {
+
+            $("#selectVehicule").empty();
+            alert("La date de fin doit être supérieure à la date de début");
+            dateDebutElem.value = null;
+            dateFinElem.value = null;
+
+        }
+
+    } else {
+        dateFinElem.value = null;
+        alert("Veuillez entrer en premier la date de début");
+    }
+}
+
+function setParamDateDebutForAjax() {
+
+    var date1 = new Date(dateDebutValue);
+    var date2 = new Date(dateFinValue);
+
+    dateDebutDay = date1.getDate();
+    dateDebutMonth = date1.getMonth() + 1;
+    dateDebutYear = date1.getFullYear();
+    dateDebutHours = date1.getHours();
+    dateDebutMinutes = date1.getMinutes();
+    dateFinDay = date2.getDate();
+    dateFinMonth = date2.getMonth() + 1;
+    dateFinYear = date2.getFullYear();
+    dateFinHours = date2.getHours();
+    dateFinMinutes = date2.getMinutes();
+}
 
 
 function retrieveDataAjax() {
@@ -27,64 +95,34 @@ function retrieveDataAjax() {
     // var n = d.toString();
     $.ajax({
         type: 'GET',
-        url: '/vehiculeDispoData',
-        data: { "day": dateDay, "month": dateMonth, "year": dateYear, "hours": dateHours, "minutes": dateMinutes },
+        url: '/reservation/vehiculeDispoFonctionDates',
+        data: {
+            "dateDebutday": dateDebutDay, "dateDebutmonth": dateDebutMonth, "dateDebutyear": dateDebutYear, "dateDebuthours": dateDebutHours, "dateDebutminutes": dateDebutMinutes,
+
+            "dateFinday": dateFinDay, "dateFinmonth": dateFinMonth, "dateFinyear": dateFinYear, "dateFinhours": dateFinHours, "dateFinminutes": dateFinMinutes
+
+        },
         Type: "json",
         success: function (data) {
-            var arrData = [];
-            var len = data.length;
-
-            for (var i = 0; i < len; i++) {
-
-                arrData.push({
-                    immatriculation: data[i].immatriculation,
-                    modele: data[i].modele,
-                    lastReservation: data[i].lastReservation,
-                    nextReservation: data[i].nextReservation,
-                    action: `<a href="/vehicule/${data[i].id}">Voir</a>`
-                });
+            console.log(data);
+            if ($("#reservation2").hasClass('hide') && $("#vehiculeDispo").hasClass('hide')) {
+                LoadDataDatatable(data);
+                $("#reservation2").removeClass('hide');
+                $("#vehiculeDispo").removeClass('hide');
+                populateSelectElem(data);
+                dataForSelect(data)
+            } else {
+                LoadDataDatatable(data);
+                populateSelectElem(data);
+                dataForSelect(data)
             }
 
-            console.log(arrData);
-            addDateToHtml();
-            LoadDataDatatable(arrData);
         },
         error: function (erreur) {
             // alert('La requête n\'a pas abouti' + erreur);
             console.log(erreur.responseText);
         }
     });
-}
-
-function getElements() {
-    dateInputElem = document.getElementById("dateInputElem");
-    dateSpanElem = document.getElementById("dateSpanElem");
-
-}
-
-function addEventListener() {
-    dateInputElem.addEventListener('change', getDateInputValue, false);
-}
-
-function getDateInputValue() {
-
-    dateInputValue = this.value;
-    dateToPhp = formatDateForAjax(dateInputValue);
-    retrieveDataAjax();
-
-}
-
-function formatDateForAjax(date) {
-    console.log(date);
-    var date = new Date(date);
-
-    dateDay = date.getDate();
-    console.log(dateDay);
-    dateMonth = date.getMonth() + 1;
-    dateHours = date.getHours();
-    dateMinutes = date.getMinutes();
-    dateYear = date.getFullYear();
-
 }
 
 function LoadDataDatatable(data) {
@@ -104,9 +142,7 @@ function LoadDataDatatable(data) {
             "columns": [
                 { "data": "immatriculation" },
                 { "data": "modele" },
-                { "data": "lastReservation" },
-                { "data": "nextReservation" },
-                { "data": "action" },
+
             ],
             "language": {
                 "emptyTable": "Aucune donnée disponible dans le tableau",
@@ -293,9 +329,6 @@ function LoadDataDatatable(data) {
             "columns": [
                 { "data": "immatriculation" },
                 { "data": "modele" },
-                { "data": "lastReservation" },
-                { "data": "nextReservation" },
-                { "data": "action" },
             ],
             "language": {
                 "emptyTable": "Aucune donnée disponible dans le tableau",
@@ -479,57 +512,42 @@ function LoadDataDatatable(data) {
 
 }
 
-function addDateToHtml() {
+function populateSelectElem(options) {
 
+    var select = document.getElementById('selectVehicule');
+    $("#selectVehicule").empty(); //remove old options jquery
 
-    switch (dateMonth) {
-        case 1:
-            month = 'Janvier';
-            break;
-        case 2:
-            month = 'Fevrier';
-            break;
+    for (var i = 0; i < options.length; i++) {
 
-        case 3:
-            month = 'Mars';
-            break;
-        case 4:
-            month = 'Avril';
-            break;
-        case 5:
-            month = 'Mai';
-            break;
-        case 6:
-            month = 'Juin';
-            break;
-        case 7:
-            month = 'Juillet';
-            break;
-        case 8:
-            month = 'Août';
-            break;
-        case 9:
-            month = 'Septembre';
-            break;
-        case 10:
-            month = 'Octobre';
-            break;
-        case 11:
-            month = 'Novembre';
-            break;
-        case 12:
-            month = 'Décembre';
-            break;
+        var opt = options[i];
+        console.log('ity ny opt ' + opt.marque);
+        var el = document.createElement("option");
+        el.text = opt.marque + ' ' + opt.modele + ' ' + opt.immatriculation;
+        el.value = opt.id;
+        select.add(el);
+
     }
-
-    if (day < 10) {
-        dateSpanElem.innerText = "0" + dateDay + " " + month + " " + dateYear;
-    } else {
-        dateSpanElem.innerText = dateDay + " " + month + " " + dateYear;
-    }
-
-
-
 }
 
+function dataForSelect(data) {
+    var data2 = [];
 
+    for (let i = 0; i < data.length; i++) {
+
+        data2.push({
+            id: data[i].id,
+            marque: data[i].marque,
+            modele: data[i].modele,
+            immatriculation: data[i].immatriculation
+        });
+
+    }
+    console.log(data2);
+    return data2;
+}
+
+function dateToTimestamp(date) {
+
+    return new Date(date).getTime();
+
+}

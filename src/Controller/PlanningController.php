@@ -107,15 +107,19 @@ class PlanningController extends AbstractController
     public function vehiculeDispoData(Request $request, VehiculeRepository $vehiculeRepo, ReservationRepository $reservationRepo)
     {
         // avy any amin'ny request ity (AJAX)
-        $dateInputAjax = $request->query->get('date');
+        $day = $request->query->get('day');
+        $month = $request->query->get('month');
+        $year = $request->query->get('year');
+        $hours = $request->query->get('hours');
+        $minutes = $request->query->get('minutes');
 
-        // convert date string to timestamp
-        $time = strtotime($dateInputAjax);
+        // $time = strtotime($dateInputAjax);
+        $time = date("Y-m-d H:i", mktime($hours, $minutes, 00, $month, $day, $year));
+        // $time =  mktime($hours, $minutes, 00, $month, $day, $year);
 
-        $newformatString = date('Y-m-d', $time);
 
         //convert a string to date php
-        $date = new \DateTime($newformatString);
+        $date = new \DateTime($time);
 
 
         // echo $this->getNextReservation($this->getVehiculesDispo($date)[0], $date)->getDateDebut()->format('d-m-Y');
@@ -125,16 +129,16 @@ class PlanningController extends AbstractController
         $datas = array();
         foreach ($this->getVehiculesDispo($date) as $key => $vehicule) {
 
+            $datas[$key]['id'] = $vehicule->getId();
             $datas[$key]['immatriculation'] = $vehicule->getImmatriculation();
             $datas[$key]['modele'] = $vehicule->getModele();
             if ($this->getLastReservation($vehicule, $date) != null) {
-
-                $datas[$key]['lastReservation'] = $this->getLastReservation($vehicule, $date)->getDateFin()->format('d-m-Y');
+                $datas[$key]['lastReservation'] = $this->getLastReservation($vehicule, $date)->getDateFin()->format('d-m-Y H:m');
             } else {
                 $datas[$key]['lastReservation'] = "Pas de réservation";
             }
             if ($this->getNextReservation($vehicule, $date) != null) {
-                $datas[$key]['nextReservation'] =  $this->getNextReservation($vehicule, $date)->getDateDebut()->format('d-m-Y');
+                $datas[$key]['nextReservation'] =  $this->getNextReservation($vehicule, $date)->getDateDebut()->format('d-m-Y H:m:sa');
             } else {
                 $datas[$key]['nextReservation'] = "Pas de réservation";
             }
@@ -165,6 +169,7 @@ class PlanningController extends AbstractController
             $i = 0;
         }
         return $vehiculeDispo;
+        dd($reservations, $vehiculeDispo);
     }
     public function getLastReservation($vehicule, $date)
     {

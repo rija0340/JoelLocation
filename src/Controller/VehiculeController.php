@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Vehicule;
 use App\Form\VehiculeType;
+use App\Repository\ReservationRepository;
 use App\Repository\VehiculeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,8 +28,33 @@ class VehiculeController extends AbstractController
     /**
      * @Route("/vehicule", name="vehicule_index", methods={"GET"})
      */
-    public function index(VehiculeRepository $vehiculeRepository, Request $request, PaginatorInterface $paginator): Response
+    public function index(VehiculeRepository $vehiculeRepository, Request $request, PaginatorInterface $paginator, ReservationRepository $reservationRepository): Response
     {
+
+        $date1 = date_create("2021-04-25");
+        $date2 = date_create("2021-05-15");
+        // echo date_format($date, "Y/m/d");
+
+        $date1 = new \DateTime(date_format($date1, "Y/m/d h:i:sa"));
+        $date2 = new \DateTime(date_format($date2, "Y/m/d h:i:sa"));
+
+        echo 'dates entrées' . ' --> ' . $date1->format('d-m-Y h:m') . '  ' . $date2->format('d-m-Y h:m') . '</br>';
+
+        $vehicules2 = $vehiculeRepository->findVehiculeDispoBetween($date1, $date2);
+
+        $reserv = $reservationRepository->findReservationExludeDates($date1, $date2);
+
+        foreach ($reserv as $r) {
+            echo $r->getDateDebut()->format('d-m-Y h:m') . ' ' . $r->getDateFin()->format('d-m-Y h:m') . ' ' . $r->getVehicule()->getImmatriculation() . '   ' . '</br>';
+            // echo $r->getDateDebut()->format('d-m-Y') . ' ' . $r->getDateFin()->format('d-m-Y') . '</br>';
+        }
+        echo 'vehicules disponibles :' . '</br>';
+        foreach ($vehicules2 as $v) {
+            echo $v->getImmatriculation() . '</br>';
+        }
+
+        // dump($vehicules2);
+
         $pagination = $paginator->paginate(
             $vehiculeRepository->findBy([], ["id" => "DESC"]), /* query NOT result */
             $request->query->getInt('page', 1)/*page number*/,

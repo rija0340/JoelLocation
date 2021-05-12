@@ -12,48 +12,7 @@
 	</h2>
 {% endblock %}
 {% block content %}
-	{# test table  #}
-	<div class="x_panel">
-		<div class="x_title">
-			<h2>
-				<i class="fa fa-shopping-cart"></i>
-				Rechercher véhicules disponible
-			</h2>
-			<div class="clearfix"></div>
-		</div>
-		<div class="x_content">
-			<div class="row">
-				<div class="col-auto">
-					<div class=" ">
-						<label for="">Début période</label>
-						<input id="dateDebut" class="date-picker form-control" type="date">
 
-					</div>
-				</div>
-				<div class="col-auto">
-					<div class=" ">
-						<label for="">Fin période</label>
-						<input id="dateFin" class="date-picker form-control" type="date">
-
-					</div>
-				</div>
-
-				<div class="col-auto">
-					<button class="btn btn-dark" id="rechercherVehicules">
-						<i class="fa fa-plus" aria-hidden="true"></i>
-						Rechercher
-					</button>
-				</div>
-
-				<div class="col-auto">
-					<a href="{{ path('reservation_new') }}" class="btn btn-danger">
-						<i class="fa fa-plus" aria-hidden="true"></i>
-						Ajouter une réservation</a>
-				</div>
-
-			</div>
-		</div>
-	</div>
 	<div class="x_panel">
 		<div class="x_title">
 			<h2>
@@ -81,15 +40,16 @@
 					{% for reservation in reservations %}
 						<tr>
 							<td></td>
-							<td>{{ reservation.dateReservation ? reservation.dateReservation|date('d-m-Y') : '' }}</td>
+							<td>{{ reservation.dateReservation ? reservation.dateReservation|date('d-m-Y H:m') : '' }}</td>
 							<td>{{ reservation.client.nom }}</td>
 							<td>{{ reservation.vehicule.marque}}
-								{{ reservation.vehicule.modele}}</td>
-							<td>{{ reservation.dateDebut ? reservation.dateDebut|date('d-m-Y ') : '' }}
+								{{ reservation.vehicule.modele}}
+								{{ reservation.vehicule.immatriculation}}</td>
+							<td>{{ reservation.dateDebut ? reservation.dateDebut|date('d-m-Y H:m') : '' }}
 								<br>
 								-
 								<br>
-								{{ reservation.dateFin ? reservation.dateFin|date('d-m-Y ') : '' }}</td>
+								{{ reservation.dateFin ? reservation.dateFin|date('d-m-Y H:m') : '' }}</td>
 							<td></td>
 							<td>{{ reservation.codeReservation }}</td>
 							<td>
@@ -138,8 +98,4 @@
 
 		</div>
 	</div>
-{% endblock %}
-{% block javascripts %}
-	<script src="../../js/admin/reservation_ajax.js"></script>
-
 {% endblock %}

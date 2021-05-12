@@ -33,12 +33,42 @@ class VehiculeRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-
     /***
      * @return Vehicule[]
      * 
      */
 
+    public function findVehiculeInvolved($dateDebut, $dateFin)
+    {
+        return $this->createQueryBuilder('v')
+            ->where(' veh_reser.date_fin > :dateDebut AND veh_reser.date_debut < :dateDebut')
+            ->orWhere('veh_reser.date_fin > :dateFin AND veh_reser.date_debut < :dateFin')
+            ->orWhere('veh_reser.date_debut < :dateDebut AND  :dateFin < veh_reser.date_fin ')
+            ->orWhere('veh_reser.date_debut > :dateDebut AND  :dateFin > veh_reser.date_fin ')
+            ->leftJoin('v.reservations', 'veh_reser')
+            ->setParameter('dateDebut', $dateDebut)
+            ->setParameter('dateFin', $dateFin)
+            ->orderBy('v.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+    /***
+     * @return Vehicule[]
+     * 
+     */
+
+    public function findVehiculeDispoBetween($dateDebut, $dateFin)
+    {
+        return $this->createQueryBuilder('v')
+            ->where('   :dateFin < veh_reser.date_debut  AND :dateDebut < veh_reser.date_debut ')
+            ->orWhere('veh_reser.date_fin < :dateDebut AND veh_reser.date_debut < :dateDebut ')
+            ->leftJoin('v.reservations', 'veh_reser')
+            ->setParameter('dateDebut', $dateDebut)
+            ->setParameter('dateFin', $dateFin)
+            ->orderBy('v.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 
     // /**
     //  * @return Vehicule[] Returns an array of Vehicule objects

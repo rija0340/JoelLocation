@@ -103,3 +103,7 @@ h2 .fa-chevron-right{
     color: inherit;
     text-decoration: none;
   }
+
+  .hide{
+      display : none !important;
+  }

@@ -32,15 +32,15 @@
 					</tr>
 					<tr>
 						<th>Date de reservation</th>
-						<td>{{ reservation.dateReservation ? reservation.dateReservation|date('d-m-Y') : '' }}</td>
+						<td>{{ reservation.dateReservation ? reservation.dateReservation|date('d-m-Y h:m') : '' }}</td>
 					</tr>
 					<tr>
 						<th>Date de début</th>
-						<td>{{ reservation.dateDebut ? reservation.dateDebut|date('d-m-Y') : '' }}</td>
+						<td>{{ reservation.dateDebut ? reservation.dateDebut|date('d-m-Y h:m') : '' }}</td>
 					</tr>
 					<tr>
 						<th>Date de fin</th>
-						<td>{{ reservation.dateFin ? reservation.dateFin|date('d-m-Y') : '' }}</td>
+						<td>{{ reservation.dateFin ? reservation.dateFin|date('d-m-Y h:m') : '' }}</td>
 					</tr>
 					<tr>
 						<th>Lieu</th>

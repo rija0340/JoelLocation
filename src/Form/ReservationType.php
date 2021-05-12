@@ -30,7 +30,7 @@ class ReservationType extends AbstractType
             ->add('lieu')
             ->add('code_reservation')
             ->add('client')
-            ->add('vehicule')
+            // ->add('vehicule')
             ->add('utilisateur')
             ->add('mode_reservation')
             ->add('etat_reservation');
