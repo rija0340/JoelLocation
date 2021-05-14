@@ -126,6 +126,7 @@ class PlanningController extends AbstractController
             $datas[$key]['start_date'] = $reservation->getDateDebut();
             $datas[$key]['end_date'] = $reservation->getDateFin();
             $datas[$key]['client_name'] = $reservation->getClient()->getNom() . " " .  $reservation->getClient()->getPrenom();
+            $datas[$key]['color'] = "red";
         }
 
         return new JsonResponse($datas);

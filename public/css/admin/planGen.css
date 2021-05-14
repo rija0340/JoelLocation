@@ -18,3 +18,24 @@ span.badge{
 .hide{
     display: none !important;
 }
+
+.style_task{
+    /* border-radius: 20%; */
+    height: 15px;
+}
+
+.gantt_tree_content, .gantt_task_content{
+    line-height: 12px;
+    white-space:normal;
+    overflow-wrap: break-word; 
+    /* bring your own prefixes */
+    padding: 5px;
+  }
+
+  .gantt_task_content{
+      background-color: red;
+      background : red;
+    }
+   
+
+ 

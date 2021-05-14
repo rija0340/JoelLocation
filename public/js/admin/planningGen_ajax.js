@@ -36,6 +36,7 @@ function retrieveDataAjax(startDatePeriode, endDatePeriode) {
         timeout: 3000,
         success: function (data) {
 
+            console.log(data);
             ganttLoadData(data, startDatePeriode, endDatePeriode);
         },
         error: function () {
@@ -65,9 +66,9 @@ function ganttInit(startDateScale, endDateScale) {
         }
     ];
     //test sur les bares de taches
-    gantt.templates.task_text = function (start, end, task) {
-        return task.client_name + " " + task.start_date.toLocaleDateString('fr-FR') + " " + task.start_time + " - " + task.real_end_date + " " + task.end_time;
-    };
+    // gantt.templates.task_text = function (start, end, task) {
+    //     return task.client_name + " " + task.start_date.toLocaleDateString('fr-FR') + " " + task.start_time + " - " + task.real_end_date + " " + task.end_time;
+    // };
 
     //date de début et fin de l'affichage tasks
     if (startDateScale != null && endDateScale != null) {
@@ -78,9 +79,34 @@ function ganttInit(startDateScale, endDateScale) {
     } else {
 
     }
+    //highlight weekend
+    gantt.templates.scale_cell_class = function (date) {
+        if (date.getDay() == 0 || date.getDay() == 6) {
+            return "weekend";
+        }
+    };
+    gantt.templates.timeline_cell_class = function (item, date) {
+        if (date.getDay() == 0 || date.getDay() == 6) {
+            return "weekend"
+        }
+    };
+
+    // class en fonction type(ilaina)
+
+
+    gantt.config.row_height = 40;
+    gantt.config.task_height = 12;
+
 
     gantt.i18n.setLocale("fr");
     gantt.init("gantt_here");
+    gantt.templates.task_class = function (start, end, task) {
+        switch (task.type) {
+            case "reservation":
+                return "reservation";
+                break;
+        }
+    };
 }
 function ganttLoadData(data, startDatePeriode, endDatePeriode) {
 
