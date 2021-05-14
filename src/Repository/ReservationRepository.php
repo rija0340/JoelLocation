@@ -125,6 +125,20 @@ class ReservationRepository extends ServiceEntityRepository
 
     /**
      * @return Reservation[] Returns an array of Reservation objects
+     * 
+     */
+    public function findLastReservationsV($vehicule)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere(' r.vehicule = :vehicule')
+            ->setParameter('vehicule', $vehicule)
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    /**
+     * @return Reservation[] Returns an array of Reservation objects
      */
     public function findNextReservations($vehicule, $date)
     {

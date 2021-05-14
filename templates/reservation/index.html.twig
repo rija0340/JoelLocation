@@ -40,16 +40,16 @@
 					{% for reservation in reservations %}
 						<tr>
 							<td></td>
-							<td>{{ reservation.dateReservation ? reservation.dateReservation|date('d-m-Y H:m') : '' }}</td>
+							<td>{{ reservation.dateReservation ? reservation.dateReservation|date('d-m-Y H:i') : '' }}</td>
 							<td>{{ reservation.client.nom }}</td>
 							<td>{{ reservation.vehicule.marque}}
 								{{ reservation.vehicule.modele}}
 								{{ reservation.vehicule.immatriculation}}</td>
-							<td>{{ reservation.dateDebut ? reservation.dateDebut|date('d-m-Y H:m') : '' }}
+							<td>{{ reservation.dateDebut ? reservation.dateDebut|date('d-m-Y H:i') : '' }}
 								<br>
 								-
 								<br>
-								{{ reservation.dateFin ? reservation.dateFin|date('d-m-Y H:m') : '' }}</td>
+								{{ reservation.dateFin ? reservation.dateFin|date('d-m-Y H:i') : '' }}</td>
 							<td></td>
 							<td>{{ reservation.codeReservation }}</td>
 							<td>

@@ -28,10 +28,12 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class AccueilController extends AbstractController
 {
     private $passwordEncoder;
+    private $vehiculeRepo;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder, VehiculeRepository $vehiculeRepository)
     {
         $this->passwordEncoder = $passwordEncoder;
+        $this->vehiculeRepo = $vehiculeRepository;
     }
 
     /**
@@ -39,19 +41,20 @@ class AccueilController extends AbstractController
      */
     public function index(): Response
     {
-        $troisvehicules[] = new Vehicule();
-        $vehicules = $this->getDoctrine()->getRepository(Vehicule::class)->findBy([], ["id" => "DESC"]);
+        $troisvehicules = [];
+        $vehicules = $this->vehiculeRepo->findAll();
         $i = 0;
         foreach ($vehicules as $vehicule) {
-            if ($i >= 3) {
-                exit;
+            if ($i < 3) {
+                // exit;
+                $troisvehicules[$i] = $vehicule;
+                $i++;
             }
-            $troisvehicules[$i] = $vehicule;
-            $i++;
         }
+
+        // dd($vehicules[0]);
         return $this->render('accueil/index.html.twig', [
-            'controller_name' => 'AccueilController',
-            'vehicules' => $troisvehicules,
+            'vehicules' => $troisvehicules
         ]);
     }
 

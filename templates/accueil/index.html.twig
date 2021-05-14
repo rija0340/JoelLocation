@@ -79,26 +79,26 @@
 				<h2>Nos Véhicules</h2>
 				<p>Vous pouvez choisir parmi les véhicules que nous offrons</p>
 			</div>
-			<div
-				class="row">{# {% for vehicule in vehicules %}
-										<div class="single-portfolio col-md-4">
-											<div class="inner">
-												<div class="portfolio-img">
-													<img src="uploads/vehicules/{{ vehicule.image }}" alt="{{ vehicule.modele }}">
-					
-													<div class="hover-content">
-														<figcaption>
-															<h3 class="m-0 p-0 text-center">{{ vehicule.marque }}
-																{{ vehicule.modele }}</h3>
-														</figcaption>
-														<div>
-															<a href="{{ path('notrevehicule', {'id': vehicule.id}) }}" class="button">Voir plus de détails</a>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									{% endfor %} #}
+			<div class="row">
+				{% for vehicule in vehicules %}
+					<div class="single-portfolio col-md-4">
+						<div class="inner">
+							<div class="portfolio-img">
+								<img src="uploads/vehicules/{{ vehicule.image }}" alt="{{ vehicule.modele }}">
+
+								<div class="hover-content">
+									<figcaption>
+										<h3 class="m-0 p-0 text-center">{{ vehicule.marque }}
+											{{ vehicule.modele }}</h3>
+									</figcaption>
+									<div>
+										<a href="{{ path('notrevehicule', {'id': vehicule.id}) }}" class="button">Voir plus de détails</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
 			</div>
 		</div>
 	</div>

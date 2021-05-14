@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Validator\Constraints\Date;
+use Symfony\Component\Validator\Constraints\Length;
 
 class PlanningController extends AbstractController
 {
@@ -36,25 +37,74 @@ class PlanningController extends AbstractController
      * @Route("/planningGeneralData", name="planningGeneralData", methods={"GET"})
      */
 
-    public function planningGeneralData(Request $request, ReservationRepository $reservationRepo,  NormalizerInterface $normalizer)
+    public function planningGeneralData(Request $request, ReservationRepository $reservationRepo, VehiculeRepository $vehiculeRepo, NormalizerInterface $normalizer)
     {
 
-        $reservations = $reservationRepo->findAll();
-        // dd($reservations);
-        // $reservationsNormalises = $normalizer->normalize($reservations, null, ['groups' => 'reserv:read']);
-        // $json = json_encode($reservationsNormalises);
-        $datas = array();
-        foreach ($reservations as $key => $reservation) {
-            $datas[$key]['id'] = $reservation->getId();
-            $datas[$key]['text'] = $reservation->getVehicule()->getMarque() . " " . $reservation->getVehicule()->getModele() . " " . $reservation->getVehicule()->getImmatriculation();
-            $datas[$key]['start_date_formated'] = $reservation->getDateDebut()->format('d/m/Y');
-            $datas[$key]['end_date_formated'] = $reservation->getDateFin()->format('d/m/Y');
-            $datas[$key]['start_date'] = $reservation->getDateDebut();
-            $datas[$key]['end_date'] = $reservation->getDateFin();
-            $datas[$key]['client_name'] = $reservation->getClient()->getNom() . " " .  $reservation->getClient()->getPrenom();
+        $reservations = $reservationRepo->findBy(array(),  array('date_debut' => 'ASC'));
+        $vehicules = $vehiculeRepo->findAll();
+
+        $i = 0;
+        $vehiculesInvolved = [];
+
+        foreach ($vehicules as $vehicule) {
+            foreach ($reservations as $reservation) {
+                if ($vehicule == $reservation->getVehicule()) {
+
+                    $i++;
+                }
+            }
+            if ($i != 0) {
+                $vehiculesInvolved[] = $vehicule;
+            }
+            $i = 0;
         }
 
-        return new JsonResponse($datas);
+        //recuperation date debut et fin de l'ensemble des reservations liées à une voiture
+
+        $data1 = array();
+        $datas = array();
+        $data2 = [];
+        $resArray = [];
+        // { id: 13, text: "Task #2", start_date: "03-04-2018 00:00", type: "project", render: "split", parent: "11", progress: 0.5, open: false, duration: 11 },
+
+        foreach ($vehiculesInvolved as $key => $vehicule) {
+            $i = 0;
+            $reservationsV = $reservationRepo->findLastReservationsV($vehicule);
+            foreach ($reservationsV as $res) {
+                $i++;
+            }
+            $data1[$key]['id'] = $vehicule->getId();
+            $data1[$key]['text'] = $vehicule->getMarque() . " " . $vehicule->getModele() . " " . $vehicule->getImmatriculation();
+            $data1[$key]['start_date'] =  $reservationsV[0]->getDateFin()->format('d-m-Y H:i');
+            $data1[$key]['type'] =  "project";
+            $data1[$key]['render'] =  "split";
+            $data1[$key]['parent'] =  0;
+            $data1[$key]['end_date'] =   $reservationsV[$i - 1]->getDateFin()->format('d-m-Y H:i');
+        }
+
+        foreach ($reservations as $key => $reservation) {
+            $datas[$key]['id'] =  uniqid();
+            $datas[$key]['text'] = $reservation->getClient()->getNom() . " " .  $reservation->getClient()->getPrenom() . " " . $reservation->getDateDebut()->format('d/m/Y H:i') . " " . $reservation->getDateFin()->format('d/m/Y H:i');
+            $datas[$key]['start_date'] = $reservation->getDateDebut()->format('d-m-Y H:i');
+            $datas[$key]['end_date'] = $reservation->getDateFin()->format('d-m-Y H:i');
+            $datas[$key]['parent'] = $reservation->getVehicule()->getId();
+            // $datas[$key]['client_name'] = $reservation->getClient()->getNom() . " " .  $reservation->getClient()->getPrenom();
+            // $datas[$key]['start_date_formated'] = $reservation->getDateDebut()->format('d/m/Y');
+            // $datas[$key]['end_date_formated'] = $reservation->getDateFin()->format('d/m/Y');
+        }
+
+        foreach ($data1 as $dt1) {
+            array_push($data2, $dt1);
+            foreach ($datas as $dts) {
+
+                if ($dt1['id'] == $dts['parent']) {
+                    array_push($data2, $dts);
+                }
+            }
+        }
+
+        // dd($data2);
+        return new JsonResponse($data2);
     }
 
     /**
@@ -133,12 +183,14 @@ class PlanningController extends AbstractController
             $datas[$key]['immatriculation'] = $vehicule->getImmatriculation();
             $datas[$key]['modele'] = $vehicule->getModele();
             if ($this->getLastReservation($vehicule, $date) != null) {
-                $datas[$key]['lastReservation'] = $this->getLastReservation($vehicule, $date)->getDateFin()->format('d-m-Y H:m');
+                $datas[$key]['lastReservation'] = $this->getLastReservation($vehicule, $date)->getDateFin()->format('d-m-Y H:i');
+
+                // dd($this->getLastReservation($vehicule, $date)->getDateFin()->format('d-m-Y H:i'));
             } else {
                 $datas[$key]['lastReservation'] = "Pas de réservation";
             }
             if ($this->getNextReservation($vehicule, $date) != null) {
-                $datas[$key]['nextReservation'] =  $this->getNextReservation($vehicule, $date)->getDateDebut()->format('d-m-Y H:m:sa');
+                $datas[$key]['nextReservation'] =  $this->getNextReservation($vehicule, $date)->getDateDebut()->format('d-m-Y H:i');
             } else {
                 $datas[$key]['nextReservation'] = "Pas de réservation";
             }
@@ -169,7 +221,6 @@ class PlanningController extends AbstractController
             $i = 0;
         }
         return $vehiculeDispo;
-        dd($reservations, $vehiculeDispo);
     }
     public function getLastReservation($vehicule, $date)
     {

@@ -96,9 +96,11 @@ class ReservationController extends AbstractController
      */
     public function index(ReservationRepository $reservationRepository, Request $request, PaginatorInterface $paginator): Response
     {
-        dump($reservationRepository->findBy([], ["id" => "DESC"]));
+
+        $reservations = $reservationRepository->findBy([], ["id" => "DESC"]);
+
         $pagination = $paginator->paginate(
-            $reservationRepository->findBy([], ["id" => "DESC"]), /* query NOT result */
+            $reservations, /* query NOT result */
             $request->query->getInt('page', 1)/*page number*/,
             50/*limit per page*/
         );

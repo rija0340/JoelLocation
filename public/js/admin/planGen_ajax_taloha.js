@@ -117,20 +117,20 @@ function ganttLoadData(data, startDatePeriode, endDatePeriode) {
 
         }
 
-        // arrData.push({
-        //     id: data[i].id,
-        //     text: data[i].text,
-        //     start_date: newStartDate,
-        //     start_time: newStartDate.toLocaleTimeString('fr-FR'),
-        //     end_date: endDatePlusOneDay, //date fin dans bdd + un jour car l'affichage n'est pas correct (durée - 1jour) lorsque l'heure = 00:00
-        //     end_time: newEndDate.toLocaleTimeString('fr-FR'),
-        //     real_end_date: data[i].end_date_formated, //real_end_date correspond date fin dans base de donnée
-        //     client_name: data[i].client_name,
-        //     color: "red"
-        // });
+        arrData.push({
+            id: data[i].id,
+            text: data[i].text,
+            start_date: newStartDate,
+            start_time: newStartDate.toLocaleTimeString('fr-FR'),
+            end_date: endDatePlusOneDay, //date fin dans bdd + un jour car l'affichage n'est pas correct (durée - 1jour) lorsque l'heure = 00:00
+            end_time: newEndDate.toLocaleTimeString('fr-FR'),
+            real_end_date: data[i].end_date_formated, //real_end_date correspond date fin dans base de donnée
+            client_name: data[i].client_name,
+            color: "red"
+        });
     }
 
-    gantt.parse({ data: data });
+    gantt.parse({ data: arrData });
 
     if (startDatePeriode != null && endDatePeriode != null) {
         addTextPeriode(dateToShortFormat(newDate(startDatePeriode)), dateToShortFormat(newDate(endDatePeriode)));
