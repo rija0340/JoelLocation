@@ -15,10 +15,19 @@
 
 	<div class="x_panel">
 		<div class="x_title">
-			<h2>
-				<i class="fa fa-shopping-cart"></i>
-				Liste des réservations
-			</h2>
+			<div class="row">
+				<div class="col-auto">
+					<h2>
+						<i class="fa fa-shopping-cart"></i>
+						Liste des réservations
+					</h2>
+				</div>
+				<div class="col-auto ml-auto">
+					<a href="{{path('reservation_new')}}" class="btn btn-danger">
+						<i class="fa fa-plus"></i>
+						Nouvelle réservation</a>
+				</div>
+			</div>
 			<div class="clearfix"></div>
 		</div>
 		<div class="x_content">
@@ -52,18 +61,14 @@
 								{{ reservation.dateFin ? reservation.dateFin|date('d-m-Y H:i') : '' }}</td>
 							<td></td>
 							<td>{{ reservation.codeReservation }}</td>
-							<td>
+							<td class=" content-center">
 								<div class="row">
 									<div class="col-auto">
 										<a href="{{ path('reservation_edit', {'id': reservation.id}) }}" class="btn btn-link">
 											<i class="fa  fa-gear (alias)"></i>
 										</a>
 									</div>
-									<div class="col-auto">
-										<a href="" class="btn btn-link">
-											<i class="fa  fa-power-off"></i>
-										</a>
-									</div>
+
 								</div>
 								<div class="row">
 									<div class="col-auto">

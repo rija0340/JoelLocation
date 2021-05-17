@@ -116,26 +116,26 @@
 	<div class="x_panel">
 
 		<div class="row">
-			<div class="col-md-2">
+			<div class="col-md-3">
 				<div class="mt-5">
 					<label for="">Date de début</label>
-					<input type="date" id="datedebutplanning" onchange="handler(event);"/>
+					<input type="date" id="datedebutplanning" class="form-control p-1" onchange="handler(event);"/>
 				</div>
 			</div>
-			<div class="col-md-10">
+			<div class="col-md-9">
 				<div class="row">
 					<div class="col-auto font-weight-bold">
 						<span id="spandStartDate"></span>
 						<span id="spanEndDate"></span>
 					</div>
 					<div class="col-auto ml-auto">
-						<button class="btn btn-danger" id="7jours">7 jours</button>
+						<div class="btn-group" role="group" aria-label="Basic example">
+							<button type="button" class="btn btn-outline-secondary" id="7jours">7 jours</button>
+							<button type="button" class="btn btn-outline-secondary" id="14jours">14 jours</button>
+							<button type="button" class="btn btn-outline-secondary" id="1mois">1 mois</button>
+							<button type="button" class="btn btn-outline-secondary" id="2mois">2 mois</button>
+						</div>
 
-						<a class="btn btn-danger" id="14jours">14 jours</a>
-
-						<a class="btn btn-danger" id="1mois">1 mois</a>
-
-						<a class="btn btn-danger" id="2mois">2 mois</a>
 					</div>
 
 				</div>

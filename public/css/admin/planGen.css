@@ -24,6 +24,27 @@ span.badge{
     height: 15px;
 }
 
+
+  /* .gantt_task_content{
+      background-color: red;
+      background : red;
+    } */
+    
+    .red{
+        background-color: red;
+    }    
+    .green{
+        background-color: green;
+    }    
+    .blue{
+        background-color: blue;
+    } 
+    .yellow{
+        background-color: rgb(241, 253, 12);
+    }
+   
+/* style pour gantt */
+    
 .gantt_tree_content, .gantt_task_content{
     line-height: 12px;
     white-space:normal;
@@ -32,10 +53,14 @@ span.badge{
     padding: 5px;
   }
 
-  .gantt_task_content{
-      background-color: red;
-      background : red;
-    }
-   
+.gantt_scale_cell{
+    line-height: 12px;
+    white-space:normal;
+    overflow-wrap: break-word; 
+    /* bring your own prefixes */
+    padding: 5px;
+}
+
+
 
  

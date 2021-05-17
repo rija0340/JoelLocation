@@ -104,6 +104,12 @@ h2 .fa-chevron-right{
     text-decoration: none;
   }
 
+  .btn-pink{
+    color: #fff;
+    background-color:  #FFC0CB;
+   
+  }
+
   .hide{
       display : none !important;
   }

@@ -1,3 +1,10 @@
 #datatable tbody tr td{
     vertical-align: middle !important;
 }
+#datatable {
+    table-layout: fixed;
+    width: 120px; /* Important */
+  }
+  #datatable tbody tr td {
+    width: 30px;
+  }

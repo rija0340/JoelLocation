@@ -65,7 +65,6 @@ class PlanningController extends AbstractController
         $datas = array();
         $data2 = [];
         $resArray = [];
-        // { id: 13, text: "Task #2", start_date: "03-04-2018 00:00", type: "project", render: "split", parent: "11", progress: 0.5, open: false, duration: 11 },
 
         foreach ($vehiculesInvolved as $key => $vehicule) {
             $i = 0;
@@ -76,18 +75,49 @@ class PlanningController extends AbstractController
             $data1[$key]['id'] = $vehicule->getId();
             $data1[$key]['text'] = $vehicule->getMarque() . " " . $vehicule->getModele() . " " . $vehicule->getImmatriculation();
             $data1[$key]['start_date'] =  $reservationsV[0]->getDateFin()->format('d-m-Y H:i');
-            $data1[$key]['type'] =  "project";
+            // $data1[$key]['type'] =  "project";
             $data1[$key]['render'] =  "split";
             $data1[$key]['parent'] =  0;
             $data1[$key]['end_date'] =   $reservationsV[$i - 1]->getDateFin()->format('d-m-Y H:i');
         }
-
+        $c = 0;
         foreach ($reservations as $key => $reservation) {
             $datas[$key]['id'] =  uniqid();
-            $datas[$key]['text'] = $reservation->getClient()->getNom() . " " .  $reservation->getClient()->getPrenom() . " " . $reservation->getDateDebut()->format('d/m/Y H:i') . " " . $reservation->getDateFin()->format('d/m/Y H:i');
+            $datas[$key]['id_r'] =  $reservation->getId();
+            $datas[$key]['client'] = $reservation->getClient()->getNom() . " " .  $reservation->getClient()->getPrenom();
             $datas[$key]['start_date'] = $reservation->getDateDebut()->format('d-m-Y H:i');
-            $datas[$key]['end_date'] = $reservation->getDateFin()->format('d-m-Y H:i');
+            $datas[$key]['start_date_formated'] = $reservation->getDateDebut()->format('d-m-Y H:i');
+            if (date("H", $reservation->getDateFin()->getTimestamp()) == 0) {
+
+                $datas[$key]['duration'] = ceil(1 + (($reservation->getDateFin()->getTimestamp() - $reservation->getDateDebut()->getTimestamp()) / 60 / 60 / 24));
+            } else {
+                $datas[$key]['duration'] = ceil(($reservation->getDateFin()->getTimestamp() - $reservation->getDateDebut()->getTimestamp()) / 60 / 60 / 24);
+            }
+            $datas[$key]['end_date_formated'] = $reservation->getDateFin()->format('d-m-Y H:i');
             $datas[$key]['parent'] = $reservation->getVehicule()->getId();
+
+
+            switch ($c) {
+                case 0:
+                    $datas[$key]['color'] =  "red";
+                    $c++;
+                    break;
+                case 1:
+                    $datas[$key]['color'] =  "green";
+                    $c++;
+                    break;
+                case 2:
+                    $datas[$key]['color'] =  "blue";
+                    $c++;
+                    break;
+                case 3:
+                    $datas[$key]['color'] =  "red";
+                    $c++;
+                    break;
+                    // default:
+                    // echo "Désolé, je n'ai pas de message à afficher pour cette note";
+            }
+
             // $datas[$key]['client_name'] = $reservation->getClient()->getNom() . " " .  $reservation->getClient()->getPrenom();
             // $datas[$key]['start_date_formated'] = $reservation->getDateDebut()->format('d/m/Y');
             // $datas[$key]['end_date_formated'] = $reservation->getDateFin()->format('d/m/Y');

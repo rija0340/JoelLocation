@@ -65,10 +65,10 @@ function ganttInit(startDateScale, endDateScale) {
             format: "%d %M"
         }
     ];
-    //test sur les bares de taches
-    // gantt.templates.task_text = function (start, end, task) {
-    //     return task.client_name + " " + task.start_date.toLocaleDateString('fr-FR') + " " + task.start_time + " - " + task.real_end_date + " " + task.end_time;
-    // };
+    // test sur les bares de taches 
+    gantt.templates.task_text = function (start, end, task) {
+        return task.client + " " + task.start_date_formated + " - " + task.end_date_formated;
+    };
 
     //date de début et fin de l'affichage tasks
     if (startDateScale != null && endDateScale != null) {
@@ -93,18 +93,20 @@ function ganttInit(startDateScale, endDateScale) {
 
     // class en fonction type(ilaina)
 
-
-    gantt.config.row_height = 40;
-    gantt.config.task_height = 12;
+    //valeur largeur colonne
+    gantt.config.min_column_width = 40;
 
 
     gantt.i18n.setLocale("fr");
     gantt.init("gantt_here");
+    //colorer task en fonction valeur "color"
     gantt.templates.task_class = function (start, end, task) {
-        switch (task.type) {
-            case "reservation":
-                return "reservation";
-                break;
+        if (task.color == "red") {
+            return "red";
+        } else if (task.color == "green") {
+            return "green";
+        } else if (task.color == "yellow") {
+            return "yellow";
         }
     };
 }
@@ -115,33 +117,33 @@ function ganttLoadData(data, startDatePeriode, endDatePeriode) {
 
     for (var i = 0; i < len; i++) { //boucle sur l'objet "data" qui est un Json
 
-        //recuperer date de data.json ensuite convertir en date js 
-        startDate = data[i].start_date.date;
-        startDateString = JSON.stringify(startDate);
-        newStartDate = new Date(startDateString);
-        startDateTimestamp = newStartDate.getTime(); //pour recuperer durée si c'est nécessaire (soustraction fin et debut) conversion timestamp nécessaire
+        // //recuperer date de data.json ensuite convertir en date js 
+        // startDate = data[i].start_date.date;
+        // startDateString = JSON.stringify(startDate);
+        // newStartDate = new Date(startDateString);
+        // startDateTimestamp = newStartDate.getTime(); //pour recuperer durée si c'est nécessaire (soustraction fin et debut) conversion timestamp nécessaire
 
-        endDate = data[i].end_date.date;
-        endDateString = JSON.stringify(endDate);
-        newEndDate = new Date(endDateString);
-        endDateTimestamp = newEndDate.getTime();
+        // endDate = data[i].end_date.date;
+        // endDateString = JSON.stringify(endDate);
+        // newEndDate = new Date(endDateString);
+        // endDateTimestamp = newEndDate.getTime();
 
-        var result = endDateTimestamp - startDateTimestamp; // On fait la soustraction
+        // var result = endDateTimestamp - startDateTimestamp; // On fait la soustraction
 
-        var durationDays = result / (1000 * 60 * 60 * 24);
+        // var durationDays = result / (1000 * 60 * 60 * 24);
 
-        var onDayTimestamp = 24 * 60 * 60 * 1000;
+        // var onDayTimestamp = 24 * 60 * 60 * 1000;
 
-        var endDatePlusOneDay = new Date(endDateTimestamp + onDayTimestamp);
+        // var endDatePlusOneDay = new Date(endDateTimestamp + onDayTimestamp);
 
-        var hour = newEndDate.getHours();
+        // var hour = newEndDate.getHours();
 
 
-        if (hour > 0) { //on a remarqué que lorsque l'heure est different de 00:00, la durée manque une journée dans gantt
+        // if (hour > 0) { //on a remarqué que lorsque l'heure est different de 00:00, la durée manque une journée dans gantt
 
-            endDatePlusOneDay = newEndDate;
+        //     endDatePlusOneDay = newEndDate;
 
-        }
+        // }
 
         // arrData.push({
         //     id: data[i].id,
