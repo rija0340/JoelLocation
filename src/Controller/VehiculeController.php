@@ -37,7 +37,7 @@ class VehiculeController extends AbstractController
             $request->query->getInt('page', 1)/*page number*/,
             20/*limit per page*/
         );
-        return $this->render('vehicule/index.html.twig', [
+        return $this->render('admin/vehicule/index.html.twig', [
             'vehicules' => $pagination,
         ]);
     }
@@ -75,7 +75,7 @@ class VehiculeController extends AbstractController
             return $this->redirectToRoute('vehicule_index');
         }
 
-        return $this->render('vehicule/new.html.twig', [
+        return $this->render('admin/vehicule/new.html.twig', [
             'vehicule' => $vehicule,
             'form' => $form->createView(),
         ]);
@@ -86,7 +86,7 @@ class VehiculeController extends AbstractController
      */
     public function show(Vehicule $vehicule): Response
     {
-        return $this->render('vehicule/show.html.twig', [
+        return $this->render('admin/vehicule/show.html.twig', [
             'vehicule' => $vehicule,
         ]);
     }
@@ -119,7 +119,7 @@ class VehiculeController extends AbstractController
             return $this->redirectToRoute('vehicule_index');
         }
 
-        return $this->render('vehicule/edit.html.twig', [
+        return $this->render('admin/vehicule/edit.html.twig', [
             'vehicule' => $vehicule,
             'form' => $form->createView(),
         ]);

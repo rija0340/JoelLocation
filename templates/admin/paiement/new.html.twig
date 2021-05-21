@@ -1,0 +1,14 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}New Paiement
+{% endblock %}
+
+{% block content %}
+	<h1>Nouveau paiement</h1>
+
+	{{ include('admin/paiement/_form.html.twig') }}
+
+	<a href="{{ path('paiement_index') }}" class="btn btn-primary">
+		<i class="fa fa-arrow-left" aria-hidden="true"></i>
+		retour</a>
+{% endblock %}

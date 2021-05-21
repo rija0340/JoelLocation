@@ -168,7 +168,7 @@ class PlanningController extends AbstractController
     public function planGen(): Response
     {
 
-        return $this->render('planning/planGen.html.twig');
+        return $this->render('admin/planning/planGen.html.twig');
     }
 
     /**
@@ -177,7 +177,7 @@ class PlanningController extends AbstractController
     public function planJour(): Response
     {
 
-        return $this->render('planning/planJour.html.twig');
+        return $this->render('admin/planning/planJour.html.twig');
     }
 
 
@@ -315,6 +315,6 @@ class PlanningController extends AbstractController
     public function VehiculeDispo(VehiculeRepository $vehiculeRepo, ReservationRepository $reservationRepo): Response
     {
 
-        return $this->render('planning/vehicule_dispo.html.twig');
+        return $this->render('admin/planning/vehicule_dispo.html.twig');
     }
 }

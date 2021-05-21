@@ -1,0 +1,31 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}Ajout véhicule
+{% endblock %}
+{% block current_page %}
+	<h2>
+		<i class="fa fa-plus"></i>
+		Ajout véhicule
+	</h2>
+
+{% endblock %}
+{% block content %}
+	<div class="x_panel">
+		<div class="x_title">
+			<h2>
+				<i class="fa fa-plus"></i>
+				Ajout véhicule
+			</h2>
+			<div class="clearfix"></div>
+		</div>
+
+		<div class="x_content">
+
+			{{ include('admin/vehicule/_form.html.twig') }}
+
+			<a href="{{ path('vehicule_index') }}" class="btn btn-dark">
+				<i class="fa fa-arrow-left mr-1" aria-hidden="true"></i>Retour</a>
+		</div>
+	</div>
+
+{% endblock %}

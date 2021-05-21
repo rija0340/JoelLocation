@@ -44,6 +44,24 @@ function getDatesValues() {
 function getDateDebutValue() {
     dateDebutValue = this.value;
     console.log('ity ilay date ' + dateDebutValue);
+
+    if (dateFinValue != null) {
+
+
+        if (dateToTimestamp(dateDebutValue) > dateToTimestamp(dateFinValue)) {
+            $("#selectVehicule").empty();
+            alert("La date de fin doit être supérieure à la date de début");
+            dateDebutElem.value = null;
+            dateFinElem.value = null;
+            dateDebutValue = null;
+            dateFinValue = null;
+        } else {
+            setParamDateDebutForAjax();
+
+            retrieveDataAjax();
+        }
+
+    }
 }
 
 function getDateFinValue() {
@@ -63,11 +81,15 @@ function getDateFinValue() {
             alert("La date de fin doit être supérieure à la date de début");
             dateDebutElem.value = null;
             dateFinElem.value = null;
+            dateDebutValue = null;
+            dateFinValue = null;
 
         }
 
     } else {
         dateFinElem.value = null;
+        dateFinValue = null;
+
         alert("Veuillez entrer en premier la date de début");
     }
 }

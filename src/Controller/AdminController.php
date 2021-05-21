@@ -30,7 +30,7 @@ class AdminController extends AbstractController
    */
   public function rechercher_res(): Response
   {
-    return $this->render('reservation/rechercher_res.html.twig');
+    return $this->render('admin/reservation/rechercher_res.html.twig');
   }
 
   /**
@@ -38,7 +38,7 @@ class AdminController extends AbstractController
    */
   public function contrats_en_cours(): Response
   {
-    return $this->render('reservation/contrat/en_cours/index.html.twig');
+    return $this->render('admin/reservation/contrat/en_cours/index.html.twig');
   }
 
   /**
@@ -46,7 +46,7 @@ class AdminController extends AbstractController
    */
   public function detail_contrats_en_cours(): Response
   {
-    return $this->render('reservation/contrat/en_cours/detail.html.twig');
+    return $this->render('admin/reservation/contrat/en_cours/detail.html.twig');
   }
 
   /**
@@ -54,7 +54,7 @@ class AdminController extends AbstractController
    */
   public function contrats_termines(): Response
   {
-    return $this->render('reservation/contrat/termine/index.html.twig');
+    return $this->render('admin/reservation/contrat/termine/index.html.twig');
   }
 
   /**
@@ -62,7 +62,7 @@ class AdminController extends AbstractController
    */
   public function detail_contrat_termine(): Response
   {
-    return $this->render('reservation/contrat/termine/detail.html.twig');
+    return $this->render('admin/reservation/contrat/termine/detail.html.twig');
   }
 
   /**
@@ -70,14 +70,14 @@ class AdminController extends AbstractController
    */
   public function nouvelle_reservation(): Response
   {
-    return $this->render('reservation/nouvelle_reservation.html.twig');
+    return $this->render('admin/reservation/nouvelle_reservation.html.twig');
   }
   /**
    * @Route("/report_reservation", name="report_reservation", methods={"GET"})
    */
   public function report_reservation(): Response
   {
-    return $this->render('reservation/report_reservation.html.twig');
+    return $this->render('admin/reservation/report_reservation.html.twig');
   }
 
   /**
@@ -85,7 +85,7 @@ class AdminController extends AbstractController
    */
   public function reserv_non_solde(): Response
   {
-    return $this->render('reservation/non_solde/reserv_non_solde.html.twig');
+    return $this->render('admin/reservation/non_solde/reserv_non_solde.html.twig');
   }
 
   /**
@@ -93,7 +93,7 @@ class AdminController extends AbstractController
    */
   public function reserv_non_solde_detail(): Response
   {
-    return $this->render('reservation/non_solde/detail.html.twig');
+    return $this->render('admin/reservation/non_solde/detail.html.twig');
   }
 
   /**
@@ -101,7 +101,7 @@ class AdminController extends AbstractController
    */
   public function sans_vehicule(): Response
   {
-    return $this->render('reservation/sans_vehicule.html.twig');
+    return $this->render('admin/reservation/sans_vehicule.html.twig');
   }
 
   /**
@@ -109,7 +109,7 @@ class AdminController extends AbstractController
    */
   public function echec_paiement(): Response
   {
-    return $this->render('reservation/echec_paiement/index.html.twig');
+    return $this->render('admin/reservation/echec_paiement/index.html.twig');
   }
 
   /**
@@ -117,7 +117,7 @@ class AdminController extends AbstractController
    */
   public function detail_echec_paiement(): Response
   {
-    return $this->render('reservation/echec_paiement/detail.html.twig');
+    return $this->render('admin/reservation/echec_paiement/detail.html.twig');
   }
 
   /**
@@ -125,7 +125,7 @@ class AdminController extends AbstractController
    */
   public function devis_reservation(): Response
   {
-    return $this->render('reservation/devis/index.html.twig');
+    return $this->render('admin/reservation/devis/index.html.twig');
   }
 
   /**
@@ -133,7 +133,7 @@ class AdminController extends AbstractController
    */
   public function detail_devis(): Response
   {
-    return $this->render('reservation/devis/detail.html.twig');
+    return $this->render('admin/reservation/devis/detail.html.twig');
   }
 
   /**
@@ -141,7 +141,7 @@ class AdminController extends AbstractController
    */
   public function annulation_reservation(): Response
   {
-    return $this->render('reservation/annulation/index.html.twig');
+    return $this->render('admin/reservation/annulation/index.html.twig');
   }
 
 
@@ -150,7 +150,7 @@ class AdminController extends AbstractController
    */
   public function annulation_attente(): Response
   {
-    return $this->render('reservation/annulation/attente.html.twig');
+    return $this->render('admin/reservation/annulation/attente.html.twig');
   }
 
   /**
@@ -158,7 +158,7 @@ class AdminController extends AbstractController
    */
   public function annulation_avoir(): Response
   {
-    return $this->render('reservation/annulation/avec_avoir.html.twig');
+    return $this->render('admin/reservation/annulation/avec_avoir.html.twig');
   }
 
 
@@ -167,7 +167,7 @@ class AdminController extends AbstractController
    */
   public function vente_comptoir(): Response
   {
-    return $this->render('vente_comptoir/index.html.twig');
+    return $this->render('admin/vente_comptoir/index.html.twig');
   }
 
   /**
@@ -175,7 +175,7 @@ class AdminController extends AbstractController
    */
   public function appel_paiement(): Response
   {
-    return $this->render('appel_paiement/index.html.twig');
+    return $this->render('admin/reservation/appel_paiement/index.html.twig');
   }
 
   /**
@@ -183,7 +183,7 @@ class AdminController extends AbstractController
    */
   public function chiffre_affaire(): Response
   {
-    return $this->render('chiffre_affaire/index.html.twig');
+    return $this->render('admin/chiffre_affaire/index.html.twig');
   }
 
   /**
@@ -191,23 +191,16 @@ class AdminController extends AbstractController
    */
   public function paiement(): Response
   {
-    return $this->render('paiement/index.html.twig');
+    return $this->render('admin/paiement/index.html.twig');
   }
 
-  /**
-   * @Route("/clients_prospects", name="clients_prospects", methods={"GET"})
-   */
-  public function clients_prospects(): Response
-  {
-    return $this->render('clients_prospects/index.html.twig');
-  }
 
   /**
    * @Route("/stop_sales", name="stop_sales", methods={"GET"})
    */
   public function stop_sales(): Response
   {
-    return $this->render('stop_sales_vehicules/index.html.twig');
+    return $this->render('admin/stop_sales_vehicules/index.html.twig');
   }
 
   /**
@@ -215,20 +208,13 @@ class AdminController extends AbstractController
    */
   public function parametre_agence(): Response
   {
-    return $this->render('parametre_agence/index.html.twig');
+    return $this->render('admin/agence/parametre_agence/index.html.twig');
   }
   /**
    * @Route("/presentation_agence", name="presentation_agence", methods={"GET"})
    */
   public function presentation_agence(): Response
   {
-    return $this->render('presentation_agence/index.html.twig');
-  }
-  /**
-   * @Route("/comptes_utilisateurs", name="comptes_utilisateurs", methods={"GET"})
-   */
-  public function comptes_utilisateurs(): Response
-  {
-    return $this->render('comptes_utilisateurs/index.html.twig');
+    return $this->render('admin/agence/presentation_agence/index.html.twig');
   }
 }

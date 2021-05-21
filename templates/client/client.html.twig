@@ -1,0 +1,105 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}page client
+{% endblock %}
+{% block stylesheets %}
+	<link rel="stylesheet" href="css/client/style.css">
+{% endblock %}
+{% block body %}
+	<div class="container">
+		<div class="section-title red text-center">
+			<h2>Espace client de
+				{{ client }}</h2>
+		</div>
+		{# test #}
+		<div class="row mt-5">
+			<div class="col-3">
+				<div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+					<a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">
+						<i class="fa fa-newspaper-o"></i>
+						Mes informations</a>
+					<a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">
+						<div class="d-flex">
+							<span>
+								<i class="fa fa-list"></i>
+								Mes réservations
+							</span>
+
+							{% set i = 0 %}
+							{% for reservation_en_cours in reservation_en_cours %}
+								{%  set i = i + 1  %}
+							{% endfor %}
+							{# {{ i }} #}
+							<span class="badge badge-danger ml-auto">{{ i }}</span>
+						</div>
+					</a>
+					<a class="nav-link" id="v-pills-reservation-tab" data-toggle="pill" href="#v-pills-reservation" role="tab" aria-controls="v-pills-reservation" aria-selected="false">
+						<div class="d-flex">
+							<span>
+								<i class="fa fa-plus"></i>
+								Nouvelle réservation
+							</span>
+						</div>
+					</a>
+					<a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">
+						<div class="d-flex">
+							<span>
+								<i class="fa fa-user-friends"></i>
+								Mes conducteurs
+							</span>
+							<span class="badge badge-danger ml-auto">0</span>
+						</div>
+					</a>
+					<div class="mt-3">
+						<a href="{{path('app_logout')}}" class="btn btn-danger w-100">
+							<i class="fa fa-start"></i>
+							Deconnexion
+						</a>
+						<a href="{{ path('accueil') }}" class="btn btn-warning w-100 mt-2">Aller sur le site Joellocation</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-9">
+				<div class="tab-content" id="v-pills-tabContent">
+					<div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+						<h5>
+							<i class="fa fa-newspaper"></i>
+							MES INFORMATIONS</h5>
+						<div class="clearfix"></div>
+						{% include "client/mes_info.html.twig" %}
+					</div>
+					{# mes reservations #}
+					<div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+
+						{% include "client/mes_reserv.html.twig" %}
+
+
+					</div>
+					{# fin mes reservations #}
+
+					{# new reservation #}
+					<div class="tab-pane fade" id="v-pills-reservation" role="tabpanel" aria-labelledby="v-pills-reservation-tab">
+
+						<div class="text-center">
+							<h3>Effectuer une reservation</h3>
+						</div>
+
+						{% include "client/_form.html.twig" %}
+
+
+					</div>
+					{# fin new reservation #}
+					<div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+						{% include "client/mes_cond.html.twig" %}</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	{# fin custom client #}
+
+
+{% endblock %}
+{% block javascripts %}
+	<script src="../../js/admin/reservationClient_new_ajax.js"></script>
+{% endblock %}

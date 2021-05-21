@@ -26,7 +26,7 @@ class PaiementController extends AbstractController
             $request->query->getInt('page', 1)/*page number*/,
             20/*limit per page*/
         );
-        return $this->render('paiement/index.html.twig', [
+        return $this->render('admin/paiement/index.html.twig', [
             'paiements' => $pagination,
         ]);
     }
@@ -48,7 +48,7 @@ class PaiementController extends AbstractController
             return $this->redirectToRoute('paiement_index');
         }
 
-        return $this->render('paiement/new.html.twig', [
+        return $this->render('admin/paiement/new.html.twig', [
             'paiement' => $paiement,
             'form' => $form->createView(),
         ]);
@@ -59,7 +59,7 @@ class PaiementController extends AbstractController
      */
     public function show(Paiement $paiement): Response
     {
-        return $this->render('paiement/show.html.twig', [
+        return $this->render('admin/paiement/show.html.twig', [
             'paiement' => $paiement,
         ]);
     }
@@ -78,7 +78,7 @@ class PaiementController extends AbstractController
             return $this->redirectToRoute('paiement_index');
         }
 
-        return $this->render('paiement/edit.html.twig', [
+        return $this->render('admin/paiement/edit.html.twig', [
             'paiement' => $paiement,
             'form' => $form->createView(),
         ]);
@@ -89,7 +89,7 @@ class PaiementController extends AbstractController
      */
     public function delete(Request $request, Paiement $paiement): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$paiement->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $paiement->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($paiement);
             $entityManager->flush();

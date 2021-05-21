@@ -104,7 +104,7 @@ class ReservationController extends AbstractController
             $request->query->getInt('page', 1)/*page number*/,
             50/*limit per page*/
         );
-        return $this->render('reservation/index.html.twig', [
+        return $this->render('admin/reservation/crud/index.html.twig', [
             'reservations' => $pagination,
         ]);
     }
@@ -129,7 +129,7 @@ class ReservationController extends AbstractController
             return $this->redirectToRoute('reservation_index');
         }
 
-        return $this->render('reservation/new.html.twig', [
+        return $this->render('admin/reservation/crud/new.html.twig', [
             'reservation' => $reservation,
             'form' => $form->createView(),
         ]);
@@ -140,7 +140,7 @@ class ReservationController extends AbstractController
      */
     public function show(Reservation $reservation): Response
     {
-        return $this->render('reservation/show.html.twig', [
+        return $this->render('admin/reservation/crud/show.html.twig', [
             'reservation' => $reservation,
         ]);
     }
@@ -161,7 +161,7 @@ class ReservationController extends AbstractController
             return $this->redirectToRoute('reservation_index');
         }
 
-        return $this->render('reservation/edit.html.twig', [
+        return $this->render('admin/reservation/crud/edit.html.twig', [
             'reservation' => $reservation,
             'form' => $form->createView(),
         ]);

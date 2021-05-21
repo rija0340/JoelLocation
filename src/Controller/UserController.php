@@ -29,13 +29,41 @@ class UserController extends AbstractController
      */
     public function index(UserRepository $userRepository, Request $request, PaginatorInterface $paginator): Response
     {
+        $clients = array();
+        $users = $userRepository->findBy([], ["date_inscription" => "DESC"]);
         $pagination = $paginator->paginate(
-            $userRepository->findBy([], ["id" => "DESC"]), /* query NOT result */
+            $userRepository->findBy([], ["date_inscription" => "ASC"]), /* query NOT result */
             $request->query->getInt('page', 1)/*page number*/,
             20/*limit per page*/
         );
-        return $this->render('user/index.html.twig', [
-            'users' => $pagination,
+        foreach ($users  as $user) {
+
+            if (in_array('ROLE_CLIENT', $user->getRoles())) {
+                array_push($clients, $user);
+            }
+        }
+
+        return $this->render('admin/user/index.html.twig', [
+            'clients' => $clients,
+        ]);
+    }
+
+    /**
+     * @Route("/comptes_utilisateurs", name="comptes_utilisateurs", methods={"GET"})
+     */
+    public function comptes_utilisateurs(UserRepository $userRepository, Request $request): Response
+    {
+        $personnels = array();
+        $users = $userRepository->findAll();
+        foreach ($users as $user) {
+
+            if (in_array('ROLE_PERSONNEL', $user->getRoles())) {
+                array_push($personnels, $user);
+            }
+        }
+
+        return $this->render('admin/agence/comptes_utilisateurs/index.html.twig', [
+            'personnels' => $personnels
         ]);
     }
 
@@ -60,10 +88,10 @@ class UserController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->redirectToRoute('user_index');
+            return $this->redirectToRoute('comptes_utilisateurs');
         }
 
-        return $this->render('user/new.html.twig', [
+        return $this->render('admin/user/new.html.twig', [
             'user' => $user,
             'form' => $form->createView(),
         ]);
@@ -74,7 +102,7 @@ class UserController extends AbstractController
      */
     public function show(User $user): Response
     {
-        return $this->render('user/show.html.twig', [
+        return $this->render('admin/user/show.html.twig', [
             'user' => $user,
         ]);
     }
@@ -93,7 +121,7 @@ class UserController extends AbstractController
             return $this->redirectToRoute('user_index');
         }
 
-        return $this->render('user/edit.html.twig', [
+        return $this->render('admin/user/edit.html.twig', [
             'user' => $user,
             'form' => $form->createView(),
         ]);

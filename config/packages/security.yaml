@@ -48,7 +48,7 @@ security:
         - { path: ^/carte, roles: ROLE_CLIENT }
         - { path: ^/payement, roles: ROLE_CLIENT }
         - { path: ^/vehicule, roles: ROLE_PERSONNEL }
-        - { path: ^/reservation, roles: ROLE_PERSONNEL }
+        - { path: ^/reservation, roles: ROLE_USER }
         - { path: ^/paiement, roles: ROLE_PERSONNEL }
         - { path: ^/user, roles: ROLE_ADMIN }
         - { path: ^/agence, roles: ROLE_ADMIN }

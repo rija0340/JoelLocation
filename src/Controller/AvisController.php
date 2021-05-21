@@ -26,7 +26,7 @@ class AvisController extends AbstractController
             $request->query->getInt('page', 1)/*page number*/,
             20/*limit per page*/
         );
-        return $this->render('avis/index.html.twig', [
+        return $this->render('admin/avis/index.html.twig', [
             'avis' => $pagination,
         ]);
     }
@@ -48,7 +48,7 @@ class AvisController extends AbstractController
             return $this->redirectToRoute('avis_index');
         }
 
-        return $this->render('avis/new.html.twig', [
+        return $this->render('admin/avis/new.html.twig', [
             'avi' => $avi,
             'form' => $form->createView(),
         ]);
@@ -59,7 +59,7 @@ class AvisController extends AbstractController
      */
     public function show(Avis $avi): Response
     {
-        return $this->render('avis/show.html.twig', [
+        return $this->render('admin/avis/show.html.twig', [
             'avi' => $avi,
         ]);
     }
@@ -78,7 +78,7 @@ class AvisController extends AbstractController
             return $this->redirectToRoute('avis_index');
         }
 
-        return $this->render('avis/edit.html.twig', [
+        return $this->render('admin/avis/edit.html.twig', [
             'avi' => $avi,
             'form' => $form->createView(),
         ]);
@@ -89,7 +89,7 @@ class AvisController extends AbstractController
      */
     public function delete(Request $request, Avis $avi): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$avi->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $avi->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($avi);
             $entityManager->flush();
