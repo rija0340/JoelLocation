@@ -2,28 +2,29 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
-use App\Entity\Reservation;
-use App\Entity\ModeReservation;
-use App\Entity\EtatReservation;
-use App\Entity\Vehicule;
-use App\Entity\ModePaiement;
-use App\Entity\Paiement;
 use App\Entity\Faq;
-use App\Form\ClientType;
+use App\Entity\User;
+use App\Form\UserType;
 use App\Form\LoginType;
-use App\Form\ReservationclientType;
+use App\Entity\Paiement;
+use App\Entity\Vehicule;
+use App\Form\ClientType;
+use App\Entity\Reservation;
+use App\Entity\ModePaiement;
+use App\Entity\EtatReservation;
+use App\Entity\ModeReservation;
 use App\Repository\UserRepository;
-use App\Repository\ReservationRepository;
-use App\Repository\ModeReservationRepository;
-use App\Repository\EtatReservationRepository;
+use App\Form\ReservationclientType;
 use App\Repository\VehiculeRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\ReservationRepository;
+use App\Repository\EtatReservationRepository;
+use App\Repository\ModeReservationRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class ClientController extends AbstractController
 {
@@ -90,7 +91,25 @@ class ClientController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/modifier/{id}", name="client_edit", methods={"GET","POST"})
+     */
+    public function edit(Request $request, User $user): Response
+    {
+        $form = $this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('client');
+        }
+
+        return $this->render('client/_formClient.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
+        ]);
+    }
 
     /**
      * @Route("/inscription", name="inscription")
