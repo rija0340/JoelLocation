@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}page client
+{% endblock %}
+{% block stylesheets %}
+	<link rel="stylesheet" href="css/client/style.css">
+{% endblock %}
+{% block body %}
+	<div class="container">
+		<h1>ceci est un test</h1>
+	</div>
+	<div class="section-title red text-center">
+		<h2>Modification des informations</h2>
+	</div>
+	{# {{ include('client/_formClient.html.twig', {'button_label': 'Modifier'}) }} #}
+
+	<a href="{{ path('client') }}" class="btn btn-dark">
+		<i class="fa fa-arrow-left" aria-hidden="true"></i>
+		Retour</a>
+
+
+{% endblock %}
+{% block javascripts %}{% endblock %}

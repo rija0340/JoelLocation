@@ -52,10 +52,8 @@ class ReservationController extends AbstractController
 
         $dateDebut = new \DateTime($dateDebut);
 
-
         $dateFin = new \DateTime($dateFin);
-        // dd($dateDebut, $dateFin);
-        // dd($this->reservationRepo->findReservationIncludeDates($dateDebut, $dateFin));
+
 
         $datas = array();
         foreach ($this->getVehiculesDispo($dateDebut, $dateFin) as $key => $vehicule) {
@@ -76,7 +74,7 @@ class ReservationController extends AbstractController
         $i = 0;
         $vehiculeDispo = [];
 
-        // code pour vehicule avec reservation , mila manao condition ame tsy misy reservation mihitsy
+        // code pour vehicule avec reservation , mila manao condition amle tsy misy reservation mihitsy
         foreach ($vehicules as $vehicule) {
             foreach ($reservations as $reservation) {
                 if ($vehicule == $reservation->getVehicule()) {
@@ -163,6 +161,7 @@ class ReservationController extends AbstractController
 
         return $this->render('admin/reservation/crud/edit.html.twig', [
             'reservation' => $reservation,
+            'imVeh' => $reservation->getVehicule()->getImmatriculation(), //utile pour val par défaut select
             'form' => $form->createView(),
         ]);
     }

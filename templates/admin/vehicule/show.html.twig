@@ -21,7 +21,9 @@
 				{{vehicule.modele}}</h2>
 			<div class="clearfix"></div>
 		</div>
-
+		<div class="image text-center">
+			<img src="{{vich_uploader_asset(vehicule, 'imageFile') }}" alt="{{ vehicule.immatriculation }}" style="width : 200px">
+		</div>
 		<table class="table">
 			<tbody>
 				<tr>
@@ -34,15 +36,23 @@
 				</tr>
 				<tr>
 					<th>Date de mise en service</th>
-					<td>{{ vehicule.dateMiseService ? vehicule.dateMiseService|date('Y-m-d') : '' }}</td>
+					<td>{{ vehicule.dateMiseService ? vehicule.dateMiseService|date('d-m-Y') : '' }}</td>
 				</tr>
 				<tr>
 					<th>Date de mise en location</th>
-					<td>{{ vehicule.dateMiseLocation ? vehicule.dateMiseLocation|date('Y-m-d') : '' }}</td>
+					<td>{{ vehicule.dateMiseLocation ? vehicule.dateMiseLocation|date('d-m-Y') : '' }}</td>
 				</tr>
 				<tr>
 					<th>Modèle</th>
 					<td>{{ vehicule.modele }}</td>
+				</tr>
+				<tr>
+					<th>Bagages</th>
+					<td>{{ vehicule.bagages }}</td>
+				</tr>
+				<tr>
+					<th>Vitesse</th>
+					<td>{{ vehicule.vitesse }}</td>
 				</tr>
 				<tr>
 					<th>Prix d'acquisition</th>
@@ -54,7 +64,7 @@
 				</tr>
 			</tbody>
 		</table>
-		<a href="{{ path('vehicule_index') }}" class="btn btn-primary">
+		<a href="{{ path('vehicule_index') }}" class="btn btn-dark">
 			<i class="fa fa-arrow-left" aria-hidden="true"></i>
 			retour</a>
 		{% if is_granted("ROLE_ADMIN") %}
@@ -68,5 +78,4 @@
 
 
 	</div>
-
 {% endblock %}

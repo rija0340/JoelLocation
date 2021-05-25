@@ -20,6 +20,8 @@ vich_uploader:
 
     mappings:
       vehicules_image:
+          # uri_prefix: '%vehicules_directory%'
+          # upload_destination: '%vehicules_directory%' 
           uri_prefix: '%vehicules_directory%'
-          upload_destination: '%vehicules_directory%'
+          upload_destination: '%kernel.project_dir%/public/%vehicules_directory%'
 

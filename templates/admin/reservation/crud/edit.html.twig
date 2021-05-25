@@ -54,6 +54,11 @@
 			<div class="clearfix"></div>
 		</div>
 
+		{# pour set default value dans select #}
+		<div style="display : none !important">
+			<span id="imVeh">{{imVeh}}</span>
+		</div>
+
 
 		{{ include('admin/reservation/crud/_form.html.twig', {'button_label': 'Modifier'}) }}
 

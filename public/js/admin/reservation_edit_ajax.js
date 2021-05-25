@@ -7,17 +7,25 @@ var dateFintToPhp;
 var dateFintToPhp;
 var btnRechercherElem;
 var reservation2Elem;
+var imVehElem;
+var imVehValue;
+
 
 getElements();
 addEventListener();
 
+
+
 window.onload = function test() {
     dateDebutValue = document.getElementById("reservation_date_debut").value;
     dateFinValue = document.getElementById("reservation_date_fin").value;
+    imVehValue = document.getElementById("imVeh").innerHTML;
+
     retrieveDataAjax();
 };
 
 function getElements() {
+
     dateDebutElem = document.getElementById("reservation_date_debut");
     dateFinElem = document.getElementById("reservation_date_fin");
     // btnRechercherElem = document.getElementById("rechercherVehicules");
@@ -25,10 +33,12 @@ function getElements() {
 }
 
 function addEventListener() {
+
     dateDebutElem.addEventListener('change', getDateDebutValue, false);
     dateFinElem.addEventListener('change', getDateFinValue, false);
     // btnRechercherElem.addEventListener('click', getDatesValues, false);
 }
+
 
 function getDatesValues() {
     console.log(document.getElementById("reservation_date_debut").value);
@@ -115,10 +125,13 @@ function populateSelectElem(options) {
 
         var opt = options[i];
         console.log('ity ny opt ' + opt.marque);
-        var el = document.createElement("option");
-        el.text = opt.marque + ' ' + opt.modele + ' ' + opt.immatriculation;
-        el.value = opt.id;
-        select.add(el);
+        var option = document.createElement("option");
+        option.text = opt.marque + ' ' + opt.modele + ' ' + opt.immatriculation;
+        option.value = opt.id;
+        if (imVehValue == opt.immatriculation) {
+            option.setAttribute('selected', 'selected');
+        }
+        select.add(option);
 
     }
 }

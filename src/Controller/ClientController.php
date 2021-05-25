@@ -92,24 +92,29 @@ class ClientController extends AbstractController
     }
 
     /**
-     * @Route("/modifier/{id}", name="client_edit", methods={"GET","POST"})
+     * @Route("client/modifier/{id}", name="client_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, User $user): Response
     {
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(ClientType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword($this->passwordEncoder->encodePassword(
+                $user,
+                $user->getPassword()
+            ));
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('client');
         }
 
-        return $this->render('client/_formClient.html.twig', [
+        return $this->render('client/edit.html.twig', [
             'user' => $user,
             'form' => $form->createView(),
         ]);
     }
+
 
     /**
      * @Route("/inscription", name="inscription")
