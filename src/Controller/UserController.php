@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Form\UserClientType;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -98,6 +99,36 @@ class UserController extends AbstractController
     }
 
     /**
+     * @Route("/clientnew", name="user_client_new", methods={"GET","POST"})
+     */
+    public function new_client(Request $request): Response
+    {
+        $user = new User();
+        $form = $this->createForm(UserClientType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user->setRoles(['ROLE_CLIENT']);
+            $user->setPassword($this->passwordEncoder->encodePassword(
+                $user,
+                $user->getPassword()
+            ));
+            $user->setPresence(1);
+            $user->setDateInscription(new \DateTime('now'));
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('user_index');
+        }
+
+        return $this->render('admin/user/newclient.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
      * @Route("/{id}", name="user_show", methods={"GET"})
      */
     public function show(User $user): Response
@@ -118,7 +149,7 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('user_index');
+            return $this->redirectToRoute('comptes_utilisateurs');
         }
         /* if($user->roles[1] == ['ROLE_PERSONNEL']){
             $user->roles = "Employé";
