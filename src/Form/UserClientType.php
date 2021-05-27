@@ -33,10 +33,11 @@ class UserClientType extends AbstractType
             ->add('mail')
             ->add('telephone')
             ->add('portable')
-            ->add('presence')
-            ->add('date_inscription', DateTimeType::class, [
+            //->add('presence')
+            /* ->add('date_inscription', DateTimeType::class, [
                 'widget' => 'single_text',
-            ]);
+            ]) */
+            ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
