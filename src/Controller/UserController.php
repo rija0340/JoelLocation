@@ -120,6 +120,19 @@ class UserController extends AbstractController
 
             return $this->redirectToRoute('user_index');
         }
+        /* if($user->roles[1] == ['ROLE_PERSONNEL']){
+            $user->roles = "Employé";
+        }
+        elseif($user->roles[1] == ['ROLE_ADMIN']){
+            $user->roles = "Administrateur";
+        }
+        elseif($user->roles[1] == ['ROLE_SUPER_ADMIN']){
+            $user->roles = "Administrateur";
+        } 
+        else {
+            $user->roles = "Client";
+        } */
+        //$user->setRoles = "Client";
 
         return $this->render('admin/user/edit.html.twig', [
             'user' => $user,
