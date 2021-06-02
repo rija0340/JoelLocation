@@ -416,9 +416,11 @@ function createCheckboxes(data) {
     //creation en fonction data (length)
     let checkboxesParent = document.getElementById("checkBoxesList");
     //creation elem div parent of input
-    let divParent = document.createElement("div");
-    divParent.classList.add('form-check');
+    let divParent = document.createElement("label");
+    divParent.classList.add('checkbox-label');
     divParent.classList.add('selectAll');
+    divParent.innerText = "Tout cocher/décocher";
+
 
     //creation elem input
     let checkboxElem = document.createElement("input");
@@ -428,9 +430,8 @@ function createCheckboxes(data) {
 
 
     //creation elem label
-    let label = document.createElement("label");
-    label.innerText = 'tout cocher/décocher';
-    label.classList.add('form-check-label');
+    let label = document.createElement("span");
+    label.classList.add('checkmark');
 
     divParent.appendChild(checkboxElem);
     divParent.appendChild(label);
@@ -445,10 +446,12 @@ function createCheckboxes(data) {
         var identifiant = marque + '_' + modele;
 
         //creation elem div parent of input
-        let divParent = document.createElement("div");
-        divParent.classList.add('form-check');
+        let divParent = document.createElement("label");
+        divParent.classList.add('checkbox-label');
         divParent.classList.add(identifiant);
         divParent.classList.add('vehicule');
+        divParent.innerText = data[i].toUpperCase();
+
 
         //creation elem input
         let checkboxElem = document.createElement("input");
@@ -458,9 +461,8 @@ function createCheckboxes(data) {
         checkboxElem.id = identifiant;
 
         //creation elem label
-        let label = document.createElement("label");
-        label.innerText = data[i].toUpperCase();
-        label.classList.add('form-check-label');
+        let label = document.createElement("span");
+        label.classList.add('checkmark');
 
         divParent.appendChild(checkboxElem);
         divParent.appendChild(label);

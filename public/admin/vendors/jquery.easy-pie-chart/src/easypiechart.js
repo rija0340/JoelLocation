@@ -1,4 +1,4 @@
-var EasyPieChart = function(el, opts) {
+var EasyPieChart = function (el, opts) {
 	var defaultOptions = {
 		barColor: '#ef1e25',
 		trackColor: '#f9f9f9',
@@ -14,27 +14,27 @@ var EasyPieChart = function(el, opts) {
 			enabled: true
 		},
 		easing: function (x, t, b, c, d) { // more can be found here: http://gsgd.co.uk/sandbox/jquery/easing/
-			t = t / (d/2);
+			t = t / (d / 2);
 			if (t < 1) {
 				return c / 2 * t * t + b;
 			}
-			return -c/2 * ((--t)*(t-2) - 1) + b;
+			return -c / 2 * ((--t) * (t - 2) - 1) + b;
 		},
-		onStart: function(from, to) {
+		onStart: function (from, to) {
 			return;
 		},
-		onStep: function(from, to, currentValue) {
+		onStep: function (from, to, currentValue) {
 			return;
 		},
-		onStop: function(from, to) {
+		onStop: function (from, to) {
 			return;
 		}
 	};
 
 	// detect present renderer
-	if (typeof(CanvasRenderer) !== 'undefined') {
+	if (typeof (CanvasRenderer) !== 'undefined') {
 		defaultOptions.renderer = CanvasRenderer;
-	} else if (typeof(SVGRenderer) !== 'undefined') {
+	} else if (typeof (SVGRenderer) !== 'undefined') {
 		defaultOptions.renderer = SVGRenderer;
 	} else {
 		throw new Error('Please load either the SVG- or the CanvasRenderer');
@@ -46,36 +46,36 @@ var EasyPieChart = function(el, opts) {
 	/**
 	 * Initialize the plugin by creating the options object and initialize rendering
 	 */
-	var init = function() {
+	var init = function () {
 		this.el = el;
 		this.options = options;
 
 		// merge user options into default options
 		for (var i in defaultOptions) {
 			if (defaultOptions.hasOwnProperty(i)) {
-				options[i] = opts && typeof(opts[i]) !== 'undefined' ? opts[i] : defaultOptions[i];
-				if (typeof(options[i]) === 'function') {
+				options[i] = opts && typeof (opts[i]) !== 'undefined' ? opts[i] : defaultOptions[i];
+				if (typeof (options[i]) === 'function') {
 					options[i] = options[i].bind(this);
 				}
 			}
 		}
 
 		// check for jQuery easing
-		if (typeof(options.easing) === 'string' && typeof(jQuery) !== 'undefined' && jQuery.isFunction(jQuery.easing[options.easing])) {
+		if (typeof (options.easing) === 'string' && typeof (jQuery) !== 'undefined' && jQuery.isFunction(jQuery.easing[options.easing])) {
 			options.easing = jQuery.easing[options.easing];
 		} else {
 			options.easing = defaultOptions.easing;
 		}
 
 		// process earlier animate option to avoid bc breaks
-		if (typeof(options.animate) === 'number') {
+		if (typeof (options.animate) === 'number') {
 			options.animate = {
 				duration: options.animate,
 				enabled: true
 			};
 		}
 
-		if (typeof(options.animate) === 'boolean' && !options.animate) {
+		if (typeof (options.animate) === 'boolean' && !options.animate) {
 			options.animate = {
 				duration: 1000,
 				enabled: options.animate
@@ -101,7 +101,7 @@ var EasyPieChart = function(el, opts) {
 	 * @param  {number} newValue Number between 0 and 100
 	 * @return {object}          Instance of the plugin for method chaining
 	 */
-	this.update = function(newValue) {
+	this.update = function (newValue) {
 		newValue = parseFloat(newValue);
 		if (options.animate.enabled) {
 			this.renderer.animate(currentValue, newValue);
@@ -116,7 +116,7 @@ var EasyPieChart = function(el, opts) {
 	 * Disable animation
 	 * @return {object} Instance of the plugin for method chaining
 	 */
-	this.disableAnimation = function() {
+	this.disableAnimation = function () {
 		options.animate.enabled = false;
 		return this;
 	};
@@ -125,7 +125,7 @@ var EasyPieChart = function(el, opts) {
 	 * Enable animation
 	 * @return {object} Instance of the plugin for method chaining
 	 */
-	this.enableAnimation = function() {
+	this.enableAnimation = function () {
 		options.animate.enabled = true;
 		return this;
 	};

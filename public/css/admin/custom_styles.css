@@ -71,14 +71,29 @@ h2 .fa-chevron-right{
       background-color: #26dad2 !important;
 
   }
+  .bg-pink{
+    background-color: #f8d7da ! important;
+}
+.bg-red{
+  background-color:#ff0b09! important;
+}
 
+.bg-gray1{
+    background-color: #2a3f54 ! important;
+}
+.bg-gray2{
+    background-color: #A9A9A9 ! important;
+}
   .alert-rose{
       background-color: #f8d7da ! important;
   }
  .alert-warning2{
       background-color: #fff3cd ! important;
-  }
+    }
+    .alert-danger{
+  background-color: #ff0b09 ! important;
 
+}
   .text-danger {
     color: #ff0b09 !important;
   }
@@ -96,6 +111,11 @@ h2 .fa-chevron-right{
   .btn-danger {
     color: #fff;
     background-color: #ff0000;
+  }
+
+  .btn-gray2 {
+    color: #fff;
+    background-color: #A9A9A9;
   }
 
   .btn-link {

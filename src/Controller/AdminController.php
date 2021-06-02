@@ -96,13 +96,6 @@ class AdminController extends AbstractController
     return $this->render('admin/reservation/non_solde/detail.html.twig');
   }
 
-  /**
-   * @Route("/sans_vehicule", name="sans_vehicule", methods={"GET"})
-   */
-  public function sans_vehicule(): Response
-  {
-    return $this->render('admin/reservation/sans_vehicule.html.twig');
-  }
 
   /**
    * @Route("/echec_paiement", name="echec_paiement", methods={"GET"})
