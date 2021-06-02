@@ -74,6 +74,7 @@ class PlanningController extends AbstractController
             }
             $data1[$key]['id'] = $vehicule->getId();
             $data1[$key]['text'] = $vehicule->getMarque() . " " . $vehicule->getModele() . " " . $vehicule->getImmatriculation();
+            $data1[$key]['marque_modele'] = $vehicule->getMarque() . " " . $vehicule->getModele();
             $data1[$key]['start_date'] =  $reservationsV[0]->getDateFin()->format('d-m-Y H:i');
             // $data1[$key]['type'] =  "project";
             $data1[$key]['render'] =  "split";
