@@ -48,6 +48,7 @@
 						<th>Prénom</th>
 						<th>Username</th>
 						<th>Date d'inscription</th>
+						<th>Rôle</th>
 						<th>actions</th>
 					</tr>
 				</thead>
@@ -67,6 +68,26 @@
 							</td>
 							<td>
 								{{ user.dateInscription ? user.dateInscription|date('Y-m-d') : '' }}
+							</td>
+							<td>
+								{% set continue = false %}
+								{% for role in user.roles %}
+									{% if role == "ROLE_PERSONNEL" %}
+										Employé
+        								{% set continue = true %}
+									{% endif %}
+									{% if role == "ROLE_ADMIN" %}
+										Administrateur
+        								{% set continue = true %}
+									{% endif %}
+									{% if role == "ROLE_SUPER_ADMIN" %}
+										Administrateur
+        								{% set continue = true %}
+									{% endif %}									
+									{% if continue %}
+										{% set continue = false %}
+									{% endif %}
+								{% endfor %}
 							</td>
 
 							<td>

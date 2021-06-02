@@ -10,7 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
-class UserType extends AbstractType
+class UserClientType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
