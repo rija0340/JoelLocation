@@ -128,6 +128,7 @@ function ganttInit(startDateScale, endDateScale) {
         }
     };
 }
+
 function ganttLoadData(data, startDatePeriode, endDatePeriode) {
 
     var arrData = [];

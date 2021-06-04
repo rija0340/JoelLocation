@@ -6,59 +6,38 @@
 </div>
 <div class="x_content">
 	<div class="row">
-		<div class="col-md-3">
+		<div class="col-md-4">
 			<label for="">
 				Agence de départ :
 			</label>
 			<div class="form-group ">
 				<div class="">
 					<select class="form-control">
-						<option>Choisir un type de date</option>
-						<option>Option one</option>
-						<option>Option two</option>
-						<option>Option three</option>
-						<option>Option four</option>
+						<option>Choisir</option>
+						<option>AEROPORT DE POINT-A-PITRE</option>
+						<option>AGENCE DU MOULE</option>
+						<option>GARE MARITIME DE BERGERVIN</option>
 					</select>
 				</div>
 			</div>
 		</div>
-		<div class="col-md-3">
+		<div class="col-md-4">
 
 			<label for="">
-				Date de départ :
+				Date et Heure de départ :
 			</label>
 			<div>
-				<input id="debut_periode" class="date-picker form-control" placeholder="dd-mm-yyyy" type="text" required="required" type="text" onfocus="this.type='date'" onmouseover="this.type='date'" onclick="this.type='date'" onblur="this.type='text'" onmouseout="timeFunctionLong(this)">
-				<script>
-					function timeFunctionLong(input) {
-setTimeout(function () {
-input.type = 'text';
-}, 60000);
-}
-				</script>
+				<input id="reservation_date_debut" type="datetime-local" class="form-control">
 			</div>
 		</div>
-		<div class="col-md-3">
 
-
-			<label for="">
-				Heure de départ :
-			</label>
-			<input type="time" class="form-control">
-		</div>
-		<div class="col-md-3">
+		<div class="col-md-4">
 			<label for="">
 				Type de véhicule :
 			</label>
 			<div class="form-group ">
 				<div class="">
-					<select class="form-control">
-						<option>Choisir une catégorie</option>
-						<option>Option one</option>
-						<option>Option two</option>
-						<option>Option three</option>
-						<option>Option four</option>
-					</select>
+					<select class="form-control" id="selectVehicule"></select>
 				</div>
 			</div>
 		</div>
@@ -72,7 +51,7 @@ input.type = 'text';
 </div>
 <div class="x_content">
 	<div class="row">
-		<div class="col-md-3">
+		<div class="col-md-4">
 			<label for="">
 				Agence de retour :
 			</label>
@@ -88,42 +67,21 @@ input.type = 'text';
 				</div>
 			</div>
 		</div>
-		<div class="col-md-3">
-
+		<div class="col-md-4">
 			<label for="">
-				Date de retour :
+				Date et Heure de retour :
 			</label>
 			<div>
-				<input id="debut_periode" class="date-picker form-control" placeholder="dd-mm-yyyy" type="text" required="required" type="text" onfocus="this.type='date'" onmouseover="this.type='date'" onclick="this.type='date'" onblur="this.type='text'" onmouseout="timeFunctionLong(this)">
-				<script>
-					function timeFunctionLong(input) {
-setTimeout(function () {
-input.type = 'text';
-}, 60000);
-}
-				</script>
+				<input id="reservation_date_fin" type="datetime-local" class="form-control">
 			</div>
 		</div>
-		<div class="col-md-3">
-			<label for="">
-				Heure de retour :
-			</label>
-
-			<input type="time" class="form-control">
-		</div>
-		<div class="col-md-3">
+		<div class="col-md-4">
 			<label for="">
 				Lieu de séjour :
 			</label>
 			<div class="form-group ">
 				<div class="">
-					<select class="form-control">
-						<option>Choisir une catégorie</option>
-						<option>Option one</option>
-						<option>Option two</option>
-						<option>Option three</option>
-						<option>Option four</option>
-					</select>
+					<input class="form-control">
 				</div>
 			</div>
 		</div>

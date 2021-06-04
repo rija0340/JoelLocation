@@ -1,0 +1,12 @@
+.unstyled {
+    -webkit-appearance: none;
+}
+/* .unstyled::-webkit-inner-spin-button,
+.unstyled::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+} */
+
+.unstyled::-webkit-inner-spin-button {
+ border: 1px solid black;
+}

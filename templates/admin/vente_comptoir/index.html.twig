@@ -34,7 +34,7 @@
 		<div
 			class="x_content">
 			<!-- Smart Wizard -->
-			<p class="testfont">Veillez suivre les différentes étapes de validation</p>
+			<p class="testfont">Veuillez suivre les différentes étapes de validation</p>
 			<div id="wizard" class="form_wizard wizard_horizontal">
 				<ul class="wizard_steps">
 					<li>
@@ -106,30 +106,6 @@
 			<script src="../../admin/vendors/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
 			<!-- jQuery Knob -->
 			<script src="../../admin/vendors/jquery-knob/dist/jquery.knob.min.js"></script>
-			<!-- Initialize datetimepicker -->
-			<script type="text/javascript">
-				$(function () {
-$('#myDatepicker').datetimepicker();
-});
-
-$('#myDatepicker2').datetimepicker({format: 'DD.MM.YYYY'});
-
-$('#myDatepicker3').datetimepicker({format: 'hh:mm A'});
-$('#myDatepicker3-2').datetimepicker({format: 'hh:mm A'});
-
-$('#myDatepicker4').datetimepicker({ignoreReadonly: true, allowInputToggle: true});
-
-$('#datetimepicker6').datetimepicker();
-
-$('#datetimepicker7').datetimepicker({useCurrent: false});
-
-$("#datetimepicker6").on("dp.change", function (e) {
-$('#datetimepicker7').data("DateTimePicker").minDate(e.date);
-});
-
-$("#datetimepicker7").on("dp.change", function (e) {
-$('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
-});
-			</script>
+			<script src="../../js/admin/reservation_new_ajax.js"></script>
 			<script src="../../js/admin/vente_comptoir.js"></script>
 		{% endblock %}
