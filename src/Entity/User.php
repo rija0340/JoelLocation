@@ -98,6 +98,11 @@ class User implements UserInterface
      */
     private $paiements;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $fonction;
+
     public function __construct()
     {
         $this->messages = new ArrayCollection();
@@ -402,5 +407,17 @@ class User implements UserInterface
     public function __toString()
     {
         return $this->getUsername();
+    }
+
+    public function getFonction(): ?string
+    {
+        return $this->fonction;
+    }
+
+    public function setFonction(?string $fonction): self
+    {
+        $this->fonction = $fonction;
+
+        return $this;
     }
 }

@@ -147,23 +147,27 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user->setRoles([$user->getFonction()]);
+            /* if($user->getFonction() == "Client"){
+                $user->setRoles([$user->getFonction()]);
+            }
+            if($user->getFonction() == "Employé"){
+                $user->setRoles(["ROLE_PERSONNEL"]);
+            }
+            if($user->getFonction() == "Administrateur"){
+                $user->setRoles(["ROLE_ADMIN"]);
+            } */
+            $user->setPassword($this->passwordEncoder->encodePassword(
+                $user,
+                $user->getPassword()
+            ));
+            /* if($user->getFonction == "Employé"){
+                $user->setRoles("ROLE_SUPER_ADMIN");
+            } */
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('comptes_utilisateurs');
         }
-        /* if($user->roles[1] == ['ROLE_PERSONNEL']){
-            $user->roles = "Employé";
-        }
-        elseif($user->roles[1] == ['ROLE_ADMIN']){
-            $user->roles = "Administrateur";
-        }
-        elseif($user->roles[1] == ['ROLE_SUPER_ADMIN']){
-            $user->roles = "Administrateur";
-        } 
-        else {
-            $user->roles = "Client";
-        } */
-        //$user->setRoles = "Client";
 
         return $this->render('admin/user/edit.html.twig', [
             'user' => $user,
