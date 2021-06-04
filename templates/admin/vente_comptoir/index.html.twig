@@ -16,6 +16,7 @@
 	<!-- Bootstrap Colorpicker -->
 	<link href="../../admin/vendors/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css" rel="stylesheet">
 	<link href="../../admin/vendors/cropper/dist/cropper.min.css" rel="stylesheet">
+	<link href="../../css/admin/smart_wizard_all.css" rel="stylesheet">
 	<link href="../../css/admin/vente_comptoir.css" rel="stylesheet">
 {% endblock %}
 {% block current_page %}
@@ -35,62 +36,62 @@
 			class="x_content">
 			<!-- Smart Wizard -->
 			<p class="testfont">Veuillez suivre les différentes étapes de validation</p>
-			<div id="wizard" class="form_wizard wizard_horizontal">
-				<ul class="wizard_steps">
-					<li>
-						<a href="#step-1">
-							<span class="step_no">1</span>
-							<span class="step_descr">
-								1. Agences & Dates
-								{# <small>Step 1 description</small> #}
-							</span>
+
+			<!-- SmartWizard html -->
+			<div id="smartwizard">
+
+				<ul class="nav">
+					<li class="nav-item">
+						<a class="nav-link" href="#step-1">
+							<strong>Etape 1</strong>
+							<br>1. Agences & Dates
 						</a>
 					</li>
-					<li>
-						<a href="#step-2">
-							<span class="step_no">2</span>
-							<span class="step_descr">
-								2. Véhicules
-								{# <small>Step 2 description</small> #}
-							</span>
+					<li class="nav-item">
+						<a class="nav-link" href="#step-2">
+							<strong>Etape 2</strong>
+							<br>2. Véhicules
 						</a>
 					</li>
-					<li>
-						<a href="#step-3">
-							<span class="step_no">3</span>
-							<span class="step_descr">
-								3. Options & Garanties
-								{# <small>Step 3 description</small> #}
-							</span>
+					<li class="nav-item">
+						<a class="nav-link" href="#step-3">
+							<strong>Etape 3</strong>
+							<br>3. Options & Garanties
 						</a>
 					</li>
-					<li>
-						<a href="#step-4">
-							<span class="step_no">4</span>
-							<span class="step_descr">
-								4. Récapitulatif
-								{# <small>Step 4 description</small> #}
-							</span>
+					<li class="nav-item">
+						<a class="nav-link " href="#step-4">
+							<strong>Etape 4</strong>
+							<br>4. Récapitulatif
 						</a>
 					</li>
 				</ul>
-				<div id="step-1">
-					{% include "admin/vente_comptoir/steps/step1.html.twig" %}
-				</div>
-				<div id="step-2">
-					{% include "admin/vente_comptoir/steps/step2.html.twig" %}
-				</div>
-				<div id="step-3">
-					{% include "admin/vente_comptoir/steps/step3.html.twig" %}
-				</div>
-				<div id="step-4">
-					{% include "admin/vente_comptoir/steps/step4.html.twig" %}
+
+				<div class="tab-content">
+					<div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1">
+						{% include "admin/vente_comptoir/steps/step1.html.twig" %}
+					</div>
+					<div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
+						{% include "admin/vente_comptoir/steps/step2.html.twig" %}
+
+					</div>
+					<div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
+						{% include "admin/vente_comptoir/steps/step3.html.twig" %}
+
+					</div>
+					<div id="step-4" class="tab-pane" role="tabpanel" aria-labelledby="step-4">
+						<h3>Step 4 Content</h3>
+						{% include "admin/vente_comptoir/steps/step4.html.twig" %}
+
+					</div>
 				</div>
 			</div>
 		{% endblock %}
 		{% block javascripts %}
 			<!-- FastClick -->
 			<script src="../../admin/vendors/fastclick/lib/fastclick.js"></script>
+			<script src="../../admin/vendors/jquery/dist/jquery.min.js" integrity="sha256-xnzn2a4ltkb44mc/jz3pt4iu1cmer0fkxs4pru/jxaq=" crossorigin=" anonymous"></script>
+
 			<!-- jQuery Smart Wizard -->
 			<script src="../../admin/vendors/jQuery-Smart-Wizard/js/jquery.smartWizard.js"></script>
 			<!-- bootstrap-daterangepicker -->
@@ -108,4 +109,5 @@
 			<script src="../../admin/vendors/jquery-knob/dist/jquery.knob.min.js"></script>
 			<script src="../../js/admin/reservation_new_ajax.js"></script>
 			<script src="../../js/admin/vente_comptoir.js"></script>
+			<script src="../../js/admin/smartwizard-config.js"></script>
 		{% endblock %}
