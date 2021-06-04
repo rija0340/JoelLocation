@@ -134,6 +134,31 @@ class Vehicule
      */
     private $updated_at;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $options;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $prix;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $garantie;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $commentaire;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $disponibilite;
+
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
@@ -422,6 +447,66 @@ class Vehicule
     public function setUpdatedAt(\DateTimeInterface $updated_at): self
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    public function getOptions(): ?string
+    {
+        return $this->options;
+    }
+
+    public function setOptions(?string $options): self
+    {
+        $this->options = $options;
+
+        return $this;
+    }
+
+    public function getPrix(): ?string
+    {
+        return $this->prix;
+    }
+
+    public function setPrix(?string $prix): self
+    {
+        $this->prix = $prix;
+
+        return $this;
+    }
+
+    public function getGarantie(): ?string
+    {
+        return $this->garantie;
+    }
+
+    public function setGarantie(?string $garantie): self
+    {
+        $this->garantie = $garantie;
+
+        return $this;
+    }
+
+    public function getCommentaire(): ?string
+    {
+        return $this->commentaire;
+    }
+
+    public function setCommentaire(?string $commentaire): self
+    {
+        $this->commentaire = $commentaire;
+
+        return $this;
+    }
+
+    public function getDisponibilite(): ?bool
+    {
+        return $this->disponibilite;
+    }
+
+    public function setDisponibilite(bool $disponibilite): self
+    {
+        $this->disponibilite = $disponibilite;
 
         return $this;
     }
