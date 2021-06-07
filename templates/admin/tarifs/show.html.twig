@@ -1,0 +1,57 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}tarifs Clients
+{% endblock %}
+
+{% block content %}
+	<h1>tarif</h1>
+
+	<table class="table">
+		<tbody>
+			<tr>
+				<th>Id</th>
+				<td>{{ tarif.id }}</td>
+			</tr>
+			<tr>
+				<th>3 jours</th>
+				<td>{{ tarif.troisJours }}</td>
+			</tr>
+			<tr>
+				<th>
+					7 jours</th>
+				<td>{{ tarif.septJours }}</td>
+			</tr>
+			<tr>
+				<th>Une semaine</th>
+				<td>{{ tarif.uneSemaine }}</td>
+			</tr>
+			<tr>
+				<th>Un mois</th>
+				<td>{{ tarif.unMois }}</td>
+			</tr>
+			<tr>
+				<th>Mois</th>
+				<td>{{ tarif.mois }}</td>
+			</tr>
+			<tr>
+				<th>Véhicule</th>
+				<td>{{ tarif.vehicule.marque }}</td>
+			</tr>
+
+		</tbody>
+	</table>
+
+	<a href="{{ path('tarifs_index') }}" class="btn btn-primary">
+		<i class="fa fa-arrow-left" aria-hidden="true"></i>
+		retour</a>
+	{% if is_granted("ROLE_ADMIN") %}
+		<a href="{{ path('tarif_edit', {'id': tarif.id}) }}" class="btn btn-success">
+			<i class="fa fa-book" aria-hidden="true"></i>
+			Modifier</a>
+	{% endif %}
+	{% if is_granted("ROLE_ADMIN") %}
+		{{ include('admin/tarifs/_delete_form.html.twig') }}
+	{% endif %}
+
+
+{% endblock %}

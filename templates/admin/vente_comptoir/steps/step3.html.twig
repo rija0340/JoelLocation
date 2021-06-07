@@ -8,7 +8,7 @@
 					Votre réservation
 				</h3>
 			</div>
-			<img src="../../images/capture 1.jpg" alt="" style="width:100%;">
+			<img src="" alt="" style="width:100%;" id="vehicule_photo">
 
 			<div>
 				<h3 class="heading">Agence départ
@@ -16,12 +16,9 @@
 				<div class="content_depart">
 					<p>
 						<i class="fa fa-map-marker"></i>
-						<span>
-							Aéroport Guadeloupe via Navette
-						</span><br>
-						<span>
-							09 Octobre 2020 - 06H00
-						</span>
+						<span id="agence_depart"></span><br>
+						<span id="date_depart"></span>
+						<span id="heure_depart"></span>
 					</p>
 				</div>
 				<h3 class="heading">Agence retour
@@ -29,26 +26,25 @@
 				<div class="content_retour">
 					<p>
 						<i class="fa fa-map-marker"></i>
-						<span>
-							Aéroport Guadeloupe via Navette
-						</span><br>
-						<span>
-							09 Octobre 2020 - 13H00
-						</span>
+						<span id="agence_retour"></span><br>
+						<span id="date_retour"></span>
+						<span id="heure_retour"></span>
 					</p>
 				</div>
 				<p>
 					Soit
-					<span>X</span>
+					<span id="nombre_jours_location"></span>
 					jours de location</p>
 
 				<h3 class="heading">Prix de base de location</h3>
 				<div class="prix_location">
-					<span class="prix">16.20 EUR</span><br>
-					soit 16.20 euro/jour
+					<span id="prix">
+						EUR</span><br>
+					soit
+					<span id="prix"></span>euro/jour
 				</div>
 				<div class="prestation">
-					<h3 class="heading">Presations incluses</h3>
+					<h3 class="heading">Prestations incluses</h3>
 					<ul class="pl-2">
 						<li>
 							<i class="fa fa-check"></i>
@@ -101,37 +97,37 @@
 						</p>
 						{# test incrementer #}
 						{# <div class="input-group input-number-group">
-																																																	<div class="row">
-																																																		<div class="col-auto p-0">
-																																																			<button class="btn btn-dark decrement mb-0">
-																																																				<i class="fa fa-minus"></i>
-																																																			</button>
-																																																		</div>
-																																																		<div class="col-auto p-0">
-																																																			<input class="input-number p-0" type="number" value="0" min="0" max="1000">
-																																																		</div>
-																																																		<div class="col-auto p-0 pl-1">
-																																																			<button class="btn btn-primary increment mb-0">
-																																																				<i class="fa fa-plus"></i>
-																																																			</button>
-																																																		</div>
-																																																		<div class="col-auto d-flex">
-																																																			<div class=" d-flex align-items-center">
-																																																				<div>0 Euro</div>
-																																																			</div>
-																																																		</div>
-																																																	</div>
-																																																</div> #}
+																																																																																																																																																																																																																																																																																											<div class="row">
+																																																																																																																																																																																																																																																																																												<div class="col-auto p-0">
+																																																																																																																																																																																																																																																																																													<button class="btn btn-dark decrement mb-0">
+																																																																																																																																																																																																																																																																																														<i class="fa fa-minus"></i>
+																																																																																																																																																																																																																																																																																													</button>
+																																																																																																																																																																																																																																																																																												</div>
+																																																																																																																																																																																																																																																																																												<div class="col-auto p-0">
+																																																																																																																																																																																																																																																																																													<input class="input-number p-0" type="number" value="0" min="0" max="1000">
+																																																																																																																																																																																																																																																																																												</div>
+																																																																																																																																																																																																																																																																																												<div class="col-auto p-0 pl-1">
+																																																																																																																																																																																																																																																																																													<button class="btn btn-primary increment mb-0">
+																																																																																																																																																																																																																																																																																														<i class="fa fa-plus"></i>
+																																																																																																																																																																																																																																																																																													</button>
+																																																																																																																																																																																																																																																																																												</div>
+																																																																																																																																																																																																																																																																																												<div class="col-auto d-flex">
+																																																																																																																																																																																																																																																																																													<div class=" d-flex align-items-center">
+																																																																																																																																																																																																																																																																																														<div>0 Euro</div>
+																																																																																																																																																																																																																																																																																													</div>
+																																																																																																																																																																																																																																																																																												</div>
+																																																																																																																																																																																																																																																																																											</div>
+																																																																																																																																																																																																																																																																																										</div> #}
 						<div class="row">
 							<div class="col-auto">
 								<label class="label-conducteur">Oui
-									<input type="radio" checked name="radio-conducteur">
+									<input type="radio" checked name="radio-conducteur" value="1">
 									<span class="checkmark-conducteur"></span>
 								</label>
 							</div>
 							<div class="col-auto">
 								<label class="label-conducteur">Non
-									<input type="radio" name="radio-conducteur">
+									<input type="radio" name="radio-conducteur" value="2">
 									<span class="checkmark-conducteur"></span>
 								</label>
 							</div>
@@ -157,15 +153,15 @@
 						<p>Nous mettons à votre disposition des sièges bébé et nourrissons, homologués NF, pour seulement 30 euros TTC. Les rehausseurs pour les enfants de + de 15kg sont totalement gratuits !</p>
 						{# test radio #}
 						<label class="label-radio">Siège bébé : 30€
-							<input type="radio" checked="checked" name="radio-bebe">
+							<input type="radio" checked="checked" name="radio-siege" value="1">
 							<span class="checkmark-radio"></span>
 						</label>
 						<label class="label-radio">Siège nourrisson : 30€
-							<input type="radio" name="radio-bebe">
+							<input type="radio" name="radio-siege" value="2">
 							<span class="checkmark-radio"></span>
 						</label>
 						<label class="label-radio">Rehausseur : gratuit
-							<input type="radio" name="radio-bebe">
+							<input type="radio" name="radio-siege" value="3">
 							<span class="checkmark-radio"></span>
 						</label>
 						{# fin incrementer #}
@@ -195,18 +191,15 @@
 						<p>
 							Ce produit élimine votre éventuelle responsabilité envers nous ; en cas de dommage 	causé aux vitres du véhicule (y compris au toit ouvrant) et aux pneus uniquement.
 						</p>
-						<div class="row">
-							<div class="col-auto p-0">
-								<label class="label-container">90€
-									<input type="checkbox" checked="checked">
-									<span class="checkmark"></span>
-								</label>
+						<div
+							class="row">
+							{# <div class="col-auto p-0"><label class="label-container">90€<input type="checkbox" checked="checked"><span class="checkmark"></span></label></div> #}
 
-
-							</div>
-
+							<label class="label-radio">90€
+								<input type="radio" checked="checked" name="radio-garantie" value="1">
+								<span class="checkmark-radio"></span>
+							</label>
 						</div>
-
 					</div>
 				</div>
 			</div>
@@ -227,12 +220,10 @@
 							Ce produit offre une couverture pour la récupération du véhicule et les frais de demande d’intervention en urgence dont vous devriez normalement vous acquitter, si la demande d’intervention ou le dépannage étaient imputables à une faute de votre part. Exemples de frais pour demande d’intervention en urgence couverts : clés perdus, batterie déchargée, erreur de carburant.
 						</p>
 						<div class="row">
-							<div class="col-auto p-0">
-								<label class="label-container">100€
-									<input type="checkbox" checked="checked">
-									<span class="checkmark"></span>
-								</label>
-							</div>
+							<label class="label-radio">100€
+								<input type="radio" checked="checked" name="radio-garantie" value="2">
+								<span class="checkmark-radio"></span>
+							</label>
 						</div>
 					</div>
 				</div>
@@ -253,12 +244,10 @@
 						<p>L’Assistance Premium est un produit optionnel qui complète l’assurance responsabilité civile incluse dans votre prix de location. Il offre une couverture pour la récupération du véhicule et les frais de demande d’intervention en urgence dont vous devriez normalement vous acquitter si la demande d’intervention ou le dépannage étaient imputables à une faute de votre part. Ce produit couvre tout dommage ou perte au véhicule à valeur total du véhicule.
 						</p>
 						<div class="row">
-							<div class="col-auto p-0">
-								<label class="label-container">160€
-									<input type="checkbox" checked="checked">
-									<span class="checkmark"></span>
-								</label>
-							</div>
+							<label class="label-radio">160€
+								<input type="radio" checked="checked" name="radio-garantie" value="3">
+								<span class="checkmark-radio"></span>
+							</label>
 						</div>
 					</div>
 				</div>

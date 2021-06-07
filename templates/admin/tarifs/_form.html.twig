@@ -1,0 +1,44 @@
+{{ form_start(form) }}
+<div class="row">
+	<div class="form-group col-md-4">
+		<label for="">Véhicule :</label>
+		{{ form_widget(form.vehicule) }}
+	</div>
+
+	<div class="form-group col-md-4">
+		<label for="">Mois :</label>
+		{{ form_widget(form.mois) }}
+	</div>
+
+	<div class="form-group col-md-4">
+		<label for="">
+			3 Jours</label>
+		{{ form_widget(form.troisJours) }}
+	</div>
+	<div class="form-group col-md-4">
+		<label for="">
+			7 Jours</label>
+		{{ form_widget(form.septJours) }}
+	</div>
+
+	<div class="form-group col-md-4">
+		<label for="">
+			15 Jours :
+		</label>
+		{{ form_widget(form.quinzeJours) }}
+	</div>
+
+	<div class="form-group col-md-4">
+		<label for="">
+			30 Jours :
+		</label>
+		{{ form_widget(form.trenteJours) }}
+	</div>
+
+
+</div>
+<button class="btn btn-success">
+	<i class="fa fa-book" aria-hidden="true"></i>
+	{{ button_label|default('Enregistrer') }}</button>
+
+{{ form_end(form) }}

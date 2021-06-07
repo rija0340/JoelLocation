@@ -97,6 +97,26 @@ class Reservation
      */
     private $paiements;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $conducteur;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $siege;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $garantie;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $commentaire;
+
     public function __construct()
     {
         $this->avis = new ArrayCollection();
@@ -299,6 +319,57 @@ class Reservation
 
         return $this;
     }
+
+    // dernière modification
+
+    public function getConducteur(): ?bool
+    {
+        return $this->conducteur;
+    }
+
+    public function setConducteur(?bool $conducteur): self
+    {
+        $this->conducteur = $conducteur;
+
+        return $this;
+    }
+
+    public function getSiege(): ?string
+    {
+        return $this->siege;
+    }
+
+    public function setSiegeEnfant(?string $siege): self
+    {
+        $this->siege = $siege;
+
+        return $this;
+    }
+
+    public function getGarantie(): ?string
+    {
+        return $this->garantie;
+    }
+
+    public function setGarantie(?string $garantie): self
+    {
+        $this->garantie = $garantie;
+
+        return $this;
+    }
+
+    public function getCommentaire(): ?string
+    {
+        return $this->commentaire;
+    }
+
+    public function setCommentaire(?string $commentaire): self
+    {
+        $this->commentaire = $commentaire;
+
+        return $this;
+    }
+
 
     /**
      * toString

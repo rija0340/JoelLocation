@@ -1,0 +1,48 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}Modifier tarif
+{% endblock %}
+{% block stylesheets %}
+	<!-- Bootstrap -->
+	<link
+	href="../../admin/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+	<!-- Font Awesome -->
+	<link
+	href="../../admin/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+	<!-- NProgress -->
+	<link
+	href="../../admin/vendors/nprogress/nprogress.css" rel="stylesheet">
+	<!-- iCheck -->
+	<link
+	href="../../admin/vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+	<!-- bootstrap-progressbar -->
+	<link
+	href="../../admin/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+	<!-- JQVMap -->
+	<link
+	href="../../admin/vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet"/>
+	<!-- bootstrap-daterangepicker -->
+	<link
+	href="../../admin/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+	<!-- Custom Theme Style -->
+	<link
+	href="../../admin/build/css/custom.min.css" rel="stylesheet">
+	<!-- Custom header dynamic table -->
+	<link
+	href="../../css/admin/custom_datatable.css" rel="stylesheet">
+	<!-- Custom header dynamic table -->
+	<link href="../../css/admin/custom_styles.css" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+	<h1>Modification tarif</h1>
+
+	{{ include('admin/tarifs/_form.html.twig', {'button_label': 'Modifier'}) }}
+
+	<a href="{{ path('tarifs_index') }}" class="btn btn-primary">
+		<i class="fa fa-arrow-left" aria-hidden="true"></i>
+		retour</a>
+
+	{{ include('admin/tarifs/_delete_form.html.twig') }}
+{% endblock %}

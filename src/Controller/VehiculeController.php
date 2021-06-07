@@ -163,7 +163,15 @@ class VehiculeController extends AbstractController
         $data['id'] = $vehicule->getId();
         $data['marque'] = $vehicule->getMarque()->getLibelle();
         $data['modele'] = $vehicule->getModele();
+        $data['carburation'] = $vehicule->getCarburation();
+        $data['vitesse'] = $vehicule->getVitesse();
         $data['immatriculation'] = $vehicule->getImmatriculation();
+        $data['bagages'] = $vehicule->getBagages();
+        $data['atouts'] = $vehicule->getAtouts();
+        $data['caution'] = $vehicule->getCaution();
+        $data['details'] = $vehicule->getDetails();
+        $data['portes'] = $vehicule->getPortes();
+        $data['passagers'] = $vehicule->getPassagers();
         $data['image'] = $vehicule->getImage();
 
         return new JsonResponse($data);

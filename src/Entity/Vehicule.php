@@ -135,29 +135,14 @@ class Vehicule
     private $updated_at;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $options;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $prix;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $garantie;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $commentaire;
-
-    /**
      * @ORM\Column(type="boolean")
      */
     private $disponibilite;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Tarifs::class, mappedBy="vehicule", cascade={"persist", "remove"})
+     */
+    private $tarifs;
 
     public function __construct()
     {
@@ -451,53 +436,6 @@ class Vehicule
         return $this;
     }
 
-    public function getOptions(): ?string
-    {
-        return $this->options;
-    }
-
-    public function setOptions(?string $options): self
-    {
-        $this->options = $options;
-
-        return $this;
-    }
-
-    public function getPrix(): ?string
-    {
-        return $this->prix;
-    }
-
-    public function setPrix(?string $prix): self
-    {
-        $this->prix = $prix;
-
-        return $this;
-    }
-
-    public function getGarantie(): ?string
-    {
-        return $this->garantie;
-    }
-
-    public function setGarantie(?string $garantie): self
-    {
-        $this->garantie = $garantie;
-
-        return $this;
-    }
-
-    public function getCommentaire(): ?string
-    {
-        return $this->commentaire;
-    }
-
-    public function setCommentaire(?string $commentaire): self
-    {
-        $this->commentaire = $commentaire;
-
-        return $this;
-    }
 
     public function getDisponibilite(): ?bool
     {
@@ -507,6 +445,23 @@ class Vehicule
     public function setDisponibilite(bool $disponibilite): self
     {
         $this->disponibilite = $disponibilite;
+
+        return $this;
+    }
+
+    public function getTarifs(): ?Tarifs
+    {
+        return $this->tarifs;
+    }
+
+    public function setTarifs(Tarifs $tarifs): self
+    {
+        // set the owning side of the relation if necessary
+        if ($tarifs->getVehicule() !== $this) {
+            $tarifs->setVehicule($this);
+        }
+
+        $this->tarifs = $tarifs;
 
         return $this;
     }

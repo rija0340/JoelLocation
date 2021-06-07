@@ -2,14 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\Tarifs;
 use App\Entity\Reservation;
 use App\Form\ReservationType;
+use App\Repository\TarifsRepository;
 use App\Repository\ReservationRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/backoffice")
@@ -158,9 +160,13 @@ class AdminController extends AbstractController
   /**
    * @Route("/vente_comptoir", name="vente_comptoir", methods={"GET"})
    */
-  public function vente_comptoir(): Response
+  public function vente_comptoir(TarifsRepository $tarifsRepo): Response
   {
-    return $this->render('admin/vente_comptoir/index.html.twig');
+    $tarifs = new Tarifs();
+    $tarifs = $tarifsRepo->findAll();
+    return $this->render('admin/vente_comptoir/index.html.twig', [
+      'tarifs' => $tarifs
+    ]);
   }
 
   /**

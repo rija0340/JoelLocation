@@ -8,19 +8,16 @@
 					Votre réservation
 				</h3>
 			</div>
-			<img src="../../images/capture 1.jpg" alt="" style="width:90%;">
+			<img src="" alt="" style="width:90%;" id="vehicule_photo">
 			<div>
 				<h3 class="heading">Agence départ
 				</h3>
 				<div class="content_depart">
 					<p>
 						<i class="fa fa-map-marker"></i>
-						<span>
-							Aéroport Guadeloupe via Navette
-						</span><br>
-						<span>
-							09 Octobre 2020 - 06H00
-						</span>
+						<span id="agence_depart"></span><br>
+						<span id="date_depart"></span>
+						<span id="heure_depart"></span>
 					</p>
 				</div>
 				<h3 class="heading">Agence retour
@@ -28,48 +25,40 @@
 				<div class="content_retour">
 					<p>
 						<i class="fa fa-map-marker"></i>
-						<span>
-							Aéroport Guadeloupe via Navette
-						</span><br>
-						<span>
-							09 Octobre 2020 - 13H00
-						</span>
+						<span id="agence_retour"></span><br>
+						<span id="date_retour"></span>
+						<span id="heure_retour"></span>
 					</p>
 				</div>
 				<p>
 					Soit
-					<span>X</span>
+					<span id="nombre_jours_location"></span>
 					jours de location</p>
 
 				<h3 class="heading">Prix de base de location</h3>
 				<div class="prix_location">
-					<span class="prix">16.20 EUR</span><br>
-					soit 16.20 euro/jour
+					<span id="prix"></span>
+					EUR<br>
+					soit
+					<span id="prix"></span>
+					euro/jour
 				</div>
 				<div class="prestation">
 					<h3 class="heading">Presations incluses</h3>
-					<ul class="pl-2">
-						<li>
-							<i class="fa fa-check"></i>
-							Kilométrage Illimité
-						</li>
-						<li>
-							<i class="fa fa-check"></i>
-							Assurance accidents causés aux tiers
-						</li>
-						<li>
-							<i class="fa fa-check"></i>
-							Assurance responsabilité civile
-						</li>
-						<li>
-							<i class="fa fa-check"></i>
-							Assurance collision (CDW)
-						</li>
-						<li>
-							<i class="fa fa-check"></i>
-							TVA 8.5 %
-						</li>
-					</ul>
+					<p>
+						<i class="fa fa-check"></i>
+						<span>Conducteur :
+						</span>
+						<span id="span_conducteur"></span>
+					</p>
+					<p>
+						<i class="fa fa-check"></i>
+						<span id="span_siege"></span>
+					</p>
+					<p>
+						<i class="fa fa-check"></i>
+						<span id="span_garantie"></span>
+					</p>
 				</div>
 			</div>
 

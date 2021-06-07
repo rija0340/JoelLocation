@@ -1,0 +1,26 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}Nouveau tarif
+{% endblock %}
+{% block current_page %}
+	<h2>
+		<i class="fa fa-plus"></i>Nouveau tarif</h2>
+{% endblock %}
+
+{% block content %}
+
+	<div class="x_panel " id="reservation2">
+		<div class="x_title">
+			<h2>
+				<i class="fa fa-plus"></i>Nouveau tarif</h2>
+			<div class="clearfix"></div>
+		</div>
+
+		{{ include('admin/tarifs/_form.html.twig') }}
+
+		<a href="{{ path('tarifs_index') }}" class="btn btn-primary">
+			<i class="fa fa-arrow-left" aria-hidden="true"></i>
+			retour</a>
+
+	</div>
+{% endblock %}
