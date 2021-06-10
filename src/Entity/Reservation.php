@@ -322,12 +322,12 @@ class Reservation
 
     // dernière modification
 
-    public function getConducteur(): ?bool
+    public function getConducteur(): ?string
     {
         return $this->conducteur;
     }
 
-    public function setConducteur(?bool $conducteur): self
+    public function setConducteur(?string $conducteur): self
     {
         $this->conducteur = $conducteur;
 

@@ -57,6 +57,7 @@ var garantieSpanElem;
 var selectedClient;
 var btnReserver;
 var selectClientElem;
+var listeClients = [];
 
 getElements()
 addEvent();
@@ -112,7 +113,7 @@ function getElementsStep2Step3Step4() {
     immatriculationSpanElem = document.querySelector('span[id="vehicule_immatriculation"]');
 
     // step 4
-    selectClientElem = document.querySelector('select[id="selectClient"]');
+    selectClientElem = document.querySelector('input[id="selectClient"]');
 
 
 
@@ -306,6 +307,8 @@ $(document).ready(function () { // Step show event
             conducteurSpanElem.innerHTML = conducteur;
             siegeSpanElem.innerHTML = siege;
             garantieSpanElem.innerHTML = garantie;
+            // autocomplete(document.getElementById("selectClient"), listeClients);
+            autocomplete(listeClients);
 
             return true;
         }
@@ -442,7 +445,15 @@ function retrieveUsersAjax() {
         Type: "json",
         success: function (data) {
             console.log(data);
-            populateSelectClientElem(data);
+
+            for (let i = 0; i < data.length; i++) {
+
+                listeClients.push(data[i].prenom + ' ' + data[i].nom + ' (' + data[i].email + ')');
+
+            }
+
+            console.log(listeClients)
+            // populateSelectClientElem(data);
 
         },
         error: function (erreur) {
@@ -599,7 +610,13 @@ function selectClient() {
     console.log(selectClientElem);
     selectedClient = selectClientElem.value;
     console.log("data : " + selectedClient, agenceDepartSelected, agenceRetourSelected, lieuSejourValue, datetimeDepartValue, datetimeRetourValue, dureeReservation,
-        tarifApplique, conducteur
-        , siege
-        , garantie);
-};
+        tarifApplique, conducteur, siege, garantie);
+}
+
+function autocomplete(listeClients) {
+    $(function () {
+        var availableTags = ["rakotoarinalina rija", "rakotoarinalina benjamina", "rakotoarinalina benjamina (rakoto@gmail.com)",];
+        $("#selectClient").autocomplete({ source: listeClients });
+    });
+}
+
