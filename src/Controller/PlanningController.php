@@ -204,9 +204,6 @@ class PlanningController extends AbstractController
         $date = new \DateTime($time);
 
 
-        // echo $this->getNextReservation($this->getVehiculesDispo($date)[0], $date)->getDateDebut()->format('d-m-Y');
-        // echo $this->getLastReservation($this->getVehiculesDispo($date)[0], $date)->getDateFin()->format('d-m-Y');
-
         //ajout de données dans array puis envoyer vers AJAX
         $datas = array();
         foreach ($this->getVehiculesDispo($date) as $key => $vehicule) {
@@ -216,8 +213,6 @@ class PlanningController extends AbstractController
             $datas[$key]['modele'] = $vehicule->getModele();
             if ($this->getLastReservation($vehicule, $date) != null) {
                 $datas[$key]['lastReservation'] = $this->getLastReservation($vehicule, $date)->getDateFin()->format('d-m-Y H:i');
-
-                // dd($this->getLastReservation($vehicule, $date)->getDateFin()->format('d-m-Y H:i'));
             } else {
                 $datas[$key]['lastReservation'] = "Pas de réservation";
             }
@@ -235,7 +230,6 @@ class PlanningController extends AbstractController
     {
         $vehicules = $this->vehiculeRepo->findAll();
         $reservations = $this->reservationRepo->findReservationIncludeDate($date);
-        // dd($reservations);
 
         $i = 0;
         $vehiculeDispo = [];

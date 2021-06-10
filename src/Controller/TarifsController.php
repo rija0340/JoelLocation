@@ -21,10 +21,22 @@ class TarifsController extends AbstractController
     {
         $listeTarifs = new Tarifs();
         $listeTarifs = $tarifsRepo->findAll();
+        $listeVehicule = [];
+        $listeUniqueVehicules = [];
+
+        $listeMois = ['Janvier', 'Février', ' Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+
+
+        foreach ($listeTarifs as $tarif) {
+            array_push($listeVehicule, $tarif->getVehicule());
+        }
+        $listeUniqueVehicules = array_unique($listeVehicule);
 
         return $this->render('admin/tarifs/index.html.twig', [
             'controller_name' => 'TarifsController',
-            'tarifs' => $listeTarifs
+            'tarifs' => $listeTarifs,
+            'listeMois' => $listeMois,
+            'listeVehicules' => $listeUniqueVehicules
         ]);
     }
 
@@ -102,6 +114,9 @@ class TarifsController extends AbstractController
     {
         $vehicule_id = intVal($request->query->get('vehicule_id'));
         $mois = $request->query->get('mois');
+
+        // dd($vehicule_id, $mois);
+        // die();
         $vehicule = $vehiculeRepo->find($vehicule_id);
         $tarif =  $tarifsRepo->findTarifs($vehicule, $mois);
 

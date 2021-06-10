@@ -54,7 +54,12 @@ var garantie;
 var conducteurSpanElem;
 var siegeSpanElem;
 var garantieSpanElem;
+var selectedClient;
+var btnReserver;
+var selectClientElem;
 
+getElements()
+addEvent();
 
 function initDetailsVehicule(data) {
 
@@ -105,6 +110,10 @@ function getElementsStep2Step3Step4() {
     cautionSpanElem = document.querySelector('span[id="vehicule_caution"]');
     passagersSpanElem = document.querySelector('span[id="vehicule_passagers"]');
     immatriculationSpanElem = document.querySelector('span[id="vehicule_immatriculation"]');
+
+    // step 4
+    selectClientElem = document.querySelector('select[id="selectClient"]');
+
 
 
 }
@@ -182,8 +191,13 @@ $(document).ready(function () { // Step show event
 
     // Smart Wizard
     $('#smartwizard').smartWizard({
-        selected: 0, theme: 'arrows',
-        // default, arrows, dots, progress
+        selected: 0,
+        theme: 'dots',
+        lang: { // Language variables for button
+            next: 'Suivant',
+            previous: 'Precedant'
+        },
+        // default, arrows, , progress
         // darkMode: true,
         transition: {
             animation: 'slide-horizontal', // Effect on navigation, none/fade/slide-horizontal/slide-vertical/slide-swing
@@ -218,7 +232,7 @@ $(document).ready(function () { // Step show event
 
         if (currentStepIndex == 1 && nextStepIndex == 2) {
 
-            if (dureeReservation == 3) tarifApplique = tarifs.troisJours;
+            if (dureeReservation <= 3) tarifApplique = tarifs.troisJours;
 
             if (dureeReservation > 3 && dureeReservation <= 7) tarifApplique = tarifs.septJours;
 
@@ -231,6 +245,7 @@ $(document).ready(function () { // Step show event
 
             }
             console.log(dureeReservation, tarifApplique);
+            retrieveUsersAjax();
         }
 
 
@@ -252,7 +267,6 @@ $(document).ready(function () { // Step show event
                         case '3':
                             siege = "Rehausseur : gratuit";
                             break;
-
                     }
                 }
             }
@@ -266,7 +280,6 @@ $(document).ready(function () { // Step show event
                         case '2':
                             conducteur = "non";
                             break;
-
                     }
                 }
             }
@@ -284,7 +297,6 @@ $(document).ready(function () { // Step show event
                         case '3':
                             garantie = " ASSISTANCE PREMIUM (160 €)";
                             break;
-
                     }
                 }
             }
@@ -297,6 +309,8 @@ $(document).ready(function () { // Step show event
 
             return true;
         }
+
+
 
     });
 
@@ -316,14 +330,12 @@ $(document).ready(function () { // Step show event
         return true;
     });
 
-
     // Demo Button Events
     $("#got_to_step").on("change", function () { // Go to step
         var step_index = $(this).val() - 1;
         $('#smartwizard').smartWizard("goToStep", step_index);
         return true;
     });
-
 
     $("#dark_mode").on("click", function () { // Change dark mode
         var options = {
@@ -361,13 +373,6 @@ $(document).ready(function () { // Step show event
         return true;
     });
 
-});
-$('#smartwizard').smartWizard({
-    lang: { // Language variables for button
-        next: 'Suivant',
-        previous: 'Precedant'
-    },
-    theme: 'dots'
 });
 
 
@@ -407,13 +412,15 @@ function retrieveTarifsAjax(vehicule) {
         url: '/tarifVenteComptoir',
         data: {
             "vehicule_id": vehicule,
-            "mois": 'Janvier'
+            "mois": getMonth(datetimeDepartValue)
         },
         beforeSend: function (xhr) {
         },
         Type: "json",
         success: function (data) {
             console.log(data);
+            console.log(getMonth(datetimeDepartValue));
+            console.log(vehicule);
             tarifs = data;
 
         },
@@ -424,8 +431,88 @@ function retrieveTarifsAjax(vehicule) {
     });
 }
 
+function retrieveUsersAjax() {
+    // var d = new Date(dateInputValue);
+    // var n = d.toString();
+    $.ajax({
+        type: 'GET',
+        url: '/user/listeclients',
+        beforeSend: function (xhr) {
+        },
+        Type: "json",
+        success: function (data) {
+            console.log(data);
+            populateSelectClientElem(data);
 
+        },
+        error: function (erreur) {
+            // alert('La requête n\'a pas abouti' + erreur);
+            console.log(erreur.responseText);
+        }
+    });
+}
 
+function populateSelectClientElem(options) {
+
+    $("#selectClient").empty(); //remove old options jquery
+
+    for (var i = 0; i < options.length; i++) {
+
+        var opt = options[i];
+        console.log('ity ny opt ' + opt.marque);
+        var el = document.createElement("option");
+        el.text = opt.nom + ' ' + opt.prenom + ' (' + opt.email + ')';
+        el.value = opt.id + " " + opt.nom;
+        selectClientElem.add(el);
+
+    }
+}
+
+function getMonth(date) {
+    var date = new Date(date);
+    var month;
+    switch (date.getMonth() + 1) {
+        case 1:
+            month = 'Janvier';
+            break;
+        case 2:
+            month = 'Fevrier';
+            break;
+
+        case 3:
+            month = 'Mars';
+            break;
+        case 4:
+            month = 'Avril';
+            break;
+        case 5:
+            month = 'Mai';
+            break;
+        case 6:
+            month = 'Juin';
+            break;
+        case 7:
+            month = 'Juillet';
+            break;
+        case 8:
+            month = 'Août';
+            break;
+        case 9:
+            month = 'Septembre';
+            break;
+        case 10:
+            month = 'Octobre';
+            break;
+        case 11:
+            month = 'Novembre';
+            break;
+        case 12:
+            month = 'Décembre';
+            break;
+    }
+
+    return month;
+}
 function getDate(date) {
     var date = new Date(date);
     var day = date.getDate();
@@ -491,7 +578,6 @@ function diff2Dates(date1, date2) {
 
     return dureeReservation;
 
-
 }
 
 function dateToTimestamp(date) {
@@ -500,3 +586,20 @@ function dateToTimestamp(date) {
 
 }
 
+function getElements() {
+    btnReserver = document.getElementById('reserver');
+
+}
+function addEvent() {
+
+    btnReserver.addEventListener('click', selectClient, false);
+}
+
+function selectClient() {
+    console.log(selectClientElem);
+    selectedClient = selectClientElem.value;
+    console.log("data : " + selectedClient, agenceDepartSelected, agenceRetourSelected, lieuSejourValue, datetimeDepartValue, datetimeRetourValue, dureeReservation,
+        tarifApplique, conducteur
+        , siege
+        , garantie);
+};

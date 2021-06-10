@@ -38,7 +38,43 @@
 			</div>
 
 		</div>
-		<div class="row">
+
+		<div class="overflow-auto">
+			<table class="table table-striped table-bordered mt-5 ">
+				<tr>
+					<td></td>
+					{% for mois  in listeMois %}
+						<th colspan="4" class="text-center">{{mois}}</th>
+					{% endfor %}
+				</tr>
+				<tr>
+
+					<th></th>
+					{% for mois  in listeMois %}
+						<th>3j</th>
+						<th>7j</th>
+						<th>15j</th>
+						<th>30j</th>
+					{% endfor %}
+				</tr>
+				{% for vehicule in listeVehicules %}
+					<tr>
+						<th>{{vehicule.marque}}
+							{{vehicule.modele}}</th>
+						{% for tarif in tarifs %}
+							{% if vehicule == tarif.vehicule %}
+								<td>{{tarif.troisJours}}</td>
+								<td>{{tarif.septJours}}</td>
+								<td>{{tarif.quinzeJours}}</td>
+								<td>{{tarif.trenteJours}}</td>
+							{% endif %}
+						{% endfor %}
+					</tr>
+				{% endfor %}
+			</table>
+
+		</div>
+		<div class="row mt-5">
 			<div class="col-sm-12">
 				<div class="card-box table-responsive">
 					<table id="datatable" class="table table-striped table-bordered" style="width:100%">
@@ -99,11 +135,14 @@
 							{# <tr><td colspan="8">Aucun enregistrement trouvé</td></tr> #}
 						</tbody>
 					</table>
+
 				</div>
 			</div>
 		</div>
 	</div>
 	{# fin content #}
+
+
 {% endblock %}
 {% block javascripts %}
 	<!-- Datatables -->

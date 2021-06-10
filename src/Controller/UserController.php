@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @Route("/user")
@@ -66,6 +67,32 @@ class UserController extends AbstractController
         return $this->render('admin/agence/comptes_utilisateurs/index.html.twig', [
             'personnels' => $personnels
         ]);
+    }
+
+    /**
+     * @Route("/listeclients", name="listeclients", methods={"GET"})
+     */
+    public function listeclients(UserRepository $userRepository, Request $request)
+    {
+        $clients = array();
+        $data = array();
+
+        $users = $userRepository->findAll();
+        foreach ($users as $user) {
+
+            if (in_array('ROLE_CLIENT', $user->getRoles())) {
+                array_push($clients, $user);
+            }
+        }
+        foreach ($clients as $key => $client) {
+
+            $data[$key]['id'] = $client->getId();
+            $data[$key]['nom'] = $client->getNom();
+            $data[$key]['prenom'] = $client->getPrenom();
+            $data[$key]['email'] = $client->getMail();
+        }
+
+        return new JsonResponse($data);
     }
 
     /**

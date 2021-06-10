@@ -18,22 +18,22 @@ class Tarifs
     private $id;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     private $troisJours;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     private $septJours;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     private $quinzeJours;
 
     /**
-     * @ORM\Column(type="integer",  nullable=true)
+     * @ORM\Column(type="float",  nullable=true)
      */
     private $trenteJours;
 
@@ -53,24 +53,24 @@ class Tarifs
         return $this->id;
     }
 
-    public function getTroisJours(): ?int
+    public function getTroisJours(): ?float
     {
         return $this->troisJours;
     }
 
-    public function setTroisJours(?int $troisJours): self
+    public function setTroisJours(?float $troisJours): self
     {
         $this->troisJours = $troisJours;
 
         return $this;
     }
 
-    public function getSeptJours(): ?int
+    public function getSeptJours(): ?float
     {
         return $this->septJours;
     }
 
-    public function setSeptJours(?int $septJours): self
+    public function setSeptJours(?float $septJours): self
     {
         $this->septJours = $septJours;
 
@@ -82,19 +82,19 @@ class Tarifs
         return $this->quinzeJours;
     }
 
-    public function setQuinzeJours(?int $quinzeJours): self
+    public function setQuinzeJours(?float $quinzeJours): self
     {
         $this->quinzeJours = $quinzeJours;
 
         return $this;
     }
 
-    public function getTrenteJours(): ?int
+    public function getTrenteJours(): ?float
     {
         return $this->trenteJours;
     }
 
-    public function setTrenteJours(?int $trenteJours): self
+    public function setTrenteJours(?float $trenteJours): self
     {
         $this->trenteJours = $trenteJours;
 

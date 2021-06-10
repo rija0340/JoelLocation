@@ -286,7 +286,7 @@ class Vehicule
      */
     public function __toString()
     {
-        return $this->getImmatriculation();
+        return $this->getMarque() . " " . $this->getModele() . " " . $this->getImmatriculation();
     }
 
     public function getDetails(): ?string

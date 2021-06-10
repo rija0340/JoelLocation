@@ -127,15 +127,8 @@ function retrieveDataAjax() {
         Type: "json",
         success: function (data) {
             console.log(data);
-            if ($("#reservation2").hasClass('hide') && $("#vehiculeDispo").hasClass('hide')) {
-                $("#reservation2").removeClass('hide');
-                $("#vehiculeDispo").removeClass('hide');
-                populateSelectElem(data);
-                dataForSelect(data)
-            } else {
-                populateSelectElem(data);
-                dataForSelect(data)
-            }
+            populateSelectElem(data);
+            dataForSelect(data);
 
         },
         error: function (erreur) {
@@ -149,6 +142,7 @@ function retrieveDataAjax() {
 function populateSelectElem(options) {
 
     var select = document.getElementById('selectVehicule');
+    console.log(select);
     $("#selectVehicule").empty(); //remove old options jquery
 
     for (var i = 0; i < options.length; i++) {
