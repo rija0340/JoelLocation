@@ -233,17 +233,20 @@ $(document).ready(function () { // Step show event
 
         if (currentStepIndex == 1 && nextStepIndex == 2) {
 
-            if (dureeReservation <= 3) tarifApplique = tarifs.troisJours;
+            if (tarifs != null) {
 
-            if (dureeReservation > 3 && dureeReservation <= 7) tarifApplique = tarifs.septJours;
+                if (dureeReservation <= 3) tarifApplique = tarifs.troisJours;
 
-            if (dureeReservation > 7 && dureeReservation <= 15) tarifApplique = tarifs.quinzeJours;
+                if (dureeReservation > 3 && dureeReservation <= 7) tarifApplique = tarifs.septJours;
 
-            if (dureeReservation > 15 && dureeReservation <= 30) tarifApplique = tarifs.trenteJours;
+                if (dureeReservation > 7 && dureeReservation <= 15) tarifApplique = tarifs.quinzeJours;
 
-            for (let i = 0; i < prixSpanElem.length; i++) {
-                prixSpanElem[i].innerText = tarifApplique;
+                if (dureeReservation > 15 && dureeReservation <= 30) tarifApplique = tarifs.trenteJours;
 
+                for (let i = 0; i < prixSpanElem.length; i++) {
+                    prixSpanElem[i].innerText = tarifApplique;
+
+                }
             }
             console.log(dureeReservation, tarifApplique);
             retrieveUsersAjax();
