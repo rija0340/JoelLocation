@@ -98,7 +98,7 @@ class Reservation
     private $paiements;
 
     /**
-     * @ORM\Column(type="boolean", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      */
     private $conducteur;
 
