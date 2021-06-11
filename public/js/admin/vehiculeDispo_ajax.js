@@ -15,11 +15,11 @@ var dateMinutes;
 getElements();
 addEventListener();
 
-$(window).load(function () {
+window.onload = function () {
 
     formatDateForAjax(Date.now());
     retrieveDataAjax();
-});
+};
 
 
 function retrieveDataAjax() {

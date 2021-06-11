@@ -6,11 +6,10 @@ var sortedDate = new Array();
 getElements();
 addEventListener();
 
-$(window).load(function () {
+window.onload = function () {
     dateInputValue = new Date(Date.now());
     retrieveDataAjax()
-
-});
+};
 
 function getElements() {
     dateInputElem = document.getElementById("datedebutplanning");

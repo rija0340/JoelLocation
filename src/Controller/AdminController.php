@@ -195,14 +195,6 @@ class AdminController extends AbstractController
 
 
   /**
-   * @Route("/stop_sales", name="stop_sales", methods={"GET"})
-   */
-  public function stop_sales(): Response
-  {
-    return $this->render('admin/stop_sales_vehicules/index.html.twig');
-  }
-
-  /**
    * @Route("/parametre_agence", name="parametre_agence", methods={"GET"})
    */
   public function parametre_agence(): Response

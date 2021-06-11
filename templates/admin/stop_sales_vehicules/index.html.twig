@@ -28,6 +28,9 @@
 					</h2>
 				</div>
 				<div class="col-auto ml-auto">
+					<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
+						Ajouter véhicule
+					</button>
 					<a href="" class="btn btn-link " id="add_row">
 						<i class="fa fa-plus"></i>
 					</a>
@@ -56,35 +59,55 @@
 							</thead>
 
 							<tbody>
-								<tr class="text-center">
-									<td>
-										01 Novembre 2020 - 00H00
-									</td>
-									<td>
-										<span>Javascript Developer
-										</span>
-									</td>
-									<td>Singapore</td>
-									<td>29</td>
-									<td>2011/06/27</td>
-									<td>
-										<div class="badge badge-primary p-2">Validé</div>
-									</td>
-									<td class="text-center">
-										<button class="btn btn-outline-violet">
-											<i class="fa  fa-mail-reply-all (alias)"></i>
-										</button>
-										<button class="btn btn-outline-warning">
-											<i class="fa fa-trash"></i>
-										</button>
-									</td>
-								</tr>
+								{% for reservation in listeStopSales %}
+									<tr class="text-center">
+										<td>
+											{{ reservation.dateDebut ? reservation.dateDebut|date('d-m-Y H:i') : '' }}
+										</td>
+										<td>
+											{{ reservation.dateFin ? reservation.dateFin|date('d-m-Y H:i') : '' }}
+										</td>
+										<td>{{reservation.vehicule.immatriculation}}</td>
+										<td>{{reservation.type}}</td>
+										<td>{{reservation.commentaire}}</td>
+										<td>
+											<div class="badge badge-primary p-2">Validé</div>
+										</td>
+										<td class="text-center">
+											<button class="btn btn-outline-violet">
+												<i class="fa  fa-mail-reply-all (alias)"></i>
+											</button>
+											<button class="btn btn-outline-warning">
+												<i class="fa fa-trash"></i>
+											</button>
+										</td>
+									</tr>
+								{% endfor %}
 							</tbody>
 
 						</table>
 					</div>
 				</div>
+				<!-- Button trigger modal -->
 
+
+				<!-- Modal -->
+				<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-lg" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="exampleModalLabel">Stop Sale</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								{{ include('admin/stop_sales_vehicules/_form.html.twig') }}
+							</div>
+
+						</div>
+					</div>
+				</div>
 
 			{% endblock %}
 			{% block javascripts %}<!-- Datatables --><script src="../../admin/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
@@ -105,5 +128,6 @@
 				<script src="../../admin/vendors/datatables.net-extensions/Editor/js/dataTables.editor.min.js"></script>
 				<script src="../../admin/vendors/datatables.net-datetime/1.0.3/js/dataTables.dateTime.min.js"></script>
 				<script src="../../admin/vendors/datatables.net-select/1.3.3/js/dataTables.select.min.js"></script>
-				<script src="../../js/admin//stop_sales.js"></script>
+				<script src="../../js/admin/stop_sales.js"></script>
+				<script src="../../js/admin/datatable.fr.js"></script>
 			{% endblock  %}

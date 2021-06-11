@@ -31,13 +31,10 @@ function getData(data) {
 }
 
 
-$(window).load(function () {
-
+window.onload = function () {
     ganttInit();
     retrieveDataAjax();
-
-});
-
+};
 
 function retrieveDataAjax() {
 

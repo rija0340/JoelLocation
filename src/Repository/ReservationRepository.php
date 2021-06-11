@@ -74,6 +74,16 @@ class ReservationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * @return Reservation[] Returns an array of Reservation objects
+     */
+    public function findStopSales()
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere(' r.commentaire IS NOT NULL')
+            ->getQuery()
+            ->getResult();
+    }
 
     /**
      * @return Reservation[] Returns an array of Reservation objects

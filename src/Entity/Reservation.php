@@ -53,7 +53,7 @@ class Reservation
     private $date_fin;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * 
      */
     private $lieu;
@@ -65,25 +65,25 @@ class Reservation
     private $vehicule;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * 
      */
     private $code_reservation;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="utilisateur")
-     */
-    private $utilisateur;
+    // /**
+    //  * @ORM\ManyToOne(targetEntity=User::class, inversedBy="utilisateur")
+    //  */
+    // private $utilisateur;
 
     /**
      * @ORM\ManyToOne(targetEntity=ModeReservation::class, inversedBy="reservations")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $mode_reservation;
 
     /**
      * @ORM\ManyToOne(targetEntity=EtatReservation::class, inversedBy="reservations")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $etat_reservation;
 
@@ -224,17 +224,17 @@ class Reservation
         return $this;
     }
 
-    public function getUtilisateur(): ?User
-    {
-        return $this->utilisateur;
-    }
+    // public function getUtilisateur(): ?User
+    // {
+    //     return $this->utilisateur;
+    // }
 
-    public function setUtilisateur(?User $utilisateur): self
-    {
-        $this->utilisateur = $utilisateur;
+    // public function setUtilisateur(?User $utilisateur): self
+    // {
+    //     $this->utilisateur = $utilisateur;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getModeReservation(): ?ModeReservation
     {

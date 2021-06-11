@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Reservation;
 use App\Form\ReservationType;
+use App\Form\StopSalesType;
 use App\Repository\VehiculeRepository;
 use App\Repository\ReservationRepository;
+use App\Repository\UserRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -112,6 +114,7 @@ class ReservationController extends AbstractController
      */
     public function new(Request $request, VehiculeRepository $vehiculeRepository): Response
     {
+
         $reservation = new Reservation();
         $form = $this->createForm(ReservationType::class, $reservation);
         $form->handleRequest($request);
@@ -132,6 +135,36 @@ class ReservationController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    /**
+     * @Route("/stop_sales", name="stop_sales", methods={"GET","POST"})
+     */
+    public function stop_sales(Request $request, ReservationRepository $reservationRepository, UserRepository $userRepo): Response
+    {
+        $listeStopSales =  $reservationRepository->findStopSales();
+
+        $super_admin = $userRepo->findSuperAdmin();
+        $reservation = new Reservation();
+        $formStopSales = $this->createForm(StopSalesType::class, $reservation);
+        $formStopSales->handleRequest($request);
+
+        if ($formStopSales->isSubmitted() && $formStopSales->isValid()) {
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $reservation->setClient($super_admin);
+            $reservation->setDateReservation(new \DateTime('NOW'));
+            $entityManager->persist($reservation);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('reservation_index');
+        }
+
+        return $this->render('admin/stop_sales_vehicules/index.html.twig', [
+            'listeStopSales' => $listeStopSales,
+            'formStopSales' => $formStopSales->createView(),
+        ]);
+    }
+
 
     /**
      * @Route("/{id}", name="reservation_show", methods={"GET"})
