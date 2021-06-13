@@ -41,10 +41,15 @@
 			<p>
 				Chercher une réservation en saisissant sa référence
 			</p>
-			<form class="form-horizontal form-label-left">
+			<form class="form-horizontal form-label-left" action="{{ path('recherche_simple') }}" method="POST">
 				<div class="form-group ">
-					<div>
-						<input type="text" id="last-name2" name="last-name" required="required" class="form-control col-md-12 " placeholder="Saisir une référence ou le nom d'un client">
+					<div class="col-md-10">
+						<input type="text" id="recherche" name="recherche" required="required" class="form-control col-md-12 " placeholder="Saisir une référence ou le nom d'un client">
+					</div>
+					<div class="col-md-2">
+						<button class="btn btn-danger" type="submit">
+							<i class="fa fa-search"></i>
+							Chercher</button>
 					</div>
 				</div>
 			</form>

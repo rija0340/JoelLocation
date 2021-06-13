@@ -5,9 +5,12 @@ namespace App\Controller;
 use App\Entity\Reservation;
 use App\Form\ReservationType;
 use App\Form\StopSalesType;
+use App\Entity\User;
+use App\Form\UserType;
+use App\Form\UserClientType;
+use App\Repository\UserRepository;
 use App\Repository\VehiculeRepository;
 use App\Repository\ReservationRepository;
-use App\Repository\UserRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -211,5 +214,28 @@ class ReservationController extends AbstractController
         }
 
         return $this->redirectToRoute('reservation_index');
+    }    
+
+    /**
+     * @Route("/recherchesimple", name="recherche_simple", methods={"POST"})
+     */
+    public function rechercheSimple(Request $request, UserRepository $userRepository, ReservationRepository $reservationRepository): Response
+    {
+        $recherche = $request->get('recherche');
+        $client_id = (int)$recherche;
+        $client = new User();
+        $reservation[] = new Reservation();
+        if($client_id > 0){
+            $client = $userRepository()->findOneById(["id" => $client_id]);
+        }else{
+            $client = $userRepository()->findOneBy(["username" => $recherche]);
+        }
+        if($client != null){
+            $reservation = $reservationRepository()->findBy(["client" => $client]);
+        }else{
+            $reservation = $reservationRepository()->findBy(["code_reservation" => $recherche]);
+        }
+
+        return $this->redirectToRoute('rechercher_res');
     }
 }
