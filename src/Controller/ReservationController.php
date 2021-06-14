@@ -224,6 +224,7 @@ class ReservationController extends AbstractController
     public function rechercheSimple(Request $request, UserRepository $userRepository, ReservationRepository $reservationRepository): Response
     {
         $recherche = $request->request->get('recherche');
+        $reservation[] = new Reservation();
         if($recherche != null){ 
             $client_id = (int)$recherche;
             $client = new User();
@@ -250,6 +251,7 @@ class ReservationController extends AbstractController
     public function rechercheImmatriculaiton(Request $request, UserRepository $userRepository, ReservationRepository $reservationRepository, VehiculeRepository $vehiculeRepository): Response
     {
         $immatriculation = $request->request->get('immatriculation');
+        $reservation[] = new Reservation();
         if($immatriculation != null){ 
             $vehicule = $vehiculeRepository->findOneBy(["immatriculation" => $immatriculation]);
             $reservation = $reservationRepository->findBy(["vehicule" => $vehicule]);
