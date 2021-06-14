@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Vehicule;
+use App\Form\VehiculeType;
 use App\Entity\Reservation;
 use App\Form\ReservationType;
 use App\Form\StopSalesType;
@@ -217,25 +219,41 @@ class ReservationController extends AbstractController
     }    
 
     /**
-     * @Route("/recherchesimple", name="recherche_simple", methods={"POST"})
+     * @Route("/recherchesimple", name="recherche_simple", methods={"GET", "POST"})
      */
     public function rechercheSimple(Request $request, UserRepository $userRepository, ReservationRepository $reservationRepository): Response
     {
-        $recherche = $request->get('recherche');
-        $client_id = (int)$recherche;
-        $client = new User();
-        $reservation[] = new Reservation();
-        if($client_id > 0){
-            $client = $userRepository()->findOneById(["id" => $client_id]);
-        }else{
-            $client = $userRepository()->findOneBy(["username" => $recherche]);
+        $recherche = $request->request->get('recherche');
+        if($recherche != null){ 
+            $client_id = (int)$recherche;
+            $client = new User();
+            $reservation[] = new Reservation();
+            //if($client_id){
+                $client = $userRepository->findOneBy(["id" => $client_id]);
+            //}
+            if($client == null){
+                $client = $userRepository->findOneBy(["username" => $recherche]);
+            }
+            if($client != null){
+                $reservation = $reservationRepository->findBy(["client" => $client]);
+            }else{
+                $reservation = $reservationRepository->findBy(["code_reservation" => $recherche]);
+            }
+            return $this->redirectToRoute('rechercher_res');
         }
-        if($client != null){
-            $reservation = $reservationRepository()->findBy(["client" => $client]);
-        }else{
-            $reservation = $reservationRepository()->findBy(["code_reservation" => $recherche]);
-        }
+        return $this->redirectToRoute('reservation_index');
+    }
 
-        return $this->redirectToRoute('rechercher_res');
+    /**
+     * @Route("/rechercheimmatriculation", name="recherche_immatriculation", methods={"GET", "POST"})
+     */
+    public function rechercheImmatriculaiton(Request $request, UserRepository $userRepository, ReservationRepository $reservationRepository, VehiculeRepository $vehiculeRepository): Response
+    {
+        $immatriculation = $request->request->get('immatriculation');
+        if($immatriculation != null){ 
+            $vehicule = $vehiculeRepository->findOneBy(["immatriculation" => $immatriculation]);
+            $reservation = $reservationRepository->findBy(["vehicule" => $vehicule]);
+        }
+        return $this->redirectToRoute('reservation_index');
     }
 }
