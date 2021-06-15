@@ -41,7 +41,7 @@ function retrieveDataAjax() {
                     modele: data[i].modele,
                     lastReservation: data[i].lastReservation,
                     nextReservation: data[i].nextReservation,
-                    action: `<a href="/vehicule/${data[i].id}">Voir</a>`
+                    action: `<a href="/vehicule/${data[i].id}/show">Voir</a>`
                 });
             }
 

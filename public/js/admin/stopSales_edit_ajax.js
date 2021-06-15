@@ -20,49 +20,51 @@ var dateFinYear;
 var dateFinHours;
 var dateFinMinutes;
 
+//var btnModifier
+
+var btnModifier;
+
 
 getElements();
 addEventListener();
 
-
-
 window.onload = function test() {
-    dateDebutValue = document.getElementById("reservation_date_debut").value;
-    dateFinValue = document.getElementById("reservation_date_fin").value;
-    imVehValue = document.getElementById("stop_sales_vehicule").value; //envoyé depuis controller et puis reçu dans edit html (champ caché)
+    dateDebutValue = document.getElementById("stop_sales_date_debut").value;
+    dateFinValue = document.getElementById("stop_sales_date_fin").value;
+    imVehValue = document.getElementById("stop_sales_vehicule").value;
     setParamDateDebutForAjax();
     retrieveDataAjax();
 };
 
 function getElements() {
 
-    dateDebutElem = document.getElementById("reservation_date_debut");
-    dateFinElem = document.getElementById("reservation_date_fin");
-    // btnRechercherElem = document.getElementById("rechercherVehicules");
+    dateDebutElem = document.getElementById("stop_sales_date_debut");
+    dateFinElem = document.getElementById("stop_sales_date_fin");
     reservation2Elem = document.getElementById("reservation2");
+    btnModifier = document.querySelector("button");
 }
 
 function addEventListener() {
 
     dateDebutElem.addEventListener('change', getDateDebutValue, false);
     dateFinElem.addEventListener('change', getDateFinValue, false);
-    // btnRechercherElem.addEventListener('click', getDatesValues, false);
+    btnModifier.addEventListener('click', setNullHiddenVehicule, false)
 }
 
 
 function getDatesValues() {
-    console.log(document.getElementById("reservation_date_debut").value);
-    console.log(document.getElementById("reservation_date_fin").value);
+    console.log(document.getElementById("stop_sales_date_debut").value);
+    console.log(document.getElementById("stop_sales_date_fin").value);
     retrieveDataAjax();
 }
 
 
 function getDateDebutValue() {
+
     dateDebutValue = this.value;
     console.log('ity ilay date ' + dateDebutValue);
 
     if (dateFinValue != null) {
-
 
         if (dateToTimestamp(dateDebutValue) > dateToTimestamp(dateFinValue)) {
             $("#selectVehicule").empty();
@@ -126,20 +128,8 @@ function setParamDateDebutForAjax() {
     dateFinMinutes = date2.getMinutes();
 }
 
-// function formatDateForAjax(date) {
-//     var date = new Date(date);
-//     day = date.getDate();
-//     month = date.getMonth();
-//     fullyear = date.getFullYear();
-//     date = (month + 1) + "/" + day + "/" + fullyear;
-//     console.log(date);
-//     return date;
-// }
-
 
 function retrieveDataAjax() {
-    // var d = new Date(dateInputValue);
-    // var n = d.toString();
     $.ajax({
         type: 'GET',
         url: '/reservation/vehiculeDispoFonctionDates',
@@ -163,8 +153,6 @@ function retrieveDataAjax() {
         }
     });
 }
-
-
 
 function populateSelectElem(options) {
 
@@ -207,4 +195,8 @@ function dateToTimestamp(date) {
 
     return new Date(date).getTime();
 
+}
+
+function setNullHiddenVehicule() {
+    document.getElementById("stop_sales_vehicule").value = null;
 }

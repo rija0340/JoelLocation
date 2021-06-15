@@ -80,7 +80,8 @@ class ReservationRepository extends ServiceEntityRepository
     public function findStopSales()
     {
         return $this->createQueryBuilder('r')
-            ->andWhere(' r.commentaire IS NOT NULL')
+            ->andWhere(' r.code_reservation = :code')
+            ->setParameter('code', 'stopSale')
             ->getQuery()
             ->getResult();
     }

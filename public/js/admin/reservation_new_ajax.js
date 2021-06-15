@@ -21,7 +21,6 @@ var dateFinMinutes;
 getElements();
 addEventListener()
 
-
 function getElements() {
     dateDebutElem = document.getElementById("reservation_date_debut");
     dateFinElem = document.getElementById("reservation_date_fin");

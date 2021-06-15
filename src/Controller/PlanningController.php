@@ -104,15 +104,20 @@ class PlanningController extends AbstractController
                     $c++;
                     break;
                 case 1:
-                    $datas[$key]['color'] =  "green";
+                    $datas[$key]['color'] =  "#A9A9A9";
                     $c++;
                     break;
                 case 2:
-                    $datas[$key]['color'] =  "blue";
+                    $datas[$key]['color'] =  "#0d00ff";
                     $c++;
                     break;
                 case 3:
-                    $datas[$key]['color'] =  "red";
+                    $datas[$key]['color'] =  "#FFC0CB";
+                    $c++;
+                    break;
+
+                case 3:
+                    $datas[$key]['color'] =  "#000000";
                     $c++;
                     break;
                     // default:

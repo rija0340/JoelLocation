@@ -116,12 +116,17 @@ function ganttInit(startDateScale, endDateScale) {
     gantt.init("gantt_here");
     //colorer task en fonction valeur "color"
     gantt.templates.task_class = function (start, end, task) {
-        if (task.color == "red") {
-            return "red";
-        } else if (task.color == "green") {
-            return "green";
-        } else if (task.color == "yellow") {
-            return "yellow";
+        if (task.color == "agence") {
+            return "rgb(255,0,0)";
+        } else if (task.color == "aeroport") {
+            return "#000000";
+        } else if (task.color == "gareMaritime") {
+            return "#FFC0CB";
+        } else if (task.color == "indisponible") {
+            return "#A9A9A9";
+
+        } else if (task.color == "pointLivraison") {
+            return "0d00ff";
         }
     };
 }

@@ -83,7 +83,7 @@ class VehiculeController extends AbstractController
     }
 
     /**
-     * @Route("/vehicule/{id}", name="vehicule_show", methods={"GET"})
+     * @Route("/vehicule/{id}/show", name="vehicule_show", methods={"GET"})
      */
     public function show(Vehicule $vehicule): Response
     {
@@ -150,7 +150,7 @@ class VehiculeController extends AbstractController
 
 
     /**
-     * @Route("/vehicule-vente-comptoir/", name="vehicule_show", methods={"GET"})
+     * @Route("/vehicule-vente-comptoir/", name="vehicule_vente_comptoir", methods={"GET"})
      */
     public function vehiculeVenteComptoir(VehiculeRepository $vehiculeRepository, Request $request)
     {

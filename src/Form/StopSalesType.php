@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class StopSalesType extends AbstractType
@@ -31,7 +32,7 @@ class StopSalesType extends AbstractType
                 'attr' => ['class' => 'tinymce'],
             ])
             // ->add('client')
-            ->add('vehicule');
+            ->add('vehicule', HiddenType::class,);
         // ->add('mode_reservation')
         // ->add('etat_reservation');
     }

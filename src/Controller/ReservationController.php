@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Reservation;
+use App\Form\EditStopSalesType;
 use App\Form\ReservationType;
 use App\Form\StopSalesType;
 use App\Repository\VehiculeRepository;
@@ -139,9 +140,44 @@ class ReservationController extends AbstractController
     /**
      * @Route("/stop_sales", name="stop_sales", methods={"GET","POST"})
      */
-    public function stop_sales(Request $request, ReservationRepository $reservationRepository, UserRepository $userRepo): Response
+    public function stop_sales(Request $request, ReservationRepository $reservationRepository,  UserRepository $userRepo,  VehiculeRepository $vehiculeRepository): Response
     {
+
+        $listeStopSales = new Reservation();
+        $reservation = new Reservation();
+
         $listeStopSales =  $reservationRepository->findStopSales();
+        $super_admin = $userRepo->findSuperAdmin();
+
+        $formStopSales = $this->createForm(StopSalesType::class, $reservation);
+
+        $formStopSales->handleRequest($request);
+
+
+
+        if ($formStopSales->isSubmitted() && $formStopSales->isValid()) {
+
+            $vehicule = $vehiculeRepository->find($request->request->get('select'));
+            $entityManager = $this->getDoctrine()->getManager();
+            $reservation->setVehicule($vehicule);
+            $reservation->setCodeReservation('stopSale');
+            $reservation->setClient($super_admin);
+            $reservation->setDateReservation(new \DateTime('NOW'));
+            $entityManager->persist($reservation);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('stop_sales');
+        }
+
+        return $this->render('admin/stop_sales_vehicules/index.html.twig', [
+            'listeStopSales' => $listeStopSales,
+        ]);
+    }
+    /**
+     * @Route("/stopSalesNew", name="stopSalesNew", methods={"GET","POST"})
+     */
+    public function stopSalesNew(Request $request, VehiculeRepository $vehiculeRepository,  UserRepository $userRepo): Response
+    {
 
         $super_admin = $userRepo->findSuperAdmin();
         $reservation = new Reservation();
@@ -156,15 +192,14 @@ class ReservationController extends AbstractController
             $entityManager->persist($reservation);
             $entityManager->flush();
 
-            return $this->redirectToRoute('reservation_index');
+            return $this->redirectToRoute('stop_sales');
         }
 
-        return $this->render('admin/stop_sales_vehicules/index.html.twig', [
-            'listeStopSales' => $listeStopSales,
+        return $this->render('admin/stop_sales_vehicules/new.html.twig', [
             'formStopSales' => $formStopSales->createView(),
+
         ]);
     }
-
 
     /**
      * @Route("/{id}", name="reservation_show", methods={"GET"})
@@ -211,5 +246,42 @@ class ReservationController extends AbstractController
         }
 
         return $this->redirectToRoute('reservation_index');
+    }
+
+    /**
+     * @Route("/{id}/editStopSale", name="stopSale_edit", methods={"GET","POST"})
+     */
+    public function editStopSale(Request $request, Reservation $reservation, ReservationRepository $reservationRepository): Response
+    {
+        $listeStopSales =  $reservationRepository->findStopSales();
+
+        $formStopSales = $this->createForm(StopSalesType::class, $reservation);
+        $formStopSales->handleRequest($request);
+
+        if ($formStopSales->isSubmitted() && $formStopSales->isValid()) {
+            $vehicule = $this->vehiculeRepo->find($request->request->get('select'));
+            $reservation->setVehicule($vehicule);
+            $this->getDoctrine()->getManager()->flush();
+            return $this->redirectToRoute('stop_sales');
+        }
+
+        return $this->render('admin/stop_sales_vehicules/edit.html.twig', [
+            'listeStopSales' => $listeStopSales,
+            'formStopSales' => $formStopSales->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/delete", name="stopSale_delete", methods={"DELETE"})
+     */
+    public function stopSaleDelete(Request $request, Reservation $reservation): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $reservation->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($reservation);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('stop_sales');
     }
 }

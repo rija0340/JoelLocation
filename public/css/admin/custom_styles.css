@@ -133,3 +133,41 @@ h2 .fa-chevron-right{
   .hide{
       display : none !important;
   }
+
+  /* badge pour planning général */
+
+  .badge-agence{
+    color: #fff;
+background-color: #ff0000;
+border-radius: 0%;
+
+}
+
+.badge-aeroport{
+  color: #fff;
+background-color: #000000;
+border-radius: 0%;
+
+}
+
+
+.badge-gareMaritime{
+  color: #fff;
+background-color: #FFC0CB;
+border-radius: 0%;
+
+}
+
+.badge-indisponible{
+  color: #fff;
+background-color: #A9A9A9;
+border-radius: 0%;
+
+}
+
+.badge-pointLivraison{
+  color: #fff;
+background-color: #0d00ff;
+border-radius: 0%;
+
+}
