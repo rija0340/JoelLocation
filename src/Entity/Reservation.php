@@ -117,6 +117,16 @@ class Reservation
      */
     private $commentaire;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $agenceDepart;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $agenceRetour;
+
     public function __construct()
     {
         $this->avis = new ArrayCollection();
@@ -378,5 +388,29 @@ class Reservation
     public function __toString()
     {
         return $this->getCodeReservation();
+    }
+
+    public function getAgenceDepart(): ?string
+    {
+        return $this->agenceDepart;
+    }
+
+    public function setAgenceDepart(?string $agenceDepart): self
+    {
+        $this->agenceDepart = $agenceDepart;
+
+        return $this;
+    }
+
+    public function getAgenceRetour(): ?string
+    {
+        return $this->agenceRetour;
+    }
+
+    public function setAgenceRetour(?string $agenceRetour): self
+    {
+        $this->agenceRetour = $agenceRetour;
+
+        return $this;
     }
 }

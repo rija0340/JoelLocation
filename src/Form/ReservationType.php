@@ -8,9 +8,11 @@ use App\Repository\ReservationRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class ReservationType extends AbstractType
 {
@@ -33,6 +35,21 @@ class ReservationType extends AbstractType
             // ->add('vehicule')
             // ->add('utilisateur')
             ->add('mode_reservation')
+            ->add('agenceDepart', ChoiceType::class, [
+                'choices'  => [
+                    'AEROPORT DE POINT-A-PITRE' => 'aeroport',
+                    'AGENCE DU MOULE' => 'agence',
+                    'GARE MARITIME DE BERGERVIN' => 'gareMaritime',
+                ],
+            ])
+            ->add('agenceRetour', ChoiceType::class, [
+                'choices'  => [
+                    'AEROPORT DE POINT-A-PITRE' => 'aeroport',
+                    'AGENCE DU MOULE' => 'agence',
+                    'GARE MARITIME DE BERGERVIN' => 'gareMaritime',
+                ],
+            ])
+            ->add('vehicule', HiddenType::class)
             ->add('etat_reservation');
     }
 

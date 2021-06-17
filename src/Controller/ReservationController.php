@@ -103,7 +103,7 @@ class ReservationController extends AbstractController
     public function index(ReservationRepository $reservationRepository, Request $request, PaginatorInterface $paginator): Response
     {
 
-        $reservations = $reservationRepository->findBy([], ["id" => "DESC"]);
+        $reservations = $reservationRepository->findReservationsSansStopSales();
 
         $pagination = $paginator->paginate(
             $reservations, /* query NOT result */
@@ -143,6 +143,29 @@ class ReservationController extends AbstractController
     }
 
     /**
+     * @Route("/newVenteComtpoir", name="newVenteComtpoir", methods={"GET","POST"})
+     */
+    public function newVenteComtpoir(Request $request, VehiculeRepository $vehiculeRepository): Response
+    {
+
+        $client =  $request->query->get('client');
+        $agenceDepart = $request->query->get('agenceDepart');
+        $agenceRetour = $request->query->get('agenceRetour');
+        $lieuSejour = $request->query->get('lieuSejour');
+        $dateTimeDepart = $request->query->get('dateTimeDepart');
+        $dateTimeRetour = $request->query->get('dateTimeRetour');
+        $vehiculeIM = $request->query->get('vehiculeIM');
+        $conducteur = $request->query->get('conducteur');
+        $siege = $request->query->get('siege');
+        $garantie = $request->query->get('garantie');
+
+        $reservation = new Reservation();
+
+        dump($client, $agenceDepart, $agenceRetour,  $lieuSejour, $dateTimeDepart);
+        die();
+    }
+
+    /**
      * @Route("/stop_sales", name="stop_sales", methods={"GET","POST"})
      */
     public function stop_sales(Request $request, ReservationRepository $reservationRepository,  UserRepository $userRepo,  VehiculeRepository $vehiculeRepository): Response
@@ -166,6 +189,7 @@ class ReservationController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $reservation->setVehicule($vehicule);
             $reservation->setCodeReservation('stopSale');
+            $reservation->setAgenceDepart('garage');
             $reservation->setClient($super_admin);
             $reservation->setDateReservation(new \DateTime('NOW'));
             $entityManager->persist($reservation);
@@ -251,7 +275,7 @@ class ReservationController extends AbstractController
         }
 
         return $this->redirectToRoute('reservation_index');
-    }    
+    }
 
     /**
      * @Route("/recherchesimple", name="recherche_simple", methods={"GET", "POST"})
@@ -260,19 +284,19 @@ class ReservationController extends AbstractController
     {
         $recherche = $request->request->get('recherche');
         $reservation[] = new Reservation();
-        if($recherche != null){ 
+        if ($recherche != null) {
             $client_id = (int)$recherche;
             $client = new User();
             $reservation[] = new Reservation();
             //if($client_id){
-                $client = $userRepository->findOneBy(["id" => $client_id]);
+            $client = $userRepository->findOneBy(["id" => $client_id]);
             //}
-            if($client == null){
+            if ($client == null) {
                 $client = $userRepository->findOneBy(["username" => $recherche]);
             }
-            if($client != null){
+            if ($client != null) {
                 $reservation = $reservationRepository->findBy(["client" => $client]);
-            }else{
+            } else {
                 $reservation = $reservationRepository->findBy(["code_reservation" => $recherche]);
             }
             return $this->redirectToRoute('rechercher_res');
@@ -287,7 +311,7 @@ class ReservationController extends AbstractController
     {
         $immatriculation = $request->request->get('immatriculation');
         $reservation[] = new Reservation();
-        if($immatriculation != null){ 
+        if ($immatriculation != null) {
             $vehicule = $vehiculeRepository->findOneBy(["immatriculation" => $immatriculation]);
             $reservation = $reservationRepository->findBy(["vehicule" => $vehicule]);
         }

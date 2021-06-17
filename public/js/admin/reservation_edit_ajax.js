@@ -29,7 +29,7 @@ addEventListener();
 window.onload = function test() {
     dateDebutValue = document.getElementById("reservation_date_debut").value;
     dateFinValue = document.getElementById("reservation_date_fin").value;
-    imVehValue = document.getElementById("stop_sales_vehicule").value; //envoyé depuis controller et puis reçu dans edit html (champ caché)
+    imVehValue = document.getElementById("reservation_vehicule").value; //envoyé depuis controller et puis reçu dans edit html (champ caché)
     setParamDateDebutForAjax();
     retrieveDataAjax();
 };
@@ -40,12 +40,15 @@ function getElements() {
     dateFinElem = document.getElementById("reservation_date_fin");
     // btnRechercherElem = document.getElementById("rechercherVehicules");
     reservation2Elem = document.getElementById("reservation2");
+    btnModifier = document.querySelector("button");
 }
 
 function addEventListener() {
 
     dateDebutElem.addEventListener('change', getDateDebutValue, false);
     dateFinElem.addEventListener('change', getDateFinValue, false);
+    btnModifier.addEventListener('click', setNullHiddenVehicule, false);
+
     // btnRechercherElem.addEventListener('click', getDatesValues, false);
 }
 
@@ -207,4 +210,7 @@ function dateToTimestamp(date) {
 
     return new Date(date).getTime();
 
+}
+function setNullHiddenVehicule() {
+    document.getElementById("reservation_vehicule").value = null;
 }

@@ -48,7 +48,7 @@ function addEventListener() {
 
     dateDebutElem.addEventListener('change', getDateDebutValue, false);
     dateFinElem.addEventListener('change', getDateFinValue, false);
-    btnModifier.addEventListener('click', setNullHiddenVehicule, false)
+    btnModifier.addEventListener('click', setNullHiddenVehicule, false);
 }
 
 

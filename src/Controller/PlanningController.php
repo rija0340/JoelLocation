@@ -81,6 +81,7 @@ class PlanningController extends AbstractController
             $data1[$key]['parent'] =  0;
             $data1[$key]['end_date'] =   $reservationsV[$i - 1]->getDateFin()->format('d-m-Y H:i');
         }
+
         $c = 0;
         foreach ($reservations as $key => $reservation) {
             $datas[$key]['id'] =  uniqid();
@@ -88,45 +89,28 @@ class PlanningController extends AbstractController
             $datas[$key]['client'] = $reservation->getClient()->getNom() . " " .  $reservation->getClient()->getPrenom();
             $datas[$key]['start_date'] = $reservation->getDateDebut()->format('d-m-Y H:i');
             $datas[$key]['start_date_formated'] = $reservation->getDateDebut()->format('d-m-Y H:i');
-            if (date("H", $reservation->getDateFin()->getTimestamp()) == 0) {
 
+            if (date("H", $reservation->getDateFin()->getTimestamp()) == 0) {
                 $datas[$key]['duration'] = ceil(1 + (($reservation->getDateFin()->getTimestamp() - $reservation->getDateDebut()->getTimestamp()) / 60 / 60 / 24));
             } else {
                 $datas[$key]['duration'] = ceil(($reservation->getDateFin()->getTimestamp() - $reservation->getDateDebut()->getTimestamp()) / 60 / 60 / 24);
             }
+
             $datas[$key]['end_date_formated'] = $reservation->getDateFin()->format('d-m-Y H:i');
             $datas[$key]['parent'] = $reservation->getVehicule()->getId();
+            $datas[$key]['agenceDepart'] = $reservation->getAgenceDepart();
 
-
-            switch ($c) {
-                case 0:
-                    $datas[$key]['color'] =  "red";
-                    $c++;
-                    break;
-                case 1:
-                    $datas[$key]['color'] =  "#A9A9A9";
-                    $c++;
-                    break;
-                case 2:
-                    $datas[$key]['color'] =  "#0d00ff";
-                    $c++;
-                    break;
-                case 3:
-                    $datas[$key]['color'] =  "#FFC0CB";
-                    $c++;
-                    break;
-
-                case 3:
-                    $datas[$key]['color'] =  "#000000";
-                    $c++;
-                    break;
-                    // default:
-                    // echo "Désolé, je n'ai pas de message à afficher pour cette note";
+            if ($reservation->getAgenceDepart() == "garage") {
+                $datas[$key]['color'] =  "#A9A9A9";
+            } else if ($reservation->getAgenceDepart() == "aeroport") {
+                $datas[$key]['color'] =  "#000000";
+            } else if ($reservation->getAgenceDepart() == "gareMaritime") {
+                $datas[$key]['color'] =  "#FFC0CB";
+            } else if ($reservation->getAgenceDepart() == "agence") {
+                $datas[$key]['color'] =  "#ff0000";
+            } else if ($reservation->getAgenceDepart() == "pointLivraison") {
+                $datas[$key]['color'] =  "#0d00ff";
             }
-
-            // $datas[$key]['client_name'] = $reservation->getClient()->getNom() . " " .  $reservation->getClient()->getPrenom();
-            // $datas[$key]['start_date_formated'] = $reservation->getDateDebut()->format('d/m/Y');
-            // $datas[$key]['end_date_formated'] = $reservation->getDateFin()->format('d/m/Y');
         }
 
         foreach ($data1 as $dt1) {
@@ -139,7 +123,7 @@ class PlanningController extends AbstractController
             }
         }
 
-        // dd($data2);
+
         return new JsonResponse($data2);
     }
 

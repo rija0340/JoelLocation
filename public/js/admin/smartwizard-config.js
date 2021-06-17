@@ -58,6 +58,15 @@ var selectedClient;
 var btnReserver;
 var selectClientElem;
 var listeClients = [];
+var btnCreateClient;
+
+//formulaire creation client
+var nomClientValue;
+var prenomClientValue;
+var emailClientValue;
+var telephoneClientValue;
+
+var btnEnregistrerDevis
 
 getElements()
 addEvent();
@@ -114,6 +123,8 @@ function getElementsStep2Step3Step4() {
 
     // step 4
     selectClientElem = document.querySelector('input[id="selectClient"]');
+
+
 
 
 
@@ -601,25 +612,160 @@ function dateToTimestamp(date) {
 }
 
 function getElements() {
+
     btnReserver = document.getElementById('reserver');
+    btnCreateClient = document.querySelector('button[id="createClient"]');
+
+    //formulaire creation nouveau client
+    nomClientElem = document.querySelector('input[id="nom"]');
+    prenomClientElem = document.querySelector('input[id="prenom"]');
+    emailClientElem = document.querySelector('input[id="email"]');
+    telephoneClientElem = document.querySelector('input[id="telephone"]');
+    btnEnregistrerDevis = document.getElementById('enregistrerDevis');
 
 }
 function addEvent() {
 
-    btnReserver.addEventListener('click', selectClient, false);
+    btnReserver.addEventListener('click', reserver, false);
+    btnCreateClient.addEventListener('click', createClientAjax, false);
+    btnEnregistrerDevis.addEventListener('click', generatePDF, false);
+
 }
 
-function selectClient() {
+function reserver() { //envoi donnée à controller par ajax
+
     console.log(selectClientElem);
     selectedClient = selectClientElem.value;
     console.log("data : " + selectedClient, agenceDepartSelected, agenceRetourSelected, lieuSejourValue, datetimeDepartValue, datetimeRetourValue, dureeReservation,
         tarifApplique, conducteur, siege, garantie);
+
+    $.ajax({
+        type: 'GET',
+        url: '/reservation/newVenteComtpoir',
+        data: {
+            'client': nomClientValue,
+            'agenceDepart': agenceDepartSelected,
+            'agenceRetour': agenceRetourSelected,
+            'dateTimeDepart': datetimeDepartValue,
+            'dateTimeRetour': datetimeRetourValue,
+            'conducteur': conducteur,
+            'siege': siege,
+            'garantie': garantie,
+            'vehiculeIM': vehiculeSelected.immatriculation,
+            'lieuSejour': lieuSejourValue
+        },
+        timeout: 3000,
+        beforeSend: function (xhr) {
+            // Show the loader
+            // $('#smartwizard').smartWizard("loader", "show");
+        },
+        success: function (data) {
+            console.log('mety ilay izy zao');
+
+            // $('#smartwizard').smartWizard("loader", "hide");
+        },
+        error: function () {
+            alert('La requête n\'a pas abouti');
+        }
+    });
+
 }
 
 function autocomplete(listeClients) {
     $(function () {
-        var availableTags = ["rakotoarinalina rija", "rakotoarinalina benjamina", "rakotoarinalina benjamina (rakoto@gmail.com)",];
         $("#selectClient").autocomplete({ source: listeClients });
     });
 }
 
+function createClientAjax(e) {
+
+    nomClientValue = nomClientElem.value;
+    prenomClientValue = prenomClientElem.value;
+    emailClientValue = emailClientElem.value;
+    telephoneClientValue = telephoneClientElem.value;
+
+    console.log(nomClientValue, prenomClientValue, emailClientValue, telephoneClientValue);
+
+    if (nomClientValue != "" && prenomClientValue != "" && emailClientValue != "" && telephoneClientValue != "") {
+        e.preventDefault();
+
+        // url = $('#createClient').attr('href');
+        url = '/user/newVenteComptoir'
+
+        $.ajax({
+            type: 'GET',
+            url: url,
+            data: { 'nom': nomClientValue, 'prenom': prenomClientValue, 'email': emailClientValue, 'telephone': telephoneClientValue },
+            timeout: 3000,
+            beforeSend: function (xhr) {
+                // Show the loader
+                $('#smartwizard').smartWizard("loader", "show");
+            },
+            success: function (data) {
+                console.log(data);
+                nullifyForm();
+
+                for (let i = 0; i < data.length; i++) {
+
+                    listeClients.push(data[i].prenom + ' ' + data[i].nom + ' (' + data[i].email + ')');
+
+                }
+                $('#smartwizard').smartWizard("loader", "hide");
+            },
+            error: function () {
+                alert('La requête n\'a pas abouti');
+            }
+        });
+
+    }
+
+}
+
+function nullifyForm() {
+    nomClientValue = "";
+    prenomClientValue = "";
+    emailClientValue = "";
+    telephoneClientValue = "";
+    nomClientElem.innerText = "";
+    prenomClientElem.innerText = "";
+    emailClientElem.innerText = "";
+    telephoneClientElem.innerText = "";
+
+    document.getElementById('formCreateClient').style.display = 'none';
+}
+
+
+function generatePDF() {
+
+    var doc = new jsPDF();
+
+    doc.text(20, 20, 'Client : ');
+    doc.text(40, 20, selectClientElem.value);
+    doc.text(20, 30, 'Agence de départ : ');
+    doc.text(70, 30, agenceDepartSelected);
+    doc.text(20, 40, 'Agence de retour : ');
+    doc.text(70, 40, agenceRetourSelected);
+    doc.text(20, 50, 'lieu sejour value : ');
+    doc.text(70, 50, lieuSejourValue);
+    doc.text(20, 60, 'Date depart : ');
+    doc.text(70, 60, datetimeDepartValue);
+    doc.text(20, 70, 'Date retour : ');
+    doc.text(70, 70, datetimeRetourValue);
+    doc.text(20, 80, 'Duree réservation : ');
+    doc.text(70, 80, dureeReservation.toString() + ' jours');
+    doc.text(20, 90, 'Tarif appliquée : ');
+    doc.text(70, 90, tarifApplique.toString() + ' €');
+
+    doc.text(20, 100, 'Marque : ');
+    doc.text(70, 100, detailsVehicule.marque);
+
+    doc.text(20, 110, 'Modèle : ');
+    doc.text(70, 110, detailsVehicule.modele);
+
+    doc.text(20, 120, 'Immatriculation :  ');
+    doc.text(70, 120, detailsVehicule.immatriculation);
+
+    doc.save('devis.pdf');
+}
+
+// console.log("data : " + selectedClient, agenceDepartSelected, agenceRetourSelected, lieuSejourValue, datetimeDepartValue, datetimeRetourValue, dureeReservation,

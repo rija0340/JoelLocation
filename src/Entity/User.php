@@ -49,7 +49,7 @@ class User implements UserInterface
     private $prenom;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255 , nullable=true)
      */
     private $adresse;
 
@@ -103,12 +103,18 @@ class User implements UserInterface
      */
     private $fonction;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Devis::class, mappedBy="Client")
+     */
+    private $devis;
+
     public function __construct()
     {
         $this->messages = new ArrayCollection();
         $this->reservations = new ArrayCollection();
         $this->utilisateur = new ArrayCollection();
         $this->paiements = new ArrayCollection();
+        $this->devis = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -417,6 +423,36 @@ class User implements UserInterface
     public function setFonction(?string $fonction): self
     {
         $this->fonction = $fonction;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Devis[]
+     */
+    public function getDevis(): Collection
+    {
+        return $this->devis;
+    }
+
+    public function addDevi(Devis $devi): self
+    {
+        if (!$this->devis->contains($devi)) {
+            $this->devis[] = $devi;
+            $devi->setClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDevi(Devis $devi): self
+    {
+        if ($this->devis->removeElement($devi)) {
+            // set the owning side to null (unless already changed)
+            if ($devi->getClient() === $this) {
+                $devi->setClient(null);
+            }
+        }
 
         return $this;
     }

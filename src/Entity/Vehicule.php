@@ -144,9 +144,15 @@ class Vehicule
      */
     private $tarifs;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Devis::class, mappedBy="Vehicule")
+     */
+    private $devis;
+
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
+        $this->devis = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -462,6 +468,36 @@ class Vehicule
         }
 
         $this->tarifs = $tarifs;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Devis[]
+     */
+    public function getDevis(): Collection
+    {
+        return $this->devis;
+    }
+
+    public function addDevi(Devis $devi): self
+    {
+        if (!$this->devis->contains($devi)) {
+            $this->devis[] = $devi;
+            $devi->setVehicule($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDevi(Devis $devi): self
+    {
+        if ($this->devis->removeElement($devi)) {
+            // set the owning side to null (unless already changed)
+            if ($devi->getVehicule() === $this) {
+                $devi->setVehicule(null);
+            }
+        }
 
         return $this;
     }

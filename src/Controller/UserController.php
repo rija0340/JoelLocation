@@ -76,14 +76,8 @@ class UserController extends AbstractController
     {
         $clients = array();
         $data = array();
+        $clients = $userRepository->findClients();
 
-        $users = $userRepository->findAll();
-        foreach ($users as $user) {
-
-            if (in_array('ROLE_CLIENT', $user->getRoles())) {
-                array_push($clients, $user);
-            }
-        }
         foreach ($clients as $key => $client) {
 
             $data[$key]['id'] = $client->getId();
@@ -153,6 +147,55 @@ class UserController extends AbstractController
             'user' => $user,
             'form' => $form->createView(),
         ]);
+    }
+
+
+
+    /**
+     * @Route("/newVenteComptoir", name="newClientVenteComptoir", methods={"GET","POST"})
+     */
+    public function newClientVenteComptoir(Request $request, UserRepository $userRepository): Response
+    {
+        $nom = $request->query->get('nom');
+        $prenom = $request->query->get('prenom');
+        $email = $request->query->get('email');
+        $telephone = $request->query->get('telephone');
+
+        if ($nom != null && $prenom != null && $email != null && $telephone != null) {
+            # code...
+            //creation of new client 
+            $user = new User();
+            $user->setNom($nom);
+            $user->setPrenom($prenom);
+            $user->setUsername($prenom . '_' . $nom);
+            $user->setMail($email);
+            $user->setTelephone($telephone);
+            $user->setMail($email);
+            $user->setRoles(['ROLE_CLIENT']);
+            $user->setPassword($this->passwordEncoder->encodePassword(
+                $user,
+                $nom . $telephone
+            ));
+            $user->setPresence(1);
+            $user->setDateInscription(new \DateTime('now'));
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+        }
+
+        $data = array();
+
+        $clients = $userRepository->findClients();
+
+        foreach ($clients as $key => $client) {
+
+            $data[$key]['id'] = $client->getId();
+            $data[$key]['nom'] = $client->getNom();
+            $data[$key]['prenom'] = $client->getPrenom();
+            $data[$key]['email'] = $client->getMail();
+        }
+
+        return new JsonResponse($data);
     }
 
     /**
