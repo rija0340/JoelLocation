@@ -69,6 +69,17 @@ class Devis
      */
     private $garantie = [];
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $dateCreation;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $duree;
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -190,6 +201,30 @@ class Devis
     public function setGarantie(array $garantie): self
     {
         $this->garantie = $garantie;
+
+        return $this;
+    }
+
+    public function getDateCreation(): ?\DateTimeInterface
+    {
+        return $this->dateCreation;
+    }
+
+    public function setDateCreation(?\DateTimeInterface $dateCreation): self
+    {
+        $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
+    public function getDuree(): ?float
+    {
+        return $this->duree;
+    }
+
+    public function setDuree(float $duree): self
+    {
+        $this->duree = $duree;
 
         return $this;
     }

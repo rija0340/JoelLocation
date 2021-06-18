@@ -58,6 +58,7 @@ var selectedClient;
 var btnReserver;
 var selectClientElem;
 var listeClients = [];
+var listeClientsOriginal = [];
 var btnCreateClient;
 
 //formulaire creation client
@@ -66,7 +67,7 @@ var prenomClientValue;
 var emailClientValue;
 var telephoneClientValue;
 
-var btnEnregistrerDevis
+var btnPdfDevis;
 
 getElements()
 addEvent();
@@ -459,14 +460,22 @@ function retrieveUsersAjax() {
         Type: "json",
         success: function (data) {
             console.log(data);
-
+            // isteClientsOriginal = data;
             for (let i = 0; i < data.length; i++) {
 
                 listeClients.push(data[i].prenom + ' ' + data[i].nom + ' (' + data[i].email + ')');
 
+                listeClientsOriginal.push({
+                    id: data[i].id,
+                    nom: data[i].nom,
+                    prenom: data[i].prenom,
+                    email: data[i].email
+                });
             }
 
-            console.log(listeClients)
+            console.log(listeClients);
+            console.log(listeClientsOriginal);
+
             // populateSelectClientElem(data);
 
         },
@@ -621,6 +630,7 @@ function getElements() {
     prenomClientElem = document.querySelector('input[id="prenom"]');
     emailClientElem = document.querySelector('input[id="email"]');
     telephoneClientElem = document.querySelector('input[id="telephone"]');
+    btnPdfDevis = document.getElementById('pdfDevis');
     btnEnregistrerDevis = document.getElementById('enregistrerDevis');
 
 }
@@ -628,22 +638,62 @@ function addEvent() {
 
     btnReserver.addEventListener('click', reserver, false);
     btnCreateClient.addEventListener('click', createClientAjax, false);
-    btnEnregistrerDevis.addEventListener('click', generatePDF, false);
+    btnPdfDevis.addEventListener('click', generatePDF, false);
+    btnEnregistrerDevis.addEventListener('click', enregistrerDevis, false);
 
 }
 
-function reserver() { //envoi donnée à controller par ajax
+function enregistrerDevis() { //envoi donnée à controller par ajax
 
     console.log(selectClientElem);
     selectedClient = selectClientElem.value;
-    console.log("data : " + selectedClient, agenceDepartSelected, agenceRetourSelected, lieuSejourValue, datetimeDepartValue, datetimeRetourValue, dureeReservation,
-        tarifApplique, conducteur, siege, garantie);
+    var nomClient = selectedClient.substring(selectedClient.indexOf(' ') + 1);
+    nomClient = nomClient.substring(0, nomClient.indexOf(' '));
+    var emailClient = selectedClient.substring(selectedClient.lastIndexOf('(') + 1);
+    emailClient = emailClient.slice(0, -1);
+
+    var idClient;
+
+    console.log('ity le liste original : ');
+    console.log(listeClientsOriginal);
+    console.log('length');
+    console.log(listeClientsOriginal.length);
+
+    for (let i = 0; i < listeClientsOriginal.length; i++) {
+
+        var result1 = listeClientsOriginal[i].nom.localeCompare(nomClient);
+        var result2 = listeClientsOriginal[i].email.localeCompare(emailClient);
+
+        if (result1 == 0 && result2 == 0) {
+
+            idClient = listeClientsOriginal[i].id;
+            console.log(idClient);
+        }
+
+    }
+    console.log(idClient);
+    console.log("data : " +
+
+        idClient,
+        nomClient,
+        emailClient,
+        agenceDepartSelected,
+        agenceRetourSelected,
+        datetimeDepartValue,
+        datetimeRetourValue,
+        conducteur,
+        siege,
+        garantie,
+        detailsVehicule.immatriculation,
+        lieuSejourValue);
 
     $.ajax({
         type: 'GET',
-        url: '/reservation/newVenteComtpoir',
+        url: '/newDevis',
         data: {
-            'client': nomClientValue,
+            'idClient': idClient,
+            'nomClient': nomClient,
+            'emailClient': emailClient,
             'agenceDepart': agenceDepartSelected,
             'agenceRetour': agenceRetourSelected,
             'dateTimeDepart': datetimeDepartValue,
@@ -651,18 +701,21 @@ function reserver() { //envoi donnée à controller par ajax
             'conducteur': conducteur,
             'siege': siege,
             'garantie': garantie,
-            'vehiculeIM': vehiculeSelected.immatriculation,
+            'vehiculeIM': detailsVehicule.immatriculation,
             'lieuSejour': lieuSejourValue
         },
         timeout: 3000,
         beforeSend: function (xhr) {
             // Show the loader
-            // $('#smartwizard').smartWizard("loader", "show");
+            $('#smartwizard').smartWizard("loader", "show");
         },
-        success: function (data) {
-            console.log('mety ilay izy zao');
+        success: function (xmlHttp) {
+            // xmlHttp is a XMLHttpRquest object
+            alert(xmlHttp.status);
+            // console.log('mety ilay izy zao');
+            window.document.location = '/devis';
 
-            // $('#smartwizard').smartWizard("loader", "hide");
+            $('#smartwizard').smartWizard("loader", "hide");
         },
         error: function () {
             alert('La requête n\'a pas abouti');
@@ -702,12 +755,15 @@ function createClientAjax(e) {
                 $('#smartwizard').smartWizard("loader", "show");
             },
             success: function (data) {
+
                 console.log(data);
                 nullifyForm();
 
                 for (let i = 0; i < data.length; i++) {
 
                     listeClients.push(data[i].prenom + ' ' + data[i].nom + ' (' + data[i].email + ')');
+
+
 
                 }
                 $('#smartwizard').smartWizard("loader", "hide");

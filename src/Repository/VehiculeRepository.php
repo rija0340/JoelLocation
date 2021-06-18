@@ -70,6 +70,21 @@ class VehiculeRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+
+
+
+
+    public function findByIM($im): ?Vehicule
+    {
+        return $this->createQueryBuilder('v')
+            ->andWhere('v.immatriculation = :val')
+            ->setParameter('val', $im)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+
+
     // /**
     //  * @return Vehicule[] Returns an array of Vehicule objects
     //  */
