@@ -8,6 +8,7 @@ use App\Repository\UserRepository;
 use App\Repository\DevisRepository;
 use App\Repository\VehiculeRepository;
 use App\Repository\ReservationRepository;
+use App\Repository\TarifsRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,14 +21,16 @@ class DevisController extends AbstractController
     private $userRepo;
     private $vehiculeRepo;
     private $devisRepo;
+    private $tarifsRepo;
 
-    public function __construct(DevisRepository $devisRepo, ReservationRepository $reservationRepo, VehiculeRepository $vehiculeRepo, UserRepository $userRepo)
+    public function __construct(DevisRepository $devisRepo, ReservationRepository $reservationRepo, VehiculeRepository $vehiculeRepo, UserRepository $userRepo, TarifsRepository $tarifsRepo)
     {
 
         $this->reservationRepo = $reservationRepo;
         $this->vehiculeRepo = $vehiculeRepo;
         $this->userRepo = $userRepo;
         $this->devisRepo = $devisRepo;
+        $this->tarifsRepo = $tarifsRepo;
     }
 
     /**
@@ -49,10 +52,9 @@ class DevisController extends AbstractController
      */
     public function newDevis(Request $request): Response
     {
-
+        $devis = new Devis();
         if ($request->isXmlHttpRequest()) {
-
-            $devis = new Devis();
+            echo $request;
             $idClient =  $request->query->get('idClient');
             $agenceDepart = $request->query->get('agenceDepart');
             $agenceRetour = $request->query->get('agenceRetour');
@@ -76,22 +78,36 @@ class DevisController extends AbstractController
             $devis->setAgenceRetour($agenceRetour);
             $devis->setDateDepart(new \DateTime($dateTimeDepart));
             $devis->setDateRetour(new \DateTime($dateTimeRetour));
-            $devis->setGarantie(['garantie' => $garantie]);
-            $devis->setSiege(['siege' => $siege]);
+            $devis->setGarantie(['texte' => $garantie['texte'], 'prix' => $garantie['prix']]);
+            $devis->setSiege(['texte' => $siege['texte'], 'prix' => $siege['prix']]);
             $devis->setConducteur($conducteur);
             $devis->setLieuSejour($lieuSejour);
             $devis->setDuree($duree->format('%d'));
+            $devis->setDateCreation(new \DateTime('NOW'));
 
+            //recuperation tarif en fonction mois départ et véhicule
+            $mois = $this->monthName($devis->getDateDepart()->format('m'));
+            $tarifs = $this->tarifsRepo->findTarifs($vehicule, $mois);
+
+            if ($duree->format('%d') <= 3) $tarif = $tarifs->getTroisJours();
+
+            if ($duree->format('%d') > 3 && $duree->format('%d') <= 7) $tarif = $tarifs->getSeptJours();
+
+            if ($duree->format('%d') > 7 && $duree->format('%d') <= 15) $tarif = $tarifs->getQuinzeJours();
+
+            if ($duree->format('%d') > 15 && $duree->format('%d') <= 30) $tarif = $tarifs->getTrenteJours();
+
+            $devis->setPrix($tarif + $garantie['prix'] + $siege['prix']);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($devis);
             $entityManager->flush();
+
+            return $this->redirectToRoute('devis_index');
         }
 
-        $devis = $this->devisRepo->findAll();
-
         return $this->render('admin/devis/index.html.twig', [
+
             'controller_name' => 'DevisController',
-            'devis' => $devis
         ]);
     }
 
@@ -101,7 +117,8 @@ class DevisController extends AbstractController
      */
     public function show(Devis $devis): Response
     {
-        return $this->render('admin/devis/show.html.twig', [
+
+        return $this->render('admin/devis/details.html.twig', [
             'devis' => $devis,
         ]);
     }
@@ -141,5 +158,50 @@ class DevisController extends AbstractController
         }
 
         return $this->redirectToRoute('devis_index');
+    }
+
+    function monthName($month)
+    {
+        $monthFR = null;
+        switch ($month) {
+            case "01":
+                $monthFR = 'Janvier';
+                break;
+            case "02":
+                $monthFR = 'Février';
+                break;
+            case "03":
+                $monthFR = 'Mars';
+                break;
+            case "04":
+                $monthFR = 'Avril';
+                break;
+            case "05":
+                $monthFR = 'Mai';
+                break;
+            case "06":
+                $monthFR = 'Juin';
+                break;
+            case "07":
+                $monthFR = 'Juillet';
+                break;
+            case "08":
+                $monthFR = 'Août';
+                break;
+            case "09":
+                $monthFR = 'Septembre';
+                break;
+            case "10":
+                $monthFR = 'Octobre';
+                break;
+            case "11":
+                $monthFR = 'Novembre';
+                break;
+            case "12":
+                $monthFR = 'Décembre';
+                break;
+        }
+
+        return $monthFR;
     }
 }

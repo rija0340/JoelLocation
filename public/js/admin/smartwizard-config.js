@@ -47,7 +47,7 @@ let detailsVehicule;
 var dureeReservation;
 // get elem step 3
 var conducteur;
-var siege;
+var siege = Array();
 var garantie;
 
 // get elem step 4
@@ -124,11 +124,6 @@ function getElementsStep2Step3Step4() {
 
     // step 4
     selectClientElem = document.querySelector('input[id="selectClient"]');
-
-
-
-
-
 }
 
 function setValuesStep2Step3Step4() {
@@ -275,13 +270,13 @@ $(document).ready(function () { // Step show event
                 if (radioSiege[i].type == 'radio' && radioSiege[i].checked) {
                     switch (radioSiege[i].value) {
                         case '1':
-                            siege = "Siège bébé : 30€";
+                            siege = { "prix": 30, "texte": 'Siège bébé : 30€' };
                             break;
                         case '2':
-                            siege = "Siège nourrisson : 30€";
+                            siege = { "prix": 30, "texte": "Siège nourrisson : 30€" };
                             break;
                         case '3':
-                            siege = "Rehausseur : gratuit";
+                            siege = { "prix": 0, "texte": "Rehausseur : gratuit" };
                             break;
                     }
                 }
@@ -304,14 +299,14 @@ $(document).ready(function () { // Step show event
                 if (radioGarantie[i].type == 'radio' && radioGarantie[i].checked) {
                     switch (radioGarantie[i].value) {
                         case '1':
-                            garantie = "GARANTIE BRIS DE GLACE & PNEUS (90€)";
+                            garantie = { "prix": 90, "texte": "GARANTIE BRIS DE GLACE & PNEUS (90€)" };
                             break;
                         case '2':
-                            garantie = "ASSISTANCE ESPRIT TRANQUILLE (100€)";
+                            garantie = { "prix": 100, "texte": "ASSISTANCE ESPRIT TRANQUILLE (100€)" };
                             break;
 
                         case '3':
-                            garantie = " ASSISTANCE PREMIUM (160 €)";
+                            garantie = { "prix": 160, "texte": "ASSISTANCE PREMIUM (160 €)" };
                             break;
                     }
                 }
@@ -467,9 +462,7 @@ function retrieveUsersAjax() {
 
                 listeClientsOriginal.push({
                     id: data[i].id,
-                    nom: data[i].nom,
-                    prenom: data[i].prenom,
-                    email: data[i].email
+                    nomPrenomEmail: data[i].prenom + ' ' + data[i].nom + ' (' + data[i].email + ')'
                 });
             }
 
@@ -646,81 +639,76 @@ function addEvent() {
 function enregistrerDevis() { //envoi donnée à controller par ajax
 
     console.log(selectClientElem);
+    selectedClient = null;
     selectedClient = selectClientElem.value;
-    var nomClient = selectedClient.substring(selectedClient.indexOf(' ') + 1);
-    nomClient = nomClient.substring(0, nomClient.indexOf(' '));
-    var emailClient = selectedClient.substring(selectedClient.lastIndexOf('(') + 1);
-    emailClient = emailClient.slice(0, -1);
 
-    var idClient;
+    if (selectedClient != "") {
+        var idClient;
+        console.log('ity le liste original : ');
+        console.log(listeClientsOriginal);
+        console.log('length');
+        console.log(listeClientsOriginal.length);
 
-    console.log('ity le liste original : ');
-    console.log(listeClientsOriginal);
-    console.log('length');
-    console.log(listeClientsOriginal.length);
+        for (let i = 0; i < listeClientsOriginal.length; i++) {
 
-    for (let i = 0; i < listeClientsOriginal.length; i++) {
+            var result = listeClientsOriginal[i].nomPrenomEmail.localeCompare(selectedClient);
 
-        var result1 = listeClientsOriginal[i].nom.localeCompare(nomClient);
-        var result2 = listeClientsOriginal[i].email.localeCompare(emailClient);
+            if (result == 0) {
 
-        if (result1 == 0 && result2 == 0) {
+                idClient = listeClientsOriginal[i].id;
+                console.log(idClient);
+            }
 
-            idClient = listeClientsOriginal[i].id;
-            console.log(idClient);
         }
+        console.log(idClient);
+        console.log("data : " +
 
+            idClient,
+            agenceDepartSelected,
+            agenceRetourSelected,
+            datetimeDepartValue,
+            datetimeRetourValue,
+            conducteur,
+            siege,
+            garantie,
+            detailsVehicule.immatriculation,
+            lieuSejourValue);
+
+        $.ajax({
+            type: 'GET',
+            url: '/newDevis',
+            data: {
+                'idClient': idClient,
+                'agenceDepart': agenceDepartSelected,
+                'agenceRetour': agenceRetourSelected,
+                'dateTimeDepart': datetimeDepartValue,
+                'dateTimeRetour': datetimeRetourValue,
+                'conducteur': conducteur,
+                'siege': siege,
+                'garantie': garantie,
+                'vehiculeIM': detailsVehicule.immatriculation,
+                'lieuSejour': lieuSejourValue
+            },
+            timeout: 3000,
+            beforeSend: function (xhr) {
+                // Show the loader
+                $('#smartwizard').smartWizard("loader", "show");
+            },
+            success: function (xmlHttp) {
+                // xmlHttp is a XMLHttpRquest object
+                console.log('met le izy');
+                // console.log('mety ilay izy zao');
+                window.document.location = '/devis';
+
+                $('#smartwizard').smartWizard("loader", "hide");
+            },
+            error: function () {
+                alert('La requête n\'a pas abouti');
+            }
+        });
+    } else {
+        alert('Veuillez indiquer un client');
     }
-    console.log(idClient);
-    console.log("data : " +
-
-        idClient,
-        nomClient,
-        emailClient,
-        agenceDepartSelected,
-        agenceRetourSelected,
-        datetimeDepartValue,
-        datetimeRetourValue,
-        conducteur,
-        siege,
-        garantie,
-        detailsVehicule.immatriculation,
-        lieuSejourValue);
-
-    $.ajax({
-        type: 'GET',
-        url: '/newDevis',
-        data: {
-            'idClient': idClient,
-            'nomClient': nomClient,
-            'emailClient': emailClient,
-            'agenceDepart': agenceDepartSelected,
-            'agenceRetour': agenceRetourSelected,
-            'dateTimeDepart': datetimeDepartValue,
-            'dateTimeRetour': datetimeRetourValue,
-            'conducteur': conducteur,
-            'siege': siege,
-            'garantie': garantie,
-            'vehiculeIM': detailsVehicule.immatriculation,
-            'lieuSejour': lieuSejourValue
-        },
-        timeout: 3000,
-        beforeSend: function (xhr) {
-            // Show the loader
-            $('#smartwizard').smartWizard("loader", "show");
-        },
-        success: function (xmlHttp) {
-            // xmlHttp is a XMLHttpRquest object
-            alert(xmlHttp.status);
-            // console.log('mety ilay izy zao');
-            window.document.location = '/devis';
-
-            $('#smartwizard').smartWizard("loader", "hide");
-        },
-        error: function () {
-            alert('La requête n\'a pas abouti');
-        }
-    });
 
 }
 
@@ -758,14 +746,17 @@ function createClientAjax(e) {
 
                 console.log(data);
                 nullifyForm();
-
+                listeClientsOriginal = [];
                 for (let i = 0; i < data.length; i++) {
 
                     listeClients.push(data[i].prenom + ' ' + data[i].nom + ' (' + data[i].email + ')');
-
-
-
+                    listeClientsOriginal.push({
+                        id: data[i].id,
+                        nomPrenomEmail: data[i].prenom + ' ' + data[i].nom + ' (' + data[i].email + ')'
+                    });
                 }
+                console.log('ity le izy ');
+                console.log(listeClientsOriginal);
                 $('#smartwizard').smartWizard("loader", "hide");
             },
             error: function () {

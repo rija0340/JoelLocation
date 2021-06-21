@@ -79,6 +79,11 @@ class Devis
      */
     private $duree;
 
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $prix;
+
 
     public function getId(): ?int
     {
@@ -225,6 +230,18 @@ class Devis
     public function setDuree(float $duree): self
     {
         $this->duree = $duree;
+
+        return $this;
+    }
+
+    public function getPrix(): ?float
+    {
+        return $this->prix;
+    }
+
+    public function setPrix(float $prix): self
+    {
+        $this->prix = $prix;
 
         return $this;
     }
