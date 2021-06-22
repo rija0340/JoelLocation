@@ -1,0 +1,16 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}Edit Avis
+{% endblock %}
+
+{% block content %}
+	<h1>Modification Avis</h1>
+
+	{{ include('admin/garanties/_form.html.twig', {'button_label': 'Modifier'}) }}
+
+	<a href="{{ path('garanties_index') }}" class="btn btn-primary">
+		<i class="fa fa-arrow-left" aria-hidden="true"></i>
+		retour</a>
+
+	{{ include('admin/garanties/_delete_form.html.twig') }}
+{% endblock %}

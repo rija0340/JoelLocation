@@ -1,0 +1,37 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}Détails option
+{% endblock %}
+
+{% block content %}
+	<h1>Option</h1>
+
+	<table class="table">
+		<tbody>
+
+			<tr>
+				<th>Nom option</th>
+				<td>{{ option.appelation }}</td>
+			</tr>
+			<tr>
+				<th>prix</th>
+				<td>{{ option.prix }}</td>
+			</tr>
+
+		</tbody>
+	</table>
+
+	<a href="{{ path('options_index') }}" class="btn btn-primary">
+		<i class="fa fa-arrow-left" aria-hidden="true"></i>
+		retour</a>
+	{% if is_granted("ROLE_ADMIN") %}
+		<a href="{{ path('options_edit', {'id': option.id}) }}" class="btn btn-success">
+			<i class="fa fa-book" aria-hidden="true"></i>
+			Modifier</a>
+	{% endif %}
+	{% if is_granted("ROLE_ADMIN") %}
+		{{ include('admin/options/_delete_form.html.twig') }}
+	{% endif %}
+
+
+{% endblock %}

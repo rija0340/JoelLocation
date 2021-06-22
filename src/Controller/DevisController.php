@@ -6,6 +6,8 @@ use App\Entity\Devis;
 use App\Form\DevisType;
 use App\Repository\UserRepository;
 use App\Repository\DevisRepository;
+use App\Repository\GarantieRepository;
+use App\Repository\OptionsRepository;
 use App\Repository\VehiculeRepository;
 use App\Repository\ReservationRepository;
 use App\Repository\TarifsRepository;
@@ -22,8 +24,10 @@ class DevisController extends AbstractController
     private $vehiculeRepo;
     private $devisRepo;
     private $tarifsRepo;
+    private $garantiesRepo;
+    private $optionsRepo;
 
-    public function __construct(DevisRepository $devisRepo, ReservationRepository $reservationRepo, VehiculeRepository $vehiculeRepo, UserRepository $userRepo, TarifsRepository $tarifsRepo)
+    public function __construct(DevisRepository $devisRepo, ReservationRepository $reservationRepo, VehiculeRepository $vehiculeRepo, UserRepository $userRepo, TarifsRepository $tarifsRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
     {
 
         $this->reservationRepo = $reservationRepo;
@@ -31,6 +35,8 @@ class DevisController extends AbstractController
         $this->userRepo = $userRepo;
         $this->devisRepo = $devisRepo;
         $this->tarifsRepo = $tarifsRepo;
+        $this->garantiesRepo = $garantiesRepo;
+        $this->optionsRepo = $optionsRepo;
     }
 
     /**
@@ -41,7 +47,6 @@ class DevisController extends AbstractController
         $devis = $this->devisRepo->findAll();
 
         return $this->render('admin/devis/index.html.twig', [
-            'controller_name' => 'DevisController',
             'devis' => $devis
         ]);
     }
@@ -54,7 +59,6 @@ class DevisController extends AbstractController
     {
         $devis = new Devis();
         if ($request->isXmlHttpRequest()) {
-            echo $request;
             $idClient =  $request->query->get('idClient');
             $agenceDepart = $request->query->get('agenceDepart');
             $agenceRetour = $request->query->get('agenceRetour');
@@ -63,8 +67,12 @@ class DevisController extends AbstractController
             $dateTimeRetour = $request->query->get('dateTimeRetour');
             $vehiculeIM = $request->query->get('vehiculeIM');
             $conducteur = $request->query->get('conducteur');
-            $siege = $request->query->get('siege');
-            $garantie = $request->query->get('garantie');
+            $idSiege = $request->query->get('idSiege');
+            $idGarantie = $request->query->get('idGarantie');
+
+
+            $siege = $this->optionsRepo->find($idSiege);
+            $garantie = $this->garantiesRepo->find($idGarantie);
 
             $vehicule = $this->vehiculeRepo->findByIM($vehiculeIM);
             // $client = $this->userRepo->findByNameAndMail($nomClient, $emailClient);
@@ -78,8 +86,8 @@ class DevisController extends AbstractController
             $devis->setAgenceRetour($agenceRetour);
             $devis->setDateDepart(new \DateTime($dateTimeDepart));
             $devis->setDateRetour(new \DateTime($dateTimeRetour));
-            $devis->setGarantie(['texte' => $garantie['texte'], 'prix' => $garantie['prix']]);
-            $devis->setSiege(['texte' => $siege['texte'], 'prix' => $siege['prix']]);
+            $devis->setGarantie($garantie);
+            $devis->setSiege($siege);
             $devis->setConducteur($conducteur);
             $devis->setLieuSejour($lieuSejour);
             $devis->setDuree($duree->format('%d'));
@@ -97,7 +105,7 @@ class DevisController extends AbstractController
 
             if ($duree->format('%d') > 15 && $duree->format('%d') <= 30) $tarif = $tarifs->getTrenteJours();
 
-            $devis->setPrix($tarif + $garantie['prix'] + $siege['prix']);
+            $devis->setPrix($tarif + $garantie->getPrix() + $siege->getPrix());
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($devis);
             $entityManager->flush();
@@ -105,9 +113,10 @@ class DevisController extends AbstractController
             return $this->redirectToRoute('devis_index');
         }
 
-        return $this->render('admin/devis/index.html.twig', [
+        $devis = $this->devisRepo->findAll();
 
-            'controller_name' => 'DevisController',
+        return $this->render('admin/devis/index.html.twig', [
+            'devis' => $devis
         ]);
     }
 
@@ -132,6 +141,7 @@ class DevisController extends AbstractController
         $form = $this->createForm(DevisType::class, $devis);
 
         $form->handleRequest($request);
+
 
         if ($form->isSubmitted() && $form->isValid()) {
 

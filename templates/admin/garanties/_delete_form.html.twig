@@ -1,0 +1,7 @@
+<form method="post" action="{{ path('garanties_delete', {'id': garantie.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer cette garantie?');">
+	<input type="hidden" name="_method" value="DELETE">
+	<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ garantie.id) }}">
+	<button class="btn btn-danger">
+		<i class="fa fa-trash" aria-hidden="true"></i>
+		Supprimer</button>
+</form>
