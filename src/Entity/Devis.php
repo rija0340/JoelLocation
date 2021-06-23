@@ -59,15 +59,8 @@ class Devis
      */
     private $conducteur;
 
-    /**
-     * @ORM\Column(type="array")
-     */
-    private $siege = [];
 
-    /**
-     * @ORM\Column(type="array")
-     */
-    private $garantie = [];
+
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -83,6 +76,16 @@ class Devis
      * @ORM\Column(type="float")
      */
     private $prix;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Options::class, inversedBy="devis")
+     */
+    private $siege;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Garantie::class, inversedBy="devis")
+     */
+    private $garantie;
 
 
     public function getId(): ?int
@@ -186,30 +189,6 @@ class Devis
         return $this;
     }
 
-    public function getSiege(): ?array
-    {
-        return $this->siege;
-    }
-
-    public function setSiege(array $siege): self
-    {
-        $this->siege = $siege;
-
-        return $this;
-    }
-
-    public function getGarantie(): ?array
-    {
-        return $this->garantie;
-    }
-
-    public function setGarantie(array $garantie): self
-    {
-        $this->garantie = $garantie;
-
-        return $this;
-    }
-
     public function getDateCreation(): ?\DateTimeInterface
     {
         return $this->dateCreation;
@@ -242,6 +221,30 @@ class Devis
     public function setPrix(float $prix): self
     {
         $this->prix = $prix;
+
+        return $this;
+    }
+
+    public function getSiege(): ?Options
+    {
+        return $this->siege;
+    }
+
+    public function setSiege(?Options $siege): self
+    {
+        $this->siege = $siege;
+
+        return $this;
+    }
+
+    public function getGarantie(): ?Garantie
+    {
+        return $this->garantie;
+    }
+
+    public function setGarantie(?Garantie $garantie): self
+    {
+        $this->garantie = $garantie;
 
         return $this;
     }

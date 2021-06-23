@@ -1,0 +1,14 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}New option
+{% endblock %}
+
+{% block content %}
+	<h1>Nouvelle option</h1>
+
+	{{ include('admin/options/_form.html.twig') }}
+
+	<a href="{{ path('options_index') }}" class="btn btn-primary">
+		<i class="fa fa-arrow-left" aria-hidden="true"></i>
+		retour</a>
+{% endblock %}

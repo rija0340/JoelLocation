@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Tarifs;
 use App\Entity\Reservation;
 use App\Form\ReservationType;
+use App\Repository\GarantieRepository;
+use App\Repository\OptionsRepository;
 use App\Repository\TarifsRepository;
 use App\Repository\ReservationRepository;
 use Knp\Component\Pager\PaginatorInterface;
@@ -160,12 +162,17 @@ class AdminController extends AbstractController
   /**
    * @Route("/vente_comptoir", name="vente_comptoir", methods={"GET"})
    */
-  public function vente_comptoir(TarifsRepository $tarifsRepo): Response
+  public function vente_comptoir(TarifsRepository $tarifsRepo, GarantieRepository $garantieRepo, OptionsRepository $optionsRepo): Response
   {
+    $garanties = $garantieRepo->findAll();
+
     $tarifs = new Tarifs();
     $tarifs = $tarifsRepo->findAll();
+    $options = $optionsRepo->findAll();
     return $this->render('admin/vente_comptoir/index.html.twig', [
-      'tarifs' => $tarifs
+      'tarifs' => $tarifs,
+      'garanties' => $garanties,
+      'options' => $options,
     ]);
   }
 

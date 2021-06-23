@@ -188,9 +188,9 @@
 						<i class="fa fa-user mr-1"></i>Modifier les informations</button>
 					<button type="button" class="btn btn-dark text-nowrap">
 						<i class="fa fa-reply-all mr-1"></i>Retour anticipé</button>
-					<button type="button" class="btn btn-warning text-nowrap">
+					<a type="button" class="btn btn-warning text-nowrap" href="{{path('devis_edit', {'id': devis.id} ) }}">
 						<i class="fa fa-cog"></i>
-						Modifier la réservation</button>
+						Modifier la réservation</a>
 					<button type="button" class="btn btn-danger text-nowrap">
 						<i class="fa fa-edit (alias)"></i>
 						Modifier les options & garanties</button>
@@ -325,12 +325,12 @@
 				<p>Conducteur : Non</p>
 			{% endif %}
 
-			<p>{{devis.siege['texte']}}</p>
+			<p>{{devis.siege}}</p>
 			{# <p class="font-italic">Aucune option souscrite.</p> #}
 			<p class="font-weight-bold label">
 				Garantie(s) souscrite(s):
 			</p>
-			<p>{{devis.garantie['texte']}}</p>
+			<p>{{devis.garantie}}</p>
 			{# <p class="font-italic">Aucune garantie souscrite.</p> #}
 			<p class="font-weight-bold label">
 				Taxes de dépassement horaire
@@ -365,26 +365,26 @@
 				</div>
 				<div class="col-md-4 col-sm-4 col-xs-4">
 					<div class="text-right">
-						{{ devis.prix - (devis.garantie['prix'] + devis.siege['prix']) }}
+						{{ devis.prix - (devis.garantie.prix + devis.siege.prix) }}
 						€
 					</div>
 				</div>
-				{# 
-																								<div class="col-md-8 col-sm-8 col-xs-8">
-																									<i class="fa fa-chevron-right"></i>Total dépassements horaires
-																								</div>
-																								<div class="col-md-4 col-sm-4 col-xs-4">
-																									<div class="text-right">
-																										300.00€
-																									</div>
-																								</div> #}
+
+				<div class="col-md-8 col-sm-8 col-xs-8">
+					<i class="fa fa-chevron-right"></i>Total dépassements horaires
+				</div>
+				<div class="col-md-4 col-sm-4 col-xs-4">
+					<div class="text-right">
+						0 €
+					</div>
+				</div>
 
 				<div class="col-md-8 col-sm-8 col-xs-8">
 					<i class="fa fa-chevron-right"></i>Total options souscrites
 				</div>
 				<div class="col-md-4 col-sm-4 col-xs-4">
 					<div class="text-right">
-						{{devis.siege['prix']}}
+						{{devis.siege.prix}}
 						€
 					</div>
 				</div>
@@ -395,19 +395,19 @@
 				</div>
 				<div class="col-md-4 col-sm-4 col-xs-4">
 					<div class="text-right">
-						{{devis.garantie['prix']}}
+						{{devis.garantie.prix}}
 						€
 					</div>
 				</div>
 
-				{# <div class="col-md-8 col-sm-8 col-xs-8">
-																									<i class="fa fa-chevron-right"></i>Montant de la remise
-																								</div>
-																								<div class="col-md-4 col-sm-4 col-xs-4">
-																									<div class="text-right">
-																										300.00€
-																									</div>
-																								</div> #}
+				<div class="col-md-8 col-sm-8 col-xs-8">
+					<i class="fa fa-chevron-right"></i>Montant de la remise
+				</div>
+				<div class="col-md-4 col-sm-4 col-xs-4">
+					<div class="text-right">
+						0 €
+					</div>
+				</div>
 
 				<div class="col-md-8 col-sm-8 col-xs-8">
 					<i class="fa fa-chevron-right"></i>Montant à régler
@@ -432,37 +432,23 @@
 			<div class="clearfix"></div>
 		</div>
 		<div class="x_content">
-			<div class="d-flex justify-content-end">
-				<div class="btn-group mb-1">
-					<button type="button" class="btn btn-danger dropdown-toggle font-weight-bold " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Autre réglement
-					</button>
-					<div class="dropdown-menu">
-						<a class="dropdown-item" href="#">Reporter la réservation</a>
-						<a class="dropdown-item" href="#">Mail de confirmation</a>
-						<a class="dropdown-item" href="#">Annuler la réservation</a>
-						<a class="dropdown-item" href="#">Fermer le contrat</a>
-						<a class="dropdown-item" href="#">Archiver la réservation</a>
-					</div>
-				</div>
-			</div>
-
 			<div class="row">
 				<div class="col-md-8 col-sm-8 col-xs-8">
-					<i class="fa fa-chevron-right"></i>Montant de la remise
+					<i class="fa fa-chevron-right"></i>Total des règlements effectués :
 				</div>
 				<div class="col-md-4 col-sm-4 col-xs-4">
 					<div class="text-right">
-						300.00€
+						0 €
 					</div>
 				</div>
 
 				<div class="col-md-8 col-sm-8 col-xs-8">
-					<i class="fa fa-chevron-right"></i>Montant à régler
+					<i class="fa fa-chevron-right"></i>Solde
 				</div>
 				<div class="col-md-4 col-sm-4 col-xs-4">
 					<div class="text-right">
-						300.00€
+						{{devis.prix}}
+						€
 					</div>
 				</div>
 			</div>

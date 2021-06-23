@@ -1,0 +1,14 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}New Avis
+{% endblock %}
+
+{% block content %}
+	<h1>Nouveau Avis</h1>
+
+	{{ include('admin/garanties/_form.html.twig') }}
+
+	<a href="{{ path('garanties_index') }}" class="btn btn-primary">
+		<i class="fa fa-arrow-left" aria-hidden="true"></i>
+		retour</a>
+{% endblock %}

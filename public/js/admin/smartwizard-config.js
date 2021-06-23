@@ -49,6 +49,8 @@ var dureeReservation;
 var conducteur;
 var siege = Array();
 var garantie;
+var idGarantie;
+var idSiege;
 
 // get elem step 4
 var conducteurSpanElem;
@@ -61,11 +63,14 @@ var listeClients = [];
 var listeClientsOriginal = [];
 var btnCreateClient;
 
+var listeOptions;
+var listeGaranties;
 //formulaire creation client
 var nomClientValue;
 var prenomClientValue;
 var emailClientValue;
 var telephoneClientValue;
+
 
 var btnPdfDevis;
 
@@ -222,6 +227,8 @@ $(document).ready(function () { // Step show event
 
             getElementsStep1();
             getValuesStep1();
+            getListeOptions();
+            getListeGaranties();
 
             if (vehiculeSelected != null && agenceDepartSelected != "Choisir" && agenceRetourSelected != "Choisir" && lieuSejourValue != "") {
 
@@ -266,22 +273,20 @@ $(document).ready(function () { // Step show event
             var radioSiege = document.querySelectorAll('input[name="radio-siege"]');
             var radioGarantie = document.querySelectorAll('input[name="radio-garantie"]');
 
+            //recuperer valeur value radio (id option) et l'option correspondante
             for (var i = 0; i < radioSiege.length; i++) {
                 if (radioSiege[i].type == 'radio' && radioSiege[i].checked) {
-                    switch (radioSiege[i].value) {
-                        case '1':
-                            siege = { "prix": 30, "texte": 'Siège bébé : 30€' };
-                            break;
-                        case '2':
-                            siege = { "prix": 30, "texte": "Siège nourrisson : 30€" };
-                            break;
-                        case '3':
-                            siege = { "prix": 0, "texte": "Rehausseur : gratuit" };
-                            break;
-                    }
+                    idSiege = radioSiege[i].value;
                 }
             }
 
+
+            for (let i = 0; i < listeOptions.length; i++) {
+                if (idSiege == listeOptions[i].id) {
+                    siege = listeOptions[i].appelation;
+                }
+
+            }
             for (var i = 0; i < radioConducteur.length; i++) {
                 if (radioConducteur[i].type == 'radio' && radioConducteur[i].checked) {
                     switch (radioConducteur[i].value) {
@@ -295,22 +300,20 @@ $(document).ready(function () { // Step show event
                 }
             }
 
+            //recuperer valeur value radio (id garantie) et la garentie qui corresponde
             for (var i = 0; i < radioGarantie.length; i++) {
                 if (radioGarantie[i].type == 'radio' && radioGarantie[i].checked) {
-                    switch (radioGarantie[i].value) {
-                        case '1':
-                            garantie = { "prix": 90, "texte": "GARANTIE BRIS DE GLACE & PNEUS (90€)" };
-                            break;
-                        case '2':
-                            garantie = { "prix": 100, "texte": "ASSISTANCE ESPRIT TRANQUILLE (100€)" };
-                            break;
-
-                        case '3':
-                            garantie = { "prix": 160, "texte": "ASSISTANCE PREMIUM (160 €)" };
-                            break;
-                    }
+                    idGarantie = radioGarantie[i].value;
                 }
             }
+            for (let i = 0; i < listeGaranties.length; i++) {
+                if (idGarantie == listeGaranties[i].id) {
+                    garantie = listeGaranties[i].appelation;
+                }
+
+            }
+
+
             conducteurSpanElem = document.querySelector('span[id="span_conducteur"]');
             siegeSpanElem = document.querySelector('span[id="span_siege"]');
             garantieSpanElem = document.querySelector('span[id="span_garantie"]');
@@ -669,10 +672,11 @@ function enregistrerDevis() { //envoi donnée à controller par ajax
             datetimeDepartValue,
             datetimeRetourValue,
             conducteur,
-            siege,
-            garantie,
             detailsVehicule.immatriculation,
-            lieuSejourValue);
+            lieuSejourValue,
+            idSiege,
+            idGarantie
+        );
 
         $.ajax({
             type: 'GET',
@@ -684,8 +688,8 @@ function enregistrerDevis() { //envoi donnée à controller par ajax
                 'dateTimeDepart': datetimeDepartValue,
                 'dateTimeRetour': datetimeRetourValue,
                 'conducteur': conducteur,
-                'siege': siege,
-                'garantie': garantie,
+                'idSiege': idSiege,
+                'idGarantie': idGarantie,
                 'vehiculeIM': detailsVehicule.immatriculation,
                 'lieuSejour': lieuSejourValue
             },
@@ -802,17 +806,54 @@ function generatePDF() {
     doc.text(70, 80, dureeReservation.toString() + ' jours');
     doc.text(20, 90, 'Tarif appliquée : ');
     doc.text(70, 90, tarifApplique.toString() + ' €');
-
     doc.text(20, 100, 'Marque : ');
     doc.text(70, 100, detailsVehicule.marque);
-
     doc.text(20, 110, 'Modèle : ');
     doc.text(70, 110, detailsVehicule.modele);
-
     doc.text(20, 120, 'Immatriculation :  ');
     doc.text(70, 120, detailsVehicule.immatriculation);
-
     doc.save('devis.pdf');
 }
 
 // console.log("data : " + selectedClient, agenceDepartSelected, agenceRetourSelected, lieuSejourValue, datetimeDepartValue, datetimeRetourValue, dureeReservation,
+
+
+function getListeGaranties() {
+    $.ajax({
+        type: 'GET',
+        url: "/listeOptions",
+        timeout: 3000,
+        beforeSend: function (xhr) {
+        },
+        success: function (data) {
+
+            listeOptions = data;
+            console.log("listeOptions");
+            console.log(listeOptions);
+
+        },
+        error: function () {
+            alert('La requête n\'a pas abouti');
+        }
+    });
+}
+
+function getListeOptions() {
+    $.ajax({
+        type: 'GET',
+        url: "/listeGaranties",
+        timeout: 3000,
+        beforeSend: function (xhr) {
+        },
+        success: function (data) {
+
+            listeGaranties = data;
+            console.log("listeGaranties");
+            console.log(listeGaranties);
+
+        },
+        error: function () {
+            alert('La requête n\'a pas abouti');
+        }
+    });
+}

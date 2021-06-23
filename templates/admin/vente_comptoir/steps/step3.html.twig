@@ -1,4 +1,3 @@
-<h2 class="StepTitle">Step 3 Content</h2>
 <div class="row">
 	<div class="col-md-3">
 		<div class="alert alert-secondary btn-block h-100">
@@ -131,18 +130,14 @@
 						</div>
 						<p>Nous mettons à votre disposition des sièges bébé et nourrissons, homologués NF, pour seulement 30 euros TTC. Les rehausseurs pour les enfants de + de 15kg sont totalement gratuits !</p>
 						{# test radio #}
-						<label class="label-radio">Siège bébé : 30€
-							<input type="radio" checked="checked" name="radio-siege" value="1">
-							<span class="checkmark-radio"></span>
-						</label>
-						<label class="label-radio">Siège nourrisson : 30€
-							<input type="radio" name="radio-siege" value="2">
-							<span class="checkmark-radio"></span>
-						</label>
-						<label class="label-radio">Rehausseur : gratuit
-							<input type="radio" name="radio-siege" value="3">
-							<span class="checkmark-radio"></span>
-						</label>
+						{% for option in options %}
+
+							<label class="label-radio">{{option.appelation}}
+								<input type="radio" checked="checked" name="radio-siege" value="{{option.id}}">
+								<span class="checkmark-radio"></span>
+							</label>
+
+						{% endfor %}
 						{# fin incrementer #}
 					</div>
 				</div>
@@ -154,86 +149,40 @@
 
 			Choisissez vos garanties</h3>
 		<div class="row">
-			<div class="col-md-6">
-				<div class="row">
-					<div class="col-md-4">
-						<div class="alert alert-secondary h-100">
-							<img src="" alt="" style="width:100%;" id="vehicule_photo">
 
-						</div>
-					</div>
-					<div class="col-md-8">
-						<div class="x_title">
-							<h4>
-								GARANTIE BRIS DE GLACE & PNEUS
-							</h4>
-						</div>
-						<p>
-							Ce produit élimine votre éventuelle responsabilité envers nous ; en cas de dommage 	causé aux vitres du véhicule (y compris au toit ouvrant) et aux pneus uniquement.
-						</p>
-						<div
-							class="row">
-							{# <div class="col-auto p-0"><label class="label-container">90€<input type="checkbox" checked="checked"><span class="checkmark"></span></label></div> #}
+			{% for garantie in garanties %}
 
-							<label class="label-radio">90€
-								<input type="radio" checked="checked" name="radio-garantie" value="1">
-								<span class="checkmark-radio"></span>
-							</label>
+				<div class="col-md-6">
+					<div class="row">
+						<div class="col-md-4">
+							<div class="alert alert-secondary h-100">
+								<img src="" alt="" style="width:100%;" id="vehicule_photo">
+
+							</div>
+						</div>
+						<div class="col-md-8">
+							<div class="x_title">
+								<h4>
+									{{garantie.appelation}}
+								</h4>
+							</div>
+							<p>
+								{{garantie.description}}
+							</p>
+							<div
+								class="row">
+								{# <div class="col-auto p-0"><label class="label-container">90€<input type="checkbox" checked="checked"><span class="checkmark"></span></label></div> #}
+
+								<label class="label-radio">{{garantie.prix}}
+									€
+									<input type="radio" checked="checked" name="radio-garantie" value="{{garantie.id}}">
+									<span class="checkmark-radio"></span>
+								</label>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="col-md-6">
-				<div class="row">
-					<div class="col-md-4">
-						<div class="alert alert-secondary btn-block h-100">
-							<img src="" alt="" style="width:100%;" id="vehicule_photo">
-
-						</div>
-					</div>
-					<div class="col-md-8">
-						<div class="x_title">
-							<h4>
-								ASSISTANCE ESPRIT TRANQUILLE
-							</h4>
-						</div>
-						<p>
-							Ce produit offre une couverture pour la récupération du véhicule et les frais de demande d’intervention en urgence dont vous devriez normalement vous acquitter, si la demande d’intervention ou le dépannage étaient imputables à une faute de votre part. Exemples de frais pour demande d’intervention en urgence couverts : clés perdus, batterie déchargée, erreur de carburant.
-						</p>
-						<div class="row">
-							<label class="label-radio">100€
-								<input type="radio" checked="checked" name="radio-garantie" value="2">
-								<span class="checkmark-radio"></span>
-							</label>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-6 mt-2">
-				<div class="row">
-					<div class="col-md-4">
-						<div class="alert alert-secondary btn-block h-100">
-							<img src="" alt="" style="width:100%;" id="vehicule_photo">
-
-						</div>
-					</div>
-					<div class="col-md-8">
-						<div class="x_title">
-							<h4>
-								ASSISTANCE PREMIUM
-							</h4>
-						</div>
-						<p>L’Assistance Premium est un produit optionnel qui complète l’assurance responsabilité civile incluse dans votre prix de location. Il offre une couverture pour la récupération du véhicule et les frais de demande d’intervention en urgence dont vous devriez normalement vous acquitter si la demande d’intervention ou le dépannage étaient imputables à une faute de votre part. Ce produit couvre tout dommage ou perte au véhicule à valeur total du véhicule.
-						</p>
-						<div class="row">
-							<label class="label-radio">160€
-								<input type="radio" checked="checked" name="radio-garantie" value="3">
-								<span class="checkmark-radio"></span>
-							</label>
-						</div>
-					</div>
-				</div>
-			</div>
+			{% endfor %}
 		</div>
 	</div>
 </div>

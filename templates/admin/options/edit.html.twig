@@ -1,0 +1,31 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}Edit options
+{% endblock %}
+
+
+{% block current_page %}
+	<h2>
+		<i class="fa fa-edit"></i>
+		Modifier option
+	</h2>
+{% endblock %}
+
+{% block content %}
+	<div class="x_panel">
+		<div class="x_title">
+			<h2>
+				<i class="fa fa-edit"></i>Modifier option</h2>
+			<div class="clearfix"></div>
+		</div>
+		<h1>Modification option</h1>
+
+		{{ include('admin/options/_form.html.twig', {'button_label': 'Modifier'}) }}
+
+		<a href="{{ path('options_index') }}" class="btn btn-primary">
+			<i class="fa fa-arrow-left" aria-hidden="true"></i>
+			retour</a>
+
+		{{ include('admin/options/_delete_form.html.twig') }}
+	</div>
+{% endblock %}
