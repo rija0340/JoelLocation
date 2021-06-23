@@ -53,6 +53,7 @@ class DevisController extends AbstractController
     public function newDevis(Request $request): Response
     {
         $devis = new Devis();
+        echo("teste eto");
         if ($request->isXmlHttpRequest()) {
             echo $request;
             $idClient =  $request->query->get('idClient');
