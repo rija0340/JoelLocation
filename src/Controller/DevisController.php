@@ -70,15 +70,11 @@ class DevisController extends AbstractController
             $idSiege = $request->query->get('idSiege');
             $idGarantie = $request->query->get('idGarantie');
 
-
             $siege = $this->optionsRepo->find($idSiege);
             $garantie = $this->garantiesRepo->find($idGarantie);
-
             $vehicule = $this->vehiculeRepo->findByIM($vehiculeIM);
-            // $client = $this->userRepo->findByNameAndMail($nomClient, $emailClient);
             $client = $this->userRepo->find($idClient);
-
-            $duree = date_diff(new \DateTime($dateTimeDepart), new \DateTime($dateTimeRetour));
+            $duree = $this->calculDuree($dateTimeDepart, $dateTimeRetour);
 
             $devis->setVehicule($vehicule);
             $devis->setClient($client);
@@ -90,22 +86,14 @@ class DevisController extends AbstractController
             $devis->setSiege($siege);
             $devis->setConducteur($conducteur);
             $devis->setLieuSejour($lieuSejour);
-            $devis->setDuree($duree->format('%d'));
+            $devis->setDuree($duree);
             $devis->setDateCreation(new \DateTime('NOW'));
 
-            //recuperation tarif en fonction mois départ et véhicule
-            $mois = $this->monthName($devis->getDateDepart()->format('m'));
-            $tarifs = $this->tarifsRepo->findTarifs($vehicule, $mois);
 
-            if ($duree->format('%d') <= 3) $tarif = $tarifs->getTroisJours();
+            $prix = $this->calculTarif($dateTimeDepart, $dateTimeRetour, $siege, $garantie, $vehicule);
 
-            if ($duree->format('%d') > 3 && $duree->format('%d') <= 7) $tarif = $tarifs->getSeptJours();
+            $devis->setPrix($prix);
 
-            if ($duree->format('%d') > 7 && $duree->format('%d') <= 15) $tarif = $tarifs->getQuinzeJours();
-
-            if ($duree->format('%d') > 15 && $duree->format('%d') <= 30) $tarif = $tarifs->getTrenteJours();
-
-            $devis->setPrix($tarif + $garantie->getPrix() + $siege->getPrix());
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($devis);
             $entityManager->flush();
@@ -142,11 +130,19 @@ class DevisController extends AbstractController
 
         $form->handleRequest($request);
 
-
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $this->getDoctrine()->getManager()->flush();
 
+            $dateDepart = $request->request->get('devis')['dateDepart'];
+            $dateRetour = $request->request->get('devis')['dateRetour'];
+            $siege = $request->request->get('devis')['siege'];
+            $garantie = $request->request->get('devis')['garantie'];
+            $vehicule = $request->request->get('devis')['vehicule'];
+
+            $prix = $this->calculTarif($dateDepart, $dateRetour, $siege, $garantie, $vehicule);
+            $devis->setPrix($prix);
+            $devis->setDuree($this->calculDuree($dateDepart, $dateRetour));
+            $this->getDoctrine()->getManager()->flush();
             return $this->redirectToRoute('devis_index');
         }
 
@@ -170,8 +166,13 @@ class DevisController extends AbstractController
         return $this->redirectToRoute('devis_index');
     }
 
-    function monthName($month)
+    function monthName($date)
     {
+        if (is_object($date)) {
+            $month = $date->format('m');
+        } else {
+            $month = (new \DateTime($date))->format('m');
+        }
         $monthFR = null;
         switch ($month) {
             case "01":
@@ -213,5 +214,48 @@ class DevisController extends AbstractController
         }
 
         return $monthFR;
+    }
+
+    function calculTarif($dateDepart, $dateRetour, $siege, $garantie, $vehicule)
+    {
+
+        if (!is_object($siege) && !is_object($garantie) && !is_object($vehicule)) {
+
+            $siege = $this->optionsRepo->find(intval($siege));
+            $garantie = $this->garantiesRepo->find(intval($garantie));
+            $vehicule = $this->vehiculeRepo->find(intval($vehicule));
+        }
+
+        $mois = $this->monthName($dateDepart);
+        $tarifs = $this->tarifsRepo->findTarifs($vehicule, $mois);
+
+        $duree = $this->calculDuree($dateDepart, $dateRetour);
+        $tarif = 0; //initialisation de $tarif
+        if (!is_null($tarifs)) {
+
+            if ($duree <= 3) $tarif = $tarifs->getTroisJours();
+
+            if ($duree > 3 && $duree <= 7) $tarif = $tarifs->getSeptJours();
+
+            if ($duree > 7 && $duree <= 15) $tarif = $tarifs->getQuinzeJours();
+
+            if ($duree > 15 && $duree <= 30) $tarif = $tarifs->getTrenteJours();
+        }
+
+        if ($tarif != null) {
+            $prix = $tarif + $siege->getPrix() + $garantie->getPrix();
+        } else {
+            $prix = $siege->getPrix() + $garantie->getPrix();
+        }
+
+        return $prix;
+    }
+    function calculDuree($dateDepart, $dateRetour)
+    {
+        $dateDepart = new \DateTime($dateDepart);
+        $dateRetour = new \DateTime($dateRetour);
+        $duree = date_diff($dateDepart, $dateRetour);
+
+        return $duree->days;
     }
 }

@@ -73,6 +73,31 @@ class ReservationController extends AbstractController
 
         return new JsonResponse($datas);
     }
+
+
+    /**
+     * @Route("/listeVehicules", name="listeVehicules",methods={"GET","POST"}))
+     */
+    public function listeVehicules(Request $request)
+    {
+
+        $dateDepart = $request->query->get('dateDepart');
+        $dateRetour = $request->query->get('dateRetour');
+        $dateDepart = new \DateTime($dateDepart);
+        $dateRetour = new \DateTime($dateRetour);
+        $datas = array();
+        // dump($this->reservationRepo->findReservationIncludeDates($dateDepart, $dateRetour));
+        // die();
+
+        foreach ($this->reservationRepo->findReservationIncludeDates($dateDepart, $dateRetour) as $key => $reservation) {
+            $datas[$key]['id'] = $reservation->getVehicule()->getId();
+            $datas[$key]['marque'] = $reservation->getVehicule()->getMarque()->getLibelle();
+            $datas[$key]['modele'] = $reservation->getVehicule()->getModele();
+            $datas[$key]['immatriculation'] = $reservation->getVehicule()->getImmatriculation();
+        }
+
+        return new JsonResponse($datas);
+    }
     public function getVehiculesDispo($dateDebut, $dateFin)
     {
         $vehicules = $this->vehiculeRepo->findAll();
@@ -180,8 +205,6 @@ class ReservationController extends AbstractController
         $formStopSales = $this->createForm(StopSalesType::class, $reservation);
 
         $formStopSales->handleRequest($request);
-
-
 
         if ($formStopSales->isSubmitted() && $formStopSales->isValid()) {
 

@@ -80,6 +80,11 @@
 				</div>
 			</div>
 		{% endif %}
+
+		<div id="js-alertVehicule" class="text-center mb-5 hide">
+			<h1>cette véhicule est déjà prise</h1>
+		</div>
+
 		<div class="x_title">
 
 			<div class="row info_client">
@@ -90,9 +95,9 @@
 				</div>
 				<div class="col-auto ml-auto pr-0">
 					<div class="d-flex align-items-center">
-						<button type="button" class="btn btn-outline-success text-uppercase p-1">
+						<a id="btnGenererPDf" type="button" class="btn btn-outline-success text-uppercase p-1">
 							<i class="fa  fa-file-pdf-o"></i>
-							Générer le devis</button>
+							Générer le devis</a>
 						<button type="button" class="btn btn-outline-warning text-uppercase p-1">
 							<i class="fa fa-file-archive-o"></i>
 							Envoyer la devis</button>
@@ -121,22 +126,23 @@
 				<div class="row">
 					<div class="col-md-4">
 						<span class="label_client">Client :</span>
-						<span>{{devis.client.prenom}}
-							{{devis.client.nom}}</span>
+						<span class="js-prenom_client">{{devis.client.prenom}}
+							<span class="js-nom_client">{{devis.client.nom}}</span>
+						</span>
 					</div>
 					<div class="col-md-4">
 						<span class="label_client">Email :</span>
-						<span>{{devis.client.mail}}</span>
+						<span class="js-email_client">{{devis.client.mail}}</span>
 					</div>
 					<div class="col-md-4">
 						<span class="label_client">Téléphone(s):</span>
-						<span>{{devis.client.telephone}}</span>
+						<span class="js-tel_client">{{devis.client.telephone}}</span>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-md-12">
 						<span class="label_client">adresse:</span>
-						<span>{{devis.client.adresse}}</span>
+						<span class="js-adresse_client">{{devis.client.adresse}}</span>
 					</div>
 				</div>
 				<div class="row">
@@ -155,7 +161,8 @@
 				<div class="row">
 					<div class="col-md-4">
 						<span class="label_client">Véhicule :</span>
-						<span>{{devis.vehicule}}</span>
+						<span class="js-vehicule">{{devis.vehicule}}</span>
+						<span class="js-idVehicule hide">{{devis.vehicule.id}}</span>
 					</div>
 					<div class="col-md-4">
 						<span class="label_client">Code affilié :</span>
@@ -184,16 +191,16 @@
 					</div>
 				</div>
 				<div class=" text-center">
-					<button type="button" class="btn btn-primary text-nowrap">
-						<i class="fa fa-user mr-1"></i>Modifier les informations</button>
+					<a type="button" class="btn btn-primary text-nowrap" href="{{path('user_edit', {'id': devis.client.id})}}">
+						<i class="fa fa-user mr-1"></i>Modifier les informations</a>
 					<button type="button" class="btn btn-dark text-nowrap">
 						<i class="fa fa-reply-all mr-1"></i>Retour anticipé</button>
 					<a type="button" class="btn btn-warning text-nowrap" href="{{path('devis_edit', {'id': devis.id} ) }}">
 						<i class="fa fa-cog"></i>
 						Modifier la réservation</a>
-					<button type="button" class="btn btn-danger text-nowrap">
+					<a type="button" class="btn btn-danger text-nowrap" href="{{path('devis_edit', {'id': devis.id} ) }}">
 						<i class="fa fa-edit (alias)"></i>
-						Modifier les options & garanties</button>
+						Modifier les options & garanties</a>
 					<button type="button" class="btn btn-violet text-nowrap">
 						<i class="fa  fa-send-o (alias)"></i>
 						Envoyer les identifians de connexion</button>
@@ -266,13 +273,15 @@
 			<div class="row">
 				<div class="col-md-6">
 					<span class="label_periode">Départ :</span>
-					<p>{{devis.agenceDepart}}
-						<br>{{devis.dateDepart|date('d-m-Y H:i')}}</p>
+					<p class="js-agenceDepart">{{devis.agenceDepart}}
+					</p>
+					<span class="js-dateDepart">{{devis.dateDepart|date('d-m-Y H:i')}}</span>
 				</div>
 				<div class="col-md-6">
 					<span class="label_periode">Retour :</span>
-					<p>{{devis.agenceRetour}}
-						<br>{{devis.dateRetour|date('d-m-Y H:i')}}</p>
+					<p class="js-agenceRetour">{{devis.agenceRetour}}
+					</p>
+					<span class="js-dateRetour">{{devis.dateRetour|date('d-m-Y H:i')}}</span>
 
 				</div>
 				<div class="col-md-6">
@@ -302,7 +311,7 @@
 			<div>
 				<h3 class="text-center">
 					SOIT
-					<span style="color:red">{{devis.duree}}
+					<span class="js-duree" style="color:red">{{devis.duree}}
 						JOURS</span>
 					DE LOCATION
 				</h3>
@@ -325,12 +334,12 @@
 				<p>Conducteur : Non</p>
 			{% endif %}
 
-			<p>{{devis.siege}}</p>
+			<p class="js-siege">{{devis.siege}}</p>
 			{# <p class="font-italic">Aucune option souscrite.</p> #}
 			<p class="font-weight-bold label">
 				Garantie(s) souscrite(s):
 			</p>
-			<p>{{devis.garantie}}</p>
+			<p class="js-garantie">{{devis.garantie}}</p>
 			{# <p class="font-italic">Aucune garantie souscrite.</p> #}
 			<p class="font-weight-bold label">
 				Taxes de dépassement horaire
@@ -348,7 +357,7 @@
 					</h2>
 				</div>
 				<div class="col-auto ml-auto d-flex align-items-center">
-					<div class="">
+					<div class="js-prix">
 						{{devis.prix}}
 						€
 					</div>
@@ -472,4 +481,6 @@
 	<script src="../../admin/vendors/jszip/dist/jszip.min.js"></script>
 	<script src="../../admin/vendors/pdfmake/build/pdfmake.min.js"></script>
 	<script src="../../admin/vendors/pdfmake/build/vfs_fonts.js"></script>
+	<script src="../../js/admin/jspdf.min.js"></script>
+	<script src="../../js/admin/details_devis.js"></script>
 {% endblock  %}

@@ -21,13 +21,13 @@ class Devis
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="devis")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $Client;
+    private $client;
 
     /**
      * @ORM\ManyToOne(targetEntity=Vehicule::class, inversedBy="devis")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $Vehicule;
+    private $vehicule;
 
     /**
      * @ORM\Column(type="datetime")
@@ -95,24 +95,24 @@ class Devis
 
     public function getClient(): ?User
     {
-        return $this->Client;
+        return $this->client;
     }
 
-    public function setClient(?User $Client): self
+    public function setClient(?User $client): self
     {
-        $this->Client = $Client;
+        $this->client = $client;
 
         return $this;
     }
 
-    public function getVehicule(): ?Vehicule
+    public function getVehicule(): ?vehicule
     {
-        return $this->Vehicule;
+        return $this->vehicule;
     }
 
-    public function setVehicule(?Vehicule $Vehicule): self
+    public function setVehicule(?vehicule $vehicule): self
     {
-        $this->Vehicule = $Vehicule;
+        $this->vehicule = $vehicule;
 
         return $this;
     }
