@@ -1,0 +1,29 @@
+{# {{ form_start(form) }}
+{{ form_widget(form) }}
+<button class="btn btn-success">
+	<i class="fa fa-book" aria-hidden="true"></i>
+	{{ button_label|default('Enregistrer') }}</button>
+{{ form_end(form) }} #}
+
+{{ form_start(formVehicule) }}
+<div class="row">
+
+	<div class="form-group col-md-4">
+		<label for="">Date départ :</label>
+		{{ form_widget(formVehicule.dateDepart) }}
+	</div>
+	<div class="form-group col-md-4">
+		<label for="">Date retour :</label>
+		{{ form_widget(formVehicule.dateRetour) }}
+	</div>
+
+	<div class="form-group col-md-3">
+		<label for="">Véhicule :</label>
+		<select name="selectVehicule" id="selectVehicule" class="form-control"></select>
+		{# {{ form_widget(form.vehicule) }} #}
+	</div>
+</div>
+<button class="btn btn-success">
+	<i class="fa fa-book" aria-hidden="true"></i>
+	{{ button_label|default('Enregistrer') }}</button>
+{{ form_end(formVehicule) }}

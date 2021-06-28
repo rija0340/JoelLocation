@@ -20,6 +20,7 @@ var idVehiculeElem;
 var btnGenererPDf;
 var garantieAppelation;
 var siegeAppelation;
+var btnReserver;
 
 var garantiePrix;
 var siegePrix;
@@ -62,6 +63,7 @@ function getElements() {
 
     //boutons
     btnGenererPDf = document.getElementById('btnGenererPDf');
+    btnReserver = document.getElementById('btnReserver');
 }
 
 function getValues() {
@@ -138,13 +140,25 @@ function getListeVehicules() {
             console.log(data);
             console.log("idVehiculeValue");
             console.log(idVehiculeValue);
+            //verifier si le véhicule choisi lors création devis est disponible ou pas , si non afficher PAS DISPO
             for (let i = 0; i < data.length; i++) {
 
                 if (data[i].id == parseInt(idVehiculeValue)) {
+
+                    //affichage vehicule non dispo si déja pris.
                     if (alertVehiculeElem.classList.contains('hide'))
                         alertVehiculeElem.classList.replace('hide', 'noHide');
                     else
                         alertVehiculeElem.classList.replace('noHide', 'hide');
+
+                    //afficher ou cacher bouton "reserver" en fonction disponibilité véhicule choisi
+                    if (btnReserver.classList.contains('hide'))
+                        btnReserver.classList.replace('hide', 'noHide');
+                    else
+                        btnReserver.classList.replace('noHide', 'hide');
+
+
+
                 }
             }
 

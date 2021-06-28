@@ -1,0 +1,29 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}Modifier devis
+{% endblock %}
+
+{% block current_page %}
+	<h2>
+		<i class="fa fa-edit"></i>
+		Modifier devis
+	</h2>
+{% endblock %}
+
+{% block content %}
+	<div class="x_panel">
+		<div class="x_title">
+			<h2>
+				<i class="fa fa-edit"></i>Modifier de la véhicule</h2>
+			<div class="clearfix"></div>
+		</div>
+		{# <h1>Modification Avis</h1> #}
+
+		{{ include('admin/devis/_formVehicule.html.twig', {'button_label': 'Modifier'}) }}
+
+
+	</div>
+{% endblock %}
+{% block javascripts %}
+	<script src="../../js/admin/devis_editVehicule_ajax.js"></script>
+{% endblock %}

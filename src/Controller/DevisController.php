@@ -4,13 +4,16 @@ namespace App\Controller;
 
 use App\Entity\Devis;
 use App\Form\DevisType;
+use App\Entity\Reservation;
 use App\Repository\UserRepository;
+use App\Form\DevisEditVehiculeType;
 use App\Repository\DevisRepository;
-use App\Repository\GarantieRepository;
-use App\Repository\OptionsRepository;
-use App\Repository\VehiculeRepository;
-use App\Repository\ReservationRepository;
 use App\Repository\TarifsRepository;
+use App\Repository\OptionsRepository;
+use App\Repository\GarantieRepository;
+use App\Repository\VehiculeRepository;
+use App\Controller\ReservationController;
+use App\Repository\ReservationRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,8 +29,10 @@ class DevisController extends AbstractController
     private $tarifsRepo;
     private $garantiesRepo;
     private $optionsRepo;
+    private $reservController;
 
-    public function __construct(DevisRepository $devisRepo, ReservationRepository $reservationRepo, VehiculeRepository $vehiculeRepo, UserRepository $userRepo, TarifsRepository $tarifsRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
+
+    public function __construct(UserRepository $userRepo, DevisRepository $devisRepo, ReservationRepository $reservationRepo, VehiculeRepository $vehiculeRepo,   TarifsRepository $tarifsRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo, ReservationController $reservController)
     {
 
         $this->reservationRepo = $reservationRepo;
@@ -37,6 +42,7 @@ class DevisController extends AbstractController
         $this->tarifsRepo = $tarifsRepo;
         $this->garantiesRepo = $garantiesRepo;
         $this->optionsRepo = $optionsRepo;
+        $this->reservController = $reservController;
     }
 
     /**
@@ -132,15 +138,15 @@ class DevisController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-
             $dateDepart = $request->request->get('devis')['dateDepart'];
             $dateRetour = $request->request->get('devis')['dateRetour'];
             $siege = $request->request->get('devis')['siege'];
             $garantie = $request->request->get('devis')['garantie'];
             $vehicule = $request->request->get('devis')['vehicule'];
-
+            // $vehicule = $request->request->get('selectVehicule');
             $prix = $this->calculTarif($dateDepart, $dateRetour, $siege, $garantie, $vehicule);
             $devis->setPrix($prix);
+            // $devis->setVehicule($this->vehiculeRepo->find($vehicule));
             $devis->setDuree($this->calculDuree($dateDepart, $dateRetour));
             $this->getDoctrine()->getManager()->flush();
             return $this->redirectToRoute('devis_index');
@@ -148,6 +154,38 @@ class DevisController extends AbstractController
 
         return $this->render('admin/devis/edit.html.twig', [
             'form' => $form->createView(),
+            'devis' => $devis
+        ]);
+    }
+
+
+    /**
+     * @Route("devis/{id}/editVehicule", name="devis_edit_vehicule", methods={"GET","POST"})
+     */
+    public function editVehicule(Request $request, Devis $devis): Response
+    {
+        $formVehicule = $this->createForm(DevisEditVehiculeType::class, $devis);
+
+        $formVehicule->handleRequest($request);
+
+        if ($formVehicule->isSubmitted() && $formVehicule->isValid()) {
+
+
+            $dateDepart = $request->request->get('devis_edit_vehicule')['dateDepart'];
+            $dateRetour = $request->request->get('devis_edit_vehicule')['dateRetour'];
+            $vehicule = $request->request->get('selectVehicule');
+
+
+            $prix = $this->calculTarif($dateDepart, $dateRetour, $devis->getSiege()->getPrix(), $devis->getGarantie()->getPrix(), $vehicule);
+            $devis->setPrix($prix);
+            $devis->setVehicule($this->vehiculeRepo->find($vehicule));
+            $devis->setDuree($this->calculDuree($dateDepart, $dateRetour));
+            $this->getDoctrine()->getManager()->flush();
+            return $this->redirectToRoute('devis_index');
+        }
+
+        return $this->render('admin/devis/editVehicule.html.twig', [
+            'formVehicule' => $formVehicule->createView(),
             'devis' => $devis
         ]);
     }
@@ -164,6 +202,32 @@ class DevisController extends AbstractController
         }
 
         return $this->redirectToRoute('devis_index');
+    }
+
+    /**
+     * @Route("devis/{id}/reserver", name="devis_reserver", methods={"GET","POST"})
+     */
+    public function reserver(Request $request, Devis $devis)
+    {
+        $reservation = new Reservation();
+        $reservation->setVehicule($devis->getVehicule());
+        $reservation->setClient($devis->getClient());
+        $reservation->setDateDebut($devis->getDateDepart());
+        $reservation->setDateFin($devis->getDateRetour());
+        $reservation->setAgenceDepart($devis->getAgenceDepart());
+        $reservation->setAgenceRetour($devis->getAgenceRetour());
+        $reservation->setGarantie($devis->getGarantie());
+        $reservation->setSiege($devis->getSiege());
+        $reservation->setPrix($devis->getPrix());
+        $reservation->setDateReservation(new \DateTime('NOW'));
+        $reservation->setCodeReservation('devisTransformé');
+
+        $entityManager = $this->reservController->getDoctrine()->getManager();
+        $entityManager->persist($reservation);
+        $entityManager->flush();
+        // dump($reservation);
+        // die();
+        return $this->redirectToRoute('reservation_index');
     }
 
     function monthName($date)
@@ -221,14 +285,22 @@ class DevisController extends AbstractController
 
         if (!is_object($siege) && !is_object($garantie) && !is_object($vehicule)) {
 
-            $siege = $this->optionsRepo->find(intval($siege));
-            $garantie = $this->garantiesRepo->find(intval($garantie));
+            if (!is_float($siege)) {
+                $siegePrix = $this->optionsRepo->find(intval($siege))->getPrix();
+            } else {
+                $siegePrix = $siege;
+            }
+            if (!is_float($garantie)) {
+                $garantiePrix = $this->garantiesRepo->find(intval($garantie))->getPrix();
+            } else {
+                $garantiePrix = $garantie;
+            }
+
             $vehicule = $this->vehiculeRepo->find(intval($vehicule));
         }
 
         $mois = $this->monthName($dateDepart);
         $tarifs = $this->tarifsRepo->findTarifs($vehicule, $mois);
-
         $duree = $this->calculDuree($dateDepart, $dateRetour);
         $tarif = 0; //initialisation de $tarif
         if (!is_null($tarifs)) {
@@ -243,9 +315,9 @@ class DevisController extends AbstractController
         }
 
         if ($tarif != null) {
-            $prix = $tarif + $siege->getPrix() + $garantie->getPrix();
+            $prix = $tarif + $siegePrix + $garantiePrix;
         } else {
-            $prix = $siege->getPrix() + $garantie->getPrix();
+            $prix = $siegePrix + $garantiePrix;
         }
 
         return $prix;

@@ -22,7 +22,7 @@ class Reservation
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable = true)
      * @Groups("reserv:read")
      */
     private $type;
@@ -105,16 +105,6 @@ class Reservation
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $siege;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $garantie;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
     private $commentaire;
 
     /**
@@ -126,6 +116,26 @@ class Reservation
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $agenceRetour;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Options::class, inversedBy="reservations")
+     */
+    private $siege;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Garantie::class, inversedBy="reservations")
+     */
+    private $garantie;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $prix;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $duree;
 
     public function __construct()
     {
@@ -344,30 +354,6 @@ class Reservation
         return $this;
     }
 
-    public function getSiege(): ?string
-    {
-        return $this->siege;
-    }
-
-    public function setSiegeEnfant(?string $siege): self
-    {
-        $this->siege = $siege;
-
-        return $this;
-    }
-
-    public function getGarantie(): ?string
-    {
-        return $this->garantie;
-    }
-
-    public function setGarantie(?string $garantie): self
-    {
-        $this->garantie = $garantie;
-
-        return $this;
-    }
-
     public function getCommentaire(): ?string
     {
         return $this->commentaire;
@@ -410,6 +396,54 @@ class Reservation
     public function setAgenceRetour(?string $agenceRetour): self
     {
         $this->agenceRetour = $agenceRetour;
+
+        return $this;
+    }
+
+    public function getSiege(): ?Options
+    {
+        return $this->siege;
+    }
+
+    public function setSiege(?Options $siege): self
+    {
+        $this->siege = $siege;
+
+        return $this;
+    }
+
+    public function getGarantie(): ?Garantie
+    {
+        return $this->garantie;
+    }
+
+    public function setGarantie(?Garantie $garantie): self
+    {
+        $this->garantie = $garantie;
+
+        return $this;
+    }
+
+    public function getPrix(): ?float
+    {
+        return $this->prix;
+    }
+
+    public function setPrix(?float $prix): self
+    {
+        $this->prix = $prix;
+
+        return $this;
+    }
+
+    public function getDuree(): ?float
+    {
+        return $this->duree;
+    }
+
+    public function setDuree(?float $duree): self
+    {
+        $this->duree = $duree;
 
         return $this;
     }

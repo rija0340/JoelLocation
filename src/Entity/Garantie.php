@@ -41,9 +41,15 @@ class Garantie
      */
     private $devis;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Reservation::class, mappedBy="garantie")
+     */
+    private $reservations;
+
     public function __construct()
     {
         $this->devis = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -124,5 +130,35 @@ class Garantie
     public function __toString()
     {
         return $this->getAppelation() . ' : ' . $this->getPrix() . " €";
+    }
+
+    /**
+     * @return Collection|Reservation[]
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): self
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations[] = $reservation;
+            $reservation->setGarantie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): self
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getGarantie() === $this) {
+                $reservation->setGarantie(null);
+            }
+        }
+
+        return $this;
     }
 }

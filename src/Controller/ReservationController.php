@@ -2,18 +2,22 @@
 
 namespace App\Controller;
 
+use App\Entity\Garantie;
+use App\Entity\User;
+use App\Form\UserType;
 use App\Entity\Vehicule;
 use App\Form\VehiculeType;
 use App\Entity\Reservation;
-use App\Form\EditStopSalesType;
-use App\Form\ReservationType;
 use App\Form\StopSalesType;
-use App\Entity\User;
-use App\Form\UserType;
 use App\Form\UserClientType;
+use App\Form\ReservationType;
+use App\Form\EditStopSalesType;
+use App\Repository\GarantieRepository;
+use App\Repository\OptionsRepository;
 use App\Repository\UserRepository;
 use App\Repository\VehiculeRepository;
 use App\Repository\ReservationRepository;
+use App\Repository\TarifsRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,15 +30,23 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class ReservationController extends AbstractController
 {
+    private $userRepo;
     private $reservationRepo;
     private $dateTimestamp;
     private $vehiculeRepo;
+    private $optionsRepo;
+    private $garantiesRepo;
+    private $tarifsRepo;
 
-    public function __construct(ReservationRepository $reservationRepo, VehiculeRepository $vehiculeRepo)
+    public function __construct(TarifsRepository $tarifsRepo, ReservationRepository $reservationRepo,  UserRepository $userRepo, VehiculeRepository $vehiculeRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
     {
 
         $this->reservationRepo = $reservationRepo;
         $this->vehiculeRepo = $vehiculeRepo;
+        $this->optionsRepo = $optionsRepo;
+        $this->garantiesRepo = $garantiesRepo;
+        $this->userRepo = $userRepo;
+        $this->tarifsRepo = $tarifsRepo;
     }
 
     /**
@@ -168,27 +180,63 @@ class ReservationController extends AbstractController
     }
 
     /**
-     * @Route("/newVenteComtpoir", name="newVenteComtpoir", methods={"GET","POST"})
+     * @Route("/newReservation", name="reserverVenteComptoir",  methods={"GET","POST"})
      */
-    public function newVenteComtpoir(Request $request, VehiculeRepository $vehiculeRepository): Response
+    public function reserverVenteComptoir(Request $request): Response
     {
-
-        $client =  $request->query->get('client');
-        $agenceDepart = $request->query->get('agenceDepart');
-        $agenceRetour = $request->query->get('agenceRetour');
-        $lieuSejour = $request->query->get('lieuSejour');
-        $dateTimeDepart = $request->query->get('dateTimeDepart');
-        $dateTimeRetour = $request->query->get('dateTimeRetour');
-        $vehiculeIM = $request->query->get('vehiculeIM');
-        $conducteur = $request->query->get('conducteur');
-        $siege = $request->query->get('siege');
-        $garantie = $request->query->get('garantie');
-
         $reservation = new Reservation();
 
-        dump($client, $agenceDepart, $agenceRetour,  $lieuSejour, $dateTimeDepart);
-        die();
+        if ($request->isXmlHttpRequest()) {
+
+            $idClient =  $request->query->get('idClient');
+            $agenceDepart = $request->query->get('agenceDepart');
+            $agenceRetour = $request->query->get('agenceRetour');
+            $lieuSejour = $request->query->get('lieuSejour');
+            $dateTimeDepart = $request->query->get('dateTimeDepart');
+            $dateTimeRetour = $request->query->get('dateTimeRetour');
+            $vehiculeIM = $request->query->get('vehiculeIM');
+            $conducteur = $request->query->get('conducteur');
+            $idSiege = $request->query->get('idSiege');
+            $idGarantie = $request->query->get('idGarantie');
+
+            $siege = $this->optionsRepo->find($idSiege);
+            $garantie = $this->garantiesRepo->find($idGarantie);
+            $vehicule = $this->vehiculeRepo->findByIM($vehiculeIM);
+            $client = $this->userRepo->find($idClient);
+            $duree = $this->calculDuree($dateTimeDepart, $dateTimeRetour);
+
+            $reservation->setVehicule($vehicule);
+            $reservation->setClient($client);
+            $reservation->setAgenceDepart($agenceDepart);
+            $reservation->setAgenceRetour($agenceRetour);
+            $reservation->setDateDebut(new \DateTime($dateTimeDepart));
+            $reservation->setDateFin(new \DateTime($dateTimeRetour));
+            $reservation->setGarantie($garantie);
+            $reservation->setSiege($siege);
+            $reservation->setConducteur($conducteur);
+            $reservation->setLieu($lieuSejour);
+            $reservation->setDuree($duree);
+            $reservation->setDateReservation(new \DateTime('NOW'));
+            $reservation->setCodeReservation($agenceDepart);
+
+            $prix = $this->calculTarif($dateTimeDepart, $dateTimeRetour, $siege, $garantie, $vehicule);
+
+            $reservation->setPrix($prix);
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($reservation);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('reservation_index');
+        }
+        return $this->redirectToRoute('reservation_index');
+        // $reservations = $this->reservationRepo->findAll();
+
+        // return $this->render('admin/devis/index.html.twig', [
+        //     'reservations' => $reservations
+        // ]);
     }
+
 
     /**
      * @Route("/stop_sales", name="stop_sales", methods={"GET","POST"})
@@ -251,6 +299,44 @@ class ReservationController extends AbstractController
             'formStopSales' => $formStopSales->createView(),
 
         ]);
+    }
+
+
+    /**
+     * @Route("/{id}/editStopSale", name="stopSale_edit", methods={"GET","POST"})
+     */
+    public function editStopSale(Request $request, Reservation $reservation, ReservationRepository $reservationRepository): Response
+    {
+        $listeStopSales =  $reservationRepository->findStopSales();
+
+        $formStopSales = $this->createForm(StopSalesType::class, $reservation);
+        $formStopSales->handleRequest($request);
+
+        if ($formStopSales->isSubmitted() && $formStopSales->isValid()) {
+            $vehicule = $this->vehiculeRepo->find($request->request->get('select'));
+            $reservation->setVehicule($vehicule);
+            $this->getDoctrine()->getManager()->flush();
+            return $this->redirectToRoute('stop_sales');
+        }
+
+        return $this->render('admin/stop_sales_vehicules/edit.html.twig', [
+            'listeStopSales' => $listeStopSales,
+            'formStopSales' => $formStopSales->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/delete", name="stopSale_delete", methods={"DELETE"})
+     */
+    public function stopSaleDelete(Request $request, Reservation $reservation): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $reservation->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($reservation);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('stop_sales');
     }
 
     /**
@@ -330,7 +416,7 @@ class ReservationController extends AbstractController
     /**
      * @Route("/rechercheimmatriculation", name="recherche_immatriculation", methods={"GET", "POST"})
      */
-    public function rechercheImmatriculaiton(Request $request, UserRepository $userRepository, ReservationRepository $reservationRepository, VehiculeRepository $vehiculeRepository): Response
+    public function rechercheImmatriculation(Request $request, UserRepository $userRepository, ReservationRepository $reservationRepository, VehiculeRepository $vehiculeRepository): Response
     {
         $immatriculation = $request->request->get('immatriculation');
         $reservation[] = new Reservation();
@@ -341,40 +427,108 @@ class ReservationController extends AbstractController
         return $this->redirectToRoute('reservation_index');
     }
 
-    /**
-     * @Route("/{id}/editStopSale", name="stopSale_edit", methods={"GET","POST"})
-     */
-    public function editStopSale(Request $request, Reservation $reservation, ReservationRepository $reservationRepository): Response
+
+    function monthName($date)
     {
-        $listeStopSales =  $reservationRepository->findStopSales();
-
-        $formStopSales = $this->createForm(StopSalesType::class, $reservation);
-        $formStopSales->handleRequest($request);
-
-        if ($formStopSales->isSubmitted() && $formStopSales->isValid()) {
-            $vehicule = $this->vehiculeRepo->find($request->request->get('select'));
-            $reservation->setVehicule($vehicule);
-            $this->getDoctrine()->getManager()->flush();
-            return $this->redirectToRoute('stop_sales');
+        if (is_object($date)) {
+            $month = $date->format('m');
+        } else {
+            $month = (new \DateTime($date))->format('m');
+        }
+        $monthFR = null;
+        switch ($month) {
+            case "01":
+                $monthFR = 'Janvier';
+                break;
+            case "02":
+                $monthFR = 'Février';
+                break;
+            case "03":
+                $monthFR = 'Mars';
+                break;
+            case "04":
+                $monthFR = 'Avril';
+                break;
+            case "05":
+                $monthFR = 'Mai';
+                break;
+            case "06":
+                $monthFR = 'Juin';
+                break;
+            case "07":
+                $monthFR = 'Juillet';
+                break;
+            case "08":
+                $monthFR = 'Août';
+                break;
+            case "09":
+                $monthFR = 'Septembre';
+                break;
+            case "10":
+                $monthFR = 'Octobre';
+                break;
+            case "11":
+                $monthFR = 'Novembre';
+                break;
+            case "12":
+                $monthFR = 'Décembre';
+                break;
         }
 
-        return $this->render('admin/stop_sales_vehicules/edit.html.twig', [
-            'listeStopSales' => $listeStopSales,
-            'formStopSales' => $formStopSales->createView(),
-        ]);
+        return $monthFR;
     }
 
-    /**
-     * @Route("/{id}/delete", name="stopSale_delete", methods={"DELETE"})
-     */
-    public function stopSaleDelete(Request $request, Reservation $reservation): Response
+    function calculTarif($dateDepart, $dateRetour, $siege, $garantie, $vehicule)
     {
-        if ($this->isCsrfTokenValid('delete' . $reservation->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($reservation);
-            $entityManager->flush();
+
+        if (!is_object($siege) && !is_object($garantie) && !is_object($vehicule)) {
+
+            if (!is_float($siege)) {
+                $siegePrix = $this->optionsRepo->find(intval($siege))->getPrix();
+            } else {
+                $siegePrix = $siege;
+            }
+            if (!is_float($garantie)) {
+                $garantiePrix = $this->garantiesRepo->find(intval($garantie))->getPrix();
+            } else {
+                $garantiePrix = $garantie;
+            }
+
+            $vehicule = $this->vehiculeRepo->find(intval($vehicule));
+        } else {
+            $siegePrix = $siege->getPrix();
+            $garantiePrix = $garantie->getPrix();
         }
 
-        return $this->redirectToRoute('stop_sales');
+        $mois = $this->monthName($dateDepart);
+        $tarifs = $this->tarifsRepo->findTarifs($vehicule, $mois);
+        $duree = $this->calculDuree($dateDepart, $dateRetour);
+        $tarif = 0; //initialisation de $tarif
+        if (!is_null($tarifs)) {
+
+            if ($duree <= 3) $tarif = $tarifs->getTroisJours();
+
+            if ($duree > 3 && $duree <= 7) $tarif = $tarifs->getSeptJours();
+
+            if ($duree > 7 && $duree <= 15) $tarif = $tarifs->getQuinzeJours();
+
+            if ($duree > 15 && $duree <= 30) $tarif = $tarifs->getTrenteJours();
+        }
+
+        if ($tarif != null) {
+            $prix = $tarif + $siegePrix + $garantiePrix;
+        } else {
+            $prix = $siegePrix + $garantiePrix;
+        }
+
+        return $prix;
+    }
+    function calculDuree($dateDepart, $dateRetour)
+    {
+        $dateDepart = new \DateTime($dateDepart);
+        $dateRetour = new \DateTime($dateRetour);
+        $duree = date_diff($dateDepart, $dateRetour);
+
+        return $duree->days;
     }
 }

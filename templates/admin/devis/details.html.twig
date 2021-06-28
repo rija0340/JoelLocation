@@ -83,6 +83,9 @@
 
 		<div id="js-alertVehicule" class="text-center mb-5 hide">
 			<h1>cette véhicule est déjà prise</h1>
+			<a type="button" class="btn btn-danger text-nowrap" href="{{path('devis_edit_vehicule', {'id': devis.id} ) }}">
+				<i class="fa fa-edit (alias)"></i>
+				Modifier véhicule</a>
 		</div>
 
 		<div class="x_title">
@@ -110,6 +113,9 @@
 						<button type="button" class="btn btn-outline-success text-uppercase p-1">
 							<i class="fa fa-send (alias)"></i>
 							Envoyer facture</button>
+						<a type="button" class="btn btn-outline-dark text-uppercase p-1 noHide" id="btnReserver" href="{{path('devis_reserver', {'id': devis.id} ) }}">
+							<i class="fa fa-checked"></i>
+							Réserver</a>
 					</div>
 				</div>
 			</div>
@@ -155,6 +161,7 @@
 					</div>
 					<div class="col-md-4">
 						<span class="label_client">Catégorie :</span>
+						<span class="js-categorie">{{devis.vehicule.marque}}{{devis.vehicule.modele}}</span>
 					</div>
 				</div>
 
@@ -201,6 +208,7 @@
 					<a type="button" class="btn btn-danger text-nowrap" href="{{path('devis_edit', {'id': devis.id} ) }}">
 						<i class="fa fa-edit (alias)"></i>
 						Modifier les options & garanties</a>
+
 					<button type="button" class="btn btn-violet text-nowrap">
 						<i class="fa  fa-send-o (alias)"></i>
 						Envoyer les identifians de connexion</button>

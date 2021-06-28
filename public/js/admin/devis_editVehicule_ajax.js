@@ -29,17 +29,17 @@ getElements();
 addEventListener();
 
 window.onload = function test() {
-    dateDebutValue = document.getElementById("stop_sales_date_debut").value;
-    dateFinValue = document.getElementById("stop_sales_date_fin").value;
-    imVehValue = document.getElementById("stop_sales_vehicule").value; //champ caché dans stopSalesType
+    dateDebutValue = document.getElementById("devis_edit_vehicule_dateDepart").value;
+    dateFinValue = document.getElementById("devis_edit_vehicule_dateRetour").value;
+    imVehValue = document.getElementById("devis_edit_vehicule_vehicule").value; //champ caché dans devisType
     setParamDateDebutForAjax();
     retrieveDataAjax();
 };
 
 function getElements() {
 
-    dateDebutElem = document.getElementById("stop_sales_date_debut");
-    dateFinElem = document.getElementById("stop_sales_date_fin");
+    dateDebutElem = document.getElementById("devis_edit_vehicule_dateDepart");
+    dateFinElem = document.getElementById("devis_edit_vehicule_dateRetour");
     reservation2Elem = document.getElementById("reservation2");
     btnModifier = document.querySelector("button");
 }
@@ -53,8 +53,8 @@ function addEventListener() {
 
 
 function getDatesValues() {
-    console.log(document.getElementById("stop_sales_date_debut").value);
-    console.log(document.getElementById("stop_sales_date_fin").value);
+    console.log(document.getElementById("devis_dateDepart").value);
+    console.log(document.getElementById("devis_dateRetour").value);
     retrieveDataAjax();
 }
 
@@ -198,5 +198,5 @@ function dateToTimestamp(date) {
 }
 
 function setNullHiddenVehicule() {
-    document.getElementById("stop_sales_vehicule").value = null;
+    document.getElementById("devis_edit_vehicule_vehicule").value = null;
 }

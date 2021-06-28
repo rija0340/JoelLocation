@@ -298,7 +298,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
     }
     function addEvent() {
 
-        btnReserver.addEventListener('click', reserver, false);
+        btnReserver.addEventListener('click', reserverAjax, false);
         btnCreateClient.addEventListener('click', createClientAjax, false);
         btnPdfDevis.addEventListener('click', enregistrerDevisPDF, false);
         btnEnregistrerDevis.addEventListener('click', enregistrerDevisAjax, false);
@@ -428,7 +428,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
                 }
             });
         } else {
-            alert('Veuillez indiquer un client');
+            alert('Veuillez choisir un client');
         }
 
     }
@@ -611,6 +611,83 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
                 alert('La requête n\'a pas abouti');
             }
         });
+    }
+
+    function reserverAjax() { //envoi donnée à controller par ajax
+
+        console.log(selectClientElem);
+        selectedClient = null;
+        selectedClient = selectClientElem.value;
+
+        if (selectedClient != "") {
+            var idClient;
+            console.log('ity le liste original : ');
+            console.log(listeClientsOriginal);
+            console.log('length');
+            console.log(listeClientsOriginal.length);
+
+            for (let i = 0; i < listeClientsOriginal.length; i++) {
+
+                var result = listeClientsOriginal[i].nomPrenomEmail.localeCompare(selectedClient);
+
+                if (result == 0) {
+
+                    idClient = listeClientsOriginal[i].id;
+                    console.log(idClient);
+                }
+
+            }
+            console.log(idClient);
+            console.log("data : " +
+
+                idClient,
+                agenceDepartSelected,
+                agenceRetourSelected,
+                datetimeDepartValue,
+                datetimeRetourValue,
+                conducteur,
+                detailsVehicule.immatriculation,
+                lieuSejourValue,
+                idSiege,
+                idGarantie
+            );
+
+            $.ajax({
+                type: 'GET',
+                url: '/reservation/newReservation',
+                data: {
+                    'idClient': idClient,
+                    'agenceDepart': agenceDepartSelected,
+                    'agenceRetour': agenceRetourSelected,
+                    'dateTimeDepart': datetimeDepartValue,
+                    'dateTimeRetour': datetimeRetourValue,
+                    'conducteur': conducteur,
+                    'idSiege': idSiege,
+                    'idGarantie': idGarantie,
+                    'vehiculeIM': detailsVehicule.immatriculation,
+                    'lieuSejour': lieuSejourValue
+                },
+                timeout: 3000,
+                beforeSend: function (xhr) {
+                    // Show the loader
+                    $('#smartwizard').smartWizard("loader", "show");
+                },
+                success: function (xmlHttp) {
+                    // xmlHttp is a XMLHttpRquest object
+                    console.log('met le izy');
+                    // console.log('mety ilay izy zao');
+                    window.document.location = '/devis';
+
+                    $('#smartwizard').smartWizard("loader", "hide");
+                },
+                error: function () {
+                    alert('La requête n\'a pas abouti');
+                }
+            });
+        } else {
+            alert('Veuillez choisir un client');
+        }
+
     }
 
     //--------------------------liste des fonctions exectuées dans chaque step--------------------
