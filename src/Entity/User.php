@@ -108,6 +108,11 @@ class User implements UserInterface
      */
     private $devis;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $recupass;
+
     public function __construct()
     {
         $this->messages = new ArrayCollection();
@@ -453,6 +458,18 @@ class User implements UserInterface
                 $devi->setClient(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getRecupass(): ?string
+    {
+        return $this->recupass;
+    }
+
+    public function setRecupass(?string $recupass): self
+    {
+        $this->recupass = $recupass;
 
         return $this;
     }

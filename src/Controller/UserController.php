@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Form\UserEditType;
 use App\Form\UserClientType;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -103,7 +104,8 @@ class UserController extends AbstractController
             $user->setPassword($this->passwordEncoder->encodePassword(
                 $user,
                 $user->getPassword()
-            ));
+            ));                
+            $user->setRecupass($user->getPassword());
             $user->setPresence(1);
             $user->setDateInscription(new \DateTime('now'));
             $entityManager = $this->getDoctrine()->getManager();
@@ -133,7 +135,8 @@ class UserController extends AbstractController
             $user->setPassword($this->passwordEncoder->encodePassword(
                 $user,
                 $user->getPassword()
-            ));
+            ));                
+            $user->setRecupass($user->getPassword());
             $user->setPresence(1);
             $user->setDateInscription(new \DateTime('now'));
             $entityManager = $this->getDoctrine()->getManager();
@@ -175,7 +178,8 @@ class UserController extends AbstractController
             $user->setPassword($this->passwordEncoder->encodePassword(
                 $user,
                 $nom . $telephone
-            ));
+            ));                
+            $user->setRecupass($user->getPassword());
             $user->setPresence(1);
             $user->setDateInscription(new \DateTime('now'));
             $entityManager = $this->getDoctrine()->getManager();
@@ -213,9 +217,9 @@ class UserController extends AbstractController
      */
     public function edit(Request $request, User $user): Response
     {
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(UserEditType::class, $user);
         $form->handleRequest($request);
-
+        $password = $user->getPassword();
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setRoles([$user->getFonction()]);
             /* if($user->getFonction() == "Client"){
@@ -227,10 +231,15 @@ class UserController extends AbstractController
             if($user->getFonction() == "Administrateur"){
                 $user->setRoles(["ROLE_ADMIN"]);
             } */
-            $user->setPassword($this->passwordEncoder->encodePassword(
-                $user,
-                $user->getPassword()
-            ));
+            if($user->getPassword() == ''){ 
+                $user->setPassword($user->getRecupass());
+            }else{ 
+                $user->setPassword($this->passwordEncoder->encodePassword(
+                    $user,
+                    $user->getPassword()
+                ));
+                $user->setRecupass($user->getPassword());
+            }
             /* if($user->getFonction == "Employé"){
                 $user->setRoles("ROLE_SUPER_ADMIN");
             } */
