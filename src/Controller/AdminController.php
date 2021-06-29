@@ -37,21 +37,6 @@ class AdminController extends AbstractController
     return $this->render('admin/reservation/rechercher_res.html.twig');
   }
 
-  /**
-   * @Route("/contrats_en_cours", name="contrats_en_cours", methods={"GET"})
-   */
-  public function contrats_en_cours(): Response
-  {
-    return $this->render('admin/reservation/contrat/en_cours/index.html.twig');
-  }
-
-  /**
-   * @Route("/detail_contrats_en_cours", name="detail_contrats_en_cours", methods={"GET"})
-   */
-  public function detail_contrats_en_cours(): Response
-  {
-    return $this->render('admin/reservation/contrat/en_cours/detail.html.twig');
-  }
 
   /**
    * @Route("/contrats_termines", name="contrats_termines", methods={"GET"})

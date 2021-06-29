@@ -333,7 +333,10 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
             doc.text(20, 80, 'Duree réservation : ');
             doc.text(70, 80, dureeReservation.toString() + ' jours');
             doc.text(20, 90, 'Tarif appliquée : ');
-            doc.text(70, 90, tarifApplique.toString() + ' €');
+            if (tarifApplique != null) {
+
+                doc.text(70, 90, tarifApplique.toString() + ' €');
+            }
             doc.text(20, 100, 'Marque : ');
             doc.text(70, 100, detailsVehicule.marque);
             doc.text(20, 110, 'Modèle : ');
@@ -380,20 +383,17 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
                 }
 
             }
-            console.log(idClient);
-            console.log("data : " +
 
-                idClient,
-                agenceDepartSelected,
-                agenceRetourSelected,
-                datetimeDepartValue,
-                datetimeRetourValue,
-                conducteur,
-                detailsVehicule.immatriculation,
-                lieuSejourValue,
-                idSiege,
-                idGarantie
-            );
+            console.log("idClient : " + idClient);
+            console.log("agenceDepartSelected : " + agenceDepartSelected);
+            console.log("agenceRetourSelected : " + agenceRetourSelected);
+            console.log("datetimeDepartValue : " + datetimeDepartValue);
+            console.log("datetimeRetourValue : " + datetimeRetourValue);
+            console.log("conducteur : " + conducteur);
+            console.log("detailsVehicule : " + detailsVehicule.immatriculation);
+            console.log("lieuSejourValue : " + lieuSejourValue);
+            console.log("idSiege : " + idSiege);
+            console.log("idGarantie : " + idGarantie);
 
             $.ajax({
                 type: 'GET',

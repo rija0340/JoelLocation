@@ -27,7 +27,7 @@
 		<div class="x_title">
 			<h2>
 				<i class="fa fa-shopping-basket"></i>
-				Liste des réservations
+				Liste des réservations en cours
 			</h2>
 
 			<div class="clearfix"></div>
@@ -53,37 +53,31 @@
 
 
 							<tbody>
-								<tr>
-									<td>
-										<div class="badge badge-success p-2">FUL</div>
-									</td>
-									<td>Javascript Developer</td>
-									<td>Singapore</td>
-									<td>29</td>
-									<td>2011/06/27</td>
-									<td>$183,000</td>
-									<td>$183,000</td>
-									<td class="text-center">
-										<a href="{{ path('detail_contrats_en_cours') }}">
-											<i class=" fa fa-info-circle" style="font-size: 2em !important;"></i>
-										</a>
-									</td>
-								</tr>
-								<tr>
-									<td>Donna Snider</td>
-									<td>Customer Support</td>
-									<td>New York</td>
-									<td>27</td>
-									<td>2011/01/25</td>
-									<td>2011/01/25</td>
-									<td>2011/01/25</td>
-									<td class="text-center">
-										<a href="{{ path('detail_contrats_en_cours') }}">
-
-											<i class=" fa fa-info-circle" style="font-size: 2em !important;"></i>
-										</a>
-									</td>
-								</tr>
+								{% for reservation in reservations %}
+									<tr>
+										<td>
+											<div class="badge badge-success p-2">FUL</div>
+										</td>
+										<td>{{ reservation.dateReservation ? reservation.dateReservation|date('d-m-Y H:i') : '' }}</td>
+										<td>{{ reservation.client.prenom }}
+											{{ reservation.client.nom }}</td>
+										<td>{{ reservation.vehicule }}</td>
+										<td>{{reservation.dateDebut|date('d-m-Y H:i')}}
+											-->
+											{{reservation.dateFin|date('d-m-Y H:i')}}
+											/
+											{{ reservation.duree}}
+											jours</td>
+										<td>{{reservation.prix}}
+											€</td>
+										<td></td>
+										<td class="text-center">
+											<a href="{{ path('contrats_show', {'id': reservation.id}) }}">
+												<i class=" fa fa-info-circle" style="font-size: 2em !important;"></i>
+											</a>
+										</td>
+									</tr>
+								{% endfor %}
 							</tbody>
 						</table>
 					</div>

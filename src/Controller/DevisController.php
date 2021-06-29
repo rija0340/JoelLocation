@@ -64,7 +64,6 @@ class DevisController extends AbstractController
     public function newDevis(Request $request): Response
     {
         $devis = new Devis();
-        echo("teste eto");
         if ($request->isXmlHttpRequest()) {
             $idClient =  $request->query->get('idClient');
             $agenceDepart = $request->query->get('agenceDepart');
@@ -298,6 +297,9 @@ class DevisController extends AbstractController
             }
 
             $vehicule = $this->vehiculeRepo->find(intval($vehicule));
+        } else {
+            $siegePrix = $siege->getPrix();
+            $garantiePrix = $garantie->getPrix();
         }
 
         $mois = $this->monthName($dateDepart);

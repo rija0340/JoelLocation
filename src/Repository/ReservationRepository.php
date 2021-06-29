@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Reservation;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Validator\Constraints\Date;
 
 /**
  * @method Reservation|null find($id, $lockMode = null, $lockVersion = null)
@@ -28,6 +30,19 @@ class ReservationRepository extends ServiceEntityRepository
             ->andWhere('r.client = :client AND r.date_fin < :date')
             ->setParameter('client', $client)
             ->setParameter('date', $date)
+            ->orderBy('r.date_fin', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Reservation[] Returns an array of Reservation objects
+     */
+    public function findReservationsTermines()
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.date_fin < :date')
+            ->setParameter('date', new \DateTime('NOW'))
             ->orderBy('r.date_fin', 'DESC')
             ->getQuery()
             ->getResult();
@@ -92,8 +107,9 @@ class ReservationRepository extends ServiceEntityRepository
     public function findReservationsSansStopSales()
     {
         return $this->createQueryBuilder('r')
-            ->andWhere(' r.code_reservation != :code')
+            ->andWhere(' r.code_reservation != :code AND r.date_fin > :date')
             ->setParameter('code', 'stopSale')
+            ->setParameter('date', new \DateTime('NOW'))
             ->getQuery()
             ->getResult();
     }
