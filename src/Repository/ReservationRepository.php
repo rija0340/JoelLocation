@@ -81,9 +81,12 @@ class ReservationRepository extends ServiceEntityRepository
      */
     public function findReservationIncludeDate($date)
     {
+        dump($date);
         return $this->createQueryBuilder('r')
-            ->andWhere(' r.date_fin > :date')
+            ->where(' r.date_fin > :date')
             ->andWhere('r.date_debut < :date')
+            ->andWhere(' r.code_reservation != :code')
+            ->setParameter('code', 'stopSale')
             ->setParameter('date', $date)
             ->getQuery()
             ->getResult();
@@ -188,6 +191,21 @@ class ReservationRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+
+    /**
+     * @return Reservation[] Returns an array of Reservation objects
+     */
+    public function findByName($keyword)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere(' r.client.nom LIKE :keyword')
+            ->setParameter('keyword', $keyword)
+            ->getQuery()
+            ->getResult();
+    }
+
+
 
 
 

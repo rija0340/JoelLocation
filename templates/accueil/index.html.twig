@@ -142,7 +142,7 @@
 				<div class="col-lg-6 col-md-12 col-sm-12  single-service d-flex justify-content-center">
 					<div class="d-flex align-items-center ">
 						<div>
-							<video width="425" controls autoplay loop>
+							<video width="425" controls autoplay loop id="video3d">
 								<source
 								src="../../videos/voiture 3d JOELLOCATION 2.0.mp4" type="video/mp4">
 								{# <source src="../../videos/voiture 3d JOELLOCATION 2.0.mp4" type="video/ogg"> #}
@@ -161,4 +161,8 @@
 	<script src="js/custom/material/bootstrap-material-design.min.js" type="text/javascript"></script>
 	<script src="js/custom/material/material-kit.js?v=2.0.7" type="text/javascript"></script>
 	<script src="js/admin/nav.js" type="text/javascript"></script>
+	<script>
+		var vid = document.getElementById("video3d");
+vid.volume = 0.2;
+	</script>
 {% endblock %}

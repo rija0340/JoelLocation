@@ -133,20 +133,18 @@ class PlanningController extends AbstractController
 
     public function planningJournalierData(Request $request, ReservationRepository $reservationRepo)
     {
-
-        $reservations = $reservationRepo->findAll();
-
+        $date = $request->query->get('date');
+        // dump();
+        // die();
+        $dateStarted = \DateTime::createFromFormat('D M d Y H:i:s e+', $date);
+        $reservations = $reservationRepo->findReservationIncludeDate($dateStarted);
 
         $datas = array();
         foreach ($reservations as $key => $reservation) {
-            $datas[$key]['id'] = $reservation->getId();
-            $datas[$key]['text'] = $reservation->getType();
-            $datas[$key]['start_date_formated'] = $reservation->getDateDebut()->format('d/m/Y');
-            $datas[$key]['end_date_formated'] = $reservation->getDateFin()->format('d/m/Y');
-            $datas[$key]['start_date'] = $reservation->getDateDebut();
-            $datas[$key]['end_date'] = $reservation->getDateFin();
-            $datas[$key]['client_name'] = $reservation->getClient()->getNom() . " " .  $reservation->getClient()->getPrenom();
-            $datas[$key]['color'] = "red";
+            $datas[$key]['identification'] = $reservation->getVehicule()->getMarque() . ' ' . $reservation->getVehicule()->getModele() . ' ' . $reservation->getVehicule()->getImmatriculation();
+            $datas[$key]['client'] = $reservation->getClient()->getNom() . ' ' . $reservation->getClient()->getPrenom();
+            $datas[$key]['start_date_formated'] = $reservation->getDateDebut()->format('d/m/Y - H\Hi');
+            $datas[$key]['end_date_formated'] = $reservation->getDateFin()->format('d/m/Y - H\Hi');
         }
 
         return new JsonResponse($datas);

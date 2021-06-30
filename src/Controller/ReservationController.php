@@ -305,7 +305,7 @@ class ReservationController extends AbstractController
 
 
     /**
-     * @Route("/{id}/editStopSale", name="stopSale_edit", methods={"GET","POST"})
+     * @Route("/{id}/editStopSale", name="stopSale_edit", methods={"GET","POST"}, requirements={"id":"\d+"})
      */
     public function editStopSale(Request $request, Reservation $reservation, ReservationRepository $reservationRepository): Response
     {
@@ -328,7 +328,7 @@ class ReservationController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/delete", name="stopSale_delete", methods={"DELETE"})
+     * @Route("/{id}/delete", name="stopSale_delete", methods={"DELETE"},requirements={"id":"\d+"})
      */
     public function stopSaleDelete(Request $request, Reservation $reservation): Response
     {
@@ -342,7 +342,7 @@ class ReservationController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="reservation_show", methods={"GET"})
+     * @Route("/{id}", name="reservation_show", methods={"GET"},requirements={"id":"\d+"})
      */
     public function show(Reservation $reservation): Response
     {
@@ -352,7 +352,7 @@ class ReservationController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="reservation_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="reservation_edit", methods={"GET","POST"},requirements={"id":"\d+"})
      */
     public function edit(Request $request, Reservation $reservation): Response
     {
@@ -375,7 +375,7 @@ class ReservationController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="reservation_delete", methods={"DELETE"})
+     * @Route("/{id}", name="reservation_delete", methods={"DELETE"},requirements={"id":"\d+"})
      */
     public function delete(Request $request, Reservation $reservation): Response
     {
@@ -393,8 +393,11 @@ class ReservationController extends AbstractController
      */
     public function rechercheSimple(Request $request, UserRepository $userRepository, ReservationRepository $reservationRepository): Response
     {
-        $recherche = $request->request->get('recherche');
+        $recherche = $request->query->get('recherche');
+        // dd($request);
+        // die();
         $reservation[] = new Reservation();
+
         if ($recherche != null) {
             $client_id = (int)$recherche;
             $client = new User();
@@ -403,14 +406,24 @@ class ReservationController extends AbstractController
             $client = $userRepository->findOneBy(["id" => $client_id]);
             //}
             if ($client == null) {
-                $client = $userRepository->findOneBy(["username" => $recherche]);
+                $client = $userRepository->findOneBy(["nom" => $recherche]);
             }
             if ($client != null) {
                 $reservation = $reservationRepository->findBy(["client" => $client]);
             } else {
                 $reservation = $reservationRepository->findBy(["code_reservation" => $recherche]);
             }
-            return $this->redirectToRoute('rechercher_res');
+            $datas = array();
+            foreach ($reservation as $key => $res) {
+                $datas[$key]['id'] = $res->getId();
+                $datas[$key]['dateDepart'] = $res->getDateDebut()->format('d-m-Y H:i');
+                $datas[$key]['dateRetour'] = $res->getDateFin()->format('d-m-Y H:i');
+                $datas[$key]['dateRes'] = $res->getDateReservation()->format('d-m-Y H:i');
+                $datas[$key]['agenceDepart'] = $res->getAgenceDepart();
+                $datas[$key]['agenceRetour'] = $res->getAgenceRetour();
+            }
+
+            return new JsonResponse($datas);
         }
         return $this->redirectToRoute('reservation_index');
     }

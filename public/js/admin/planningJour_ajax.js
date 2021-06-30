@@ -76,9 +76,11 @@ function retrieveDataAjax() {
         type: 'GET',
         url: '/planningJournalierData',
         Type: "json",
+        data: { 'date': new Date(dateInputValue) },
         success: function (data) {
 
-            sortData(data);
+            // sortData(data);
+            LoadCurrentReport(data);
         },
         error: function () {
             alert('La requête n\'a pas abouti');
@@ -86,24 +88,24 @@ function retrieveDataAjax() {
     });
 }
 
-function sortData(data) {
+// function sortData(data) {
 
-    sortedDate = [];
-    var dateInputTimestamp = dateInputToTimestamp(dateInputValue);
+//     sortedDate = [];
+//     var dateInputTimestamp = dateInputToTimestamp(dateInputValue);
 
-    for (var i = 0; i < data.length; i++) {
+//     for (var i = 0; i < data.length; i++) {
 
-        var startDateTask = dateToTimestamp(data[i].start_date);
-        var endDateTask = dateToTimestamp(data[i].end_date);
+//         var startDateTask = dateToTimestamp(data[i].start_date);
+//         var endDateTask = dateToTimestamp(data[i].end_date);
 
-        if (+startDateTask <= +dateInputTimestamp && +dateInputTimestamp <= +endDateTask) {
-            sortedDate.push(data[i]);
-        }
-    }
-    console.log(sortedDate);
-    LoadCurrentReport(sortedDate);
+//         if (+startDateTask <= +dateInputTimestamp && +dateInputTimestamp <= +endDateTask) {
+//             sortedDate.push(data[i]);
+//         }
+//     }
+//     console.log(sortedDate);
+//     LoadCurrentReport(sortedDate);
 
-}
+// }
 
 function LoadCurrentReport(data) {
 
@@ -114,19 +116,16 @@ function LoadCurrentReport(data) {
     //Load  datatable
 
     // var oTblReport = $("#tblReportResultsDemographics");
-    var table = $("#tblReportResultsDemographics");
+    var table = $("#tblPlanningJournalier");
 
-    if (!$.fn.DataTable.isDataTable('#tblReportResultsDemographics')) {
+    if (!$.fn.DataTable.isDataTable('#tblPlanningJournalier')) {
         table.DataTable({
             "data": data,
             "columns": [
-                { "data": "id" },
-                { "data": "text" },
+                { "data": "identification" },
+                { "data": "client" },
                 { "data": "start_date_formated" },
                 { "data": "end_date_formated" },
-                { "data": "client_name" },
-                { "data": "start_date.date" },
-                { "data": "end_date.date" }
             ],
             "language": {
                 "emptyTable": "Aucune donnée disponible dans le tableau",
@@ -311,13 +310,10 @@ function LoadCurrentReport(data) {
         table.DataTable({
             "data": data,
             "columns": [
-                { "data": "id" },
-                { "data": "text" },
+                { "data": "identification" },
+                { "data": "client" },
                 { "data": "start_date_formated" },
                 { "data": "end_date_formated" },
-                { "data": "client_name" },
-                { "data": "start_date.date" },
-                { "data": "end_date.date" }
             ],
             "language": {
                 "emptyTable": "Aucune donnée disponible dans le tableau",

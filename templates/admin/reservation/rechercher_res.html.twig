@@ -12,19 +12,19 @@
 
 {% block stylesheets %}
 	{# <!-- bootstrap-wysiwyg -->
-			<link
-			href="../../admin/vendors/google-code-prettify/bin/prettify.min.css" rel="stylesheet">
-			<!-- Select2 -->
-			<link
-			href="../../admin/vendors/select2/dist/css/select2.min.css" rel="stylesheet">
-			<!-- Switchery -->
-			<link
-			href="../../admin/vendors/switchery/dist/switchery.min.css" rel="stylesheet">
-			<!-- starrr -->
-			<link
-			href="../../admin/vendors/starrr/dist/starrr.css" rel="stylesheet">
-			<!-- bootstrap-daterangepicker -->
-			<link href="../../admin/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet"> #}
+																													<link
+																													href="../../admin/vendors/google-code-prettify/bin/prettify.min.css" rel="stylesheet">
+																													<!-- Select2 -->
+																													<link
+																													href="../../admin/vendors/select2/dist/css/select2.min.css" rel="stylesheet">
+																													<!-- Switchery -->
+																													<link
+																													href="../../admin/vendors/switchery/dist/switchery.min.css" rel="stylesheet">
+																													<!-- starrr -->
+																													<link
+																													href="../../admin/vendors/starrr/dist/starrr.css" rel="stylesheet">
+																													<!-- bootstrap-daterangepicker -->
+																													<link href="../../admin/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet"> #}
 {% endblock  %}
 
 {% block content %}
@@ -41,19 +41,34 @@
 			<p>
 				Chercher une réservation en saisissant sa référence
 			</p>
-			<form class="form-horizontal form-label-left" action="{{ path('recherche_simple') }}" method="POST">
+			<form class="form-horizontal form-label-left">
 				<div class="form-group ">
 					<div class="col-md-10">
-						<input type="text" id="recherche" name="recherche" required="required" class="form-control col-md-12 " placeholder="Saisir une référence ou le nom d'un client">
+						<input type="text" id="rechercheSimple" name="recherche" required="required" class="form-control col-md-12 " placeholder="Saisir une référence ou le nom d'un client">
 					</div>
 					<div class="col-md-2">
-						<button class="btn btn-danger" type="submit">
+						<button class="btn btn-danger" id="btnrechercheSimple">
 							<i class="fa fa-search"></i>
 							Chercher</button>
 					</div>
 				</div>
 			</form>
 		</div>
+	</div>
+	<div class="x_panel hide" id="resultRechSimple">
+		<table class="table">
+			<thead class="thead-dark">
+				<tr>
+					<th scope="col">Date Depart</th>
+					<th scope="col">Date retour</th>
+					<th scope="col">Date reservation</th>
+					<th scope="col">Agence départ</th>
+					<th scope="col">Agence retour</th>
+				</tr>
+			</thead>
+			<tbody id="tbody"></tbody>
+		</table>
+
 	</div>
 	<div class="x_panel">
 		<div class="x_title">
@@ -221,4 +236,6 @@ input.type = 'text';
 		</div>
 	</div>
 {% endblock %}
-{% block javascripts %}{% endblock  %}
+{% block javascripts %}
+	<script src="../../js/admin/recherche_res.js"></script>
+{% endblock  %}

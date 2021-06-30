@@ -91,8 +91,8 @@ function genererDevisPDF() {
 
     var doc = new jsPDF();
 
-    doc.text(20, 20, 'Client : ');
-    doc.text(40, 20, nomclientValue + prenomClientValue);
+    doc.text(20, 20, 'Nom Client : ');
+    doc.text(40, 20, nomclientValue + ' ' + prenomClientValue);
     doc.text(20, 30, 'Agence de départ : ');
     doc.text(70, 30, agenceDepartValue);
     doc.text(20, 40, 'Agence de retour : ');
@@ -168,4 +168,7 @@ function getListeVehicules() {
             console.log(erreur.responseText);
         }
     });
+}
+
+
 }

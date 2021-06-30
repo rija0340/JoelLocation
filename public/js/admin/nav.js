@@ -1,7 +1,7 @@
 var test;
 let listItems = document.querySelectorAll('.side-menu li');
 
-$(window).load(function () {
+$(window).on('load', function () {
 
     listItems = document.querySelectorAll('.side-menu li');
     listItems.forEach((item, index) => {
