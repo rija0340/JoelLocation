@@ -17,6 +17,7 @@ use App\Repository\ReservationRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class DevisController extends AbstractController
@@ -332,5 +333,20 @@ class DevisController extends AbstractController
         $duree = date_diff($dateDepart, $dateRetour);
 
         return $duree->days;
+    }
+  
+    /**
+     * @Route("devispdf/{id}", name="devis_pdf", methods={"GET"})
+     */  
+    public function pdfdevis(Knp\Snappy\Pdf $knpSnappyPdf, Devis $devis)
+    {
+        $html = $this->renderView('pdfdevis.html.twig', [
+            'devis'  => $devis
+        ]);
+
+        return new PdfResponse(
+            $knpSnappyPdf->getOutputFromHtml($html),
+            'file.pdf'
+        );
     }
 }
