@@ -206,8 +206,20 @@ class ReservationRepository extends ServiceEntityRepository
     }
 
 
-
-
+    /**
+     * @return Reservation[] Returns an array of Reservation objects
+     */
+    public function findPlanningJournaliers($date)
+    {
+        $date = $date->format('Y-m-d');
+        return $this->createQueryBuilder('r')
+            ->where("DATE_FORMAT(r.date_debut,'%Y-%m-%d') = :date AND r.code_reservation != :code ")
+            ->orWhere("DATE_FORMAT(r.date_fin,'%Y-%m-%d') = :date AND r.code_reservation != :code")
+            ->setParameter('date', $date)
+            ->setParameter('code', 'stopSale')
+            ->getQuery()
+            ->getResult();
+    }
 
 
     // /**

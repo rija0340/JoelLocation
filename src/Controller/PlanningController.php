@@ -134,10 +134,11 @@ class PlanningController extends AbstractController
     public function planningJournalierData(Request $request, ReservationRepository $reservationRepo)
     {
         $date = $request->query->get('date');
-        // dump();
-        // die();
+
+        //creation d'une date valide en php à partir d'une date de javascript.
+
         $dateStarted = \DateTime::createFromFormat('D M d Y H:i:s e+', $date);
-        $reservations = $reservationRepo->findReservationIncludeDate($dateStarted);
+        $reservations = $reservationRepo->findPlanningJournaliers($dateStarted);
 
         $datas = array();
         foreach ($reservations as $key => $reservation) {

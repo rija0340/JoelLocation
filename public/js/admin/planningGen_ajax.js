@@ -65,7 +65,7 @@ function ganttInit(startDateScale, endDateScale) {
             label: "RESSOURCES",
             tree: false,
             width: 175,
-            resize: true,
+            resize: false,
 
         }
     ];
@@ -79,7 +79,12 @@ function ganttInit(startDateScale, endDateScale) {
     ];
     // test sur les bares de taches 
     gantt.templates.task_text = function (start, end, task) {
-        return task.client + " " + task.start_date_formated + " - " + task.end_date_formated;
+        if (task.client != undefined) {
+
+            return task.client + " " + task.start_date_formated + " - " + task.end_date_formated;
+        } else {
+            return " ";
+        }
     };
 
     //date de début et fin de l'affichage tasks

@@ -78,7 +78,6 @@ function retrieveDataAjax() {
         Type: "json",
         data: { 'date': new Date(dateInputValue) },
         success: function (data) {
-
             // sortData(data);
             LoadCurrentReport(data);
         },

@@ -20,13 +20,29 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class AdminController extends AbstractController
 {
+
+  private $reservationRepo;
+
+
+
+  public function __construct(ReservationRepository $reservationRepo)
+  {
+
+    $this->reservationRepo = $reservationRepo;
+  }
   /**
    * @Route("/", name="admin_index", methods={"GET"})
    */
   public function index(): Response
   {
+    $reservations = $this->reservationRepo->findBy(array(), array('id' => 'DESC'), 3);
+    $stopSales = $this->reservationRepo->findStopSales();
 
-    return $this->render('admin/index.html.twig');
+
+    return $this->render('admin/index.html.twig', [
+      'reservations' => $reservations,
+      'stopSales' => $stopSales
+    ]);
   }
 
   /**

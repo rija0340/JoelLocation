@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20210629080407 extends AbstractMigration
+final class Version20210709065744 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -20,12 +20,16 @@ final class Version20210629080407 extends AbstractMigration
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE user ADD recupass VARCHAR(255) DEFAULT NULL');
+        $this->addSql('ALTER TABLE avis DROP FOREIGN KEY FK_8F91ABF0B83297E7');
+        $this->addSql('DROP INDEX IDX_8F91ABF0B83297E7 ON avis');
+        $this->addSql('ALTER TABLE avis DROP reservation_id');
     }
 
     public function down(Schema $schema) : void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE user DROP recupass');
+        $this->addSql('ALTER TABLE avis ADD reservation_id INT NOT NULL');
+        $this->addSql('ALTER TABLE avis ADD CONSTRAINT FK_8F91ABF0B83297E7 FOREIGN KEY (reservation_id) REFERENCES reservation (id)');
+        $this->addSql('CREATE INDEX IDX_8F91ABF0B83297E7 ON avis (reservation_id)');
     }
 }

@@ -3,6 +3,12 @@
 
 {% block title %}Backoffice
 {% endblock %}
+{% block stylesheets %}
+
+	<link href="../../css/admin/owl.carousel.css" rel="stylesheet">
+	<link href="../../css/admin/accueil.css" rel="stylesheet">
+
+{% endblock %}
 {% block current_page %}
 	<h2>
 		<i class="fa fa-dashboard (alias)"></i>
@@ -84,65 +90,138 @@
 					</div>
 					<div class="row">
 						<div class="col-md-12">
-							<div class="panel panel-body">
-
-								<div class="row">
-									<div class="col-md-2 col-sm-3">
-										<span class="chart" data-percent="86">
-											<span class="percent"></span>
-										</span>
-										<div class="text-center">Octobre
-											<br>
-											2020
+							<div
+								class="panel panel-body">
+								{# debut caroussel #}
+								<div class="testimonial-area pb-100">
+									<div class="container">
+										<div class="row">
+											<div class="col-lg-12 col-md-12">
+												<div class="testimonial-carousel">
+													<div class="single-testimonial">
+														<div class="row pt-4 mr-4">
+															<div class="col-md-2 col-sm-3">
+																<span class="chart" data-percent="86">
+																	<span class="percent"></span>
+																</span>
+																<div class="text-center">Janvier
+																	<br>
+																	2020
+																</div>
+															</div>
+															<div class="col-md-2 col-sm-3">
+																<span class="chart" data-percent="73">
+																	<span class="percent"></span>
+																</span>
+																<div class="text-center">Février
+																	<br>
+																	2020
+																</div>
+															</div>
+															<div class="col-md-2 col-sm-3">
+																<span class="chart" data-percent="60">
+																	<span class="percent"></span>
+																</span>
+																<div class="text-center">Mars
+																	<br>
+																	2020
+																</div>
+															</div>
+															<div class="col-md-2 col-sm-3">
+																<span class="chart" data-percent="50">
+																	<span class="percent"></span>
+																</span>
+																<div class="text-center">Avril
+																	<br>
+																	2020
+																</div>
+															</div>
+															<div class="col-md-2 col-sm-3">
+																<span class="chart" data-percent="45">
+																	<span class="percent"></span>
+																</span>
+																<div class="text-center">Mai
+																	<br>
+																	2020
+																</div>
+															</div>
+															<div class="col-md-2 col-sm-3">
+																<span class="chart" data-percent="75">
+																	<span class="percent"></span>
+																</span>
+																<div class="text-center">Juin
+																	<br>
+																	2020
+																</div>
+															</div>
+															<div class="clearfix"></div>
+														</div>
+													</div>
+													<div class="single-testimonial">
+														<div class="row pt-4 mr-4">
+															<div class="col-md-2 col-sm-3">
+																<span class="chart" data-percent="86">
+																	<span class="percent"></span>
+																</span>
+																<div class="text-center">Juillet
+																	<br>
+																	2020
+																</div>
+															</div>
+															<div class="col-md-2 col-sm-3">
+																<span class="chart" data-percent="73">
+																	<span class="percent"></span>
+																</span>
+																<div class="text-center">Aôut
+																	<br>
+																	2020
+																</div>
+															</div>
+															<div class="col-md-2 col-sm-3">
+																<span class="chart" data-percent="60">
+																	<span class="percent"></span>
+																</span>
+																<div class="text-center">Septembre
+																	<br>
+																	2020
+																</div>
+															</div>
+															<div class="col-md-2 col-sm-3">
+																<span class="chart" data-percent="50">
+																	<span class="percent"></span>
+																</span>
+																<div class="text-center">Octobre
+																	<br>
+																	2020
+																</div>
+															</div>
+															<div class="col-md-2 col-sm-3">
+																<span class="chart" data-percent="45">
+																	<span class="percent"></span>
+																</span>
+																<div class="text-center">Octobre
+																	<br>
+																	2020
+																</div>
+															</div>
+															<div class="col-md-2 col-sm-3">
+																<span class="chart" data-percent="75">
+																	<span class="percent"></span>
+																</span>
+																<div class="text-center">Octobre
+																	<br>
+																	2020
+																</div>
+															</div>
+															<div class="clearfix"></div>
+														</div>
+													</div>
+												</div>
+											</div>
 										</div>
 									</div>
-									<div class="col-md-2 col-sm-3">
-										<span class="chart" data-percent="73">
-											<span class="percent"></span>
-										</span>
-										<div class="text-center">Octobre
-											<br>
-											2020
-										</div>
-									</div>
-									<div class="col-md-2 col-sm-3">
-										<span class="chart" data-percent="60">
-											<span class="percent"></span>
-										</span>
-										<div class="text-center">Octobre
-											<br>
-											2020
-										</div>
-									</div>
-									<div class="col-md-2 col-sm-3">
-										<span class="chart" data-percent="50">
-											<span class="percent"></span>
-										</span>
-										<div class="text-center">Octobre
-											<br>
-											2020
-										</div>
-									</div>
-									<div class="col-md-2 col-sm-3">
-										<span class="chart" data-percent="45">
-											<span class="percent"></span>
-										</span>
-										<div class="text-center">Octobre
-											<br>
-											2020
-										</div>
-									</div>
-									<div class="col-md-2 col-sm-3">
-										<span class="chart" data-percent="75">
-											<span class="percent"></span>
-										</span>
-										<div class="text-center">Octobre
-											<br>
-											2020
-										</div>
-									</div>
-									<div class="clearfix"></div>
 								</div>
+								{# fin caroussel  #}
 
 							</div>
 						</div>
@@ -221,9 +300,9 @@
 						</div>
 						<div class="col-md-1 d-flex align-items-center ">
 							<div class=" ">
-								<button class="btn btn-gray2">
+								<a class="btn btn-gray2" href="{{path('reservation_index')}}">
 									<i class="fa fa-list"></i>
-								</button>
+								</a>
 							</div>
 						</div>
 					</div>
@@ -240,27 +319,20 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<th scope="row">1</th>
-								<td>Mark</td>
-								<td>Otto</td>
-								<td>@mdo</td>
-								<td>@mdo</td>
-							</tr>
-							<tr>
-								<th scope="row">2</th>
-								<td>Jacob</td>
-								<td>Thornton</td>
-								<td>@fat</td>
-								<td>@fat</td>
-							</tr>
-							<tr>
-								<th scope="row">3</th>
-								<td>Larry</td>
-								<td>the Bird</td>
-								<td>@twitter</td>
-								<td>@twitter</td>
-							</tr>
+							{% for reservation in reservations %}
+
+								<tr>
+									<th scope="row">{{reservation.dateReservation |date('d/m/Y - H:i')}}</th>
+									<td>réference</td>
+									<td>{{reservation.client.nom}}</td>
+									<td>{{reservation.prix}}
+										€</td>
+									<td>
+										<a class="btn btn-dark text-white" href="{{ path('reservation_show', {'id': reservation.id} ) }}">Voir</a>
+									</td>
+								</tr>
+							{% endfor %}
+
 						</tbody>
 					</table>
 				</div>
@@ -283,9 +355,9 @@
 									devis transformés</h2>
 							</div>
 							<div class="col-auto ml-auto pr-0">
-								<button class="btn btn-gray2 mb-0 mr-0 text-white">
+								<a class="btn btn-gray2 mb-0 mr-0 text-white" href="{{path('reservation_index')}}">
 									<i class="fa fa-list"></i>
-								</button>
+								</a>
 							</div>
 							<div class="clearfix"></div>
 						</div>
@@ -312,21 +384,17 @@
 					<table class="table">
 
 						<tbody>
-							<tr>
-								<td>FH819AF</td>
-								<td>02/10/2020</td>
-								<td>du 08/10/2020 au 31/12/2030</td>
-							</tr>
-							<tr>
-								<td>FH819AF</td>
-								<td>02/10/2020</td>
-								<td>du 08/10/2020 au 31/12/2030</td>
-							</tr>
-							<tr>
-								<td>FH819AF</td>
-								<td>02/10/2020</td>
-								<td>du 08/10/2020 au 31/12/2030</td>
-							</tr>
+							{% for stop in stopSales %}
+								<tr>
+									<td>{{stop.vehicule.immatriculation}}</td>
+									<td>{{stop.dateReservation | date('d/m/Y')}}</td>
+									<td>du
+										{{stop.dateDebut | date('d/m/Y')}}
+										au
+										{{stop.dateFin | date('d/m/Y')}}</td>
+								</tr>
+							{% endfor %}
+
 						</tbody>
 					</table>
 				</div>
@@ -337,7 +405,7 @@
 				</div>
 				<div class="x_content">
 
-					<div class="alertalert-danger alert-dismissible " role="alert">
+					<div class="alert alert-danger alert-dismissible " role="alert">
 						<i class="fa fa-info mr-1"></i>
 						Liste dynamique des derniers avis provenant des enquêtes de satisfaction envoyées par mail à vos clients 48 heures après la fin de leur période de location
 					</div>
@@ -361,7 +429,7 @@
 									<button class="btn btn-danger">
 										<i class="fa fa-info"></i>
 									</button>
-									<button class="btn btn-gray2">
+									<button class="btn btn-gray2" type="button" data-toggle="modal" data-target=".bs-example-modal-lg">
 										<i class="fa fa-newspaper-o"></i>
 									</button>
 								</td>
@@ -413,6 +481,102 @@
 				</div>
 			</div>
 		</div>
+
+		<!-- Large modal -->
+		{# <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Large modal</button> #}
+
+		<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+
+					<div class="modal-header">
+						<h5 class="modal-title" id="myModalLabel">Détails avis client réservation : FH819AF21236549871</h5>
+						<button type="button" class="close" data-dismiss="modal">
+							<span aria-hidden="true">×</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-4">
+								<div class="row">
+									<div class="col-auto">
+										<p>Global</p>
+									</div>
+									<div class="col-auto">
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star"></i>
+
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star"></i>
+
+										<i class="fa fa-star"></i>
+									</div>
+
+								</div>
+
+							</div>
+							<div class="col-md-4">
+								<div class="row">
+									<div class="col-auto">
+										<p>Ponctualité</p>
+									</div>
+									<div class="col-auto">
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star"></i>
+
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star"></i>
+
+										<i class="fa fa-star"></i>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="row">
+									<div class="col-auto">
+										<p>Accueil</p>
+									</div>
+									<div class="col-auto">
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star"></i>
+
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star"></i>
+
+										<i class="fa fa-star"></i>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="row">
+									<div class="col-auto">
+										<p>Service:
+										</p>
+									</div>
+									<div class="col-auto">
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star"></i>
+
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star"></i>
+
+										<i class="fa fa-star"></i>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">
+							<i class="fa fa-close"></i>
+							Fermer</button>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		{# fin modal #}
+
 	</div>
 {% endblock %}
 {% block javascripts %}
@@ -431,7 +595,7 @@ lineCap: 'square',
 lineWidth: 15,
 // percent: 75,
 trackWidth: undefined,
-size: 110,
+size: 100,
 rotate: 0,
 animate: {
 duration: 1000,
@@ -443,4 +607,6 @@ $(this.el).find('.percent').text(Math.round(percent));
 });
 });
 	</script>
+	<script src="../../js/admin/owl.carousel.min.js"></script>
+	<script src="../../js/admin/accueil.js"></script>
 {% endblock %}

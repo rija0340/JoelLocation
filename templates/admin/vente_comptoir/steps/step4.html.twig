@@ -65,6 +65,12 @@
 		</div>
 	</div>
 	<div class="col-md-9">
+		<div class="alert alert-success alert-dismissible fade show hide" role="alert" id="alertCreatedClient">
+			<strong>Le client a été enregistré avec succés !</strong>
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close" id="btnCloseAlert">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
 		<div class="x_title">
 			<h2 class="font-weight-bold">
 				<i class="fa fa-search"></i>
@@ -74,14 +80,14 @@
 		</div>
 		<div class="x_content">
 			<div class="form-group">
-				{# <label for="formGroupExampleInput">Example label</label> #}
-				{# <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Nom ou email du client"><select name="select" id="selectClient" class="form-control"> </select> #}
-					<form autocomplete="off"> <div class="autocomplete">
+				<form autocomplete="off">
+					<div class="autocomplete">
 						<input id="selectClient" type="text" name="myCountry" placeholder="Nom ou email du client" class="form-control">
 					</div>
 				</form>
 			</div>
 		</div>
+
 		<div id="formCreateClient">
 			<div class="x_title">
 				<h2 class="font-weight-bold">
@@ -92,6 +98,7 @@
 				<div class="clearfix"></div>
 			</div>
 			<div class="x_content">
+
 				<form name="createClient" class="needs-validation">
 					<div class="row">
 						<div class="col-md-6">

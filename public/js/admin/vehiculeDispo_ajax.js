@@ -101,6 +101,11 @@ function LoadDataDatatable(data) {
     if (!$.fn.DataTable.isDataTable('#vehiculeDispoDatatable')) {
         table.DataTable({
             "data": data,
+            dom: 'Blfrtip',
+            buttons: [
+                'csv', 'excel', 'pdf'
+            ],
+            "data": data,
             "columns": [
                 { "data": "immatriculation" },
                 { "data": "modele" },
@@ -290,6 +295,10 @@ function LoadDataDatatable(data) {
         table.dataTable().fnDestroy();
         table.DataTable({
             "data": data,
+            dom: 'Blfrtip',
+            buttons: [
+                'csv', 'excel', 'pdf'
+            ],
             "columns": [
                 { "data": "immatriculation" },
                 { "data": "modele" },

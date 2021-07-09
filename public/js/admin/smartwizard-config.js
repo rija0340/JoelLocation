@@ -93,6 +93,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
     var listeClients = [];
     var listeClientsOriginal = [];
     var btnCreateClient;
+    var alertCreatedClient;
 
     var listeOptions;
     var listeGaranties;
@@ -294,6 +295,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
         prenomClientElem = document.querySelector('input[id="prenom"]');
         emailClientElem = document.querySelector('input[id="email"]');
         telephoneClientElem = document.querySelector('input[id="telephone"]');
+        alertCreatedClient = document.getElementById('alertCreatedClient');
 
     }
     function addEvent() {
@@ -470,6 +472,18 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
                             nomPrenomEmail: data[i].prenom + ' ' + data[i].nom + ' (' + data[i].email + ')'
                         });
                     }
+
+                    if (alertCreatedClient.classList.contains('hide')) {
+
+                        alertCreatedClient.classList.replace('hide', 'noHide');
+                    }
+                    else {
+
+                        alertCreatedClient.classList.replace('noHide', 'hide');
+                    }
+
+                    setTimeout(closeAlert, 5000);
+
                     console.log('ity le izy ');
                     console.log(listeClientsOriginal);
                     $('#smartwizard').smartWizard("loader", "hide");
@@ -977,5 +991,9 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
     function calculPrixTotal() {
         var total = tarifApplique + siege.prix + garantie.prix;
         return total;
+    }
+
+    function closeAlert() {
+        $('#btnCloseAlert').trigger('click');
     }
 });

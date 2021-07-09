@@ -17,11 +17,7 @@ class Avis
      */
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Reservation::class, inversedBy="avis")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $reservation;
+
 
     /**
      * @ORM\Column(type="integer")
@@ -58,17 +54,6 @@ class Avis
         return $this->id;
     }
 
-    public function getReservation(): ?Reservation
-    {
-        return $this->reservation;
-    }
-
-    public function setReservation(?Reservation $reservation): self
-    {
-        $this->reservation = $reservation;
-
-        return $this;
-    }
 
     public function getGlobal(): ?int
     {
@@ -143,9 +128,9 @@ class Avis
     }
 
     /**
-    * toString
-    * @return string
-    */
+     * toString
+     * @return string
+     */
     public function __toString()
     {
         return $this->getCommentaire();

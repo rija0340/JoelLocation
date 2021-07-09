@@ -107,6 +107,7 @@ function genererDevisPDF() {
     doc.text(70, 80, dureeValue);
     doc.text(20, 90, 'Tarif appliquée : ');
     doc.text(70, 90, tarifValue);
+    doc.table(70, 90, [{ 'table': 'test', 'val2': 'test' }]);
     // doc.text(20, 100, 'Marque : ');
     // doc.text(70, 100, detailsVehicule.marque);
     // doc.text(20, 110, 'Modèle : ');
@@ -171,4 +172,3 @@ function getListeVehicules() {
 }
 
 
-}

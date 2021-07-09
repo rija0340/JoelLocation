@@ -3,6 +3,7 @@
 $(document).ready(function () {
     $("#datatable").dataTable().fnDestroy();
     $('#datatable').dataTable({
+
         "language": {
             "emptyTable": "Aucune donnée disponible dans le tableau",
             "lengthMenu": "Afficher _MENU_ éléments",
