@@ -10,22 +10,7 @@
 
 {% endblock %}
 
-{% block stylesheets %}
-	{# <!-- bootstrap-wysiwyg -->
-																													<link
-																													href="../../admin/vendors/google-code-prettify/bin/prettify.min.css" rel="stylesheet">
-																													<!-- Select2 -->
-																													<link
-																													href="../../admin/vendors/select2/dist/css/select2.min.css" rel="stylesheet">
-																													<!-- Switchery -->
-																													<link
-																													href="../../admin/vendors/switchery/dist/switchery.min.css" rel="stylesheet">
-																													<!-- starrr -->
-																													<link
-																													href="../../admin/vendors/starrr/dist/starrr.css" rel="stylesheet">
-																													<!-- bootstrap-daterangepicker -->
-																													<link href="../../admin/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet"> #}
-{% endblock  %}
+{% block stylesheets %}{% endblock  %}
 
 {% block content %}
 	<div class="x_panel">
@@ -54,21 +39,27 @@
 				</div>
 			</form>
 		</div>
-	</div>
-	<div class="x_panel hide" id="resultRechSimple">
-		<table class="table">
-			<thead class="thead-dark">
-				<tr>
-					<th scope="col">Date Depart</th>
-					<th scope="col">Date retour</th>
-					<th scope="col">Date reservation</th>
-					<th scope="col">Agence départ</th>
-					<th scope="col">Agence retour</th>
-				</tr>
-			</thead>
-			<tbody id="tbody"></tbody>
-		</table>
+		<div class=" hide" id="resultRechSimple">
+			<table class="table">
+				<thead class="thead-dark">
+					<tr>
+						<th scope="col" class="text-uppercase">paiement</th>
+						<th scope="col" class="text-uppercase text-nowrap">date création</th>
+						<th scope="col" class="text-uppercase">client</th>
+						<th scope="col" class="text-uppercase">réservation / véhicule</th>
+						<th scope="col" class="text-uppercase">dates / durée</th>
+						<th scope="col" class="text-uppercase">prix</th>
+						<th scope="col" class="text-uppercase">action</th>
+					</tr>
+				</thead>
+				<tbody id="tbodyRechSimple"></tbody>
+			</table>
 
+		</div>
+		<div class="hide" id="RS_aucun">
+			<i class="fa fa-warning">
+				Aucun résultat trouvé</i>
+		</div>
 	</div>
 	<div class="x_panel">
 		<div class="x_title">
@@ -85,37 +76,50 @@
 				<div class="col-md-4">
 					<div class="form-group ">
 						<div class="">
-							<select class="form-control">
+							<select class="form-control" id="RIM_selectVehicule">
 								<option>Sélectionnez une immatriculation</option>
-								<option>Option one</option>
-								<option>Option two</option>
-								<option>Option three</option>
-								<option>Option four</option>
+
+								{% for vehicule in vehicules %}
+									<option value={{vehicule.id}}>{{vehicule}}</option>
+								{% endfor %}
 							</select>
 						</div>
 					</div>
 				</div>
 				<div class="col-md-3">
 					<div class="item form-group">
-
 						<div class=" ">
-							<input id="birthday" class="date-picker form-control" placeholder="dd-mm-yyyy" type="text" required="required" type="text" onfocus="this.type='date'" onmouseover="this.type='date'" onclick="this.type='date'" onblur="this.type='text'" onmouseout="timeFunctionLong(this)">
-							<script>
-								function timeFunctionLong(input) {
-setTimeout(function () {
-input.type = 'text';
-}, 60000);
-}
-							</script>
+							<input id="RIM_date" type="date" class="form-control">
 						</div>
 					</div>
 				</div>
 				<div class="col-md-2">
-					<button class="btn btn-danger" type="button">
+					<button class="btn btn-danger" type="button" id="RIM_btnChercher">
 						<i class="fa fa-search"></i>
 						Chercher</button>
 				</div>
 			</div>
+		</div>
+		<div class=" hide" id="RIM_resultRech">
+			<table class="table">
+				<thead class="thead-dark">
+					<tr>
+						<th scope="col" class="text-uppercase">paiement</th>
+						<th scope="col" class="text-uppercase text-nowrap">date création</th>
+						<th scope="col" class="text-uppercase">client</th>
+						<th scope="col" class="text-uppercase">réservation / véhicule</th>
+						<th scope="col" class="text-uppercase">dates / durée</th>
+						<th scope="col" class="text-uppercase">prix</th>
+						<th scope="col" class="text-uppercase">action</th>
+					</tr>
+				</thead>
+				<tbody id="RIM_tbodyRech"></tbody>
+			</table>
+
+		</div>
+		<div class="hide" id="RIM_aucun">
+			<i class="fa fa-warning">
+				Aucun résultat trouvé</i>
 		</div>
 	</div>
 	<div class="x_panel">

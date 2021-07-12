@@ -99,12 +99,12 @@ function LoadDataDatatable(data) {
     var table = $("#vehiculeDispoDatatable");
 
     if (!$.fn.DataTable.isDataTable('#vehiculeDispoDatatable')) {
-        table.DataTable({
+        vehDispoDataTable = table.DataTable({
             "data": data,
-            dom: 'Blfrtip',
-            buttons: [
-                'csv', 'excel', 'pdf'
-            ],
+            // dom: 'Blfrtip',
+            // buttons: [
+            //     'csv', 'excel', 'pdf'
+            // ],
             "data": data,
             "columns": [
                 { "data": "immatriculation" },
@@ -290,15 +290,61 @@ function LoadDataDatatable(data) {
                 }
             }
         });
+
+        new $.fn.dataTable.Buttons(vehDispoDataTable, {
+            buttons: [
+
+                {
+                    extend: 'csv',
+                    text: '<i class="fa fa-files-o"></i> CSV',
+                    titleAttr: 'CSV',
+                    className: 'btn btn-dark btn-sm',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'excel',
+                    text: '<i class="fa fa-files-o"></i> Excel',
+                    titleAttr: 'Excel',
+                    className: 'btn btn-success btn-sm',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    text: '<i class="fa fa-file-pdf-o"></i> PDF',
+                    titleAttr: 'PDF',
+                    className: 'btn btn-danger btn-sm',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="fa fa-print"></i> Print',
+                    titleAttr: 'Print',
+                    className: 'btn btn-primary btn-sm',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+            ]
+        });
+        if (data.length != 0) {
+
+            vehDispoDataTable.buttons().container().appendTo('#test');
+        }
     } else {
         // table.dataTable().fnClearTable();
         table.dataTable().fnDestroy();
-        table.DataTable({
+        vehDispoDataTable = table.DataTable({
             "data": data,
-            dom: 'Blfrtip',
-            buttons: [
-                'csv', 'excel', 'pdf'
-            ],
+            // dom: 'Blfrtip',
+            // buttons: [
+            //     'csv', 'excel', 'pdf'
+            // ],
             "columns": [
                 { "data": "immatriculation" },
                 { "data": "modele" },
@@ -483,6 +529,51 @@ function LoadDataDatatable(data) {
                 }
             }
         });
+        new $.fn.dataTable.Buttons(vehDispoDataTable, {
+            buttons: [
+
+                {
+                    extend: 'csv',
+                    text: '<i class="fa fa-files-o"></i> CSV',
+                    titleAttr: 'CSV',
+                    className: 'btn btn-dark btn-sm',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'excel',
+                    text: '<i class="fa fa-files-o"></i> Excel',
+                    titleAttr: 'Excel',
+                    className: 'btn btn-success btn-sm',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    text: '<i class="fa fa-file-pdf-o"></i> PDF',
+                    titleAttr: 'PDF',
+                    className: 'btn btn-danger btn-sm',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="fa fa-print"></i> Print',
+                    titleAttr: 'Print',
+                    className: 'btn btn-primary btn-sm',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+            ]
+        });
+        if (data.length != 0) {
+
+            vehDispoDataTable.buttons().container().appendTo('#test');
+        }
     }
     // table.destroy();
 

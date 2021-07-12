@@ -221,6 +221,21 @@ class ReservationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * @return Reservation[] Returns an array of Reservation objects
+     */
+    public function findRechercheIM($vehicule, $date)
+    {
+        return $this->createQueryBuilder('r')
+            ->where(' r.date_fin > :date AND r.date_debut < :date')
+            ->andWhere("r.vehicule = :vehicule")
+            ->setParameter('date', $date)
+            ->setParameter('vehicule', $vehicule)
+            ->getQuery()
+            ->getResult();
+    }
+
+
 
     // /**
     //  * @return Reservation[] Returns an array of Reservation objects

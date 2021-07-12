@@ -292,7 +292,7 @@ class Vehicule
      */
     public function __toString()
     {
-        return $this->getMarque() . " " . $this->getModele() . " " . $this->getImmatriculation();
+        return $this->getMarque()->getLibelle() . " " . $this->getModele() . " " . $this->getImmatriculation();
     }
 
     public function getDetails(): ?string

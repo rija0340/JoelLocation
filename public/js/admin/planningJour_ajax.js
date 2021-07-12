@@ -108,6 +108,7 @@ function retrieveDataAjax() {
 
 function LoadCurrentReport(data) {
 
+    console.log(data.length);
     var data = data;
     dateSpanElem.innerText = new Date(dateInputValue).toLocaleDateString('fr-FR');
     addDateToHtml(dateInputValue);
@@ -118,7 +119,7 @@ function LoadCurrentReport(data) {
     var table = $("#tblPlanningJournalier");
 
     if (!$.fn.DataTable.isDataTable('#tblPlanningJournalier')) {
-        table.DataTable({
+        planJourDT = table.DataTable({
             "data": data,
             "columns": [
                 { "data": "identification" },
@@ -303,10 +304,37 @@ function LoadCurrentReport(data) {
                 }
             }
         });
+        new $.fn.dataTable.Buttons(planJourDT, {
+            buttons: [
+                {
+                    extend: 'pdf',
+                    text: '<i class="fa fa-file-pdf-o"></i> PDF',
+                    titleAttr: 'PDF',
+                    className: 'btn btn-danger p-2',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'excel',
+                    text: '<i class="fa fa-files-o"></i> Excel',
+                    titleAttr: 'Excel',
+                    className: 'btn btn-dark btn-sm',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+
+            ]
+        });
+        if (data.length != 0) {
+
+            planJourDT.buttons().container().appendTo('#btnExport');
+        }
     } else {
         // table.dataTable().fnClearTable();
         table.dataTable().fnDestroy();
-        table.DataTable({
+        planJourDT = table.DataTable({
             "data": data,
             "columns": [
                 { "data": "identification" },
@@ -491,6 +519,33 @@ function LoadCurrentReport(data) {
                 }
             }
         });
+        new $.fn.dataTable.Buttons(planJourDT, {
+            buttons: [
+                {
+                    extend: 'pdf',
+                    text: '<i class="fa fa-file-pdf-o"></i> PDF',
+                    titleAttr: 'PDF',
+                    className: 'btn btn-danger btn-sm',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'excel',
+                    text: '<i class="fa fa-files-o"></i> Excel',
+                    titleAttr: 'Excel',
+                    className: 'btn btn-dark btn-sm',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+
+            ]
+        });
+        if (data.length != 0) {
+
+            planJourDT.buttons().container().appendTo('#btnExport');
+        }
     }
     // table.destroy();
 
