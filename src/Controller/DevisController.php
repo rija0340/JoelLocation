@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Knp\Snappy\Pdf;
 use App\Entity\Devis;
 use App\Form\DevisType;
 use App\Entity\Reservation;
@@ -338,10 +339,16 @@ class DevisController extends AbstractController
     /**
      * @Route("devispdf/{id}", name="devis_pdf", methods={"GET"})
      */  
-    public function pdfdevis(Knp\Snappy\Pdf $knpSnappyPdf, Devis $devis)
+    public function pdfdevis(Knp\Snappy\Pdf $knpSnappyPdf, Devis $devis, UserRepository $userRepository, VehiculeRepository $vehiculeRepository)
     {
+        $client = $this->userRepository->findOneBy(['client' => $devis->getClient()]);
+        $vehicule = $this->vehiculeRepository->findOneBy(['vehicule' => $devis->getVehicule()]);
+        $quantite = $devis->getDateDepart()->diff($devis->getDateRetour());
         $html = $this->renderView('pdfdevis.html.twig', [
-            'devis'  => $devis
+            'devis'  => $devis,
+            'client' => $client,
+            'vehicule' => $vehicule,
+            'quantite' => $quantite,
         ]);
 
         return new PdfResponse(
