@@ -380,7 +380,7 @@ class DevisController extends AbstractController
 
         // Output the generated PDF to Browser (force download)
         $dompdf->stream("devis.pdf", [
-            "Attachment" => true
+            "Attachment" => true,
         ]);
     }
 }
