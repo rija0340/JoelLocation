@@ -27,10 +27,10 @@
                     Date d'échéance  : 07-07-2021
                 </td>
                 <td>               
-                    <strong>M. Housni Mohammed</strong><br>
-                    27 Boulevard Voltaire<br>
-                    75011 Paris<br>
-                    France<br>
+                    <strong>{{ devis.client }}</strong><br>
+                    {# {{ client.adresse }} #}<br>
+                    {# {{ client.mail }} #}<br>
+                    {# {{ client.telephone }} #}<br>
                 </td>
             </tr>
         </table>
@@ -44,7 +44,7 @@
                 <td>TTC</td>
             </tr>
             <tr>
-                <td></td>
+                <td>{# {{ devis.vehicule }} #}</td>
                 <td></td>
                 <td></td>
                 <td></td>

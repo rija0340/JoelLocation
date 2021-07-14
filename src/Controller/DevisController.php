@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use Knp\Snappy\Pdf;
 use App\Entity\Devis;
 use App\Form\DevisType;
+use App\Entity\User;
+use App\Entity\Vehicule;
 use App\Entity\Reservation;
 use App\Repository\UserRepository;
 use App\Form\DevisEditVehiculeType;
@@ -19,6 +22,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+// Include Dompdf required namespaces
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 class DevisController extends AbstractController
 {
@@ -338,15 +344,43 @@ class DevisController extends AbstractController
     /**
      * @Route("devispdf/{id}", name="devis_pdf", methods={"GET"})
      */  
-    public function pdfdevis(Knp\Snappy\Pdf $knpSnappyPdf, Devis $devis)
+    public function pdfdevis(Pdf $knpSnappyPdf, Devis $devis, UserRepository $userRepository, VehiculeRepository $vehiculeRepository, DevisRepository $devisRepository)
     {
-        $html = $this->renderView('pdfdevis.html.twig', [
-            'devis'  => $devis
+        // Configure Dompdf according to your needs
+        $pdfOptions = new Options();
+        $pdfOptions->set('defaultFont', 'Arial');        
+        // Instantiate Dompdf with our options
+        $dompdf = new Dompdf($pdfOptions);
+        $client = new User();
+        $vehicule = new Vehicule();
+        $client = $devisRepository->findOneBy(['client' => $devis->getClient()]);
+        $user = $userRepository->findOneBy(["id" => $client->getId()]);
+        $vehicule = $devisRepository->findOneBy(['vehicule' => $devis->getVehicule()]);
+        $quantite = $devis->getDateDepart()->diff($devis->getDateRetour());
+        $html = $this->renderView('admin/devis/pdfdevis.html.twig', [
+            'devis'  => $devis,
+            'client' => $user,
+            'vehicule' => $vehicule,
+            'quantite' => $quantite,
         ]);
 
-        return new PdfResponse(
+        /* return new PdfResponse(
             $knpSnappyPdf->getOutputFromHtml($html),
             'file.pdf'
-        );
+        ); */
+        
+        // Load HTML to Dompdf
+        $dompdf->loadHtml($html);
+        
+        // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser (force download)
+        $dompdf->stream("devis.pdf", [
+            "Attachment" => true,
+        ]);
     }
 }
