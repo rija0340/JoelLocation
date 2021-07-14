@@ -63,7 +63,7 @@
 		</div>
 		{# <div class="x_content"></div> #}
 		<div>
-			<button type="button" class="btn btn-outline-dark text-uppercase p-1">
+			<button type="button" class="btn btn-outline-dark text-uppercase p-1" data-toggle="modal" data-target=".bs-example-modal-lg">
 				<i class="fa  fa-car"></i>
 				kilometrage</button>
 
@@ -477,6 +477,51 @@
 			</div>
 		</div>
 	</div>
+
+	<!-- Large modal -->
+	{# <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Large modal</button> #}
+
+	<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+
+				<div class="modal-header">
+					<h5 class="modal-title" id="myModalLabel">
+						<i class="fa fa-car"></i>
+						Saisir le kilométrage du véhicule</h5>
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-6">
+							<div class="form-group">
+								<label for="kmDepart">Kilométrage au départ</label>
+								<input type="text" class="form-control" id="kmDepart">
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="form-group">
+								<label for="kmRetour">Kilométrage au retour</label>
+								<input type="text" class="form-control" id="kmRetour">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-dark" data-dismiss="modal">
+						<i class="fa fa-close"></i>
+						Fermer</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal">
+						<i class="fa fa-check"></i>
+						Valider</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	{# fin modal #}
 {% endblock %}
 {% block javascripts %}
 	<!-- Datatables -->
