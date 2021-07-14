@@ -107,10 +107,10 @@
 						<button type="button" class="btn btn-outline-violet text-uppercase p-1">
 							<i class="fa fa-send (alias)"></i>
 							Générer détail</button>
-						<button type="button" class="btn btn-outline-info text-uppercase p-1">
+						<a type="button" class="btn btn-outline-info text-uppercase p-1" id="btnGenererFacturePDF">
 							<i class="fa fa-send (alias)"></i>
 							générer facture</button>
-						<button type="button" class="btn btn-outline-success text-uppercase p-1">
+						<a type="button" class="btn btn-outline-success text-uppercase p-1">
 							<i class="fa fa-send (alias)"></i>
 							Envoyer facture</button>
 						<a type="button" class="btn btn-outline-dark text-uppercase p-1 noHide" id="btnReserver" href="{{path('devis_reserver', {'id': devis.id} ) }}">
@@ -490,5 +490,6 @@
 	<script src="../../admin/vendors/pdfmake/build/pdfmake.min.js"></script>
 	<script src="../../admin/vendors/pdfmake/build/vfs_fonts.js"></script>
 	<script src="../../js/admin/jspdf.min.js"></script>
+	<script src="../../js/admin/jspdf.plugin.autotable.js"></script>
 	<script src="../../js/admin/details_devis.js"></script>
 {% endblock  %}
