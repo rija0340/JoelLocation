@@ -348,6 +348,7 @@ class DevisController extends AbstractController
     {
         // Configure Dompdf according to your needs
         $pdfOptions = new Options();
+        $pdfOptions->setIsRemoteEnabled(true);
         $pdfOptions->set('defaultFont', 'Arial');        
         // Instantiate Dompdf with our options
         $dompdf = new Dompdf($pdfOptions);
@@ -357,11 +358,13 @@ class DevisController extends AbstractController
         $user = $userRepository->findOneBy(["id" => $client->getId()]);
         $vehicule = $devisRepository->findOneBy(['vehicule' => $devis->getVehicule()]);
         $quantite = $devis->getDateDepart()->diff($devis->getDateRetour());
+        $logo = $this->getParameter('logo').'/Joel-Location-new.png';
         $html = $this->renderView('admin/devis/pdfdevis.html.twig', [
             'devis'  => $devis,
             'client' => $user,
             'vehicule' => $vehicule,
             'quantite' => $quantite,
+            'logo' => $logo,
         ]);
 
         /* return new PdfResponse(
@@ -380,7 +383,7 @@ class DevisController extends AbstractController
 
         // Output the generated PDF to Browser (force download)
         $dompdf->stream("devis.pdf", [
-            "Attachment" => true,
+            "Attachment" => true, 
         ]);
     }
 }
