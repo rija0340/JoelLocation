@@ -59,9 +59,6 @@ class Devis
      */
     private $conducteur;
 
-
-
-
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
@@ -86,7 +83,6 @@ class Devis
      * @ORM\ManyToOne(targetEntity=Garantie::class, inversedBy="devis")
      */
     private $garantie;
-
 
     public function getId(): ?int
     {

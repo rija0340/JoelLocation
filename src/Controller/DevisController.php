@@ -71,7 +71,9 @@ class DevisController extends AbstractController
     public function newDevis(Request $request): Response
     {
         $devis = new Devis();
+
         if ($request->isXmlHttpRequest()) {
+
             $idClient =  $request->query->get('idClient');
             $agenceDepart = $request->query->get('agenceDepart');
             $agenceRetour = $request->query->get('agenceRetour');
@@ -82,6 +84,7 @@ class DevisController extends AbstractController
             $conducteur = $request->query->get('conducteur');
             $idSiege = $request->query->get('idSiege');
             $idGarantie = $request->query->get('idGarantie');
+
 
             $siege = $this->optionsRepo->find($idSiege);
             $garantie = $this->garantiesRepo->find($idGarantie);
@@ -340,15 +343,15 @@ class DevisController extends AbstractController
 
         return $duree->days;
     }
-  
+
     /**
      * @Route("devispdf/{id}", name="devis_pdf", methods={"GET"})
-     */  
+     */
     public function pdfdevis(Pdf $knpSnappyPdf, Devis $devis, UserRepository $userRepository, VehiculeRepository $vehiculeRepository, DevisRepository $devisRepository)
     {
         // Configure Dompdf according to your needs
         $pdfOptions = new Options();
-        $pdfOptions->set('defaultFont', 'Arial');        
+        $pdfOptions->set('defaultFont', 'Arial');
         // Instantiate Dompdf with our options
         $dompdf = new Dompdf($pdfOptions);
         $client = new User();
@@ -368,10 +371,10 @@ class DevisController extends AbstractController
             $knpSnappyPdf->getOutputFromHtml($html),
             'file.pdf'
         ); */
-        
+
         // Load HTML to Dompdf
         $dompdf->loadHtml($html);
-        
+
         // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
         $dompdf->setPaper('A4', 'portrait');
 

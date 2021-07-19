@@ -137,6 +137,11 @@ class Reservation
      */
     private $duree;
 
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $numDevis;
+
     public function __construct()
     {
         $this->avis = new ArrayCollection();
@@ -444,6 +449,18 @@ class Reservation
     public function setDuree(?float $duree): self
     {
         $this->duree = $duree;
+
+        return $this;
+    }
+
+    public function getNumDevis(): ?float
+    {
+        return $this->numDevis;
+    }
+
+    public function setNumDevis(?float $numDevis): self
+    {
+        $this->numDevis = $numDevis;
 
         return $this;
     }

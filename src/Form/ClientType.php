@@ -18,7 +18,9 @@ class ClientType extends AbstractType
         $builder
             ->add('username')
             //->add('roles')
-            ->add('password', PasswordType::class)
+            ->add('password', PasswordType::class, [
+                'required' => false,
+            ])
             ->add('nom')
             ->add('prenom')
             ->add('adresse')
