@@ -1,0 +1,84 @@
+{% extends 'baseClient.html.twig' %}
+
+{% block title %}page client
+{% endblock %}
+{% block stylesheets %}
+	<link href="../../css/admin/smart_wizard_all.css" rel="stylesheet">
+	<link href="../../css/admin/details_vehicule.css" rel="stylesheet">
+	<link href="../../css/admin/vente_comptoir.css" rel="stylesheet">
+
+{% endblock %}
+{% block body %}
+	<div
+		class="x_panel ">
+		{# champ caché pour pouvoir recuperé dans smartWizardClient.js #}
+		<div class="hide" id="clientID">
+			{{clientID}}
+		</div>
+		<div class="x_title">
+			<h2 class="">Nouvelle réservation
+			</h2>
+			<div class="clearfix"></div>
+		</div>
+		<div
+			class="x_content">
+			{# smart wizard #}
+			<p class="">Veuillez suivre les différentes étapes de validation</p>
+
+			{# SmartWizard html #}
+			<div id="smartwizard">
+
+				<ul class="nav">
+					<li class="nav-item">
+						<a class="nav-link" href="#step-1">
+							<strong>Etape 1</strong>
+							<br>1. Agences & Dates
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#step-2">
+							<strong>Etape 2</strong>
+							<br>2. Véhicules
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#step-3">
+							<strong>Etape 3</strong>
+							<br>3. Options & Garanties
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link " href="#step-4">
+							<strong>Etape 4</strong>
+							<br>4. Récapitulatif
+						</a>
+					</li>
+				</ul>
+
+				<div class="tab-content">
+					<div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1">
+						{% include "client/steps/step1.html.twig" %}
+					</div>
+					<div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
+						{% include "client/steps/step2.html.twig" %}
+
+					</div>
+					<div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
+						{% include "client/steps/step3.html.twig" %}
+
+					</div>
+					<div id="step-4" class="tab-pane" role="tabpanel" aria-labelledby="step-4">
+						{% include "client/steps/step4.html.twig" %}
+
+					</div>
+				</div>
+			</div>
+		{% endblock %}
+		{% block javascripts %}
+			<!-- jQuery Smart Wizard -->
+			<script src="../../admin/vendors/jQuery-Smart-Wizard/js/jquery.smartWizard.js"></script>
+			<script src="../../js/admin/vente_comptoir.js"></script>
+			<script src="../../js/admin/reservation_new_ajax.js"></script>
+			<script src="../../js/client/smartwizardClient.js"></script>
+
+		{% endblock %}

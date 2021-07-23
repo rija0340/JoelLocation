@@ -68,7 +68,6 @@ function dateInputToTimestamp(date) {
 
 }
 
-
 function retrieveDataAjax() {
     // var d = new Date(dateInputValue);
     // var n = d.toString();
@@ -310,6 +309,7 @@ function LoadCurrentReport(data) {
                     extend: 'pdf',
                     text: '<i class="fa fa-file-pdf-o"></i> PDF',
                     titleAttr: 'PDF',
+                    title: 'Planning du ' + formatDate(dateInputValue),
                     className: 'btn btn-danger p-2',
                     exportOptions: {
                         columns: ':visible'
@@ -319,7 +319,8 @@ function LoadCurrentReport(data) {
                     extend: 'excel',
                     text: '<i class="fa fa-files-o"></i> Excel',
                     titleAttr: 'Excel',
-                    className: 'btn btn-dark btn-sm',
+                    title: 'Planning du ' + formatDate(dateInputValue),
+                    className: 'btn btn-dark p-2',
                     exportOptions: {
                         columns: ':visible'
                     }
@@ -525,7 +526,8 @@ function LoadCurrentReport(data) {
                     extend: 'pdf',
                     text: '<i class="fa fa-file-pdf-o"></i> PDF',
                     titleAttr: 'PDF',
-                    className: 'btn btn-danger btn-sm',
+                    title: 'Planning du ' + formatDate(dateInputValue),
+                    className: 'btn btn-danger p-2',
                     exportOptions: {
                         columns: ':visible'
                     }
@@ -534,7 +536,8 @@ function LoadCurrentReport(data) {
                     extend: 'excel',
                     text: '<i class="fa fa-files-o"></i> Excel',
                     titleAttr: 'Excel',
-                    className: 'btn btn-dark btn-sm',
+                    title: 'Planning du ' + formatDate(dateInputValue),
+                    className: 'btn btn-dark p-2',
                     exportOptions: {
                         columns: ':visible'
                     }
@@ -551,7 +554,7 @@ function LoadCurrentReport(data) {
 
 }
 
-function addDateToHtml(date) {
+function formatDate(date) {
 
     var date = new Date(date)
     var day = date.getDate();
@@ -600,12 +603,15 @@ function addDateToHtml(date) {
     }
 
     if (day < 10) {
-        dateSpanElem.innerText = "0" + day + " " + month + " " + year;
+        return "0" + day + " " + month + " " + year;
     } else {
-        dateSpanElem.innerText = day + " " + month + " " + year;
+        return day + " " + month + " " + year;
     }
 
+}
 
+function addDateToHtml(date) {
+    dateSpanElem.innerText = formatDate(date);
 
 }
 

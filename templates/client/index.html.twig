@@ -1,0 +1,59 @@
+{% extends 'baseClient.html.twig' %}
+
+{% block title %}page client
+{% endblock %}
+{% block stylesheets %}{% endblock %}
+{% block body %}
+	{{ form_start(formClient) }}
+
+	<div class="row">
+		<div class="form-group col-md-6">
+			<label for="">Nom :</label>
+			{{ form_widget(formClient.nom,{'attr' : { 'readonly' : 'readonly'}  } )}}
+		</div>
+		<div class="form-group col-md-6">
+			<label for="">Prénom :</label>
+			{{ form_widget(formClient.prenom,{'attr' : { 'readonly' : 'readonly'}  } )}}
+
+		</div>
+		<div class="form-group col-md-6">
+			<label for="">Username :</label>
+			{{ form_widget(formClient.username,{'attr' : { 'readonly' : 'readonly'}  } )}}
+		</div>
+		<div class="form-group col-md-6">
+			<label for="">Mot de passe :</label>
+			{{ form_widget(formClient.password,{'attr' : { 'readonly' : 'readonly'}  } )}}
+
+		</div>
+		<div class="form-group col-md-6">
+			<label for="">Adresse email :</label>
+			{{ form_widget(formClient.mail,{'attr' : { 'readonly' : 'readonly'}  } )}}
+
+		</div>
+		<div class="form-group col-md-3">
+			<label for="">Téléphone :</label>
+			{{ form_widget(formClient.telephone,{'attr' : { 'readonly' : 'readonly'}  } )}}
+
+		</div>
+		<div class="form-group col-md-3">
+			<label for="">Portable :</label>
+			{{ form_widget(formClient.portable,{'attr' : { 'readonly' : 'readonly'}  } )}}
+
+		</div>
+
+		<div class="form-group col-md-6">
+			<label for="">Adresse :</label>
+			{{ form_widget(formClient.adresse,{'attr' : { 'readonly' : 'readonly'}  } )}}
+
+		</div>
+	</div>
+
+	{{ form_end(formClient) }}
+	<div class="">
+		<a href="{{ path('client_edit', {'id': id}) }}" class="btn btn-danger ">
+			<i class="fa  fa-edit (alias)"></i>
+			Modifier
+		</a>
+	</div>
+{% endblock %}
+{% block javascripts %}{% endblock %}

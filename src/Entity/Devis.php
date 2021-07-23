@@ -84,6 +84,11 @@ class Devis
      */
     private $garantie;
 
+    /**
+     * @ORM\Column(type="string", length=1000, nullable=true)
+     */
+    private $numero;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -243,5 +248,23 @@ class Devis
         $this->garantie = $garantie;
 
         return $this;
+    }
+
+    public function getNumero(): ?string
+    {
+        return $this->numero;
+    }
+
+    public function setNumero(?string $numero): self
+    {
+        $this->numero = $numero;
+
+        return $this;
+    }
+
+    public function setNumeroDevis($currentID)
+    {
+        $ref  = "DV" . $currentID;
+        $this->setNumero($ref);
     }
 }

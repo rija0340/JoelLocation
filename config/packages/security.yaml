@@ -47,12 +47,13 @@ security:
         - { path: ^/client, roles: ROLE_CLIENT }
         - { path: ^/carte, roles: ROLE_CLIENT }
         - { path: ^/payement, roles: ROLE_CLIENT }
-        - { path: ^/vehicule, roles: ROLE_PERSONNEL }
+        - { path: ^/payement, roles: ROLE_CLIENT }
+        - { path: ^/vehicule, roles: ROLE_USER }
         - { path: ^/reservation, roles: ROLE_USER }
         - { path: ^/paiement, roles: ROLE_PERSONNEL }
         - { path: ^/user, roles: ROLE_ADMIN }
         - { path: ^/agence, roles: ROLE_ADMIN }
-        - { path: ^/message, roles: ROLE_ADMIN }
+        - { path: ^/vehicule-vente-comptoir, roles: ROLE_CLIENT }
         - { path: ^/contact, roles: ROLE_ADMIN }
         - { path: ^/type, roles: ROLE_ADMIN }
         - { path: ^/avis, roles: ROLE_ADMIN }

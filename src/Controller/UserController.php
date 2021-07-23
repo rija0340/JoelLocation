@@ -7,6 +7,7 @@ use App\Form\UserType;
 use App\Form\UserEditType;
 use App\Form\UserClientType;
 use App\Repository\UserRepository;
+use DateTimeZone;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -104,7 +105,7 @@ class UserController extends AbstractController
             $user->setPassword($this->passwordEncoder->encodePassword(
                 $user,
                 $user->getPassword()
-            ));                
+            ));
             $user->setRecupass($user->getPassword());
             $user->setPresence(1);
             $user->setDateInscription(new \DateTime('now'));
@@ -135,7 +136,7 @@ class UserController extends AbstractController
             $user->setPassword($this->passwordEncoder->encodePassword(
                 $user,
                 $user->getPassword()
-            ));                
+            ));
             $user->setRecupass($user->getPassword());
             $user->setPresence(1);
             $user->setDateInscription(new \DateTime('now'));
@@ -178,10 +179,10 @@ class UserController extends AbstractController
             $user->setPassword($this->passwordEncoder->encodePassword(
                 $user,
                 $nom . $telephone
-            ));                
+            ));
             $user->setRecupass($user->getPassword());
             $user->setPresence(1);
-            $user->setDateInscription(new \DateTime('now'));
+            $user->setDateInscription(new \DateTime('NOW', new DateTimeZone('+0300')));
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
@@ -231,9 +232,9 @@ class UserController extends AbstractController
             if($user->getFonction() == "Administrateur"){
                 $user->setRoles(["ROLE_ADMIN"]);
             } */
-            if($user->getPassword() == ''){ 
+            if ($user->getPassword() == '') {
                 $user->setPassword($user->getRecupass());
-            }else{ 
+            } else {
                 $user->setPassword($this->passwordEncoder->encodePassword(
                     $user,
                     $user->getPassword()
@@ -266,5 +267,63 @@ class UserController extends AbstractController
         }
 
         return $this->redirectToRoute('user_index');
+    }
+
+
+    /**
+     * @Route("/{id}", name="employe_delete", methods={"DELETE"})
+     */
+    public function employe_delete(Request $request, User $user): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($user);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('comptes_utilisateurs');
+    }
+
+
+    /**
+     * @Route("/modifier/{id}", name="employe_edit", methods={"GET","POST"})
+     */
+    public function employe_edit(Request $request, User $user): Response
+    {
+        $form = $this->createForm(UserEditType::class, $user);
+        $form->handleRequest($request);
+        $password = $user->getPassword();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user->setRoles([$user->getFonction()]);
+            /* if($user->getFonction() == "Client"){
+                $user->setRoles([$user->getFonction()]);
+            }
+            if($user->getFonction() == "Employé"){
+                $user->setRoles(["ROLE_PERSONNEL"]);
+            }
+            if($user->getFonction() == "Administrateur"){
+                $user->setRoles(["ROLE_ADMIN"]);
+            } */
+            if ($user->getPassword() == '') {
+                $user->setPassword($user->getRecupass());
+            } else {
+                $user->setPassword($this->passwordEncoder->encodePassword(
+                    $user,
+                    $user->getPassword()
+                ));
+                $user->setRecupass($user->getPassword());
+            }
+            /* if($user->getFonction == "Employé"){
+                $user->setRoles("ROLE_SUPER_ADMIN");
+            } */
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('comptes_utilisateurs');
+        }
+
+        return $this->render('admin/user/edit.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
+        ]);
     }
 }

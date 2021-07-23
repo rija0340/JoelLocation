@@ -1,40 +1,38 @@
-{{ form_start(form) }}
+{{ form_start(formEdit) }}
 <div class="row">
 	<div class="form-group col-md-4">
 		<label for="">Véhicule :</label>
-		{{ form_widget(form.vehicule) }}
+		{{ form_widget(formEdit.vehicule) }}
 	</div>
 
-	<div class="form-group col-md-3">
+	<div class="form-group col-md-4">
 		<label for="">Véhicule :</label>
-		<select name="select" id="selectMois" class="form-control"></select>
-		{# {{ form_widget(form.vehicule) }} #}
-
+		{{ form_widget(formEdit.mois) }}
 	</div>
 
 	<div class="form-group col-md-4">
 		<label for="">
 			3 Jours</label>
-		{{ form_widget(form.troisJours) }}
+		{{ form_widget(formEdit.troisJours) }}
 	</div>
 	<div class="form-group col-md-4">
 		<label for="">
 			7 Jours</label>
-		{{ form_widget(form.septJours) }}
+		{{ form_widget(formEdit.septJours) }}
 	</div>
 
 	<div class="form-group col-md-4">
 		<label for="">
 			15 Jours :
 		</label>
-		{{ form_widget(form.quinzeJours) }}
+		{{ form_widget(formEdit.quinzeJours) }}
 	</div>
 
 	<div class="form-group col-md-4">
 		<label for="">
 			30 Jours :
 		</label>
-		{{ form_widget(form.trenteJours) }}
+		{{ form_widget(formEdit.trenteJours) }}
 	</div>
 
 
@@ -43,4 +41,4 @@
 	<i class="fa fa-book" aria-hidden="true"></i>
 	{{ button_label|default('Enregistrer') }}</button>
 
-{{ form_end(form) }}
+{{ form_end(formEdit) }}

@@ -105,6 +105,15 @@ class DevisController extends AbstractController
             $devis->setDuree($duree);
             $devis->setDateCreation(new \DateTime('NOW'));
 
+            // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
+            $lastID = $this->devisRepo->findBy(array(), array('id' => 'DESC'), 1);
+            if ($lastID == null) {
+                $currentID = 1;
+            } else {
+
+                $currentID = $lastID[0]->getId() + 1;
+            }
+            $devis->setNumeroDevis($currentID);
 
             $prix = $this->calculTarif($dateTimeDepart, $dateTimeRetour, $siege, $garantie, $vehicule);
 
@@ -231,6 +240,10 @@ class DevisController extends AbstractController
         $reservation->setPrix($devis->getPrix());
         $reservation->setDateReservation(new \DateTime('NOW'));
         $reservation->setCodeReservation('devisTransformé');
+        // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
+        $lastID = $this->reservationRepo->findBy(array(), array('id' => 'DESC'), 1);
+        $currentID = $lastID[0]->getId() + 1;
+        $reservation->setRefRes("CPTGP", $currentID);
 
         $entityManager = $this->reservController->getDoctrine()->getManager();
         $entityManager->persist($reservation);
@@ -351,12 +364,7 @@ class DevisController extends AbstractController
     {
         // Configure Dompdf according to your needs
         $pdfOptions = new Options();
-<<<<<<< HEAD
         $pdfOptions->set('defaultFont', 'Arial');
-=======
-        $pdfOptions->setIsRemoteEnabled(true);
-        $pdfOptions->set('defaultFont', 'Arial');        
->>>>>>> b553a9c7220721bab9f8b84fda57b237db1f842b
         // Instantiate Dompdf with our options
         $dompdf = new Dompdf($pdfOptions);
         $client = new User();
@@ -365,7 +373,7 @@ class DevisController extends AbstractController
         $user = $userRepository->findOneBy(["id" => $client->getId()]);
         $vehicule = $devisRepository->findOneBy(['vehicule' => $devis->getVehicule()]);
         $quantite = $devis->getDateDepart()->diff($devis->getDateRetour());
-        $logo = $this->getParameter('logo').'/Joel-Location-new.png';
+        $logo = $this->getParameter('logo') . '/Joel-Location-new.png';
         $html = $this->renderView('admin/devis/pdfdevis.html.twig', [
             'devis'  => $devis,
             'client' => $user,
@@ -390,7 +398,7 @@ class DevisController extends AbstractController
 
         // Output the generated PDF to Browser (force download)
         $dompdf->stream("devis.pdf", [
-            "Attachment" => true, 
+            "Attachment" => true,
         ]);
     }
 }

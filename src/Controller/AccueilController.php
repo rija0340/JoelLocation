@@ -152,8 +152,6 @@ class AccueilController extends AbstractController
     }
 
 
-
-
     /**
      * @Route("/foireauxquestion", name="foireauxquestion")
      */
@@ -193,7 +191,7 @@ class AccueilController extends AbstractController
         $user = new User();
         $user = $this->getUser();
         if (in_array("ROLE_CLIENT", $user->getRoles())) {
-            return $this->redirectToRoute('client');
+            return $this->redirectToRoute('client_index');
         }
         if (in_array("ROLE_PERSONNEL", $user->getRoles())) {
             return $this->redirectToRoute('admin_index');

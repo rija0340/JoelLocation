@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>Espace client
+		</title>
+		<link
+		rel="icon" type="image/x-icon" href="../../images/Joel-Location-new.png"/>
+		<!-- Bootstrap -->
+		<link
+		href="{{ asset( 'admin/vendors/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet">
+		<!-- Font Awesome -->
+		<link href="{{ asset( 'admin/vendors/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet">
+		<link href="{{ asset( 'css/client/style.css')}}" rel="stylesheet"> {% block stylesheets %}{% endblock %}
+		</head>
+		<body>
+			<div class="preloader">
+				<span class="preloader-spin"></span>
+			</div>
+
+			<div
+				class="site">
+				{# <header class="d-flex align-items-center"></header> #}
+				<div class="containerBody">
+					<div class="row ">
+						<div class="col-md-3 col-sm-3 ">
+							<div class="">
+								<ul class="nav flex-column" id="menu">
+									<li class="nav-item {% if app.request.attributes.get('_route') starts with 'client_index' %}current-menu w-100{% endif %}">
+										<a class="" href="{{path('client_index')}}">
+											<i class="fa fa-user mr-1"></i>Mes informations</a>
+									</li>
+									<li class="nav-item {% if app.request.attributes.get('_route') starts with 'client_reservations' %}current-menu w-100{% endif %}">
+										<a class="" href="{{path('client_reservations')}}">
+											<i class="fa fa-shopping-cart mr-1"></i>
+
+											Mes réservations</a>
+									</li>
+									<li class=" nav-item {% if app.request.attributes.get('_route') starts with 'client_nouvelleReserv' %}current-menu w-100{% endif %}">
+										<a class="" href="{{path('client_nouvelleReserv')}}">
+											<i class="fa fa-plus mr-1"></i>Nouvelle réservation</a>
+									</li>
+									<li class="nav-item">
+										<a class=" " tabindex="-1" href="" class="text-dark">
+											<i class="fa fa-list"></i>
+											Mes conducteurs</a>
+									</li>
+									<li class="nav-item">
+										<a class="btn btn-dark w-100 btnLogout" tabindex="-1" href="{{path('app_logout')}}" class="text-white">Deconnexion</a>
+									</li>
+									<li class="nav-item">
+										<a href="{{ path('accueil') }}" class="btn btn-warning w-100 p-1">Aller sur le site Joellocation</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="col-md-9 col-sm-9"> {% block body %}{% endblock %}
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--Required JS files-->
+				<!-- jQuery -->
+				<script src="../../plugins/jquery/jquery.min.js"></script>
+				{% block javascripts %}{% endblock %}
+			</body>
+		</html>

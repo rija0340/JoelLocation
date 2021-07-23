@@ -15,10 +15,13 @@ use App\Entity\EtatReservation;
 use App\Entity\ModeReservation;
 use App\Repository\UserRepository;
 use App\Form\ReservationclientType;
+use App\Repository\DevisRepository;
 use App\Repository\VehiculeRepository;
 use App\Repository\ReservationRepository;
 use App\Repository\EtatReservationRepository;
+use App\Repository\GarantieRepository;
 use App\Repository\ModeReservationRepository;
+use App\Repository\OptionsRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,16 +33,24 @@ class ClientController extends AbstractController
 {
     private $passwordEncoder;
     private $vehiculeRepo;
+    private $optionRepo;
+    private $garantieRepo;
+    private $reservRepo;
+    private $devisRepo;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder, VehiculeRepository $vehiculeRepository)
+    public function __construct(DevisRepository $devisRepo, ReservationRepository $reservRepo, UserPasswordEncoderInterface $passwordEncoder, VehiculeRepository $vehiculeRepository, OptionsRepository $optionRepo, GarantieRepository $garantieRepo)
     {
         $this->passwordEncoder = $passwordEncoder;
         $this->vehiculeRepo = $vehiculeRepository;
+        $this->optionRepo = $optionRepo;
+        $this->garantieRepo = $garantieRepo;
+        $this->reservRepo = $reservRepo;
+        $this->devisRepo = $devisRepo;
     }
 
 
     /**
-     * @Route("/client", name="client")
+     * @Route("/client", name="client_index")
      */
     public function client(Request $request): Response
     {
@@ -68,26 +79,64 @@ class ClientController extends AbstractController
             return $this->redirectToRoute('carte');
         }
 
-        //récupération des réservations effectuée
-        $reservationEffectuers = $this->getDoctrine()->getRepository(Reservation::class)->findReservationEffectuers($client, $date);
-
-        //récupération des réservations en cours
-        $reservationEncours = $this->getDoctrine()->getRepository(Reservation::class)->findReservationEncours($client, $date);
-
-        //récupération des réservation en attente
-        $reservationEnAttentes = $this->getDoctrine()->getRepository(Reservation::class)->findReservationEnAttente($client, $date);
-
         // page client.html auparavant
-        return $this->render('client/client.html.twig', [
+        return $this->render('client/index.html.twig', [
             'controller_name' => 'AccueilController',
             'client' => $client->getUsername(),
             'id' => $client->getId(),
-            'reservation_effectuers' => $reservationEffectuers,
-            'reservation_en_cours' => $reservationEncours,
-            'reservation_en_attentes' => $reservationEnAttentes,
             'message' => $message_reservation,
             'form' => $form->createView(),
             'formClient' => $formClient->createView(),
+
+
+        ]);
+    }
+
+    /** 
+     * @Route("client/reservations", name="client_reservations", methods={"GET","POST"})
+     */
+    public function reservations(Request $request): Response
+    {
+        $client = $this->getUser();
+        $date = new \DateTime('now');
+
+
+        //récupération des réservations effectuée
+        $reservationEffectuers = $this->reservRepo->findReservationEffectuers($client, $date);
+
+        //récupération des réservations en cours
+        $reservationEncours = $this->reservRepo->findReservationEncours($client, $date);
+
+        $res_attente_dateDebut = $this->reservRepo->findReservationsAttenteDateDebut($client, $date);
+
+        //récupération des réservation en attente (devis envoyé et en attente de validation par client)
+        // $reservationEnAttentes = $this->reservRepo->findReservationEnAttente($client, $date);
+        $res_attente_validation = $this->devisRepo->findBy(['client' => $client]);
+
+        return $this->render('client/reservation/index.html.twig', [
+            'reservation_effectuers' => $reservationEffectuers,
+            'reservation_en_cours' => $reservationEncours,
+            'res_attente_validation' => $res_attente_validation,
+            'res_attente_dateDebut' => $res_attente_dateDebut,
+        ]);
+    }
+
+
+    /** 
+     * @Route("client/new/reservation", name="client_nouvelleReserv", methods={"GET","POST"})
+     */
+    public function nouvelleReservation(Request $request): Response
+    {
+
+
+        //get options et garanties pour smart wizard
+        $options = $this->optionRepo->findAll();
+        $garanties = $this->garantieRepo->findAll();
+        $client = $this->getUser();
+        return $this->render('client/steps/index.html.twig', [
+            'options' => $options,
+            'garanties' => $garanties,
+            'clientID' => $client->getId()
         ]);
     }
 
@@ -214,6 +263,6 @@ class ClientController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($paiement);
         $entityManager->flush();
-        return $this->redirectToRoute('client');
+        return $this->redirectToRoute('client_index');
     }
 }

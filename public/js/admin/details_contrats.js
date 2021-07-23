@@ -628,7 +628,7 @@ $(document).ready(function () {
         doc.text('SIRET : 87868990000016 APE: 7711a\n           N°TVA FR40878689900\n              www.joellocation.com', 80, 285);
 
         //save the pdf file
-        doc.save("contrat.pdf");
+        doc.save("Contrat" + "_" + nomclientValue + ".pdf");
 
     }
 
