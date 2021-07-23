@@ -145,6 +145,16 @@ class DevisController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("devis/client/{id}", name="client_devis_show", methods={"GET"})
+     */
+    public function client_devis_show(Devis $devis): Response
+    {
+
+        return $this->render('client/reservation/details.html.twig', [
+            'devis' => $devis,
+        ]);
+    }
 
     /**
      * @Route("devis/{id}/edit", name="devis_edit", methods={"GET","POST"})

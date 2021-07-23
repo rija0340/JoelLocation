@@ -46,6 +46,7 @@
 					<th>Réservation/véhicule</th>
 					<th>Dates/Durée</th>
 					<th>Prix</th>
+					<th>Action</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -62,6 +63,11 @@
 						</td>
 						<td>{{ reser.prix }}
 							€</td>
+						<td>
+							<a href="{{ path('client_devis_show', {'id': reser.id}) }}">
+								<i class=" fa fa-info-circle" style="font-size: 2em !important;"></i>
+							</a>
+						</td>
 					</tr>
 				{% else %}
 					<tr>

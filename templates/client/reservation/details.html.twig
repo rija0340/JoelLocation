@@ -1,0 +1,95 @@
+{% extends 'baseClient.html.twig' %}
+
+{% block title %}Details devis
+{% endblock %}
+{% block stylesheets %}{% endblock %}
+{% block body %}
+
+	<div class="row">
+		<div
+			class="col-md-4">
+			{# <img src="" alt="" style="width:90%;" id="vehicule_photo"> #}
+			<img src="uploads/vehicules/{{ devis.vehicule.image }}" alt="image voiture" class="img-circle  " style="width : 90px;">
+		</div>
+		<div class="col-md-8">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="row">
+						<div class="col-md-6">
+							<h3 class="heading">Agence départ
+							</h3>
+							<div class="content_depart">
+								<p>
+									<i class="fa fa-map-marker"></i>
+									<span id="agence_depart">{{devis.agenceDepart}}</span><br>
+									<span id="date_depart">{{devis.dateDepart |date('d/m/Y - H:i')}}</span>
+									{# <span id="heure_depart"></span> #}
+								</p>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<h3 class="heading">Agence retour
+							</h3>
+							<div class="content_retour">
+								<p>
+									<i class="fa fa-map-marker"></i>
+									<span id="agence_retour">{{devis.agenceRetour}}</span><br>
+									<span id="date_retour">{{devis.dateRetour|date('d/m/Y - H:i')}}</span>
+									{# <span id="heure_retour"></span> #}
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-12">
+					<div class="row">
+						<div class="col-md-6">
+							<p>
+								Soit
+								<span id="nombre_jours_location">{{devis.duree}}</span>
+								jours de location</p>
+
+							<h3 class="heading">Prix de base de location</h3>
+							<div class="prix_location">
+								<span id="prix">{{devis.prix}}</span>
+								EUR<br>
+								soit
+								<span id="prix"></span>
+								euro/jour
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="prestation">
+								<h3 class="heading">Prestations incluses</h3>
+								<p>
+									<i class="fa fa-check"></i>
+									<span>Conducteur :
+									</span>
+									<span id="span_conducteur">
+										{% if devis.conducteur == 1 %}
+											Oui
+										{% else %}
+											Non
+										{% endif %}
+									</span>
+								</p>
+								<p>
+									<i class="fa fa-check"></i>
+									<span id="span_siege">{{devis.siege.appelation}}
+										{{devis.siege.prix}}€</span>
+								</p>
+								<p>
+									<i class="fa fa-check"></i>
+									<span id="span_garantie">{{devis.garantie.appelation}}
+										{{devis.garantie.prix}}€</span>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
+{% block javascripts %}{% endblock %}
