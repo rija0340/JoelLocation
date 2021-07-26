@@ -20,7 +20,7 @@
 				</li>
 				<li class="{% if app.request.attributes.get('_route') starts with 'app_login' %}current-menu-item{% endif %}">
 					{% if is_granted("ROLE_CLIENT") %}
-						<a href="{{ path('client_index') }}">Mon compte</a>
+						<a href="{{ path('espaceClient_index') }}">Mon compte</a>
 					{% elseif is_granted("ROLE_PERSONNEL") %}
 						<a href="{{ path('admin_index') }}">Mon compte</a>
 					{% else %}

@@ -191,7 +191,7 @@ class AccueilController extends AbstractController
         $user = new User();
         $user = $this->getUser();
         if (in_array("ROLE_CLIENT", $user->getRoles())) {
-            return $this->redirectToRoute('client_index');
+            return $this->redirectToRoute('espaceClient_index');
         }
         if (in_array("ROLE_PERSONNEL", $user->getRoles())) {
             return $this->redirectToRoute('admin_index');

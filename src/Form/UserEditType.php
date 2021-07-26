@@ -46,6 +46,7 @@ class UserEditType extends AbstractType
             ->add('datePermis', DateType::class, [
                 'widget' => 'single_text',
             ])
+            // ->add('role')
             /* ->add('recupass', HiddenType::class, [
             'required' => true,
             'empty_data' => function ($user) {

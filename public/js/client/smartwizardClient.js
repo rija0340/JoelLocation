@@ -410,7 +410,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
 
         $.ajax({
             type: 'GET',
-            url: '/client/reserverWizard',
+            url: '/client/reservationWizard',
             data: {
                 'clientID': clientID,
                 'agenceDepart': agenceDepartSelected,

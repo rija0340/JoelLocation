@@ -47,8 +47,9 @@ class ClientController extends AbstractController
     private $tarifsHelper;
     private $dateHelper;
     private $reservController;
+    private $userRepo;
 
-    public function __construct(ReservationController $reservController, DateHelper $dateHelper, TarifsHelper $tarifsHelper, DevisRepository $devisRepo, ReservationRepository $reservRepo, UserPasswordEncoderInterface $passwordEncoder, VehiculeRepository $vehiculeRepository, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
+    public function __construct(UserRepository $userRepo, ReservationController $reservController, DateHelper $dateHelper, TarifsHelper $tarifsHelper, DevisRepository $devisRepo, ReservationRepository $reservRepo, UserPasswordEncoderInterface $passwordEncoder, VehiculeRepository $vehiculeRepository, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
     {
         $this->passwordEncoder = $passwordEncoder;
         $this->vehiculeRepo = $vehiculeRepository;
@@ -59,11 +60,12 @@ class ClientController extends AbstractController
         $this->tarifsHelper = $tarifsHelper;
         $this->dateHelper = $dateHelper;
         $this->reservController = $reservController;
+        $this->userRepo = $userRepo;
     }
 
 
     /**
-     * @Route("/client", name="client_index")
+     * @Route("/client", name="espaceClient_index")
      */
     public function client(Request $request): Response
     {
@@ -194,9 +196,12 @@ class ClientController extends AbstractController
             $reservation->setDateReservation(new \DateTime('NOW', new \DateTimeZone('Europe/Paris')));
             $reservation->setCodeReservation($agenceDepart);
             // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
-
             $lastID = $this->reservRepo->findBy(array(), array('id' => 'DESC'), 1);
-            $currentID = $lastID[0]->getId() + 1;
+            if ($lastID == null) {
+                $currentID = 1;
+            } else {
+                $currentID = $lastID[0]->getId() + 1;
+            }
             $pref = "WEBGP";
             $reservation->setRefRes($pref, $currentID);
 
@@ -458,6 +463,6 @@ class ClientController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($paiement);
         $entityManager->flush();
-        return $this->redirectToRoute('client_index');
+        return $this->redirectToRoute('espaceClient_index');
     }
 }

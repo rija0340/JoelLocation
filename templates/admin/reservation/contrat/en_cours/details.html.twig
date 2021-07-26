@@ -23,7 +23,7 @@
 		<i class="fa fa-folder-open"></i>
 		Détails de la réservation -
 		<br>
-		<span>WEBGP2020FEV865396</span>
+		<span>{{reservation.reference}}</span>
 	</div>
 {% endblock %}
 
@@ -157,7 +157,7 @@
 					</div>
 				</div>
 				<div class=" text-center">
-					<a type="button" class="btn btn-primary text-nowrap" href="{{path('user_edit', {'id': reservation.client.id})}}">
+					<a type="button" class="btn btn-primary text-nowrap" href="{{path('client_edit', {'id': reservation.client.id})}}">
 						<i class="fa fa-user mr-1"></i>Modifier les informations</a>
 					<button type="button" class="btn btn-dark text-nowrap">
 						<i class="fa fa-reply-all mr-1"></i>Retour anticipé</button>

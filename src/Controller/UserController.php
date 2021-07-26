@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\ClientEditType;
 use App\Form\UserType;
 use App\Form\UserEditType;
 use App\Form\UserClientType;
@@ -170,7 +171,7 @@ class UserController extends AbstractController
      */
     public function editClient(Request $request, User $user): Response
     {
-        $form = $this->createForm(UserEditType::class, $user);
+        $form = $this->createForm(ClientEditType::class, $user);
         $form->handleRequest($request);
         $password = $user->getPassword();
         if ($form->isSubmitted() && $form->isValid()) {
