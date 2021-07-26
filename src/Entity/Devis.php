@@ -89,6 +89,11 @@ class Devis
      */
     private $numero;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $transformed;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -266,5 +271,17 @@ class Devis
     {
         $ref  = "DV" . $currentID;
         $this->setNumero($ref);
+    }
+
+    public function getTransformed(): ?bool
+    {
+        return $this->transformed;
+    }
+
+    public function setTransformed(?bool $transformed): self
+    {
+        $this->transformed = $transformed;
+
+        return $this;
     }
 }

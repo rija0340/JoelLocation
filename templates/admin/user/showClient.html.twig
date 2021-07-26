@@ -89,19 +89,19 @@
 			</div>
 		</form>
 
-		<a href="{{ path('user_index') }}" class="btn btn-primary">
+		<a href="{{ path('client_index') }}" class="btn btn-primary">
 			<i class="fa fa-arrow-left" aria-hidden="true"></i>
 			retour</a>
 		<div>
 			{% if is_granted("ROLE_ADMIN") %}
-				<a href="{{ path('user_edit', {'id': user.id}) }}" class="btn btn-success">
+				<a href="{{ path('client_edit', {'id': user.id}) }}" class="btn btn-success">
 					<i class="fa fa-book" aria-hidden="true"></i>
 					Modification</a>
 			{% endif %}
 		</div>
 		<div>
 			{% if is_granted("ROLE_ADMIN") %}
-				{{ include('admin/user/_delete_form.html.twig') }}
+				{{ include('admin/user/_deleteClient_form.html.twig') }}
 			{% endif %}
 		</div>
 	</div>

@@ -59,4 +59,17 @@ class DateHelper
 
         return $monthFR;
     }
+    /**
+     * @param date1 et date2
+     * @return int
+     */
+
+    function calculDuree($dateDepart, $dateRetour)
+    {
+        $dateDepart = new \DateTime($dateDepart);
+        $dateRetour = new \DateTime($dateRetour);
+        $duree = date_diff($dateDepart, $dateRetour);
+
+        return $duree->days;
+    }
 }

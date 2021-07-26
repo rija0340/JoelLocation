@@ -140,7 +140,7 @@ class Reservation
     private $duree;
 
     /**
-     * @ORM\Column(type="float", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      */
     private $numDevis;
 
@@ -460,12 +460,12 @@ class Reservation
         return $this;
     }
 
-    public function getNumDevis(): ?float
+    public function getNumDevis(): ?string
     {
         return $this->numDevis;
     }
 
-    public function setNumDevis(?float $numDevis): self
+    public function setNumDevis(?string $numDevis): self
     {
         $this->numDevis = $numDevis;
 

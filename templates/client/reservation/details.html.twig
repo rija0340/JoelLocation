@@ -4,12 +4,11 @@
 {% endblock %}
 {% block stylesheets %}{% endblock %}
 {% block body %}
+	<div id="IDdevis" class="hide">{{devis.id}}</div>
 
 	<div class="row">
-		<div
-			class="col-md-4">
-			{# <img src="" alt="" style="width:90%;" id="vehicule_photo"> #}
-			<img src="uploads/vehicules/{{ devis.vehicule.image }}" alt="image voiture" class="img-circle  " style="width : 90px;">
+		<div class="col-md-4">
+			<img src="../../uploads/vehicules/{{ devis.vehicule.image }}" alt=" image voiture" class="img-circle " style=" width : 100%">
 		</div>
 		<div class="col-md-8">
 			<div class="row">
@@ -91,5 +90,16 @@
 		</div>
 	</div>
 
+	<div class="form-group text-center mt-4">
+		<div>
+			<a type="button" class="btn btn-danger" id="reserver">
+				<i class="fa fa-check"></i>
+				Réserver</a>
+		</div>
+	</div>
 {% endblock %}
-{% block javascripts %}{% endblock %}
+{% block javascripts %}
+	<script src="../../js/client/detailsReservation.js"></script>
+
+	}
+{% endblock %}

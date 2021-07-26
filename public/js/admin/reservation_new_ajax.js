@@ -42,10 +42,16 @@ function getDatesValues() {
 
 function getDateDebutValue() {
     dateDebutValue = this.value;
+    if (dateToTimestamp(dateDebutValue) < dateToTimestamp(new Date(Date.now()))) {
+        alert("Veuillez choisir une autre date");
+        dateDebutElem.value = null;
+        dateFinElem.value = null;
+        dateDebutValue = null;
+        dateFinValue = null;
+    }
     console.log('ity ilay date ' + dateDebutValue);
 
     if (dateFinValue != null) {
-
 
         if (dateToTimestamp(dateDebutValue) > dateToTimestamp(dateFinValue)) {
             $("#selectVehicule").empty();

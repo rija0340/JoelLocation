@@ -18,7 +18,7 @@ class UserType extends AbstractType
         $roles = [
             'Client' => 'ROLE_CLIENT',
             'Employé' => 'ROLE_PERSONNEL',
-            'chauffeur' => 'ROLE_CONDUCTEUR',
+            'conducteur' => 'ROLE_CONDUCTEUR',
             'Administrateur' => 'ROLE_ADMIN'
         ];
         $builder

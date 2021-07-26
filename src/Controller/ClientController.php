@@ -4,27 +4,34 @@ namespace App\Controller;
 
 use App\Entity\Faq;
 use App\Entity\User;
+use App\Entity\Devis;
 use App\Form\UserType;
 use App\Form\LoginType;
 use App\Entity\Paiement;
 use App\Entity\Vehicule;
 use App\Form\ClientType;
 use App\Entity\Reservation;
+use App\Service\DateHelper;
 use App\Entity\ModePaiement;
+use App\Service\TarifsHelper;
 use App\Entity\EtatReservation;
 use App\Entity\ModeReservation;
 use App\Repository\UserRepository;
 use App\Form\ReservationclientType;
 use App\Repository\DevisRepository;
+use App\Repository\TarifsRepository;
+use App\Repository\OptionsRepository;
+use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
+use App\Controller\ReservationController;
 use App\Repository\ReservationRepository;
 use App\Repository\EtatReservationRepository;
-use App\Repository\GarantieRepository;
 use App\Repository\ModeReservationRepository;
-use App\Repository\OptionsRepository;
+use DateTimeZone;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -33,19 +40,25 @@ class ClientController extends AbstractController
 {
     private $passwordEncoder;
     private $vehiculeRepo;
-    private $optionRepo;
-    private $garantieRepo;
+    private $optionsRepo;
+    private $garantiesRepo;
     private $reservRepo;
     private $devisRepo;
+    private $tarifsHelper;
+    private $dateHelper;
+    private $reservController;
 
-    public function __construct(DevisRepository $devisRepo, ReservationRepository $reservRepo, UserPasswordEncoderInterface $passwordEncoder, VehiculeRepository $vehiculeRepository, OptionsRepository $optionRepo, GarantieRepository $garantieRepo)
+    public function __construct(ReservationController $reservController, DateHelper $dateHelper, TarifsHelper $tarifsHelper, DevisRepository $devisRepo, ReservationRepository $reservRepo, UserPasswordEncoderInterface $passwordEncoder, VehiculeRepository $vehiculeRepository, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
     {
         $this->passwordEncoder = $passwordEncoder;
         $this->vehiculeRepo = $vehiculeRepository;
-        $this->optionRepo = $optionRepo;
-        $this->garantieRepo = $garantieRepo;
+        $this->optionsRepo = $optionsRepo;
+        $this->garantiesRepo = $garantiesRepo;
         $this->reservRepo = $reservRepo;
         $this->devisRepo = $devisRepo;
+        $this->tarifsHelper = $tarifsHelper;
+        $this->dateHelper = $dateHelper;
+        $this->reservController = $reservController;
     }
 
 
@@ -95,7 +108,7 @@ class ClientController extends AbstractController
     /** 
      * @Route("client/reservations", name="client_reservations", methods={"GET","POST"})
      */
-    public function reservations(Request $request): Response
+    public function listeReservations(Request $request): Response
     {
         $client = $this->getUser();
         $date = new \DateTime('now');
@@ -111,7 +124,7 @@ class ClientController extends AbstractController
 
         //récupération des réservation en attente (devis envoyé et en attente de validation par client)
         // $reservationEnAttentes = $this->reservRepo->findReservationEnAttente($client, $date);
-        $res_attente_validation = $this->devisRepo->findBy(['client' => $client]);
+        $res_attente_validation = $this->devisRepo->findBy(['client' => $client, 'transformed' => false]);
 
         return $this->render('client/reservation/index.html.twig', [
             'reservation_effectuers' => $reservationEffectuers,
@@ -130,8 +143,8 @@ class ClientController extends AbstractController
 
 
         //get options et garanties pour smart wizard
-        $options = $this->optionRepo->findAll();
-        $garanties = $this->garantieRepo->findAll();
+        $options = $this->optionsRepo->findAll();
+        $garanties = $this->garantiesRepo->findAll();
         $client = $this->getUser();
         return $this->render('client/steps/index.html.twig', [
             'options' => $options,
@@ -140,8 +153,190 @@ class ClientController extends AbstractController
         ]);
     }
 
+
     /**
-     * @Route("client/modifier/{id}", name="client_edit", methods={"GET","POST"})
+     * @Route("/client/reservationWizard", name="client_reserverWizard",  methods={"GET","POST"})
+     */
+    public function reserverWeb(Request $request): Response
+    {
+        $reservation = new Reservation();
+
+        if ($request->isXmlHttpRequest()) {
+
+            $clientID =  $request->query->get('clientID');
+            $agenceDepart = $request->query->get('agenceDepart');
+            $agenceRetour = $request->query->get('agenceRetour');
+            $lieuSejour = $request->query->get('lieuSejour');
+            $dateTimeDepart = $request->query->get('dateTimeDepart');
+            $dateTimeRetour = $request->query->get('dateTimeRetour');
+            $vehiculeIM = $request->query->get('vehiculeIM');
+            $conducteur = $request->query->get('conducteur');
+            $idSiege = $request->query->get('idSiege');
+            $idGarantie = $request->query->get('idGarantie');
+
+            $siege = $this->optionsRepo->find($idSiege);
+            $garantie = $this->garantiesRepo->find($idGarantie);
+            $vehicule = $this->vehiculeRepo->findByIM($vehiculeIM);
+            $client = $this->userRepo->find($clientID);
+            $duree = $this->dateHelper->calculDuree($dateTimeDepart, $dateTimeRetour);
+
+            $reservation->setVehicule($vehicule);
+            $reservation->setClient($client);
+            $reservation->setAgenceDepart($agenceDepart);
+            $reservation->setAgenceRetour($agenceRetour);
+            $reservation->setDateDebut(new \DateTime($dateTimeDepart));
+            $reservation->setDateFin(new \DateTime($dateTimeRetour));
+            $reservation->setGarantie($garantie);
+            $reservation->setSiege($siege);
+            $reservation->setConducteur($conducteur);
+            $reservation->setLieu($lieuSejour);
+            $reservation->setDuree($duree);
+            $reservation->setDateReservation(new \DateTime('NOW', new \DateTimeZone('Europe/Paris')));
+            $reservation->setCodeReservation($agenceDepart);
+            // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
+
+            $lastID = $this->reservRepo->findBy(array(), array('id' => 'DESC'), 1);
+            $currentID = $lastID[0]->getId() + 1;
+            $pref = "WEBGP";
+            $reservation->setRefRes($pref, $currentID);
+
+            $prix = $this->tarifsHelper->calculTarif($dateTimeDepart, $dateTimeRetour, $siege, $garantie, $vehicule);
+
+            $reservation->setPrix($prix);
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($reservation);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('client_reservations');
+        }
+        return $this->redirectToRoute('client_reservations');
+    }
+
+
+    /**
+     * @Route("/client/reserverDevis/{id}", name="client_reserverDevis", methods={"GET","POST"})
+     */
+    public function client_reserverDevis(Request $request, Devis $devis)
+    {
+        $reservation = new Reservation();
+        $reservation->setVehicule($devis->getVehicule());
+        $reservation->setClient($devis->getClient());
+        $reservation->setDateDebut($devis->getDateDepart());
+        $reservation->setDateFin($devis->getDateRetour());
+        $reservation->setAgenceDepart($devis->getAgenceDepart());
+        $reservation->setAgenceRetour($devis->getAgenceRetour());
+        $reservation->setGarantie($devis->getGarantie());
+        $reservation->setSiege($devis->getSiege());
+        $reservation->setPrix($devis->getPrix());
+        $reservation->setNumDevis($devis->getNumero());
+        $reservation->setDateReservation(new \DateTime('NOW', new DateTimeZone('Europe/Paris')));
+        $reservation->setCodeReservation('devisTransformé');
+        // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
+        $lastID = $this->reservRepo->findBy(array(), array('id' => 'DESC'), 1);
+        $currentID = $lastID[0]->getId() + 1;
+        $reservation->setRefRes("WEPGP", $currentID);
+
+        $devis->setTransformed(true);
+
+        $entityManager = $this->reservController->getDoctrine()->getManager();
+        $entityManager->persist($reservation);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('client_reservations');
+    }
+
+    /**
+     * @Route("/client/detailsVehicule", name="client_detailsVehicule", methods={"GET"})
+     */
+    public function detailsVehicule(VehiculeRepository $vehiculeRepository, Request $request)
+    {
+        $vehicule = new Vehicule;
+        $id = intVal($request->query->get('vehicule_id'));
+        $vehicule =  $vehiculeRepository->find($id);
+
+        $data = array();
+
+        $data['id'] = $vehicule->getId();
+        $data['marque'] = $vehicule->getMarque()->getLibelle();
+        $data['modele'] = $vehicule->getModele();
+        $data['carburation'] = $vehicule->getCarburation();
+        $data['vitesse'] = $vehicule->getVitesse();
+        $data['immatriculation'] = $vehicule->getImmatriculation();
+        $data['bagages'] = $vehicule->getBagages();
+        $data['atouts'] = $vehicule->getAtouts();
+        $data['caution'] = $vehicule->getCaution();
+        $data['details'] = $vehicule->getDetails();
+        $data['portes'] = $vehicule->getPortes();
+        $data['passagers'] = $vehicule->getPassagers();
+        $data['image'] = $vehicule->getImage();
+
+        return new JsonResponse($data);
+    }
+
+    /**
+     * @Route("/client/tarifsVehicule", name="client_tarifsVehicule", methods={"GET"})
+     */
+    public function tarifsVehicule(Request $request, VehiculeRepository $vehiculeRepo, TarifsRepository $tarifsRepo)
+    {
+        $vehicule_id = intVal($request->query->get('vehicule_id'));
+        $mois = $request->query->get('mois');
+
+        // dd($vehicule_id, $mois);
+        // die();
+        $vehicule = $vehiculeRepo->find($vehicule_id);
+        $tarif =  $tarifsRepo->findTarifs($vehicule, $mois);
+
+        $data = array();
+
+        $data['troisJours'] = $tarif->getTroisJours();
+        $data['septJours'] = $tarif->getSeptJours();
+        $data['quinzeJours'] = $tarif->getQuinzeJours();
+        $data['trenteJours'] = $tarif->getTrenteJours();
+
+
+        return new JsonResponse($data);
+    }
+
+    /**
+     * @Route("/client/listeOptions", name="client_listeOptions", methods={"GET"})
+     */
+    public function client_listeOptions(Request $request)
+    {
+        $data = array();
+        $options = $this->optionsRepo->findAll();
+
+        foreach ($options as $key => $option) {
+
+            $data[$key]['id'] = $option->getId();
+            $data[$key]['appelation'] = $option->getAppelation();
+            $data[$key]['prix'] = $option->getPrix();
+        }
+
+        return new JsonResponse($data);
+    }
+
+
+    /**
+     * @Route("/client/listeGaranties", name="client_listeGaranties", methods={"GET"})
+     */
+    public function client_listeGaranties(Request $request)
+    {
+        $data = array();
+        $garanties = $this->garantiesRepo->findAll();
+
+        foreach ($garanties as $key => $garantie) {
+
+            $data[$key]['id'] = $garantie->getId();
+            $data[$key]['appelation'] = $garantie->getAppelation();
+            $data[$key]['prix'] = $garantie->getPrix();
+        }
+
+        return new JsonResponse($data);
+    }
+
+    /**
+     * @Route("/client/modifier/{id}", name="client_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, User $user): Response
     {

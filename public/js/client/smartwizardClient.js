@@ -217,7 +217,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
     $("#smartwizard").on("leaveStep", function (e, anchorObject, currentStepIndex, nextStepIndex, stepDirection) {
 
         if (currentStepIndex == 0 && nextStepIndex == 1) {
-            tachesStep1toStep2();
+            return tachesStep1toStep2();
         }
 
         if (currentStepIndex == 1 && nextStepIndex == 2) {
@@ -301,7 +301,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
         // var n = d.toString();
         $.ajax({
             type: 'GET',
-            url: '/vehicule-vente-comptoir',
+            url: '/client/detailsVehicule',
             data: {
                 "vehicule_id": vehicule
             },
@@ -330,7 +330,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
         // var n = d.toString();
         $.ajax({
             type: 'GET',
-            url: '/tarifVenteComptoir',
+            url: '/client/tarifsVehicule',
             data: {
                 "vehicule_id": vehicule,
                 "mois": getMonth(datetimeDepartValue)
@@ -352,11 +352,10 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
         });
     }
 
-
-    function getListeGarantiesAjax() {
+    function getListeOptionsAjax() {
         $.ajax({
             type: 'GET',
-            url: "/listeOptions",
+            url: "/client/listeOptions",
             timeout: 3000,
             beforeSend: function (xhr) {
             },
@@ -373,10 +372,10 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
         });
     }
 
-    function getListeOptionsAjax() {
+    function getListeGarantiesAjax() {
         $.ajax({
             type: 'GET',
-            url: "/listeGaranties",
+            url: "/client/listeGaranties",
             timeout: 3000,
             beforeSend: function (xhr) {
             },
@@ -411,7 +410,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
 
         $.ajax({
             type: 'GET',
-            url: '/reservation/newReservationWeb',
+            url: '/client/reserverWizard',
             data: {
                 'clientID': clientID,
                 'agenceDepart': agenceDepartSelected,
@@ -453,18 +452,21 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
         getListeGarantiesAjax(); //from database
         setValuesRecapitulatif();
 
+        var completed;
+
         if (vehiculeSelected != null && agenceDepartSelected != "Choisir" && agenceRetourSelected != "Choisir" && lieuSejourValue != "") {
 
             retrieveTarifsAjax(vehiculeSelected);
             retrieveVehiculeAjax(vehiculeSelected); //in success status include setValues 2,3,4
 
             ;
-            return true;
+            completed = true;
 
         } else {
             alert("Veuillez remplir tous les champs");
-            return false;
+            completed = false;
         }
+        return completed;
     }
 
     function tachesStep2toStep3() {

@@ -1,6 +1,6 @@
 {% extends 'base2.html.twig' %}
 
-{% block title %}User index
+{% block title %}Clients
 {% endblock %}
 
 {% block stylesheets %}
@@ -28,7 +28,7 @@
 						<i class="fa fa-list"></i>Clients / Prospects</h2>
 				</div>
 				<div class="col-auto ml-auto">
-					<a href="{{ path('user_client_new') }}" class="btn btn-danger">
+					<a href="{{ path('client_new') }}" class="btn btn-danger">
 						<i class="fa fa-plus" aria-hidden="true"></i>
 						Ajouter</a>
 				</div>
@@ -71,7 +71,7 @@
 						<td>
 							<div class="row">
 								<div class="col-auto p-0 m-0">
-									<a href="{{ path('user_show', {'id': user.id}) }}" class="btn btn-link ">
+									<a href="{{ path('client_show', {'id': user.id}) }}" class="btn btn-link ">
 										<i class="fa fa-list"></i>
 									</a>
 								</div>
@@ -79,14 +79,14 @@
 									<div class="col-auto p-0 m-0 ">
 										<div class="d-flex">
 											<div class="align-items-center">
-												<a href="{{ path('user_edit', {'id': user.id}) }}" class="btn btn-link m">
+												<a href="{{ path('client_edit', {'id': user.id}) }}" class="btn btn-link m">
 													<i class="fa  fa-gear (alias)"></i>
 												</a>
 											</div>
 										</div>
 									</div>
 									<div class="col-auto p-0 m-0">
-										<form method="post" action="{{ path('user_delete', {'id': user.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer cet utilisateur?');">
+										<form method="post" action="{{ path('client_delete', {'id': user.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer cet utilisateur?');">
 											<input type="hidden" name="_method" value="DELETE">
 											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
 											<button class="btn btn-link">

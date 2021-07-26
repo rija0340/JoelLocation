@@ -9,23 +9,29 @@
 		<table class="table">
 			<thead>
 				<tr>
-					<th>Type</th>
-					<th>Date de reservation</th>
-					<th>Date de début</th>
-					<th>Date de fin</th>
-					<th>Lieu</th>
-					<th>Code reservation</th>
+					<th>Référence
+					</th>
+					<th>Date de création</th>
+					<th>Réservation/véhicule</th>
+					<th>Dates/Durée</th>
+					<th>Prix</th>
 				</tr>
 			</thead>
 			<tbody>
-				{% for reservation_en_cours in reservation_en_cours %}
+				{% for reserv in reservation_en_cours %}
 					<tr>
-						<td>{{ reservation_en_cours.type }}</td>
-						<td>{{ reservation_en_cours.dateReservation ? reservation_en_cours.dateReservation|date('d/m/Y - H:i') : '' }}</td>
-						<td>{{ reservation_en_cours.dateDebut ? reservation_en_cours.dateDebut|date('d/m/Y - H:i') : '' }}</td>
-						<td>{{ reservation_en_cours.dateFin ? reservation_en_cours.dateFin|date('d/m/Y - H:i') : '' }}</td>
-						<td>{{ reservation_en_cours.lieu }}</td>
-						<td>{{ reservation_en_cours.codeReservation }}</td>
+						<td>{{ reserv.reference }}</td>
+						<td>{{ reserv.dateReservation|date('d/m/Y - H:i') }}</td>
+						<td>{{ reserv.vehicule.marque}}
+							{{ reserv.vehicule.modele}}</td>
+						<td>{{ reserv.dateDebut|date('d/m/Y - H:i')  }}<br>
+							<span class="text-center font-italic">
+								{{ reserv.duree}}
+								jours
+							</span>
+						</td>
+						<td>{{ reserv.prix }}
+							€</td>
 					</tr>
 				{% else %}
 					<tr>
@@ -50,21 +56,20 @@
 				</tr>
 			</thead>
 			<tbody>
-				{% for reser in res_attente_validation %}
+				{% for reserv in res_attente_validation %}
 					<tr>
-						<td>{{ reser.numero }}</td>
-						<td>{{ reser.dateCreation ? reser.dateCreation|date('d/m/Y - H:i') : '' }}</td>
-						<td>{{ reser.vehicule.marque}}
-							{{ reser.vehicule.modele}}</td>
-						<td>{{ reser.dateDepart ? reser.dateDepart|date('d/m/Y - H:i') : '' }}--
-							{{ reser.dateRetour ? reser.dateRetour|date('d/m/Y - H:i') : '' }}/
-							{{ reser.duree}}
+						<td>{{ reserv.numero }}</td>
+						<td>{{ reserv.dateCreation ? reserv.dateCreation|date('d/m/Y - H:i') : '' }}</td>
+						<td>{{ reserv.vehicule.marque}}
+							{{ reserv.vehicule.modele}}</td>
+						<td>{{ reserv.dateDepart ? reserv.dateDepart|date('d/m/Y - H:i') : '' }}/
+							{{ reserv.duree}}
 							jours
 						</td>
-						<td>{{ reser.prix }}
+						<td>{{ reserv.prix }}
 							€</td>
 						<td>
-							<a href="{{ path('client_devis_show', {'id': reser.id}) }}">
+							<a href="{{ path('client_devis_show', {'id': reserv.id}) }}">
 								<i class=" fa fa-info-circle" style="font-size: 2em !important;"></i>
 							</a>
 						</td>
@@ -100,10 +105,11 @@
 						<td>{{ reserv.vehicule.marque}}
 							{{reserv.vehicule.modele}}
 						</td>
-						<td>{{ reserv.dateDebut ? reserv.dateDebut|date('d/m/Y - H:i ') : '' }}--
-							{{ reserv.dateFin ? reserv.dateFin|date('d-m-Y - H:i') : '' }}/
-							{{ reserv.duree}}
-							jours
+						<td>{{ reserv.dateDebut ? reserv.dateDebut|date('d/m/Y - H:i ') : '' }}/<br>
+							<span class="text-center font-italic">
+								{{ reserv.duree}}
+								jours
+							</span>
 						</td>
 						<td>{{ reserv.prix }}
 							€</td>
@@ -122,31 +128,38 @@
 		<table class="table">
 			<thead>
 				<tr>
-					<th>Type</th>
-					<th>Date de reservation</th>
-					<th>Date de début</th>
-					<th>Date de fin</th>
-					<th>Lieu</th>
-					<th>Code reservation</th>
+					<th>Référence
+					</th>
+					<th>Date de création</th>
+					<th>Réservation/véhicule</th>
+					<th>Dates/Durée</th>
+					<th>Prix</th>
 				</tr>
 			</thead>
 			<tbody>
-				{% for reservation_effectuer in reservation_effectuers %}
+				{% for reserv in reservation_effectuers %}
 					<tr>
-						<td>{{ reservation_effectuer.type }}</td>
-						<td>{{ reservation_effectuer.dateReservation ? reservation_effectuer.dateReservation|date('d / m / Y') : '' }}</td>
-						<td>{{ reservation_effectuer.dateDebut ? reservation_effectuer.dateDebut|date('d / m / Y') : '' }}</td>
-						<td>{{ reservation_effectuer.dateFin ? reservation_effectuer.dateFin|date('d / m / Y') : '' }}</td>
-						<td>{{ reservation_effectuer.lieu }}</td>
-						<td>{{ reservation_effectuer.codeReservation }}</td>
+
+						<td>{{ reserv.reference }}</td>
+						<td>{{ reserv.dateReservation|date('d/m/Y - H:i') }}</td>
+						<td>{{ reserv.vehicule.marque}}
+							{{ reserv.vehicule.modele}}</td>
+						<td>{{ reserv.dateDebut|date('d/m/Y - H:i')  }}
+							<br>
+							<span class="text-center font-italic">
+								{{ reserv.duree}}
+								jours
+							</span>
+						</td>
+						<td>{{ reserv.prix }}
+							€</td>
 					</tr>
-				{% else %}
-					<tr>
-						<td colspan="8">Aucune reservation réaliser</td>
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-	</div>
-{% endblock %}
-{% block javascripts %}{% endblock %}
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="8">Aucune reservation réaliser</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>{% endblock %}{% block javascripts %}{% endblock %}

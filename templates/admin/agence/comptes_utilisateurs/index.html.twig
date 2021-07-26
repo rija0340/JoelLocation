@@ -31,7 +31,7 @@
 					</h2>
 				</div>
 				<div class="col-auto ml-auto">
-					<a href="{{ path('user_new') }}" class="btn btn-danger">
+					<a href="{{ path('employe_new') }}" class="btn btn-danger">
 						<i class="fa fa-plus" aria-hidden="true"></i>
 						Ajouter</a>
 				</div>
@@ -49,6 +49,7 @@
 						<th>Username</th>
 						<th>Date d'inscription</th>
 						<th>Rôle</th>
+						<th>Fonction</th>
 						<th>actions</th>
 					</tr>
 				</thead>
@@ -89,11 +90,12 @@
 									{% endif %}
 								{% endfor %}
 							</td>
+							<td>{{user.fonction}}</td>
 
 							<td>
 								<div class="row">
 									<div class="col-auto p-0 m-0">
-										<a href="{{ path('user_show', {'id': user.id}) }}" class="btn btn-link ">
+										<a href="{{ path('employe_show', {'id': user.id}) }}" class="btn btn-link ">
 											<i class="fa fa-list"></i>
 										</a>
 									</div>
