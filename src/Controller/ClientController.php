@@ -178,7 +178,7 @@ class ClientController extends AbstractController
     }
 
     /**
-     * @Route("/payement", name="payement", methods={"POST"})
+     * @Route("/payement", name="payement", methods={"GET","POST"})
      */
     public function payement(Request $request)
     {
@@ -186,6 +186,9 @@ class ClientController extends AbstractController
         $reservation = $this->getDoctrine()->getRepository(Reservation::class)->findOneBy(["client" => $client], ["id" => "DESC"]);
         $modePaiement = $this->getDoctrine()->getRepository(ModePaiement::class)->findOneBy(["id" => 1]);
         $vehicule = new Vehicule();
+        if($reservation == null){            
+            return $this->redirectToRoute('client');
+        }
         $vehicule = $reservation->getVehicule();
         $caution = $vehicule->getCaution() * 100;
         // Set your secret key. Remember to switch to your live secret key in production.
