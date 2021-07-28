@@ -129,7 +129,7 @@
     width: 2rem;
     height: 2rem;
     border: 10px solid #f3f3f3;
-    border-top: 10px solid #3498db;
+    border-top: 10px solid #ff0000;
     border-radius: 50%;
     z-index: 10;
     -webkit-animation: spin 1s linear infinite;
@@ -509,21 +509,21 @@
 }
 
 .sw-theme-dots > .nav .nav-link.active {
-    color: #5bc0de !important;
+    color: #ff0000 !important;
     cursor: pointer;
 }
 
 .sw-theme-dots > .nav .nav-link.active::after {
-    background-color: #5bc0de !important;
+    background-color: #ff0000 !important;
 }
 
 .sw-theme-dots > .nav .nav-link.done {
-    color: #5cb85c;
+    color: #000000;
     cursor: pointer;
 }
 
 .sw-theme-dots > .nav .nav-link.done::after {
-    background-color: #5cb85c;
+    background-color: #000000;
 }
 
 .sw-theme-dots > .nav .nav-link.disabled {

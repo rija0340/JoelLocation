@@ -43,15 +43,26 @@
 		{{ form_widget(form.portable) }}
 
 	</div>
-	{# <div class="form-group col-md-3">
-		<label for="">Date d'inscription :</label>
-		{{ form_widget(form.date_inscription) }}
-	</div> #}
-	{# <div class="form-group col-md-3">
-		<label for="">Presence :</label>
-		{{ form_widget(form.presence) }}
+	<div class="form-group col-md-3">
+		<label for="">Date de Naissance :</label>
+		{{ form_widget(form.dateNaissance) }}
 
-	</div> #}
+	</div>
+	<div class="form-group col-md-3">
+		<label for="">Lieu de Naissance :</label>
+		{{ form_widget(form.lieuNaissance) }}
+
+	</div>
+	<div class="form-group col-md-3">
+		<label for="">Numero de permis :</label>
+		{{ form_widget(form.numeroPermis) }}
+
+	</div>
+	<div class="form-group col-md-3">
+		<label for="">Date permis :</label>
+		{{ form_widget(form.datePermis) }}
+
+	</div>
 	<div class="form-group col-md-6">
 		<label for="">Adresse :</label>
 		{{ form_widget(form.adresse) }}

@@ -61,7 +61,6 @@ class AdminController extends AbstractController
 
 
 
-
   /**
    * @Route("/contrats_termines", name="contrats_termines", methods={"GET"})
    */

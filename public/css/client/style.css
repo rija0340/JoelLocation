@@ -17,3 +17,83 @@ tr:nth-child(even) td {
     border: 1px solid rgb(255, 255, 255);
 }
 
+.hide{
+    display : none !important;
+}
+
+.containerBody{
+    padding-top: 100px;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+/* style pour smart wizard */
+.x_panel{
+    position:relative;
+    width:100%;
+    margin-bottom:10px;
+    padding:10px 17px;
+    display:inline-block;
+    background:#fff;
+    -webkit-column-break-inside:avoid;
+    -moz-column-break-inside:avoid;
+    column-break-inside:avoid;
+    opacity:1;
+    -webkit-transition:all .2s ease;
+    transition:all .2s ease
+}
+
+.x_title{border-bottom:2px solid #E6E9ED;padding:1px 5px 6px;margin-bottom:10px}
+.x_title .filter{width:40%;float:right}
+.x_title h2{margin:5px 0 6px;float:left;display:block;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;font-size: 20px;}
+.x_title h2 small{margin-left:10px}
+.x_title span{color:#BDBDBD}
+
+
+.x_content{padding:0 3px 6px;position:relative;width:100%;float:left;clear:both;margin-top:5px}
+.x_content h4{font-size:16px;font-weight:500}
+
+
+.form-control{border-radius:0;width:100%}
+.form-horizontal .control-label{padding-top:8px}
+.form-control:focus{border-color:#CCD0D7;-webkit-box-shadow:none !important;box-shadow:none !important}legend{font-size:18px;color:inherit}
+.form-horizontal .form-group{margin-right:0;margin-left:0}
+.form-control-feedback{position:absolute;margin-top:8px;height:23px;color:#bbb;line-height:24px;font-size:15px;top:0px;width:34px;text-align:center}
+.form-control-feedback.left{border-right:1px solid #ccc;left:13px}
+.form-control-feedback.right{border-left:1px solid #ccc;right:13px}
+.form-control.has-feedback-left{padding-left:45px}
+.form-control.has-feedback-right{padding-right:45px}
+.form-group{margin-bottom:10px}.validate{margin-top:10px}
+.invalid-form-error-message{margin-top:10px;padding:5px}
+.invalid-form-error-message.filled{border-left:2px solid #E74C3C}
+
+ /* style pour steps de reservation */
+ .step1{
+     padding : 5px;
+ }
+
+ /*************** style nav ************ */
+
+.current-menu {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+  }
+
+.nav > li {
+    /* margin : 5px; */
+    padding : 5px;
+}
+
+#menu > li > a{
+    display: block;
+    text-decoration: none;
+    color : inherit;
+    font-size: 16px;
+
+}
+
+#menu > li > .btnLogout{
+    color : #fff;
+}
+  

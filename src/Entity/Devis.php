@@ -59,9 +59,6 @@ class Devis
      */
     private $conducteur;
 
-
-
-
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
@@ -87,6 +84,15 @@ class Devis
      */
     private $garantie;
 
+    /**
+     * @ORM\Column(type="string", length=1000, nullable=true)
+     */
+    private $numero;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $transformed;
 
     public function getId(): ?int
     {
@@ -245,6 +251,36 @@ class Devis
     public function setGarantie(?Garantie $garantie): self
     {
         $this->garantie = $garantie;
+
+        return $this;
+    }
+
+    public function getNumero(): ?string
+    {
+        return $this->numero;
+    }
+
+    public function setNumero(?string $numero): self
+    {
+        $this->numero = $numero;
+
+        return $this;
+    }
+
+    public function setNumeroDevis($currentID)
+    {
+        $ref  = "DV" . $currentID;
+        $this->setNumero($ref);
+    }
+
+    public function getTransformed(): ?bool
+    {
+        return $this->transformed;
+    }
+
+    public function setTransformed(?bool $transformed): self
+    {
+        $this->transformed = $transformed;
 
         return $this;
     }

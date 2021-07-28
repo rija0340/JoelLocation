@@ -308,3 +308,11 @@
 .btn .sw-btn-prev{
   background-color: red;
 }
+.sw-theme-dots .toolbar > .btn {
+  color: #ffffff;
+  background-color: #000000;
+  border: 1px solid #000000;
+  padding: .375rem .75rem;
+  border-radius: .25rem;
+  font-weight: 400;
+}

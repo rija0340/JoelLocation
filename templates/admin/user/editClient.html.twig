@@ -1,0 +1,29 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}Edit User
+{% endblock %}
+{% block stylesheets %}{% endblock %}
+
+{% block current_page %}
+	<h2>
+		<i class="fa fa-edit"></i>
+		Modifier
+	</h2>
+{% endblock %}
+
+{% block content %}
+	<div class="x_panel">
+		<div class="x_title">
+			<h2>
+				<i class="fa fa-edit"></i>Modifier les informations</h2>
+			<div class="clearfix"></div>
+		</div>
+		{{ include('admin/user/_formclient.html.twig', {'button_label': 'Modifier'}) }}
+
+		<a href="{{ path('client_index') }}" class="btn btn-dark">
+			<i class="fa fa-arrow-left" aria-hidden="true"></i>
+			Retour</a>
+
+		{{ include('admin/user/_deleteClient_form.html.twig') }}
+	</div>
+{% endblock %}

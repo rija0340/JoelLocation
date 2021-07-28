@@ -6,9 +6,10 @@ use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class UserClientType extends AbstractType
 {
@@ -33,11 +34,18 @@ class UserClientType extends AbstractType
             ->add('mail')
             ->add('telephone')
             ->add('portable')
+            ->add('dateNaissance',  DateType::class, [
+                'widget' => 'single_text',
+            ])
+            ->add('lieuNaissance')
+            ->add('numeroPermis')
+            ->add('datePermis',  DateType::class, [
+                'widget' => 'single_text',
+            ])
             //->add('presence')
             /* ->add('date_inscription', DateTimeType::class, [
                 'widget' => 'single_text',
-            ]) */
-            ;
+            ]) */;
     }
 
     public function configureOptions(OptionsResolver $resolver)

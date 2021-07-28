@@ -176,23 +176,13 @@ class PlanningController extends AbstractController
 
     public function vehiculeDispoData(Request $request, VehiculeRepository $vehiculeRepo, ReservationRepository $reservationRepo)
     {
-        // avy any amin'ny request ity (AJAX)
-        $day = $request->query->get('day');
-        $month = $request->query->get('month');
-        $year = $request->query->get('year');
-        $hours = $request->query->get('hours');
-        $minutes = $request->query->get('minutes');
 
-        // $time = strtotime($dateInputAjax);
-        $time = date("Y-m-d H:i", mktime($hours, $minutes, 00, $month, $day, $year));
-        // $time =  mktime($hours, $minutes, 00, $month, $day, $year);
+        $date = $request->query->get('date');
 
+        //creation d'une date valide en php à partir d'une date de javascript.
 
-        //convert a string to date php
-        $date = new \DateTime($time);
+        $date = \DateTime::createFromFormat('D M d Y H:i:s e+', $date);
 
-
-        //ajout de données dans array puis envoyer vers AJAX
         $datas = array();
         foreach ($this->getVehiculesDispo($date) as $key => $vehicule) {
 
@@ -218,7 +208,6 @@ class PlanningController extends AbstractController
     {
         $vehicules = $this->vehiculeRepo->findAll();
         $reservations = $this->reservationRepo->findReservationIncludeDate($date);
-
         $i = 0;
         $vehiculeDispo = [];
 

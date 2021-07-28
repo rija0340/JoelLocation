@@ -19,7 +19,7 @@ class ContratsController extends AbstractController
     public function enCours(ReservationRepository $reservationRepository, Request $request, PaginatorInterface $paginator): Response
     {
 
-        $reservations = $reservationRepository->findReservationsSansStopSales();
+        $reservations = $reservationRepository->findReservationIncludeDate(new \DateTime('NOW'));
 
         return $this->render('admin/reservation/contrat/en_cours/index.html.twig', [
             'reservations' => $reservations,

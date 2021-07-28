@@ -1,6 +1,6 @@
 {% extends 'base2.html.twig' %}
 
-{% block title %}Détail reservation
+{% block title %}Détails reservation
 {% endblock %}
 
 
@@ -24,7 +24,7 @@
 		<i class="fa fa-folder-open"></i>
 		Détails de la réservation -
 		<br>
-		<span>WEBGP2020FEV865396</span>
+		<span>{{reservation.reference}}</span>
 	</div>
 {% endblock %}
 
@@ -40,6 +40,11 @@
 
 
 {% block content %}
+	<!-- div contenant extra information utile pour javascript -->
+	<div class="hide">
+		<span class="js-vehCarb">{{reservation.vehicule.carburation}}</span>
+		<span class="js-vehIM">{{reservation.vehicule.immatriculation}}</span>
+	</div>
 	<!-- top tiles -->
 	<div class="x_panel">
 
@@ -68,7 +73,7 @@
 				<i class="fa  fa-car"></i>
 				kilometrage</button>
 
-			<button type="button" class="btn btn-outline-danger text-uppercase p-1">
+			<button type="button" id="genererContratPDF" class="btn btn-outline-danger text-uppercase p-1">
 				<i class="fa fa-newspaper-o"></i>
 				Générer le contrat</button>
 
@@ -180,7 +185,7 @@
 		</div>
 		<div class="x_content ">
 			<div class="text-center">
-				<button class="btn btn-primary">
+				<button class="btn btn-primary" id="ajouterConducteur">
 					<i class="fa fa-plus"></i>
 					Ajouter conducteur</button>
 			</div>
@@ -575,4 +580,7 @@
 	<script src="../../admin/vendors/jszip/dist/jszip.min.js"></script>
 	<script src="../../admin/vendors/pdfmake/build/pdfmake.min.js"></script>
 	<script src="../../admin/vendors/pdfmake/build/vfs_fonts.js"></script>
+	<script src="../../js/admin/jspdf.min.js"></script>
+	<script src="../../js/admin/jspdf.plugin.autotable.js"></script>
+	<script src="../../js/admin/details_contrats.js"></script>
 {% endblock  %}

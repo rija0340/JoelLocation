@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ReservationRepository;
+use App\Service\DateHelper;
+use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -136,6 +138,16 @@ class Reservation
      * @ORM\Column(type="float", nullable=true)
      */
     private $duree;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $numDevis;
+
+    /**
+     * @ORM\Column(type="string", length=1000, nullable=true)
+     */
+    private $reference;
 
     public function __construct()
     {
@@ -446,5 +458,44 @@ class Reservation
         $this->duree = $duree;
 
         return $this;
+    }
+
+    public function getNumDevis(): ?string
+    {
+        return $this->numDevis;
+    }
+
+    public function setNumDevis(?string $numDevis): self
+    {
+        $this->numDevis = $numDevis;
+
+        return $this;
+    }
+
+    public function getReference(): ?string
+    {
+        return $this->reference;
+    }
+
+    public function setReference(?string $reference): self
+    {
+        $this->reference = $reference;
+
+        return $this;
+    }
+
+    // custom function
+    public function setRefRes($pref, $currentID)
+    {
+        $dateHelper = new DateHelper();
+        $currentTime = new \DateTime('NOW');
+        $year = $currentTime->format('Y');
+        $month = $dateHelper->getMonthName($currentTime);
+        $ref  = $pref . $year . $month . $currentID;
+        $this->setReference($ref);
+    }
+
+    public function frenchMouth()
+    {
     }
 }

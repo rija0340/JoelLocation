@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Reservation;
+use App\Service\DateHelper;
 use DateTime;
+use DateTimeZone;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Validator\Constraints\Date;
@@ -42,7 +44,7 @@ class ReservationRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('r')
             ->andWhere('r.date_fin < :date')
-            ->setParameter('date', new \DateTime('NOW'))
+            ->setParameter('date', new \DateTime('NOW', new DateTimeZone('+0300')))
             ->orderBy('r.date_fin', 'DESC')
             ->getQuery()
             ->getResult();
@@ -79,14 +81,40 @@ class ReservationRepository extends ServiceEntityRepository
     /**
      * @return Reservation[] Returns an array of Reservation objects
      */
+    public function findReservationsAttenteDateDebut($client)
+    {
+
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.client = :client AND r.date_debut > :date')
+            ->setParameter('client', $client)
+            ->setParameter('date', new \DateTime('NOW', new DateTimeZone('+0300')))
+            ->orderBy('r.date_debut', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Reservation[] Returns an array of Reservation objects
+     */
     public function findReservationIncludeDate($date)
     {
-        dump($date);
         return $this->createQueryBuilder('r')
-            ->where(' r.date_fin > :date')
-            ->andWhere('r.date_debut < :date')
-            ->andWhere(' r.code_reservation != :code')
-            ->setParameter('code', 'stopSale')
+            ->where(' r.date_fin >= :date')
+            ->andWhere('r.date_debut <= :date')
+
+            ->setParameter('date', $date)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Reservation[] Returns an array of Reservation objects
+     */
+    public function findReservationExcludeDate($date)
+    {
+        return $this->createQueryBuilder('r')
+            ->where(' r.date_fin < :date')
+            ->orWhere('r.date_debut > :date')
             ->setParameter('date', $date)
             ->getQuery()
             ->getResult();
@@ -112,7 +140,7 @@ class ReservationRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('r')
             ->andWhere(' r.code_reservation != :code AND r.date_fin > :date')
             ->setParameter('code', 'stopSale')
-            ->setParameter('date', new \DateTime('NOW'))
+            ->setParameter('date', new \DateTime('NOW', new DateTimeZone('+0300')))
             ->getQuery()
             ->getResult();
     }
@@ -138,6 +166,7 @@ class ReservationRepository extends ServiceEntityRepository
      * @return Reservation[] Returns an array of Reservation objects
      */
     public function findReservationExludeDates($dateDebut, $dateFin)
+
     {
         return $this->createQueryBuilder('r')
             ->where('   :dateFin < r.date_debut  AND :dateDebut < r.date_debut ')
@@ -158,7 +187,9 @@ class ReservationRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('r')
             ->andWhere(' r.vehicule = :vehicule')
             ->andWhere('r.date_fin < :date')
+            ->andWhere(' r.code_reservation != :code')
             ->setParameter('vehicule', $vehicule)
+            ->setParameter('code', 'stopSale')
             ->setParameter('date', $date)
             ->getQuery()
             ->getResult();
@@ -186,7 +217,9 @@ class ReservationRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('r')
             ->andWhere(' r.vehicule = :vehicule')
             ->andWhere('r.date_debut > :date')
+            ->andWhere(' r.code_reservation != :code')
             ->setParameter('vehicule', $vehicule)
+            ->setParameter('code', 'stopSale')
             ->setParameter('date', $date)
             ->getQuery()
             ->getResult();

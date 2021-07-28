@@ -160,9 +160,6 @@ function getListeVehicules() {
                         btnReserver.classList.replace('hide', 'noHide');
                     else
                         btnReserver.classList.replace('noHide', 'hide');
-
-
-
                 }
             }
 
@@ -190,13 +187,13 @@ function genererFacturePDF() {
     //numero facture
     doc.text("FACTURE N° FA00029", 8, 75);
     //details facture
-    doc.text("Date de création:\t13-06-2021\nDate d'échéance:\t30-06-2021\nDevis associé:\t\tDV0014", 8, 80);
+    doc.text("Date de création:\t" + dateDepartValue + "\nDate d'échéance:\t" + dateRetourValue + "\nDevis associé:\t\tDV0014", 8, 80);
 
     //details client
-    doc.text("Mlle Nelly Florent\n21 Residence La Hallebarde Sud\n62530 Hersin Coupigny\nFrance", 125, 75);
+    doc.text(nomclientValue + ' ' + prenomClientValue + "\n21 Residence La Hallebarde Sud\n62530 Hersin Coupigny\nFrance", 125, 75);
 
     //objet 
-    doc.text("Objet : Location Renault Clio IV du 13 ai 26 Juin 2021. KM illimités", 8, 100);
+    doc.text("Objet : Location " + vehiculeValue + " du " + dateDepartValue + " au " + dateRetourValue + ". KM illimités", 8, 100);
 
     // Or use javascript directly:
     doc.autoTable({
@@ -207,7 +204,7 @@ function genererFacturePDF() {
 
         head: [['Designation', 'Qte', 'Prix U.', 'Prix HT', 'TTC']],
         body: [
-            ['Renault Clio 4\nLocation de véhicule pour 13 jours\nRetrait le 13/06/2021, Lieu : Aéroport de Pointe-à-Pitre.\nRetrait le 13/06/2021, Lieu : Aéroport de Pointe-à-Pitre.', '13j', '18.43', '239.63', '260.00']
+            [vehiculeValue + '\n\tLocation de véhicule pour ' + dureeValue + ' jours\n\tRetrait le ' + dateDepartValue + ', Lieu : ' + agenceDepartValue + '.\n\tRetrait le ' + dateRetourValue + ', Lieu : ' + agenceRetourValue, '18.43', '239.63', tarifValue]
 
         ],
         headStyles: { fillColor: [255, 0, 0], textColor: [255, 255, 255] },
@@ -218,10 +215,15 @@ function genererFacturePDF() {
     });
     doc.setFontType("bold");
     doc.text("Conditions de règlement", 10, 145);
+
     doc.setFontSize(9);
     doc.setFontType("normal");
-
-    doc.text("Aucun escompte n'est consenti pour règelemtn anticipé\nTout incident de paiement est passible d'interêt de retard. Le montant\ndes pénalités résulte de l'application au somme restant dus d'un\ntaux t'interêt légal en vigueur au moment de l'incident. L'endemnité\nforfaitaire pour frais de recouvrement due au créancier en cas de\nretard de paiement est de 80 EUR", 10, 150);
+    doc.text("Aucun escompte n'est consenti pour règlement anticipé", 10, 150);
+    doc.text("Tout incident de paiement est passible d'interêt de retard. Le montant", 10, 155);
+    doc.text("des pénalités résulte de l'application au somme restant dus d'un", 10, 160);
+    doc.text("taux t'interêt légal en vigueur au moment de l'incident. L'endemnité", 10, 165);
+    doc.text("forfaitaire pour frais de recouvrement due au créancier en cas de", 10, 170);
+    doc.text("retard de paiement est de 80 EUR", 10, 175);
 
     // // Or use javascript directly:
     doc.autoTable({
@@ -261,33 +263,14 @@ function genererFacturePDF() {
         head: [['Reste à payer', '0.00 €']],
         headStyles: { fillColor: [255, 0, 0], textColor: [255, 255, 255] },
     });
-    //bas de page
-    // doc.setFontType("normal");
-    // doc.autoTable({
-    //     startY: 258,
-    //     margin: {
-    //         left: 8,
-    //         bottom: 0
-
-    //     },
-
-    //     head: [['SIRET : 87868990000016 APE: 7711a\nN°TVA FR40878689900\nwww.joellocation.com']],
-    //     headStyles: {
-    //         fillColor: [255, 0, 0],
-    //         textColor: [255, 255, 255],
-    //         valign: 'middle',
-    //         halign: 'center',
-    //         fontType: 'normal',
-    //         fontSize: 9,
-    //     },
-    // });
-
     doc.setFontSize(9);
 
-    doc.setFillColor(255, 0, 0);
-    doc.rect(8, 278, 190, 15, 'F');
-    doc.setTextColor(255, 255, 255);
-    doc.text('SIRET : 87868990000016 APE: 7711a\nN°TVA FR40878689900\nwww.joellocation.com', 70, 282);
+    doc.setFillColor(255, 0, 0); //color of the rect
+    doc.rect(5, 278, 200, 15, 'F'); //x, y, longueur, hauteur, fill
+    doc.setTextColor(255, 255, 255); //
+    doc.text('SIRET : 87868990000016 APE: 7711a', 75, 282);
+    doc.text('N°TVA FR40878689900', 80, 287);
+    doc.text('www.joellocation.com', 85, 291);
     // doc.text('SIRET : 87868990000016 APE: 7711a\nN°TVA FR40878689900\nwww.joellocation.com', 10, 248, null, null, 'center');
 
     doc.save("sample.pdf");

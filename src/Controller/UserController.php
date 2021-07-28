@@ -3,10 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\ClientEditType;
 use App\Form\UserType;
 use App\Form\UserEditType;
 use App\Form\UserClientType;
 use App\Repository\UserRepository;
+use DateTimeZone;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,7 +30,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/", name="user_index", methods={"GET"})
+     * @Route("/client", name="client_index", methods={"GET"})
      */
     public function index(UserRepository $userRepository, Request $request, PaginatorInterface $paginator): Response
     {
@@ -52,25 +54,6 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/comptes_utilisateurs", name="comptes_utilisateurs", methods={"GET"})
-     */
-    public function comptes_utilisateurs(UserRepository $userRepository, Request $request): Response
-    {
-        $personnels = array();
-        $users = $userRepository->findAll();
-        foreach ($users as $user) {
-
-            if (in_array('ROLE_PERSONNEL', $user->getRoles()) || in_array('ROLE_SUPER_ADMIN', $user->getRoles())) {
-                array_push($personnels, $user);
-            }
-        }
-
-        return $this->render('admin/agence/comptes_utilisateurs/index.html.twig', [
-            'personnels' => $personnels
-        ]);
-    }
-
-    /**
      * @Route("/listeclients", name="listeclients", methods={"GET"})
      */
     public function listeclients(UserRepository $userRepository, Request $request)
@@ -90,41 +73,11 @@ class UserController extends AbstractController
         return new JsonResponse($data);
     }
 
-    /**
-     * @Route("/new", name="user_new", methods={"GET","POST"})
-     */
-    public function new(Request $request): Response
-    {
-        $user = new User();
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $user->setRoles(['ROLE_PERSONNEL']);
-            $user->setPassword($this->passwordEncoder->encodePassword(
-                $user,
-                $user->getPassword()
-            ));                
-            $user->setRecupass($user->getPassword());
-            $user->setPresence(1);
-            $user->setDateInscription(new \DateTime('now'));
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('comptes_utilisateurs');
-        }
-
-        return $this->render('admin/user/new.html.twig', [
-            'user' => $user,
-            'form' => $form->createView(),
-        ]);
-    }
 
     /**
-     * @Route("/clientnew", name="user_client_new", methods={"GET","POST"})
+     * @Route("/client/new", name="client_new", methods={"GET","POST"})
      */
-    public function new_client(Request $request): Response
+    public function newClient(Request $request): Response
     {
         $user = new User();
         $form = $this->createForm(UserClientType::class, $user);
@@ -135,15 +88,15 @@ class UserController extends AbstractController
             $user->setPassword($this->passwordEncoder->encodePassword(
                 $user,
                 $user->getPassword()
-            ));                
+            ));
             $user->setRecupass($user->getPassword());
             $user->setPresence(1);
-            $user->setDateInscription(new \DateTime('now'));
+            $user->setDateInscription(new \DateTime('NOW', new DateTimeZone('Europe/Paris')));
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->redirectToRoute('user_index');
+            return $this->redirectToRoute('client_index');
         }
 
         return $this->render('admin/user/newclient.html.twig', [
@@ -151,8 +104,6 @@ class UserController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
-
 
     /**
      * @Route("/newVenteComptoir", name="newClientVenteComptoir", methods={"GET","POST"})
@@ -178,10 +129,10 @@ class UserController extends AbstractController
             $user->setPassword($this->passwordEncoder->encodePassword(
                 $user,
                 $nom . $telephone
-            ));                
+            ));
             $user->setRecupass($user->getPassword());
             $user->setPresence(1);
-            $user->setDateInscription(new \DateTime('now'));
+            $user->setDateInscription(new \DateTime('NOW', new DateTimeZone('+0300')));
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
@@ -202,20 +153,141 @@ class UserController extends AbstractController
         return new JsonResponse($data);
     }
 
+
+
     /**
-     * @Route("/{id}", name="user_show", methods={"GET"})
+     * @Route("/client/{id}", name="client_show", methods={"GET"})
+     */
+    public function clientShow(User $user): Response
+    {
+        return $this->render('admin/user/showClient.html.twig', [
+            'user' => $user,
+        ]);
+    }
+
+
+    /**
+     * @Route("/client/modifier/{id}", name="client_edit", methods={"GET","POST"})
+     */
+    public function editClient(Request $request, User $user): Response
+    {
+        $form = $this->createForm(ClientEditType::class, $user);
+        $form->handleRequest($request);
+        $password = $user->getPassword();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user->setRoles([$user->getFonction()]);
+            /* if($user->getFonction() == "Client"){
+                $user->setRoles([$user->getFonction()]);
+            }
+            if($user->getFonction() == "Employé"){
+                $user->setRoles(["ROLE_PERSONNEL"]);
+            }
+            if($user->getFonction() == "Administrateur"){
+                $user->setRoles(["ROLE_ADMIN"]);
+            } */
+            if ($user->getPassword() == '') {
+                $user->setPassword($user->getRecupass());
+            } else {
+                $user->setPassword($this->passwordEncoder->encodePassword(
+                    $user,
+                    $user->getPassword()
+                ));
+                $user->setRecupass($user->getPassword());
+            }
+            /* if($user->getFonction == "Employé"){
+                $user->setRoles("ROLE_SUPER_ADMIN");
+            } */
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('client_index');
+        }
+
+        return $this->render('admin/user/editClient.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
+        ]);
+    }
+    /**
+     * @Route("/client/delete/{id}", name="client_delete", methods={"DELETE"})
+     */
+    public function clientDelete(Request $request, User $user): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($user);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('client_index');
+    }
+
+
+    /**
+     * @Route("/employe", name="employe_index", methods={"GET"})
+     */
+    public function indexEmploye(UserRepository $userRepository, Request $request): Response
+    {
+        $personnels = array();
+        $users = $userRepository->findAll();
+        foreach ($users as $user) {
+
+            if (in_array('ROLE_PERSONNEL', $user->getRoles()) || in_array('ROLE_SUPER_ADMIN', $user->getRoles())) {
+                array_push($personnels, $user);
+            }
+        }
+
+        return $this->render('admin/agence/comptes_utilisateurs/index.html.twig', [
+            'personnels' => $personnels
+        ]);
+    }
+
+
+    /**
+     * @Route("/employe/new", name="employe_new", methods={"GET","POST"})
+     */
+    public function newEmploye(Request $request): Response
+    {
+        $user = new User();
+        $form = $this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user->setRoles(['ROLE_PERSONNEL']);
+            $user->setPassword($this->passwordEncoder->encodePassword(
+                $user,
+                $user->getPassword()
+            ));
+            $user->setRecupass($user->getPassword());
+            $user->setPresence(1);
+            $user->setDateInscription(new \DateTime('now'));
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('employe_index');
+        }
+
+        return $this->render('admin/agence/comptes_utilisateurs/newEmploye.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
+        ]);
+    }
+
+
+    /**
+     * @Route("/employe/{id}", name="employe_show", methods={"GET"})
      */
     public function show(User $user): Response
     {
-        return $this->render('admin/user/show.html.twig', [
+        return $this->render('admin/agence/comptes_utilisateurs/showEmploye.html.twig', [
             'user' => $user,
         ]);
     }
 
     /**
-     * @Route("/modifier/{id}", name="user_edit", methods={"GET","POST"})
+     * @Route("/employe/modifier/{id}", name="employe_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, User $user): Response
+    public function editEmploye(Request $request, User $user): Response
     {
         $form = $this->createForm(UserEditType::class, $user);
         $form->handleRequest($request);
@@ -231,9 +303,9 @@ class UserController extends AbstractController
             if($user->getFonction() == "Administrateur"){
                 $user->setRoles(["ROLE_ADMIN"]);
             } */
-            if($user->getPassword() == ''){ 
+            if ($user->getPassword() == '') {
                 $user->setPassword($user->getRecupass());
-            }else{ 
+            } else {
                 $user->setPassword($this->passwordEncoder->encodePassword(
                     $user,
                     $user->getPassword()
@@ -245,19 +317,20 @@ class UserController extends AbstractController
             } */
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('comptes_utilisateurs');
+            return $this->redirectToRoute('employe_index');
         }
 
-        return $this->render('admin/user/edit.html.twig', [
+        return $this->render('admin/agence/comptes_utilisateurs/editEmploye.html.twig', [
             'user' => $user,
             'form' => $form->createView(),
         ]);
     }
 
+
     /**
-     * @Route("/{id}", name="user_delete", methods={"DELETE"})
+     * @Route("/employe/delete/{id}", name="employe_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, User $user): Response
+    public function deleteEmploye(Request $request, User $user): Response
     {
         if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
@@ -265,6 +338,6 @@ class UserController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('user_index');
+        return $this->redirectToRoute('employe_index');
     }
 }

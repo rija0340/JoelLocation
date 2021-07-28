@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Tarifs;
 use App\Form\TarifsType;
+use App\Form\TarifEditType;
 use App\Repository\TarifsRepository;
 use App\Repository\VehiculeRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,23 +21,49 @@ class TarifsController extends AbstractController
     public function index(TarifsRepository $tarifsRepo): Response
     {
         $listeTarifs = new Tarifs();
-        $listeTarifs = $tarifsRepo->findAll();
+        $listeTarifs =  $tarifsRepo->findAll();
+        $nbrTarifs = count($listeTarifs);
         $listeVehicule = [];
         $listeUniqueVehicules = [];
 
-        $listeMois = ['Janvier', 'Février', ' Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
-
+        $listeMois = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
 
         foreach ($listeTarifs as $tarif) {
             array_push($listeVehicule, $tarif->getVehicule());
         }
-        $listeUniqueVehicules = array_unique($listeVehicule);
+        foreach ($listeVehicule  as $veh) {
+            if (!in_array($veh, $listeUniqueVehicules)) {
+                array_push($listeUniqueVehicules, $veh);
+            }
+        }
+
+        // $listeUniqueVehicules = array_unique($listeVehicule);
+
+        $tarifsParVehicule = [];
+        //arrangement des donnée Janvier -> décembre
+        foreach ($listeUniqueVehicules as $veh) {
+            $ordered = [];
+            foreach ($listeMois as $mois) {
+                $i = 0;
+                foreach ($listeTarifs as $tarif) {
+                    if ($tarif->getMois() == $mois && $tarif->getVehicule() == $veh) {
+                        $i = $i + 1;
+                        array_push($ordered, $tarif);
+                    }
+                }
+                if ($i == 0) {
+                    array_push($ordered, null);
+                }
+            }
+            array_push($tarifsParVehicule, $ordered);
+        }
 
         return $this->render('admin/tarifs/index.html.twig', [
             'controller_name' => 'TarifsController',
             'tarifs' => $listeTarifs,
             'listeMois' => $listeMois,
-            'listeVehicules' => $listeUniqueVehicules
+            'listeVehicules' => $listeUniqueVehicules,
+            'tarifsParVehicule' => $tarifsParVehicule
         ]);
     }
 
@@ -47,11 +74,13 @@ class TarifsController extends AbstractController
     {
 
         $tarif = new Tarifs();
+
         $form = $this->createForm(TarifsType::class, $tarif);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
             $entityManager = $this->getDoctrine()->getManager();
+            $tarif->setMois($request->request->get('select'));
             $entityManager->persist($tarif);
             $entityManager->flush();
 
@@ -79,10 +108,10 @@ class TarifsController extends AbstractController
      */
     public function edit(Request $request, Tarifs $tarif): Response
     {
-        $form = $this->createForm(TarifsType::class, $tarif);
-        $form->handleRequest($request);
+        $formEdit = $this->createForm(TarifEditType::class, $tarif);
+        $formEdit->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($formEdit->isSubmitted() && $formEdit->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('tarif_index');
@@ -90,7 +119,7 @@ class TarifsController extends AbstractController
 
         return $this->render('admin/tarifs/edit.html.twig', [
             'tarif' => $tarif,
-            'form' => $form->createView(),
+            'formEdit' => $formEdit->createView(),
         ]);
     }
 
@@ -129,5 +158,42 @@ class TarifsController extends AbstractController
 
 
         return new JsonResponse($data);
+    }
+
+
+    /**
+     * @Route("/listeTarifsByVehicule", name="listeTarifsByVehicule", methods={"GET"})
+     * @return tableau contenant mois contenant tarifs
+     */
+    public function listeTarifsByVehicule(Request $request, VehiculeRepository $vehiculeRepo, TarifsRepository $tarifsRepo)
+    {
+        $vehiculeID = intVal($request->query->get('vehiculeID'));
+        $vehicule = $vehiculeRepo->find($vehiculeID);
+        $tarifs = $tarifsRepo->findBy(['vehicule' => $vehicule]);
+
+
+        $listeMois = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+
+        $ordered = [];
+        foreach ($listeMois as $mois) {
+            $i = 0;
+            foreach ($tarifs as $tarif) {
+                if ($tarif->getMois() == $mois) {
+                    $i = $i + 1;
+                    array_push($ordered, $tarif->getMois());
+                }
+            }
+            if ($i == 0) {
+                array_push($ordered, "");
+            }
+        }
+
+        $moisSansVal = [];
+        for ($i = 0; $i < 12; $i++) {
+            if ($ordered[$i] == "") {
+                array_push($moisSansVal, $listeMois[$i]);
+            }
+        }
+        return new JsonResponse($moisSansVal);
     }
 }

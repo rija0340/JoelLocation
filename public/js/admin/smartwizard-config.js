@@ -89,6 +89,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
     var garantieSpanElem;
     var selectedClient;
     var btnReserver;
+    var btnReserver;
     var selectClientElem;
     var listeClients = [];
     var listeClientsOriginal = [];
@@ -103,6 +104,8 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
     var emailClientValue;
     var telephoneClientValue;
 
+    var btnEnregistrerDevisEnvoi;
+    var btnEnregistrerDevis;
 
     var btnPdfDevis;
 
@@ -222,7 +225,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
     $("#smartwizard").on("leaveStep", function (e, anchorObject, currentStepIndex, nextStepIndex, stepDirection) {
 
         if (currentStepIndex == 0 && nextStepIndex == 1) {
-            tachesStep1toStep2();
+            return tachesStep1toStep2();
         }
 
         if (currentStepIndex == 1 && nextStepIndex == 2) {
@@ -289,6 +292,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
         btnCreateClient = document.querySelector('button[id="createClient"]');
         btnPdfDevis = document.getElementById('pdfDevis');
         btnEnregistrerDevis = document.getElementById('enregistrerDevis');
+        btnEnregistrerDevisEnvoi = document.getElementById('enregistrerDevisEnvoi');
 
         //ETAPE 4 ->formulaire creation nouveau client
         nomClientElem = document.querySelector('input[id="nom"]');
@@ -304,6 +308,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
         btnCreateClient.addEventListener('click', createClientAjax, false);
         btnPdfDevis.addEventListener('click', enregistrerDevisPDF, false);
         btnEnregistrerDevis.addEventListener('click', enregistrerDevisAjax, false);
+        btnEnregistrerDevisEnvoi.addEventListener('click', enregistrerDevisAjax, false);
 
     }
 
@@ -399,7 +404,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
 
             $.ajax({
                 type: 'GET',
-                url: '/newDevis',
+                url: '/devis/new',
                 data: {
                     'idClient': idClient,
                     'agenceDepart': agenceDepartSelected,
@@ -690,7 +695,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
                     // xmlHttp is a XMLHttpRquest object
                     console.log('met le izy');
                     // console.log('mety ilay izy zao');
-                    window.document.location = '/devis';
+                    window.document.location = '/reservation';
 
                     $('#smartwizard').smartWizard("loader", "hide");
                 },
@@ -712,19 +717,20 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
         getListeOptionsAjax(); //from database
         getListeGarantiesAjax(); //from database
         setValuesRecapitulatif();
-
+        var completed;
         if (vehiculeSelected != null && agenceDepartSelected != "Choisir" && agenceRetourSelected != "Choisir" && lieuSejourValue != "") {
 
             retrieveTarifsAjax(vehiculeSelected);
             retrieveVehiculeAjax(vehiculeSelected); //in success status include setValues 2,3,4
 
             ;
-            return true;
+            completed = true;
 
         } else {
             alert("Veuillez remplir tous les champs");
-            return false;
+            completed = false;
         }
+        return completed;
     }
 
     function tachesStep2toStep3() {

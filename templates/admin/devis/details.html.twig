@@ -1,6 +1,6 @@
 {% extends 'base2.html.twig' %}
 
-{% block title %}Détail devis
+{% block title %}Détails devis
 {% endblock %}
 
 
@@ -21,9 +21,9 @@
 {% block current_page %}
 	<div class="text-info">
 		<i class="fa fa-folder-open"></i>
-		Détails de la réservation -
+		Détails devis -
 		<br>
-		<span>WEBGP2020FEV865396</span>
+		<span>{{ devis.numero }}</span>
 	</div>
 {% endblock %}
 
@@ -198,7 +198,7 @@
 					</div>
 				</div>
 				<div class=" text-center">
-					<a type="button" class="btn btn-primary text-nowrap" href="{{path('user_edit', {'id': devis.client.id})}}">
+					<a type="button" class="btn btn-primary text-nowrap" href="{{path('client_edit', {'id': devis.client.id})}}">
 						<i class="fa fa-user mr-1"></i>Modifier les informations</a>
 					<button type="button" class="btn btn-dark text-nowrap">
 						<i class="fa fa-reply-all mr-1"></i>Retour anticipé</button>
@@ -320,8 +320,7 @@
 				<h3 class="text-center">
 					SOIT
 					<span class="js-duree" style="color:red">{{devis.duree}}
-						JOURS</span>
-					DE LOCATION
+					</span>JOURS DE LOCATION
 				</h3>
 			</div>
 		</div>

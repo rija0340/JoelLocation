@@ -18,6 +18,9 @@ use App\Repository\UserRepository;
 use App\Repository\VehiculeRepository;
 use App\Repository\ReservationRepository;
 use App\Repository\TarifsRepository;
+use App\Service\DateHelper;
+use App\Service\TarifsHelper;
+use DateTimeZone;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,8 +40,10 @@ class ReservationController extends AbstractController
     private $optionsRepo;
     private $garantiesRepo;
     private $tarifsRepo;
+    private $dateHelper;
+    private $tarifsHelper;
 
-    public function __construct(TarifsRepository $tarifsRepo, ReservationRepository $reservationRepo,  UserRepository $userRepo, VehiculeRepository $vehiculeRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
+    public function __construct(TarifsHelper $tarifsHelper, DateHelper $dateHelper, TarifsRepository $tarifsRepo, ReservationRepository $reservationRepo,  UserRepository $userRepo, VehiculeRepository $vehiculeRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
     {
 
         $this->reservationRepo = $reservationRepo;
@@ -47,6 +52,8 @@ class ReservationController extends AbstractController
         $this->garantiesRepo = $garantiesRepo;
         $this->userRepo = $userRepo;
         $this->tarifsRepo = $tarifsRepo;
+        $this->dateHelper = $dateHelper;
+        $this->tarifsHelper = $tarifsHelper;
     }
 
     /**
@@ -169,6 +176,18 @@ class ReservationController extends AbstractController
             $vehicule = $vehiculeRepository->find($request->request->get('select'));
             $entityManager = $this->getDoctrine()->getManager();
             $reservation->setVehicule($vehicule);
+
+            // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
+
+            $lastID = $this->reservationRepo->findBy(array(), array('id' => 'DESC'), 1);
+            if ($lastID == null) {
+                $currentID = 1;
+            } else {
+                $currentID = $lastID[0]->getId() + 1;
+            }
+            $pref = "CTPGP";
+            $reservation->setRefRes($pref, $currentID);
+
             $entityManager->persist($reservation);
             $entityManager->flush();
 
@@ -205,7 +224,7 @@ class ReservationController extends AbstractController
             $garantie = $this->garantiesRepo->find($idGarantie);
             $vehicule = $this->vehiculeRepo->findByIM($vehiculeIM);
             $client = $this->userRepo->find($idClient);
-            $duree = $this->calculDuree($dateTimeDepart, $dateTimeRetour);
+            $duree = $this->dateHelper->calculDuree($dateTimeDepart, $dateTimeRetour);
 
             $reservation->setVehicule($vehicule);
             $reservation->setClient($client);
@@ -218,10 +237,21 @@ class ReservationController extends AbstractController
             $reservation->setConducteur($conducteur);
             $reservation->setLieu($lieuSejour);
             $reservation->setDuree($duree);
-            $reservation->setDateReservation(new \DateTime('NOW'));
+            $reservation->setDateReservation(new \DateTime('NOW', new DateTimeZone('Europe/Paris')));
             $reservation->setCodeReservation($agenceDepart);
+            // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
 
-            $prix = $this->calculTarif($dateTimeDepart, $dateTimeRetour, $siege, $garantie, $vehicule);
+
+            $lastID = $this->reservationRepo->findBy(array(), array('id' => 'DESC'), 1);
+            if ($lastID == null) {
+                $currentID = 1;
+            } else {
+                $currentID = $lastID[0]->getId() + 1;
+            }
+            $pref = "CTPGP";
+            $reservation->setRefRes($pref, $currentID);
+
+            $prix = $this->tarifsHelper->calculTarif($dateTimeDepart, $dateTimeRetour, $siege, $garantie, $vehicule);
 
             $reservation->setPrix($prix);
 
@@ -250,7 +280,7 @@ class ReservationController extends AbstractController
         $reservation = new Reservation();
 
         $listeStopSales =  $reservationRepository->findStopSales();
-        $super_admin = $userRepo->findSuperAdmin();
+        $super_admin = $this->getUser();
 
         $formStopSales = $this->createForm(StopSalesType::class, $reservation);
 
@@ -264,7 +294,7 @@ class ReservationController extends AbstractController
             $reservation->setCodeReservation('stopSale');
             $reservation->setAgenceDepart('garage');
             $reservation->setClient($super_admin);
-            $reservation->setDateReservation(new \DateTime('NOW'));
+            $reservation->setDateReservation(new \DateTime('NOW', new DateTimeZone('Europe/Paris')));
             $entityManager->persist($reservation);
             $entityManager->flush();
 
@@ -281,7 +311,7 @@ class ReservationController extends AbstractController
     public function stopSalesNew(Request $request, VehiculeRepository $vehiculeRepository,  UserRepository $userRepo): Response
     {
 
-        $super_admin = $userRepo->findSuperAdmin();
+        $super_admin = $this->getUser();
         $reservation = new Reservation();
         $formStopSales = $this->createForm(StopSalesType::class, $reservation);
         $formStopSales->handleRequest($request);
@@ -399,19 +429,21 @@ class ReservationController extends AbstractController
         $reservation[] = new Reservation();
 
         if ($recherche != null) {
-            $client_id = (int)$recherche;
-            $client = new User();
+            // $client_id = (int)$recherche;
+            $client_nom = $recherche;
+            // $client = new User();
             $reservation[] = new Reservation();
             //if($client_id){
-            $client = $userRepository->findOneBy(["id" => $client_id]);
+            // $client = $userRepository->findOneBy(["id" => $client_id]);
+            $client = $userRepository->findOneBy(["nom" => $client_nom]);
             //}
-            if ($client == null) {
-                $client = $userRepository->findOneBy(["nom" => $recherche]);
-            }
+            // if ($client == null) {
+            //     $client = $userRepository->findOneBy(["nom" => $recherche]);
+            // }
             if ($client != null) {
                 $reservation = $reservationRepository->findBy(["client" => $client]);
             } else {
-                $reservation = $reservationRepository->findBy(["code_reservation" => $recherche]);
+                $reservation = $reservationRepository->findBy(["reference" => $recherche]);
             }
             $datas = array();
 
@@ -428,7 +460,7 @@ class ReservationController extends AbstractController
                 $datas[$key]['dateResa'] = $res->getDateReservation()->format('d-m-Y H:i');
                 $datas[$key]['nomPrenomClient'] = $res->getClient()->getNom() . " " . $res->getClient()->getPrenom();
                 $datas[$key]['mailClient'] = $res->getClient()->getMail();
-                $datas[$key]['dureeResa'] = \date_diff($res->getDateFin(), $res->getDateDebut())->format('%d');
+                $datas[$key]['dureeResa'] = $res->getDuree();
                 $datas[$key]['codeResa'] = $res->getCodeReservation();
                 $datas[$key]['vehicule'] = $res->getVehicule()->getMarque()->getLibelle() . " " . $res->getVehicule()->getModele() . " " . $res->getVehicule()->getImmatriculation();
             }
@@ -478,7 +510,7 @@ class ReservationController extends AbstractController
                 $datas[$key]['dateResa'] = $res->getDateReservation()->format('d-m-Y H:i');
                 $datas[$key]['nomPrenomClient'] = $res->getClient()->getNom() . " " . $res->getClient()->getPrenom();
                 $datas[$key]['mailClient'] = $res->getClient()->getMail();
-                $datas[$key]['dureeResa'] = \date_diff($res->getDateFin(), $res->getDateDebut())->format('%d');
+                $datas[$key]['dureeResa'] = $res->getDuree();
                 $datas[$key]['codeResa'] = $res->getCodeReservation();
                 $datas[$key]['vehicule'] = $res->getVehicule()->getMarque()->getLibelle() . " " . $res->getVehicule()->getModele() . " " . $res->getVehicule()->getImmatriculation();
             }
@@ -486,116 +518,5 @@ class ReservationController extends AbstractController
             return new JsonResponse($datas);
         }
         return $this->redirectToRoute('reservation_index');
-
-        // if ($immatriculation != null) {
-        //     $vehicule = $vehiculeRepository->findOneBy(["immatriculation" => $immatriculation]);
-        //     $reservation = $reservationRepository->findBy(["vehicule" => $vehicule]);
-        // }
-        // return $this->redirectToRoute('reservation_index');
-    }
-
-
-    function monthName($date)
-    {
-        if (is_object($date)) {
-            $month = $date->format('m');
-        } else {
-            $month = (new \DateTime($date))->format('m');
-        }
-        $monthFR = null;
-        switch ($month) {
-            case "01":
-                $monthFR = 'Janvier';
-                break;
-            case "02":
-                $monthFR = 'Février';
-                break;
-            case "03":
-                $monthFR = 'Mars';
-                break;
-            case "04":
-                $monthFR = 'Avril';
-                break;
-            case "05":
-                $monthFR = 'Mai';
-                break;
-            case "06":
-                $monthFR = 'Juin';
-                break;
-            case "07":
-                $monthFR = 'Juillet';
-                break;
-            case "08":
-                $monthFR = 'Août';
-                break;
-            case "09":
-                $monthFR = 'Septembre';
-                break;
-            case "10":
-                $monthFR = 'Octobre';
-                break;
-            case "11":
-                $monthFR = 'Novembre';
-                break;
-            case "12":
-                $monthFR = 'Décembre';
-                break;
-        }
-
-        return $monthFR;
-    }
-
-    function calculTarif($dateDepart, $dateRetour, $siege, $garantie, $vehicule)
-    {
-
-        if (!is_object($siege) && !is_object($garantie) && !is_object($vehicule)) {
-
-            if (!is_float($siege)) {
-                $siegePrix = $this->optionsRepo->find(intval($siege))->getPrix();
-            } else {
-                $siegePrix = $siege;
-            }
-            if (!is_float($garantie)) {
-                $garantiePrix = $this->garantiesRepo->find(intval($garantie))->getPrix();
-            } else {
-                $garantiePrix = $garantie;
-            }
-
-            $vehicule = $this->vehiculeRepo->find(intval($vehicule));
-        } else {
-            $siegePrix = $siege->getPrix();
-            $garantiePrix = $garantie->getPrix();
-        }
-
-        $mois = $this->monthName($dateDepart);
-        $tarifs = $this->tarifsRepo->findTarifs($vehicule, $mois);
-        $duree = $this->calculDuree($dateDepart, $dateRetour);
-        $tarif = 0; //initialisation de $tarif
-        if (!is_null($tarifs)) {
-
-            if ($duree <= 3) $tarif = $tarifs->getTroisJours();
-
-            if ($duree > 3 && $duree <= 7) $tarif = $tarifs->getSeptJours();
-
-            if ($duree > 7 && $duree <= 15) $tarif = $tarifs->getQuinzeJours();
-
-            if ($duree > 15 && $duree <= 30) $tarif = $tarifs->getTrenteJours();
-        }
-
-        if ($tarif != null) {
-            $prix = $tarif + $siegePrix + $garantiePrix;
-        } else {
-            $prix = $siegePrix + $garantiePrix;
-        }
-
-        return $prix;
-    }
-    function calculDuree($dateDepart, $dateRetour)
-    {
-        $dateDepart = new \DateTime($dateDepart);
-        $dateRetour = new \DateTime($dateRetour);
-        $duree = date_diff($dateDepart, $dateRetour);
-
-        return $duree->days;
     }
 }

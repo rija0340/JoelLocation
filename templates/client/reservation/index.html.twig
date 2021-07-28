@@ -1,0 +1,165 @@
+{% extends 'baseClient.html.twig' %}
+
+{% block title %}page client
+{% endblock %}
+{% block stylesheets %}{% endblock %}
+{% block body %}
+	<h3>Réservation en cours</h3>
+	<div class="row">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Référence
+					</th>
+					<th>Date de création</th>
+					<th>Réservation/véhicule</th>
+					<th>Dates/Durée</th>
+					<th>Prix</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for reserv in reservation_en_cours %}
+					<tr>
+						<td>{{ reserv.reference }}</td>
+						<td>{{ reserv.dateReservation|date('d/m/Y - H:i') }}</td>
+						<td>{{ reserv.vehicule.marque}}
+							{{ reserv.vehicule.modele}}</td>
+						<td>{{ reserv.dateDebut|date('d/m/Y - H:i')  }}<br>
+							<span class="text-center font-italic">
+								{{ reserv.duree}}
+								jours
+							</span>
+						</td>
+						<td>{{ reserv.prix }}
+							€</td>
+					</tr>
+				{% else %}
+					<tr>
+						<td colspan="8">Aucune reservation en cours</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<hr>
+	<h3>Réservation en attente de validation</h3>
+	<div class="row">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Numéro Devis</th>
+					<th>Date de création</th>
+					<th>Réservation/véhicule</th>
+					<th>Dates/Durée</th>
+					<th>Prix</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for reserv in res_attente_validation %}
+					<tr>
+						<td>{{ reserv.numero }}</td>
+						<td>{{ reserv.dateCreation ? reserv.dateCreation|date('d/m/Y - H:i') : '' }}</td>
+						<td>{{ reserv.vehicule.marque}}
+							{{ reserv.vehicule.modele}}</td>
+						<td>{{ reserv.dateDepart ? reserv.dateDepart|date('d/m/Y - H:i') : '' }}/
+							{{ reserv.duree}}
+							jours
+						</td>
+						<td>{{ reserv.prix }}
+							€</td>
+						<td>
+							<a href="{{ path('client_devis_show', {'id': reserv.id}) }}">
+								<i class=" fa fa-info-circle" style="font-size: 2em !important;"></i>
+							</a>
+						</td>
+					</tr>
+				{% else %}
+					<tr>
+						<td colspan="8">Aucune reservation en attente</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<hr>
+
+	<hr>
+	<h3>Réservations à venir</h3>
+	<div class="row">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Numéro Devis</th>
+					<th>Date de création</th>
+					<th>Réservation/véhicule</th>
+					<th>Dates/Durée</th>
+					<th>Prix</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for reserv in res_attente_dateDebut %}
+					<tr>
+						<td>{{ reserv.reference }}</td>
+						<td>{{ reserv.dateReservation ? reserv.dateReservation|date('d/m/Y - H:i') : '' }}</td>
+						<td>{{ reserv.vehicule.marque}}
+							{{reserv.vehicule.modele}}
+						</td>
+						<td>{{ reserv.dateDebut ? reserv.dateDebut|date('d/m/Y - H:i ') : '' }}/<br>
+							<span class="text-center font-italic">
+								{{ reserv.duree}}
+								jours
+							</span>
+						</td>
+						<td>{{ reserv.prix }}
+							€</td>
+					</tr>
+				{% else %}
+					<tr>
+						<td colspan="8">Aucune reservation en attente</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<hr>
+	<h3>Réservation réalisées</h3>
+	<div class="row">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Référence
+					</th>
+					<th>Date de création</th>
+					<th>Réservation/véhicule</th>
+					<th>Dates/Durée</th>
+					<th>Prix</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for reserv in reservation_effectuers %}
+					<tr>
+
+						<td>{{ reserv.reference }}</td>
+						<td>{{ reserv.dateReservation|date('d/m/Y - H:i') }}</td>
+						<td>{{ reserv.vehicule.marque}}
+							{{ reserv.vehicule.modele}}</td>
+						<td>{{ reserv.dateDebut|date('d/m/Y - H:i')  }}
+							<br>
+							<span class="text-center font-italic">
+								{{ reserv.duree}}
+								jours
+							</span>
+						</td>
+						<td>{{ reserv.prix }}
+							€</td>
+					</tr>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="8">Aucune reservation réaliser</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>{% endblock %}{% block javascripts %}{% endblock %}

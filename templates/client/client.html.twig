@@ -1,8 +1,22 @@
-{% extends 'base.html.twig' %}
+{% extends 'baseClient.html.twig' %}
 
 {% block title %}page client
 {% endblock %}
 {% block stylesheets %}
+	<!-- bootstrap-datetimepicker -->
+	<link
+	href="../../admin/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
+	<!-- Ion.RangeSlider -->
+	<link href="../../admin/vendors/normalize-css/normalize.css" rel="stylesheet">
+	<link href="../../admin/vendors/ion.rangeSlider/css/ion.rangeSlider.css" rel="stylesheet">
+	<link
+	href="../../admin/vendors/ion.rangeSlider/css/ion.rangeSlider.skinFlat.css" rel="stylesheet">
+	<!-- smart  -->
+	<link href="../../admin/vendors/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css" rel="stylesheet">
+	<link href="../../admin/vendors/cropper/dist/cropper.min.css" rel="stylesheet">
+	<link href="../../css/admin/smart_wizard_all.css" rel="stylesheet">
+	<link href="../../css/admin/jquery-ui.css" rel="stylesheet">
+	<link href="../../css/admin/details_vehicule.css" rel="stylesheet">
 	<link rel="stylesheet" href="css/client/style.css">
 {% endblock %}
 {% block body %}
@@ -84,8 +98,7 @@
 							<h3>Effectuer une reservation</h3>
 						</div>
 
-						{% include "client/_form.html.twig" %}
-
+						{% include "client/reservationSteps/index.html.twig" %}
 
 					</div>
 					{# fin new reservation #}
@@ -102,4 +115,48 @@
 {% endblock %}
 {% block javascripts %}
 	<script src="../../js/admin/reservationClient_new_ajax.js"></script>
+	<!-- FastClick -->
+	<script src="../../admin/vendors/fastclick/lib/fastclick.js"></script>
+	<script src="../../admin/vendors/jquery/dist/jquery.min.js"></script>
+
+	<!-- jQuery Smart Wizard -->
+	<script src="../../admin/vendors/jQuery-Smart-Wizard/js/jquery.smartWizard.js"></script>
+	<!-- bootstrap-daterangepicker -->
+	<script src="../../admin/vendors/moment/min/moment.min.js"></script>
+	<script src="../../admin/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+	<!-- bootstrap-datetimepicker -->
+	<script src="../../admin/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+	<!-- Ion.RangeSlider -->
+	<script src="../../admin/vendors/ion.rangeSlider/js/ion.rangeSlider.min.js"></script>
+	<!-- Bootstrap Colorpicker -->
+	<script src="../../admin/vendors/mjolnic-bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js"></script>
+	<!-- jquery.inputmask -->
+	<script src="../../admin/vendors/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
+	<!-- jQuery Knob -->
+	<script src="../../admin/vendors/jquery-knob/dist/jquery.knob.min.js"></script>
+	<script src="../../js/admin/reservation_new_ajax.js"></script>
+	<script src="../../js/admin/vente_comptoir.js"></script>
+	<script src="../../js/admin/jspdf.min.js"></script>
+	<script src="../../js/admin/smartwizard-config.js"></script>
+	<script src="../../js/admin/jquery-ui.js"></script>
+
+	<script>
+		// Example starter JavaScript for disabling form submissions if there are invalid fields
+(function () {
+'use strict';
+window.addEventListener('load', function () { // Fetch all the forms we want to apply custom Bootstrap validation styles to
+var forms = document.getElementsByClassName('needs-validation');
+// Loop over them and prevent submission
+var validation = Array.prototype.filter.call(forms, function (form) {
+form.addEventListener('submit', function (event) {
+if (form.checkValidity() === false) {
+event.preventDefault();
+event.stopPropagation();
+}
+form.classList.add('was-validated');
+}, false);
+});
+}, false);
+})();
+	</script>
 {% endblock %}

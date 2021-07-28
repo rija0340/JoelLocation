@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Tarifs;
+use App\Entity\Vehicule;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -17,22 +19,7 @@ class TarifsType extends AbstractType
             ->add('septJours')
             ->add('quinzeJours')
             ->add('trenteJours')
-            ->add('mois', ChoiceType::class, [
-                'choices'  => [
-                    'Janvier' => 'Janvier',
-                    'Février' => 'Février',
-                    'Mars' => 'Mars',
-                    'Avril' => 'Avril',
-                    'Mai' => 'Mai',
-                    'Juin' => 'Juin',
-                    'Juillet' => 'Juillet',
-                    'Août' => 'Août',
-                    'Septembre' => 'Septembre',
-                    'Octobre' => 'Octobre',
-                    'Novembre' => 'Novembre',
-                    'Décembre' => 'Décembre',
-                ]
-            ])
+
             ->add('vehicule');
     }
 

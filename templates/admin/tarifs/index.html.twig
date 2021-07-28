@@ -57,19 +57,26 @@
 						<th>30j</th>
 					{% endfor %}
 				</tr>
-				{% for vehicule in listeVehicules %}
+				{% set i = 0 %}
+				{% for tarifs in tarifsParVehicule %}
 					<tr>
-						<th>{{vehicule.marque}}
-							{{vehicule.modele}}</th>
+
+						<th>{{listeVehicules[i]}}</th>
 						{% for tarif in tarifs %}
-							{% if vehicule == tarif.vehicule %}
+							{% if tarif != null %}
 								<td>{{tarif.troisJours}}</td>
 								<td>{{tarif.septJours}}</td>
 								<td>{{tarif.quinzeJours}}</td>
 								<td>{{tarif.trenteJours}}</td>
+							{% else %}
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
 							{% endif %}
 						{% endfor %}
 					</tr>
+					{% set i = i + 1 %}
 				{% endfor %}
 			</table>
 
@@ -105,19 +112,19 @@
 
 										<div class="row">
 
-											<div class="col-auto">
+											<div class="col-auto p-0 m-0">
 												<a href="{{ path('tarif_show', {'id': tarif.id}) }}" class="btn btn-link">
 													<i class="fa  fa-list-ul"></i>
 												</a>
 											</div>
 											{% if is_granted("ROLE_ADMIN") %}
 
-												<div class="col-auto">
+												<div class="col-auto p-0 m-0">
 													<a id="btnEdit" href="{{ path('tarif_edit', {'id': tarif.id}) }}" class="btn btn-link">
 														<i class="fa  fa-gear (alias)"></i>
 													</a>
 												</div>
-												<div class="col-auto">
+												<div class="col-auto p-0 m-0">
 													<form method="post" action="{{ path('tarif_delete', {'id': tarif.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer ce tarif?');">
 														<input type="hidden" name="_method" value="DELETE">
 														<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tarif.id) }}">
@@ -139,14 +146,8 @@
 				</div>
 			</div>
 		</div>
-	</div>
-	{# fin content #}
-
-
-{% endblock %}
-{% block javascripts %}
-	<!-- Datatables -->
-	<script src="../../admin/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+	</div>{# fin content #}{% endblock %}
+{% block javascripts %}<!-- Datatables --><script src="../../admin/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
 	<script src="../../admin/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 	<script src="../../admin/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
 	<script src="../../admin/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
@@ -162,4 +163,5 @@
 	<script src="../../admin/vendors/pdfmake/build/pdfmake.min.js"></script>
 	<script src="../../admin/vendors/pdfmake/build/vfs_fonts.js"></script>
 	<script src="../../js/admin/datatable.fr.js"></script>
+	<script src="../../js/admin/tarifs.js"></script>
 {% endblock  %}

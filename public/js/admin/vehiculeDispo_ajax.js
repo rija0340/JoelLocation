@@ -5,7 +5,6 @@ var day;
 var month;
 var fullyear;
 var dateInputValue;
-var dateToPhp;
 var dateDay;
 var dateMonth;
 var dateYear;
@@ -17,7 +16,7 @@ addEventListener();
 
 window.onload = function () {
 
-    formatDateForAjax(Date.now());
+    dateInputValue = new Date(Date.now());
     retrieveDataAjax();
 };
 
@@ -28,7 +27,8 @@ function retrieveDataAjax() {
     $.ajax({
         type: 'GET',
         url: '/vehiculeDispoData',
-        data: { "day": dateDay, "month": dateMonth, "year": dateYear, "hours": dateHours, "minutes": dateMinutes },
+        // data: { "day": dateDay, "month": dateMonth, "year": dateYear, "hours": dateHours, "minutes": dateMinutes },
+        data: { 'date': new Date(dateInputValue) },
         Type: "json",
         success: function (data) {
             var arrData = [];
@@ -46,7 +46,7 @@ function retrieveDataAjax() {
             }
 
             console.log(arrData);
-            addDateToHtml();
+            addDateToHtml(dateInputValue);
             LoadDataDatatable(arrData);
         },
         error: function (erreur) {
@@ -69,23 +69,10 @@ function addEventListener() {
 function getDateInputValue() {
 
     dateInputValue = this.value;
-    dateToPhp = formatDateForAjax(dateInputValue);
     retrieveDataAjax();
 
 }
 
-function formatDateForAjax(date) {
-    console.log(date);
-    var date = new Date(date);
-
-    dateDay = date.getDate();
-    console.log(dateDay);
-    dateMonth = date.getMonth() + 1;
-    dateHours = date.getHours();
-    dateMinutes = date.getMinutes();
-    dateYear = date.getFullYear();
-
-}
 
 function LoadDataDatatable(data) {
 
@@ -307,6 +294,7 @@ function LoadDataDatatable(data) {
                     extend: 'excel',
                     text: '<i class="fa fa-files-o"></i> Excel',
                     titleAttr: 'Excel',
+                    title: 'Véhicules disponible du ' + formatDate(dateInputValue),
                     className: 'btn btn-success btn-sm',
                     exportOptions: {
                         columns: ':visible'
@@ -316,6 +304,7 @@ function LoadDataDatatable(data) {
                     extend: 'pdf',
                     text: '<i class="fa fa-file-pdf-o"></i> PDF',
                     titleAttr: 'PDF',
+                    title: 'Véhicules disponible du ' + formatDate(dateInputValue),
                     className: 'btn btn-danger btn-sm',
                     exportOptions: {
                         columns: ':visible'
@@ -545,6 +534,7 @@ function LoadDataDatatable(data) {
                     extend: 'excel',
                     text: '<i class="fa fa-files-o"></i> Excel',
                     titleAttr: 'Excel',
+                    title: 'Véhicules disponible du ' + formatDate(dateInputValue),
                     className: 'btn btn-success btn-sm',
                     exportOptions: {
                         columns: ':visible'
@@ -554,6 +544,7 @@ function LoadDataDatatable(data) {
                     extend: 'pdf',
                     text: '<i class="fa fa-file-pdf-o"></i> PDF',
                     titleAttr: 'PDF',
+                    title: 'Véhicules disponible du ' + formatDate(dateInputValue),
                     className: 'btn btn-danger btn-sm',
                     exportOptions: {
                         columns: ':visible'
@@ -579,10 +570,68 @@ function LoadDataDatatable(data) {
 
 }
 
-function addDateToHtml() {
+// function addDateToHtml() {
+
+//     switch (dateMonth) {
+//         case 1:
+//             month = 'Janvier';
+//             break;
+//         case 2:
+//             month = 'Fevrier';
+//             break;
+
+//         case 3:
+//             month = 'Mars';
+//             break;
+//         case 4:
+//             month = 'Avril';
+//             break;
+//         case 5:
+//             month = 'Mai';
+//             break;
+//         case 6:
+//             month = 'Juin';
+//             break;
+//         case 7:
+//             month = 'Juillet';
+//             break;
+//         case 8:
+//             month = 'Août';
+//             break;
+//         case 9:
+//             month = 'Septembre';
+//             break;
+//         case 10:
+//             month = 'Octobre';
+//             break;
+//         case 11:
+//             month = 'Novembre';
+//             break;
+//         case 12:
+//             month = 'Décembre';
+//             break;
+//     }
+
+//     if (day < 10) {
+//         dateSpanElem.innerText = "0" + dateDay + " " + month + " " + dateYear;
+//     } else {
+//         dateSpanElem.innerText = dateDay + " " + month + " " + dateYear;
+//     }
 
 
-    switch (dateMonth) {
+
+// }
+
+
+function formatDate(date) {
+
+    var date = new Date(date)
+    var day = date.getDate();
+    var month = date.getMonth() + 1;
+
+    var year = date.getFullYear()
+
+    switch (month) {
         case 1:
             month = 'Janvier';
             break;
@@ -623,13 +672,17 @@ function addDateToHtml() {
     }
 
     if (day < 10) {
-        dateSpanElem.innerText = "0" + dateDay + " " + month + " " + dateYear;
+        return "0" + day + " " + month + " " + year;
     } else {
-        dateSpanElem.innerText = dateDay + " " + month + " " + dateYear;
+        return day + " " + month + " " + year;
     }
 
+}
 
+function addDateToHtml(date) {
+    dateSpanElem.innerText = formatDate(date);
 
 }
+
 
 

@@ -113,6 +113,26 @@ class User implements UserInterface
      */
     private $recupass;
 
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private $dateNaissance;
+
+    /**
+     * @ORM\Column(type="string", length=1000, nullable=true)
+     */
+    private $numeroPermis;
+
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private $datePermis;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $lieuNaissance;
+
     public function __construct()
     {
         $this->messages = new ArrayCollection();
@@ -470,6 +490,54 @@ class User implements UserInterface
     public function setRecupass(?string $recupass): self
     {
         $this->recupass = $recupass;
+
+        return $this;
+    }
+
+    public function getDateNaissance(): ?\DateTimeInterface
+    {
+        return $this->dateNaissance;
+    }
+
+    public function setDateNaissance(?\DateTimeInterface $dateNaissance): self
+    {
+        $this->dateNaissance = $dateNaissance;
+
+        return $this;
+    }
+
+    public function getNumeroPermis(): ?string
+    {
+        return $this->numeroPermis;
+    }
+
+    public function setNumeroPermis(?string $numeroPermis): self
+    {
+        $this->numeroPermis = $numeroPermis;
+
+        return $this;
+    }
+
+    public function getDatePermis(): ?\DateTimeInterface
+    {
+        return $this->datePermis;
+    }
+
+    public function setDatePermis(?\DateTimeInterface $datePermis): self
+    {
+        $this->datePermis = $datePermis;
+
+        return $this;
+    }
+
+    public function getLieuNaissance(): ?string
+    {
+        return $this->lieuNaissance;
+    }
+
+    public function setLieuNaissance(?string $lieuNaissance): self
+    {
+        $this->lieuNaissance = $lieuNaissance;
 
         return $this;
     }

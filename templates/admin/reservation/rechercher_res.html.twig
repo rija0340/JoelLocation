@@ -78,7 +78,6 @@
 						<div class="">
 							<select class="form-control" id="RIM_selectVehicule">
 								<option>Sélectionnez une immatriculation</option>
-
 								{% for vehicule in vehicules %}
 									<option value={{vehicule.id}}>{{vehicule}}</option>
 								{% endfor %}
@@ -139,12 +138,12 @@
 					</p>
 					<div class="form-group ">
 						<div class="">
-							<select class="form-control">
-								<option>Choisir un type de date</option>
-								<option>Option one</option>
-								<option>Option two</option>
-								<option>Option three</option>
-								<option>Option four</option>
+							<select class="form-control" id="RA_selectVehicule">
+								<option>Choisir une catégorie</option>
+
+								{% for vehicule in vehicules %}
+									<option value={{vehicule.id}}>{{vehicule}}</option>
+								{% endfor %}
 							</select>
 						</div>
 					</div>
@@ -154,14 +153,7 @@
 						Début période:
 					</p>
 					<div>
-						<input id="debut_periode" class="date-picker form-control" placeholder="dd-mm-yyyy" type="text" required="required" type="text" onfocus="this.type='date'" onmouseover="this.type='date'" onclick="this.type='date'" onblur="this.type='text'" onmouseout="timeFunctionLong(this)">
-						<script>
-							function timeFunctionLong(input) {
-setTimeout(function () {
-input.type = 'text';
-}, 60000);
-}
-						</script>
+						<input id="RA_dateDepart" type="date" class="form-control">
 					</div>
 				</div>
 				<div class="col-4">
@@ -170,14 +162,7 @@ input.type = 'text';
 						Fin période:
 					</p>
 					<div>
-						<input id="fin_periode" class="date-picker form-control" placeholder="dd-mm-yyyy" type="text" required="required" type="text" onfocus="this.type='date'" onmouseover="this.type='date'" onclick="this.type='date'" onblur="this.type='text'" onmouseout="timeFunctionLong(this)">
-						<script>
-							function timeFunctionLong(input) {
-setTimeout(function () {
-input.type = 'text';
-}, 60000);
-}
-						</script>
+						<input id="RIM_dateRetour" type="date" class="form-control">
 					</div>
 				</div>
 				<div class="col-4">
@@ -186,12 +171,12 @@ input.type = 'text';
 					</p>
 					<div class="form-group ">
 						<div class="">
-							<select class="form-control">
+							<select class="form-control" id="RA_selectVehicule">
 								<option>Choisir une catégorie</option>
-								<option>Option one</option>
-								<option>Option two</option>
-								<option>Option three</option>
-								<option>Option four</option>
+
+								{% for vehicule in vehicules %}
+									<option value={{vehicule.id}}>{{vehicule}}</option>
+								{% endfor %}
 							</select>
 						</div>
 					</div>
