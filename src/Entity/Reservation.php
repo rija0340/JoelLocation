@@ -491,6 +491,18 @@ class Reservation
         $currentTime = new \DateTime('NOW');
         $year = $currentTime->format('Y');
         $month = $dateHelper->getMonthName($currentTime);
+        if ($currentID < 10) {
+            $currentID = '0000' . $currentID;
+        }
+        if ($currentID < 100 && $currentID > 10) {
+            $currentID = '000' . $currentID;
+        }
+        if ($currentID < 1000 && $currentID > 100) {
+            $currentID = '00' . $currentID;
+        }
+        if ($currentID < 10000 && $currentID > 1000) {
+            $currentID = '0' . $currentID;
+        }
         $ref  = $pref . $year . $month . $currentID;
         $this->setReference($ref);
     }

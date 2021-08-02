@@ -177,7 +177,7 @@ class ReservationController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $reservation->setVehicule($vehicule);
 
-            // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
+            // ajout reference dans Entity RESERVATION (CPT + year + month + ID)
 
             $lastID = $this->reservationRepo->findBy(array(), array('id' => 'DESC'), 1);
             if ($lastID == null) {
@@ -185,7 +185,7 @@ class ReservationController extends AbstractController
             } else {
                 $currentID = $lastID[0]->getId() + 1;
             }
-            $pref = "CTPGP";
+            $pref = "CPT";
             $reservation->setRefRes($pref, $currentID);
 
             $entityManager->persist($reservation);
@@ -241,14 +241,13 @@ class ReservationController extends AbstractController
             $reservation->setCodeReservation($agenceDepart);
             // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
 
-
             $lastID = $this->reservationRepo->findBy(array(), array('id' => 'DESC'), 1);
             if ($lastID == null) {
                 $currentID = 1;
             } else {
                 $currentID = $lastID[0]->getId() + 1;
             }
-            $pref = "CTPGP";
+            $pref = "CPT";
             $reservation->setRefRes($pref, $currentID);
 
             $prix = $this->tarifsHelper->calculTarif($dateTimeDepart, $dateTimeRetour, $siege, $garantie, $vehicule);
@@ -415,108 +414,6 @@ class ReservationController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('reservation_index');
-    }
-
-    /**
-     * @Route("/recherchesimple", name="recherche_simple", methods={"GET", "POST"})
-     */
-    public function rechercheSimple(Request $request, UserRepository $userRepository, ReservationRepository $reservationRepository): Response
-    {
-        $recherche = $request->query->get('recherche');
-        // dd($request);
-        // die();
-        $reservation[] = new Reservation();
-
-        if ($recherche != null) {
-            // $client_id = (int)$recherche;
-            $client_nom = $recherche;
-            // $client = new User();
-            $reservation[] = new Reservation();
-            //if($client_id){
-            // $client = $userRepository->findOneBy(["id" => $client_id]);
-            $client = $userRepository->findOneBy(["nom" => $client_nom]);
-            //}
-            // if ($client == null) {
-            //     $client = $userRepository->findOneBy(["nom" => $recherche]);
-            // }
-            if ($client != null) {
-                $reservation = $reservationRepository->findBy(["client" => $client]);
-            } else {
-                $reservation = $reservationRepository->findBy(["reference" => $recherche]);
-            }
-            $datas = array();
-
-            foreach ($reservation as $key => $res) {
-                if ($res->getDateFin() < new \Datetime('now')) {
-                    $datas[$key]['status'] = 0; //terminé
-                } else {
-                    $datas[$key]['status'] = 1; //en cours
-                }
-                $datas[$key]['id'] = $res->getId();
-                $datas[$key]['prix'] = $res->getPrix();
-                $datas[$key]['dateDepart'] = $res->getDateDebut()->format('d-m-Y H:i');
-                $datas[$key]['dateRetour'] = $res->getDateFin()->format('d-m-Y H:i');
-                $datas[$key]['dateResa'] = $res->getDateReservation()->format('d-m-Y H:i');
-                $datas[$key]['nomPrenomClient'] = $res->getClient()->getNom() . " " . $res->getClient()->getPrenom();
-                $datas[$key]['mailClient'] = $res->getClient()->getMail();
-                $datas[$key]['dureeResa'] = $res->getDuree();
-                $datas[$key]['codeResa'] = $res->getCodeReservation();
-                $datas[$key]['vehicule'] = $res->getVehicule()->getMarque()->getLibelle() . " " . $res->getVehicule()->getModele() . " " . $res->getVehicule()->getImmatriculation();
-            }
-
-            // dd($datas);
-            // die();
-
-            return new JsonResponse($datas);
-        }
-        return $this->redirectToRoute('reservation_index');
-    }
-
-    /**
-     * @Route("/rechercheimmatriculation", name="recherche_immatriculation", methods={"GET", "POST"})
-     */
-    public function rechercheImmatriculation(Request $request): Response
-    {
-
-        // dump($request);
-        // die();
-
-        $idVehicule = $request->query->get('idVehicule');
-        $date = $request->query->get('date');
-
-        if ($idVehicule != null && $date != null) {
-            $date = new \DateTime($date);
-            $vehicule = $this->vehiculeRepo->find($idVehicule);
-
-            // dump($date, $vehicule);
-            // die();
-
-            $reservations = new Reservation();
-            $reservations = $this->reservationRepo->findRechercheIM($vehicule, $date);
-
-            $datas = array();
-
-            foreach ($reservations as $key => $res) {
-                if ($res->getDateFin() < new \Datetime('now')) {
-                    $datas[$key]['status'] = 0; //terminé
-                } else {
-                    $datas[$key]['status'] = 1; //en cours
-                }
-                $datas[$key]['id'] = $res->getId();
-                $datas[$key]['prix'] = $res->getPrix();
-                $datas[$key]['dateDepart'] = $res->getDateDebut()->format('d-m-Y H:i');
-                $datas[$key]['dateRetour'] = $res->getDateFin()->format('d-m-Y H:i');
-                $datas[$key]['dateResa'] = $res->getDateReservation()->format('d-m-Y H:i');
-                $datas[$key]['nomPrenomClient'] = $res->getClient()->getNom() . " " . $res->getClient()->getPrenom();
-                $datas[$key]['mailClient'] = $res->getClient()->getMail();
-                $datas[$key]['dureeResa'] = $res->getDuree();
-                $datas[$key]['codeResa'] = $res->getCodeReservation();
-                $datas[$key]['vehicule'] = $res->getVehicule()->getMarque()->getLibelle() . " " . $res->getVehicule()->getModele() . " " . $res->getVehicule()->getImmatriculation();
-            }
-
-            return new JsonResponse($datas);
-        }
         return $this->redirectToRoute('reservation_index');
     }
 }

@@ -2,13 +2,14 @@
 
 namespace App\Repository;
 
-use App\Entity\Reservation;
-use App\Service\DateHelper;
 use DateTime;
 use DateTimeZone;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Entity\Reservation;
+use App\Service\DateHelper;
+use App\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Validator\Constraints\Date;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Reservation|null find($id, $lockMode = null, $lockVersion = null)
@@ -18,8 +19,11 @@ use Symfony\Component\Validator\Constraints\Date;
  */
 class ReservationRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $userRepo;
+    public function __construct(ManagerRegistry $registry, UserRepository $userRepo)
     {
+
+        $this->userRepo = $userRepo;
         parent::__construct($registry, Reservation::class);
     }
 
@@ -268,6 +272,165 @@ class ReservationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+
+    /**
+     * @return Reservation[] Returns an array of Reservation objects
+     */
+    public function findDateDepartIncludedBetwn($debutPeriode, $finPeriode, $vehicule, $typeTarif)
+    {
+
+        $superAdmin = $this->userRepo->findSuperAdmin();
+
+        if ($vehicule == null && $typeTarif == null) {
+            return $this->createQueryBuilder('r')
+                ->where(' :debutPeriode < r.date_debut AND r.date_debut < :finPeriode AND r.client != :client')
+                ->setParameter('debutPeriode', $debutPeriode)
+                ->setParameter('finPeriode', $finPeriode)
+                ->setParameter('client', $superAdmin)
+                ->getQuery()
+                ->getResult();
+        } else {
+            if ($vehicule != null && $typeTarif == null) {
+                return $this->createQueryBuilder('r')
+                    ->where(' :debutPeriode < r.date_debut AND r.date_debut < :finPeriode AND r.vehicule = :vehicule AND r.client != :client')
+                    ->setParameter('debutPeriode', $debutPeriode)
+                    ->setParameter('finPeriode', $finPeriode)
+                    ->setParameter('vehicule', $vehicule)
+                    ->setParameter('client', $superAdmin)
+                    ->getQuery()
+                    ->getResult();
+            }
+            if ($vehicule == null && $typeTarif != null) {
+                return $this->createQueryBuilder('r')
+                    ->where(' :debutPeriode < r.date_debut AND r.date_debut < :finPeriode AND r.reference LIKE :typeTarif AND r.client != :client')
+                    ->setParameter('debutPeriode', $debutPeriode)
+                    ->setParameter('finPeriode', $finPeriode)
+                    ->setParameter('typeTarif', $typeTarif)
+                    ->setParameter('client', $superAdmin)
+                    ->getQuery()
+                    ->getResult();
+            }
+            if ($vehicule != null && $typeTarif != null) {
+                return $this->createQueryBuilder('r')
+                    ->where(' :debutPeriode < r.date_debut AND r.date_debut < :finPeriode AND r.reference LIKE :typeTarif AND r.vehicule = :vehicule AND r.client != :client')
+                    ->setParameter('debutPeriode', $debutPeriode)
+                    ->setParameter('finPeriode', $finPeriode)
+                    ->setParameter('typeTarif', $typeTarif)
+                    ->setParameter('vehicule', $vehicule)
+                    ->setParameter('client', $superAdmin)
+                    ->getQuery()
+                    ->getResult();
+            }
+        }
+    }
+
+
+    /**
+     * @return Reservation[] Returns an array of Reservation objects
+     */
+    public function findDateRetourIncludedBetwn($debutPeriode, $finPeriode, $vehicule, $typeTarif)
+    {
+        $superAdmin = $this->userRepo->findSuperAdmin();
+
+        if ($vehicule == null && $typeTarif == null) {
+            return $this->createQueryBuilder('r')
+                ->where(' :debutPeriode < r.date_fin AND r.date_fin < :finPeriode AND r.client != :client')
+                ->setParameter('debutPeriode', $debutPeriode)
+                ->setParameter('finPeriode', $finPeriode)
+                ->setParameter('client', $superAdmin)
+                ->getQuery()
+                ->getResult();
+        } else {
+            if ($vehicule != null && $typeTarif == null) {
+                return $this->createQueryBuilder('r')
+                    ->where(' :debutPeriode < r.date_fin AND r.date_fin < :finPeriode AND r.vehicule = :vehicule AND r.client != :client')
+                    ->setParameter('debutPeriode', $debutPeriode)
+                    ->setParameter('finPeriode', $finPeriode)
+                    ->setParameter('vehicule', $vehicule)
+                    ->setParameter('client', $superAdmin)
+                    ->getQuery()
+                    ->getResult();
+            }
+            if ($vehicule == null && $typeTarif != null) {
+                return $this->createQueryBuilder('r')
+                    ->where(' :debutPeriode < r.date_fin AND r.date_fin < :finPeriode AND r.reference LIKE :typeTarif AND r.client != :client')
+                    ->setParameter('debutPeriode', $debutPeriode)
+                    ->setParameter('finPeriode', $finPeriode)
+                    ->setParameter('typeTarif', $typeTarif)
+                    ->setParameter('client', $superAdmin)
+                    ->getQuery()
+                    ->getResult();
+            }
+            if ($vehicule != null && $typeTarif != null) {
+                return $this->createQueryBuilder('r')
+                    ->where(' :debutPeriode < r.date_fin AND r.date_fin < :finPeriode AND r.reference LIKE :typeTarif AND r.vehicule = :vehicule AND r.client != :client')
+                    ->setParameter('debutPeriode', $debutPeriode)
+                    ->setParameter('finPeriode', $finPeriode)
+                    ->setParameter('typeTarif', $typeTarif)
+                    ->setParameter('vehicule', $vehicule)
+                    ->setParameter('client', $superAdmin)
+                    ->getQuery()
+                    ->getResult();
+            }
+        }
+    }
+
+
+    /**
+     * @return Reservation[] Returns an array of Reservation objects
+     */
+    public function findDateResIncludedBetwn($debutPeriode, $finPeriode, $vehicule, $typeTarif)
+    {
+        $superAdmin = $this->userRepo->findSuperAdmin();
+
+        if ($typeTarif == 'WEB') {
+            $typeTarif = 'WEB%';
+        } else {
+            $typeTarif = 'CPT%';
+        }
+
+        if ($vehicule == null && $typeTarif == null) {
+            return $this->createQueryBuilder('r')
+                ->where(' :debutPeriode < r.date_reservation AND r.date_reservation < :finPeriode AND r.client != :client')
+                ->setParameter('debutPeriode', $debutPeriode)
+                ->setParameter('finPeriode', $finPeriode)
+                ->setParameter('client', $superAdmin)
+                ->getQuery()
+                ->getResult();
+        } else {
+            if ($vehicule != null && $typeTarif == null) {
+                return $this->createQueryBuilder('r')
+                    ->where(' :debutPeriode < r.date_reservation AND r.date_reservation < :finPeriode AND r.vehicule = :vehicule AND r.client != :client')
+                    ->setParameter('debutPeriode', $debutPeriode)
+                    ->setParameter('finPeriode', $finPeriode)
+                    ->setParameter('vehicule', $vehicule)
+                    ->setParameter('client', $superAdmin)
+                    ->getQuery()
+                    ->getResult();
+            }
+            if ($vehicule == null && $typeTarif != null) {
+                return $this->createQueryBuilder('r')
+                    ->where(' :debutPeriode < r.date_reservation AND r.date_reservation < :finPeriode AND r.reference LIKE :typeTarif AND r.client != :client')
+                    ->setParameter('debutPeriode', $debutPeriode)
+                    ->setParameter('finPeriode', $finPeriode)
+                    ->setParameter('typeTarif', $typeTarif)
+                    ->setParameter('client', $superAdmin)
+                    ->getQuery()
+                    ->getResult();
+            }
+            if ($vehicule != null && $typeTarif != null) {
+                return $this->createQueryBuilder('r')
+                    ->where(' :debutPeriode < r.date_reservation AND r.date_reservation < :finPeriode AND r.reference LIKE :typeTarif AND r.vehicule = :vehicule AND r.client != :client')
+                    ->setParameter('debutPeriode', $debutPeriode)
+                    ->setParameter('finPeriode', $finPeriode)
+                    ->setParameter('typeTarif', $typeTarif)
+                    ->setParameter('vehicule', $vehicule)
+                    ->setParameter('client', $superAdmin)
+                    ->getQuery()
+                    ->getResult();
+            }
+        }
+    }
 
 
     // /**

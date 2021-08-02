@@ -202,7 +202,7 @@ class ClientController extends AbstractController
             } else {
                 $currentID = $lastID[0]->getId() + 1;
             }
-            $pref = "WEBGP";
+            $pref = "WEB";
             $reservation->setRefRes($pref, $currentID);
 
             $prix = $this->tarifsHelper->calculTarif($dateTimeDepart, $dateTimeRetour, $siege, $garantie, $vehicule);
@@ -240,7 +240,7 @@ class ClientController extends AbstractController
         // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
         $lastID = $this->reservRepo->findBy(array(), array('id' => 'DESC'), 1);
         $currentID = $lastID[0]->getId() + 1;
-        $reservation->setRefRes("WEPGP", $currentID);
+        $reservation->setRefRes("WEB", $currentID);
 
         $devis->setTransformed(true);
 
@@ -427,7 +427,7 @@ class ClientController extends AbstractController
     }
 
     /**
-     * @Route("/payement", name="payement", methods={"POST"})
+     * @Route("/payement", name="payement", methods={"GET","POST"})
      */
     public function payement(Request $request)
     {

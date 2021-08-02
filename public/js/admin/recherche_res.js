@@ -15,6 +15,16 @@ var RIM_date;
 var RIM_tbody;
 var RIM_divResultRech;
 var RIM_aucun;
+var RA_btnRechercher;
+
+// recherche avancee
+var typeDateElem;
+var typeDateValue;
+var debutPeriodeValue;
+var debutPeriodeElem;
+var finPeriodeElem;
+var finPeriodeValue;
+
 
 
 getElements();
@@ -32,12 +42,24 @@ function getElements() {
     RIM_divResultRech = document.getElementById('RIM_resultRech');
     RIM_btnChercher = document.getElementById('RIM_btnChercher');
     RIM_aucun = document.getElementById('RIM_aucun');
+    // rechercha avance
+    RA_btnRechercher = document.getElementById('RA_btnRechercher');
+    typeDateElem = document.getElementById('typeDate');
+    debutPeriodeElem = document.getElementById('debutPeriode');
+    finPeriodeElem = document.getElementById('finPeriode');
 
 }
 
 function addEventListener() {
     btnRechSimple.addEventListener('click', rechercheSimple, false);
     RIM_btnChercher.addEventListener('click', rechercheIM, false)
+    RA_btnRechercher.addEventListener('click', rechercheRA, false)
+}
+
+function getValues() {
+    typeDateValue = typeDateElem.value;
+    debutPeriodeValue = debutPeriodeElem.value;
+    finPeriodeValue = finPeriodeElem.value;
 }
 
 //********************************** */
@@ -52,7 +74,7 @@ function rechercheSimple(e) {
 
         $.ajax({
             type: 'GET',
-            url: '/reservation/recherchesimple',
+            url: '/recherchesimple',
             timeout: 3000,
             data: { 'recherche': motcleRechSimple },
             success: function (data) {
@@ -157,7 +179,7 @@ function rechercheIM(e) {
 
     $.ajax({
         type: 'GET',
-        url: '/reservation/rechercheimmatriculation',
+        url: '/rechercheimmatriculation',
         timeout: 3000,
         data: { 'idVehicule': RIM_idVehicule, 'date': RIM_date },
         success: function (data) {
@@ -194,6 +216,7 @@ function rechercheIM(e) {
     });
 
 }
+
 
 
 

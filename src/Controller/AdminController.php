@@ -4,12 +4,14 @@ namespace App\Controller;
 
 use App\Entity\Tarifs;
 use App\Entity\Reservation;
+use App\Form\RechercheAVType;
 use App\Form\ReservationType;
 use App\Repository\GarantieRepository;
 use App\Repository\OptionsRepository;
 use App\Repository\TarifsRepository;
 use App\Repository\ReservationRepository;
 use App\Repository\VehiculeRepository;
+use DateTime;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,18 +49,6 @@ class AdminController extends AbstractController
       'stopSales' => $stopSales
     ]);
   }
-
-  /**
-   * @Route("/rechercher_res", name="rechercher_res")
-   */
-  public function rechercher_res(): Response
-  {
-    $vehicules = $this->vehiculeRepo->findAll();
-    return $this->render('admin/reservation/rechercher_res.html.twig', [
-      'vehicules' => $vehicules,
-    ]);
-  }
-
 
 
   /**
