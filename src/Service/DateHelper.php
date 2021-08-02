@@ -2,6 +2,8 @@
 
 namespace App\Service;
 
+use DateTime;
+use DateTimeZone;
 
 class DateHelper
 {
@@ -71,5 +73,10 @@ class DateHelper
         $duree = date_diff($dateDepart, $dateRetour);
 
         return $duree->days;
+    }
+
+    function dateNow()
+    {
+        return new DateTime('NOW', new DateTimeZone('+0300'));
     }
 }

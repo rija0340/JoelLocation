@@ -149,6 +149,16 @@ class Reservation
      */
     private $reference;
 
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $kmDepart;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $kmRetour;
+
     public function __construct()
     {
         $this->avis = new ArrayCollection();
@@ -509,5 +519,29 @@ class Reservation
 
     public function frenchMouth()
     {
+    }
+
+    public function getKmDepart(): ?float
+    {
+        return $this->kmDepart;
+    }
+
+    public function setKmDepart(?float $kmDepart): self
+    {
+        $this->kmDepart = $kmDepart;
+
+        return $this;
+    }
+
+    public function getKmRetour(): ?float
+    {
+        return $this->kmRetour;
+    }
+
+    public function setKmRetour(?float $kmRetour): self
+    {
+        $this->kmRetour = $kmRetour;
+
+        return $this;
     }
 }

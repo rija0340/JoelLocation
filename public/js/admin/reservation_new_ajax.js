@@ -2,21 +2,10 @@ var dateDebutElem;
 var dateDebutValue;
 var dateFinElem;
 var dateFinValue;
-var dateDebutToPhp;
-var dateFintToPhp;
-var dateFintToPhp;
 var btnRechercherElem;
 var reservation2Elem;
-var dateDebutDay;
-var dateDebutMonth;
-var dateDebutYear;
-var dateDebutHours;
-var dateDebutMinutes;
-var dateFinDay;
-var dateFinMonth;
-var dateFinYear;
-var dateFinHours;
-var dateFinMinutes;
+var dateDepart;
+var dateRetour;
 
 getElements();
 addEventListener()
@@ -61,7 +50,6 @@ function getDateDebutValue() {
             dateDebutValue = null;
             dateFinValue = null;
         } else {
-            setParamDateDebutForAjax();
 
             retrieveDataAjax();
         }
@@ -75,8 +63,6 @@ function getDateFinValue() {
     if ((dateFinValue = this.value) != null && dateDebutValue != null) {
 
         if (dateToTimestamp(dateFinValue) > dateToTimestamp(dateDebutValue)) {
-
-            setParamDateDebutForAjax();
 
             retrieveDataAjax();
 
@@ -99,35 +85,16 @@ function getDateFinValue() {
     }
 }
 
-function setParamDateDebutForAjax() {
-
-    var date1 = new Date(dateDebutValue);
-    var date2 = new Date(dateFinValue);
-
-    dateDebutDay = date1.getDate();
-    dateDebutMonth = date1.getMonth() + 1;
-    dateDebutYear = date1.getFullYear();
-    dateDebutHours = date1.getHours();
-    dateDebutMinutes = date1.getMinutes();
-    dateFinDay = date2.getDate();
-    dateFinMonth = date2.getMonth() + 1;
-    dateFinYear = date2.getFullYear();
-    dateFinHours = date2.getHours();
-    dateFinMinutes = date2.getMinutes();
-}
-
-
 function retrieveDataAjax() {
-    // var d = new Date(dateInputValue);
-    // var n = d.toString();
+
+    dateDepart = dateDebutValue;
+    dateRetour = dateFinValue;
+
     $.ajax({
         type: 'GET',
         url: '/reservation/vehiculeDispoFonctionDates',
         data: {
-            "dateDebutday": dateDebutDay, "dateDebutmonth": dateDebutMonth, "dateDebutyear": dateDebutYear, "dateDebuthours": dateDebutHours, "dateDebutminutes": dateDebutMinutes,
-
-            "dateFinday": dateFinDay, "dateFinmonth": dateFinMonth, "dateFinyear": dateFinYear, "dateFinhours": dateFinHours, "dateFinminutes": dateFinMinutes
-
+            'dateDepart': dateDepart, 'dateRetour': dateRetour
         },
         Type: "json",
         success: function (data) {

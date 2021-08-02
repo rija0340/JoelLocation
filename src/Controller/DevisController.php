@@ -110,7 +110,7 @@ class DevisController extends AbstractController
             $devis->setConducteur($conducteur);
             $devis->setLieuSejour($lieuSejour);
             $devis->setDuree($duree);
-            $devis->setDateCreation(new \DateTime('NOW', new DateTimeZone('Europe/Paris')));
+            $devis->setDateCreation($this->dateHelper->dateNow());
             $devis->setTransformed(false);
 
             // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)

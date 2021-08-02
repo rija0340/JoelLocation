@@ -2,35 +2,20 @@ var dateDebutElem;
 var dateDebutValue;
 var dateFinElem;
 var dateFinValue;
-var dateDebutToPhp;
-var dateFintToPhp;
-var dateFintToPhp;
 var btnRechercherElem;
 var reservation2Elem;
 var imVehElem;
 var imVehValue;
-var dateDebutDay;
-var dateDebutMonth;
-var dateDebutYear;
-var dateDebutHours;
-var dateDebutMinutes;
-var dateFinDay;
-var dateFinMonth;
-var dateFinYear;
-var dateFinHours;
-var dateFinMinutes;
-
+var dateDepart;
+var dateRetour;
 
 getElements();
 addEventListener();
-
-
 
 window.onload = function test() {
     dateDebutValue = document.getElementById("reservation_date_debut").value;
     dateFinValue = document.getElementById("reservation_date_fin").value;
     imVehValue = document.getElementById("reservation_vehicule").value; //envoyé depuis controller et puis reçu dans edit html (champ caché)
-    setParamDateDebutForAjax();
     retrieveDataAjax();
 };
 
@@ -75,7 +60,6 @@ function getDateDebutValue() {
             dateDebutValue = null;
             dateFinValue = null;
         } else {
-            setParamDateDebutForAjax();
 
             retrieveDataAjax();
         }
@@ -90,7 +74,6 @@ function getDateFinValue() {
 
         if (dateToTimestamp(dateFinValue) > dateToTimestamp(dateDebutValue)) {
 
-            setParamDateDebutForAjax();
 
             retrieveDataAjax();
 
@@ -112,45 +95,15 @@ function getDateFinValue() {
         alert("Veuillez entrer en premier la date de début");
     }
 }
-function setParamDateDebutForAjax() {
-
-    var date1 = new Date(dateDebutValue);
-    var date2 = new Date(dateFinValue);
-
-    dateDebutDay = date1.getDate();
-    dateDebutMonth = date1.getMonth() + 1;
-    dateDebutYear = date1.getFullYear();
-    dateDebutHours = date1.getHours();
-    dateDebutMinutes = date1.getMinutes();
-    dateFinDay = date2.getDate();
-    dateFinMonth = date2.getMonth() + 1;
-    dateFinYear = date2.getFullYear();
-    dateFinHours = date2.getHours();
-    dateFinMinutes = date2.getMinutes();
-}
-
-// function formatDateForAjax(date) {
-//     var date = new Date(date);
-//     day = date.getDate();
-//     month = date.getMonth();
-//     fullyear = date.getFullYear();
-//     date = (month + 1) + "/" + day + "/" + fullyear;
-//     console.log(date);
-//     return date;
-// }
-
 
 function retrieveDataAjax() {
-    // var d = new Date(dateInputValue);
-    // var n = d.toString();
+    dateDepart = dateDebutValue;
+    dateRetour = dateFinValue;
     $.ajax({
         type: 'GET',
         url: '/reservation/vehiculeDispoFonctionDates',
         data: {
-            "dateDebutday": dateDebutDay, "dateDebutmonth": dateDebutMonth, "dateDebutyear": dateDebutYear, "dateDebuthours": dateDebutHours, "dateDebutminutes": dateDebutMinutes,
-
-            "dateFinday": dateFinDay, "dateFinmonth": dateFinMonth, "dateFinyear": dateFinYear, "dateFinhours": dateFinHours, "dateFinminutes": dateFinMinutes
-
+            'dateDepart': dateDepart, 'dateRetour': dateRetour
         },
         Type: "json",
         success: function (data) {

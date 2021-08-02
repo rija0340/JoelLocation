@@ -213,4 +213,20 @@ class AdminController extends AbstractController
   {
     return $this->render('admin/agence/presentation_agence/index.html.twig');
   }
+
+
+  /**
+   * @Route("/testerCode", name="testerCode", methods={"GET","POST"})
+   */
+  public function testerCode(): Response
+  {
+
+    $date = new \DateTime('now');
+    $date2 = $date->format('Y-m-d');
+    $dateDebut = \DateTime::createFromFormat('D M d Y H:i:s e+', date('Y-m-d', mktime()));
+    $dateFin = \DateTime::createFromFormat('D M d Y H:i:s e+', $date2);
+    dump($dateDebut, $dateFin, $date2);
+    die();
+    return $this->render('admin/agence/presentation_agence/index.html.twig');
+  }
 }

@@ -20,10 +20,13 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 class ReservationRepository extends ServiceEntityRepository
 {
     private $userRepo;
-    public function __construct(ManagerRegistry $registry, UserRepository $userRepo)
+    private $dateHelper;
+    public function __construct(ManagerRegistry $registry, UserRepository $userRepo, DateHelper $dateHelper)
     {
 
         $this->userRepo = $userRepo;
+        $this->dateHelper = $dateHelper;
+
         parent::__construct($registry, Reservation::class);
     }
 
@@ -48,7 +51,7 @@ class ReservationRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('r')
             ->andWhere('r.date_fin < :date')
-            ->setParameter('date', new \DateTime('NOW', new DateTimeZone('+0300')))
+            ->setParameter('date', $this->dateHelper->dateNow())
             ->orderBy('r.date_fin', 'DESC')
             ->getQuery()
             ->getResult();
@@ -91,7 +94,7 @@ class ReservationRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('r')
             ->andWhere('r.client = :client AND r.date_debut > :date')
             ->setParameter('client', $client)
-            ->setParameter('date', new \DateTime('NOW', new DateTimeZone('+0300')))
+            ->setParameter('date', $this->dateHelper->dateNow())
             ->orderBy('r.date_debut', 'DESC')
             ->getQuery()
             ->getResult();
@@ -144,7 +147,7 @@ class ReservationRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('r')
             ->andWhere(' r.code_reservation != :code AND r.date_fin > :date')
             ->setParameter('code', 'stopSale')
-            ->setParameter('date', new \DateTime('NOW', new DateTimeZone('+0300')))
+            ->setParameter('date', $this->dateHelper->dateNow())
             ->getQuery()
             ->getResult();
     }

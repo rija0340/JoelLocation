@@ -20,6 +20,7 @@ use App\Repository\ReservationRepository;
 use App\Repository\TarifsRepository;
 use App\Service\DateHelper;
 use App\Service\TarifsHelper;
+use DateTime;
 use DateTimeZone;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -62,25 +63,11 @@ class ReservationController extends AbstractController
     public function vehiculeDispoFonctionDates(Request $request)
     {
 
-        $dateDebutday = $request->query->get('dateDebutday');
-        $dateDebutmonth = $request->query->get('dateDebutmonth');
-        $dateDebutyear = $request->query->get('dateDebutyear');
-        $dateDebuthours = $request->query->get('dateDebuthours');
-        $dateDebutminutes = $request->query->get('dateDebutminutes');
-        $dateFinday = $request->query->get('dateFinday');
-        $dateFinmonth = $request->query->get('dateFinmonth');
-        $dateFinyear = $request->query->get('dateFinyear');
-        $dateFinhours = $request->query->get('dateFinhours');
-        $dateFinminutes = $request->query->get('dateFinminutes');
+        $dateDepart = $request->query->get('dateDepart');
+        $dateRetour = $request->query->get('dateRetour');
 
-        $dateDebut = date("Y-m-d H:i", mktime($dateDebuthours, $dateDebutminutes, 00, $dateDebutmonth, $dateDebutday, $dateDebutyear));
-        $dateFin = date("Y-m-d H:i", mktime($dateFinhours, $dateFinminutes, 00, $dateFinmonth, $dateFinday, $dateFinyear));
-
-
-        $dateDebut = new \DateTime($dateDebut);
-
-        $dateFin = new \DateTime($dateFin);
-
+        $dateDebut = new \DateTime($dateDepart);
+        $dateFin = new \DateTime($dateRetour);
 
         $datas = array();
         foreach ($this->getVehiculesDispo($dateDebut, $dateFin) as $key => $vehicule) {
@@ -237,7 +224,7 @@ class ReservationController extends AbstractController
             $reservation->setConducteur($conducteur);
             $reservation->setLieu($lieuSejour);
             $reservation->setDuree($duree);
-            $reservation->setDateReservation(new \DateTime('NOW', new DateTimeZone('Europe/Paris')));
+            $reservation->setDateReservation($this->dateHelper->dateNow());
             $reservation->setCodeReservation($agenceDepart);
             // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
 
@@ -293,7 +280,7 @@ class ReservationController extends AbstractController
             $reservation->setCodeReservation('stopSale');
             $reservation->setAgenceDepart('garage');
             $reservation->setClient($super_admin);
-            $reservation->setDateReservation(new \DateTime('NOW', new DateTimeZone('Europe/Paris')));
+            $reservation->setDateReservation($this->dateHelper->dateNow());
             $entityManager->persist($reservation);
             $entityManager->flush();
 

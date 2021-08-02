@@ -193,7 +193,7 @@ class ClientController extends AbstractController
             $reservation->setConducteur($conducteur);
             $reservation->setLieu($lieuSejour);
             $reservation->setDuree($duree);
-            $reservation->setDateReservation(new \DateTime('NOW', new \DateTimeZone('Europe/Paris')));
+            $reservation->setDateReservation($this->dateHelper->dateNow());
             $reservation->setCodeReservation($agenceDepart);
             // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
             $lastID = $this->reservRepo->findBy(array(), array('id' => 'DESC'), 1);
@@ -235,7 +235,7 @@ class ClientController extends AbstractController
         $reservation->setSiege($devis->getSiege());
         $reservation->setPrix($devis->getPrix());
         $reservation->setNumDevis($devis->getNumero());
-        $reservation->setDateReservation(new \DateTime('NOW', new DateTimeZone('Europe/Paris')));
+        $reservation->setDateReservation($this->dateHelper->dateNow());
         $reservation->setCodeReservation('devisTransformé');
         // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
         $lastID = $this->reservRepo->findBy(array(), array('id' => 'DESC'), 1);
@@ -381,7 +381,7 @@ class ClientController extends AbstractController
                 $user->getPassword()
             ));
             $user->setPresence(1);
-            $user->setDateInscription(new \DateTime('now'));
+            $user->setDateInscription($this->dateHelper->dateNow());
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
@@ -458,7 +458,7 @@ class ClientController extends AbstractController
         $paiement->setUtilisateur($client);
         $paiement->setClient($client);
         $paiement->setMontant($vehicule->getCaution());
-        $paiement->setDatePaiement(new \DateTime('now'));
+        $paiement->setDatePaiement($this->dateHelper->dateNow());
         $paiement->setMotif('caution pour le véhicule ' . $vehicule->getMarque() . ' ' . $vehicule->getModele());
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($paiement);
