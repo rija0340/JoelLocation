@@ -65,7 +65,7 @@ class ClientController extends AbstractController
 
 
     /**
-     * @Route("/client", name="espaceClient_index")
+     * @Route("/espaceclient", name="espaceClient_index")
      */
     public function client(Request $request): Response
     {
@@ -108,7 +108,7 @@ class ClientController extends AbstractController
     }
 
     /** 
-     * @Route("client/reservations", name="client_reservations", methods={"GET","POST"})
+     * @Route("/espaceclient/reservations", name="client_reservations", methods={"GET","POST"})
      */
     public function listeReservations(Request $request): Response
     {
@@ -138,7 +138,7 @@ class ClientController extends AbstractController
 
 
     /** 
-     * @Route("client/new/reservation", name="client_nouvelleReserv", methods={"GET","POST"})
+     * @Route("/espaceclient/new/reservation", name="client_nouvelleReserv", methods={"GET","POST"})
      */
     public function nouvelleReservation(Request $request): Response
     {
@@ -157,7 +157,7 @@ class ClientController extends AbstractController
 
 
     /**
-     * @Route("/client/reservationWizard", name="client_reserverWizard",  methods={"GET","POST"})
+     * @Route("/espaceclient/reservationWizard", name="client_reserverWizard",  methods={"GET","POST"})
      */
     public function reserverWeb(Request $request): Response
     {
@@ -220,7 +220,7 @@ class ClientController extends AbstractController
 
 
     /**
-     * @Route("/client/reserverDevis/{id}", name="client_reserverDevis", methods={"GET","POST"})
+     * @Route("/espaceclient/reserverDevis/{id}", name="client_reserverDevis", methods={"GET","POST"})
      */
     public function client_reserverDevis(Request $request, Devis $devis)
     {
@@ -252,7 +252,7 @@ class ClientController extends AbstractController
     }
 
     /**
-     * @Route("/client/detailsVehicule", name="client_detailsVehicule", methods={"GET"})
+     * @Route("/espaceclient/detailsVehicule", name="client_detailsVehicule", methods={"GET"})
      */
     public function detailsVehicule(VehiculeRepository $vehiculeRepository, Request $request)
     {
@@ -280,7 +280,7 @@ class ClientController extends AbstractController
     }
 
     /**
-     * @Route("/client/tarifsVehicule", name="client_tarifsVehicule", methods={"GET"})
+     * @Route("/espaceclient/tarifsVehicule", name="client_tarifsVehicule", methods={"GET"})
      */
     public function tarifsVehicule(Request $request, VehiculeRepository $vehiculeRepo, TarifsRepository $tarifsRepo)
     {
@@ -304,7 +304,7 @@ class ClientController extends AbstractController
     }
 
     /**
-     * @Route("/client/listeOptions", name="client_listeOptions", methods={"GET"})
+     * @Route("/espaceclient/listeOptions", name="client_listeOptions", methods={"GET"})
      */
     public function client_listeOptions(Request $request)
     {
@@ -323,7 +323,7 @@ class ClientController extends AbstractController
 
 
     /**
-     * @Route("/client/listeGaranties", name="client_listeGaranties", methods={"GET"})
+     * @Route("/espaceclient/listeGaranties", name="client_listeGaranties", methods={"GET"})
      */
     public function client_listeGaranties(Request $request)
     {
@@ -341,7 +341,7 @@ class ClientController extends AbstractController
     }
 
     /**
-     * @Route("/client/modifier/{id}", name="client_edit", methods={"GET","POST"})
+     * @Route("/espaceclient/modifier/{id}", name="infoclient_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, User $user): Response
     {
@@ -358,7 +358,7 @@ class ClientController extends AbstractController
             return $this->redirectToRoute('client');
         }
 
-        return $this->render('client/edit.html.twig', [
+        return $this->render('client/information/edit.html.twig', [
             'user' => $user,
             'form' => $form->createView(),
         ]);

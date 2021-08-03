@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'baseClient.html.twig' %}
 
 {% block title %}Edit User
 {% endblock %}
@@ -12,9 +12,9 @@
 		<div class="section-title red text-center">
 			<h2>Modification des informations</h2>
 		</div>
-		{{ include('client/_formClient.html.twig', {'button_label': 'Modifier'}) }}
+		{{ include('client/information/_formClient.html.twig', {'button_label': 'Modifier'}) }}
 
-		<a href="{{ path('client') }}" class="btn btn-dark">
+		<a href="{{ path('espaceClient_index') }}" class="btn btn-dark">
 			<i class="fa fa-arrow-left" aria-hidden="true"></i>
 			Retour</a>
 
