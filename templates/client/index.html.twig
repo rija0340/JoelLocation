@@ -46,6 +46,26 @@
 			{{ form_widget(formClient.adresse,{'attr' : { 'readonly' : 'readonly'}  } )}}
 
 		</div>
+		<div class="form-group col-md-6">
+			<label for="">Date de naissance :</label>
+			{{ form_widget(formClient.dateNaissance,{'attr' : { 'readonly' : 'readonly'}  } )}}
+
+		</div>
+		<div class="form-group col-md-6">
+			<label for="">Lieu de naissance :</label>
+			{{ form_widget(formClient.lieuNaissance,{'attr' : { 'readonly' : 'readonly'}  } )}}
+
+		</div>
+		<div class="form-group col-md-6">
+			<label for="">Numero de permis :</label>
+			{{ form_widget(formClient.numeroPermis,{'attr' : { 'readonly' : 'readonly'}  } )}}
+
+		</div>
+		<div class="form-group col-md-6">
+			<label for="">Date de permis :</label>
+			{{ form_widget(formClient.datePermis,{'attr' : { 'readonly' : 'readonly'}  } )}}
+
+		</div>
 	</div>
 
 	{{ form_end(formClient) }}

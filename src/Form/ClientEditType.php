@@ -28,11 +28,13 @@ class ClientEditType extends AbstractType
             ->add('portable')
             ->add('dateNaissance', DateType::class, [
                 'widget' => 'single_text',
+                'required' => false
             ])
             ->add('lieuNaissance')
             ->add('numeroPermis')
             ->add('datePermis', DateType::class, [
                 'widget' => 'single_text',
+                'required' => false
             ]);
     }
 

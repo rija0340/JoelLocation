@@ -24,6 +24,7 @@ use App\Repository\OptionsRepository;
 use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
 use App\Controller\ReservationController;
+use App\Form\ClientEditType;
 use App\Repository\ReservationRepository;
 use App\Repository\EtatReservationRepository;
 use App\Repository\ModeReservationRepository;
@@ -345,7 +346,11 @@ class ClientController extends AbstractController
      */
     public function edit(Request $request, User $user): Response
     {
-        $form = $this->createForm(ClientType::class, $user);
+        $form = $this->createForm(ClientEditType::class, $user);
+
+        // dump($request);
+        // die();
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -355,7 +360,7 @@ class ClientController extends AbstractController
             ));
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('client');
+            return $this->redirectToRoute('espaceClient_index');
         }
 
         return $this->render('client/information/edit.html.twig', [
