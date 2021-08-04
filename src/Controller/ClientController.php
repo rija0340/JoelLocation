@@ -24,6 +24,7 @@ use App\Repository\OptionsRepository;
 use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
 use App\Controller\ReservationController;
+use App\Form\ClientEditType;
 use App\Repository\ReservationRepository;
 use App\Repository\EtatReservationRepository;
 use App\Repository\ModeReservationRepository;
@@ -65,7 +66,7 @@ class ClientController extends AbstractController
 
 
     /**
-     * @Route("/client", name="espaceClient_index")
+     * @Route("/espaceclient", name="espaceClient_index")
      */
     public function client(Request $request): Response
     {
@@ -108,7 +109,7 @@ class ClientController extends AbstractController
     }
 
     /** 
-     * @Route("client/reservations", name="client_reservations", methods={"GET","POST"})
+     * @Route("/espaceclient/reservations", name="client_reservations", methods={"GET","POST"})
      */
     public function listeReservations(Request $request): Response
     {
@@ -138,7 +139,7 @@ class ClientController extends AbstractController
 
 
     /** 
-     * @Route("client/new/reservation", name="client_nouvelleReserv", methods={"GET","POST"})
+     * @Route("/espaceclient/new/reservation", name="client_nouvelleReserv", methods={"GET","POST"})
      */
     public function nouvelleReservation(Request $request): Response
     {
@@ -157,7 +158,7 @@ class ClientController extends AbstractController
 
 
     /**
-     * @Route("/client/reservationWizard", name="client_reserverWizard",  methods={"GET","POST"})
+     * @Route("/espaceclient/reservationWizard", name="client_reserverWizard",  methods={"GET","POST"})
      */
     public function reserverWeb(Request $request): Response
     {
@@ -193,7 +194,7 @@ class ClientController extends AbstractController
             $reservation->setConducteur($conducteur);
             $reservation->setLieu($lieuSejour);
             $reservation->setDuree($duree);
-            $reservation->setDateReservation(new \DateTime('NOW', new \DateTimeZone('Europe/Paris')));
+            $reservation->setDateReservation($this->dateHelper->dateNow());
             $reservation->setCodeReservation($agenceDepart);
             // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
             $lastID = $this->reservRepo->findBy(array(), array('id' => 'DESC'), 1);
@@ -202,7 +203,7 @@ class ClientController extends AbstractController
             } else {
                 $currentID = $lastID[0]->getId() + 1;
             }
-            $pref = "WEBGP";
+            $pref = "WEB";
             $reservation->setRefRes($pref, $currentID);
 
             $prix = $this->tarifsHelper->calculTarif($dateTimeDepart, $dateTimeRetour, $siege, $garantie, $vehicule);
@@ -220,7 +221,7 @@ class ClientController extends AbstractController
 
 
     /**
-     * @Route("/client/reserverDevis/{id}", name="client_reserverDevis", methods={"GET","POST"})
+     * @Route("/espaceclient/reserverDevis/{id}", name="client_reserverDevis", methods={"GET","POST"})
      */
     public function client_reserverDevis(Request $request, Devis $devis)
     {
@@ -235,12 +236,12 @@ class ClientController extends AbstractController
         $reservation->setSiege($devis->getSiege());
         $reservation->setPrix($devis->getPrix());
         $reservation->setNumDevis($devis->getNumero());
-        $reservation->setDateReservation(new \DateTime('NOW', new DateTimeZone('Europe/Paris')));
+        $reservation->setDateReservation($this->dateHelper->dateNow());
         $reservation->setCodeReservation('devisTransformé');
         // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
         $lastID = $this->reservRepo->findBy(array(), array('id' => 'DESC'), 1);
         $currentID = $lastID[0]->getId() + 1;
-        $reservation->setRefRes("WEPGP", $currentID);
+        $reservation->setRefRes("WEB", $currentID);
 
         $devis->setTransformed(true);
 
@@ -252,7 +253,7 @@ class ClientController extends AbstractController
     }
 
     /**
-     * @Route("/client/detailsVehicule", name="client_detailsVehicule", methods={"GET"})
+     * @Route("/espaceclient/detailsVehicule", name="client_detailsVehicule", methods={"GET"})
      */
     public function detailsVehicule(VehiculeRepository $vehiculeRepository, Request $request)
     {
@@ -280,7 +281,7 @@ class ClientController extends AbstractController
     }
 
     /**
-     * @Route("/client/tarifsVehicule", name="client_tarifsVehicule", methods={"GET"})
+     * @Route("/espaceclient/tarifsVehicule", name="client_tarifsVehicule", methods={"GET"})
      */
     public function tarifsVehicule(Request $request, VehiculeRepository $vehiculeRepo, TarifsRepository $tarifsRepo)
     {
@@ -304,7 +305,7 @@ class ClientController extends AbstractController
     }
 
     /**
-     * @Route("/client/listeOptions", name="client_listeOptions", methods={"GET"})
+     * @Route("/espaceclient/listeOptions", name="client_listeOptions", methods={"GET"})
      */
     public function client_listeOptions(Request $request)
     {
@@ -323,7 +324,7 @@ class ClientController extends AbstractController
 
 
     /**
-     * @Route("/client/listeGaranties", name="client_listeGaranties", methods={"GET"})
+     * @Route("/espaceclient/listeGaranties", name="client_listeGaranties", methods={"GET"})
      */
     public function client_listeGaranties(Request $request)
     {
@@ -341,11 +342,15 @@ class ClientController extends AbstractController
     }
 
     /**
-     * @Route("/client/modifier/{id}", name="client_edit", methods={"GET","POST"})
+     * @Route("/espaceclient/modifier/{id}", name="infoclient_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, User $user): Response
     {
-        $form = $this->createForm(ClientType::class, $user);
+        $form = $this->createForm(ClientEditType::class, $user);
+
+        // dump($request);
+        // die();
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -355,10 +360,10 @@ class ClientController extends AbstractController
             ));
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('client');
+            return $this->redirectToRoute('espaceClient_index');
         }
 
-        return $this->render('client/edit.html.twig', [
+        return $this->render('client/information/edit.html.twig', [
             'user' => $user,
             'form' => $form->createView(),
         ]);
@@ -381,7 +386,7 @@ class ClientController extends AbstractController
                 $user->getPassword()
             ));
             $user->setPresence(1);
-            $user->setDateInscription(new \DateTime('now'));
+            $user->setDateInscription($this->dateHelper->dateNow());
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
@@ -461,7 +466,7 @@ class ClientController extends AbstractController
         $paiement->setUtilisateur($client);
         $paiement->setClient($client);
         $paiement->setMontant($vehicule->getCaution());
-        $paiement->setDatePaiement(new \DateTime('now'));
+        $paiement->setDatePaiement($this->dateHelper->dateNow());
         $paiement->setMotif('caution pour le véhicule ' . $vehicule->getMarque() . ' ' . $vehicule->getModele());
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($paiement);

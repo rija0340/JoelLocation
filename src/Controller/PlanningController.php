@@ -179,8 +179,6 @@ class PlanningController extends AbstractController
 
         $date = $request->query->get('date');
 
-        //creation d'une date valide en php à partir d'une date de javascript.
-
         $date = \DateTime::createFromFormat('D M d Y H:i:s e+', $date);
 
         $datas = array();

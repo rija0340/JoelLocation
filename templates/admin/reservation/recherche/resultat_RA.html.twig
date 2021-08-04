@@ -1,0 +1,131 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}Rechercher une résa
+{% endblock %}
+{% block current_page %}
+	<h2>
+		<i class="fa fa-search"></i>
+		Résultat recherche avancée
+	</h2>
+
+{% endblock %}
+
+{% block stylesheets %}
+
+	<link href="{{ asset( 'css/admin/resultat_RA.css')}}" rel="stylesheet">
+
+{% endblock  %}
+
+{% block content %}
+	<div class="x_panel">
+
+		<div class="x_content">
+			<div class="text-center mb-3">
+				<h2>
+					PERIODE DU
+					<span>{{debutPeriode| date('d/m/Y')}}</span>
+					AU
+					<span>{{finPeriode | date('d/m/Y')}}</span>
+					INCLUS
+				</h2>
+			</div>
+			<div>
+				<div class="row resume_RA">
+					<div class="col-md-2 text-center">
+						<h2 class=" text-uppercase ">
+							Chiffre d'affaire période
+						</h2>
+						<div class="font-weight-bold text-dark text">
+							{{chiffreAffaire}}
+							€
+						</div>
+					</div>
+					<div class="col-md-2 text-center">
+						<h2 class="text-uppercase">
+							nombre de réservations
+						</h2>
+						<div class="font-weight-bold text-dark text">
+							{{nbreservations}}
+						</div>
+					</div>
+					<div class="col-md-2 text-center">
+						<h2 class="text-uppercase">
+							prix moyen/jour
+						</h2>
+						<div class="font-weight-bold text-dark text"></div>
+					</div>
+					<div class="col-md-2 text-center">
+						<h2 class="text-uppercase">
+							panier moyen
+						</h2>
+						<div class="font-weight-bold text-dark text"></div>
+					</div>
+					<div class="col-md-2 text-center">
+						<h2 class="text-uppercase">
+							duree moyenne location
+						</h2>
+						<div class="font-weight-bold text-dark text"></div>
+					</div>
+
+					<div class="col-md-2 text-center">
+						<h2 class="text-uppercase">
+							volume location
+						</h2>
+						<div class="font-weight-bold text-dark text">
+							{{dureeTotal}}
+							j
+						</div>
+					</div>
+
+				</div>
+			</div>
+			<table class="table table-bordered text-center">
+				<thead class="bg-dark text-white text-uppercase">
+					<tr class="text-uppercase">
+						<th>paiement</th>
+						<th>client</th>
+						<th>réservation/véhicule</th>
+						<th>date création</th>
+						<th>dates/duréé</th>
+						<th>prix</th>
+						<th>action</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for res in reservations %}
+						<tr>
+							<td></td>
+							<td>{{res.client.nom}}
+								{{res.client.prenom}}
+							</td>
+							<td>{{res.reference}}/
+								{{res.vehicule}}
+							</td>
+							<td>{{res.dateReservation|date('d/m/Y H:i')}}
+							</td>
+							<td>{{res.dateDebut|date('d/m/Y H:i')}}
+								/
+								{{res.duree}}
+								jours
+							</td>
+							<td>{{res.prix}}
+								€
+							</td>
+							<td>
+								<a href="{{ path('contrats_show', {'id': res.id}) }}">
+									<i class=" fa fa-info-circle" style="font-size: 2em !important;"></i>
+								</a>
+							</td>
+						</tr>
+					{% endfor %}
+
+				</tbody>
+			</table>
+
+		</div>
+	</div>
+
+{% endblock %}
+{% block javascripts %}
+	<script src="../../js/admin/recherche_res.js"></script>
+{% endblock  %}

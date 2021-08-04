@@ -149,6 +149,16 @@ class Reservation
      */
     private $reference;
 
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $kmDepart;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $kmRetour;
+
     public function __construct()
     {
         $this->avis = new ArrayCollection();
@@ -491,11 +501,47 @@ class Reservation
         $currentTime = new \DateTime('NOW');
         $year = $currentTime->format('Y');
         $month = $dateHelper->getMonthName($currentTime);
+        if ($currentID < 10) {
+            $currentID = '0000' . $currentID;
+        }
+        if ($currentID < 100 && $currentID > 10) {
+            $currentID = '000' . $currentID;
+        }
+        if ($currentID < 1000 && $currentID > 100) {
+            $currentID = '00' . $currentID;
+        }
+        if ($currentID < 10000 && $currentID > 1000) {
+            $currentID = '0' . $currentID;
+        }
         $ref  = $pref . $year . $month . $currentID;
         $this->setReference($ref);
     }
 
     public function frenchMouth()
     {
+    }
+
+    public function getKmDepart(): ?float
+    {
+        return $this->kmDepart;
+    }
+
+    public function setKmDepart(?float $kmDepart): self
+    {
+        $this->kmDepart = $kmDepart;
+
+        return $this;
+    }
+
+    public function getKmRetour(): ?float
+    {
+        return $this->kmRetour;
+    }
+
+    public function setKmRetour(?float $kmRetour): self
+    {
+        $this->kmRetour = $kmRetour;
+
+        return $this;
     }
 }

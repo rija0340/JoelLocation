@@ -301,7 +301,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
         // var n = d.toString();
         $.ajax({
             type: 'GET',
-            url: '/client/detailsVehicule',
+            url: '/espaceclient/detailsVehicule',
             data: {
                 "vehicule_id": vehicule
             },
@@ -330,7 +330,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
         // var n = d.toString();
         $.ajax({
             type: 'GET',
-            url: '/client/tarifsVehicule',
+            url: '/espaceclient/tarifsVehicule',
             data: {
                 "vehicule_id": vehicule,
                 "mois": getMonth(datetimeDepartValue)
@@ -355,7 +355,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
     function getListeOptionsAjax() {
         $.ajax({
             type: 'GET',
-            url: "/client/listeOptions",
+            url: "/espaceclient/listeOptions",
             timeout: 3000,
             beforeSend: function (xhr) {
             },
@@ -375,7 +375,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
     function getListeGarantiesAjax() {
         $.ajax({
             type: 'GET',
-            url: "/client/listeGaranties",
+            url: "/espaceclient/listeGaranties",
             timeout: 3000,
             beforeSend: function (xhr) {
             },
@@ -410,7 +410,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
 
         $.ajax({
             type: 'GET',
-            url: '/client/reservationWizard',
+            url: '/espaceclient/reservationWizard',
             data: {
                 'clientID': clientID,
                 'agenceDepart': agenceDepartSelected,
@@ -432,7 +432,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
                 // xmlHttp is a XMLHttpRquest object
                 console.log('met le izy');
                 // console.log('mety ilay izy zao');
-                window.document.location = '/client/reservations';
+                window.document.location = '/espaceclient/reservations';
 
                 $('#smartwizard').smartWizard("loader", "hide");
             },

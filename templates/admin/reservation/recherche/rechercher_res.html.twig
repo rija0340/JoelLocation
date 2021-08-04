@@ -73,7 +73,9 @@
 				Chercher une réservation en sélectionnant une immatriculation et une date
 			</p>
 			<div class="row">
-				<div class="col-md-4">
+				<div
+					class="form-group col-md-4">
+					{# <label for="">Date départ :</label> #}
 					<div class="form-group ">
 						<div class="">
 							<select class="form-control" id="RIM_selectVehicule">
@@ -130,98 +132,50 @@
 
 			<div class="clearfix"></div>
 		</div>
-		<div class="x_content">
+		<div
+			class="x_content">
+
+			{# test form pour recherche #}
+			{{ form_start(form) }}
 			<div class="row">
-				<div class="col-4">
-					<p>
-						Type de date:
-					</p>
-					<div class="form-group ">
-						<div class="">
-							<select class="form-control" id="RA_selectVehicule">
-								<option>Choisir une catégorie</option>
-
-								{% for vehicule in vehicules %}
-									<option value={{vehicule.id}}>{{vehicule}}</option>
-								{% endfor %}
-							</select>
-						</div>
-					</div>
+				<div class="form-group col-md-4">
+					<label for="">Type date :</label>
+					{{ form_widget(form.typeDate) }}
 				</div>
-				<div class="col-4">
-					<p>
-						Début période:
-					</p>
-					<div>
-						<input id="RA_dateDepart" type="date" class="form-control">
-					</div>
+				<div class="form-group col-md-4">
+					<label for="">Date début période :</label>
+					{{ form_widget(form.debutPeriode) }}
 				</div>
-				<div class="col-4">
-
-					<p>
-						Fin période:
-					</p>
-					<div>
-						<input id="RIM_dateRetour" type="date" class="form-control">
-					</div>
+				<div class="form-group col-md-4">
+					<label for="">Date fin période :</label>
+					{{ form_widget(form.finPeriode) }}
 				</div>
-				<div class="col-4">
-					<p>
-						Catégorie:
-					</p>
-					<div class="form-group ">
-						<div class="">
-							<select class="form-control" id="RA_selectVehicule">
-								<option>Choisir une catégorie</option>
-
-								{% for vehicule in vehicules %}
-									<option value={{vehicule.id}}>{{vehicule}}</option>
-								{% endfor %}
-							</select>
-						</div>
-					</div>
+				<div class="form-group col-md-4">
+					<label for="">Catégorie :</label>
+					{{ form_widget(form.categorie) }}
 				</div>
-				<div class="col-4">
-					<p>
-						Type tarif:
-					</p>
-					<div class="form-group ">
-						<div class="">
-							<select class="form-control">
-								<option>Choisir un type de tarif</option>
-								<option>Option one</option>
-								<option>Option two</option>
-								<option>Option three</option>
-								<option>Option four</option>
-							</select>
-						</div>
-					</div>
+				<div class="form-group col-md-4">
+					<label for="">Type tarif :</label>
+
+					{{ form_widget(form.typeTarif) }}
 				</div>
-				<div class="col-4">
-					<p>
-						Code promo:
-					</p>
-					<form class="form-horizontal form-label-left">
-
-						<div class="form-group ">
-
-							<div>
-								<input type="text" id="last-name2" name="last-name" required="required" class="form-control col-md-12 " placeholder="Code promo">
-							</div>
-						</div>
-					</form>
+				<div class="form-group col-md-4">
+					<label for="">Code promo :</label>
+					{{ form_widget(form.codePromo) }}
 				</div>
 			</div>
-			<div class="ln_solid"></div>
 			<div class="item form-group">
 				<div class="col-md-6 col-sm-6 offset-md-5">
-					<button class="btn border-dark" type="button">
-						<i class="fa fa-close"></i>
-						Annuler</button>
-					<button type="button" class="btn btn-danger">
-						<i class="fa fa-search mr-1"></i>Rechercher</button>
+					<button class="btn btn-danger">
+						<i class="fa fa-search" aria-hidden="true"></i>
+						{{ button_label|default('Rechercher') }}</button>
+
 				</div>
 			</div>
+			{{ form_end(form) }}
+
+
+			{# fin test  #}
 		</div>
 	</div>
 {% endblock %}
