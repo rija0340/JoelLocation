@@ -78,7 +78,7 @@
 				Générer le contrat</button>
 
 
-			<button type="button" class="btn btn-outline-info text-uppercase p-1">
+			<button type="button" class="btn btn-outline-info text-uppercase p-1" id="genererFacturePDF">
 				<i class="fa fa-send (alias)"></i>
 				générer facture</button>
 
@@ -93,8 +93,8 @@
 					<div class="col-md-4">
 						<span class="label_client">Client :</span>
 						<span class="js-prenom_client">{{reservation.client.prenom}}
-							<span class="js-nom_client">{{reservation.client.nom}}</span>
 						</span>
+						<span class="js-nom_client">{{reservation.client.nom}}</span>
 					</div>
 					<div class="col-md-4">
 						<span class="label_client">Email :</span>
@@ -594,5 +594,6 @@
 	<script src="../../admin/vendors/pdfmake/build/vfs_fonts.js"></script>
 	<script src="../../js/admin/jspdf.min.js"></script>
 	<script src="../../js/admin/jspdf.plugin.autotable.js"></script>
+	<script src="../../js/admin/factureJsPDF.js"></script>
 	<script src="../../js/admin/details_contrats.js"></script>
 {% endblock  %}

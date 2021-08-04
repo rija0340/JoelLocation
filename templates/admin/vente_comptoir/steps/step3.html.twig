@@ -132,7 +132,12 @@
 						{# test radio #}
 						{% for option in options %}
 
-							<label class="label-radio">{{option.appelation}}
+							<label class="label-radio">
+								{{option.appelation}}
+								{% if option.prix != 0  %}
+									:
+									{{option.prix}}€
+								{% endif %}
 								<input type="radio" checked="checked" name="radio-siege" value="{{option.id}}">
 								<span class="checkmark-radio"></span>
 							</label>

@@ -207,18 +207,21 @@ class ReservationController extends AbstractController
             $idSiege = $request->query->get('idSiege');
             $idGarantie = $request->query->get('idGarantie');
 
+            $dateDepart = new \DateTime($dateTimeDepart);
+            $dateRetour = new \DateTime($dateTimeRetour);
             $siege = $this->optionsRepo->find($idSiege);
             $garantie = $this->garantiesRepo->find($idGarantie);
             $vehicule = $this->vehiculeRepo->findByIM($vehiculeIM);
             $client = $this->userRepo->find($idClient);
-            $duree = $this->dateHelper->calculDuree($dateTimeDepart, $dateTimeRetour);
+            $duree = $this->dateHelper->calculDuree($dateDepart, $dateRetour);
+            $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
 
             $reservation->setVehicule($vehicule);
             $reservation->setClient($client);
             $reservation->setAgenceDepart($agenceDepart);
             $reservation->setAgenceRetour($agenceRetour);
-            $reservation->setDateDebut(new \DateTime($dateTimeDepart));
-            $reservation->setDateFin(new \DateTime($dateTimeRetour));
+            $reservation->setDateDebut($dateDepart);
+            $reservation->setDateFin($dateRetour);
             $reservation->setGarantie($garantie);
             $reservation->setSiege($siege);
             $reservation->setConducteur($conducteur);
@@ -226,6 +229,7 @@ class ReservationController extends AbstractController
             $reservation->setDuree($duree);
             $reservation->setDateReservation($this->dateHelper->dateNow());
             $reservation->setCodeReservation($agenceDepart);
+            $reservation->setTarifVehicule($tarifVehicule);
             // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
 
             $lastID = $this->reservationRepo->findBy(array(), array('id' => 'DESC'), 1);
@@ -237,7 +241,7 @@ class ReservationController extends AbstractController
             $pref = "CPT";
             $reservation->setRefRes($pref, $currentID);
 
-            $prix = $this->tarifsHelper->calculTarif($dateTimeDepart, $dateTimeRetour, $siege, $garantie, $vehicule);
+            $prix = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $siege, $garantie);
 
             $reservation->setPrix($prix);
 

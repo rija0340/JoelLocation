@@ -4,6 +4,10 @@ body{
 .containerBody{
     background-color: white;
 }
+.hide{
+    display: none !important;
+}
+
 table thead th {
     background-color: black;
 }

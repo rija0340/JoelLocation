@@ -159,6 +159,11 @@ class Reservation
      */
     private $kmRetour;
 
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $tarifVehicule;
+
     public function __construct()
     {
         $this->avis = new ArrayCollection();
@@ -541,6 +546,18 @@ class Reservation
     public function setKmRetour(?float $kmRetour): self
     {
         $this->kmRetour = $kmRetour;
+
+        return $this;
+    }
+
+    public function getTarifVehicule(): ?float
+    {
+        return $this->tarifVehicule;
+    }
+
+    public function setTarifVehicule(?float $tarifVehicule): self
+    {
+        $this->tarifVehicule = $tarifVehicule;
 
         return $this;
     }
