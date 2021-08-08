@@ -79,6 +79,7 @@ class VehiculeController extends AbstractController
         return $this->render('admin/vehicule/new.html.twig', [
             'vehicule' => $vehicule,
             'form' => $form->createView(),
+            'modifier' => false
         ]);
     }
 
@@ -123,6 +124,7 @@ class VehiculeController extends AbstractController
         return $this->render('admin/vehicule/edit.html.twig', [
             'vehicule' => $vehicule,
             'form' => $form->createView(),
+            'modifier' => true //afficher picture véhicule si modification
         ]);
     }
 

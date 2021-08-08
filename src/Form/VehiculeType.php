@@ -27,7 +27,6 @@ class VehiculeType extends AbstractType
             ])
             ->add('modele')
             ->add('prix_acquisition')
-            ->add('tarif_journaliere')
             ->add('marque')
             ->add('type')
             ->add('details')

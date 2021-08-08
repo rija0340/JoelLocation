@@ -67,10 +67,6 @@ class Vehicule
      */
     private $prix_acquisition;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $tarif_journaliere;
 
     /**
      * @ORM\OneToMany(targetEntity=Reservation::class, mappedBy="vehicule", orphanRemoval=true)
@@ -134,10 +130,6 @@ class Vehicule
      */
     private $updated_at;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $disponibilite;
 
     /**
      * @ORM\OneToMany(targetEntity=Tarifs::class, mappedBy="vehicule", cascade={"persist", "remove"})
@@ -244,17 +236,6 @@ class Vehicule
         return $this;
     }
 
-    public function getTarifJournaliere(): ?int
-    {
-        return $this->tarif_journaliere;
-    }
-
-    public function setTarifJournaliere(int $tarif_journaliere): self
-    {
-        $this->tarif_journaliere = $tarif_journaliere;
-
-        return $this;
-    }
 
     /**
      * @return Collection|Reservation[]
@@ -438,19 +419,6 @@ class Vehicule
     public function setUpdatedAt(\DateTimeInterface $updated_at): self
     {
         $this->updated_at = $updated_at;
-
-        return $this;
-    }
-
-
-    public function getDisponibilite(): ?bool
-    {
-        return $this->disponibilite;
-    }
-
-    public function setDisponibilite(bool $disponibilite): self
-    {
-        $this->disponibilite = $disponibilite;
 
         return $this;
     }

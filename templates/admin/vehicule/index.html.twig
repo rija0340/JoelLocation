@@ -70,7 +70,7 @@
 												<i class="fa  fa-list-ul"></i>
 											</a>
 
-											<form method="post" action="{{ path('vehicule_delete', {'id': vehicule.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer cet utilisateur?');">
+											<form method="post" action="{{ path('vehicule_delete', {'id': vehicule.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer ce véhicule ?');">
 												<input type="hidden" name="_method" value="DELETE">
 												<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ vehicule.id) }}">
 												<button class="btn btn-link">
