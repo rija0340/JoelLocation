@@ -26,7 +26,7 @@ class MarqueController extends AbstractController
             $request->query->getInt('page', 1)/*page number*/,
             10/*limit per page*/
         );
-        return $this->render('marque/index.html.twig', [
+        return $this->render('admin/marque/index.html.twig', [
             'marques' => $pagination,
         ]);
     }
@@ -48,7 +48,7 @@ class MarqueController extends AbstractController
             return $this->redirectToRoute('marque_index');
         }
 
-        return $this->render('marque/new.html.twig', [
+        return $this->render('admin/marque/new.html.twig', [
             'marque' => $marque,
             'form' => $form->createView(),
         ]);
@@ -59,7 +59,7 @@ class MarqueController extends AbstractController
      */
     public function show(Marque $marque): Response
     {
-        return $this->render('marque/show.html.twig', [
+        return $this->render('admin/marque/show.html.twig', [
             'marque' => $marque,
         ]);
     }
@@ -78,7 +78,7 @@ class MarqueController extends AbstractController
             return $this->redirectToRoute('marque_index');
         }
 
-        return $this->render('marque/edit.html.twig', [
+        return $this->render('admin/marque/edit.html.twig', [
             'marque' => $marque,
             'form' => $form->createView(),
         ]);
@@ -89,7 +89,7 @@ class MarqueController extends AbstractController
      */
     public function delete(Request $request, Marque $marque): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$marque->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $marque->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($marque);
             $entityManager->flush();

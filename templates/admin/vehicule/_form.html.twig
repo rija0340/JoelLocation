@@ -8,8 +8,8 @@
 {{ form_start(form) }}
 <div class="row">
 	<div class="form-group col-md-6">
-		<label for="">Modèle :</label>
-		{{ form_widget(form.modele) }}
+		<label for="">Marque :</label>
+		{{ form_widget(form.marque) }}
 	</div>
 	<div class="form-group col-md-6">
 		<label for="">Date mise en service :</label>
@@ -22,8 +22,9 @@
 	</div>
 
 	<div class="form-group col-md-6">
-		<label for="">Marque :</label>
-		{{ form_widget(form.marque) }}
+		<label for="">Modèle :</label>
+		<select name="select" id="selectModele" class="form-control"></select>
+		{# {{ form_widget(form.vehicule) }} #}
 
 	</div>
 	<div class="form-group col-md-6">
@@ -98,7 +99,7 @@
 	</div>
 </div>
 <div class="">
-	<button class="btn btn-danger">
+	<button class="btn btn-danger" id="enregistrer">
 		<i class="fa fa-book" aria-hidden="true"></i>
 		{{ button_label|default('Enregistrer') }}
 	</button>

@@ -35,11 +35,7 @@ class Vehicule
      */
     private $immatriculation;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Marque::class, inversedBy="vehicules")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $marque;
+
 
     /**
      * @ORM\ManyToOne(targetEntity=Type::class, inversedBy="vehicules")
@@ -57,10 +53,7 @@ class Vehicule
      */
     private $date_mise_location;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $modele;
+
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -141,6 +134,16 @@ class Vehicule
      */
     private $devis;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Modele::class, inversedBy="vehicules")
+     */
+    private $modele;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Marque::class, inversedBy="vehicules")
+     */
+    private $marque;
+
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
@@ -164,17 +167,6 @@ class Vehicule
         return $this;
     }
 
-    public function getMarque(): ?Marque
-    {
-        return $this->marque;
-    }
-
-    public function setMarque(?Marque $marque): self
-    {
-        $this->marque = $marque;
-
-        return $this;
-    }
 
     public function getType(): ?Type
     {
@@ -212,17 +204,6 @@ class Vehicule
         return $this;
     }
 
-    public function getModele(): ?string
-    {
-        return $this->modele;
-    }
-
-    public function setModele(string $modele): self
-    {
-        $this->modele = $modele;
-
-        return $this;
-    }
 
     public function getPrixAcquisition(): ?int
     {
@@ -273,7 +254,7 @@ class Vehicule
      */
     public function __toString()
     {
-        return $this->getMarque()->getLibelle() . " " . $this->getModele() . " " . $this->getImmatriculation();
+        return $this->getMarque()->getLibelle() . " " . $this->getModele()->getLibelle() . " " . $this->getImmatriculation();
     }
 
     public function getDetails(): ?string
@@ -431,8 +412,8 @@ class Vehicule
     public function setTarifs(Tarifs $tarifs): self
     {
         // set the owning side of the relation if necessary
-        if ($tarifs->getVehicule() !== $this) {
-            $tarifs->setVehicule($this);
+        if ($tarifs->getMarque() !== $this) {
+            $tarifs->getMarque($this);
         }
 
         $this->tarifs = $tarifs;
@@ -466,6 +447,30 @@ class Vehicule
                 $devi->setVehicule(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getModele(): ?Modele
+    {
+        return $this->modele;
+    }
+
+    public function setModele(?Modele $modele): self
+    {
+        $this->modele = $modele;
+
+        return $this;
+    }
+
+    public function getMarque(): ?Marque
+    {
+        return $this->marque;
+    }
+
+    public function setMarque(?Marque $marque): self
+    {
+        $this->marque = $marque;
 
         return $this;
     }

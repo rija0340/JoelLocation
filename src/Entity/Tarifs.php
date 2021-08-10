@@ -43,10 +43,16 @@ class Tarifs
     private $mois;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Vehicule::class, inversedBy="tarifs")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity=Marque::class, inversedBy="tarifs")
      */
-    private $vehicule;
+    private $marque;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Modele::class, inversedBy="tarifs")
+     */
+    private $modele;
+
+
 
     public function getId(): ?int
     {
@@ -113,14 +119,26 @@ class Tarifs
         return $this;
     }
 
-    public function getVehicule(): ?Vehicule
+    public function getMarque(): ?Marque
     {
-        return $this->vehicule;
+        return $this->marque;
     }
 
-    public function setVehicule(Vehicule $vehicule): self
+    public function setMarque(?Marque $marque): self
     {
-        $this->vehicule = $vehicule;
+        $this->marque = $marque;
+
+        return $this;
+    }
+
+    public function getModele(): ?Modele
+    {
+        return $this->modele;
+    }
+
+    public function setModele(?Modele $modele): self
+    {
+        $this->modele = $modele;
 
         return $this;
     }

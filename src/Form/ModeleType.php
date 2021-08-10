@@ -2,29 +2,25 @@
 
 namespace App\Form;
 
-use App\Entity\Tarifs;
+use App\Entity\Modele;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class TarifEditType extends AbstractType
+class ModeleType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('troisJours')
-            ->add('septJours')
-            ->add('quinzeJours')
-            ->add('trenteJours')
-            ->add('mois')
+            ->add('libelle')
             ->add('marque')
-            ->add('modele');
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Tarifs::class,
+            'data_class' => Modele::class,
         ]);
     }
 }

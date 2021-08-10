@@ -2,15 +2,18 @@
 
 namespace App\Form;
 
+use App\Entity\Modele;
 use App\Entity\Vehicule;
 use Symfony\Component\Form\AbstractType;
 use Vich\UploaderBundle\Form\Type\VichFileType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class VehiculeType extends AbstractType
 {
@@ -25,9 +28,10 @@ class VehiculeType extends AbstractType
             ->add('date_mise_location', DateType::class, [
                 'widget' => 'single_text',
             ])
-            ->add('modele')
             ->add('prix_acquisition')
-            ->add('marque')
+            ->add(
+                'marque'
+            )
             ->add('type')
             ->add('details')
             ->add('carburation')

@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Tarifs;
 use App\Form\TarifsType;
 use App\Form\TarifEditType;
+use App\Repository\MarqueRepository;
+use App\Repository\ModeleRepository;
 use App\Repository\TarifsRepository;
 use App\Repository\VehiculeRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,11 +17,24 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class TarifsController extends AbstractController
 {
+
+    private $marqueRepo;
+    private $modeleRepo;
+
+    public function __construct(MarqueRepository $marqueRepo, ModeleRepository $modeleRepo)
+    {
+        $this->marqueRepo = $marqueRepo;
+        $this->modeleRepo = $modeleRepo;
+    }
+
     /**
      * @Route("/tarifs", name="tarifs_index")
      */
     public function index(TarifsRepository $tarifsRepo): Response
     {
+
+
+
         $listeTarifs = new Tarifs();
         $listeTarifs =  $tarifsRepo->findAll();
         $nbrTarifs = count($listeTarifs);
@@ -28,25 +43,28 @@ class TarifsController extends AbstractController
 
         $listeMois = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
 
-        foreach ($listeTarifs as $tarif) {
-            array_push($listeVehicule, $tarif->getVehicule());
-        }
-        foreach ($listeVehicule  as $veh) {
-            if (!in_array($veh, $listeUniqueVehicules)) {
-                array_push($listeUniqueVehicules, $veh);
+
+        $marques = $this->marqueRepo->findAll();
+        $modeles = $this->modeleRepo->findAll();
+        foreach ($marques as $marque) {
+            foreach ($modeles as $modele) {
+
+                if ($marque == $modele->getMarque()) {
+                    array_push($listeUniqueVehicules, $marque . " " . $modele);
+                }
             }
         }
 
-        // $listeUniqueVehicules = array_unique($listeVehicule);
 
         $tarifsParVehicule = [];
         //arrangement des donnée Janvier -> décembre
         foreach ($listeUniqueVehicules as $veh) {
+            dump($veh);
             $ordered = [];
             foreach ($listeMois as $mois) {
                 $i = 0;
                 foreach ($listeTarifs as $tarif) {
-                    if ($tarif->getMois() == $mois && $tarif->getVehicule() == $veh) {
+                    if ($tarif->getMois() == $mois && $tarif->getMarque()->getLibelle() . " " . $tarif->getModele()->getLibelle() == $veh) {
                         $i = $i + 1;
                         array_push($ordered, $tarif);
                     }
@@ -77,10 +95,17 @@ class TarifsController extends AbstractController
 
         $form = $this->createForm(TarifsType::class, $tarif);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
 
+            $modeleId =  $request->request->get('selectModele');
+            $mois =  $request->request->get('selectMois');
+            $modele =  $this->modeleRepo->find($modeleId);
+            $tarif->setModele($modele);
+            $tarif->setMois($mois);
+
             $entityManager = $this->getDoctrine()->getManager();
-            $tarif->setMois($request->request->get('select'));
+
             $entityManager->persist($tarif);
             $entityManager->flush();
 
@@ -162,15 +187,18 @@ class TarifsController extends AbstractController
 
 
     /**
-     * @Route("/listeTarifsByVehicule", name="listeTarifsByVehicule", methods={"GET"})
+     * @Route("/listeMoisSansValeur", name="listeMoisSansValeur", methods={"GET"})
      * @return tableau contenant mois contenant tarifs
      */
-    public function listeTarifsByVehicule(Request $request, VehiculeRepository $vehiculeRepo, TarifsRepository $tarifsRepo)
+    public function listeMoisSansValeur(Request $request, VehiculeRepository $vehiculeRepo, TarifsRepository $tarifsRepo)
     {
-        $vehiculeID = intVal($request->query->get('vehiculeID'));
-        $vehicule = $vehiculeRepo->find($vehiculeID);
-        $tarifs = $tarifsRepo->findBy(['vehicule' => $vehicule]);
+        $marqueID = intVal($request->query->get('marqueID'));
+        $modeleID = intVal($request->query->get('modeleID'));
 
+        $marque = $this->marqueRepo->find($marqueID);
+        $modele = $this->modeleRepo->find($modeleID);
+
+        $tarifs = $tarifsRepo->findBy(['marque' => $marque, 'modele' => $modele]);
 
         $listeMois = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
 

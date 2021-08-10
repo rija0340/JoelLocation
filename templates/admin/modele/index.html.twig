@@ -1,0 +1,48 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}modele index
+{% endblock %}
+
+{% block content %}
+	<h1>Liste des modeles</h1>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Libellé</th>
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for modele in modeles %}
+				<tr>
+					<td>{{ modele.id }}</td>
+					<td>{{ modele.libelle }}</td>
+					<td>
+						<a href="{{ path('modele_show', {'id': modele.id}) }}" class="btn btn-success">
+							<i class="fa fa-book" aria-hidden="true"></i>
+							Visionner</a>
+						{% if is_granted("ROLE_ADMIN") %}
+							<a href="{{ path('modele_edit', {'id': modele.id}) }}" class="btn btn-danger">
+								<i class="fa fa-trash" aria-hidden="true"></i>
+								Modifier</a>
+						{% endif %}
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="3">Aucun enregistrement trouver</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+	<div class="navigation">
+		{{ knp_pagination_render(modeles) }}
+	</div>
+
+	<a href="{{ path('modele_new') }}" class="btn btn-primary">
+		<i class="fa fa-plus" aria-hidden="true"></i>
+		Ajouter</a>
+{% endblock %}

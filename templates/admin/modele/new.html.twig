@@ -1,0 +1,14 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}New modele
+{% endblock %}
+
+{% block content %}
+	<h1>Nouvelle modele</h1>
+
+	{{ include('admin/modele/_form.html.twig') }}
+
+	<a href="{{ path('modele_index') }}" class="btn btn-primary">
+		<i class="fa fa-arrow-left" aria-hidden="true"></i>
+		retour</a>
+{% endblock %}

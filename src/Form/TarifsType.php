@@ -9,6 +9,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class TarifsType extends AbstractType
 {
@@ -20,7 +21,7 @@ class TarifsType extends AbstractType
             ->add('quinzeJours')
             ->add('trenteJours')
 
-            ->add('vehicule');
+            ->add('marque');
     }
 
     public function configureOptions(OptionsResolver $resolver)

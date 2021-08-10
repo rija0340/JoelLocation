@@ -73,7 +73,7 @@ class ReservationController extends AbstractController
         foreach ($this->getVehiculesDispo($dateDebut, $dateFin) as $key => $vehicule) {
             $datas[$key]['id'] = $vehicule->getId();
             $datas[$key]['marque'] = $vehicule->getMarque()->getLibelle();
-            $datas[$key]['modele'] = $vehicule->getModele();
+            $datas[$key]['modele'] = $vehicule->getModele()->getLibelle();
             $datas[$key]['immatriculation'] = $vehicule->getImmatriculation();
         }
 
@@ -98,7 +98,7 @@ class ReservationController extends AbstractController
         foreach ($this->reservationRepo->findReservationIncludeDates($dateDepart, $dateRetour) as $key => $reservation) {
             $datas[$key]['id'] = $reservation->getVehicule()->getId();
             $datas[$key]['marque'] = $reservation->getVehicule()->getMarque()->getLibelle();
-            $datas[$key]['modele'] = $reservation->getVehicule()->getModele();
+            $datas[$key]['modele'] = $reservation->getVehicule()->getModele()->getLibelle();
             $datas[$key]['immatriculation'] = $reservation->getVehicule()->getImmatriculation();
         }
 

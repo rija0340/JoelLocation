@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Vehicule;
 use App\Form\VehiculeType;
+use App\Form\VehiculeEditType;
+use App\Repository\ModeleRepository;
 use App\Repository\VehiculeRepository;
 use App\Repository\ReservationRepository;
 use Knp\Component\Pager\PaginatorInterface;
@@ -20,10 +22,12 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 class VehiculeController extends AbstractController
 {
     private $slugger;
+    private $modeleRepo;
 
-    public function __construct(SluggerInterface $slugger)
+    public function __construct(SluggerInterface $slugger, ModeleRepository $modeleRepo)
     {
         $this->slugger = $slugger;
+        $this->modeleRepo = $modeleRepo;
     }
 
     /**
@@ -54,21 +58,8 @@ class VehiculeController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // $imageFile = $form->get('image')->getData();
-            // if ($imageFile) {
-            //     $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
-            //     //$safeFilename = $slugger->slug($originalFilename);
-            //     $newFilename = $this->generateUniqueFileName() . '.' . $imageFile->guessExtension();
-            //     try {
-            //         $imageFile->move(
-            //             $this->getParameter('vehicules_directory'),
-            //             $newFilename
-            //         );
-            //     } catch (FileException $e) {
-            //     }
-            // }
-            // $vehicule->setImage($newFilename);
-
+            $modele = $this->modeleRepo->find($request->request->get('select'));
+            $vehicule->setModele($modele);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($vehicule);
             $entityManager->flush();
@@ -98,24 +89,15 @@ class VehiculeController extends AbstractController
      */
     public function edit(Request $request, Vehicule $vehicule): Response
     {
-        $form = $this->createForm(VehiculeType::class, $vehicule);
+        // dump($request);
+        // die();
+        $form = $this->createForm(VehiculeEditType::class, $vehicule);
         $form->handleRequest($request);
 
+
         if ($form->isSubmitted() && $form->isValid()) {
-            // $imageFile = $form->get('image')->getData();
-            // if ($imageFile) {
-            //     $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
-            //     //$safeFilename = $slugger->slug($originalFilename);
-            //     $newFilename = $this->generateUniqueFileName() . '.' . $imageFile->guessExtension();
-            //     try {
-            //         $imageFile->move(
-            //             $this->getParameter('vehicules_directory'),
-            //             $newFilename
-            //         );
-            //     } catch (FileException $e) {
-            //     }
-            // }
-            // $vehicule->setImage($newFilename);
+            $modele = $this->modeleRepo->find($request->request->get('select'));
+            $vehicule->setModele($modele);
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('vehicule_index');
