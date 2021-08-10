@@ -471,7 +471,7 @@ class ClientController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($paiement);
         $entityManager->flush();
-        //return $this->redirectToRoute('espaceClient_index');
-        return $this->redirectToRoute('client');
+        return $this->redirectToRoute('espaceClient_index');
+        //return $this->redirectToRoute('client');
     }
 }
