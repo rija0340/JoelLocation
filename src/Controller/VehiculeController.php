@@ -68,7 +68,7 @@ class VehiculeController extends AbstractController
             //     }
             // }
             // $vehicule->setImage($newFilename);
-            $vehicule->setDisponibilite(1);
+            //$vehicule->setDisponibilite(1);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($vehicule);
             $entityManager->flush();
@@ -116,7 +116,7 @@ class VehiculeController extends AbstractController
             //     }
             // }
             // $vehicule->setImage($newFilename);
-            $vehicule->setDisponibilite(1);
+            //$vehicule->setDisponibilite(1);
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('vehicule_index');
