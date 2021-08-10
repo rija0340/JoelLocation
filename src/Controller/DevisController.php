@@ -93,18 +93,21 @@ class DevisController extends AbstractController
             $idGarantie = $request->query->get('idGarantie');
 
 
+            $dateDepart = new \DateTime($dateTimeDepart);
+            $dateRetour = new \DateTime($dateTimeRetour);
             $siege = $this->optionsRepo->find($idSiege);
             $garantie = $this->garantiesRepo->find($idGarantie);
             $vehicule = $this->vehiculeRepo->findByIM($vehiculeIM);
             $client = $this->userRepo->find($idClient);
-            $duree = $this->dateHelper->calculDuree($dateTimeDepart, $dateTimeRetour);
+            $duree = $this->dateHelper->calculDuree($dateDepart, $dateRetour);
+            $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
 
             $devis->setVehicule($vehicule);
             $devis->setClient($client);
             $devis->setAgenceDepart($agenceDepart);
             $devis->setAgenceRetour($agenceRetour);
-            $devis->setDateDepart(new \DateTime($dateTimeDepart));
-            $devis->setDateRetour(new \DateTime($dateTimeRetour));
+            $devis->setDateDepart($dateDepart);
+            $devis->setDateRetour($dateRetour);
             $devis->setGarantie($garantie);
             $devis->setSiege($siege);
             $devis->setConducteur($conducteur);
@@ -112,6 +115,7 @@ class DevisController extends AbstractController
             $devis->setDuree($duree);
             $devis->setDateCreation($this->dateHelper->dateNow());
             $devis->setTransformed(false);
+            $devis->setTarifVehicule($tarifVehicule);
 
             // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
             $lastID = $this->devisRepo->findBy(array(), array('id' => 'DESC'), 1);
@@ -123,7 +127,7 @@ class DevisController extends AbstractController
             }
             $devis->setNumeroDevis($currentID);
 
-            $prix = $this->tarifsHelper->calculTarif($dateTimeDepart, $dateTimeRetour, $siege, $garantie, $vehicule);
+            $prix = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $siege, $garantie);
 
             $devis->setPrix($prix);
 

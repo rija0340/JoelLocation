@@ -27,10 +27,10 @@ class TarifsHelper
         $this->dateHelper = $dateHelper;
     }
 
-    function calculTarif($dateDepart, $dateRetour, $siege, $garantie, $vehicule)
+    function calculTarifTotal($tarifVehicule, $siege, $garantie)
     {
 
-        if (!is_object($siege) && !is_object($garantie) && !is_object($vehicule)) {
+        if (!is_object($siege) && !is_object($garantie)) {
 
             if (!is_float($siege)) {
                 $siegePrix = $this->optionsRepo->find(intval($siege))->getPrix();
@@ -42,34 +42,40 @@ class TarifsHelper
             } else {
                 $garantiePrix = $garantie;
             }
-
-            $vehicule = $this->vehiculeRepo->find(intval($vehicule));
         } else {
             $siegePrix = $siege->getPrix();
             $garantiePrix = $garantie->getPrix();
         }
 
-        $mois = $this->dateHelper->getMonthName($dateDepart);
-        $tarifs = $this->tarifsRepo->findTarifs($vehicule, $mois);
-        $duree = $this->dateHelper->calculDuree($dateDepart, $dateRetour);
-        $tarif = 0; //initialisation de $tarif
-        if (!is_null($tarifs)) {
-
-            if ($duree <= 3) $tarif = $tarifs->getTroisJours();
-
-            if ($duree > 3 && $duree <= 7) $tarif = $tarifs->getSeptJours();
-
-            if ($duree > 7 && $duree <= 15) $tarif = $tarifs->getQuinzeJours();
-
-            if ($duree > 15 && $duree <= 30) $tarif = $tarifs->getTrenteJours();
-        }
-
-        if ($tarif != null) {
-            $prix = $tarif + $siegePrix + $garantiePrix;
+        $tarifTotal = 0; //initialisation de $tarif
+        if ($tarifVehicule != null) {
+            $tarifTotal = $tarifVehicule + $siegePrix + $garantiePrix;
         } else {
-            $prix = $siegePrix + $garantiePrix;
+            $tarifTotal = $siegePrix + $garantiePrix;
         }
 
-        return $prix;
+        return $tarifTotal;
+    }
+
+    function calculTarifVehicule($dateDepart, $dateRetour, $vehicule)
+    {
+        $mois = $this->dateHelper->getMonthName($dateDepart);
+        $duree = $this->dateHelper->calculDuree($dateDepart, $dateRetour);
+        $tarif = $this->tarifsRepo->findTarifs($vehicule, $mois);
+
+        $tarifVehicule = 0;
+
+        if (!is_null($tarif)) {
+
+            if ($duree <= 3) $tarifVehicule = $tarif->getTroisJours();
+
+            if ($duree > 3 && $duree <= 7) $tarifVehicule = $tarif->getSeptJours();
+
+            if ($duree > 7 && $duree <= 15) $tarifVehicule = $tarif->getQuinzeJours();
+
+            if ($duree > 15 && $duree <= 30) $tarifVehicule = $tarif->getTrenteJours();
+        }
+
+        return $tarifVehicule;
     }
 }

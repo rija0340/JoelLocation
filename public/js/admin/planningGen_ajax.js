@@ -1,3 +1,5 @@
+// const { gantt } = require("../../Gantt/dhtmlxgantt");
+
 var datedebutplanning;
 var dateValue;
 var startDate;
@@ -43,6 +45,7 @@ function retrieveDataAjax() {
         url: '/planningGeneralData',
         timeout: 3000,
         success: function (data) {
+            console.log(data);
             getData(data);
             createCheckboxes(getUniqueListVehicules(data));
 
@@ -69,7 +72,7 @@ function ganttInit(startDateScale, endDateScale) {
 
         }
     ];
-    //affichage scale (organisatio date, mois, jours, année)
+    //affichage scale (organisation date, mois, jours, année)
     gantt.config.scales = [
         {
             unit: "day",
@@ -117,8 +120,21 @@ function ganttInit(startDateScale, endDateScale) {
     gantt.i18n.setLocale("fr");
 
     gantt.clearAll();
+    gantt.plugins({
+        quick_info: true
+    });
 
     gantt.init("gantt_here");
+
+    gantt.attachEvent("onTaskDblClick", function (id, e) {
+        var taskID = gantt.getTask(id).id_r;
+        var enCours = gantt.getTask(id).enCours;
+        if (enCours) {
+            window.document.location = '/reservation/contrats_en_cours/' + taskID;
+        } else {
+            window.document.location = '/reservation/contrat_termine/' + taskID;
+        }
+    });
     //colorer task en fonction valeur "color"
     gantt.templates.task_class = function (start, end, task) {
         if (task.color == "agence") {

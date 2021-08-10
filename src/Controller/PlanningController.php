@@ -7,6 +7,7 @@ use App\Entity\Vehicule;
 use App\Repository\VehiculeRepository;
 use App\Form\ReservationType;
 use App\Repository\ReservationRepository;
+use App\Service\DateHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,13 +25,15 @@ class PlanningController extends AbstractController
     private $reservationRepo;
     private $dateTimestamp;
     private $vehiculeRepo;
+    private $dateHelper;
 
 
-    public function __construct(ReservationRepository $reservationRepo, VehiculeRepository $vehiculeRepo)
+    public function __construct(DateHelper $dateHelper, ReservationRepository $reservationRepo, VehiculeRepository $vehiculeRepo)
     {
 
         $this->reservationRepo = $reservationRepo;
         $this->vehiculeRepo = $vehiculeRepo;
+        $this->dateHelper = $dateHelper;
     }
 
     /**
@@ -99,6 +102,19 @@ class PlanningController extends AbstractController
             $datas[$key]['end_date_formated'] = $reservation->getDateFin()->format('d-m-Y H:i');
             $datas[$key]['parent'] = $reservation->getVehicule()->getId();
             $datas[$key]['agenceDepart'] = $reservation->getAgenceDepart();
+            $datas[$key]['agenceRetour'] = $reservation->getAgenceRetour();
+            $datas[$key]['reference'] = $reservation->getReference();
+            $datas[$key]['telClient'] = $reservation->getClient()->getTelephone();
+            $datas[$key]['text'] = ""; //util pour eviter erreur quick_info
+            // tester si une reservation est en cours
+            if ($reservation->getDateDebut() < $this->dateHelper->dateNow() && $this->dateHelper->dateNow() < $reservation->getDateFin()) {
+
+                $datas[$key]['enCours'] = true;
+            }
+            if ($reservation->getDateFin() < $this->dateHelper->dateNow()) {
+
+                $datas[$key]['enCours'] = false;
+            }
 
             if ($reservation->getAgenceDepart() == "garage") {
                 $datas[$key]['color'] =  "#A9A9A9";
@@ -122,7 +138,6 @@ class PlanningController extends AbstractController
                 }
             }
         }
-
 
         return new JsonResponse($data2);
     }

@@ -1,6 +1,7 @@
 {% extends 'baseClient.html.twig' %}
 
-{% block title %}page client
+{% block title %}
+	page client
 {% endblock %}
 {% block stylesheets %}{% endblock %}
 {% block body %}
@@ -33,17 +34,10 @@
 						<td>{{ reserv.prix }}
 							€</td>
 					</tr>
-				{% else %}
-					<tr>
-						<td colspan="8">Aucune reservation en cours</td>
-					</tr>
 				{% endfor %}
 			</tbody>
 		</table>
-	</div>
-	<hr>
-	<h3>Réservation en attente de validation</h3>
-	<div>
+		<h3>Réservation en attente de validation</h3>
 		<table class="table">
 			<thead>
 				<tr>
@@ -58,6 +52,7 @@
 			<tbody>
 				{% for reserv in res_attente_validation %}
 					<tr>
+						<td id="devisID " class="hide">{{reserv.id}}</td>
 						<td>{{ reserv.numero }}</td>
 						<td>{{ reserv.dateCreation ? reserv.dateCreation|date('d/m/Y - H:i') : '' }}</td>
 						<td>{{ reserv.vehicule.marque}}
@@ -72,92 +67,85 @@
 							<a href="{{ path('client_devis_show', {'id': reserv.id}) }}">
 								<i class=" fa fa-info-circle" style="font-size: 2em !important;"></i>
 							</a>
+							<a id="telechargerDevis">
+								<i class="fa fa-arrow-circle-o-down" style="font-size: 2em !important;"></i>
+							</a>
 						</td>
-					</tr>
-				{% else %}
-					<tr>
-						<td colspan="8">Aucune reservation en attente</td>
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-	</div>
-	<hr>
-	<h3>Réservations à venir</h3>
-	<div>
-		<table class="table">
-			<thead>
-				<tr>
-					<th>Numéro Devis</th>
-					<th>Date de création</th>
-					<th>Réservation/véhicule</th>
-					<th>Dates/Durée</th>
-					<th>Prix</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for reserv in res_attente_dateDebut %}
-					<tr>
-						<td>{{ reserv.reference }}</td>
-						<td>{{ reserv.dateReservation ? reserv.dateReservation|date('d/m/Y - H:i') : '' }}</td>
-						<td>{{ reserv.vehicule.marque}}
-							{{reserv.vehicule.modele}}
-						</td>
-						<td>{{ reserv.dateDebut ? reserv.dateDebut|date('d/m/Y - H:i ') : '' }}/<br>
-							<span class="text-center font-italic">
-								{{ reserv.duree}}
-								jours
-							</span>
-						</td>
-						<td>{{ reserv.prix }}
-							€</td>
-					</tr>
-				{% else %}
-					<tr>
-						<td colspan="8">Aucune reservation en attente</td>
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-	</div>
-	<hr>
-	<h3>Réservation réalisées</h3>
-	<div>
-		<table class="table">
-			<thead>
-				<tr>
-					<th>Référence
-					</th>
-					<th>Date de création</th>
-					<th>Réservation/véhicule</th>
-					<th>Dates/Durée</th>
-					<th>Prix</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for reserv in reservation_effectuers %}
-					<tr>
 
-						<td>{{ reserv.reference }}</td>
-						<td>{{ reserv.dateReservation|date('d/m/Y - H:i') }}</td>
-						<td>{{ reserv.vehicule.marque}}
-							{{ reserv.vehicule.modele}}</td>
-						<td>{{ reserv.dateDebut|date('d/m/Y - H:i')  }}
-							<br>
-							<span class="text-center font-italic">
-								{{ reserv.duree}}
-								jours
-							</span>
-						</td>
-						<td>{{ reserv.prix }}
-							€</td>
 					</tr>
-				</tr>
-			{% else %}
+				{% endfor %}
+			</tbody>
+		</tbody>
+	</table>
+	<h3>Réservations à venir</h3>
+	<table class=" table">
+		<thead>
+			<tr>
+				<th>Numéro Devis</th>
+				<th>Date de création</th>
+				<th>Réservation/véhicule</th>
+				<th>Dates/Durée</th>
+				<th>Prix</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for reserv in res_attente_dateDebut %}
 				<tr>
-					<td colspan="8">Aucune reservation réalisée</td>
+					<td>{{ reserv.reference }}</td>
+					<td>{{ reserv.dateReservation ? reserv.dateReservation|date('d/m/Y - H:i') : '' }}</td>
+					<td>{{ reserv.vehicule.marque}}
+						{{reserv.vehicule.modele}}
+					</td>
+					<td>{{ reserv.dateDebut ? reserv.dateDebut|date('d/m/Y - H:i ') : '' }}/<br>
+						<span class="text-center font-italic">
+							{{ reserv.duree}}
+							jours
+						</span>
+					</td>
+					<td>{{ reserv.prix }}
+						€</td>
 				</tr>
 			{% endfor %}
 		</tbody>
 	</table>
-</div>{% endblock %}{% block javascripts %}{% endblock %}
+	<h3>Réservation réalisées</h3>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Référence</th>
+				<th>Date de création</th>
+				<th>Réservation/véhicule</th>
+				<th>Dates/Durée</th>
+				<th>Prix</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for reserv in reservation_effectuers %}
+				<tr>
+
+					<td>{{ reserv.reference }}</td>
+					<td>{{ reserv.dateReservation|date('d/m/Y - H:i') }}</td>
+					<td>{{ reserv.vehicule.marque}}
+						{{ reserv.vehicule.modele}}</td>
+					<td>{{ reserv.dateDebut|date('d/m/Y - H:i')  }}
+						<br>
+						<span class="text-center font-italic">
+							{{ reserv.duree}}
+							jours
+						</span>
+					</td>
+					<td>{{ reserv.prix }}
+						€</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+{% endblock %}
+{% block javascripts %}
+	<script src="{{ asset( 'js/admin/jspdf.min.js')}}"></script>
+	<script src="{{ asset( 'js/admin/jspdf.plugin.autotable.js')}}"></script>
+	<script src="{{ asset( 'js/admin/devisJsPDF.js')}}"></script>
+	<script src="{{ asset( 'js/client/reservation.js')}}"></script>
+{% endblock %}

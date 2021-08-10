@@ -23,7 +23,7 @@
 		<i class="fa fa-folder-open"></i>
 		Détails devis -
 		<br>
-		<span>{{ devis.numero }}</span>
+		<span class="js-numeroDevis">{{ devis.numero }}</span>
 	</div>
 {% endblock %}
 
@@ -109,13 +109,11 @@
 							Générer détail</button>
 						<a type="button" class="btn btn-outline-info text-uppercase p-1" id="btnGenererFacturePDF">
 							<i class="fa fa-send (alias)"></i>
-							générer facture</button>
+							générer facture</a>
 						<a type="button" class="btn btn-outline-success text-uppercase p-1">
 							<i class="fa fa-send (alias)"></i>
-							Envoyer facture</button>
-						<a type="button" class="btn btn-outline-dark text-uppercase p-1 noHide" id="btnReserver" href="{{path('devis_reserver', {'id': devis.id} ) }}">
-							<i class="fa fa-checked"></i>
-							Réserver</a>
+							Envoyer facture</a>
+
 					</div>
 				</div>
 			</div>
@@ -133,8 +131,8 @@
 					<div class="col-md-4">
 						<span class="label_client">Client :</span>
 						<span class="js-prenom_client">{{devis.client.prenom}}
-							<span class="js-nom_client">{{devis.client.nom}}</span>
 						</span>
+						<span class="js-nom_client">{{devis.client.nom}}</span>
 					</div>
 					<div class="col-md-4">
 						<span class="label_client">Email :</span>
@@ -490,5 +488,7 @@
 	<script src="../../admin/vendors/pdfmake/build/vfs_fonts.js"></script>
 	<script src="../../js/admin/jspdf.min.js"></script>
 	<script src="../../js/admin/jspdf.plugin.autotable.js"></script>
+	<script src="../../js/admin/devisJsPDF.js"></script>
+	<script src="../../js/admin/factureJsPDF.js"></script>
 	<script src="../../js/admin/details_devis.js"></script>
 {% endblock  %}

@@ -94,6 +94,11 @@ class Devis
      */
     private $transformed;
 
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $tarifVehicule;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -269,6 +274,18 @@ class Devis
 
     public function setNumeroDevis($currentID)
     {
+        if ($currentID < 10) {
+            $currentID = '0000' . $currentID;
+        }
+        if ($currentID < 100 && $currentID > 10) {
+            $currentID = '000' . $currentID;
+        }
+        if ($currentID < 1000 && $currentID > 100) {
+            $currentID = '00' . $currentID;
+        }
+        if ($currentID < 10000 && $currentID > 1000) {
+            $currentID = '0' . $currentID;
+        }
         $ref  = "DV" . $currentID;
         $this->setNumero($ref);
     }
@@ -281,6 +298,18 @@ class Devis
     public function setTransformed(?bool $transformed): self
     {
         $this->transformed = $transformed;
+
+        return $this;
+    }
+
+    public function getTarifVehicule(): ?float
+    {
+        return $this->tarifVehicule;
+    }
+
+    public function setTarifVehicule(?float $tarifVehicule): self
+    {
+        $this->tarifVehicule = $tarifVehicule;
 
         return $this;
     }

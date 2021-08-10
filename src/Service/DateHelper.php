@@ -68,8 +68,7 @@ class DateHelper
 
     function calculDuree($dateDepart, $dateRetour)
     {
-        $dateDepart = new \DateTime($dateDepart);
-        $dateRetour = new \DateTime($dateRetour);
+
         $duree = date_diff($dateDepart, $dateRetour);
 
         return $duree->days;

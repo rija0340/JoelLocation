@@ -238,6 +238,7 @@ class ClientController extends AbstractController
         $reservation->setNumDevis($devis->getNumero());
         $reservation->setDateReservation($this->dateHelper->dateNow());
         $reservation->setCodeReservation('devisTransformé');
+        $reservation->setDuree($this->dateHelper->calculDuree($devis->getDateDepart(), $devis->getDateRetour()));
         // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
         $lastID = $this->reservRepo->findBy(array(), array('id' => 'DESC'), 1);
         $currentID = $lastID[0]->getId() + 1;
@@ -367,6 +368,30 @@ class ClientController extends AbstractController
             'user' => $user,
             'form' => $form->createView(),
         ]);
+    }
+
+
+    /**
+     * @Route("/espaceclient/devisPDF/{id}", name="devisPDF", methods={"GET","POST"})
+     */
+    public function devisPDF(Request $request, Devis $devis)
+    {
+
+        $data = array();
+
+        $data['numeroDevis'] = $devis->getNumero();
+        $data['dateDepart'] = $devis->getDateDepart()->format('d/m/Y H:i');
+        $data['dateRetour'] = $devis->getDateRetour()->format('d/m/Y H:i');
+        $data['nomClient'] = $devis->getClient()->getNom();
+        $data['prenomClient'] = $devis->getClient()->getPrenom();
+        $data['vehicule'] = $devis->getVehicule()->getMarque() . " " . $devis->getVehicule()->getModele() . " " . $devis->getVehicule()->getImmatriculation();
+        $data['duree'] = $devis->getDuree();
+        $data['agenceDepart'] = $devis->getAgenceDepart();
+        $data['agenceRetour'] = $devis->getAgenceRetour();
+        $data['tarif'] = $devis->getPrix();
+        $data['adresseClient'] = $devis->getClient()->getAdresse();
+
+        return new JsonResponse($data);
     }
 
 
