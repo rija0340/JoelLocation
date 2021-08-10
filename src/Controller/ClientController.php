@@ -465,6 +465,9 @@ class ClientController extends AbstractController
         $reservation = $this->getDoctrine()->getRepository(Reservation::class)->findOneBy(["client" => $client], ["id" => "DESC"]);
         $modePaiement = $this->getDoctrine()->getRepository(ModePaiement::class)->findOneBy(["id" => 1]);
         $vehicule = new Vehicule();
+        if($reservation == null){            
+            return $this->redirectToRoute('client');
+        }
         $vehicule = $reservation->getVehicule();
         $caution = $vehicule->getCaution() * 100;
         // Set your secret key. Remember to switch to your live secret key in production.
@@ -494,5 +497,6 @@ class ClientController extends AbstractController
         $entityManager->persist($paiement);
         $entityManager->flush();
         return $this->redirectToRoute('espaceClient_index');
+        //return $this->redirectToRoute('client');
     }
 }
