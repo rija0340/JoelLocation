@@ -51,7 +51,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
     var nbJrLocationSpanElem;
     var vehiculeImgElem;
 
-    var tarifs;
+    var tarifVehicule;
     var tarifApplique;
 
     //  get elem vehicule details step 2
@@ -67,7 +67,8 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
     var immatriculationSpanElem;
 
     // prix location elem
-    var prixSpanElem;
+    var prixTotalSpanElem;
+    var prixJournalierSpanElem;
 
     // var detailsVehicule from ajax; 
     let detailsVehicule;
@@ -280,7 +281,8 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
         heureRetourSpanElem = document.querySelectorAll('span[id="heure_retour"]');
         nbJrLocationSpanElem = document.querySelectorAll('span[id="nombre_jours_location"]')
         vehiculeImgElem = document.querySelectorAll('img[id="vehicule_photo"]');
-        prixSpanElem = document.querySelectorAll('span[id="prix"]');
+        prixTotalSpanElem = document.querySelectorAll('span[id="prixTotal"]');
+        prixJournalierSpanElem = document.querySelectorAll('span[id="prixJournalier"]');
 
         conducteurSpanElem = document.querySelector('span[id="span_conducteur"]');
         siegeSpanElem = document.querySelector('span[id="span_siege"]');
@@ -501,6 +503,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
         }
 
     }
+    //requete vers VehiculeController
     function retrieveVehiculeAjax(vehicule) {
         // var d = new Date(dateInputValue);
         // var n = d.toString();
@@ -530,7 +533,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
         });
     }
 
-    function retrieveTarifsAjax(vehicule) {
+    function retrieveTarifsAjax(dateDepart, dateRetour, vehicule) {
         // var d = new Date(dateInputValue);
         // var n = d.toString();
         $.ajax({
@@ -538,7 +541,9 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
             url: '/tarifVenteComptoir',
             data: {
                 "vehicule_id": vehicule,
-                "mois": getMonth(datetimeDepartValue)
+                // "mois": getMonth(datetimeDepartValue)
+                "dateDepart": dateDepart,
+                "dateRetour": dateRetour
             },
             beforeSend: function (xhr) {
             },
@@ -547,7 +552,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
                 console.log(data);
                 console.log(getMonth(datetimeDepartValue));
                 console.log(vehicule);
-                tarifs = data;
+                tarifVehicule = data.tarif;
 
             },
             error: function (erreur) {
@@ -720,7 +725,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
         var completed;
         if (vehiculeSelected != null && agenceDepartSelected != "Choisir" && agenceRetourSelected != "Choisir" && lieuSejourValue != "") {
 
-            retrieveTarifsAjax(vehiculeSelected);
+            retrieveTarifsAjax(datetimeDepartValue, datetimeRetourValue, vehiculeSelected);
             retrieveVehiculeAjax(vehiculeSelected); //in success status include setValues 2,3,4
 
             ;
@@ -735,22 +740,16 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
 
     function tachesStep2toStep3() {
 
-        if (tarifs != null) {
+        for (let i = 0; i < prixTotalSpanElem.length; i++) {
+            prixTotalSpanElem[i].innerText = tarifVehicule;
 
-            if (dureeReservation <= 3) tarifApplique = tarifs.troisJours;
-
-            if (dureeReservation > 3 && dureeReservation <= 7) tarifApplique = tarifs.septJours;
-
-            if (dureeReservation > 7 && dureeReservation <= 15) tarifApplique = tarifs.quinzeJours;
-
-            if (dureeReservation > 15 && dureeReservation <= 30) tarifApplique = tarifs.trenteJours;
-
-            for (let i = 0; i < prixSpanElem.length; i++) {
-                prixSpanElem[i].innerText = tarifApplique;
-
-            }
         }
-        console.log(dureeReservation, tarifApplique);
+
+        for (let i = 0; i < prixJournalierSpanElem.length; i++) {
+            prixJournalierSpanElem[i].innerText = tarifVehicule;
+
+        }
+        console.log(dureeReservation, tarifVehicule);
         retrieveClientsAjax();
     }
 

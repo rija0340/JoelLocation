@@ -51,8 +51,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
     var nbJrLocationSpanElem;
     var vehiculeImgElem;
 
-    var tarifs;
-    var tarifApplique;
+    var tarifVehicule;
 
     //  get elem vehicule details step 2
     var marqueSpanElem;
@@ -67,7 +66,8 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
     var immatriculationSpanElem;
 
     // prix location elem
-    var prixSpanElem;
+    var prixJournalierSpanElem;
+    var prixTotalSpanElem;
 
     // var detailsVehicule from ajax; 
     let detailsVehicule;
@@ -272,7 +272,8 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
         heureRetourSpanElem = document.querySelectorAll('span[id="heure_retour"]');
         nbJrLocationSpanElem = document.querySelectorAll('span[id="nombre_jours_location"]')
         vehiculeImgElem = document.querySelectorAll('img[id="vehicule_photo"]');
-        prixSpanElem = document.querySelectorAll('span[id="prix"]');
+        prixTotalSpanElem = document.querySelectorAll('span[id="prixTotal"]');
+        prixJournalierSpanElem = document.querySelectorAll('span[id="prixJournalier"]');
 
         conducteurSpanElem = document.querySelector('span[id="span_conducteur"]');
         siegeSpanElem = document.querySelector('span[id="span_siege"]');
@@ -291,7 +292,6 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
 
 
     }
-
 
 
     //--------------------------liste des fonctions AJAX--------------------
@@ -325,15 +325,16 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
         });
     }
 
-    function retrieveTarifsAjax(vehicule) {
+    function retrieveTarifsAjax(dateDepart, dateRetour, vehicule) {
         // var d = new Date(dateInputValue);
         // var n = d.toString();
         $.ajax({
             type: 'GET',
-            url: '/espaceclient/tarifsVehicule',
+            url: '/tarifVenteComptoir',
             data: {
                 "vehicule_id": vehicule,
-                "mois": getMonth(datetimeDepartValue)
+                "dateDepart": dateDepart,
+                "dateRetour": dateRetour
             },
             beforeSend: function (xhr) {
             },
@@ -342,7 +343,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
                 console.log(data);
                 console.log(getMonth(datetimeDepartValue));
                 console.log(vehicule);
-                tarifs = data;
+                tarifVehicule = data.tarif;
 
             },
             error: function (erreur) {
@@ -456,7 +457,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
 
         if (vehiculeSelected != null && agenceDepartSelected != "Choisir" && agenceRetourSelected != "Choisir" && lieuSejourValue != "") {
 
-            retrieveTarifsAjax(vehiculeSelected);
+            retrieveTarifsAjax(datetimeDepartValue, datetimeRetourValue, vehiculeSelected);
             retrieveVehiculeAjax(vehiculeSelected); //in success status include setValues 2,3,4
 
             ;
@@ -471,22 +472,17 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
 
     function tachesStep2toStep3() {
 
-        if (tarifs != null) {
+        for (let i = 0; i < prixTotalSpanElem.length; i++) {
+            prixTotalSpanElem[i].innerText = tarifVehicule;
 
-            if (dureeReservation <= 3) tarifApplique = tarifs.troisJours;
-
-            if (dureeReservation > 3 && dureeReservation <= 7) tarifApplique = tarifs.septJours;
-
-            if (dureeReservation > 7 && dureeReservation <= 15) tarifApplique = tarifs.quinzeJours;
-
-            if (dureeReservation > 15 && dureeReservation <= 30) tarifApplique = tarifs.trenteJours;
-
-            for (let i = 0; i < prixSpanElem.length; i++) {
-                prixSpanElem[i].innerText = tarifApplique;
-
-            }
         }
-        console.log(dureeReservation, tarifApplique);
+
+        for (let i = 0; i < prixJournalierSpanElem.length; i++) {
+            prixJournalierSpanElem[i].innerText = tarifVehicule;
+
+        }
+
+        console.log(dureeReservation, tarifVehicule);
     }
 
     function tachesStep3toStep4() {
@@ -727,7 +723,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
     }
 
     function calculPrixTotal() {
-        var total = tarifApplique + siege.prix + garantie.prix;
+        var total = tarifVehicule + siege.prix + garantie.prix;
         return total;
     }
 

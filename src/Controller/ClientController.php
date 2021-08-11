@@ -177,18 +177,21 @@ class ClientController extends AbstractController
             $idSiege = $request->query->get('idSiege');
             $idGarantie = $request->query->get('idGarantie');
 
+
+            $dateDepart = $this->dateHelper->newDate($dateTimeDepart);
+            $dateRetour = $this->dateHelper->newDate($dateTimeRetour);
             $siege = $this->optionsRepo->find($idSiege);
             $garantie = $this->garantiesRepo->find($idGarantie);
             $vehicule = $this->vehiculeRepo->findByIM($vehiculeIM);
             $client = $this->userRepo->find($clientID);
-            $duree = $this->dateHelper->calculDuree($dateTimeDepart, $dateTimeRetour);
+            $duree = $this->dateHelper->calculDuree($dateDepart, $dateRetour);
 
             $reservation->setVehicule($vehicule);
             $reservation->setClient($client);
             $reservation->setAgenceDepart($agenceDepart);
             $reservation->setAgenceRetour($agenceRetour);
-            $reservation->setDateDebut(new \DateTime($dateTimeDepart));
-            $reservation->setDateFin(new \DateTime($dateTimeRetour));
+            $reservation->setDateDebut($dateDepart);
+            $reservation->setDateFin($dateRetour);
             $reservation->setGarantie($garantie);
             $reservation->setSiege($siege);
             $reservation->setConducteur($conducteur);
@@ -206,7 +209,8 @@ class ClientController extends AbstractController
             $pref = "WEB";
             $reservation->setRefRes($pref, $currentID);
 
-            $prix = $this->tarifsHelper->calculTarif($dateTimeDepart, $dateTimeRetour, $siege, $garantie, $vehicule);
+            $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
+            $prix = $this->tarifsHelper->calculTarifTotal($tarifVehicule,  $siege, $garantie);
 
             $reservation->setPrix($prix);
 
@@ -266,7 +270,7 @@ class ClientController extends AbstractController
 
         $data['id'] = $vehicule->getId();
         $data['marque'] = $vehicule->getMarque()->getLibelle();
-        $data['modele'] = $vehicule->getModele();
+        $data['modele'] = $vehicule->getModele()->getLibelle();
         $data['carburation'] = $vehicule->getCarburation();
         $data['vitesse'] = $vehicule->getVitesse();
         $data['immatriculation'] = $vehicule->getImmatriculation();
@@ -287,20 +291,23 @@ class ClientController extends AbstractController
     public function tarifsVehicule(Request $request, VehiculeRepository $vehiculeRepo, TarifsRepository $tarifsRepo)
     {
         $vehicule_id = intVal($request->query->get('vehicule_id'));
-        $mois = $request->query->get('mois');
+        $dateDepart = $request->query->get('dateDepart');
+        $dateRetour = $request->query->get('dateRetour');
 
-        // dd($vehicule_id, $mois);
-        // die();
+        $dateDepart = $this->dateHelper->newDate($dateDepart);
+        $dateRetour = $this->dateHelper->newDate($dateRetour);
+
         $vehicule = $vehiculeRepo->find($vehicule_id);
-        $tarif =  $tarifsRepo->findTarifs($vehicule, $mois);
+        $tarif = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
 
         $data = array();
 
-        $data['troisJours'] = $tarif->getTroisJours();
-        $data['septJours'] = $tarif->getSeptJours();
-        $data['quinzeJours'] = $tarif->getQuinzeJours();
-        $data['trenteJours'] = $tarif->getTrenteJours();
+        if ($tarif != null) {
 
+            $data['tarif'] = $tarif;
+        } else {
+            $data['tarif'] = 0;
+        }
 
         return new JsonResponse($data);
     }
@@ -384,7 +391,7 @@ class ClientController extends AbstractController
         $data['dateRetour'] = $devis->getDateRetour()->format('d/m/Y H:i');
         $data['nomClient'] = $devis->getClient()->getNom();
         $data['prenomClient'] = $devis->getClient()->getPrenom();
-        $data['vehicule'] = $devis->getVehicule()->getMarque() . " " . $devis->getVehicule()->getModele() . " " . $devis->getVehicule()->getImmatriculation();
+        $data['vehicule'] = $devis->getVehicule()->getMarque()->getLibelle() . " " . $devis->getVehicule()->getModele()->getLibelle() . " " . $devis->getVehicule()->getImmatriculation();
         $data['duree'] = $devis->getDuree();
         $data['agenceDepart'] = $devis->getAgenceDepart();
         $data['agenceRetour'] = $devis->getAgenceRetour();
@@ -465,7 +472,7 @@ class ClientController extends AbstractController
         $reservation = $this->getDoctrine()->getRepository(Reservation::class)->findOneBy(["client" => $client], ["id" => "DESC"]);
         $modePaiement = $this->getDoctrine()->getRepository(ModePaiement::class)->findOneBy(["id" => 1]);
         $vehicule = new Vehicule();
-        if($reservation == null){            
+        if ($reservation == null) {
             return $this->redirectToRoute('client');
         }
         $vehicule = $reservation->getVehicule();

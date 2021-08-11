@@ -61,7 +61,11 @@ class TarifsHelper
     {
         $mois = $this->dateHelper->getMonthName($dateDepart);
         $duree = $this->dateHelper->calculDuree($dateDepart, $dateRetour);
-        $tarif = $this->tarifsRepo->findTarifs($vehicule, $mois);
+        // $tarif = $this->tarifsRepo->findTarifs($vehicule, $mois);
+        $marque = $vehicule->getMarque();
+        $modele = $vehicule->getModele();
+
+        $tarif = $this->tarifsRepo->findOneBy(['marque' => $marque, 'modele' => $modele, 'mois' => $mois]);
 
         $tarifVehicule = 0;
 

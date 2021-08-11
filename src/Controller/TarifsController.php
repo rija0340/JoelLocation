@@ -9,6 +9,8 @@ use App\Repository\MarqueRepository;
 use App\Repository\ModeleRepository;
 use App\Repository\TarifsRepository;
 use App\Repository\VehiculeRepository;
+use App\Service\DateHelper;
+use App\Service\TarifsHelper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,11 +22,15 @@ class TarifsController extends AbstractController
 
     private $marqueRepo;
     private $modeleRepo;
+    private $tarifsHelper;
+    private $dateHelper;
 
-    public function __construct(MarqueRepository $marqueRepo, ModeleRepository $modeleRepo)
+    public function __construct(DateHelper $dateHelper, TarifsHelper $tarifsHelper, MarqueRepository $marqueRepo, ModeleRepository $modeleRepo)
     {
         $this->marqueRepo = $marqueRepo;
         $this->modeleRepo = $modeleRepo;
+        $this->tarifsHelper = $tarifsHelper;
+        $this->dateHelper = $dateHelper;
     }
 
     /**
@@ -166,21 +172,25 @@ class TarifsController extends AbstractController
      */
     public function tarifVenteComptoir(Request $request, VehiculeRepository $vehiculeRepo, TarifsRepository $tarifsRepo)
     {
-        $vehicule_id = intVal($request->query->get('vehicule_id'));
-        $mois = $request->query->get('mois');
 
-        // dd($vehicule_id, $mois);
-        // die();
+        $vehicule_id = intVal($request->query->get('vehicule_id'));
+        $dateDepart = $request->query->get('dateDepart');
+        $dateRetour = $request->query->get('dateRetour');
+
+        $dateDepart = $this->dateHelper->newDate($dateDepart);
+        $dateRetour = $this->dateHelper->newDate($dateRetour);
+
         $vehicule = $vehiculeRepo->find($vehicule_id);
-        $tarif =  $tarifsRepo->findTarifs($vehicule, $mois);
+        $tarif = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
 
         $data = array();
 
-        $data['troisJours'] = $tarif->getTroisJours();
-        $data['septJours'] = $tarif->getSeptJours();
-        $data['quinzeJours'] = $tarif->getQuinzeJours();
-        $data['trenteJours'] = $tarif->getTrenteJours();
+        if ($tarif != null) {
 
+            $data['tarif'] = $tarif;
+        } else {
+            $data['tarif'] = 0;
+        }
 
         return new JsonResponse($data);
     }

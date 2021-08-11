@@ -78,4 +78,10 @@ class DateHelper
     {
         return new DateTime('NOW', new DateTimeZone('+0300'));
     }
+
+    //parametre objet date
+    function newDate($date)
+    {
+        return new DateTime($date, new DateTimeZone('+0300'));
+    }
 }

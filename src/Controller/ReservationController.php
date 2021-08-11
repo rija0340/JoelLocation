@@ -2,26 +2,27 @@
 
 namespace App\Controller;
 
-use App\Entity\Garantie;
+use DateTime;
+use DateTimeZone;
 use App\Entity\User;
 use App\Form\UserType;
+use App\Entity\Garantie;
 use App\Entity\Vehicule;
 use App\Form\VehiculeType;
 use App\Entity\Reservation;
 use App\Form\StopSalesType;
+use App\Service\DateHelper;
 use App\Form\UserClientType;
+use App\Form\KilometrageType;
 use App\Form\ReservationType;
+use App\Service\TarifsHelper;
 use App\Form\EditStopSalesType;
-use App\Repository\GarantieRepository;
-use App\Repository\OptionsRepository;
 use App\Repository\UserRepository;
+use App\Repository\TarifsRepository;
+use App\Repository\OptionsRepository;
+use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
 use App\Repository\ReservationRepository;
-use App\Repository\TarifsRepository;
-use App\Service\DateHelper;
-use App\Service\TarifsHelper;
-use DateTime;
-use DateTimeZone;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -364,10 +365,34 @@ class ReservationController extends AbstractController
     /**
      * @Route("/{id}", name="reservation_show", methods={"GET"},requirements={"id":"\d+"})
      */
-    public function show(Reservation $reservation): Response
+    public function show(Reservation $reservation, Request $request): Response
     {
+        // return $this->render('admin/reservation/crud/show.html.twig', [
+        //     'reservation' => $reservation,
+        // ]);
+
+
+        $formKM = $this->createForm(KilometrageType::class, $reservation);
+        $formKM->handleRequest($request);
+
+
+        if ($formKM->isSubmitted() && $formKM->isValid()) {
+
+            $entityManager = $this->reservController->getDoctrine()->getManager();
+            $entityManager->persist($reservation);
+            $entityManager->flush();
+
+            return $this->render('admin/reservation/crud/show.html.twig', [
+                'reservation' => $reservation,
+                'formKM' => $formKM->createView(),
+
+            ]);
+        }
+
+
         return $this->render('admin/reservation/crud/show.html.twig', [
             'reservation' => $reservation,
+            'formKM' => $formKM->createView()
         ]);
     }
 
