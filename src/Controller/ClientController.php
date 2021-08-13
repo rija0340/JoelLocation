@@ -24,7 +24,11 @@ use App\Repository\OptionsRepository;
 use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
 use App\Controller\ReservationController;
+use App\Entity\Conducteur;
+use App\Form\ClientCompteType;
 use App\Form\ClientEditType;
+use App\Form\ConducteurType;
+use App\Repository\ConducteurRepository;
 use App\Repository\ReservationRepository;
 use App\Repository\EtatReservationRepository;
 use App\Repository\ModeReservationRepository;
@@ -49,8 +53,9 @@ class ClientController extends AbstractController
     private $dateHelper;
     private $reservController;
     private $userRepo;
+    private $conductRepo;
 
-    public function __construct(UserRepository $userRepo, ReservationController $reservController, DateHelper $dateHelper, TarifsHelper $tarifsHelper, DevisRepository $devisRepo, ReservationRepository $reservRepo, UserPasswordEncoderInterface $passwordEncoder, VehiculeRepository $vehiculeRepository, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
+    public function __construct(ConducteurRepository $conductRepo,  UserRepository $userRepo, ReservationController $reservController, DateHelper $dateHelper, TarifsHelper $tarifsHelper, DevisRepository $devisRepo, ReservationRepository $reservRepo, UserPasswordEncoderInterface $passwordEncoder, VehiculeRepository $vehiculeRepository, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
     {
         $this->passwordEncoder = $passwordEncoder;
         $this->vehiculeRepo = $vehiculeRepository;
@@ -62,6 +67,7 @@ class ClientController extends AbstractController
         $this->dateHelper = $dateHelper;
         $this->reservController = $reservController;
         $this->userRepo = $userRepo;
+        $this->conductRepo = $conductRepo;
     }
 
 
@@ -71,42 +77,120 @@ class ClientController extends AbstractController
     public function client(Request $request): Response
     {
         $client = $this->getUser();
+        // dump($request);
+        // die();
         $date = new \DateTime('now');
         $message_reservation = '';
         $reservation = new Reservation();
         // $client1 = new User();
         $mode_reservation = $this->getDoctrine()->getRepository(ModeReservation::class)->findOneBy(['id' => 3]);
         $etat_reservation = $this->getDoctrine()->getRepository(EtatReservation::class)->findOneBy(['id' => 1]);
-        $form = $this->createForm(ReservationclientType::class, $reservation);
+        // $form = $this->createForm(ReservationclientType::class, $reservation);
         $formClient = $this->createForm(ClientType::class, $client);
-        $form->handleRequest($request);
+        $formClientCompte = $this->createForm(ClientCompteType::class);
+        // $form->handleRequest($request);
+        $formClientCompte->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($formClientCompte->isSubmitted() && $formClientCompte->isValid()) {
+
+            if ($client->getPassword() == '') {
+                $client->setPassword($client->getRecupass());
+            } else {
+                $client->setPassword($this->passwordEncoder->encodePassword(
+                    $client,
+                    $client->getPassword()
+                ));
+                $client->setRecupass($client->getPassword());
+            }
+
             $entityManager = $this->getDoctrine()->getManager();
-            $reservation->setDateReservation($date);
-            $reservation->setCodeReservation("123");
-            $reservation->setClient($client);
-            $reservation->setUtilisateur($client);
-            $reservation->setModeReservation($mode_reservation);
-            $reservation->setEtatReservation($etat_reservation);
             $entityManager->persist($reservation);
             $entityManager->flush();
-            $message_reservation = 'reservation enregister avec sussès';
-            return $this->redirectToRoute('carte');
+            return $this->redirectToRoute('app_login');
         }
 
         // page client.html auparavant
         return $this->render('client/index.html.twig', [
-            'controller_name' => 'AccueilController',
+
             'client' => $client->getUsername(),
             'id' => $client->getId(),
-            'message' => $message_reservation,
-            'form' => $form->createView(),
+            // 'form' => $form->createView(),
             'formClient' => $formClient->createView(),
-
+            'formClientCompte' => $formClientCompte->createView(),
 
         ]);
     }
+
+    //*********************MES CONDUCTEURS*********************** */
+
+
+    /** 
+     * @Route("/espaceclient/mesConducteurs", name="client_mesConducteurs", methods={"GET","POST"})
+     */
+    public function mesConducteurs(Request $request): Response
+    {
+        $client = $this->getUser();
+        $conducteurs = $this->conductRepo->findBy(['client' => $client]);
+
+        // $formClient = $this->createForm(ClientType::class, $client);
+
+        return $this->render('client/conducteur/index.html.twig', [
+
+            'client' => $client,
+            'conducteurs' => $conducteurs
+        ]);
+    }
+
+    /** 
+     * @Route("/espaceclient/conducteur/new/", name="client_newConducteur", methods={"GET","POST"})
+     */
+    public function newConducteurs(Request $request): Response
+    {
+        $conducteur = new Conducteur();
+        $client = $this->getUser();
+        $formConducteur = $this->createForm(ConducteurType::class, $conducteur);
+        $formConducteur->handleRequest($request);
+
+        if ($formConducteur->isSubmitted() && $formConducteur->isValid()) {
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $conducteur->setClient($client);
+            $entityManager->persist($conducteur);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('client_mesConducteurs');
+        }
+
+        return $this->render('client/conducteur/new.html.twig', [
+
+            'formConducteur' => $formConducteur->createView()
+
+        ]);
+    }
+
+
+    /**
+     * @Route("/espaceclient/modifier/conducteur/{id}", name="conducteur_edit", methods={"GET","POST"})
+     */
+    public function editConducteur(Request $request, Conducteur $conducteur): Response
+    {
+        $formConducteur = $this->createForm(ConducteurType::class, $conducteur);
+        $formConducteur->handleRequest($request);
+
+        if ($formConducteur->isSubmitted() && $formConducteur->isValid()) {
+
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('client_mesConducteurs');
+        }
+
+        return $this->render('client/conducteur/edit.html.twig', [
+            'formConducteur' => $formConducteur->createView(),
+        ]);
+    }
+
+
+    //*******************fin mes conducteurs***************** */
 
     /** 
      * @Route("/espaceclient/reservations", name="client_reservations", methods={"GET","POST"})
@@ -481,7 +565,7 @@ class ClientController extends AbstractController
         // See your keys here: https://dashboard.stripe.com/account/apikeys
         \Stripe\Stripe::setApiKey('sk_test_51INCSpLWsPgEVX5UZKrH0YIs7H7PF8Boao1VcYHEks40it5a39h5KJzcwWxSWUIV6ODWkPS7txKsRyKeSfBknDFC00PAHEBwVP');
 
-        // Token is created using Stripe Checkout or Elements!
+        // Token is created using Stripe Checkout or Elements!  
         // Get the payment token ID submitted by the form:
         //$token = $_POST['stripeToken'];
         $token = $request->request->get('stripeToken');

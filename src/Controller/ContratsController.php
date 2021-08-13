@@ -37,7 +37,6 @@ class ContratsController extends AbstractController
         ]);
     }
 
-
     /**
      * @Route("/reservation/contrats_en_cours/{id}", name="contrats_show", methods={"GET"})
      */

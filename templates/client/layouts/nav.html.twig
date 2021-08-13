@@ -1,59 +1,29 @@
-<div class="container d-flex align-items-center">
-	<div class=" mr-auto logo-column">
-		<a href="{{ path('accueil') }}" class="logo">
-			<img src="images/Joel-Location-new.png" alt="JOEL LOCATION">
-		</a>
-		{# <span style="font-family:'Monotype corsiva';">Sa Ka Woulé</span> #}
-		<span>Sa Ka Woulé</span>
-	</div>
-	<div class="nav-column">
-		<nav id="menu" class="d-none d-lg-block ">
-			<ul>
-				<li class="{% if app.request.attributes.get('_route') starts with 'accueil' %}current-menu-item{% endif %}">
-					<a href="{{ path('accueil') }}">Accueil</a>
-				</li>
-				<li class="{% if app.request.attributes.get('_route') starts with 'app_login' %}current-menu-item{% endif %}">
-					{% if is_granted("ROLE_CLIENT") %}
-						<a href="{{ path('client') }}">Mon compte</a>
-					{% elseif is_granted("ROLE_PERSONNEL") %}
-						<a href="{{ path('admin_index') }}">Mon compte</a>
-					{% else %}
-						<a href="{{ path('app_login') }}">Mon compte</a>
-					{% endif %}
-				</li>
-				{% if is_granted("ROLE_CLIENT") or is_granted("ROLE_PERSONNEL") %}
-					<li class="current-menu-item has-child profil_mobile">
-						<a href="index.html">
-							<img src="/images/blank_profile.png" alt="DGSR Logo" class="brand-image img-circle elevation-3" style="opacity: .8; height:30px; width:auto;">
-						</a>
-						<ul class="sub-menu">
-							<li>
-								<a href="{{ path('app_logout') }}">Déconnecter</a>
-							</li>
-						</ul>
-					</li>
-				{% endif %}
-			</ul>
-		</nav>
-	</div>
-	<div class="profil_desktop ">
-		{% if is_granted("ROLE_CLIENT") or is_granted("ROLE_PERSONNEL") %}
-			<nav id="menu2">
-				<ul>
-					<li class="current-menu-item has-child">
-						<a href="index.html">
-							<img src="/images/blank_profile.png" alt="DGSR Logo" class="brand-image img-circle elevation-3" style="opacity: .8; height:30px; width:auto;">
-						</a>
-						<ul class="sub-menu">
-							<li>
-								<a href="{{ path('app_logout') }}">Déconnecter</a>
-							</li>
+<div class="">
+	<ul class="nav flex-column" id="menu">
+		<li class="nav-item {% if app.request.attributes.get('_route') starts with 'espaceClient_index' %}current-menu w-100{% endif %}">
+			<a class="" href="{{path('espaceClient_index')}}">
+				<i class="fa fa-user mr-1"></i>Mes informations</a>
+		</li>
+		<li class="nav-item {% if app.request.attributes.get('_route') starts with 'client_reservations' %}current-menu w-100{% endif %}">
+			<a class="" href="{{path('client_reservations')}}">
+				<i class="fa fa-shopping-cart mr-1"></i>
 
-						</ul>
-					</li>
-				</ul>
-			</nav>
-		{% endif %}
-	</div>
-
+				Mes réservations</a>
+		</li>
+		<li class=" nav-item {% if app.request.attributes.get('_route') starts with 'client_nouvelleReserv' %}current-menu w-100{% endif %}">
+			<a class="" href="{{path('client_nouvelleReserv')}}">
+				<i class="fa fa-plus mr-1"></i>Nouvelle réservation</a>
+		</li>
+		<li class="nav-item {% if app.request.attributes.get('_route') starts with 'client_mesConducteurs' %}current-menu w-100{% endif %}">
+			<a class=" " tabindex="-1" class="text-dark" href="{{path('client_mesConducteurs')}}">
+				<i class="fa fa-list"></i>
+				Mes conducteurs</a>
+		</li>
+		<li class="nav-item">
+			<a class="btn btn-dark w-100 btnLogout" tabindex="-1" href="{{path('app_logout')}}" class="text-white">Deconnexion</a>
+		</li>
+		<li class="nav-item">
+			<a href="{{ path('accueil') }}" class="btn btn-warning w-100 p-1">Aller sur le site Joellocation</a>
+		</li>
+	</ul>
 </div>

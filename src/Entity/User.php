@@ -133,6 +133,26 @@ class User implements UserInterface
      */
     private $lieuNaissance;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $complementAdresse;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $ville;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $codePostal;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Conducteur::class, mappedBy="client")
+     */
+    private $conducteurs;
+
     public function __construct()
     {
         $this->messages = new ArrayCollection();
@@ -140,6 +160,7 @@ class User implements UserInterface
         $this->utilisateur = new ArrayCollection();
         $this->paiements = new ArrayCollection();
         $this->devis = new ArrayCollection();
+        $this->conducteurs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -538,6 +559,72 @@ class User implements UserInterface
     public function setLieuNaissance(?string $lieuNaissance): self
     {
         $this->lieuNaissance = $lieuNaissance;
+
+        return $this;
+    }
+
+    public function getComplementAdresse(): ?string
+    {
+        return $this->complementAdresse;
+    }
+
+    public function setComplementAdresse(?string $complementAdresse): self
+    {
+        $this->complementAdresse = $complementAdresse;
+
+        return $this;
+    }
+
+    public function getVille(): ?string
+    {
+        return $this->ville;
+    }
+
+    public function setVille(?string $ville): self
+    {
+        $this->ville = $ville;
+
+        return $this;
+    }
+
+    public function getCodePostal(): ?float
+    {
+        return $this->codePostal;
+    }
+
+    public function setCodePostal(?float $codePostal): self
+    {
+        $this->codePostal = $codePostal;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Conducteur[]
+     */
+    public function getConducteurs(): Collection
+    {
+        return $this->conducteurs;
+    }
+
+    public function addConducteur(Conducteur $conducteur): self
+    {
+        if (!$this->conducteurs->contains($conducteur)) {
+            $this->conducteurs[] = $conducteur;
+            $conducteur->setClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConducteur(Conducteur $conducteur): self
+    {
+        if ($this->conducteurs->removeElement($conducteur)) {
+            // set the owning side to null (unless already changed)
+            if ($conducteur->getClient() === $this) {
+                $conducteur->setClient(null);
+            }
+        }
 
         return $this;
     }

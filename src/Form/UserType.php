@@ -31,6 +31,8 @@ class UserType extends AbstractType
             ->add('nom')
             ->add('prenom')
             ->add('adresse')
+            ->add('complementAdresse')
+            ->add('ville')
             ->add('mail')
             ->add('telephone')
             ->add('portable')

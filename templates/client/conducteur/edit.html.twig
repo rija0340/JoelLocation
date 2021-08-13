@@ -1,0 +1,23 @@
+{% extends 'baseClient.html.twig' %}
+
+{% block title %}Modifier conducteur
+{% endblock %}
+
+{% block stylesheets %}
+
+	<link rel="stylesheet" href="/css/client/style.css">
+{% endblock %}
+{% block body %}
+	<div class="container">
+		<div class="section-title red text-center">
+			<h2>Modification
+			</h2>
+		</div>
+		{{ include('client/conducteur/_formConducteur.html.twig', {'button_label': 'Modifier'}) }}
+
+		<a href="{{ path('client_mesConducteurs') }}" class="btn btn-dark">
+			<i class="fa fa-arrow-left" aria-hidden="true"></i>
+			Retour</a>
+
+	</div>
+{% endblock %}

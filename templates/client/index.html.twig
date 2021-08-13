@@ -4,6 +4,11 @@
 {% endblock %}
 {% block stylesheets %}{% endblock %}
 {% block body %}
+
+	<h4 class="mb-0 pb-0">Mes informations</h4>
+	<div class="clearfix"></div>
+	<div class="x_title"></div>
+
 	{{ form_start(formClient) }}
 
 	<div class="row">
@@ -31,12 +36,12 @@
 
 		</div>
 		<div class="form-group col-md-3">
-			<label for="">Téléphone :</label>
+			<label for="">Téléphone 1:</label>
 			{{ form_widget(formClient.telephone,{'attr' : { 'readonly' : 'readonly'}  } )}}
 
 		</div>
 		<div class="form-group col-md-3">
-			<label for="">Portable :</label>
+			<label for="">Téléphone 2 :</label>
 			{{ form_widget(formClient.portable,{'attr' : { 'readonly' : 'readonly'}  } )}}
 
 		</div>
@@ -44,6 +49,21 @@
 		<div class="form-group col-md-6">
 			<label for="">Adresse :</label>
 			{{ form_widget(formClient.adresse,{'attr' : { 'readonly' : 'readonly'}  } )}}
+
+		</div>
+		<div class="form-group col-md-6">
+			<label for="">Complément adresse :</label>
+			{{ form_widget(formClient.complementAdresse,{'attr' : { 'readonly' : 'readonly'}  } )}}
+
+		</div>
+		<div class="form-group col-md-6">
+			<label for="">Code postal :</label>
+			{{ form_widget(formClient.codePostal,{'attr' : { 'readonly' : 'readonly'}  } )}}
+
+		</div>
+		<div class="form-group col-md-6">
+			<label for="">Ville :</label>
+			{{ form_widget(formClient.ville,{'attr' : { 'readonly' : 'readonly'}  } )}}
 
 		</div>
 		<div class="form-group col-md-6">
@@ -57,15 +77,17 @@
 
 		</div>
 		<div class="form-group col-md-6">
-			<label for="">Numero de permis :</label>
+			<label for="">Numero permis :</label>
 			{{ form_widget(formClient.numeroPermis,{'attr' : { 'readonly' : 'readonly'}  } )}}
 
 		</div>
 		<div class="form-group col-md-6">
-			<label for="">Date de permis :</label>
+			<label for="">Date permis :</label>
 			{{ form_widget(formClient.datePermis,{'attr' : { 'readonly' : 'readonly'}  } )}}
 
 		</div>
+
+
 	</div>
 
 	{{ form_end(formClient) }}
@@ -75,5 +97,35 @@
 			Modifier
 		</a>
 	</div>
+
+	<h4 class="mb-0 pb-0">
+		<i class="fa fa-user"></i>
+		Mon compte
+	</h4>
+	<div class="clearfix"></div>
+	<div class="x_title"></div>
+
+	{{ form_start(formClientCompte) }}
+	<div class="row">
+		<div class="col-md-6">
+			<label for="">Username :
+			</label>
+			{{ form_widget(formClientCompte.username) }}
+		</div>
+		<div class="col-md-6">
+			<label for="">Mot de passe :
+			</label>
+			{{ form_widget(formClientCompte.password) }}
+		</div>
+	</div>
+
+	<div class="text-center mt-3">
+		<button class="btn btn-danger">
+			<i class="fa fa-book" aria-hidden="true"></i>
+			{{ button_label|default('Valider') }}
+		</button>
+	</div>
+	{{ form_end(formClientCompte) }}
+
 {% endblock %}
 {% block javascripts %}{% endblock %}
