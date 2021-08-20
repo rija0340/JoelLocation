@@ -438,7 +438,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
                     // xmlHttp is a XMLHttpRquest object
                     console.log('met le izy');
                     // console.log('mety ilay izy zao');
-                    // window.document.location = '/devis';
+                    window.document.location = '/devis';
 
                     $('#smartwizard').smartWizard("loader", "hide");
                 },
