@@ -2,18 +2,26 @@
 
 namespace App\Controller;
 
+use DateTimeZone;
 use App\Entity\Faq;
 use App\Entity\User;
 use App\Entity\Devis;
 use App\Form\UserType;
+use App\Form\DevisType;
 use App\Form\LoginType;
 use App\Entity\Paiement;
 use App\Entity\Vehicule;
 use App\Form\ClientType;
+use App\Entity\Conducteur;
 use App\Entity\Reservation;
 use App\Service\DateHelper;
 use App\Entity\ModePaiement;
+use App\Form\ClientEditType;
+use App\Form\ClientInfoType;
+use App\Form\ConducteurType;
+use App\Form\DevisClientType;
 use App\Service\TarifsHelper;
+use App\Form\ClientCompteType;
 use App\Entity\EtatReservation;
 use App\Entity\ModeReservation;
 use App\Repository\UserRepository;
@@ -23,16 +31,11 @@ use App\Repository\TarifsRepository;
 use App\Repository\OptionsRepository;
 use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
-use App\Controller\ReservationController;
-use App\Entity\Conducteur;
-use App\Form\ClientCompteType;
-use App\Form\ClientEditType;
-use App\Form\ConducteurType;
 use App\Repository\ConducteurRepository;
+use App\Controller\ReservationController;
 use App\Repository\ReservationRepository;
 use App\Repository\EtatReservationRepository;
 use App\Repository\ModeReservationRepository;
-use DateTimeZone;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -177,6 +180,8 @@ class ClientController extends AbstractController
         $formConducteur = $this->createForm(ConducteurType::class, $conducteur);
         $formConducteur->handleRequest($request);
 
+
+
         if ($formConducteur->isSubmitted() && $formConducteur->isValid()) {
 
             $this->getDoctrine()->getManager()->flush();
@@ -188,9 +193,89 @@ class ClientController extends AbstractController
             'formConducteur' => $formConducteur->createView(),
         ]);
     }
-
-
     //*******************fin mes conducteurs***************** */
+
+
+    //***********************processus validation devis***************** */
+    /**
+     * @Route("/espaceclient/optionsGaranties", name="step2OptionsGaranties", methods={"GET","POST"})
+     */
+    public function step2OptionsGaranties(Request $request): Response
+    {
+
+        // dump($request->request->get('devis_client')['id']);
+        // die();
+        $devisID = $request->request->get('reservID');
+
+        if ($devisID == null) {
+            $devisID = $request->request->get('devisID');
+        }
+
+        $devis = $this->devisRepo->find($devisID);
+
+        $garanties = $this->garantiesRepo->findAll();
+        $options = $this->optionsRepo->findAll();
+
+        $form = $this->createForm(DevisClientType::class, $devis);
+        $form->handleRequest($request);
+
+        $tarif = $this->tarifsHelper->calculTarifVehicule($devis->getDateDepart(), $devis->getDateRetour(), $devis->getVehicule());
+        $tarifJour = $tarif / $this->dateHelper->calculDuree($devis->getDateDepart(), $devis->getDateRetour());
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($devis);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('step3infosClient', ['devisID' => $devisID]);
+        }
+
+        return $this->render('client/reservation/validation/step2OptionsGaranties.html.twig', [
+
+            'garanties' => $garanties,
+            'options' => $options,
+            'devis' => $devis,
+            'tarif' => $tarif,
+            'tarifJour' => $tarifJour,
+            'form' => $form->createView(),
+            'devisID' => $devisID
+        ]);
+    }
+
+
+    /**
+     * @Route("/espaceclient/infosClient/{devisID}", name="step3infosClient", methods={"GET","POST"})
+     */
+    public function step3infosClient($devisID): Response
+    {
+
+        $client = $this->getUser();
+        // dump($devisID);
+        $listeDevis = $this->devisRepo->findBy(['client' => $client]);
+        $devis = $this->devisRepo->find($devisID);
+
+        $formClient = $this->createForm(ClientInfoType::class, $client);
+
+        $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($devis->getDateDepart(), $devis->getDateRetour(), $devis->getVehicule());
+
+
+        $tarifJour = $tarifVehicule / $this->dateHelper->calculDuree($devis->getDateDepart(), $devis->getDateRetour());
+
+        if ($devis->getClient() == $client) {
+            return $this->render('client/reservation/validation/step3infosClient.html.twig', [
+                'devis' => $devis,
+                'tarif' => $tarifVehicule,
+                'tarifJour' => $tarifJour,
+                'devis' => $devis,
+                'formClient' => $formClient->createView()
+            ]);
+        } else {
+            return $this->render('client/reservation/validation/error.html.twig');
+        }
+    }
+
+
+    //***********************fin processus validation devis*************** */
 
     /** 
      * @Route("/espaceclient/reservations", name="client_reservations", methods={"GET","POST"})
@@ -250,6 +335,10 @@ class ClientController extends AbstractController
 
         if ($request->isXmlHttpRequest()) {
 
+            $options = [];
+            $garanties = [];
+
+
             $clientID =  $request->query->get('clientID');
             $agenceDepart = $request->query->get('agenceDepart');
             $agenceRetour = $request->query->get('agenceRetour');
@@ -258,14 +347,14 @@ class ClientController extends AbstractController
             $dateTimeRetour = $request->query->get('dateTimeRetour');
             $vehiculeIM = $request->query->get('vehiculeIM');
             $conducteur = $request->query->get('conducteur');
-            $idSiege = $request->query->get('idSiege');
-            $idGarantie = $request->query->get('idGarantie');
+            $arrayOptionsID = (array)$request->query->get('arrayOptionsID');
+            $arrayGarantiesID = (array)$request->query->get('arrayGarantiesID');
 
 
             $dateDepart = $this->dateHelper->newDate($dateTimeDepart);
             $dateRetour = $this->dateHelper->newDate($dateTimeRetour);
-            $siege = $this->optionsRepo->find($idSiege);
-            $garantie = $this->garantiesRepo->find($idGarantie);
+
+
             $vehicule = $this->vehiculeRepo->findByIM($vehiculeIM);
             $client = $this->userRepo->find($clientID);
             $duree = $this->dateHelper->calculDuree($dateDepart, $dateRetour);
@@ -276,8 +365,32 @@ class ClientController extends AbstractController
             $reservation->setAgenceRetour($agenceRetour);
             $reservation->setDateDebut($dateDepart);
             $reservation->setDateFin($dateRetour);
-            $reservation->setGarantie($garantie);
-            $reservation->setSiege($siege);
+
+            //loop sur id des options
+            if ($arrayOptionsID != []) {
+                for ($i = 0; $i < count($arrayOptionsID); $i++) {
+
+                    $id = $arrayOptionsID[$i];
+                    $option = $this->optionsRepo->find($id);
+                    array_push($options, $option);
+                    $reservation->addOption($option);
+                }
+            }
+
+            //loop sur id des garanties
+            if ($arrayOptionsID != []) {
+
+                for ($i = 0; $i < count($arrayGarantiesID); $i++) {
+
+                    $id = $arrayGarantiesID[$i];
+                    $garantie = $this->garantiesRepo->find($id);
+                    array_push($garanties, $garantie);
+                    $reservation->addGaranty($garantie);
+                }
+            }
+
+
+
             $reservation->setConducteur($conducteur);
             $reservation->setLieu($lieuSejour);
             $reservation->setDuree($duree);
@@ -294,7 +407,7 @@ class ClientController extends AbstractController
             $reservation->setRefRes($pref, $currentID);
 
             $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
-            $prix = $this->tarifsHelper->calculTarifTotal($tarifVehicule,  $siege, $garantie);
+            $prix = $this->tarifsHelper->calculTarifTotal($tarifVehicule,  $options, $garanties);
 
             $reservation->setPrix($prix);
 
@@ -320,8 +433,40 @@ class ClientController extends AbstractController
         $reservation->setDateFin($devis->getDateRetour());
         $reservation->setAgenceDepart($devis->getAgenceDepart());
         $reservation->setAgenceRetour($devis->getAgenceRetour());
-        $reservation->setGarantie($devis->getGarantie());
-        $reservation->setSiege($devis->getSiege());
+
+        // $reservation->setGarantie($devis->getGarantie());
+
+
+        // $reservation->setSiege($devis->getSiege());
+
+        $arrayOptionsID = $devis->getOptions();
+        $arrayGarantiesID = $devis->getGaranties();
+
+        //loop sur id des options
+        if ($arrayOptionsID != []) {
+            for ($i = 0; $i < count($arrayOptionsID); $i++) {
+
+                $id = $arrayOptionsID[$i];
+                $option = $this->optionsRepo->find($id);
+                array_push($options, $option);
+                $reservation->addOption($option);
+            }
+        }
+
+        //loop sur id des garanties
+        if ($arrayOptionsID != []) {
+
+            for ($i = 0; $i < count($arrayGarantiesID); $i++) {
+
+                $id = $arrayGarantiesID[$i];
+                $garantie = $this->garantiesRepo->find($id);
+                array_push($garanties, $garantie);
+                $reservation->addGaranty($garantie);
+            }
+        }
+
+
+
         $reservation->setPrix($devis->getPrix());
         $reservation->setNumDevis($devis->getNumero());
         $reservation->setDateReservation($this->dateHelper->dateNow());

@@ -1,0 +1,218 @@
+{% extends 'baseClient2.html.twig' %}
+
+{% block title %}
+	options et garanties
+{% endblock %}
+{% block stylesheets %}
+	<link href="{{ asset( 'css/client/validationDevis.css')}}" rel="stylesheet">
+
+{% endblock %}
+{% block nav %}{% endblock %}
+{% block body %}
+
+
+	<div class="row">
+		<div class="col-md-3">
+			<div class="card p-2 btn-block h-100  card mdl-shadow--2dp">
+				<div class="x_title">
+					<h5>
+						<i class="fa fa-chevron-right"></i>
+						Votre véhicule
+					</h5>
+				</div>
+				<div class="vehicule">
+					<div class="marque_modele">{{devis.vehicule.marque}}
+						{{devis.vehicule.modele}}</div>
+					<img src="/uploads/vehicules/{{ devis.vehicule.image }}" alt="{{ devis.vehicule.image }}" class="img-circle  " style="width : 100%;">
+
+				</div>
+				<div>
+					<h5 class="heading">Agence départ
+					</h5>
+					<div class="content_depart border-bottom">
+						<p>
+							<i class="fa fa-map-marker"></i>
+							<span id="agence_depart">{{devis.agenceDepart}}</span><br>
+							<span id="date_depart">{{devis.dateDepart | date('d-m-Y H:i')}}</span>
+							<span id="heure_depart"></span>
+						</p>
+					</div>
+					<h5 class="heading">Agence retour
+					</h5>
+					<div class="content_retour border-bottom">
+						<p>
+							<i class="fa fa-map-marker"></i>
+							<span id="agence_retour">{{devis.agenceRetour}}</span><br>
+							<span id="date_retour">{{devis.dateRetour| date('d-m-Y H:i')}}</span>
+							<span id="heure_retour"></span>
+						</p>
+					</div>
+					<p>
+						Soit
+						<span id="nombre_jours_location">{{devis.duree}}</span>
+						jours de location</p>
+
+					<h5 class="heading">Prix de base de location</h5>
+					<div class="prix_location border-bottom">
+						<span id="prix">{{tarif}}</span>EUR<br>
+						soit
+						<span id="prix">{{tarifJour}}</span>euro/jour
+					</div>
+					<div class="prestation border-bottom">
+						<h5 class="heading">Prestations incluses</h5>
+						<ul class="pl-2 ">
+							<li>
+								<i class="fa fa-check"></i>
+								Kilométrage Illimité
+							</li>
+							<li>
+								<i class="fa fa-check"></i>
+								Assurance accidents causés aux tiers
+							</li>
+							<li>
+								<i class="fa fa-check"></i>
+								Assurance responsabilité civile
+							</li>
+							<li>
+								<i class="fa fa-check"></i>
+								Assurance collision (CDW)
+							</li>
+							<li>
+								<i class="fa fa-check"></i>
+								TVA 8.5 %
+							</li>
+						</ul>
+					</div>
+					<h5 class="heading">Option(s)
+					</h5>
+					<div class="options border-bottom">
+						<ul class="pl-2 ">
+							{% for option in devis.options %}
+								<li>
+									<div class="d-flex">
+										<div>
+											<i class="fa fa-check"></i>
+											{{option.appelation}}
+										</div>
+										<div class="ml-auto">
+											{{option.prix}}€
+										</div>
+									</div>
+
+								</li>
+							{% endfor %}
+						</ul>
+
+					</div>
+					<h5 class="heading">Garantie(s)
+					</h5>
+					<div class="garanties ">
+						<ul class="pl-2 ">
+							{% for garantie in devis.garanties %}
+								<li>
+									<div class="d-flex">
+										<div>
+											<i class="fa fa-check"></i>
+											{{garantie.appelation}}
+										</div>
+										<div class="ml-auto">
+											{{garantie.prix}}€
+
+										</div>
+									</div>
+								</li>
+							{% endfor %}
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-9 ">
+			<div class="card mdl-shadow--2dp p-4 informations">
+
+				<div class="text-center">
+					<h3>Mes informations
+					</h3>
+				</div>
+
+				{{ form_start(formClient) }}
+				<div class="row">
+					<div class="col-md-6" class="bmd-label-floating">
+						<div class="form-group">
+							<label class="bmd-label-floating">Nom *:</label>
+							{{form_widget(formClient.nom) }}
+						</div>
+					</div>
+					<div class="col-md-6" class="bmd-label-floating">
+						<div class="form-group">
+							<label class="bmd-label-floating">Prénom *:</label>
+							{{form_widget(formClient.prenom)}}
+						</div>
+					</div>
+
+					<div class="col-md-6" class="bmd-label-floating">
+						<div class="form-group">
+							<label class="bmd-label-floating">Email *:</label>
+							{{form_widget(formClient.mail) }}
+						</div>
+					</div>
+
+					<div class="col-md-6" class="bmd-label-floating">
+						<div class="form-group">
+							<label class="bmd-label-floating">Téléphone *:</label>
+							{{form_widget(formClient.telephone) }}
+						</div>
+					</div>
+
+					<div class="col-lg-12">
+						<input class="button" type="submit" value="Enregistrer">
+					</div>
+				</div>
+				{{ form_end(formClient) }}
+
+			</div>
+
+			<div class="card mdl-shadow--2dp p-4 modePaiement">
+
+				<div class="text-center">
+					<h3>Mode de paiement
+					</h3>
+				</div>
+
+				<div>
+					<input type="radio" value="1000" name="modePaiement">
+					<label for="">Je souhaite régler en une seule fois</label>
+				</div>
+				<div>
+					<input type="radio" value="500" name="modePaiement">
+					<label for="">Je paie un acompte de 50%
+					</label>
+				</div>
+				<div>
+					<input type="radio" value="200" name="modePaiement">
+					<label for="">Je paie un acompte de 20%</label>
+				</div>
+
+			</div>
+
+
+			<div class="card mdl-shadow--2dp p-4 conditionGeneralVente">
+
+				<div class="text-center">
+					<h3>Condition générale de vente
+					</h3>
+				</div>
+
+				<div>
+					<input type="checkbox" value="10" name="conditionGeneralVente">
+					<label for="">Je reconnais avoir prix connaissance des conditions générales de vente que j'accepte sans réserve</label>
+				</div>
+
+
+			</div>
+
+
+		</div>
+	</div>
+{% endblock %}
+{% block javascripts %}{% endblock %}

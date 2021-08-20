@@ -128,12 +128,19 @@ function ganttInit(startDateScale, endDateScale) {
 
     gantt.attachEvent("onTaskDblClick", function (id, e) {
         var taskID = gantt.getTask(id).id_r;
-        var enCours = gantt.getTask(id).enCours;
-        if (enCours) {
+        var etat = gantt.getTask(id).etat;
+        if (etat == 'encours') {
             window.document.location = '/reservation/contrats_en_cours/' + taskID;
-        } else {
+        }
+
+        if (etat == 'termine') {
             window.document.location = '/reservation/contrat_termine/' + taskID;
         }
+        if (etat == 'nouvelle') {
+            window.document.location = '/reservation/show/' + taskID;
+
+        }
+
     });
     //colorer task en fonction valeur "color"
     gantt.templates.task_class = function (start, end, task) {

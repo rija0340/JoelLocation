@@ -6,6 +6,7 @@ var btnRechercherElem;
 var reservation2Elem;
 var dateDepart;
 var dateRetour;
+var listeVehiculesDispo;
 
 getElements();
 addEventListener()
@@ -94,10 +95,12 @@ function retrieveDataAjax() {
         type: 'GET',
         url: '/reservation/vehiculeDispoFonctionDates',
         data: {
-            'dateDepart': dateDepart, 'dateRetour': dateRetour
+            'dateDepart': dateDepart,
+            'dateRetour': dateRetour,
         },
         Type: "json",
         success: function (data) {
+            listeVehiculesDispo = data;
             console.log(data);
             populateSelectElem(data);
             dataForSelect(data);
@@ -150,4 +153,8 @@ function dateToTimestamp(date) {
 
     return new Date(date).getTime();
 
+}
+
+function getListVehiculeDispo() {
+    return listeVehiculesDispo;
 }

@@ -3,11 +3,15 @@
 namespace App\Form;
 
 use App\Entity\Devis;
+use App\Entity\Options;
+use App\Entity\Garantie;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 class DevisType extends AbstractType
@@ -37,8 +41,20 @@ class DevisType extends AbstractType
             ])
             ->add('lieuSejour')
             ->add('conducteur')
-            ->add('siege')
-            ->add('garantie')
+            ->add('options', EntityType::class, [
+                'class' => Options::class,
+                'multiple' => true,
+                'expanded' => true,
+            ])
+            ->add('garanties', EntityType::class, [
+                'class' => Garantie::class,
+                'multiple' => true,
+                'expanded' => true,
+                // 'data' => true,
+                'label' => 'Garanties',
+                // 'choice_label' => 'id'
+                // 'choice_label' => 'description',
+            ])
             ->add('client')
             ->add('vehicule');
     }

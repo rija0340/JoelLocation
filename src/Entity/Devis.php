@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\DevisRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -74,15 +76,9 @@ class Devis
      */
     private $prix;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Options::class, inversedBy="devis")
-     */
-    private $siege;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Garantie::class, inversedBy="devis")
-     */
-    private $garantie;
+
+
 
     /**
      * @ORM\Column(type="string", length=1000, nullable=true)
@@ -98,6 +94,24 @@ class Devis
      * @ORM\Column(type="float", nullable=true)
      */
     private $tarifVehicule;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Options::class, inversedBy="devis")
+     */
+    private $options;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Garantie::class, inversedBy="devis")
+     */
+    private $garanties;
+
+
+
+    public function __construct()
+    {
+        $this->options = new ArrayCollection();
+        $this->garanties = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -236,29 +250,7 @@ class Devis
         return $this;
     }
 
-    public function getSiege(): ?Options
-    {
-        return $this->siege;
-    }
 
-    public function setSiege(?Options $siege): self
-    {
-        $this->siege = $siege;
-
-        return $this;
-    }
-
-    public function getGarantie(): ?Garantie
-    {
-        return $this->garantie;
-    }
-
-    public function setGarantie(?Garantie $garantie): self
-    {
-        $this->garantie = $garantie;
-
-        return $this;
-    }
 
     public function getNumero(): ?string
     {
@@ -310,6 +302,54 @@ class Devis
     public function setTarifVehicule(?float $tarifVehicule): self
     {
         $this->tarifVehicule = $tarifVehicule;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Options[]
+     */
+    public function getOptions(): Collection
+    {
+        return $this->options;
+    }
+
+    public function addOption(Options $option): self
+    {
+        if (!$this->options->contains($option)) {
+            $this->options[] = $option;
+        }
+
+        return $this;
+    }
+
+    public function removeOption(Options $option): self
+    {
+        $this->options->removeElement($option);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Garantie[]
+     */
+    public function getGaranties(): Collection
+    {
+        return $this->garanties;
+    }
+
+    public function addGaranty(Garantie $garanty): self
+    {
+        if (!$this->garanties->contains($garanty)) {
+            $this->garanties[] = $garanty;
+        }
+
+        return $this;
+    }
+
+    public function removeGaranty(Garantie $garanty): self
+    {
+        $this->garanties->removeElement($garanty);
 
         return $this;
     }

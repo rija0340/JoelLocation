@@ -61,6 +61,56 @@ class DateHelper
 
         return $monthFR;
     }
+
+    function getMonthFullName($date): string
+    {
+        if (is_object($date)) {
+            $month = $date->format('m');
+        } else {
+            $month = (new \DateTime($date))->format('m');
+        }
+        $monthFR = null;
+        switch ($month) {
+            case "01":
+                $monthFR = 'Janvier';
+                break;
+            case "02":
+                $monthFR = 'Février';
+                break;
+            case "03":
+                $monthFR = 'Mars';
+                break;
+            case "04":
+                $monthFR = 'Avril';
+                break;
+            case "05":
+                $monthFR = 'Mai';
+                break;
+            case "06":
+                $monthFR = 'Juin';
+                break;
+            case "07":
+                $monthFR = 'Juillet';
+                break;
+            case "08":
+                $monthFR = 'Août';
+                break;
+            case "09":
+                $monthFR = 'Septembre';
+                break;
+            case "10":
+                $monthFR = 'Octobre';
+                break;
+            case "11":
+                $monthFR = 'Novembre';
+                break;
+            case "12":
+                $monthFR = 'Décembre';
+                break;
+        }
+
+        return $monthFR;
+    }
     /**
      * @param date1 et date2
      * @return int

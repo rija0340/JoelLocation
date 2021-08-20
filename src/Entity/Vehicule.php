@@ -35,8 +35,6 @@ class Vehicule
      */
     private $immatriculation;
 
-
-
     /**
      * @ORM\ManyToOne(targetEntity=Type::class, inversedBy="vehicules")
      * @ORM\JoinColumn(nullable=false)
@@ -52,8 +50,6 @@ class Vehicule
      * @ORM\Column(type="date")
      */
     private $date_mise_location;
-
-
 
     /**
      * @ORM\Column(type="integer", nullable=true)

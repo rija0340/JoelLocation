@@ -79,9 +79,15 @@ class DevisController extends AbstractController
     {
         $devis = new Devis();
 
-        if ($request->isXmlHttpRequest()) {
+        $idClient =  $request->query->get('idClient');
 
-            $idClient =  $request->query->get('idClient');
+        if ($request->isXmlHttpRequest() || $idClient != null) {
+
+            $arrayOptionsID = [];
+            $arrayGarantiesID = [];
+            $options = [];
+            $garanties = [];
+
             $agenceDepart = $request->query->get('agenceDepart');
             $agenceRetour = $request->query->get('agenceRetour');
             $lieuSejour = $request->query->get('lieuSejour');
@@ -89,14 +95,13 @@ class DevisController extends AbstractController
             $dateTimeRetour = $request->query->get('dateTimeRetour');
             $vehiculeIM = $request->query->get('vehiculeIM');
             $conducteur = $request->query->get('conducteur');
-            $idSiege = $request->query->get('idSiege');
-            $idGarantie = $request->query->get('idGarantie');
+            $arrayOptionsID = (array) $request->query->get('arrayOptionsID');
+            $arrayGarantiesID = (array)$request->query->get('arrayGarantiesID');
 
 
             $dateDepart = new \DateTime($dateTimeDepart);
             $dateRetour = new \DateTime($dateTimeRetour);
-            $siege = $this->optionsRepo->find($idSiege);
-            $garantie = $this->garantiesRepo->find($idGarantie);
+
             $vehicule = $this->vehiculeRepo->findByIM($vehiculeIM);
             $client = $this->userRepo->find($idClient);
             $duree = $this->dateHelper->calculDuree($dateDepart, $dateRetour);
@@ -108,8 +113,31 @@ class DevisController extends AbstractController
             $devis->setAgenceRetour($agenceRetour);
             $devis->setDateDepart($dateDepart);
             $devis->setDateRetour($dateRetour);
-            $devis->setGarantie($garantie);
-            $devis->setSiege($siege);
+
+            //loop sur id des options
+            if ($arrayOptionsID != []) {
+                for ($i = 0; $i < count($arrayOptionsID); $i++) {
+
+                    $id = $arrayOptionsID[$i];
+                    $option = $this->optionsRepo->find($id);
+                    array_push($options, $option);
+                    $devis->addOption($option);
+                }
+            }
+
+            //loop sur id des garanties
+            if ($arrayOptionsID != []) {
+
+                for ($i = 0; $i < count($arrayGarantiesID); $i++) {
+
+                    $id = $arrayGarantiesID[$i];
+                    $garantie = $this->garantiesRepo->find($id);
+                    array_push($garanties, $garantie);
+                    $devis->addGaranty($garantie);
+                }
+            }
+
+
             $devis->setConducteur($conducteur);
             $devis->setLieuSejour($lieuSejour);
             $devis->setDuree($duree);
@@ -127,7 +155,7 @@ class DevisController extends AbstractController
             }
             $devis->setNumeroDevis($currentID);
 
-            $prix = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $siege, $garantie);
+            $prix = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $options, $garanties);
 
             $devis->setPrix($prix);
 
@@ -185,7 +213,8 @@ class DevisController extends AbstractController
             $garantie = $request->request->get('devis')['garantie'];
             $vehicule = $request->request->get('devis')['vehicule'];
             // $vehicule = $request->request->get('selectVehicule');
-            $prix = $this->tarifsHelper->calculTarif($dateDepart, $dateRetour, $siege, $garantie, $vehicule);
+            $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
+            $prix = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $siege, $garantie);
             $devis->setPrix($prix);
             // $devis->setVehicule($this->vehiculeRepo->find($vehicule));
             $devis->setDuree($this->dateHelper->calculDuree($dateDepart, $dateRetour));
@@ -216,10 +245,16 @@ class DevisController extends AbstractController
             $dateRetour = $request->request->get('devis_edit_vehicule')['dateRetour'];
             $vehicule = $request->request->get('selectVehicule');
 
+            $dateDepart = $this->dateHelper->newDate($dateDepart);
+            $dateRetour = $this->dateHelper->newDate($dateRetour);
 
-            $prix = $this->tarifsHelper->calculTarif($dateDepart, $dateRetour, $devis->getSiege()->getPrix(), $devis->getGarantie()->getPrix(), $vehicule);
-            $devis->setPrix($prix);
-            $devis->setVehicule($this->vehiculeRepo->find($vehicule));
+            $vehicule = $this->vehiculeRepo->find($vehicule);
+
+            $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
+            $tarifTotal = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $devis->getOptions(), $devis->getGaranties());
+
+            $devis->setPrix($tarifTotal);
+            $devis->setVehicule($vehicule);
             $devis->setDuree($this->dateHelper->calculDuree($dateDepart, $dateRetour));
             $this->getDoctrine()->getManager()->flush();
             return $this->redirectToRoute('devis_index');
@@ -257,8 +292,21 @@ class DevisController extends AbstractController
         $reservation->setDateFin($devis->getDateRetour());
         $reservation->setAgenceDepart($devis->getAgenceDepart());
         $reservation->setAgenceRetour($devis->getAgenceRetour());
-        $reservation->setGarantie($devis->getGarantie());
-        $reservation->setSiege($devis->getSiege());
+
+
+        //boucle pour ajout options 
+
+        foreach ($devis->getOptions() as $option) {
+            $reservation->addOption($option);
+        }
+
+        //boucle pour ajout garantie 
+
+        foreach ($devis->getGaranties() as $garantie) {
+            $reservation->addGaranty($garantie);
+        }
+
+
         $reservation->setPrix($devis->getPrix());
         $reservation->setDateReservation(new \DateTime('NOW'));
         $reservation->setCodeReservation('devisTransformé');

@@ -109,11 +109,16 @@ class PlanningController extends AbstractController
             // tester si une reservation est en cours
             if ($reservation->getDateDebut() < $this->dateHelper->dateNow() && $this->dateHelper->dateNow() < $reservation->getDateFin()) {
 
-                $datas[$key]['enCours'] = true;
+                $datas[$key]['etat'] = 'encours';
             }
-            if ($reservation->getDateFin() < $this->dateHelper->dateNow()) {
+            if ($reservation->getDateFin() > $this->dateHelper->dateNow() && $reservation->getDateFin() > $this->dateHelper->dateNow()) {
 
-                $datas[$key]['enCours'] = false;
+                $datas[$key]['etat'] = 'nouvelle';
+            }
+
+            if ($reservation->getDateDebut() < $this->dateHelper->dateNow() && $reservation->getDateFin() < $this->dateHelper->dateNow()) {
+
+                $datas[$key]['etat'] = 'termine';
             }
 
             if ($reservation->getAgenceDepart() == "garage") {

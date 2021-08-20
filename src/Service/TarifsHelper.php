@@ -27,31 +27,25 @@ class TarifsHelper
         $this->dateHelper = $dateHelper;
     }
 
-    function calculTarifTotal($tarifVehicule, $siege, $garantie)
+    function calculTarifTotal($tarifVehicule, $options, $garanties)
     {
 
-        if (!is_object($siege) && !is_object($garantie)) {
-
-            if (!is_float($siege)) {
-                $siegePrix = $this->optionsRepo->find(intval($siege))->getPrix();
-            } else {
-                $siegePrix = $siege;
-            }
-            if (!is_float($garantie)) {
-                $garantiePrix = $this->garantiesRepo->find(intval($garantie))->getPrix();
-            } else {
-                $garantiePrix = $garantie;
-            }
+        if ($options != []) {
+            $optionsPrix = $this->sommeTarifsOptions($options);
         } else {
-            $siegePrix = $siege->getPrix();
-            $garantiePrix = $garantie->getPrix();
+            $optionsPrix = 0;
+        }
+        if ($garanties != []) {
+            $garantiesPrix = $this->sommeTarifsGaranties($garanties);
+        } else {
+            $garantiesPrix = 0;
         }
 
         $tarifTotal = 0; //initialisation de $tarif
         if ($tarifVehicule != null) {
-            $tarifTotal = $tarifVehicule + $siegePrix + $garantiePrix;
+            $tarifTotal = $tarifVehicule + $optionsPrix + $garantiesPrix;
         } else {
-            $tarifTotal = $siegePrix + $garantiePrix;
+            $tarifTotal = $optionsPrix + $garantiesPrix;
         }
 
         return $tarifTotal;
@@ -59,7 +53,7 @@ class TarifsHelper
 
     function calculTarifVehicule($dateDepart, $dateRetour, $vehicule)
     {
-        $mois = $this->dateHelper->getMonthName($dateDepart);
+        $mois = $this->dateHelper->getMonthFullName($dateDepart);
         $duree = $this->dateHelper->calculDuree($dateDepart, $dateRetour);
         // $tarif = $this->tarifsRepo->findTarifs($vehicule, $mois);
         $marque = $vehicule->getMarque();
@@ -81,5 +75,27 @@ class TarifsHelper
         }
 
         return $tarifVehicule;
+    }
+
+
+    function sommeTarifsOptions($options)
+    {
+        $prix = 0;
+        foreach ($options as  $option) {
+
+            $prix = $prix  + $option->getPrix();
+        }
+        return $prix;
+    }
+
+
+    function sommeTarifsGaranties($garanties)
+    {
+        $prix = 0;
+        foreach ($garanties as  $garantie) {
+
+            $prix = $prix  + $garantie->getPrix();
+        }
+        return $prix;
     }
 }

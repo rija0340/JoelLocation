@@ -21,6 +21,8 @@ use App\Repository\UserRepository;
 use App\Repository\TarifsRepository;
 use App\Repository\OptionsRepository;
 use App\Repository\GarantieRepository;
+use App\Repository\MarqueRepository;
+use App\Repository\ModeleRepository;
 use App\Repository\VehiculeRepository;
 use App\Repository\ReservationRepository;
 use Knp\Component\Pager\PaginatorInterface;
@@ -39,13 +41,15 @@ class ReservationController extends AbstractController
     private $reservationRepo;
     private $dateTimestamp;
     private $vehiculeRepo;
+    private $modeleRepo;
     private $optionsRepo;
     private $garantiesRepo;
     private $tarifsRepo;
     private $dateHelper;
     private $tarifsHelper;
+    private $marqueRepo;
 
-    public function __construct(TarifsHelper $tarifsHelper, DateHelper $dateHelper, TarifsRepository $tarifsRepo, ReservationRepository $reservationRepo,  UserRepository $userRepo, VehiculeRepository $vehiculeRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
+    public function __construct(MarqueRepository $marqueRepo, ModeleRepository $modeleRepo, TarifsHelper $tarifsHelper, DateHelper $dateHelper, TarifsRepository $tarifsRepo, ReservationRepository $reservationRepo,  UserRepository $userRepo, VehiculeRepository $vehiculeRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
     {
 
         $this->reservationRepo = $reservationRepo;
@@ -56,6 +60,8 @@ class ReservationController extends AbstractController
         $this->tarifsRepo = $tarifsRepo;
         $this->dateHelper = $dateHelper;
         $this->tarifsHelper = $tarifsHelper;
+        $this->modeleRepo = $modeleRepo;
+        $this->marqueRepo = $marqueRepo;
     }
 
     /**
@@ -71,16 +77,55 @@ class ReservationController extends AbstractController
         $dateFin = new \DateTime($dateRetour);
 
         $datas = array();
-        foreach ($this->getVehiculesDispo($dateDebut, $dateFin) as $key => $vehicule) {
+        $data = array();
+        $listeUnique = [];
+        $listeVehiculesDispo = array();
+        $listeVehiculesDispo = $this->getVehiculesDispo($dateDebut, $dateFin);
+
+        foreach ($listeVehiculesDispo as $key => $vehicule) {
+            $data[$key]['marque'] = $vehicule->getMarque()->getLibelle();
+            $data[$key]['modele'] = $vehicule->getModele()->getLibelle();
+        }
+
+        $listeUnique = array_unique($data, SORT_REGULAR);
+        // dump($listeUnique);
+        // die();
+
+        //data2 => liste véhicule sans immatriculation
+        $data2 = array();
+        foreach ($listeUnique as $key =>  $v) {
+
+            $marque = $this->marqueRepo->findOneBy(['libelle' => $v['marque']]);
+            $modele = $this->modeleRepo->findOneBy(['libelle' => $v['modele']]);
+
+            $vehicule = $this->vehiculeRepo->findOneBy(['marque' => $marque, 'modele' => $modele]);
+            $tarif = $this->tarifsHelper->calculTarifVehicule($dateDebut, $dateFin, $vehicule);
+
+            $data2[$key]['id'] = $vehicule->getId();
+            $data2[$key]['marque'] = $vehicule->getMarque()->getLibelle();
+            $data2[$key]['modele'] = $vehicule->getModele()->getLibelle();
+            $data2[$key]['carburation'] = $vehicule->getCarburation();
+            $data2[$key]['carburation'] = $vehicule->getCarburation();
+            $data2[$key]['immatriculation'] = "";
+            $data2[$key]['vitesse'] = $vehicule->getVitesse();
+            $data2[$key]['bagages'] = $vehicule->getBagages();
+            $data2[$key]['atouts'] = $vehicule->getAtouts();
+            $data2[$key]['caution'] = $vehicule->getCaution();
+            $data2[$key]['portes'] = $vehicule->getPortes();
+            $data2[$key]['passagers'] = $vehicule->getPassagers();
+            $data2[$key]['image'] = $vehicule->getImage();
+            $data2[$key]['tarif'] = $tarif;
+            $data2[$key]['tarifJour'] = $tarif / $this->dateHelper->calculDuree($dateDebut, $dateFin);
+        }
+
+        foreach ($listeVehiculesDispo as $key => $vehicule) {
             $datas[$key]['id'] = $vehicule->getId();
             $datas[$key]['marque'] = $vehicule->getMarque()->getLibelle();
             $datas[$key]['modele'] = $vehicule->getModele()->getLibelle();
-            $datas[$key]['immatriculation'] = $vehicule->getImmatriculation();
         }
 
-        return new JsonResponse($datas);
+        return new JsonResponse($data2);
     }
-
 
     /**
      * @Route("/listeVehicules", name="listeVehicules",methods={"GET","POST"}))
@@ -197,6 +242,9 @@ class ReservationController extends AbstractController
 
         if ($request->isXmlHttpRequest()) {
 
+            $options = [];
+            $garanties = [];
+
             $idClient =  $request->query->get('idClient');
             $agenceDepart = $request->query->get('agenceDepart');
             $agenceRetour = $request->query->get('agenceRetour');
@@ -205,13 +253,12 @@ class ReservationController extends AbstractController
             $dateTimeRetour = $request->query->get('dateTimeRetour');
             $vehiculeIM = $request->query->get('vehiculeIM');
             $conducteur = $request->query->get('conducteur');
-            $idSiege = $request->query->get('idSiege');
-            $idGarantie = $request->query->get('idGarantie');
+            $arrayOptionsID = (array) $request->query->get('arrayOptionsID');
+            $arrayGarantiesID = (array)$request->query->get('arrayGarantiesID');
 
             $dateDepart = new \DateTime($dateTimeDepart);
             $dateRetour = new \DateTime($dateTimeRetour);
-            $siege = $this->optionsRepo->find($idSiege);
-            $garantie = $this->garantiesRepo->find($idGarantie);
+
             $vehicule = $this->vehiculeRepo->findByIM($vehiculeIM);
             $client = $this->userRepo->find($idClient);
             $duree = $this->dateHelper->calculDuree($dateDepart, $dateRetour);
@@ -223,8 +270,29 @@ class ReservationController extends AbstractController
             $reservation->setAgenceRetour($agenceRetour);
             $reservation->setDateDebut($dateDepart);
             $reservation->setDateFin($dateRetour);
-            $reservation->setGarantie($garantie);
-            $reservation->setSiege($siege);
+            //loop sur id des options
+            if ($arrayOptionsID != []) {
+                for ($i = 0; $i < count($arrayOptionsID); $i++) {
+
+                    $id = $arrayOptionsID[$i];
+                    $option = $this->optionsRepo->find($id);
+                    array_push($options, $option);
+                    $reservation->addOption($option);
+                }
+            }
+
+            //loop sur id des garanties
+            if ($arrayOptionsID != []) {
+
+                for ($i = 0; $i < count($arrayGarantiesID); $i++) {
+
+                    $id = $arrayGarantiesID[$i];
+                    $garantie = $this->garantiesRepo->find($id);
+                    array_push($garanties, $garantie);
+                    $reservation->addGaranty($garantie);
+                }
+            }
+
             $reservation->setConducteur($conducteur);
             $reservation->setLieu($lieuSejour);
             $reservation->setDuree($duree);
@@ -242,7 +310,7 @@ class ReservationController extends AbstractController
             $pref = "CPT";
             $reservation->setRefRes($pref, $currentID);
 
-            $prix = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $siege, $garantie);
+            $prix = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $options, $garanties);
 
             $reservation->setPrix($prix);
 
@@ -363,7 +431,7 @@ class ReservationController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="reservation_show", methods={"GET"},requirements={"id":"\d+"})
+     * @Route("/show/{id}", name="reservation_show", methods={"GET"},requirements={"id":"\d+"})
      */
     public function show(Reservation $reservation, Request $request): Response
     {
@@ -384,7 +452,11 @@ class ReservationController extends AbstractController
 
             return $this->render('admin/reservation/crud/show.html.twig', [
                 'reservation' => $reservation,
+
                 'formKM' => $formKM->createView(),
+                'tarifVehicule' => $this->tarifsHelper->calculTarifVehicule($reservation->getDateDebut(), $reservation->getDateFin(), $reservation->getVehicule()),
+                'tarifOptions' => $this->tarifsHelper->sommeTarifsOptions($reservation->getOptions()),
+                'tarifGaranties' => $this->tarifsHelper->sommeTarifsGaranties($reservation->getGaranties()),
 
             ]);
         }
@@ -392,6 +464,9 @@ class ReservationController extends AbstractController
 
         return $this->render('admin/reservation/crud/show.html.twig', [
             'reservation' => $reservation,
+            'tarifVehicule' => $this->tarifsHelper->calculTarifVehicule($reservation->getDateDebut(), $reservation->getDateFin(), $reservation->getVehicule()),
+            'tarifOptions' => $this->tarifsHelper->sommeTarifsOptions($reservation->getOptions()),
+            'tarifGaranties' => $this->tarifsHelper->sommeTarifsGaranties($reservation->getGaranties()),
             'formKM' => $formKM->createView()
         ]);
     }

@@ -118,7 +118,7 @@ $(function () {
     function populateSelectMois(options) {
 
 
-        $("#selectMoisElem").empty(); //remove old options jquery
+        $("#selectMois").empty(); //remove old options jquery
 
         for (var i = 0; i < options.length; i++) {
 

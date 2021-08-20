@@ -70,6 +70,14 @@
 							<a id="telechargerDevis">
 								<i class="fa fa-arrow-circle-o-down" style="font-size: 2em !important;"></i>
 							</a>
+
+							<form method="post" action="{{ path('step2OptionsGaranties') }}">
+								<input type="hidden" name="reservID" value="{{reserv.id}}">
+								<button class="btn btn-link" style=" -webkit-appearance: none">
+									<i class="fa fa-check" style="font-size: 2em !important;"></i>
+								</button>
+							</form>
+
 						</td>
 
 					</tr>
@@ -123,7 +131,6 @@
 		<tbody>
 			{% for reserv in reservation_effectuers %}
 				<tr>
-
 					<td>{{ reserv.reference }}</td>
 					<td>{{ reserv.dateReservation|date('d/m/Y - H:i') }}</td>
 					<td>{{ reserv.vehicule.marque}}

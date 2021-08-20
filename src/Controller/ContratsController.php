@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Reservation;
 use App\Form\KilometrageType;
 use App\Repository\ReservationRepository;
+use App\Service\TarifsHelper;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,12 +17,14 @@ class ContratsController extends AbstractController
 
 
     private $reservController;
+    private $tarifsHelper;
 
 
-    public function __construct(ReservationController $reservController)
+    public function __construct(TarifsHelper $tarifsHelper, ReservationController $reservController)
     {
 
         $this->reservController = $reservController;
+        $this->tarifsHelper = $tarifsHelper;
     }
 
     /**
@@ -34,6 +37,7 @@ class ContratsController extends AbstractController
 
         return $this->render('admin/reservation/contrat/en_cours/index.html.twig', [
             'reservations' => $reservations,
+
         ]);
     }
 
@@ -55,6 +59,9 @@ class ContratsController extends AbstractController
             return $this->render('admin/reservation/contrat/termine/details.html.twig', [
                 'reservation' => $reservation,
                 'formKM' => $formKM->createView(),
+                'tarifVehicule' => $this->tarifsHelper->calculTarifVehicule($reservation->getDateDebut(), $reservation->getDateFin(), $reservation->getVehicule()),
+                'tarifOptions' => $this->tarifsHelper->sommeTarifsOptions($reservation->getOptions()),
+                'tarifGaranties' => $this->tarifsHelper->sommeTarifsGaranties($reservation->getGaranties()),
 
             ]);
         }
@@ -62,7 +69,10 @@ class ContratsController extends AbstractController
 
         return $this->render('admin/reservation/contrat/termine/details.html.twig', [
             'reservation' => $reservation,
-            'formKM' => $formKM->createView()
+            'formKM' => $formKM->createView(),
+            'tarifVehicule' => $this->tarifsHelper->calculTarifVehicule($reservation->getDateDebut(), $reservation->getDateFin(), $reservation->getVehicule()),
+            'tarifOptions' => $this->tarifsHelper->sommeTarifsOptions($reservation->getOptions()),
+            'tarifGaranties' => $this->tarifsHelper->sommeTarifsGaranties($reservation->getGaranties()),
         ]);
     }
 
@@ -98,6 +108,9 @@ class ContratsController extends AbstractController
             return $this->render('admin/reservation/contrat/termine/details.html.twig', [
                 'reservation' => $reservation,
                 'formKM' => $formKM->createView(),
+                'tarifVehicule' => $this->tarifsHelper->calculTarifVehicule($reservation->getDateDebut(), $reservation->getDateFin(), $reservation->getVehicule()),
+                'tarifOptions' => $this->tarifsHelper->sommeTarifsOptions($reservation->getOptions()),
+                'tarifGaranties' => $this->tarifsHelper->sommeTarifsGaranties($reservation->getGaranties()),
 
             ]);
         }
@@ -105,6 +118,9 @@ class ContratsController extends AbstractController
         return $this->render('admin/reservation/contrat/termine/details.html.twig', [
             'reservation' => $reservation,
             'formKM' => $formKM->createView(),
+            'tarifVehicule' => $this->tarifsHelper->calculTarifVehicule($reservation->getDateDebut(), $reservation->getDateFin(), $reservation->getVehicule()),
+            'tarifOptions' => $this->tarifsHelper->sommeTarifsOptions($reservation->getOptions()),
+            'tarifGaranties' => $this->tarifsHelper->sommeTarifsGaranties($reservation->getGaranties()),
         ]);
     }
 

@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Garantie
 {
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -36,13 +37,14 @@ class Garantie
      */
     private $description;
 
+
     /**
-     * @ORM\OneToMany(targetEntity=Devis::class, mappedBy="garantie")
+     * @ORM\ManyToMany(targetEntity=Devis::class, mappedBy="garanties")
      */
     private $devis;
 
     /**
-     * @ORM\OneToMany(targetEntity=Reservation::class, mappedBy="garantie")
+     * @ORM\ManyToMany(targetEntity=Reservation::class, mappedBy="garanties")
      */
     private $reservations;
 
@@ -93,6 +95,18 @@ class Garantie
         return $this;
     }
 
+
+
+    /**
+     * toString
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getAppelation() . ' : ' . $this->getPrix() . " €";
+    }
+
+
     /**
      * @return Collection|Devis[]
      */
@@ -105,7 +119,7 @@ class Garantie
     {
         if (!$this->devis->contains($devi)) {
             $this->devis[] = $devi;
-            $devi->setGarantie($this);
+            $devi->addGaranty($this);
         }
 
         return $this;
@@ -114,22 +128,10 @@ class Garantie
     public function removeDevi(Devis $devi): self
     {
         if ($this->devis->removeElement($devi)) {
-            // set the owning side to null (unless already changed)
-            if ($devi->getGarantie() === $this) {
-                $devi->setGarantie(null);
-            }
+            $devi->removeGaranty($this);
         }
 
         return $this;
-    }
-
-    /**
-     * toString
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getAppelation() . ' : ' . $this->getPrix() . " €";
     }
 
     /**
@@ -144,7 +146,7 @@ class Garantie
     {
         if (!$this->reservations->contains($reservation)) {
             $this->reservations[] = $reservation;
-            $reservation->setGarantie($this);
+            $reservation->addGaranty($this);
         }
 
         return $this;
@@ -153,10 +155,7 @@ class Garantie
     public function removeReservation(Reservation $reservation): self
     {
         if ($this->reservations->removeElement($reservation)) {
-            // set the owning side to null (unless already changed)
-            if ($reservation->getGarantie() === $this) {
-                $reservation->setGarantie(null);
-            }
+            $reservation->removeGaranty($this);
         }
 
         return $this;

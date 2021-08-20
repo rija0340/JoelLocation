@@ -29,20 +29,24 @@ class Options
      */
     private $prix;
 
+
     /**
-     * @ORM\OneToMany(targetEntity=Devis::class, mappedBy="siege")
+     * @ORM\ManyToMany(targetEntity=Devis::class, mappedBy="options")
      */
     private $devis;
 
     /**
-     * @ORM\OneToMany(targetEntity=Reservation::class, mappedBy="siege")
+     * @ORM\ManyToMany(targetEntity=Reservation::class, mappedBy="options")
      */
     private $reservations;
+
+
 
     public function __construct()
     {
         $this->devis = new ArrayCollection();
         $this->reservations = new ArrayCollection();
+        $this->y = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -74,6 +78,18 @@ class Options
         return $this;
     }
 
+
+    /**
+     * toString
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getAppelation();
+    }
+
+
+
     /**
      * @return Collection|Devis[]
      */
@@ -86,7 +102,7 @@ class Options
     {
         if (!$this->devis->contains($devi)) {
             $this->devis[] = $devi;
-            $devi->setSiege($this);
+            $devi->addOption($this);
         }
 
         return $this;
@@ -95,22 +111,10 @@ class Options
     public function removeDevi(Devis $devi): self
     {
         if ($this->devis->removeElement($devi)) {
-            // set the owning side to null (unless already changed)
-            if ($devi->getSiege() === $this) {
-                $devi->setSiege(null);
-            }
+            $devi->removeOption($this);
         }
 
         return $this;
-    }
-
-    /**
-     * toString
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getAppelation();
     }
 
     /**
@@ -125,7 +129,7 @@ class Options
     {
         if (!$this->reservations->contains($reservation)) {
             $this->reservations[] = $reservation;
-            $reservation->setSiege($this);
+            $reservation->addOption($this);
         }
 
         return $this;
@@ -134,10 +138,7 @@ class Options
     public function removeReservation(Reservation $reservation): self
     {
         if ($this->reservations->removeElement($reservation)) {
-            // set the owning side to null (unless already changed)
-            if ($reservation->getSiege() === $this) {
-                $reservation->setSiege(null);
-            }
+            $reservation->removeOption($this);
         }
 
         return $this;

@@ -158,6 +158,8 @@ class VehiculeController extends AbstractController
         $data['passagers'] = $vehicule->getPassagers();
         $data['image'] = $vehicule->getImage();
 
+
+
         return new JsonResponse($data);
     }
 }

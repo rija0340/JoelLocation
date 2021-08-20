@@ -58,6 +58,7 @@ security:
         - { path: ^/mode, roles: ROLE_ADMIN }        
         - { path: ^/mode/paiement, roles: ROLE_ADMIN }
         - { path: ^/mode/reservation, roles: ROLE_ADMIN }
+        - { path: ^/backoffice, roles: ROLE_ADMIN }
         - { path: ^/marque, roles: ROLE_ADMIN }
         - { path: ^/etat, roles: ROLE_ADMIN }
         - { path: ^/etat/reservation, roles: ROLE_ADMIN }        

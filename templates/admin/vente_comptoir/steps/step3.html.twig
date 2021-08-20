@@ -138,7 +138,7 @@
 									:
 									{{option.prix}}€
 								{% endif %}
-								<input type="radio" checked="checked" name="radio-siege" value="{{option.id}}">
+								<input type="checkbox" name="checkboxOptions" value="{{option.id}}">
 								<span class="checkmark-radio"></span>
 							</label>
 
@@ -180,7 +180,7 @@
 
 								<label class="label-radio">{{garantie.prix}}
 									€
-									<input type="radio" checked="checked" name="radio-garantie" value="{{garantie.id}}">
+									<input type="checkbox" name="checkboxGaranties" value="{{garantie.id}}">
 									<span class="checkmark-radio"></span>
 								</label>
 							</div>

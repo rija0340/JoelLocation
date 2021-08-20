@@ -55,13 +55,13 @@
 				<a class="dropdown-item" href="#">Reporter la réservation</a>
 				<a class="dropdown-item" href="#">Mail de confirmation</a>
 
-										<form class=" dropdown-item m-0 p-0"  method="post" action="{{ path('reservation_delete', {'id': reservation.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer cette réservation ?');">
-											<input type="hidden" name="_method" value="DELETE">
-											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ reservation.id) }}">
-											<button class="btn btn-link" style=" -webkit-appearance: none">
-                                            Annuler la réservation
-											</button>
-										</form>
+				<form class=" dropdown-item m-0 p-0" method="post" action="{{ path('reservation_delete', {'id': reservation.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer cette réservation ?');">
+					<input type="hidden" name="_method" value="DELETE">
+					<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ reservation.id) }}">
+					<button class="btn btn-link" style=" -webkit-appearance: none">
+						Annuler la réservation
+					</button>
+				</form>
 
 				<a class="dropdown-item" href="#">Fermer le contrat</a>
 				<a class="dropdown-item" href="#">Archiver la réservation</a>
@@ -309,12 +309,18 @@
 				<p>Conducteur : Non</p>
 			{% endif %}
 
-			<p class="js-siege">{{reservation.siege}}</p>
+			{% for opt in reservation.options %}
+				<p class="js-siege">{{opt}}</p>
+
+			{% endfor %}
 			{# <p class="font-italic">Aucune option souscrite.</p> #}
 			<p class="font-weight-bold label">
 				Garantie(s) souscrite(s):
 			</p>
-			<p class="js-garantie">{{reservation.garantie}}</p>
+			{% for gar in reservation.garanties %}
+
+				<p class="js-garantie">{{gar}}</p>
+			{% endfor %}
 			{# <p class="font-italic">Aucune garantie souscrite.</p> #}
 			<p class="font-weight-bold label">
 				Taxes de dépassement horaire
@@ -349,10 +355,7 @@
 				</div>
 				<div class="col-md-4 col-sm-4 col-xs-4">
 					<div class="text-right">
-						{% if (reservation.garantie != null) and (reservation.siege != null)  %}
-							{{ reservation.prix - (reservation.garantie.prix + reservation.siege.prix) }}
-							€
-						{% endif %}
+						{{tarifVehicule}}€
 					</div>
 				</div>
 
@@ -369,12 +372,7 @@
 					<i class="fa fa-chevron-right"></i>Total options souscrites
 				</div>
 				<div class="col-md-4 col-sm-4 col-xs-4">
-					<div class="text-right">
-						{% if reservation.siege != null  %}
-							{{reservation.siege.prix}}
-							€
-						{% endif %}
-					</div>
+					<div class="text-right">{{tarifGaranties}}€</div>
 				</div>
 
 				<div class="col-md-8 col-sm-8 col-xs-8">
@@ -383,11 +381,8 @@
 				</div>
 				<div class="col-md-4 col-sm-4 col-xs-4">
 					<div class="text-right">
-						{% if reservation.garantie != null  %}
-							{{reservation.garantie.prix}}
-							€
-						{% endif %}
-
+						{{tarifOptions}}
+						€
 					</div>
 				</div>
 
