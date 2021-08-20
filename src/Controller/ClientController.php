@@ -553,7 +553,11 @@ class ClientController extends AbstractController
     public function payement(Request $request)
     {
         $client = $this->getUser();
+        // $montant = $request->request->get("montant");
+        //id de la reservation
+        // $id = $request->request->get("id");
         $reservation = $this->getDoctrine()->getRepository(Reservation::class)->findOneBy(["client" => $client], ["id" => "DESC"]);
+        // $reservation = $this->getDoctrine()->getRepository(Reservation::class)->findOneBy(["id" => $id]);
         $modePaiement = $this->getDoctrine()->getRepository(ModePaiement::class)->findOneBy(["id" => 1]);
         $vehicule = new Vehicule();
         if ($reservation == null) {
@@ -561,6 +565,7 @@ class ClientController extends AbstractController
         }
         $vehicule = $reservation->getVehicule();
         $caution = $vehicule->getCaution() * 100;
+        //$$caution = $montant;
         // Set your secret key. Remember to switch to your live secret key in production.
         // See your keys here: https://dashboard.stripe.com/account/apikeys
         \Stripe\Stripe::setApiKey('sk_test_51INCSpLWsPgEVX5UZKrH0YIs7H7PF8Boao1VcYHEks40it5a39h5KJzcwWxSWUIV6ODWkPS7txKsRyKeSfBknDFC00PAHEBwVP');
