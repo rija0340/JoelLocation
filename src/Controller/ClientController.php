@@ -223,6 +223,8 @@ class ClientController extends AbstractController
 
         $tarifJournalier = $tarifTotal / $this->dateHelper->calculDuree($devis->getDateDepart(), $devis->getDateRetour());
 
+        $tarifJournalier = round($tarifJournalier, 2);
+
         if ($form->isSubmitted() && $form->isValid()) {
 
             $entityManager = $this->getDoctrine()->getManager();
@@ -264,6 +266,8 @@ class ClientController extends AbstractController
 
         $tarifJournalier = $tarifTotal / $this->dateHelper->calculDuree($devis->getDateDepart(), $devis->getDateRetour());
 
+        $tarifJournalier = round($tarifJournalier, 2);
+
         $vingtPourcentTarifTotal = (20 * $tarifTotal) / 100;
 
         $cinquantePourcentTarifTotal = (50 * $tarifTotal) / 100;
@@ -302,7 +306,6 @@ class ClientController extends AbstractController
     public function step4paiement(Request $request, $devisID, $sommePaiement): Response
     {
 
-
         $client = $this->getUser();
         $listeDevis = $this->devisRepo->findBy(['client' => $client]);
         $devis = $this->devisRepo->find($devisID);
@@ -312,6 +315,8 @@ class ClientController extends AbstractController
         $tarifTotal = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $devis->getOptions(), $devis->getGaranties());
 
         $tarifJournalier = $tarifTotal / $this->dateHelper->calculDuree($devis->getDateDepart(), $devis->getDateRetour());
+
+        $tarifJournalier = round($tarifJournalier, 2);
 
         $vingtPourcentTarifTotal = (20 * $tarifTotal) / 100;
 
@@ -333,8 +338,6 @@ class ClientController extends AbstractController
         }
     }
 
-
-
     //***********************fin processus validation devis*************** */
 
     /** 
@@ -344,7 +347,6 @@ class ClientController extends AbstractController
     {
         $client = $this->getUser();
         $date = new \DateTime('now');
-
 
         //récupération des réservations effectuée
         $reservationEffectuers = $this->reservRepo->findReservationEffectuers($client, $date);
@@ -372,7 +374,6 @@ class ClientController extends AbstractController
      */
     public function nouvelleReservation(Request $request): Response
     {
-
 
         //get options et garanties pour smart wizard
         $options = $this->optionsRepo->findAll();
