@@ -203,8 +203,6 @@ class ClientController extends AbstractController
     public function step2OptionsGaranties(Request $request): Response
     {
 
-        // dump($request->request->get('devis_client')['id']);
-        // die();
         $devisID = $request->request->get('reservID');
 
         if ($devisID == null) {
@@ -219,10 +217,14 @@ class ClientController extends AbstractController
         $form = $this->createForm(DevisClientType::class, $devis);
         $form->handleRequest($request);
 
-        $tarif = $this->tarifsHelper->calculTarifVehicule($devis->getDateDepart(), $devis->getDateRetour(), $devis->getVehicule());
-        $tarifJour = $tarif / $this->dateHelper->calculDuree($devis->getDateDepart(), $devis->getDateRetour());
+        $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($devis->getDateDepart(), $devis->getDateRetour(), $devis->getVehicule());
+
+        $tarifTotal = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $devis->getOptions(), $devis->getGaranties());
+
+        $tarifJournalier = $tarifTotal / $this->dateHelper->calculDuree($devis->getDateDepart(), $devis->getDateRetour());
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($devis);
             $entityManager->flush();
@@ -235,8 +237,8 @@ class ClientController extends AbstractController
             'garanties' => $garanties,
             'options' => $options,
             'devis' => $devis,
-            'tarif' => $tarif,
-            'tarifJour' => $tarifJour,
+            'tarifTotal' => $tarifTotal,
+            'tarifJournalier' => $tarifJournalier,
             'form' => $form->createView(),
             'devisID' => $devisID
         ]);
@@ -246,33 +248,91 @@ class ClientController extends AbstractController
     /**
      * @Route("/espaceclient/infosClient/{devisID}", name="step3infosClient", methods={"GET","POST"})
      */
-    public function step3infosClient($devisID): Response
+    public function step3infosClient(Request $request, $devisID): Response
     {
 
         $client = $this->getUser();
-        // dump($devisID);
         $listeDevis = $this->devisRepo->findBy(['client' => $client]);
         $devis = $this->devisRepo->find($devisID);
 
         $formClient = $this->createForm(ClientInfoType::class, $client);
+        $formClient->handleRequest($request);
 
         $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($devis->getDateDepart(), $devis->getDateRetour(), $devis->getVehicule());
 
+        $tarifTotal = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $devis->getOptions(), $devis->getGaranties());
 
-        $tarifJour = $tarifVehicule / $this->dateHelper->calculDuree($devis->getDateDepart(), $devis->getDateRetour());
+        $tarifJournalier = $tarifTotal / $this->dateHelper->calculDuree($devis->getDateDepart(), $devis->getDateRetour());
+
+        $vingtPourcentTarifTotal = (20 * $tarifTotal) / 100;
+
+        $cinquantePourcentTarifTotal = (50 * $tarifTotal) / 100;
+
+        if ($formClient->isSubmitted() && $formClient->isValid()) {
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($client);
+            $entityManager->flush();
+
+            $sommePaiement = $request->request->get('modePaiement');
+
+            return $this->redirectToRoute('step4paiement', ['devisID' => $devisID, 'sommePaiement' => $sommePaiement]);
+        }
 
         if ($devis->getClient() == $client) {
             return $this->render('client/reservation/validation/step3infosClient.html.twig', [
                 'devis' => $devis,
                 'tarif' => $tarifVehicule,
-                'tarifJour' => $tarifJour,
+                'tarifJournalier' => $tarifJournalier,
+                'vingtPourcentTarifTotal' => $vingtPourcentTarifTotal,
+                'cinquantePourcentTarifTotal' => $cinquantePourcentTarifTotal,
                 'devis' => $devis,
+                'tarifTotal' => $tarifTotal,
                 'formClient' => $formClient->createView()
             ]);
         } else {
             return $this->render('client/reservation/validation/error.html.twig');
         }
     }
+
+
+    /**
+     * @Route("/espaceclient/paiement/{devisID}/{sommePaiement}", name="step4paiement", methods={"GET","POST"})
+     */
+    public function step4paiement(Request $request, $devisID, $sommePaiement): Response
+    {
+
+
+        $client = $this->getUser();
+        $listeDevis = $this->devisRepo->findBy(['client' => $client]);
+        $devis = $this->devisRepo->find($devisID);
+
+        $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($devis->getDateDepart(), $devis->getDateRetour(), $devis->getVehicule());
+
+        $tarifTotal = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $devis->getOptions(), $devis->getGaranties());
+
+        $tarifJournalier = $tarifTotal / $this->dateHelper->calculDuree($devis->getDateDepart(), $devis->getDateRetour());
+
+        $vingtPourcentTarifTotal = (20 * $tarifTotal) / 100;
+
+        $cinquantePourcentTarifTotal = (50 * $tarifTotal) / 100;
+
+        if ($devis->getClient() == $client) {
+            return $this->render('client/reservation/validation/step4paiement.html.twig', [
+                'devis' => $devis,
+                'tarif' => $tarifVehicule,
+                'tarifJournalier' => $tarifJournalier,
+                'vingtPourcentTarifTotal' => $vingtPourcentTarifTotal,
+                'cinquantePourcentTarifTotal' => $cinquantePourcentTarifTotal,
+                'devis' => $devis,
+                'tarifTotal' => $tarifTotal,
+                'sommePaiement' => $sommePaiement
+            ]);
+        } else {
+            return $this->render('client/reservation/validation/error.html.twig');
+        }
+    }
+
 
 
     //***********************fin processus validation devis*************** */

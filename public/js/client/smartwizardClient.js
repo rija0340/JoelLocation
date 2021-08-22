@@ -152,7 +152,6 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
             if (idGarantie == listeGaranties[i].id) {
                 garantie = listeGaranties[i];
             }
-
         }
     }
 

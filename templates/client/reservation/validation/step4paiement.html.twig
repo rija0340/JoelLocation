@@ -1,7 +1,7 @@
 {% extends 'baseClient2.html.twig' %}
 
 {% block title %}
-	options et garanties
+	paiement
 {% endblock %}
 {% block stylesheets %}
 	<link href="{{ asset( 'css/client/validationDevis.css')}}" rel="stylesheet">
@@ -9,7 +9,6 @@
 {% endblock %}
 {% block nav %}{% endblock %}
 {% block body %}
-
 
 	<div class="row">
 		<div class="col-md-3">
@@ -125,92 +124,17 @@
 			</div>
 		</div>
 		<div class="col-md-9 ">
-			{{ form_start(formClient) }}
-			<div class="card mdl-shadow--2dp p-4 divInformations">
-				<div class="text-center">
-					<h3>Mes informations
-					</h3>
-				</div>
-				<div class="row">
-					<div class="col-md-6" class="bmd-label-floating">
-						<div class="form-group">
-							<label class="bmd-label-floating">Nom *:</label>
-							{{form_widget(formClient.nom) }}
-						</div>
-					</div>
-					<div class="col-md-6" class="bmd-label-floating">
-						<div class="form-group">
-							<label class="bmd-label-floating">Prénom *:</label>
-							{{form_widget(formClient.prenom)}}
-						</div>
-					</div>
-					<div class="col-md-6" class="bmd-label-floating">
-						<div class="form-group">
-							<label class="bmd-label-floating">Email *:</label>
-							{{form_widget(formClient.mail) }}
-						</div>
-					</div>
-					<div class="col-md-6" class="bmd-label-floating">
-						<div class="form-group">
-							<label class="bmd-label-floating">Téléphone *:</label>
-							{{form_widget(formClient.telephone) }}
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="card mdl-shadow--2dp p-4 divModePaiement">
-				<div class="text-center">
-					<h3>Mode de paiement
-					</h3>
-				</div>
-				<div>
-					<input type="radio" value={{tarifTotal}} name="modePaiement">
-					<label for="">Je souhaite régler en une seule fois le montant de
-						{{tarifTotal}}€</label>
-				</div>
-				<div>
-					<input type="radio" value={{cinquantePourcentTarifTotal}} name="modePaiement">
-					<label for="">Je paie un acompte de
-						{{cinquantePourcentTarifTotal}}€ (50%) et à mon arrivée
-						<span class="reste50pourcent">
-							{{ tarifTotal - cinquantePourcentTarifTotal }}€
-						</span>
-					</label>
-				</div>
-				<div>
-					<input type="radio" value={{vingtPourcentTarifTotal}} name="modePaiement">
-					<label for="">Je paie un acompte de
-						{{vingtPourcentTarifTotal}}€ (20%) et à mon arrivée
-						<span class="reste20pourcent">
-							{{ tarifTotal - vingtPourcentTarifTotal}}€
-						</span>
+			<div class="card mdl-shadow--2dp">
 
-					</label>
-				</div>
-			</div>
-			<div class="card mdl-shadow--2dp p-4 divConditionGeneralVente">
-				<div class="text-center">
-					<h3>Condition générale de vente
-					</h3>
-				</div>
-				<div>
-					<input type="checkbox" value="10" name="conditionGeneralVente" id="conditionGeneralVente">
-					<label for="">Je reconnais avoir prix connaissance des conditions générales de vente que j'accepte sans réserve</label>
-				</div>
+
+				<h5>Le client a choisi de payer
+				</h5>
+				<h2>{{sommePaiement}}
+					€</h2>
 			</div>
 
-			<div class="text-center mt-3 mb-3">
-				<button class="btn btn-danger" id="validerPaiement">
-
-					{{ button_label|default('Enregistrer') }}</button>
-			</div>
-
-			{{ form_end(formClient) }}
 		</div>
 	</div>
-{% endblock %}
-{% block javascripts %}
+</div>{% endblock %}{% block javascripts %}
 
-	<script src="{{ asset('js/client/reservation/step3infosClient.js')}}"></script>
-
-{% endblock %}
+<script src="{{ asset('js/client/reservation/step2OptionsGaranties.js')}}"></script>{% endblock %}

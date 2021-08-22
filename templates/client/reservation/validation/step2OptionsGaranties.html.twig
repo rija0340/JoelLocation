@@ -9,27 +9,25 @@
 {% endblock %}
 {% block nav %}{% endblock %}
 {% block body %}
-	<h1>Options garanties</h1>
 
 	<div class="row">
 		<div class="col-md-3">
-			<div class="card p-2 btn-block h-100  card mdl-shadow--2dp">
-				<div class="x_title">
-					<h5>
-						<i class="fa fa-chevron-right"></i>
-						Votre véhicule
-					</h5>
-				</div>
-				<div class="vehicule">
+			<div class="votreVehicule">
+				<h5 class="text-uppercase">
+					Votre véhicule
+				</h5>
+			</div>
+			<div class="card p-2 btn-block card mdl-shadow--2dp">
+				<div class="vehicule border-bottom">
 					<div class="marque_modele">{{devis.vehicule.marque}}
 						{{devis.vehicule.modele}}</div>
 					<img src="/uploads/vehicules/{{ devis.vehicule.image }}" alt="{{ devis.vehicule.image }}" class="img-circle  " style="width : 100%;">
 
 				</div>
 				<div>
-					<h5 class="heading">Agence départ
-					</h5>
-					<div class="content_depart border-bottom">
+					<div class="divDepart border-bottom">
+						<h5 class="heading">Agence départ
+						</h5>
 						<p>
 							<i class="fa fa-map-marker"></i>
 							<span id="agence_depart">{{devis.agenceDepart}}</span><br>
@@ -37,9 +35,9 @@
 							<span id="heure_depart"></span>
 						</p>
 					</div>
-					<h5 class="heading">Agence retour
-					</h5>
-					<div class="content_retour border-bottom">
+					<div class="divRetour border-bottom">
+						<h5 class="heading">Agence retour
+						</h5>
 						<p>
 							<i class="fa fa-map-marker"></i>
 							<span id="agence_retour">{{devis.agenceRetour}}</span><br>
@@ -47,18 +45,7 @@
 							<span id="heure_retour"></span>
 						</p>
 					</div>
-					<p>
-						Soit
-						<span id="nombre_jours_location">{{devis.duree}}</span>
-						jours de location</p>
-
-					<h5 class="heading">Prix de base de location</h5>
-					<div class="prix_location border-bottom">
-						<span id="prix">{{tarif}}</span>EUR<br>
-						soit
-						<span id="prix">{{tarifJour}}</span>euro/jour
-					</div>
-					<div class="prestation border-bottom">
+					<div class="divPrestation border-bottom">
 						<h5 class="heading">Prestations incluses</h5>
 						<ul class="pl-2 ">
 							<li>
@@ -83,13 +70,63 @@
 							</li>
 						</ul>
 					</div>
+					<div class="divOptions border-bottom">
+						<h5 class="heading">Option(s)
+						</h5>
+						<ul class="pl-2 ">
+							{% for option in devis.options %}
+								<li>
+									<div class="d-flex">
+										<div>
+											<i class="fa fa-check"></i>
+											{{option.appelation}}
+										</div>
+										<div class="ml-auto">
+											{{option.prix}}€
+										</div>
+									</div>
+
+								</li>
+							{% endfor %}
+						</ul>
+					</div>
+					<div class="divGaranties">
+						<h5 class="heading">Garantie(s)
+						</h5>
+						<ul class="pl-2 ">
+							{% for garantie in devis.garanties %}
+								<li>
+									<div class="d-flex">
+										<div>
+											<i class="fa fa-check"></i>
+											{{garantie.appelation}}
+										</div>
+										<div class="ml-auto">
+											{{garantie.prix}}€
+
+										</div>
+									</div>
+								</li>
+							{% endfor %}
+						</ul>
+					</div>
+
 				</div>
 			</div>
+			<div class="divTarifTotal text-center">
+				<h5 class="heading">Prix total pour
+					{{devis.duree}}
+					jours
+				</h5>
+				<span class="tarifTotal">{{tarifTotal}}€</span><br>
+				<span class="tarifJournalier">Soit
+					{{tarifJournalier}}€ / jour</span>
+			</div>
 		</div>
-		<div class="col-md-9 mdl-shadow--2dp">
+		<div class="col-md-9 ">
 			{{ form_start(form) }}
-			<input type="hidden" value={{devisID}} name="devisID">
-			<div class="card mdl-shadow--2dp">
+			<div class="card mdl-shadow--2dp divGaranties">
+				<input type="hidden" value={{devisID}} name="devisID">
 				<div class="text-center mt-4 mb-4">
 					<h2>VOS GARANTIES</h2>
 				</div>
@@ -113,7 +150,9 @@
 						</div>
 					{% endfor %}
 				</div>
+			</div>
 
+			<div class="card mdl-shadow--2dp divOptions">
 				<div class="text-center mt-4 mb-4">
 					<h2>VOS OPTIONS</h2>
 				</div>
@@ -141,12 +180,6 @@
 			{{ form_end(form) }}
 		</div>
 	</div>
-	{# {{ form_widget(form) }} #}
+</div>{% endblock %}{% block javascripts %}
 
-
-{% endblock %}
-{% block javascripts %}
-
-	<script src="{{ asset('js/client/reservation/step2OptionsGaranties.js')}}"></script>
-
-{% endblock %}
+<script src="{{ asset('js/client/reservation/step2OptionsGaranties.js')}}"></script>{% endblock %}
