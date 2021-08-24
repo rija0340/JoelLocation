@@ -80,6 +80,10 @@ class ClientController extends AbstractController
     public function client(Request $request): Response
     {
         $client = $this->getUser();
+
+        if ($client == null) {
+            return $this->redirectToRoute('app_login');
+        }
         // dump($request);
         // die();
         $date = new \DateTime('now');
@@ -133,6 +137,10 @@ class ClientController extends AbstractController
     public function mesConducteurs(Request $request): Response
     {
         $client = $this->getUser();
+
+        if ($client == null) {
+            return $this->redirectToRoute('app_login');
+        }
         $conducteurs = $this->conductRepo->findBy(['client' => $client]);
 
         // $formClient = $this->createForm(ClientType::class, $client);
@@ -151,6 +159,10 @@ class ClientController extends AbstractController
     {
         $conducteur = new Conducteur();
         $client = $this->getUser();
+
+        if ($client == null) {
+            return $this->redirectToRoute('app_login');
+        }
         $formConducteur = $this->createForm(ConducteurType::class, $conducteur);
         $formConducteur->handleRequest($request);
 
@@ -179,9 +191,6 @@ class ClientController extends AbstractController
     {
         $formConducteur = $this->createForm(ConducteurType::class, $conducteur);
         $formConducteur->handleRequest($request);
-
-
-
         if ($formConducteur->isSubmitted() && $formConducteur->isValid()) {
 
             $this->getDoctrine()->getManager()->flush();
@@ -254,6 +263,9 @@ class ClientController extends AbstractController
     {
 
         $client = $this->getUser();
+        if ($client == null) {
+            return $this->redirectToRoute('app_login');
+        }
         $listeDevis = $this->devisRepo->findBy(['client' => $client]);
         $devis = $this->devisRepo->find($devisID);
 
@@ -307,6 +319,9 @@ class ClientController extends AbstractController
     {
 
         $client = $this->getUser();
+        if ($client == null) {
+            return $this->redirectToRoute('app_login');
+        }
         $listeDevis = $this->devisRepo->findBy(['client' => $client]);
         $devis = $this->devisRepo->find($devisID);
 
@@ -346,6 +361,9 @@ class ClientController extends AbstractController
     public function listeReservations(Request $request): Response
     {
         $client = $this->getUser();
+        if ($client == null) {
+            return $this->redirectToRoute('app_login');
+        }
         $date = new \DateTime('now');
 
         //récupération des réservations effectuée
@@ -759,6 +777,9 @@ class ClientController extends AbstractController
     public function payement(Request $request)
     {
         $client = $this->getUser();
+        if ($client == null) {
+            return $this->redirectToRoute('app_login');
+        }
         // $montant = $request->request->get("montant");
         //id de la reservation
         // $id = $request->request->get("id");
