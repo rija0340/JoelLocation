@@ -725,6 +725,7 @@ class ClientController extends AbstractController
                 $user,
                 $user->getPassword()
             ));
+            $user->setRecupass($user->getPassword());
             $user->setPresence(1);
             $user->setDateInscription($this->dateHelper->dateNow());
             $entityManager = $this->getDoctrine()->getManager();
