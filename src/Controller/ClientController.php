@@ -397,10 +397,14 @@ class ClientController extends AbstractController
         $options = $this->optionsRepo->findAll();
         $garanties = $this->garantiesRepo->findAll();
         $client = $this->getUser();
+        if ($client == null) {
+            return $this->redirectToRoute('app_login');
+        }
         return $this->render('client/steps/index.html.twig', [
             'options' => $options,
             'garanties' => $garanties,
             'clientID' => $client->getId()
+
         ]);
     }
 
@@ -468,8 +472,6 @@ class ClientController extends AbstractController
                 }
             }
 
-
-
             $reservation->setConducteur($conducteur);
             $reservation->setLieu($lieuSejour);
             $reservation->setDuree($duree);
@@ -495,6 +497,99 @@ class ClientController extends AbstractController
             $entityManager->flush();
 
             return $this->redirectToRoute('client_reservations');
+        }
+        return $this->redirectToRoute('client_reservations');
+    }
+
+    /**
+     * @Route("/espaceclient/enregistrerDevisWizard", name="client_enregistrerDevisWizard",  methods={"GET","POST"})
+     */
+    public function enregistrerDevisWizard(Request $request): Response
+    {
+        $devis = new Devis();
+
+        if ($request->isXmlHttpRequest()) {
+
+            $options = [];
+            $garanties = [];
+
+
+            $agenceDepart = $request->query->get('agenceDepart');
+            $agenceRetour = $request->query->get('agenceRetour');
+            $lieuSejour = $request->query->get('lieuSejour');
+            $dateTimeDepart = $request->query->get('dateTimeDepart');
+            $dateTimeRetour = $request->query->get('dateTimeRetour');
+            $vehiculeIM = $request->query->get('vehiculeIM');
+            $conducteur = $request->query->get('conducteur');
+            $arrayOptionsID = (array)$request->query->get('arrayOptionsID');
+            $arrayGarantiesID = (array)$request->query->get('arrayGarantiesID');
+
+
+            $dateDepart = $this->dateHelper->newDate($dateTimeDepart);
+            $dateRetour = $this->dateHelper->newDate($dateTimeRetour);
+
+
+            $vehicule = $this->vehiculeRepo->findByIM($vehiculeIM);
+            $client = $this->getUser();
+            $duree = $this->dateHelper->calculDuree($dateDepart, $dateRetour);
+
+            $devis->setVehicule($vehicule);
+            $devis->setClient($client);
+            $devis->setAgenceDepart($agenceDepart);
+            $devis->setAgenceRetour($agenceRetour);
+            $devis->setDateDepart($dateDepart);
+            $devis->setDateRetour($dateRetour);
+
+            //loop sur id des options
+            if ($arrayOptionsID != []) {
+                for ($i = 0; $i < count($arrayOptionsID); $i++) {
+
+                    $id = $arrayOptionsID[$i];
+                    $option = $this->optionsRepo->find($id);
+                    array_push($options, $option);
+                    $devis->addOption($option);
+                }
+            }
+
+            //loop sur id des garanties
+            if ($arrayOptionsID != []) {
+
+                for ($i = 0; $i < count($arrayGarantiesID); $i++) {
+
+                    $id = $arrayGarantiesID[$i];
+                    $garantie = $this->garantiesRepo->find($id);
+                    array_push($garanties, $garantie);
+                    $devis->addGaranty($garantie);
+                }
+            }
+
+            $devis->setConducteur($conducteur);
+            $devis->setLieuSejour($lieuSejour);
+            $devis->setDuree($duree);
+            $devis->setDateCreation($this->dateHelper->dateNow());
+            // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
+            $lastID = $this->devisRepo->findBy(array(), array('id' => 'DESC'), 1);
+
+            if ($lastID == null) {
+                $currentID = 1;
+            } else {
+
+                $currentID = $lastID[0]->getId() + 1;
+            }
+            $devis->setNumeroDevis($currentID);
+
+
+            $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
+            $prix = $this->tarifsHelper->calculTarifTotal($tarifVehicule,  $options, $garanties);
+
+            $devis->setPrix($prix);
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($devis);
+            $entityManager->flush();
+
+            $lastDevis = $this->devisRepo->findBy(array(), array('id' => 'DESC'), 1);
+            return new JsonResponse($lastDevis[0]->getId());
         }
         return $this->redirectToRoute('client_reservations');
     }
@@ -721,6 +816,7 @@ class ClientController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setRoles(['ROLE_CLIENT']);
+
             $user->setPassword($this->passwordEncoder->encodePassword(
                 $user,
                 $user->getPassword()

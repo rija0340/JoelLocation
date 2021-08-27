@@ -9,12 +9,8 @@
 	<link rel="stylesheet" href="css/inscription.css">
 {% endblock %}
 {% block body %}
-	<div
-		class="container">
+	<div class="container">
 
-		{# <div class="section-title">
-																									<h3>Veuiller vous inscrire</h3>
-																								</div> #}
 		<h2 class="text-center title">Veuillez vous inscrire</h2>
 
 		<div class="col-lg-8 col-md-8 ml-auto mr-auto">
@@ -71,9 +67,53 @@
 							{{form_widget(form.portable)}}
 						</div>
 					</div>
-					<div class="col-lg-12">
-						<input class="button" type="submit" value="Enregistrer">
+
+					<div class="col-lg-6" class="bmd-label-floating">
+						<div class="form-group">
+							<label class="bmd-label-floating">Complément adresse :</label>
+							{{form_widget(form.complementAdresse)}}
+						</div>
 					</div>
+					<div class="col-lg-6" class="bmd-label-floating">
+						<div class="form-group">
+							<label class="bmd-label-floating">Ville :</label>
+							{{form_widget(form.ville)}}
+						</div>
+					</div>
+					<div class="col-lg-6" class="bmd-label-floating">
+						<div class="form-group">
+							<label class="bmd-label-floating">Code postal :</label>
+							{{form_widget(form.codePostal)}}
+						</div>
+					</div>
+					<div class="col-lg-6" class="bmd-label-floating">
+						<div class="form-group">
+							<label class="">Date de naissance :</label>
+							{{form_widget(form.dateNaissance)}}
+						</div>
+					</div>
+					<div class="col-lg-6" class="bmd-label-floating">
+						<div class="form-group">
+							<label class="bmd-label-floating">Lieu de naissance :</label>
+							{{form_widget(form.lieuNaissance)}}
+						</div>
+					</div>
+					<div class="col-lg-6" class="bmd-label-floating">
+						<div class="form-group">
+							<label class="bmd-label-floating">numero de permis :</label>
+							{{form_widget(form.numeroPermis)}}
+						</div>
+					</div>
+					<div class="col-lg-6" class="">
+						<div class="form-group">
+							<label class="">Date de délivrance permis :</label>
+							{{form_widget(form.datePermis)}}
+						</div>
+					</div>
+					<button class="btn btn-danger">
+						<i class="fa fa-book" aria-hidden="true"></i>
+						{{ button_label|default('Enregistrer') }}
+					</button>
 				</div>
 				{{ form_end(form) }}
 			</form>

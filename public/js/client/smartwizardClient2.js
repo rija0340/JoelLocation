@@ -93,8 +93,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
     var siegeSpanElem;
     var garantieSpanElem;
     var selectedClient;
-    var btnReserver;
-    var btnReserver;
+    var btnEnregistrerDevis;
     var selectClientElem;
     var alertCreatedClient;
 
@@ -289,7 +288,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
 
         //ETAPE 4 
         selectClientElem = document.querySelector('input[id="selectClient"]');
-        btnReserver = document.getElementById('reserver');
+        btnEnregistrerDevis = document.getElementById('enregistrerDevis');
         btnPdfDevis = document.getElementById('pdfDevis');
 
 
@@ -303,7 +302,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
     }
     function addEvent() {
 
-        btnReserver.addEventListener('click', reserverAjax, false);
+        btnEnregistrerDevis.addEventListener('click', enregistrerDevisAjax, false);
 
     }
 
@@ -409,80 +408,50 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
         });
     }
 
-    function reserverAjax() { //envoi donnée à controller par ajax
+    function enregistrerDevisAjax() { //envoi donnée à controller par ajax
 
-        console.log(selectClientElem);
-        selectedClient = null;
-        selectedClient = selectClientElem.value;
 
-        if (selectedClient != "") {
-            var idClient;
-            console.log('ity le liste original : ');
-            console.log(listeClientsOriginal);
-            console.log('length');
-            console.log(listeClientsOriginal.length);
+        console.log("data : " +
+            agenceDepartSelected,
+            agenceRetourSelected,
+            datetimeDepartValue,
+            datetimeRetourValue,
+            conducteur,
+            detailsVehicule.immatriculation,
+            lieuSejourValue,
+            arrayOptionsID,
+            arrayGarantiesID
+        );
 
-            for (let i = 0; i < listeClientsOriginal.length; i++) {
+        $.ajax({
+            type: 'GET',
+            url: '/espaceclient/enregistrerDevisWizard',
+            data: {
+                'agenceDepart': agenceDepartSelected,
+                'agenceRetour': agenceRetourSelected,
+                'dateTimeDepart': datetimeDepartValue,
+                'dateTimeRetour': datetimeRetourValue,
+                'conducteur': conducteur,
+                'arrayOptionsID': arrayOptionsID,
+                'arrayGarantiesID': arrayGarantiesID,
+                'vehiculeIM': detailsVehicule.immatriculation,
+                'lieuSejour': lieuSejourValue
+            },
+            timeout: 3000,
+            beforeSend: function (xhr) {
+                // Show the loader
+                $('#smartwizard').smartWizard("loader", "show");
+            },
+            success: function (data) {
 
-                var result = listeClientsOriginal[i].nomPrenomEmail.localeCompare(selectedClient);
+                window.document.location = '/espaceclient/infosClient/' + data;
 
-                if (result == 0) {
-
-                    idClient = listeClientsOriginal[i].id;
-                    console.log(idClient);
-                }
-
+                $('#smartwizard').smartWizard("loader", "hide");
+            },
+            error: function () {
+                alert('La requête n\'a pas abouti');
             }
-            console.log(idClient);
-            console.log("data : " +
-
-                idClient,
-                agenceDepartSelected,
-                agenceRetourSelected,
-                datetimeDepartValue,
-                datetimeRetourValue,
-                conducteur,
-                detailsVehicule.immatriculation,
-                lieuSejourValue,
-                arrayOptionsID,
-                arrayGarantiesID
-            );
-
-            $.ajax({
-                type: 'GET',
-                url: '/reservation/newReservation',
-                data: {
-                    'idClient': idClient,
-                    'agenceDepart': agenceDepartSelected,
-                    'agenceRetour': agenceRetourSelected,
-                    'dateTimeDepart': datetimeDepartValue,
-                    'dateTimeRetour': datetimeRetourValue,
-                    'conducteur': conducteur,
-                    'arrayOptionsID': arrayOptionsID,
-                    'arrayGarantiesID': arrayGarantiesID,
-                    'vehiculeIM': detailsVehicule.immatriculation,
-                    'lieuSejour': lieuSejourValue
-                },
-                timeout: 3000,
-                beforeSend: function (xhr) {
-                    // Show the loader
-                    $('#smartwizard').smartWizard("loader", "show");
-                },
-                success: function (xmlHttp) {
-                    // xmlHttp is a XMLHttpRquest object
-                    console.log('met le izy');
-                    // console.log('mety ilay izy zao');
-                    window.document.location = '/reservation';
-
-                    $('#smartwizard').smartWizard("loader", "hide");
-                },
-                error: function () {
-                    alert('La requête n\'a pas abouti');
-                }
-            });
-        } else {
-            alert('Veuillez choisir un client');
-        }
+        });
 
     }
 
@@ -557,23 +526,31 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
         console.log(arrayGarantiesID);
 
         var listeOptionsElem = document.getElementById('listeOptions');
-        var listeGarantiesElem = document.getElementById('listeOptions');
+        var listeGarantiesElem = document.getElementById('listeGaranties');
 
+        //afficher les options séléctionés dans steps 3 dans step 4
         for (let i = 0; i < arrayOptionsID.length; i++) {
-            if (listeOptions[i].id == arrayOptionsID[i]) {
-                var p = document.createElement('p');
-                p.innerText = listeOptions[i].appelation + " : " + listeOptions[i].prix + "€";
-                listeOptionsElem.appendChild(p);
+            console.log("ity ve : " + arrayOptionsID[i]);
+            for (let j = 0; j < listeOptions.length; j++) {
+                if (listeOptions[j].id == arrayOptionsID[i]) {
+                    var p = document.createElement('p');
+                    p.innerText = listeOptions[j].appelation + " : " + listeOptions[j].prix + "€";
+                    listeOptionsElem.appendChild(p);
+                }
             }
+
 
         }
 
+        //afficher les garanties séléctionés dans steps 3 dans step 4
 
         for (let i = 0; i < arrayGarantiesID.length; i++) {
-            if (listeGaranties[i].id == arrayGarantiesID[i]) {
-                var p = document.createElement('p');
-                p.innerText = listeGaranties[i].appelation + " : " + listeGaranties[i].prix + "€";
-                listeGarantiesElem.appendChild(p);
+            for (let j = 0; j < listeGaranties.length; j++) {
+                if (listeGaranties[j].id == arrayGarantiesID[i]) {
+                    var p = document.createElement('p');
+                    p.innerText = listeGaranties[j].appelation + " : " + listeGaranties[j].prix + "€";
+                    listeGarantiesElem.appendChild(p);
+                }
             }
 
         }
@@ -604,7 +581,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
             theme: 'dots',
             lang: { // Language variables for button
                 next: 'Suivant',
-                previous: 'Precedant'
+                previous: 'Précédent'
             },
             // default, arrows, , progress
             // darkMode: true,
