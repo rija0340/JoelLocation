@@ -825,7 +825,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
             theme: 'dots',
             lang: { // Language variables for button
                 next: 'Suivant',
-                previous: 'Precedant'
+                previous: 'Précédent'
             },
             // default, arrows, , progress
             // darkMode: true,
