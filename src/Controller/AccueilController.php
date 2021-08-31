@@ -142,12 +142,14 @@ class AccueilController extends AbstractController
 
 
     /**
-     * @Route("/carte", name="carte")
+     * @Route("/carte", name="carte", methods={"GET","POST"})
      */
-    public function carte()
+    public function carte(Request $request)
     {
+        $id = $request->request->get("id");
         return $this->render('accueil/paiement.html.twig', [
-            'controller_name' => 'carte bancaire'
+            'controller_name' => 'carte bancaire',
+            'id' => $id,
         ]);
     }
 
