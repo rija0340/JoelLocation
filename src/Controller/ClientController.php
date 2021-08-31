@@ -877,7 +877,7 @@ class ClientController extends AbstractController
         if ($client == null) {
             return $this->redirectToRoute('app_login');
         }
-        $montant = $request->request->get("montant");
+        $montant = floatval($request->request->get("montant"));
         //id de la reservation
         $id = $request->request->get("id");
         //$reservation = $this->getDoctrine()->getRepository(Reservation::class)->findOneBy(["client" => $client], ["id" => "DESC"]);
