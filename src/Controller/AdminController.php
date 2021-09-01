@@ -40,7 +40,7 @@ class AdminController extends AbstractController
    */
   public function index(): Response
   {
-    $reservations = $this->reservationRepo->findBy(array(), array('id' => 'DESC'), 3);
+    $reservations = $this->reservationRepo->findReservationsSansStopSales(array(), array('id' => 'DESC'), 3);
     $stopSales = $this->reservationRepo->findStopSales();
 
 
@@ -197,23 +197,6 @@ class AdminController extends AbstractController
   {
     return $this->render('admin/paiement/index.html.twig');
   }
-
-
-  /**
-   * @Route("/parametre_agence", name="parametre_agence", methods={"GET"})
-   */
-  public function parametre_agence(): Response
-  {
-    return $this->render('admin/agence/parametre_agence/index.html.twig');
-  }
-  /**
-   * @Route("/presentation_agence", name="presentation_agence", methods={"GET"})
-   */
-  public function presentation_agence(): Response
-  {
-    return $this->render('admin/agence/presentation_agence/index.html.twig');
-  }
-
 
   /**
    * @Route("/testerCode", name="testerCode", methods={"GET","POST"})

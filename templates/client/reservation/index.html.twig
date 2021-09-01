@@ -37,7 +37,7 @@
 				{% endfor %}
 			</tbody>
 		</table>
-		<h3>Réservation en attente de validation</h3>
+		<h3>Devis</h3>
 		<table class="table">
 			<thead>
 				<tr>
@@ -63,23 +63,23 @@
 						</td>
 						<td>{{ reserv.prix }}
 							€</td>
-						<td>
-							{# <a href="{{ path('client_devis_show', {'id': reserv.id}) }}">
-															<i class=" fa fa-info-circle" style="font-size: 2em !important;"></i>
-														</a> #}
-							<a id="telechargerDevis">
-								<i class="fa fa-arrow-circle-o-down" style="font-size: 2em !important;"></i>
-							</a>
-
-							<form method="post" action="{{ path('step2OptionsGaranties') }}">
-								<input type="hidden" name="reservID" value="{{reserv.id}}">
-								<button class="btn btn-link" style=" -webkit-appearance: none">
-									<i class="fa fa-check" style="font-size: 2em !important;"></i>
-								</button>
-							</form>
-
+						<td class=" d-flex justify-content-center ">
+							<div class="row">
+								<div class="col-auto m-0 p-0">
+									<a id="telechargerDevis">
+										<i class="fa fa-arrow-circle-o-down" style="font-size: 1.5em !important;"></i>
+									</a>
+								</div>
+								<div class="col-auto m-0 p-0">
+									<form method="post" action="{{ path('step2OptionsGaranties') }}">
+										<input type="hidden" name="reservID" value="{{reserv.id}}">
+										<button class="btn btn-link m-0 p-0" style=" -webkit-appearance: none">
+											<i class="fa fa-check" style="font-size: 1.5em !important;"></i>
+										</button>
+									</form>
+								</div>
+							</div>
 						</td>
-
 					</tr>
 				{% endfor %}
 			</tbody>

@@ -41,7 +41,6 @@ function retrieveDataAjax() {
                     modele: data[i].modele,
                     lastReservation: data[i].lastReservation,
                     nextReservation: data[i].nextReservation,
-                    action: `<a href="/vehicule/${data[i].id}/show">Voir</a>`
                 });
             }
 
@@ -98,7 +97,6 @@ function LoadDataDatatable(data) {
                 { "data": "modele" },
                 { "data": "lastReservation" },
                 { "data": "nextReservation" },
-                { "data": "action" },
             ],
             "language": {
                 "emptyTable": "Aucune donnée disponible dans le tableau",
@@ -339,7 +337,6 @@ function LoadDataDatatable(data) {
                 { "data": "modele" },
                 { "data": "lastReservation" },
                 { "data": "nextReservation" },
-                { "data": "action" },
             ],
             "language": {
                 "emptyTable": "Aucune donnée disponible dans le tableau",

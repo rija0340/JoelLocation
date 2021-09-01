@@ -371,7 +371,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
     function getListeGarantiesAjax() {
         $.ajax({
             type: 'GET',
-            url: "/listeOptions",
+            url: "/espaceclient/listeOptions",
             timeout: 3000,
             beforeSend: function (xhr) {
             },
@@ -444,7 +444,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
             },
             success: function (data) {
 
-                window.document.location = '/espaceclient/infosClient/' + data;
+                window.document.location = '/espaceclient/reservations';
 
                 $('#smartwizard').smartWizard("loader", "hide");
             },

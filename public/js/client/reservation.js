@@ -27,7 +27,9 @@ function addEventListener() {
 function generatePDF() {
 
     //get the ID of the devis
-    devisID = parseInt(this.parentElement.parentElement.firstElementChild.innerText);
+    devisID = parseInt(this.parentElement.parentElement.parentElement.parentElement.firstElementChild.innerText);
+
+    console.log(devisID);
 
     $.ajax({
         type: 'GET',

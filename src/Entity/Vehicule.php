@@ -55,8 +55,6 @@ class Vehicule
      * @ORM\Column(type="integer", nullable=true)
      */
     private $prix_acquisition;
-
-
     /**
      * @ORM\OneToMany(targetEntity=Reservation::class, mappedBy="vehicule", orphanRemoval=true)
      * 
@@ -120,13 +118,9 @@ class Vehicule
     private $updated_at;
 
 
-    /**
-     * @ORM\OneToMany(targetEntity=Tarifs::class, mappedBy="vehicule", cascade={"persist", "remove"})
-     */
-    private $tarifs;
 
     /**
-     * @ORM\OneToMany(targetEntity=Devis::class, mappedBy="Vehicule")
+     * @ORM\OneToMany(targetEntity=Devis::class, mappedBy="vehicule")
      */
     private $devis;
 
@@ -400,22 +394,6 @@ class Vehicule
         return $this;
     }
 
-    public function getTarifs(): ?Tarifs
-    {
-        return $this->tarifs;
-    }
-
-    public function setTarifs(Tarifs $tarifs): self
-    {
-        // set the owning side of the relation if necessary
-        if ($tarifs->getMarque() !== $this) {
-            $tarifs->getMarque($this);
-        }
-
-        $this->tarifs = $tarifs;
-
-        return $this;
-    }
 
     /**
      * @return Collection|Devis[]

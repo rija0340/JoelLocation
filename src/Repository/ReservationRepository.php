@@ -95,7 +95,7 @@ class ReservationRepository extends ServiceEntityRepository
             ->andWhere('r.client = :client AND r.date_debut > :date')
             ->setParameter('client', $client)
             ->setParameter('date', $this->dateHelper->dateNow())
-            ->orderBy('r.date_debut', 'DESC')
+            ->orderBy('r.id', 'DESC')
             ->getQuery()
             ->getResult();
     }

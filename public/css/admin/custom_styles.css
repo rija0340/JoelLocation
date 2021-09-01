@@ -145,9 +145,8 @@ border-radius: 0%;
 
 .badge-aeroport{
   color: #fff;
-background-color: #000000;
-border-radius: 0%;
-
+  background-color: #A9A9A9;
+  border-radius: 0%;
 }
 
 
@@ -159,10 +158,10 @@ border-radius: 0%;
 }
 
 .badge-indisponible{
-  color: #fff;
-background-color: #A9A9A9;
-border-radius: 0%;
 
+  color: #fff;
+  background-color: #000000;
+  border-radius: 0%;
 }
 
 .badge-pointLivraison{

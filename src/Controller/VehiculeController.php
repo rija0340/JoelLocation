@@ -116,12 +116,14 @@ class VehiculeController extends AbstractController
     public function delete(Request $request, Vehicule $vehicule): Response
     {
         if ($this->isCsrfTokenValid('delete' . $vehicule->getId(), $request->request->get('_token'))) {
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($vehicule);
             $entityManager->flush();
         }
         return $this->redirectToRoute('vehicule_index');
     }
+
     /**
      * @return string
      */

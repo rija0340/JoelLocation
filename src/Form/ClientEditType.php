@@ -14,12 +14,6 @@ class ClientEditType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username')
-
-            ->add('password', PasswordType::class, [
-                'required' => false,
-                'empty_data' => '',
-            ])
             ->add('nom')
             ->add('prenom')
             ->add('adresse')
@@ -38,7 +32,8 @@ class ClientEditType extends AbstractType
             ->add('datePermis', DateType::class, [
                 'widget' => 'single_text',
                 'required' => false
-            ]);
+            ])
+            ->add('villeDelivrancePermis');
     }
 
     public function configureOptions(OptionsResolver $resolver)

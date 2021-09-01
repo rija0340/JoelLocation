@@ -104,7 +104,7 @@ class User implements UserInterface
     private $fonction;
 
     /**
-     * @ORM\OneToMany(targetEntity=Devis::class, mappedBy="Client")
+     * @ORM\OneToMany(targetEntity=Devis::class, mappedBy="client")
      */
     private $devis;
 
@@ -152,6 +152,11 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity=Conducteur::class, mappedBy="client")
      */
     private $conducteurs;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $villeDelivrancePermis;
 
     public function __construct()
     {
@@ -625,6 +630,18 @@ class User implements UserInterface
                 $conducteur->setClient(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getVilleDelivrancePermis(): ?string
+    {
+        return $this->villeDelivrancePermis;
+    }
+
+    public function setVilleDelivrancePermis(?string $villeDelivrancePermis): self
+    {
+        $this->villeDelivrancePermis = $villeDelivrancePermis;
 
         return $this;
     }

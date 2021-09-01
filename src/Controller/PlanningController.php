@@ -105,29 +105,34 @@ class PlanningController extends AbstractController
             $datas[$key]['agenceRetour'] = $reservation->getAgenceRetour();
             $datas[$key]['reference'] = $reservation->getReference();
             $datas[$key]['telClient'] = $reservation->getClient()->getTelephone();
+            // $datas[$key]['unscheduled'] = true;
             $datas[$key]['text'] = ""; //util pour eviter erreur quick_info
             // tester si une reservation est en cours
-            if ($reservation->getDateDebut() < $this->dateHelper->dateNow() && $this->dateHelper->dateNow() < $reservation->getDateFin()) {
+            if ($reservation->getDateDebut() < $this->dateHelper->dateNow() && $this->dateHelper->dateNow() < $reservation->getDateFin() && $reservation->getCodeReservation() != 'stopSale') {
 
                 $datas[$key]['etat'] = 'encours';
             }
-            if ($reservation->getDateFin() > $this->dateHelper->dateNow() && $reservation->getDateFin() > $this->dateHelper->dateNow()) {
+            if ($reservation->getDateFin() > $this->dateHelper->dateNow() && $reservation->getDateFin() > $this->dateHelper->dateNow() && $reservation->getCodeReservation() != 'stopSale') {
 
                 $datas[$key]['etat'] = 'nouvelle';
             }
 
-            if ($reservation->getDateDebut() < $this->dateHelper->dateNow() && $reservation->getDateFin() < $this->dateHelper->dateNow()) {
+            if ($reservation->getDateDebut() < $this->dateHelper->dateNow() && $reservation->getDateFin() < $this->dateHelper->dateNow() && $reservation->getCodeReservation() != 'stopSale') {
 
                 $datas[$key]['etat'] = 'termine';
             }
+            if ($reservation->getCodeReservation() == 'stopSale') {
+
+                $datas[$key]['etat'] = 'stopSale';
+            }
 
             if ($reservation->getAgenceDepart() == "garage") {
-                $datas[$key]['color'] =  "#A9A9A9";
-            } else if ($reservation->getAgenceDepart() == "aeroport") {
                 $datas[$key]['color'] =  "#000000";
-            } else if ($reservation->getAgenceDepart() == "gareMaritime") {
+            } else if ($reservation->getAgenceDepart() == "AEROPORT DE POINT-A-PITRE") {
+                $datas[$key]['color'] =  "#A9A9A9";
+            } else if ($reservation->getAgenceDepart() == "GARE MARITIME DE BERGERVIN") {
                 $datas[$key]['color'] =  "#FFC0CB";
-            } else if ($reservation->getAgenceDepart() == "agence") {
+            } else if ($reservation->getAgenceDepart() == "AGENCE DU MOULE") {
                 $datas[$key]['color'] =  "#ff0000";
             } else if ($reservation->getAgenceDepart() == "pointLivraison") {
                 $datas[$key]['color'] =  "#0d00ff";
@@ -206,7 +211,7 @@ class PlanningController extends AbstractController
 
             $datas[$key]['id'] = $vehicule->getId();
             $datas[$key]['immatriculation'] = $vehicule->getImmatriculation();
-            $datas[$key]['modele'] = $vehicule->getModele();
+            $datas[$key]['modele'] = $vehicule->getModele()->getLibelle();
             if ($this->getLastReservation($vehicule, $date) != null) {
                 $datas[$key]['lastReservation'] = $this->getLastReservation($vehicule, $date)->getDateFin()->format('d-m-Y H:i');
             } else {
