@@ -821,6 +821,7 @@ class ClientController extends AbstractController
                 $user,
                 $user->getPassword()
             ));
+            $user->setRecupass($user->getPassword());
             $user->setPresence(1);
             $user->setDateInscription($this->dateHelper->dateNow());
             $entityManager = $this->getDoctrine()->getManager();
@@ -876,19 +877,19 @@ class ClientController extends AbstractController
         if ($client == null) {
             return $this->redirectToRoute('app_login');
         }
-        // $montant = $request->request->get("montant");
+        $montant = floatval($request->request->get("montant"));
         //id de la reservation
-        // $id = $request->request->get("id");
-        $reservation = $this->getDoctrine()->getRepository(Reservation::class)->findOneBy(["client" => $client], ["id" => "DESC"]);
-        // $reservation = $this->getDoctrine()->getRepository(Reservation::class)->findOneBy(["id" => $id]);
+        $id = $request->request->get("id");
+        //$reservation = $this->getDoctrine()->getRepository(Reservation::class)->findOneBy(["client" => $client], ["id" => "DESC"]);
+        $reservation = $this->getDoctrine()->getRepository(Reservation::class)->findOneBy(["id" => $id]);
         $modePaiement = $this->getDoctrine()->getRepository(ModePaiement::class)->findOneBy(["id" => 1]);
         $vehicule = new Vehicule();
         if ($reservation == null) {
-            return $this->redirectToRoute('client');
+            return $this->redirectToRoute('espaceClient_index');
         }
         $vehicule = $reservation->getVehicule();
-        $caution = $vehicule->getCaution() * 100;
-        //$$caution = $montant;
+        //$caution = $vehicule->getCaution() * 100;
+        $caution = $montant;
         // Set your secret key. Remember to switch to your live secret key in production.
         // See your keys here: https://dashboard.stripe.com/account/apikeys
         \Stripe\Stripe::setApiKey('sk_test_51INCSpLWsPgEVX5UZKrH0YIs7H7PF8Boao1VcYHEks40it5a39h5KJzcwWxSWUIV6ODWkPS7txKsRyKeSfBknDFC00PAHEBwVP');
