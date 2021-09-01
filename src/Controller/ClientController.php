@@ -889,7 +889,7 @@ class ClientController extends AbstractController
         }
         $vehicule = $reservation->getVehicule();
         //$caution = $vehicule->getCaution() * 100;
-        $caution = $montant;
+        $net_a_payer = (($reservaton->getPrix()*$montant)/100);
         // Set your secret key. Remember to switch to your live secret key in production.
         // See your keys here: https://dashboard.stripe.com/account/apikeys
         \Stripe\Stripe::setApiKey('sk_test_51INCSpLWsPgEVX5UZKrH0YIs7H7PF8Boao1VcYHEks40it5a39h5KJzcwWxSWUIV6ODWkPS7txKsRyKeSfBknDFC00PAHEBwVP');
@@ -899,10 +899,10 @@ class ClientController extends AbstractController
         //$token = $_POST['stripeToken'];
         $token = $request->request->get('stripeToken');
         $charge = \Stripe\Charge::create([
-            'amount' => $caution,
+            'amount' => $net_a_payer,
             'currency' => 'eur',
             'source' => $token,
-            'description' => 'caution pour le véhicule ' . $vehicule->getMarque() . ' ' . $vehicule->getModele(),
+            'description' => 'payement avance pour le véhicule ' . $vehicule->getMarque() . ' ' . $vehicule->getModele() . ' à hauteur de ' . $montant . '% du tarif',
         ]);
 
         $paiement = new Paiement();
