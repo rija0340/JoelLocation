@@ -611,7 +611,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
     function getListeGarantiesAjax() {
         $.ajax({
             type: 'GET',
-            url: "/listeOptions",
+            url: "/backoffice/options/liste",
             timeout: 3000,
             beforeSend: function (xhr) {
             },
@@ -1047,6 +1047,8 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
     //test boucle affichage véhicules
     function addListVehicules() {
 
+        $('#smartwizard').smartWizard("loader", "show");
+
         for (let i = 0; i < getListVehiculeDispo().length; i++) {
             var div = document.createElement('div');
             div.innerHTML = `
@@ -1127,5 +1129,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
             var container = document.getElementById('listeVehiculesDispo');
             container.appendChild(div);
         }
+        $('#smartwizard').smartWizard("loader", "hide");
+
     }
 });

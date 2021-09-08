@@ -19,11 +19,11 @@ class ClientType extends AbstractType
     {
         $builder
             ->add('id', HiddenType::class)
-            ->add('username')
-            //->add('roles')
-            ->add('password', PasswordType::class, [
-                'required' => false,
-            ])
+            // ->add('username')
+            // //->add('roles')
+            // ->add('password', PasswordType::class, [
+            //     'required' => false,
+            // ])
             ->add('nom')
             ->add('prenom')
             ->add('adresse')
@@ -42,7 +42,8 @@ class ClientType extends AbstractType
             ->add('datePermis', DateType::class, [
                 'widget' => 'single_text',
                 'required' => false
-            ]);
+            ])
+            ->add('villeDelivrancePermis');
         //->add('presence')
         //->add('date_inscription')
     }

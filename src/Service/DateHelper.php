@@ -120,8 +120,12 @@ class DateHelper
     {
 
         $duree = date_diff($dateDepart, $dateRetour);
+        $d = $duree->days;
+        if ($d == 0) {
+            $d = 1;
+        }
 
-        return $duree->days;
+        return $d;
     }
 
     function dateNow()

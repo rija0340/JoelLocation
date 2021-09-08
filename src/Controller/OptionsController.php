@@ -37,6 +37,24 @@ class OptionsController extends AbstractController
     }
 
     /**
+     * @Route("backoffice/options/liste", name="listeOptions", methods={"GET"})
+     */
+    public function listeOptions(Request $request)
+    {
+        $data = array();
+        $options = $this->optionsRepo->findAll();
+
+        foreach ($options as $key => $option) {
+
+            $data[$key]['id'] = $option->getId();
+            $data[$key]['appelation'] = $option->getAppelation();
+            $data[$key]['prix'] = $option->getPrix();
+        }
+
+        return new JsonResponse($data);
+    }
+
+    /**
      * @Route("backoffice/options/new", name="options_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
@@ -101,23 +119,5 @@ class OptionsController extends AbstractController
         }
 
         return $this->redirectToRoute('options_index');
-    }
-
-    /**
-     * @Route("/listeOptions", name="listeOptions", methods={"GET"})
-     */
-    public function listeOptions(Request $request)
-    {
-        $data = array();
-        $options = $this->optionsRepo->findAll();
-
-        foreach ($options as $key => $option) {
-
-            $data[$key]['id'] = $option->getId();
-            $data[$key]['appelation'] = $option->getAppelation();
-            $data[$key]['prix'] = $option->getPrix();
-        }
-
-        return new JsonResponse($data);
     }
 }

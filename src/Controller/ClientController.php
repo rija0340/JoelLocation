@@ -41,6 +41,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -137,7 +138,8 @@ class ClientController extends AbstractController
     public function mesConducteurs(Request $request): Response
     {
         $client = $this->getUser();
-
+        $session = new Session();
+        $session->set('test', 'Rija');
         if ($client == null) {
             return $this->redirectToRoute('app_login');
         }
@@ -157,9 +159,9 @@ class ClientController extends AbstractController
      */
     public function newConducteurs(Request $request): Response
     {
+
         $conducteur = new Conducteur();
         $client = $this->getUser();
-
         if ($client == null) {
             return $this->redirectToRoute('app_login');
         }
@@ -376,7 +378,7 @@ class ClientController extends AbstractController
 
         //récupération des réservation en attente (devis envoyé et en attente de validation par client)
         // $reservationEnAttentes = $this->reservRepo->findReservationEnAttente($client, $date);
-        $res_attente_validation = $this->devisRepo->findBy(['client' => $client, 'transformed' => false]);
+        $res_attente_validation = $this->devisRepo->findBy(['client' => $client, 'transformed' => false], ['dateCreation' => 'DESC']);
 
         return $this->render('client/reservation/index.html.twig', [
             'reservation_effectuers' => $reservationEffectuers,
@@ -513,7 +515,6 @@ class ClientController extends AbstractController
             $options = [];
             $garanties = [];
 
-
             $agenceDepart = $request->query->get('agenceDepart');
             $agenceRetour = $request->query->get('agenceRetour');
             $lieuSejour = $request->query->get('lieuSejour');
@@ -524,10 +525,8 @@ class ClientController extends AbstractController
             $arrayOptionsID = (array)$request->query->get('arrayOptionsID');
             $arrayGarantiesID = (array)$request->query->get('arrayGarantiesID');
 
-
             $dateDepart = $this->dateHelper->newDate($dateTimeDepart);
             $dateRetour = $this->dateHelper->newDate($dateTimeRetour);
-
 
             $vehicule = $this->vehiculeRepo->findByIM($vehiculeIM);
             $client = $this->getUser();
@@ -539,6 +538,8 @@ class ClientController extends AbstractController
             $devis->setAgenceRetour($agenceRetour);
             $devis->setDateDepart($dateDepart);
             $devis->setDateRetour($dateRetour);
+
+            $devis->setTransformed(0);
 
             //loop sur id des options
             if ($arrayOptionsID != []) {
@@ -587,9 +588,8 @@ class ClientController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($devis);
             $entityManager->flush();
-
-            $lastDevis = $this->devisRepo->findBy(array(), array('id' => 'DESC'), 1);
-            return new JsonResponse($lastDevis[0]->getId());
+            // $lastDevis = $this->devisRepo->findBy(array(), array('id' => 'DESC'), 1);
+            // return new JsonResponse($lastDevis[0]->getId());
         }
         return $this->redirectToRoute('client_reservations');
     }

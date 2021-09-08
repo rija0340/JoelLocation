@@ -94,6 +94,7 @@ function ganttInit(startDateScale, endDateScale) {
     if (startDateScale != null && endDateScale != null) {
         gantt.config.start_date = new Date(startDateScale);
         gantt.config.end_date = new Date(endDateScale);
+        gantt.config.show_tasks_outside_timescale = true;
 
 
     } else {
@@ -132,31 +133,32 @@ function ganttInit(startDateScale, endDateScale) {
         if (etat == 'encours') {
             window.document.location = '/reservation/contrats_en_cours/' + taskID;
         }
-
         if (etat == 'termine') {
             window.document.location = '/reservation/contrat_termine/' + taskID;
         }
         if (etat == 'nouvelle') {
             window.document.location = '/reservation/show/' + taskID;
-
+        }
+        if (etat == 'stopSale') {
+            window.document.location = '';
         }
 
     });
     //colorer task en fonction valeur "color"
-    gantt.templates.task_class = function (start, end, task) {
-        if (task.color == "agence") {
-            return "rgb(255,0,0)";
-        } else if (task.color == "aeroport") {
-            return "#000000";
-        } else if (task.color == "gareMaritime") {
-            return "#FFC0CB";
-        } else if (task.color == "indisponible") {
-            return "#A9A9A9";
+    // gantt.templates.task_class = function (start, end, task) {
+    //     if (task.color == "agence") {
+    //         return "rgb(255,0,0)";
+    //     } else if (task.color == "aeroport") {
+    //         return "#000000";
+    //     } else if (task.color == "gareMaritime") {
+    //         return "#FFC0CB";
+    //     } else if (task.color == "indisponible") {
+    //         return "#A9A9A9";
 
-        } else if (task.color == "pointLivraison") {
-            return "0d00ff";
-        }
-    };
+    //     } else if (task.color == "pointLivraison") {
+    //         return "0d00ff";
+    //     }
+    // };
 }
 
 function ganttLoadData(data, startDatePeriode, endDatePeriode) {
@@ -304,8 +306,6 @@ function changeScale7jours() {
 
             ganttLoadData(thedata, startDate, startDatePlus7Days(startDate));
         }
-
-
 
     } else {
         ganttInit(datedebutplanning.value, startDatePlus7Days(datedebutplanning.value));
