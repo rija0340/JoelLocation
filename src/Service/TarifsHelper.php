@@ -98,4 +98,19 @@ class TarifsHelper
         }
         return $prix;
     }
+
+    function CinquantePourcent($tarif)
+    {
+
+        $value = (50 * $tarif) / 100;
+
+        return $value;
+    }
+    function Vingtpourcent($tarif)
+    {
+
+        $value = (50 * $tarif) / 100;
+
+        return $value;
+    }
 }

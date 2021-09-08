@@ -22,7 +22,7 @@ function addEvent() {
 }
 
 function addTextButton() {
-    btnValiderElem.innerText = "Valider mon paiement de " + this.value + "€";
+    // btnValiderElem.innerText = "Valider mon paiement de " + this.realValue + "€";
 }
 
 function valider(e) {

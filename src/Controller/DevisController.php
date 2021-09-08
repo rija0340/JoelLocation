@@ -292,10 +292,7 @@ class DevisController extends AbstractController
         $reservation->setDateFin($devis->getDateRetour());
         $reservation->setAgenceDepart($devis->getAgenceDepart());
         $reservation->setAgenceRetour($devis->getAgenceRetour());
-
-
         //boucle pour ajout options 
-
         foreach ($devis->getOptions() as $option) {
             $reservation->addOption($option);
         }

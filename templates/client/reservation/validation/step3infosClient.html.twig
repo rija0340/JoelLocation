@@ -164,23 +164,34 @@
 					</h3>
 				</div>
 				<div>
-					<input type="radio" value={{tarifTotal}} name="modePaiement">
+					<input type="radio" value="100" name="modePaiement">
 					<label for="">Je souhaite régler en une seule fois le montant de
-						{{tarifTotal}}€</label>
+
+						<span id="value">
+							{{tarifTotal}}
+						</span>
+
+						€</label>
 				</div>
 				<div>
-					<input type="radio" value={{cinquantePourcentTarifTotal}} name="modePaiement">
+					<input type="radio" value="50" name="modePaiement">
 					<label for="">Je paie un acompte de
-						{{cinquantePourcentTarifTotal}}€ (50%) et à mon arrivée
+						<span>
+							{{cinquantePourcentTarifTotal}}
+						</span>
+						€ (50%) et à mon arrivée
 						<span class="reste50pourcent">
 							{{ tarifTotal - cinquantePourcentTarifTotal }}€
 						</span>
 					</label>
 				</div>
 				<div>
-					<input type="radio" value={{vingtPourcentTarifTotal}} name="modePaiement">
+					<input type="radio" value="20" name="modePaiement">
 					<label for="">Je paie un acompte de
-						{{vingtPourcentTarifTotal}}€ (20%) et à mon arrivée
+						<span>
+							{{vingtPourcentTarifTotal}}
+						</span>
+						€ (20%) et à mon arrivée
 						<span class="reste20pourcent">
 							{{ tarifTotal - vingtPourcentTarifTotal}}€
 						</span>

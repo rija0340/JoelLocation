@@ -58,8 +58,9 @@ class ClientController extends AbstractController
     private $reservController;
     private $userRepo;
     private $conductRepo;
+    private $devisController;
 
-    public function __construct(ConducteurRepository $conductRepo,  UserRepository $userRepo, ReservationController $reservController, DateHelper $dateHelper, TarifsHelper $tarifsHelper, DevisRepository $devisRepo, ReservationRepository $reservRepo, UserPasswordEncoderInterface $passwordEncoder, VehiculeRepository $vehiculeRepository, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
+    public function __construct(DevisController $devisController, ConducteurRepository $conductRepo,  UserRepository $userRepo, ReservationController $reservController, DateHelper $dateHelper, TarifsHelper $tarifsHelper, DevisRepository $devisRepo, ReservationRepository $reservRepo, UserPasswordEncoderInterface $passwordEncoder, VehiculeRepository $vehiculeRepository, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
     {
         $this->passwordEncoder = $passwordEncoder;
         $this->vehiculeRepo = $vehiculeRepository;
@@ -72,6 +73,7 @@ class ClientController extends AbstractController
         $this->reservController = $reservController;
         $this->userRepo = $userRepo;
         $this->conductRepo = $conductRepo;
+        $this->devisController = $devisController;
     }
 
 
@@ -292,9 +294,9 @@ class ClientController extends AbstractController
             $entityManager->persist($client);
             $entityManager->flush();
 
-            $sommePaiement = $request->request->get('modePaiement');
+            $modePaiement = $request->request->get('modePaiement');
 
-            return $this->redirectToRoute('step4paiement', ['devisID' => $devisID, 'sommePaiement' => $sommePaiement]);
+            return $this->redirectToRoute('step4paiement', ['devisID' => $devisID, 'modePaiement' => $modePaiement]);
         }
 
         if ($devis->getClient() == $client) {
@@ -306,7 +308,8 @@ class ClientController extends AbstractController
                 'cinquantePourcentTarifTotal' => $cinquantePourcentTarifTotal,
                 'devis' => $devis,
                 'tarifTotal' => $tarifTotal,
-                'formClient' => $formClient->createView()
+                'formClient' => $formClient->createView(),
+
             ]);
         } else {
             return $this->render('client/reservation/validation/error.html.twig');
@@ -315,9 +318,9 @@ class ClientController extends AbstractController
 
 
     /**
-     * @Route("/espaceclient/paiement/{devisID}/{sommePaiement}", name="step4paiement", methods={"GET","POST"})
+     * @Route("/espaceclient/paiement/{devisID}/{modePaiement}", name="step4paiement", methods={"GET","POST"})
      */
-    public function step4paiement(Request $request, $devisID, $sommePaiement): Response
+    public function step4paiement(Request $request, $devisID, $modePaiement): Response
     {
 
         $client = $this->getUser();
@@ -339,6 +342,16 @@ class ClientController extends AbstractController
 
         $cinquantePourcentTarifTotal = (50 * $tarifTotal) / 100;
 
+        if ($modePaiement == 20) {
+            $sommePaiement = $this->tarifsHelper->Vingtpourcent($tarifTotal);
+        }
+        if ($modePaiement == 50) {
+            $sommePaiement = $this->tarifsHelper->CinquantePourcent($tarifTotal);
+        }
+        if ($modePaiement == 100) {
+            $sommePaiement = $tarifTotal;
+        }
+
         if ($devis->getClient() == $client) {
             return $this->render('client/reservation/validation/step4paiement.html.twig', [
                 'devis' => $devis,
@@ -348,7 +361,7 @@ class ClientController extends AbstractController
                 'cinquantePourcentTarifTotal' => $cinquantePourcentTarifTotal,
                 'devis' => $devis,
                 'tarifTotal' => $tarifTotal,
-                'sommePaiement' => $sommePaiement
+                'sommePaiement' => $sommePaiement,
             ]);
         } else {
             return $this->render('client/reservation/validation/error.html.twig');
@@ -423,7 +436,6 @@ class ClientController extends AbstractController
             $options = [];
             $garanties = [];
 
-
             $clientID =  $request->query->get('clientID');
             $agenceDepart = $request->query->get('agenceDepart');
             $agenceRetour = $request->query->get('agenceRetour');
@@ -434,7 +446,6 @@ class ClientController extends AbstractController
             $conducteur = $request->query->get('conducteur');
             $arrayOptionsID = (array)$request->query->get('arrayOptionsID');
             $arrayGarantiesID = (array)$request->query->get('arrayGarantiesID');
-
 
             $dateDepart = $this->dateHelper->newDate($dateTimeDepart);
             $dateRetour = $this->dateHelper->newDate($dateTimeRetour);
@@ -872,24 +883,29 @@ class ClientController extends AbstractController
      * @Route("/payement", name="payement", methods={"GET","POST"})
      */
     public function payement(Request $request)
+
     {
+
         $client = $this->getUser();
         if ($client == null) {
             return $this->redirectToRoute('app_login');
         }
         $montant = floatval($request->request->get("montant"));
+
         //id de la reservation
         $id = $request->request->get("id");
+
         //$reservation = $this->getDoctrine()->getRepository(Reservation::class)->findOneBy(["client" => $client], ["id" => "DESC"]);
-        $reservation = $this->getDoctrine()->getRepository(Reservation::class)->findOneBy(["id" => $id]);
+        $devis = $this->getDoctrine()->getRepository(Devis::class)->findOneBy(["id" => $id]);
         $modePaiement = $this->getDoctrine()->getRepository(ModePaiement::class)->findOneBy(["id" => 1]);
         $vehicule = new Vehicule();
-        if ($reservation == null) {
+        if ($devis == null) {
             return $this->redirectToRoute('espaceClient_index');
         }
-        $vehicule = $reservation->getVehicule();
+        $vehicule = $devis->getVehicule();
         //$caution = $vehicule->getCaution() * 100;
-        $net_a_payer = (($reservaton->getPrix()*$montant)/100);
+        // $net_a_payer = (($devis->getPrix() * $montant) / 100);
+        $net_a_payer = $montant * 100;
         // Set your secret key. Remember to switch to your live secret key in production.
         // See your keys here: https://dashboard.stripe.com/account/apikeys
         \Stripe\Stripe::setApiKey('sk_test_51INCSpLWsPgEVX5UZKrH0YIs7H7PF8Boao1VcYHEks40it5a39h5KJzcwWxSWUIV6ODWkPS7txKsRyKeSfBknDFC00PAHEBwVP');
@@ -905,12 +921,15 @@ class ClientController extends AbstractController
             'description' => 'payement avance pour le véhicule ' . $vehicule->getMarque() . ' ' . $vehicule->getModele() . ' à hauteur de ' . $montant . '% du tarif',
         ]);
 
+        $this->reserverDevis($devis);
+        $reservation = $this->reservRepo->findOneBy(['numDevis' => $devis->getId()]);
+
         $paiement = new Paiement();
         $paiement->setReservation($reservation);
         $paiement->setModePaiement($modePaiement);
         $paiement->setUtilisateur($client);
         $paiement->setClient($client);
-        $paiement->setMontant($vehicule->getCaution());
+        $paiement->setMontant($net_a_payer);
         $paiement->setDatePaiement($this->dateHelper->dateNow());
         $paiement->setMotif('caution pour le véhicule ' . $vehicule->getMarque() . ' ' . $vehicule->getModele());
         $entityManager = $this->getDoctrine()->getManager();
@@ -918,5 +937,48 @@ class ClientController extends AbstractController
         $entityManager->flush();
         return $this->redirectToRoute('espaceClient_index');
         //return $this->redirectToRoute('client');
+    }
+
+
+    public function reserverDevis(Devis $devis)
+    {
+
+        $devis->setTransformed(true);
+        $devisManager =  $this->devisController->getDoctrine()->getManager();
+        $devisManager->persist($devis);
+        $devisManager->flush();
+
+        $reservation = new Reservation();
+        $reservation->setVehicule($devis->getVehicule());
+        $reservation->setClient($devis->getClient());
+        $reservation->setDateDebut($devis->getDateDepart());
+        $reservation->setDateFin($devis->getDateRetour());
+        $reservation->setAgenceDepart($devis->getAgenceDepart());
+        $reservation->setAgenceRetour($devis->getAgenceRetour());
+        $reservation->setNumDevis($devis->getId()); //reference numero devis reservé
+        //boucle pour ajout options 
+        foreach ($devis->getOptions() as $option) {
+            $reservation->addOption($option);
+        }
+
+        //boucle pour ajout garantie 
+
+        foreach ($devis->getGaranties() as $garantie) {
+            $reservation->addGaranty($garantie);
+        }
+
+        $reservation->setPrix($devis->getPrix());
+        $reservation->setDateReservation(new \DateTime('NOW'));
+        $reservation->setCodeReservation('devisTransformé');
+        // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
+        $lastID = $this->reservRepo->findBy(array(), array('id' => 'DESC'), 1);
+        $currentID = $lastID[0]->getId() + 1;
+        $reservation->setRefRes("CPTGP", $currentID);
+
+        $entityManager = $this->reservController->getDoctrine()->getManager();
+        $entityManager->persist($reservation);
+        $entityManager->flush();
+        // dump($reservation);
+        // die();
     }
 }
