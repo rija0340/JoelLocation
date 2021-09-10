@@ -125,6 +125,44 @@ class TarifsController extends AbstractController
     }
 
     /**
+     * @Route("/tarif/newTarif", name="tarif_newTarif", methods={"GET","POST"})
+     */
+    public function newTarif(Request $request): Response
+    {
+
+        $tarif = new Tarifs();
+        $marque = $request->query->get('marque');
+        $modele = $request->query->get('modele');
+
+        $marque = $this->marqueRepo->findOneBy(['libelle' => $marque]);
+        $modele = $this->modeleRepo->findOneBy(['libelle' => $modele]);
+
+        $troisJours = $request->query->get('troisJours');
+        $septJours = $request->query->get('septJours');
+        $quinzeJours = $request->query->get('quinzeJours');
+        $trenteJours = $request->query->get('trenteJours');
+
+        $mois = $request->query->get('mois');
+
+
+        $tarif->setMarque($marque);
+        $tarif->setModele($modele);
+        $tarif->setTroisJours(floatval($troisJours));
+        $tarif->setSeptJours(floatval($septJours));
+        $tarif->setQuinzeJours(floatval($quinzeJours));
+        $tarif->setTrenteJours(floatval($trenteJours));
+        $tarif->setMois($mois);
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($tarif);
+        $entityManager->flush();
+
+
+        return $this->redirectToRoute('tarifs_index');
+    }
+
+
+    /**
      * @Route("/tarif/{id}", name="tarif_show", methods={"GET"})
      */
     public function show(Tarifs $tarif): Response
@@ -145,7 +183,7 @@ class TarifsController extends AbstractController
         if ($formEdit->isSubmitted() && $formEdit->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('tarif_index');
+            return $this->redirectToRoute('tarifs_index');
         }
 
         return $this->render('admin/tarifs/edit.html.twig', [

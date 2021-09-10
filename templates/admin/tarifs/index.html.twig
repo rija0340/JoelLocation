@@ -44,17 +44,17 @@
 				<tr>
 					<td></td>
 					{% for mois  in listeMois %}
-						<th colspan="4" class="text-center">{{mois}}</th>
+						<th colspan="5" class="text-center">{{mois}}</th>
 					{% endfor %}
 				</tr>
 				<tr>
-
 					<th></th>
 					{% for mois  in listeMois %}
 						<th>3j</th>
 						<th>7j</th>
 						<th>15j</th>
 						<th>30j</th>
+						<th>Actions</th>
 					{% endfor %}
 				</tr>
 				{% set i = 0 %}
@@ -62,24 +62,42 @@
 					<tr>
 
 						<th>{{listeVehicules[i]}}</th>
+
+						{# compteur pour mois , pour reperer mois cliqué #}
+						{% set j = 1 %}
 						{% for tarif in tarifs %}
 							{% if tarif != null %}
 								<td>{{tarif.troisJours}}</td>
 								<td>{{tarif.septJours}}</td>
 								<td>{{tarif.quinzeJours}}</td>
 								<td>{{tarif.trenteJours}}</td>
+								<td class="d-flex justify-content-center">
+									<div class="btn-group p-0" role="group">
+										<button id="btnGroupDrop1" type="button" class="btn btn-link p-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+											<i class="fa fa-bars"></i>
+										</button>
+										<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+											<a class="dropdown-item" href="{{ path('tarif_edit', {'id': tarif.id}) }}" class="btn btn-link">
+												Modifier
+											</a>
+											<a class="dropdown-item" href="#">Supprimer</a>
+											<a class="dropdown-item" href="#">Dropdown link</a>
+										</div>
+									</div>
+								</td>
 							{% else %}
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
+								<td class="hide" id="idMois">{{j}}</td>
+								<td colspan="5" class="text-center">
+									<button class="btn btn-dark" id="ajouterTarif">Ajouter</button>
+								</td>
 							{% endif %}
+							{% set j = j + 1 %}
+
 						{% endfor %}
 					</tr>
 					{% set i = i + 1 %}
 				{% endfor %}
 			</table>
-
 		</div>
 		<div class="row mt-5">
 			<div class="col-sm-12">
@@ -164,4 +182,6 @@
 	<script src="../../admin/vendors/pdfmake/build/vfs_fonts.js"></script>
 	<script src="../../js/admin/datatable.fr.js"></script>
 	<script src="../../js/admin/tarifs.js"></script>
+	<script src="../../js/admin/rowEditableTarif.js"></script>
+
 {% endblock  %}
