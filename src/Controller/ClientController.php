@@ -33,9 +33,11 @@ use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
 use App\Repository\ConducteurRepository;
 use App\Controller\ReservationController;
+use App\Form\ClientRegisterType;
 use App\Repository\ReservationRepository;
 use App\Repository\EtatReservationRepository;
 use App\Repository\ModeReservationRepository;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -80,9 +82,10 @@ class ClientController extends AbstractController
     /**
      * @Route("/espaceclient", name="espaceClient_index")
      */
-    public function client(Request $request): Response
+    public function client(Request $request, UserPasswordEncoderInterface $encoder): Response
     {
         $client = $this->getUser();
+        $notification_pwd = null;
 
         if ($client == null) {
             return $this->redirectToRoute('app_login');
@@ -97,26 +100,35 @@ class ClientController extends AbstractController
         $etat_reservation = $this->getDoctrine()->getRepository(EtatReservation::class)->findOneBy(['id' => 1]);
         // $form = $this->createForm(ReservationclientType::class, $reservation);
         $formClient = $this->createForm(ClientType::class, $client);
-        $formClientCompte = $this->createForm(ClientCompteType::class);
+        $formClientCompte = $this->createForm(ClientCompteType::class, $client);
         // $form->handleRequest($request);
         $formClientCompte->handleRequest($request);
 
         if ($formClientCompte->isSubmitted() && $formClientCompte->isValid()) {
 
-            if ($client->getPassword() == '') {
-                $client->setPassword($client->getRecupass());
+            //traitement nouveau mot de passe 
+            $old_pwd = $formClientCompte->get('old_password')->getData();
+
+            if ($encoder->isPasswordValid($client, $old_pwd)) {
+
+                $new_pwd = $formClientCompte->get('new_password')->getData();
+                $password = $encoder->encodePassword($client, $new_pwd);
+                $client->setPassword($password);
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->flush();
+
+                $notification_pwd = "Votre mot de passe a bien été mise à jour.";
+
+                //redirection vers logout pour entrer nouveau mot de passe 
+                return $this->redirectToRoute('app_logout');
             } else {
-                $client->setPassword($this->passwordEncoder->encodePassword(
-                    $client,
-                    $client->getPassword()
-                ));
-                $client->setRecupass($client->getPassword());
+                $notification_pwd = "Votre mot de passe actuel n'est pas le bon.";
             }
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($reservation);
-            $entityManager->flush();
-            return $this->redirectToRoute('app_login');
+            // $entityManager = $this->getDoctrine()->getManager();
+            // $entityManager->persist($reservation);
+            // $entityManager->flush();
+            // return $this->redirectToRoute('app_login');
         }
 
         // page client.html auparavant
@@ -127,6 +139,7 @@ class ClientController extends AbstractController
             // 'form' => $form->createView(),
             'formClient' => $formClient->createView(),
             'formClientCompte' => $formClientCompte->createView(),
+            'notification_pwd' => $notification_pwd
 
         ]);
     }
@@ -388,6 +401,7 @@ class ClientController extends AbstractController
         $reservationEncours = $this->reservRepo->findReservationEncours($client, $date);
 
         $res_attente_dateDebut = $this->reservRepo->findReservationsAttenteDateDebut($client, $date);
+
 
         //récupération des réservation en attente (devis envoyé et en attente de validation par client)
         // $reservationEnAttentes = $this->reservRepo->findReservationEnAttente($client, $date);
@@ -822,7 +836,7 @@ class ClientController extends AbstractController
     public function inscription(Request $request): Response
     {
         $user = new User();
-        $form = $this->createForm(ClientType::class, $user);
+        $form = $this->createForm(ClientRegisterType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -841,7 +855,7 @@ class ClientController extends AbstractController
 
             return $this->redirectToRoute('app_login');
         }
-        return $this->render('accueil/inscription.html.twig', [
+        return $this->render('accueil/inscription2.html.twig', [
             'controller_name' => 'InscriptionController',
             'user' => $user,
             'form' => $form->createView(),
@@ -921,21 +935,26 @@ class ClientController extends AbstractController
             'description' => 'payement avance pour le véhicule ' . $vehicule->getMarque() . ' ' . $vehicule->getModele() . ' à hauteur de ' . $montant . '% du tarif',
         ]);
 
-        $this->reserverDevis($devis);
-        $reservation = $this->reservRepo->findOneBy(['numDevis' => $devis->getId()]);
+        if ($charge->status == "succeeded") {
 
-        $paiement = new Paiement();
-        $paiement->setReservation($reservation);
-        $paiement->setModePaiement($modePaiement);
-        $paiement->setUtilisateur($client);
-        $paiement->setClient($client);
-        $paiement->setMontant($net_a_payer);
-        $paiement->setDatePaiement($this->dateHelper->dateNow());
-        $paiement->setMotif('caution pour le véhicule ' . $vehicule->getMarque() . ' ' . $vehicule->getModele());
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($paiement);
-        $entityManager->flush();
-        return $this->redirectToRoute('espaceClient_index');
+            $this->reserverDevis($devis);
+            $reservation = $this->reservRepo->findOneBy(['numDevis' => $devis->getId()]);
+
+            $paiement = new Paiement();
+            $paiement->setReservation($reservation);
+            $paiement->setModePaiement($modePaiement);
+            $paiement->setUtilisateur($client);
+            $paiement->setClient($client);
+            $paiement->setMontant($net_a_payer);
+            $paiement->setDatePaiement($this->dateHelper->dateNow());
+            $paiement->setMotif('caution pour le véhicule ' . $vehicule->getMarque() . ' ' . $vehicule->getModele());
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($paiement);
+            $entityManager->flush();
+            return $this->redirectToRoute('espaceClient_index');
+        } else {
+            echo "Erreur de paiement !";
+        }
         //return $this->redirectToRoute('client');
     }
 

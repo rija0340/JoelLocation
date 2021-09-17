@@ -21,15 +21,7 @@
 			{{ form_widget(formClient.prenom,{'attr' : { 'readonly' : 'readonly'}  } )}}
 
 		</div>
-		{# <div class="form-group col-md-6">
-											<label for="">Username :</label>
-											{{ form_widget(formClient.username,{'attr' : { 'readonly' : 'readonly'}  } )}}
-										</div>
-										<div class="form-group col-md-6">
-											<label for="">Mot de passe :</label>
-											{{ form_widget(formClient.password,{'attr' : { 'readonly' : 'readonly'}  } )}}
-								
-										</div> #}
+
 		<div class="form-group col-md-6">
 			<label for="">Adresse email :</label>
 			{{ form_widget(formClient.mail,{'attr' : { 'readonly' : 'readonly'}  } )}}
@@ -106,34 +98,46 @@
 		</a>
 	</div>
 
-	<h4 class="mb-0 pb-0">
-		<i class="fa fa-user"></i>
-		Mon compte
-	</h4>
-	<div class="clearfix"></div>
-	<div class="x_title"></div>
 
-	{{ form_start(formClientCompte) }}
-	<div class="row">
-		<div class="col-md-6">
-			<label for="">Username :
-			</label>
-			{{ form_widget(formClientCompte.username) }}
-		</div>
-		<div class="col-md-6">
-			<label for="">Mot de passe :
-			</label>
-			{{ form_widget(formClientCompte.password) }}
+	<div class="monCompte mt-4">
+
+		<h4 class="mb-0 pb-0">
+			<i class="fa fa-user"></i>
+			Mon compte
+		</h4>
+
+
+		<div class="clearfix"></div>
+		<div class="x_title"></div>
+		{% if notification_pwd %}
+
+			<div class="alert alert-warning alert-dismissible fade show" role="alert" id="notification_pwd">
+				{{notification_pwd}}
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+
+		{% endif %}
+
+		<div class="col-lg-8 col-md-8 ml-auto mr-auto">
+			{{ form_start(formClientCompte) }}
+
+			{{ form_widget(formClientCompte) }}
+			<div class="text-center mt-3">
+				<button class="btn btn-danger">
+					<i class="fa fa-book" aria-hidden="true"></i>
+					{{ button_label|default('Valider') }}
+				</button>
+			</div>
+			{{ form_end(formClientCompte) }}
 		</div>
 	</div>
 
-	<div class="text-center mt-3">
-		<button class="btn btn-danger">
-			<i class="fa fa-book" aria-hidden="true"></i>
-			{{ button_label|default('Valider') }}
-		</button>
-	</div>
-	{{ form_end(formClientCompte) }}
 
 {% endblock %}
-{% block javascripts %}{% endblock %}
+{% block javascripts %}
+
+	<script src="{{asset('js/client/compteClient.js')}}"></script>
+
+{% endblock %}

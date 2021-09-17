@@ -65,7 +65,6 @@ class TarifsController extends AbstractController
         $tarifsParVehicule = [];
         //arrangement des donnée Janvier -> décembre
         foreach ($listeUniqueVehicules as $veh) {
-            dump($veh);
             $ordered = [];
             foreach ($listeMois as $mois) {
                 $i = 0;
@@ -129,6 +128,7 @@ class TarifsController extends AbstractController
      */
     public function newTarif(Request $request): Response
     {
+
 
         $tarif = new Tarifs();
         $marque = $request->query->get('marque');

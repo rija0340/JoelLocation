@@ -1,0 +1,11 @@
+/* style pour form-control inputs */
+
+.form-control {
+    padding: 2px;
+    font-size: 0.9em;
+}
+
+.table td, .table th {
+    padding: .75rem;
+    vertical-align: middle;
+}

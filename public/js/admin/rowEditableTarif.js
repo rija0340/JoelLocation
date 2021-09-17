@@ -26,23 +26,23 @@ function addEventListener() {
 
 function getData() {
 
+    console.log(this.parentNode);
 
-    var numMois = this.parentElement.previousElementSibling.innerText;
-    var vehicule = this.parentElement.parentElement.firstElementChild.innerText;
+    var numMois = this.parentElement.parentElement.previousElementSibling.innerText;
+    var vehicule = this.parentElement.parentElement.parentElement.firstElementChild.innerText;
 
     modele = vehicule.substring(vehicule.indexOf(' ') + 1);
     marque = vehicule.split(' ')[0];
     month = getMonth(numMois);
 
-    console.log(marque);
-    console.log(modele);
-    console.log(month);
+    console.log('ity ny volana' + month);
 
-
+    console.log('marque :' + marque);
+    console.log('modele :' + modele);
+    console.log('mois :' + month);
 
     createInputs(this);
     disableButtons();
-
 
 }
 
@@ -52,12 +52,37 @@ function createInputs(clickedBtn) {
     thisElement = clickedBtn.parentElement;
     th = clickedBtn.parentElement.parentElement;
 
-    td1 = document.createElement('td');
-    td2 = document.createElement('td');
-    td3 = document.createElement('td');
-    td4 = document.createElement('td');
-    td5 = document.createElement('td');
+    div1 = document.createElement('div');
+    div1.classList.add('form-group');
+    div1.classList.add('text-center');
 
+    div2 = document.createElement('div');
+    div2.classList.add('form-group');
+    div2.classList.add('text-center');
+
+    div3 = document.createElement('div');
+    div3.classList.add('form-group');
+    div3.classList.add('text-center');
+
+    div4 = document.createElement('div');
+    div4.classList.add('form-group');
+    div4.classList.add('text-center');
+
+    divBtn = document.createElement('div');
+    divBtn.classList.add('form-group');
+    divBtn.classList.add('text-center');
+
+    lbl1 = document.createElement('label');
+    lbl2 = document.createElement('label');
+    lbl3 = document.createElement('label');
+    lbl4 = document.createElement('label');
+    lblBtn = document.createElement('label');
+
+    lbl1.innerText = '3j';
+    lbl2.innerText = '7j';
+    lbl3.innerText = '15j';
+    lbl4.innerText = '30j';
+    lblBtn.innerText = "Action";
 
     input1 = document.createElement('input');
     input2 = document.createElement('input');
@@ -68,32 +93,54 @@ function createInputs(clickedBtn) {
     input1.style.width = '3em';
     input1.style.height = '30px';
     input1.classList.add('troisJours');
+    input1.classList.add('form-control');
 
     input2.style.width = '3em';
     input2.style.height = '30px';
     input2.classList.add('septJours');
-
+    input2.classList.add('form-control');
 
     input3.style.width = '3em';
     input3.style.height = '30px';
     input3.classList.add('quinzeJours');
-
+    input3.classList.add('form-control');
 
     input4.style.width = '3em';
     input4.style.height = '30px';
     input4.classList.add('trenteJours');
-
+    input4.classList.add('form-control');
 
     buttonOK.classList.add('btn');
     buttonOK.classList.add('btn-danger');
     buttonOK.innerText = 'Ok';
     buttonOK.addEventListener('click', traitementInputs, false);
 
-    td1.appendChild(input1);
-    td2.appendChild(input2);
-    td3.appendChild(input3);
-    td4.appendChild(input4);
-    td5.appendChild(buttonOK);
+    div1.appendChild(lbl1);
+    div1.appendChild(input1);
+
+    div2.appendChild(lbl2);
+    div2.appendChild(input2);
+
+    div3.appendChild(lbl3);
+    div3.appendChild(input3);
+
+    div4.appendChild(lbl4);
+    div4.appendChild(input4);
+
+    divBtn.appendChild(lblBtn);
+    divBtn.appendChild(buttonOK);
+
+    td1 = document.createElement('td');
+    td2 = document.createElement('td');
+    td3 = document.createElement('td');
+    td4 = document.createElement('td');
+    td5 = document.createElement('td');
+
+    td1.appendChild(div1);
+    td2.appendChild(div2);
+    td3.appendChild(div3);
+    td4.appendChild(div4);
+    td5.appendChild(divBtn);
 
     th.insertBefore(td1, thisElement);
     th.insertBefore(td2, thisElement);
@@ -105,8 +152,6 @@ function createInputs(clickedBtn) {
 }
 
 function getMonth(numMonth) {
-
-
     var month;
     switch (parseInt(numMonth)) {
         case 1:
@@ -153,10 +198,10 @@ function getMonth(numMonth) {
 }
 
 function traitementInputs() {
-    troisJours = document.querySelector("input[class='troisJours']").value;
-    septJours = document.querySelector("input[class='septJours']").value;
-    quinzeJours = document.querySelector("input[class='quinzeJours']").value;
-    trenteJours = document.querySelector("input[class='trenteJours']").value;
+    troisJours = document.querySelector("input[class='troisJours form-control']").value;
+    septJours = document.querySelector("input[class='septJours form-control']").value;
+    quinzeJours = document.querySelector("input[class='quinzeJours form-control']").value;
+    trenteJours = document.querySelector("input[class='trenteJours form-control']").value;
     saveInputs();
 }
 
@@ -176,6 +221,7 @@ function saveInputs() {
             'trenteJours': trenteJours
 
         },
+
         Type: "json",
         success: function (data) {
             window.location.href = '/tarifs';
