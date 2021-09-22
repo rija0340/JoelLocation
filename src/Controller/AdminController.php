@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Classe\Mail;
 use App\Entity\Tarifs;
 use App\Entity\Reservation;
 use App\Form\RechercheAVType;
@@ -199,17 +200,14 @@ class AdminController extends AbstractController
   }
 
   /**
-   * @Route("/testerCode", name="testerCode", methods={"GET","POST"})
+   * @Route("/testercode", name="testerCode", methods={"GET","POST"})
    */
   public function testerCode(): Response
   {
+    $mail = new Mail();
+    $mail->send('liaksamy@gmail.com', 'Miangaly', 'Mail test', 'Bonjour Randrianarimanana, inona ny vaovao ? Manndeha ve ny code ao?');
 
-    $date = new \DateTime('now');
-    $date2 = $date->format('Y-m-d');
-    $dateDebut = \DateTime::createFromFormat('D M d Y H:i:s e+', date('Y-m-d', mktime()));
-    $dateFin = \DateTime::createFromFormat('D M d Y H:i:s e+', $date2);
-    dump($dateDebut, $dateFin, $date2);
-    die();
+
     return $this->render('admin/agence/presentation_agence/index.html.twig');
   }
 }

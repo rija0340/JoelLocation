@@ -23,7 +23,7 @@
 
 					{% if app.user %}
 						<div class="mb-3">
-							Vous êtes en tant que :
+							Vous êtes connecté en tant que :
 							{{ app.user.username }},
 							<a href="{{ path('app_logout') }}">Logout</a>
 						</div>
@@ -44,6 +44,7 @@
 							Connecter
 						</button>
 						&nbsp;&nbsp;&nbsp;<a href="{{ path('inscription') }}" class="button">S'inscrire</a>
+						&nbsp;&nbsp;&nbsp;<a href="{{ path('reset_password') }}" class="btn btn-link">Mot de passe oublié</a>
 					</br>
 				</form>
 			</br>

@@ -1,4 +1,4 @@
-<div class="">
+{# <div class="">
 	<ul class="nav flex-column" id="menu">
 		<li class="nav-item {% if app.request.attributes.get('_route') starts with 'espaceClient_index' %}current-menu w-100{% endif %}">
 			<a class="" href="{{path('espaceClient_index')}}">
@@ -26,4 +26,39 @@
 			<a href="{{ path('accueil') }}" class="btn btn-warning w-100 p-1">Aller sur le site Joellocation</a>
 		</li>
 	</ul>
-</div>
+</div> #}
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light mdl-shadow--2dp ">
+	<a href="{{path('accueil')}}">
+		<img src="../../images/Joel-Location-new.png" width="70" height="70" class="d-inline-block align-top" alt="">
+	</a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse " id="navbarNav">
+		<ul class="navbar-nav ml-auto ">
+			<li class="nav-item {% if app.request.attributes.get('_route') starts with 'espaceClient_index' %} current {% endif %} ">
+				<a class="nav-link" href="{{path('espaceClient_index')}}">
+					Mes informations</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="{{path('client_reservations')}}">
+					Mes réservations</a>
+			</li>
+
+			<li class="nav-item">
+				<a class="nav-link" href="{{path('client_nouvelleReserv')}}">
+					Nouvelle réseration</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" tabindex="-1" class="text-dark" href="{{path('client_mesConducteurs')}}">
+					Mes conducteurs</a>
+			</li>
+			<li class="nav-item">
+				<a class=" btnLogout nav-link" tabindex="-1" href="{{path('app_logout')}}" class="text-white">Deconnexion</a>
+			</li>
+
+		</ul>
+	</div>
+</nav>

@@ -60,7 +60,8 @@
 		<link
 		rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
 		{# <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia"> #}
-		<link rel="stylesheet" href="/assets/css/owl.carousel.css"> {% block stylesheets %}{% endblock %}
+		<link rel="stylesheet" href="/assets/css/owl.carousel.css">
+		<link rel="stylesheet" href="{{ asset('bundles/mercuryseriesflashy/css/flashy.css') }}"> {% block stylesheets %}{% endblock %}
 		<style></style>
 	</head>
 	<body>
@@ -125,5 +126,7 @@
 		<script src="/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 
 		{% block javascripts %}{% endblock %}
+		<!-- Include Flashy default partial -->
+		{{ include('@MercurySeriesFlashy/flashy.html.twig') }}
 	</body>
 </html>

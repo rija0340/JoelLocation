@@ -47,7 +47,8 @@
 		<link href="{{ asset( 'css/admin/custom_styles.css')}}" rel="stylesheet">
 
 		<link href="{{ asset( 'css/admin/nav.css')}}" rel="stylesheet">
-		<link href="{{ asset( 'css/admin/easypiechart.css')}}" rel="stylesheet"> {% block stylesheets %}{% endblock %}
+		<link href="{{ asset( 'css/admin/easypiechart.css')}}" rel="stylesheet">
+		<link rel="stylesheet" href="{{ asset('bundles/mercuryseriesflashy/css/flashy.css') }}"> {% block stylesheets %}{% endblock %}
 
 		</head>
 
@@ -98,9 +99,9 @@
 	<!-- NProgress -->
 	<script src="../../admin/vendors/nprogress/nprogress.js"></script>
 	{# <!-- Chart.js -->
-																			<script src="../../admin/vendors/Chart.js/dist/Chart.min.js"></script>
-																			<!-- gauge.js -->
-																			<script src="../../admin/vendors/gauge.js/dist/gauge.min.js"></script> #}
+																											<script src="../../admin/vendors/Chart.js/dist/Chart.min.js"></script>
+																											<!-- gauge.js -->
+																											<script src="../../admin/vendors/gauge.js/dist/gauge.min.js"></script> #}
 	<!-- bootstrap-progressbar -->
 	<script src="../../admin/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
 	<!-- iCheck -->
@@ -127,5 +128,9 @@
 	<!-- Custom Theme Scripts -->
 	<script src="../../admin/build/js/custom.min.js"></script>
 	<script src="../../js/admin/nav.js"></script>
+	<!-- Load Flashy default JavaScript -->
+	<script src="{{ asset('bundles/mercuryseriesflashy/js/flashy.js') }}"></script>
 	{% block javascripts %}{% endblock %}
+	<!-- Include Flashy default partial -->
+	{{ include('@MercurySeriesFlashy/flashy.html.twig') }}
 </body></html>

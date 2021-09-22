@@ -44,7 +44,7 @@ class ClientRegisterType extends AbstractType
             ->add('lieuNaissance')
             ->add('complementAdresse')
             ->add('ville')
-            ->add('codePostal', FloatType::class)
+            ->add('codePostal', TextType::class)
             ->add('villeDelivrancePermis')
             ->add('password', RepeatedType::class, [
 

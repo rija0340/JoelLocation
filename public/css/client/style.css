@@ -31,12 +31,22 @@ tr:nth-child(even) td {
     display : none !important;
 }
 
+
+.containerNav{
+    margin-left: 75px;
+    margin-right: 75px;
+    padding-top: 5px;
+    
+}
+
 .containerBody{
     padding : 20px 10px 10px 20px;
-    margin-top: 50px;
+    margin-top: 25px;
     margin-left: 75px;
     margin-right: 75px;
 }
+
+
 
 /* style pour smart wizard */
 .x_panel{
@@ -85,15 +95,17 @@ tr:nth-child(even) td {
 
  /*************** style nav ************ */
 
-.current-menu {
+.current {
     color: #fff;
-    background-color: #dc3545;
-    border-color: #dc3545;
+  }
+
+  .current a{
+    color: #fff;
   }
 
 .nav > li {
     /* margin : 5px; */
-    padding : 5px;
+    /* padding : 5px; */
 }
 
 #menu > li > a{

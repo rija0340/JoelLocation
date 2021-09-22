@@ -75,11 +75,6 @@ class Devis
      * @ORM\Column(type="float")
      */
     private $prix;
-
-
-
-
-
     /**
      * @ORM\Column(type="string", length=1000, nullable=true)
      */
@@ -104,7 +99,6 @@ class Devis
      * @ORM\ManyToMany(targetEntity=Garantie::class, inversedBy="devis")
      */
     private $garanties;
-
 
 
     public function __construct()

@@ -12,7 +12,8 @@
 		href="{{ asset( 'admin/vendors/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet">
 		<!-- Font Awesome -->
 		<link href="{{ asset( 'admin/vendors/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet">
-		<link href="{{ asset( 'css/client/style.css')}}" rel="stylesheet"> {% block stylesheets %}{% endblock %}
+		<link href="{{ asset( 'css/client/style.css')}}" rel="stylesheet">
+		<link rel="stylesheet" href="{{ asset('bundles/mercuryseriesflashy/css/flashy.css') }}"> {% block stylesheets %}{% endblock %}
 		</head>
 		<body>
 			<div class="preloader">
@@ -22,19 +23,22 @@
 			<div
 				class="site">
 				{# <header class="d-flex align-items-center"></header> #}
-				<div class="containerBody mdl-shadow--2dp">
-					<div class="row">
-						<div class="col-md-3 col-sm-3 "> {% block nav %}{% endblock %}
-							{% include "client/layouts/nav.html.twig" %}
-						</div>
-						<div class="col-md-9 col-sm-9 "> {% block body %}{% endblock %}
-							</div>
-						</div>
+				<div class="">
+					<div class="containerNav ">
+						{% include "client/layouts/nav.html.twig" %}
+
+					</div>
+				</div>
+				<div class="containerBody mdl-shadow--2dp"> {% block body %}{% endblock %}
 					</div>
 				</div>
 				<!--Required JS files-->
 				<!-- jQuery -->
 				<script src="../../plugins/jquery/jquery.min.js"></script>
+				<!-- Load Flashy default JavaScript -->
+				<script src="{{ asset('bundles/mercuryseriesflashy/js/flashy.js') }}"></script>
 				{% block javascripts %}{% endblock %}
+				<!-- Include Flashy default partial -->
+				{{ include('@MercurySeriesFlashy/flashy.html.twig') }}
 			</body>
 		</html>

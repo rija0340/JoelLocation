@@ -190,6 +190,7 @@ class AccueilController extends AbstractController
      */
     public function redirection()
     {
+
         $user = new User();
         $user = $this->getUser();
         if (in_array("ROLE_CLIENT", $user->getRoles())) {
@@ -207,9 +208,6 @@ class AccueilController extends AbstractController
         return $this->redirectToRoute('app_logout');
         //return $this->render('accueil/contact.html.twig');
     }
-
-
-
 
     /**
      * @Route("/teste", name="teste")

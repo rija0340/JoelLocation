@@ -9,6 +9,14 @@
 	<div class="clearfix"></div>
 	<div class="x_title"></div>
 
+	{% for message in app.flashes('notification') %}
+
+		<div class="alert alert-info">
+			{{message}}
+		</div>
+
+	{% endfor %}
+
 	{{ form_start(formClient) }}
 
 	<div class="row">

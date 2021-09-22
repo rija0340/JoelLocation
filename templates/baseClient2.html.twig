@@ -12,7 +12,8 @@
 		href="{{ asset( 'admin/vendors/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet">
 		<!-- Font Awesome -->
 		<link href="{{ asset( 'admin/vendors/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet">
-		<link href="{{ asset( 'css/client/baseClient2.css')}}" rel="stylesheet"> {% block stylesheets %}{% endblock %}
+		<link href="{{ asset( 'css/client/baseClient2.css')}}" rel="stylesheet">
+		<link rel="stylesheet" href="{{ asset('bundles/mercuryseriesflashy/css/flashy.css') }}"> {% block stylesheets %}{% endblock %}
 		</head>
 		<body>
 			<div class="preloader">
@@ -31,6 +32,8 @@
 					</div>
 				</div>
 				<script src="../../plugins/jquery/jquery.min.js"></script>
+				<!-- Load Flashy default JavaScript -->
+				<script src="{{ asset('bundles/mercuryseriesflashy/js/flashy.js') }}"></script>
 				{% block javascripts %}{% endblock %}
 			</body>
 		</html>

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Classe\ClasseReservation;
 use DateTime;
 use DateTimeZone;
 use App\Entity\User;
@@ -25,6 +26,7 @@ use App\Repository\MarqueRepository;
 use App\Repository\ModeleRepository;
 use App\Repository\VehiculeRepository;
 use App\Repository\ReservationRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,8 +50,9 @@ class ReservationController extends AbstractController
     private $dateHelper;
     private $tarifsHelper;
     private $marqueRepo;
+    private $em;
 
-    public function __construct(MarqueRepository $marqueRepo, ModeleRepository $modeleRepo, TarifsHelper $tarifsHelper, DateHelper $dateHelper, TarifsRepository $tarifsRepo, ReservationRepository $reservationRepo,  UserRepository $userRepo, VehiculeRepository $vehiculeRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
+    public function __construct(EntityManagerInterface $em, MarqueRepository $marqueRepo, ModeleRepository $modeleRepo, TarifsHelper $tarifsHelper, DateHelper $dateHelper, TarifsRepository $tarifsRepo, ReservationRepository $reservationRepo,  UserRepository $userRepo, VehiculeRepository $vehiculeRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
     {
 
         $this->reservationRepo = $reservationRepo;
@@ -62,117 +65,10 @@ class ReservationController extends AbstractController
         $this->tarifsHelper = $tarifsHelper;
         $this->modeleRepo = $modeleRepo;
         $this->marqueRepo = $marqueRepo;
+        $this->em = $em;
     }
 
-    /**
-     * @Route("/vehiculeDispoFonctionDates", name="vehiculeDispoFonctionDates",methods={"GET","POST"}))
-     */
-    public function vehiculeDispoFonctionDates(Request $request)
-    {
 
-        $dateDepart = $request->query->get('dateDepart');
-        $dateRetour = $request->query->get('dateRetour');
-
-        $dateDebut = new \DateTime($dateDepart);
-        $dateFin = new \DateTime($dateRetour);
-
-        $datas = array();
-        $data = array();
-        $listeUnique = [];
-        $listeVehiculesDispo = array();
-        $listeVehiculesDispo = $this->getVehiculesDispo($dateDebut, $dateFin);
-
-        foreach ($listeVehiculesDispo as $key => $vehicule) {
-            $data[$key]['marque'] = $vehicule->getMarque()->getLibelle();
-            $data[$key]['modele'] = $vehicule->getModele()->getLibelle();
-        }
-
-        $listeUnique = array_unique($data, SORT_REGULAR);
-        // dump($listeUnique);
-        // die();
-
-        //data2 => liste véhicule sans immatriculation
-        $data2 = array();
-        foreach ($listeUnique as $key =>  $v) {
-
-            $marque = $this->marqueRepo->findOneBy(['libelle' => $v['marque']]);
-            $modele = $this->modeleRepo->findOneBy(['libelle' => $v['modele']]);
-
-            $vehicule = $this->vehiculeRepo->findOneBy(['marque' => $marque, 'modele' => $modele]);
-            $tarif = $this->tarifsHelper->calculTarifVehicule($dateDebut, $dateFin, $vehicule);
-
-            $data2[$key]['id'] = $vehicule->getId();
-            $data2[$key]['marque'] = $vehicule->getMarque()->getLibelle();
-            $data2[$key]['modele'] = $vehicule->getModele()->getLibelle();
-            $data2[$key]['carburation'] = $vehicule->getCarburation();
-            $data2[$key]['carburation'] = $vehicule->getCarburation();
-            $data2[$key]['immatriculation'] = "";
-            $data2[$key]['vitesse'] = $vehicule->getVitesse();
-            $data2[$key]['bagages'] = $vehicule->getBagages();
-            $data2[$key]['atouts'] = $vehicule->getAtouts();
-            $data2[$key]['caution'] = $vehicule->getCaution();
-            $data2[$key]['portes'] = $vehicule->getPortes();
-            $data2[$key]['passagers'] = $vehicule->getPassagers();
-            $data2[$key]['image'] = $vehicule->getImage();
-            $data2[$key]['tarif'] = $tarif;
-            $data2[$key]['tarifJour'] = $tarif / $this->dateHelper->calculDuree($dateDebut, $dateFin);
-        }
-
-        foreach ($listeVehiculesDispo as $key => $vehicule) {
-            $datas[$key]['id'] = $vehicule->getId();
-            $datas[$key]['marque'] = $vehicule->getMarque()->getLibelle();
-            $datas[$key]['modele'] = $vehicule->getModele()->getLibelle();
-        }
-
-        return new JsonResponse($data2);
-    }
-
-    /**
-     * @Route("/listeVehicules", name="listeVehicules",methods={"GET","POST"}))
-     */
-    public function listeVehicules(Request $request)
-    {
-
-        $dateDepart = $request->query->get('dateDepart');
-        $dateRetour = $request->query->get('dateRetour');
-        $dateDepart = new \DateTime($dateDepart);
-        $dateRetour = new \DateTime($dateRetour);
-        $datas = array();
-        // dump($this->reservationRepo->findReservationIncludeDates($dateDepart, $dateRetour));
-        // die();
-
-        foreach ($this->reservationRepo->findReservationIncludeDates($dateDepart, $dateRetour) as $key => $reservation) {
-            $datas[$key]['id'] = $reservation->getVehicule()->getId();
-            $datas[$key]['marque'] = $reservation->getVehicule()->getMarque()->getLibelle();
-            $datas[$key]['modele'] = $reservation->getVehicule()->getModele()->getLibelle();
-            $datas[$key]['immatriculation'] = $reservation->getVehicule()->getImmatriculation();
-        }
-
-        return new JsonResponse($datas);
-    }
-    public function getVehiculesDispo($dateDebut, $dateFin)
-    {
-        $vehicules = $this->vehiculeRepo->findAll();
-        $reservations = $this->reservationRepo->findReservationIncludeDates($dateDebut, $dateFin);
-        // dd($reservations);
-
-        $i = 0;
-        $vehiculeDispo = [];
-
-        // code pour vehicule avec reservation , mila manao condition amle tsy misy reservation mihitsy
-        foreach ($vehicules as $vehicule) {
-            foreach ($reservations as $reservation) {
-                if ($vehicule == $reservation->getVehicule()) {
-                    $i++;
-                }
-            }
-            if ($i == 0) {
-                $vehiculeDispo[] = $vehicule;
-            }
-            $i = 0;
-        }
-        return $vehiculeDispo;
-    }
 
     /**
      * @Route("/", name="reservation_index", methods={"GET"})
@@ -193,54 +89,15 @@ class ReservationController extends AbstractController
     }
 
 
-
-    /**
-     * @Route("/new", name="reservation_new", methods={"GET","POST"})
-     */
-    public function new(Request $request, VehiculeRepository $vehiculeRepository): Response
-    {
-
-        $reservation = new Reservation();
-        $form = $this->createForm(ReservationType::class, $reservation);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            $vehicule = $vehiculeRepository->find($request->request->get('select'));
-            $entityManager = $this->getDoctrine()->getManager();
-            $reservation->setVehicule($vehicule);
-
-            // ajout reference dans Entity RESERVATION (CPT + year + month + ID)
-
-            $lastID = $this->reservationRepo->findBy(array(), array('id' => 'DESC'), 1);
-            if ($lastID == null) {
-                $currentID = 1;
-            } else {
-                $currentID = $lastID[0]->getId() + 1;
-            }
-            $pref = "CPT";
-            $reservation->setRefRes($pref, $currentID);
-
-            $entityManager->persist($reservation);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('reservation_index');
-        }
-
-        return $this->render('admin/reservation/crud/new.html.twig', [
-            'reservation' => $reservation,
-            'form' => $form->createView(),
-        ]);
-    }
-
     /**
      * @Route("/newReservation", name="reserverVenteComptoir",  methods={"GET","POST"})
      */
     public function reserverVenteComptoir(Request $request): Response
     {
-        $reservation = new Reservation();
 
         if ($request->isXmlHttpRequest()) {
+
+            $reservation = new Reservation();
 
             $options = [];
             $garanties = [];
@@ -321,113 +178,47 @@ class ReservationController extends AbstractController
             return $this->redirectToRoute('reservation_index');
         }
         return $this->redirectToRoute('reservation_index');
-        // $reservations = $this->reservationRepo->findAll();
-
-        // return $this->render('admin/devis/index.html.twig', [
-        //     'reservations' => $reservations
-        // ]);
     }
 
-
     /**
-     * @Route("/stop_sales", name="stop_sales", methods={"GET","POST"})
+     * @Route("/new", name="reservation_new", methods={"GET","POST"})
      */
-    public function stop_sales(Request $request, ReservationRepository $reservationRepository,  UserRepository $userRepo,  VehiculeRepository $vehiculeRepository): Response
+    public function new(Request $request, VehiculeRepository $vehiculeRepository): Response
     {
 
-        $listeStopSales = new Reservation();
         $reservation = new Reservation();
 
-        $listeStopSales =  $reservationRepository->findStopSales();
-        $super_admin = $this->getUser();
+        $form = $this->createForm(ReservationType::class, $reservation);
 
-        $formStopSales = $this->createForm(StopSalesType::class, $reservation);
+        $form->handleRequest($request);
 
-        $formStopSales->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
 
-        if ($formStopSales->isSubmitted() && $formStopSales->isValid()) {
-
-            $vehicule = $vehiculeRepository->find($request->request->get('select'));
-            $entityManager = $this->getDoctrine()->getManager();
-            $reservation->setVehicule($vehicule);
-            $reservation->setCodeReservation('stopSale');
-            $reservation->setAgenceDepart('garage');
-            $reservation->setClient($super_admin);
-            $reservation->setDateReservation($this->dateHelper->dateNow());
-            $entityManager->persist($reservation);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('stop_sales');
-        }
-
-        return $this->render('admin/stop_sales_vehicules/index.html.twig', [
-            'listeStopSales' => $listeStopSales,
-        ]);
-    }
-    /**
-     * @Route("/stopSalesNew", name="stopSalesNew", methods={"GET","POST"})
-     */
-    public function stopSalesNew(Request $request, VehiculeRepository $vehiculeRepository,  UserRepository $userRepo): Response
-    {
-
-        $super_admin = $this->getUser();
-        $reservation = new Reservation();
-        $formStopSales = $this->createForm(StopSalesType::class, $reservation);
-        $formStopSales->handleRequest($request);
-
-        if ($formStopSales->isSubmitted() && $formStopSales->isValid()) {
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $reservation->setClient($super_admin);
-            $reservation->setDateReservation(new \DateTime('NOW'));
-            $entityManager->persist($reservation);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('stop_sales');
-        }
-
-        return $this->render('admin/stop_sales_vehicules/new.html.twig', [
-            'formStopSales' => $formStopSales->createView(),
-
-        ]);
-    }
-
-
-    /**
-     * @Route("/{id}/editStopSale", name="stopSale_edit", methods={"GET","POST"}, requirements={"id":"\d+"})
-     */
-    public function editStopSale(Request $request, Reservation $reservation, ReservationRepository $reservationRepository): Response
-    {
-        $listeStopSales =  $reservationRepository->findStopSales();
-
-        $formStopSales = $this->createForm(StopSalesType::class, $reservation);
-        $formStopSales->handleRequest($request);
-
-        if ($formStopSales->isSubmitted() && $formStopSales->isValid()) {
             $vehicule = $this->vehiculeRepo->find($request->request->get('select'));
-            $reservation->setVehicule($vehicule);
-            $this->getDoctrine()->getManager()->flush();
-            return $this->redirectToRoute('stop_sales');
-        }
-
-        return $this->render('admin/stop_sales_vehicules/edit.html.twig', [
-            'listeStopSales' => $listeStopSales,
-            'formStopSales' => $formStopSales->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/{id}/delete", name="stopSale_delete", methods={"DELETE"},requirements={"id":"\d+"})
-     */
-    public function stopSaleDelete(Request $request, Reservation $reservation): Response
-    {
-        if ($this->isCsrfTokenValid('delete' . $reservation->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($reservation);
+            $reservation->setVehicule($vehicule);
+
+            // ajout reference dans Entity RESERVATION (CPT + year + month + ID)
+
+            $lastID = $this->reservationRepo->findBy(array(), array('id' => 'DESC'), 1);
+            if ($lastID == null) {
+                $currentID = 1;
+            } else {
+                $currentID = $lastID[0]->getId() + 1;
+            }
+            $pref = "CPT";
+            $reservation->setRefRes($pref, $currentID);
+
+            $entityManager->persist($reservation);
             $entityManager->flush();
+
+            return $this->redirectToRoute('reservation_index');
         }
 
-        return $this->redirectToRoute('stop_sales');
+        return $this->render('admin/reservation/crud/new.html.twig', [
+            'reservation' => $reservation,
+            'form' => $form->createView(),
+        ]);
     }
 
     /**

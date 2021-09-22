@@ -20,6 +20,7 @@ use App\Repository\ReservationRepository;
 use App\Service\DateHelper;
 use App\Service\TarifsHelper;
 use DateTimeZone;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -42,9 +43,10 @@ class DevisController extends AbstractController
     private $reservController;
     private $tarifsHelper;
     private $dateHelper;
+    private $em;
 
 
-    public function __construct(DateHelper $dateHelper, TarifsHelper $tarifsHelper,  UserRepository $userRepo, DevisRepository $devisRepo, ReservationRepository $reservationRepo, VehiculeRepository $vehiculeRepo,   TarifsRepository $tarifsRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo, ReservationController $reservController)
+    public function __construct(EntityManagerInterface $em, DateHelper $dateHelper, TarifsHelper $tarifsHelper,  UserRepository $userRepo, DevisRepository $devisRepo, ReservationRepository $reservationRepo, VehiculeRepository $vehiculeRepo,   TarifsRepository $tarifsRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo, ReservationController $reservController)
     {
 
         $this->reservationRepo = $reservationRepo;
@@ -57,6 +59,7 @@ class DevisController extends AbstractController
         $this->reservController = $reservController;
         $this->dateHelper = $dateHelper;
         $this->tarifsHelper = $tarifsHelper;
+        $this->em = $em;
     }
 
     /**
@@ -77,11 +80,12 @@ class DevisController extends AbstractController
      */
     public function newDevis(Request $request): Response
     {
-        $devis = new Devis();
 
         $idClient =  $request->query->get('idClient');
 
         if ($request->isXmlHttpRequest() || $idClient != null) {
+
+            $devis = new Devis();
 
             $arrayOptionsID = [];
             $arrayGarantiesID = [];
@@ -97,7 +101,6 @@ class DevisController extends AbstractController
             $conducteur = $request->query->get('conducteur');
             $arrayOptionsID = (array) $request->query->get('arrayOptionsID');
             $arrayGarantiesID = (array)$request->query->get('arrayGarantiesID');
-
 
             $dateDepart = new \DateTime($dateTimeDepart);
             $dateRetour = new \DateTime($dateTimeRetour);
@@ -126,7 +129,7 @@ class DevisController extends AbstractController
             }
 
             //loop sur id des garanties
-            if ($arrayOptionsID != []) {
+            if ($arrayGarantiesID != []) {
 
                 for ($i = 0; $i < count($arrayGarantiesID); $i++) {
 
@@ -136,7 +139,6 @@ class DevisController extends AbstractController
                     $devis->addGaranty($garantie);
                 }
             }
-
 
             $devis->setConducteur($conducteur);
             $devis->setLieuSejour($lieuSejour);
@@ -159,9 +161,9 @@ class DevisController extends AbstractController
 
             $devis->setPrix($prix);
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($devis);
-            $entityManager->flush();
+            $emDevis = $this->getDoctrine()->getManager();
+            $emDevis->persist($devis);
+            $emDevis->flush();
 
             return $this->redirectToRoute('devis_index');
         }
