@@ -2,17 +2,24 @@
 
 namespace App\Controller;
 
+use DateTime;
 use App\Classe\Mail;
 use App\Entity\Tarifs;
 use App\Entity\Reservation;
+use App\Service\DateHelper;
 use App\Form\RechercheAVType;
 use App\Form\ReservationType;
-use App\Repository\GarantieRepository;
-use App\Repository\OptionsRepository;
+use App\Service\TarifsHelper;
+use App\Form\ReservationStep1Type;
+use App\Repository\UserRepository;
+use App\Repository\MarqueRepository;
+use App\Repository\ModeleRepository;
 use App\Repository\TarifsRepository;
-use App\Repository\ReservationRepository;
+use App\Repository\OptionsRepository;
+use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
-use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\ReservationRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,17 +32,36 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class AdminController extends AbstractController
 {
 
+  private $userRepo;
   private $reservationRepo;
+  private $dateTimestamp;
   private $vehiculeRepo;
+  private $modeleRepo;
+  private $optionsRepo;
+  private $garantiesRepo;
+  private $tarifsRepo;
+  private $dateHelper;
+  private $tarifsHelper;
+  private $marqueRepo;
+  private $em;
 
-
-
-  public function __construct(ReservationRepository $reservationRepo, VehiculeRepository $vehiculeRepo)
+  public function __construct(EntityManagerInterface $em, MarqueRepository $marqueRepo, ModeleRepository $modeleRepo, TarifsHelper $tarifsHelper, DateHelper $dateHelper, TarifsRepository $tarifsRepo, ReservationRepository $reservationRepo,  UserRepository $userRepo, VehiculeRepository $vehiculeRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
   {
 
     $this->reservationRepo = $reservationRepo;
     $this->vehiculeRepo = $vehiculeRepo;
+    $this->optionsRepo = $optionsRepo;
+    $this->garantiesRepo = $garantiesRepo;
+    $this->tarifsRepo = $tarifsRepo;
+    $this->userRepo = $userRepo;
+    $this->dateHelper = $dateHelper;
+    $this->tarifsHelper = $tarifsHelper;
+    $this->modeleRepo = $modeleRepo;
+    $this->marqueRepo = $marqueRepo;
+    $this->em = $em;
   }
+
+
   /**
    * @Route("/", name="admin_index", methods={"GET"})
    */
@@ -202,12 +228,28 @@ class AdminController extends AbstractController
   /**
    * @Route("/testercode", name="testerCode", methods={"GET","POST"})
    */
-  public function testerCode(): Response
+  public function testerCode(Request $request): Response
   {
-    $mail = new Mail();
-    $mail->send('liaksamy@gmail.com', 'Miangaly', 'Mail test', 'Bonjour Randrianarimanana, inona ny vaovao ? Manndeha ve ny code ao?');
 
+    $form = $this->createForm(ReservationStep1Type::class);
 
-    return $this->render('admin/agence/presentation_agence/index.html.twig');
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+
+      $dateDepart = $form->getData()['dateDepart'];
+      $dateRetour = $form->getData()['dateRetour'];
+      $agenceDepart = $form->getData()['agenceDepart'];
+      $agenceRetour = $form->getData()['agenceRetour'];
+      $typeVehicule = $form->getData()['typeVehicule'];
+      $lieuSejour = $form->getData()['lieuSejour'];
+
+      $reservations = $this->reservationRepo->findReservationIncludeDates($dateDepart, $dateRetour);
+      dd($reservations);
+    }
+
+    return $this->render('admin/test/index.html.twig', [
+      'form' => $form->createView()
+    ]);
   }
 }

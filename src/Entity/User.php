@@ -11,6 +11,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @UniqueEntity("mail")
  * 
  */
 class User implements UserInterface
@@ -23,7 +24,7 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=180, unique=true)
+     * @ORM\Column(type="string", length=180, nullable=true)
      */
     private $username;
 
@@ -397,35 +398,7 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @return Collection|Reservation[]
-     */
-    public function getUtilisateur(): Collection
-    {
-        return $this->utilisateur;
-    }
 
-    public function addUtilisateur(Reservation $utilisateur): self
-    {
-        if (!$this->utilisateur->contains($utilisateur)) {
-            $this->utilisateur[] = $utilisateur;
-            $utilisateur->setUtilisateur($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUtilisateur(Reservation $utilisateur): self
-    {
-        if ($this->utilisateur->removeElement($utilisateur)) {
-            // set the owning side to null (unless already changed)
-            if ($utilisateur->getUtilisateur() === $this) {
-                $utilisateur->setUtilisateur(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection|Paiement[]

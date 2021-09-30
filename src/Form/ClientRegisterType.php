@@ -20,16 +20,18 @@ class ClientRegisterType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username', TextType::class, [
-                'constraints' => new Length([
-                    'min' => 2,
-                    'max' => 20
-                ]),
-            ])
+            // ->add('username', TextType::class, [
+            //     'constraints' => new Length([
+            //         'min' => 2,
+            //         'max' => 20
+            //     ]),
+            // ])
             ->add('nom')
             ->add('prenom')
             ->add('adresse')
-            ->add('mail', EmailType::class)
+            ->add('mail', EmailType::class, [
+                'invalid_message' => 'Cette adresse mail est déjà utilisée'
+            ])
             ->add('telephone', TelType::class)
             ->add('portable', TelType::class)
             ->add('dateNaissance', DateType::class, [

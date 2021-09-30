@@ -121,7 +121,6 @@ class UserController extends AbstractController
             $user = new User();
             $user->setNom($nom);
             $user->setPrenom($prenom);
-            $user->setUsername($prenom . '_' . $nom);
             $user->setMail($email);
             $user->setTelephone($telephone);
             $user->setMail($email);

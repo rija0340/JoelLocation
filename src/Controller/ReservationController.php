@@ -59,8 +59,8 @@ class ReservationController extends AbstractController
         $this->vehiculeRepo = $vehiculeRepo;
         $this->optionsRepo = $optionsRepo;
         $this->garantiesRepo = $garantiesRepo;
-        $this->userRepo = $userRepo;
         $this->tarifsRepo = $tarifsRepo;
+        $this->userRepo = $userRepo;
         $this->dateHelper = $dateHelper;
         $this->tarifsHelper = $tarifsHelper;
         $this->modeleRepo = $modeleRepo;

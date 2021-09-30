@@ -125,8 +125,10 @@
 		<!-- overlayScrollbars -->
 		<script src="/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 
+		<script src="{{ asset('bundles/mercuryseriesflashy/js/flashy.js') }}"></script>
 		{% block javascripts %}{% endblock %}
 		<!-- Include Flashy default partial -->
+
 		{{ include('@MercurySeriesFlashy/flashy.html.twig') }}
 	</body>
 </html>

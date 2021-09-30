@@ -16,8 +16,11 @@ class ClientCompteType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username', TextType::class, [
+            ->add('mail', TextType::class, [
                 'disabled' => true,
+                'attr' => [
+                    'label' => 'Votre e-mail'
+                ]
             ])
             ->add('old_password', PasswordType::class, [
                 'mapped' => false,

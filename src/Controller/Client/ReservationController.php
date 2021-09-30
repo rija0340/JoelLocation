@@ -5,6 +5,7 @@ namespace App\Controller\Client;
 use App\Entity\Devis;
 use App\Entity\Reservation;
 use App\Service\DateHelper;
+use App\Form\ClientInfoType;
 use App\Form\DevisClientType;
 use App\Service\TarifsHelper;
 use App\Repository\DevisRepository;
@@ -443,48 +444,5 @@ class ReservationController extends AbstractController
             // return new JsonResponse($lastDevis[0]->getId());
         }
         return $this->redirectToRoute('client_reservations');
-    }
-
-
-    public function reserverDevis(Devis $devis)
-    {
-
-        $devis->setTransformed(true);
-        $devisManager =  $this->devisController->getDoctrine()->getManager();
-        $devisManager->persist($devis);
-        $devisManager->flush();
-
-        $reservation = new Reservation();
-        $reservation->setVehicule($devis->getVehicule());
-        $reservation->setClient($devis->getClient());
-        $reservation->setDateDebut($devis->getDateDepart());
-        $reservation->setDateFin($devis->getDateRetour());
-        $reservation->setAgenceDepart($devis->getAgenceDepart());
-        $reservation->setAgenceRetour($devis->getAgenceRetour());
-        $reservation->setNumDevis($devis->getId()); //reference numero devis reservé
-        //boucle pour ajout options 
-        foreach ($devis->getOptions() as $option) {
-            $reservation->addOption($option);
-        }
-
-        //boucle pour ajout garantie 
-
-        foreach ($devis->getGaranties() as $garantie) {
-            $reservation->addGaranty($garantie);
-        }
-
-        $reservation->setPrix($devis->getPrix());
-        $reservation->setDateReservation(new \DateTime('NOW'));
-        $reservation->setCodeReservation('devisTransformé');
-        // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
-        $lastID = $this->reservRepo->findBy(array(), array('id' => 'DESC'), 1);
-        $currentID = $lastID[0]->getId() + 1;
-        $reservation->setRefRes("CPTGP", $currentID);
-
-        $entityManager = $this->reservController->getDoctrine()->getManager();
-        $entityManager->persist($reservation);
-        $entityManager->flush();
-        // dump($reservation);
-        // die();
     }
 }

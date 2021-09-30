@@ -48,10 +48,13 @@ class InscriptionController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+
             $user = $form->getData();
             $password = $this->passwordEncoder->encodePassword($user, $user->getPassword());
             $user->setRoles(['ROLE_CLIENT']);
+
             $user->setPassword($password);
+            $user->setUsername($request->request->get('client_register')['nom']);
             $user->setRecupass($user->getPassword());
             $user->setPresence(1);
             $user->setDateInscription($this->dateHelper->dateNow());
@@ -59,11 +62,11 @@ class InscriptionController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->flashy->success('Votre compte a bien été enregistrer, Veuillez vous connecter');
+            $this->flashy->success('Compte crée avec succés, Veuillez vous connecter');
 
             return $this->redirectToRoute('app_login');
         }
-        return $this->render('accueil/inscription2.html.twig', [
+        return $this->render('accueil/inscription.html.twig', [
             'controller_name' => 'InscriptionController',
             'user' => $user,
             'form' => $form->createView(),

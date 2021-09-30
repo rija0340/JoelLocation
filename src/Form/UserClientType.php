@@ -21,12 +21,6 @@ class UserClientType extends AbstractType
             'Administrateur' => '[ROLE_ADMIN]'
         ];
         $builder
-            ->add('username')
-            /* ->add('roles', ChoiceType::class, [
-                'choices' => $roles,
-                'label' => "Rôle de l\'utilisateur",
-                'required' => true,
-            ]) */
             ->add('password', PasswordType::class)
             ->add('nom')
             ->add('prenom')

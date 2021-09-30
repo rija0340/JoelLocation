@@ -117,7 +117,7 @@ class ClientController extends AbstractController
                 $entityManager->flush();
                 // $notification_pwd = "Votre mot de passe a bien été mise à jour.";
                 //redirection vers logout pour entrer nouveau mot de passe 
-                $this->flashy->success('Votre mot de passe a été modifié');
+                $this->flashy->success('Votre mot de passe a été modifié, veuillez vous connecter à nouveau');
 
                 return $this->redirectToRoute('app_logout');
             } else {
@@ -226,8 +226,8 @@ class ClientController extends AbstractController
             ));
             $this->getDoctrine()->getManager()->flush();
 
-            $this->flashy->success('Votre modification a été enregitré');
-            return $this->redirectToRoute('espaceClient_index');
+            $this->flashy->success('Votre modification a été enregistré');
+            return $this->redirectToRoute('app_logout');
         }
 
         return $this->render('client/information/edit.html.twig', [

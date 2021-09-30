@@ -22,7 +22,6 @@ class UserEditType extends AbstractType
             'Administrateur' => 'ROLE_ADMIN'
         ];
         $builder
-            ->add('username')
             ->add('fonction', ChoiceType::class, [
                 'choices' => $roles,
                 'label' => "Rôle de l\'utilisateur",

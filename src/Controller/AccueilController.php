@@ -18,6 +18,7 @@ use App\Repository\ReservationRepository;
 use App\Repository\ModeReservationRepository;
 use App\Repository\EtatReservationRepository;
 use App\Repository\VehiculeRepository;
+use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,11 +30,13 @@ class AccueilController extends AbstractController
 {
     private $passwordEncoder;
     private $vehiculeRepo;
+    private $flashy;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder, VehiculeRepository $vehiculeRepository)
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder, VehiculeRepository $vehiculeRepository, FlashyNotifier $flashy)
     {
         $this->passwordEncoder = $passwordEncoder;
         $this->vehiculeRepo = $vehiculeRepository;
+        $this->flashy = $flashy;
     }
 
     /**
@@ -194,15 +197,22 @@ class AccueilController extends AbstractController
         $user = new User();
         $user = $this->getUser();
         if (in_array("ROLE_CLIENT", $user->getRoles())) {
+            $this->flashy->success("Vous êtes bien connecté");
             return $this->redirectToRoute('espaceClient_index');
         }
         if (in_array("ROLE_PERSONNEL", $user->getRoles())) {
+            $this->flashy->success("Vous êtes bien connecté");
+
             return $this->redirectToRoute('admin_index');
         }
         if (in_array("ROLE_ADMIN", $user->getRoles())) {
+            $this->flashy->success("Vous êtes bien connecté");
+
             return $this->redirectToRoute('admin_index');
         }
         if (in_array("ROLE_SUPER_ADMIN", $user->getRoles())) {
+            $this->flashy->success("Vous êtes bien connecté");
+
             return $this->redirectToRoute('admin_index');
         }
         return $this->redirectToRoute('app_logout');

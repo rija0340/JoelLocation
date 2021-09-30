@@ -12,6 +12,7 @@
 		<div class="row login_form">
 			<div class="col-lg-4 col-md-6 ml-auto mr-auto">
 
+
 				<div class="section-title">
 					<h3 class="text-center">Veuillez vous connecter</h3>
 				</div>
@@ -30,12 +31,12 @@
 					{% endif %}
 
 					<div class="form-group">
-						<label for="inputUsername" class="bmd-label-floating">Nom d'utilisateur</label>
-						<input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" required autofocus>
+						<label for="inputUsername" class="bmd-label-floating">Votre email</label>
+						<input type="email" value="{{ last_username }}" name="email" id="inputUsername" class="form-control" required autofocus>
 					</div>
 
 					<div class="form-group">
-						<label for="inputPassword" class="bmd-label-floating">Mot de passe</label>
+						<label for="inputPassword" class="bmd-label-floating">Votre mot de passe</label>
 						<input type="password" name="password" id="inputPassword" class="form-control" required>
 					</div>
 					<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
