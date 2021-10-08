@@ -103,7 +103,7 @@ class Garantie
      */
     public function __toString()
     {
-        return $this->getAppelation() . ' : ' . $this->getPrix() . " €";
+        return $this->getAppelation();
     }
 
 

@@ -26,8 +26,8 @@ class Devis
     private $client;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Vehicule::class, inversedBy="devis")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity=Vehicule::class, inversedBy="devis",)
+     * 
      */
     private $vehicule;
 
@@ -99,6 +99,16 @@ class Devis
      * @ORM\ManyToMany(targetEntity=Garantie::class, inversedBy="devis")
      */
     private $garanties;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $prixOptions;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $prixGaranties;
 
 
     public function __construct()
@@ -344,6 +354,30 @@ class Devis
     public function removeGaranty(Garantie $garanty): self
     {
         $this->garanties->removeElement($garanty);
+
+        return $this;
+    }
+
+    public function getPrixOptions(): ?float
+    {
+        return $this->prixOptions;
+    }
+
+    public function setPrixOptions(float $prixOptions): self
+    {
+        $this->prixOptions = $prixOptions;
+
+        return $this;
+    }
+
+    public function getPrixGaranties(): ?float
+    {
+        return $this->prixGaranties;
+    }
+
+    public function setPrixGaranties(float $prixGaranties): self
+    {
+        $this->prixGaranties = $prixGaranties;
 
         return $this;
     }

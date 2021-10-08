@@ -119,10 +119,6 @@ class Reservation
      */
     private $agenceRetour;
 
-
-
-
-
     /**
      * @ORM\Column(type="float", nullable=true)
      */
@@ -167,6 +163,16 @@ class Reservation
      * @ORM\ManyToMany(targetEntity=Garantie::class, inversedBy="reservations")
      */
     private $garanties;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $prixOptions;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $prixGaranties;
 
     public function __construct()
     {
@@ -589,6 +595,30 @@ class Reservation
     public function removeGaranty(Garantie $garanty): self
     {
         $this->garanties->removeElement($garanty);
+
+        return $this;
+    }
+
+    public function getPrixOptions(): ?float
+    {
+        return $this->prixOptions;
+    }
+
+    public function setPrixOptions(?float $prixOptions): self
+    {
+        $this->prixOptions = $prixOptions;
+
+        return $this;
+    }
+
+    public function getPrixGaranties(): ?float
+    {
+        return $this->prixGaranties;
+    }
+
+    public function setPrixGaranties(?float $prixGaranties): self
+    {
+        $this->prixGaranties = $prixGaranties;
 
         return $this;
     }

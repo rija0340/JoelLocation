@@ -338,13 +338,18 @@
 			{% else %}
 				<p>Conducteur : Non</p>
 			{% endif %}
+			{% for option in devis.options %}
 
-			<p class="js-siege">{{devis.siege}}</p>
+				<p class="js-siege">{{option}}</p>
+			{% endfor %}
 			{# <p class="font-italic">Aucune option souscrite.</p> #}
 			<p class="font-weight-bold label">
 				Garantie(s) souscrite(s):
 			</p>
-			<p class="js-garantie">{{devis.garantie}}</p>
+			{% for garantie in devis.garanties %}
+
+				<p class="js-garantie">{{devis.garantie}}</p>
+			{% endfor %}
 			{# <p class="font-italic">Aucune garantie souscrite.</p> #}
 			<p class="font-weight-bold label">
 				Taxes de dépassement horaire
@@ -379,7 +384,7 @@
 				</div>
 				<div class="col-md-4 col-sm-4 col-xs-4">
 					<div class="text-right">
-						{{ devis.prix - (devis.garantie.prix + devis.siege.prix) }}
+						{{ devis.tarifVehicule }}
 						€
 					</div>
 				</div>
@@ -398,7 +403,7 @@
 				</div>
 				<div class="col-md-4 col-sm-4 col-xs-4">
 					<div class="text-right">
-						{{devis.siege.prix}}
+						{{devis.prixOptions}}
 						€
 					</div>
 				</div>
@@ -409,7 +414,7 @@
 				</div>
 				<div class="col-md-4 col-sm-4 col-xs-4">
 					<div class="text-right">
-						{{devis.garantie.prix}}
+						{{devis.prixGaranties}}
 						€
 					</div>
 				</div>

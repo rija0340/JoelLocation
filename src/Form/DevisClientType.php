@@ -27,7 +27,6 @@ class DevisClientType extends AbstractType
                 'multiple' => true,
                 'expanded' => true,
                 // 'data' => true,
-                'label' => 'Garanties',
                 // 'choice_label' => 't'
                 // 'choice_label' => 'description',
             ]);

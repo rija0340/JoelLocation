@@ -8,6 +8,7 @@ use App\Form\UserType;
 use App\Form\UserEditType;
 use App\Form\UserClientType;
 use App\Repository\UserRepository;
+use App\Service\DateHelper;
 use DateTimeZone;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,10 +24,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class UserController extends AbstractController
 {
     private $passwordEncoder;
+    private $dateHelper;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder, DateHelper $dateHelper)
     {
         $this->passwordEncoder = $passwordEncoder;
+        $this->dateHelper = $dateHelper;
     }
 
     /**
@@ -91,7 +94,7 @@ class UserController extends AbstractController
             ));
             $user->setRecupass($user->getPassword());
             $user->setPresence(1);
-            $user->setDateInscription(new \DateTime('NOW', new DateTimeZone('Europe/Paris')));
+            $user->setDateInscription($this->dateHelper->dateNow());
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();

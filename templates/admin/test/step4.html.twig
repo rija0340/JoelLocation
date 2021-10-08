@@ -1,0 +1,241 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}Réservation
+{% endblock %}
+
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{asset('css/admin/jquery-ui.css')}}">
+	<link rel="stylesheet" href="{{asset('css/admin/steps.css')}}">
+
+{% endblock %}
+{% block current_page_right %}
+
+	<div class="row">
+		<div class="col-auto text-center">
+			<i class="fa fa-circle icon-steps "></i>
+			<p class="">
+				Etape 1
+				<br>
+				Agences & Dates
+			</p>
+
+		</div>
+		<div class="col-auto text-center">
+			<i class="fa fa-circle icon-steps "></i>
+			<p>
+				Etape 2
+				<br>
+				Véhicules
+			</p>
+		</div>
+		<div class="col-auto text-center">
+			<i class="fa fa-circle icon-steps "></i>
+			<p>
+				Etape 3
+				<br>
+				Options et garanties
+			</p>
+		</div>
+		<div class="col-auto text-center current-step">
+			<i class="fa fa-circle icon-steps "></i>
+			<p>
+				Etape 4
+				<br>
+				Récapitulatif
+			</p>
+		</div>
+	</div>
+{% endblock %}
+
+{% block content %}
+
+
+	{# step 4 #}
+	<div class="row">
+		<div class="col-md-3">
+			<div class="alert alert-secondary btn-block h-100">
+				<div class="x_title">
+					<h3>
+						<i class="fa fa-chevron-right"></i>
+						Votre réservation
+					</h3>
+				</div>
+				<img src="{{vich_uploader_asset(vehicule, 'imageFile') }}" alt="{{vehicule.marque}} {{vehicule.modele}}" style="width:100%;" id="vehicule_photo">
+
+				<div>
+					<h3 class="heading">Agence départ
+					</h3>
+					<div class="content_depart">
+						<p>
+							<i class="fa fa-map-marker"></i>
+							<span id="agence_depart">{{agenceDepart}}</span><br>
+							<span id="date_depart">{{dateDepart | date('d/m/Y') }}</span>
+							<span id="heure_depart">
+								{{dateDepart | date('H:i') }}</span>
+						</p>
+					</div>
+					<h3 class="heading">Agence retour
+					</h3>
+					<div class="content_retour">
+						<p>
+							<i class="fa fa-map-marker"></i>
+							<span id="agence_retour">{{agenceRetour}}</span><br>
+							<span id="date_retour">{{dateRetour | date('d/m/Y')}}</span>
+							<span id="heure_retour">{{dateRetour | date('H:i')}}</span>
+						</p>
+					</div>
+					<p>
+						Soit
+						<span id="nombre_jours_location">{{duree}}</span>
+						jours de location</p>
+
+					<h3 class="heading">Prix de base de location</h3>
+					<div class="prix_location">
+						<span id="prixTotal">{{ tarifVehicule }}</span>
+						EUR<br>
+						soit
+						<span id="prixJournalier">{{ tarifVehicule / duree}}</span>
+						euro/jour
+					</div>
+					<div class="prestation">
+						<h3 class="heading">Prestations incluses</h3>
+						<ul class="">
+							<li>
+								<i class="fa fa-check"></i>
+								Kilométrage Illimité
+							</li>
+							<li>
+								<i class="fa fa-check"></i>
+								Assurance accidents causés aux tiers
+							</li>
+							<li>
+								<i class="fa fa-check"></i>
+								Assurance responsabilité civile
+							</li>
+							<li>
+								<i class="fa fa-check"></i>
+								Assurance collision (CDW)
+							</li>
+							<li>
+								<i class="fa fa-check"></i>
+								TVA 8.5 %
+							</li>
+						</ul>
+					</div>
+					<div class="options">
+						<h3 class="heading">Options</h3>
+
+						<ul>
+							{% for option in options %}
+								<li>{{option.appelation}}
+									:
+									{{option.prix}}
+									€</li>
+							{% endfor %}
+						</ul>
+
+					</div>
+					<div class="garanties">
+						<h3 class="heading">Garanties</h3>
+						<ul>
+							{% for garantie in garanties %}
+								<li>{{garantie.appelation}}
+									:
+									{{garantie.prix}}
+									€</li>
+							{% endfor %}
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-9">
+
+			<div class="x_panel">
+				<div class="x_title">
+					<h2 class="font-weight-bold">
+						<i class="fa fa-search"></i>
+						Rechercher un client existant
+					</h2>
+					<div class="clearfix"></div>
+				</div>
+				<div class="x_content">
+					<div class="form-group">
+						<form autocomplete="off" action="{{path('step5')}}" method="post" name="selectedClient" id="selectedClient">
+							<div class="autocomplete">
+								<input id="selectClient" type="text" name="client" placeholder="Nom ou email du client" class="form-control" required="true">
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div class="x_panel">
+				<div id="formCreateClient">
+					<div class="x_title">
+						<h2 class="font-weight-bold">
+							<i class="fa  fa-newspaper-o"></i>
+							Créer un nouveau client
+						</h2>
+
+						<div class="clearfix"></div>
+					</div>
+					<div class="x_content mb-4">
+						{{ form_start(form) }}
+						<div class="row">
+							<div class="col-md-6">
+								<label for="">Nom</label>
+								{{ form_widget(form.nom) }}
+							</div>
+							<div class="col-md-6">
+								<label for="">Prénom</label>
+								{{ form_widget(form.prenom) }}
+							</div>
+							<div class="col-md-6">
+								<label for="">Email</label>
+								{{ form_widget(form.email) }}
+							</div>
+							<div class="col-md-6">
+								<label for="">Téléphone</label>
+								{{ form_widget(form.telephone) }}
+							</div>
+						</div>
+						<div class="mt-2 text-center">
+							<button class="btn btn-danger" type="submit">
+								Enregistrer</button>
+						</div>
+						{{ form_end(form) }}
+
+					</div>
+				</div>
+			</div>
+			<div class="row justify-content-md-center mt-4">
+				<div class="col-auto pr-0 pl-0">
+					<button class="btn btn-warning" id="pdfDevis">
+						<i class="fa fa-file-pdf-o mr-1"></i>Enregistrer le devis</button>
+				</div>
+				<div class="col-auto pr-0 pl-0">
+					<button class="btn btn-primary" id="enregistrerDevisEnvoi">
+						<i class="fa fa-envelope mr-1 "></i>Enregistrer le devis + envoi au client</button>
+				</div>
+				<div class="col-auto pr-0 pl-0">
+					<button type="submit" form="selectedClient" class="btn btn-violet" id="enregistrerDevis">
+						<i class="fa fa-check mr-1"></i>Enregistrer le devis</button>
+				</div>
+			</div>
+			<div class="form-group text-center">
+				<div>
+					<a type="button" class="btn btn-danger btn-block" id="reserver">
+						<i class="fa fa-check"></i>
+						Réserver</a>
+				</div>
+			</div>
+		</div>
+		{# end step 4 #}
+	</div>
+	<!-- End SmartWizard Content -->
+{% endblock %}
+{% block javascripts %}
+	<script src="{{asset("js/admin/jquery-ui.js")}}"></script>
+	<script src="{{asset("js/admin/testVenteComptoir.js")}}"></script>
+{% endblock  %}

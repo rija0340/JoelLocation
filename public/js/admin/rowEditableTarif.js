@@ -142,6 +142,7 @@ function createInputs(clickedBtn) {
     td4.appendChild(div4);
     td5.appendChild(divBtn);
 
+
     th.insertBefore(td1, thisElement);
     th.insertBefore(td2, thisElement);
     th.insertBefore(td3, thisElement);

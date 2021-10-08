@@ -5,6 +5,7 @@
 {% endblock %}
 {% block stylesheets %}
 	<link href="{{ asset( 'css/client/validationDevis.css')}}" rel="stylesheet">
+	<link href="{{ asset( 'css/client/step3InfosClient.css')}}" rel="stylesheet">
 
 {% endblock %}
 {% block nav %}{% endblock %}
@@ -19,14 +20,14 @@
 				</h5>
 			</div>
 			<div class="card p-2 btn-block card mdl-shadow--2dp">
-				<div class="vehicule border-bottom">
+				<div class="vehicule border-bottom pb-2">
 					<div class="marque_modele">{{devis.vehicule.marque}}
 						{{devis.vehicule.modele}}</div>
 					<img src="/uploads/vehicules/{{ devis.vehicule.image }}" alt="{{ devis.vehicule.image }}" class="img-circle  " style="width : 100%;">
 
 				</div>
 				<div>
-					<div class="divDepart border-bottom">
+					<div class="divDepart border-bottom ">
 						<h5 class="heading">Agence départ
 						</h5>
 						<p>
@@ -119,9 +120,9 @@
 					{{devis.duree}}
 					jours
 				</h5>
-				<span class="tarifTotal">{{tarifTotal}}€</span><br>
+				<span class="tarifTotal">{{devis.prix}}€</span><br>
 				<span class="tarifJournalier">Soit
-					{{tarifJournalier}}€ / jour</span>
+					{{(devis.prix / devis.duree)|number_format(2,'.') }}€ / jour</span>
 			</div>
 		</div>
 		<div class="col-md-9 ">
@@ -164,39 +165,31 @@
 					</h3>
 				</div>
 				<div>
-					<input type="radio" value="100" name="modePaiement">
-					<label for="">Je souhaite régler en une seule fois le montant de
 
-						<span id="value">
-							{{tarifTotal}}
-						</span>
-
-						€</label>
-				</div>
-				<div>
-					<input type="radio" value="50" name="modePaiement">
-					<label for="">Je paie un acompte de
-						<span>
-							{{cinquantePourcentTarifTotal}}
-						</span>
-						€ (50%) et à mon arrivée
-						<span class="reste50pourcent">
-							{{ tarifTotal - cinquantePourcentTarifTotal }}€
-						</span>
+					<label class="label-radio">
+						Je souhaite régler en une seule fois le montant de
+						{{devis.prix}}€
+						<input type="radio" value="100" name="modePaiement">
+						<span class="checkmark-radio"></span>
 					</label>
-				</div>
-				<div>
-					<input type="radio" value="20" name="modePaiement">
-					<label for="">Je paie un acompte de
-						<span>
-							{{vingtPourcentTarifTotal}}
-						</span>
-						€ (20%) et à mon arrivée
-						<span class="reste20pourcent">
-							{{ tarifTotal - vingtPourcentTarifTotal}}€
-						</span>
 
+					<label class="label-radio">
+						Je paie un acompte de
+						{{ devis.prix / 2 }}€ (50%) et à mon arrivée
+						{{devis.prix - ((devis.prix)/2)}}€
+						<input type="radio" value="50" name="modePaiement">
+						<span class="checkmark-radio"></span>
 					</label>
+
+					<label class="label-radio">
+						Je paie un acompte de
+						{{ devis.prix / 4 }}€ (25%) et à mon arrivée
+						{{devis.prix - ((devis.prix)/4)}}€
+						<input type="radio" value="25" name="modePaiement">
+						<span class="checkmark-radio"></span>
+					</label>
+
+
 				</div>
 			</div>
 			<div class="card mdl-shadow--2dp p-4 divConditionGeneralVente">
@@ -204,10 +197,11 @@
 					<h3>Condition générale de vente
 					</h3>
 				</div>
-				<div>
-					<input type="checkbox" value="10" name="conditionGeneralVente" id="conditionGeneralVente">
-					<label for="">Je reconnais avoir prix connaissance des conditions générales de vente que j'accepte sans réserve</label>
-				</div>
+				<label class="label-container">
+					Je reconnais avoir prix connaissance des conditions générales de vente que j'accepte sans réserve
+					<input type="checkbox" name="conditionGeneralVente" id="conditionGeneralVente">
+					<span class="checkmark"></span>
+				</label>
 			</div>
 
 			<div class="text-center mt-3 mb-3">
@@ -223,5 +217,6 @@
 {% block javascripts %}
 
 	<script src="{{ asset('js/client/reservation/step3infosClient.js')}}"></script>
+	<script src="https://js.stripe.com/v3/"></script>
 
 {% endblock %}

@@ -118,12 +118,9 @@ class ClientController extends AbstractController
                 // $notification_pwd = "Votre mot de passe a bien été mise à jour.";
                 //redirection vers logout pour entrer nouveau mot de passe 
                 $this->flashy->success('Votre mot de passe a été modifié, veuillez vous connecter à nouveau');
-
                 return $this->redirectToRoute('app_logout');
             } else {
-
                 $this->flashy->error("Votre mot de passe actuel n'est pas le bon");
-                $notification_pwd = "Votre mot de passe actuel n'est pas le bon.";
             }
         }
 
@@ -135,7 +132,6 @@ class ClientController extends AbstractController
             // 'form' => $form->createView(),
             'formClient' => $formClient->createView(),
             'formClientCompte' => $formClientCompte->createView(),
-            'notification_pwd' => $notification_pwd
 
         ]);
     }

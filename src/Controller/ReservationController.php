@@ -68,8 +68,6 @@ class ReservationController extends AbstractController
         $this->em = $em;
     }
 
-
-
     /**
      * @Route("/", name="reservation_index", methods={"GET"})
      */
@@ -230,10 +228,8 @@ class ReservationController extends AbstractController
         //     'reservation' => $reservation,
         // ]);
 
-
         $formKM = $this->createForm(KilometrageType::class, $reservation);
         $formKM->handleRequest($request);
-
 
         if ($formKM->isSubmitted() && $formKM->isValid()) {
 
@@ -248,10 +244,8 @@ class ReservationController extends AbstractController
                 'tarifVehicule' => $this->tarifsHelper->calculTarifVehicule($reservation->getDateDebut(), $reservation->getDateFin(), $reservation->getVehicule()),
                 'tarifOptions' => $this->tarifsHelper->sommeTarifsOptions($reservation->getOptions()),
                 'tarifGaranties' => $this->tarifsHelper->sommeTarifsGaranties($reservation->getGaranties()),
-
             ]);
         }
-
 
         return $this->render('admin/reservation/crud/show.html.twig', [
             'reservation' => $reservation,

@@ -20,14 +20,14 @@
 				</h5>
 			</div>
 			<div class="card p-2 btn-block card mdl-shadow--2dp">
-				<div class="vehicule border-bottom">
+				<div class="vehicule border-bottom pb-2">
 					<div class="marque_modele">{{devis.vehicule.marque}}
 						{{devis.vehicule.modele}}</div>
 					<img src="/uploads/vehicules/{{ devis.vehicule.image }}" alt="{{ devis.vehicule.image }}" class="img-circle  " style="width : 100%;">
 
 				</div>
 				<div>
-					<div class="divDepart border-bottom">
+					<div class="divDepart border-bottom ">
 						<h5 class="heading">Agence départ
 						</h5>
 						<p>
@@ -115,14 +115,14 @@
 
 				</div>
 			</div>
-			<div class="divTarifTotal text-center ">
+			<div class="divTarifTotal text-center">
 				<h5 class="heading">Prix total pour
 					{{devis.duree}}
 					jours
 				</h5>
-				<span class="tarifTotal">{{tarifTotal}}€</span><br>
+				<span class="tarifTotal">{{devis.prix}}€</span><br>
 				<span class="tarifJournalier">Soit
-					{{tarifJournalier}}€ / jour</span>
+					{{(devis.prix / devis.duree)|number_format(2,'.') }}€ / jour</span>
 			</div>
 		</div>
 		<div class="col-md-9 ">

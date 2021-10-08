@@ -1,0 +1,12 @@
+
+.icon-steps{
+    font-size: 20px;
+}
+.current-step i {
+    color : red;
+}
+
+.current-step p {
+    color : red;
+    font-weight: bold;
+}

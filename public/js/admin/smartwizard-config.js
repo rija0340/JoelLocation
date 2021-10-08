@@ -323,13 +323,12 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
         btnEnregistrerDevisEnvoi.addEventListener('click', enregistrerDevisAjax, false);
 
     }
-
+    //enabled by librairy jquery.ui
     function autocomplete(listeClients) {
         $(function () {
             $("#selectClient").autocomplete({ source: listeClients });
         });
     }
-
 
     function enregistrerDevisPDF() {
         selectedClient = selectClientElem.value;
@@ -798,7 +797,7 @@ $(document).ready(function () { //S'assure que le dom est entièrement chargé
         console.log(arrayGarantiesID);
         // setValuesOptionGarantie();
         // autocomplete(document.getElementById("selectClient"), listeClients);
-        autocomplete(listeClients);
+        autocomplete(listeClients); //enabled by librairy jquery.ui
 
         return true;
     }

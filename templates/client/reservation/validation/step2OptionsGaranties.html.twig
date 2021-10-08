@@ -5,6 +5,7 @@
 {% endblock %}
 {% block stylesheets %}
 	<link href="{{ asset( 'css/client/validationDevis.css')}}" rel="stylesheet">
+	<link href="{{asset('css/client/step2OptionsGaranties.css')}}" rel="stylesheet">
 
 {% endblock %}
 {% block nav %}{% endblock %}
@@ -18,7 +19,7 @@
 				</h5>
 			</div>
 			<div class="card p-2 btn-block card mdl-shadow--2dp">
-				<div class="vehicule border-bottom">
+				<div class="vehicule border-bottom pb-2">
 					<div class="marque_modele">{{devis.vehicule.marque}}
 						{{devis.vehicule.modele}}</div>
 					<img src="/uploads/vehicules/{{ devis.vehicule.image }}" alt="{{ devis.vehicule.image }}" class="img-circle  " style="width : 100%;">
@@ -118,38 +119,53 @@
 					{{devis.duree}}
 					jours
 				</h5>
-				<span class="tarifTotal">{{tarifTotal}}€</span><br>
+				<span class="tarifTotal">{{devis.prix}}€</span><br>
 				<span class="tarifJournalier">Soit
-					{{tarifJournalier}}€ / jour</span>
+					{{(devis.prix / devis.duree)|number_format(2,'.') }}€ / jour</span>
 			</div>
 		</div>
 		<div class="col-md-9 ">
+			{% form_theme form 'form_div_layout.html.twig'  %}
 			{{ form_start(form) }}
 			<div class="card mdl-shadow--2dp divGaranties">
 				<input type="hidden" value={{devisID}} name="devisID">
 				<div class="text-center mt-4 mb-4">
 					<h2>VOS GARANTIES</h2>
 				</div>
-				<div class="row mb-0">
-					{% for garantie in form.garanties %}
-						<div class="col-md-4">
-							<div class="m-2 p-2 border-top border-right border-left">
-								{{form_widget(garantie)}}
+
+				{% for garantie in form.garanties %}
+					<div class="card p-3 mt-1">
+						<div class="row">
+							<div class="col-md-1">
+								<label class="label-container ">
+									{{ form_widget(garantie) }}
+									<span class="checkmark "></span>
+								</label>
+							</div>
+							<div class="col-md-11">
+								<h5>
+									{{garantie.vars.label}}
+
+									{% for gar in garanties %}
+										{% if gar.id == garantie.vars.value %}
+											:
+											{{gar.prix}}
+											€
+										{% endif %}
+									{% endfor %}
+								</h5>
+								{% for gar in garanties %}
+									{% if gar.id == garantie.vars.value %}
+										<p class="text-justify">
+											{{gar.description  }}
+										</p>
+									{% endif %}
+								{% endfor %}
 							</div>
 						</div>
-					{% endfor %}
-				</div>
-				<div class="row mt-0">
-					{% for gar in garanties %}
-						<div class="col-md-4 ">
-							<div class="m-2 p-2 border-bottom border-right border-left ">
-								<p>
-									{{gar.description}}
-								</p>
-							</div>
-						</div>
-					{% endfor %}
-				</div>
+					</div>
+				{% endfor %}
+
 			</div>
 
 			<div class="card mdl-shadow--2dp divOptions">
@@ -164,10 +180,30 @@
 					</div>
 					<p>Nous mettons à votre disposition des sièges bébé et nourrissons, homologués NF, pour seulement 30 euros TTC. Les rehausseurs pour les enfants de + de 15kg sont totalement gratuits !</p>
 				</div>
-				<div class="d-flex justify-content-around">
+				<div class="">
 					{% for option in form.options %}
-						<div>
-							{{form_widget(option)}}
+						<div class="card p-3 mt-1">
+							<div class="row">
+								<div class="col-md-1">
+									<label class="label-container ">
+										{{ form_widget(option) }}
+										<span class="checkmark "></span>
+									</label>
+								</div>
+								<div class="col-md-11">
+									<h5>
+										{{option.vars.label}}
+
+										{% for opt in options %}
+											{% if opt.id == option.vars.value %}
+												:
+												{{opt.prix}}
+												€
+											{% endif %}
+										{% endfor %}
+									</h5>
+								</div>
+							</div>
 						</div>
 					{% endfor %}
 				</div>
@@ -178,8 +214,10 @@
 				</div>
 			</div>
 			{{ form_end(form) }}
+
 		</div>
 	</div>
-</div>{% endblock %}{% block javascripts %}
-
-<script src="{{ asset('js/client/reservation/step2OptionsGaranties.js')}}"></script>{% endblock %}
+{% endblock %}
+{% block javascripts %}
+	<script src="{{ asset('js/client/reservation/step2OptionsGaranties.js')}}"></script>
+{% endblock %}

@@ -9,14 +9,6 @@
 	<div class="clearfix"></div>
 	<div class="x_title"></div>
 
-	{% for message in app.flashes('notification') %}
-
-		<div class="alert alert-info">
-			{{message}}
-		</div>
-
-	{% endfor %}
-
 	{{ form_start(formClient) }}
 
 	<div class="row">
@@ -91,6 +83,7 @@
 
 		<div class="form-group col-md-6">
 			<label for="">Ville délivrance permis :</label>
+			{# {{form_label('test')}} #}
 			{{ form_widget(formClient.villeDelivrancePermis,{'attr' : { 'readonly' : 'readonly'}  } )}}
 
 		</div>
@@ -114,19 +107,8 @@
 			Mon compte
 		</h4>
 
-
 		<div class="clearfix"></div>
 		<div class="x_title"></div>
-		{% if notification_pwd %}
-
-			<div class="alert alert-warning alert-dismissible fade show" role="alert" id="notification_pwd">
-				{{notification_pwd}}
-				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-
-		{% endif %}
 
 		<div class="col-lg-8 col-md-8 ml-auto mr-auto">
 			{{ form_start(formClientCompte) }}
@@ -141,7 +123,6 @@
 			{{ form_end(formClientCompte) }}
 		</div>
 	</div>
-
 
 {% endblock %}
 {% block javascripts %}

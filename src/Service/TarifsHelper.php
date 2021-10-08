@@ -106,10 +106,10 @@ class TarifsHelper
 
         return $value;
     }
-    function Vingtpourcent($tarif)
+    function VingtCinqPourcent($tarif)
     {
 
-        $value = (50 * $tarif) / 100;
+        $value = (25 * $tarif) / 100;
 
         return $value;
     }

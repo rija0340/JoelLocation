@@ -17,7 +17,7 @@
 				<span>Bienvenue</span>
 				<h2>
 					{% if is_granted("ROLE_USER") %}
-						{{ app.user.getUsername() }}
+						{{ app.user.getNom() }}
 					{% else %}
 						Anonymous user
 					{% endif %}
@@ -256,7 +256,7 @@
 						href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
 						{# <img src="../../images/blank_profile.png" alt="">#}
 						{% if is_granted("ROLE_USER") %}
-							{{ app.user.getUsername() }}
+							{{ app.user.getNom() }}
 						{% else %}
 							Anonymous
 						{% endif %}

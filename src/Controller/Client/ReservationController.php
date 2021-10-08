@@ -2,12 +2,15 @@
 
 namespace App\Controller\Client;
 
+use Stripe\Stripe;
 use App\Entity\Devis;
 use App\Entity\Reservation;
 use App\Service\DateHelper;
 use App\Form\ClientInfoType;
+use Stripe\Checkout\Session;
 use App\Form\DevisClientType;
 use App\Service\TarifsHelper;
+use App\Classe\ReservationClient;
 use App\Repository\DevisRepository;
 use App\Repository\OptionsRepository;
 use App\Repository\GarantieRepository;
@@ -67,15 +70,14 @@ class ReservationController extends AbstractController
 
         $res_attente_dateDebut = $this->reservationRepo->findReservationsAttenteDateDebut($client, $date);
 
-
         //récupération des réservation en attente (devis envoyé et en attente de validation par client)
         // $reservationEnAttentes = $this->reservRepo->findReservationEnAttente($client, $date);
-        $res_attente_validation = $this->devisRepo->findBy(['client' => $client, 'transformed' => false], ['dateCreation' => 'DESC']);
+        $devis = $this->devisRepo->findBy(['client' => $client, 'transformed' => false], ['dateCreation' => 'DESC']);
 
         return $this->render('client/reservation/index.html.twig', [
             'reservation_effectuers' => $reservationEffectuers,
             'reservation_en_cours' => $reservationEncours,
-            'res_attente_validation' => $res_attente_validation,
+            'devis' => $devis,
             'res_attente_dateDebut' => $res_attente_dateDebut,
         ]);
     }
@@ -215,14 +217,6 @@ class ReservationController extends AbstractController
         $form = $this->createForm(DevisClientType::class, $devis);
         $form->handleRequest($request);
 
-        $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($devis->getDateDepart(), $devis->getDateRetour(), $devis->getVehicule());
-
-        $tarifTotal = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $devis->getOptions(), $devis->getGaranties());
-
-        $tarifJournalier = $tarifTotal / $this->dateHelper->calculDuree($devis->getDateDepart(), $devis->getDateRetour());
-
-        $tarifJournalier = round($tarifJournalier, 2);
-
         if ($form->isSubmitted() && $form->isValid()) {
 
             $entityManager = $this->getDoctrine()->getManager();
@@ -237,8 +231,6 @@ class ReservationController extends AbstractController
             'garanties' => $garanties,
             'options' => $options,
             'devis' => $devis,
-            'tarifTotal' => $tarifTotal,
-            'tarifJournalier' => $tarifJournalier,
             'form' => $form->createView(),
             'devisID' => $devisID
         ]);
@@ -248,8 +240,14 @@ class ReservationController extends AbstractController
     /**
      * @Route("/espaceclient/infosClient/{devisID}", name="step3infosClient", methods={"GET","POST"})
      */
-    public function step3infosClient(Request $request, $devisID): Response
+    public function step3infosClient(Request $request, $devisID, ReservationClient $reservationClientSession): Response
     {
+        $garanties = $request->query->get('garanties');
+        $devis = $this->devisRepo->find($devisID);
+        // dd($devis->getGaranties());
+        // for ($i = 0; $i < count($garanties); $i++) {
+        // }
+
 
         $client = $this->getUser();
         if ($client == null) {
@@ -261,38 +259,23 @@ class ReservationController extends AbstractController
         $formClient = $this->createForm(ClientInfoType::class, $client);
         $formClient->handleRequest($request);
 
-        $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($devis->getDateDepart(), $devis->getDateRetour(), $devis->getVehicule());
-
-        $tarifTotal = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $devis->getOptions(), $devis->getGaranties());
-
-        $tarifJournalier = $tarifTotal / $this->dateHelper->calculDuree($devis->getDateDepart(), $devis->getDateRetour());
-
-        $tarifJournalier = round($tarifJournalier, 2);
-
-        $vingtPourcentTarifTotal = (20 * $tarifTotal) / 100;
-
-        $cinquantePourcentTarifTotal = (50 * $tarifTotal) / 100;
 
         if ($formClient->isSubmitted() && $formClient->isValid()) {
+
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($client);
             $entityManager->flush();
+            $reservationClientSession->addModePaiment($request->request->get('modePaiement'));
 
-            $modePaiement = $request->request->get('modePaiement');
-
-            return $this->redirectToRoute('step4paiement', ['devisID' => $devisID, 'modePaiement' => $modePaiement]);
+            // return $this->redirectToRoute('step4paiement', ['devisID' => $devisID]);
+            //tester stripe
+            return $this->redirectToRoute('paiementStripe', ['devisID' => $devisID]);
         }
 
         if ($devis->getClient() == $client) {
             return $this->render('client/reservation/validation/step3infosClient.html.twig', [
                 'devis' => $devis,
-                'tarif' => $tarifVehicule,
-                'tarifJournalier' => $tarifJournalier,
-                'vingtPourcentTarifTotal' => $vingtPourcentTarifTotal,
-                'cinquantePourcentTarifTotal' => $cinquantePourcentTarifTotal,
-                'devis' => $devis,
-                'tarifTotal' => $tarifTotal,
                 'formClient' => $formClient->createView(),
 
             ]);
@@ -301,11 +284,44 @@ class ReservationController extends AbstractController
         }
     }
 
+    //test de paiement par stripe
+    /**
+     * @Route("/espaceclient/paiement-stripe/{devisID}", name="paiementStripe", methods={"GET","POST"})
+     */
+    public function paiementStripe(Request $request, $devisID)
+    {
+
+        $devis = $this->devisRepo->find($devisID);
+
+
+        Stripe::setApiKey('sk_test_51JiGijGsAu4Sp9QQtyfjOoOQMb6kfGjE1z50X5vrW6nS7wLtK5y2HmodT3ByrI7tQl9dsvP69fkN4vVfH5676nDo00VgFOzXct');
+
+        $YOUR_DOMAIN = 'http://127.0.0.1:8000';
+        $checkout_session = Session::create([
+            'payment_method_types' => ['card'],
+            'line_items' => [[
+                'price_data' => [
+                    'currency' => 'eur',
+                    'product_data' => [
+                        'name' => 'Réservation du ' . $devis->getDateDepart()->format('d/m/Y H:i') . " au " . $devis->getDateRetour()->format('d/m/Y H:i'),
+                        'images' => [$YOUR_DOMAIN . "/uploads/vehicules" . $devis->getVehicule()->getImage()],
+                        'description' => $devis->getVehicule()->getMarque() . " " . $devis->getVehicule()->getModele()
+                    ],
+                    'unit_amount' => $devis->getPrix() * 100
+                ],
+                'quantity' => 1,
+            ]],
+            'mode' => 'payment',
+            'success_url' => 'https://example.com/success',
+            'cancel_url' => 'https://example.com/cancel',
+        ]);
+        return $this->redirect($checkout_session->url);
+    }
 
     /**
-     * @Route("/espaceclient/paiement/{devisID}/{modePaiement}", name="step4paiement", methods={"GET","POST"})
+     * @Route("/espaceclient/paiement/{devisID}", name="step4paiement", methods={"GET","POST"})
      */
-    public function step4paiement(Request $request, $devisID, $modePaiement): Response
+    public function step4paiement(Request $request, $devisID,  ReservationClient $reservationClientSession): Response
     {
 
         $client = $this->getUser();
@@ -315,37 +331,21 @@ class ReservationController extends AbstractController
         $listeDevis = $this->devisRepo->findBy(['client' => $client]);
         $devis = $this->devisRepo->find($devisID);
 
-        $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($devis->getDateDepart(), $devis->getDateRetour(), $devis->getVehicule());
-
-        $tarifTotal = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $devis->getOptions(), $devis->getGaranties());
-
-        $tarifJournalier = $tarifTotal / $this->dateHelper->calculDuree($devis->getDateDepart(), $devis->getDateRetour());
-
-        $tarifJournalier = round($tarifJournalier, 2);
-
-        $vingtPourcentTarifTotal = (20 * $tarifTotal) / 100;
-
-        $cinquantePourcentTarifTotal = (50 * $tarifTotal) / 100;
-
-        if ($modePaiement == 20) {
-            $sommePaiement = $this->tarifsHelper->Vingtpourcent($tarifTotal);
+        $modePaiement = $reservationClientSession->getModePaiment();
+        dd($modePaiement);
+        if ($modePaiement == 25) {
+            $sommePaiement = $this->tarifsHelper->VingtCinqPourcent($devis->getPrix());
         }
         if ($modePaiement == 50) {
-            $sommePaiement = $this->tarifsHelper->CinquantePourcent($tarifTotal);
+            $sommePaiement = $this->tarifsHelper->CinquantePourcent($devis->getPrix());
         }
         if ($modePaiement == 100) {
-            $sommePaiement = $tarifTotal;
+            $sommePaiement = $devis->getPrix();
         }
 
         if ($devis->getClient() == $client) {
             return $this->render('client/reservation/validation/step4paiement.html.twig', [
                 'devis' => $devis,
-                'tarif' => $tarifVehicule,
-                'tarifJournalier' => $tarifJournalier,
-                'vingtPourcentTarifTotal' => $vingtPourcentTarifTotal,
-                'cinquantePourcentTarifTotal' => $cinquantePourcentTarifTotal,
-                'devis' => $devis,
-                'tarifTotal' => $tarifTotal,
                 'sommePaiement' => $sommePaiement,
             ]);
         } else {

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use DateTime;
 use App\Classe\Mail;
+use App\Classe\Reservation as ClasseReservation;
 use App\Entity\Tarifs;
 use App\Entity\Reservation;
 use App\Service\DateHelper;
@@ -20,11 +21,13 @@ use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ReservationRepository;
+use GuzzleHttp\RetryMiddleware;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * @Route("/backoffice")
@@ -223,33 +226,5 @@ class AdminController extends AbstractController
   public function paiement(): Response
   {
     return $this->render('admin/paiement/index.html.twig');
-  }
-
-  /**
-   * @Route("/testercode", name="testerCode", methods={"GET","POST"})
-   */
-  public function testerCode(Request $request): Response
-  {
-
-    $form = $this->createForm(ReservationStep1Type::class);
-
-    $form->handleRequest($request);
-
-    if ($form->isSubmitted() && $form->isValid()) {
-
-      $dateDepart = $form->getData()['dateDepart'];
-      $dateRetour = $form->getData()['dateRetour'];
-      $agenceDepart = $form->getData()['agenceDepart'];
-      $agenceRetour = $form->getData()['agenceRetour'];
-      $typeVehicule = $form->getData()['typeVehicule'];
-      $lieuSejour = $form->getData()['lieuSejour'];
-
-      $reservations = $this->reservationRepo->findReservationIncludeDates($dateDepart, $dateRetour);
-      dd($reservations);
-    }
-
-    return $this->render('admin/test/index.html.twig', [
-      'form' => $form->createView()
-    ]);
   }
 }
