@@ -337,14 +337,27 @@ class DevisController extends AbstractController
         $client = $devisRepository->findOneBy(['client' => $devis->getClient()]);
         $user = $userRepository->findOneBy(["id" => $client->getId()]);
         $vehicule = $devisRepository->findOneBy(['vehicule' => $devis->getVehicule()]);
-        $quantite = $devis->getDateDepart()->diff($devis->getDateRetour());
+        //$quantite = $devis->getDateDepart()->diff($devis->getDateRetour());
+        $quantite = date_diff($devis->getDateDepart(), $devis->getDateRetour());
         $logo = $this->getParameter('logo') . '/Joel-Location-new.png';
+        $logo_data = base64_encode(file_get_contents($logo));
+        $logo_src = 'data:image/png;base64,'.$logo_data;
+        $prixunitaire = $devis->getPrix();
+        $prixht = $prixunitaire * $quantite->d;
+        $tva = 8.5/100;
+        $montant = $tva * $prixht;
+        $total = $prixht * (1 + $tva);
         $html = $this->renderView('admin/devis/pdfdevis.html.twig', [
             'devis'  => $devis,
             'client' => $user,
             'vehicule' => $vehicule,
             'quantite' => $quantite,
-            'logo' => $logo,
+            'logo' => $logo_src,
+            'prix_unitaire' => $prixunitaire,
+            'tva' => $tva,
+            'montanttva' => $montant,
+            'prixht' => $prixht,
+            'total' => $total,
         ]);
 
         /* return new PdfResponse(
