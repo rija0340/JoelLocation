@@ -1,0 +1,333 @@
+@import url('../../fonts/poppins/poppins_font.css');
+
+.groupe_boutons .col-auto {
+    padding-left:  0px;
+    padding-right: 0px;
+}
+
+.groupe_boutons .col-auto button{
+    /* margin: 1px;
+    padding: 5px; */
+}
+
+.info {
+    padding: 1px 1px 1px 1px;
+}
+
+/* style incrementer */
+
+.input-number-group {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-justify-content: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+  }
+  
+  .input-number-group input[type=number]::-webkit-inner-spin-button,
+  .input-number-group input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+            appearance: none;
+  }
+  
+  .input-number-group .input-group-button {
+    line-height: calc(40px/2 - 5px);
+  }
+  
+  .input-number-group .input-number {
+    width: 40px;
+    /* padding: 0 12px; */
+    vertical-align: top;
+    text-align: center;
+    outline: none;
+    display: block;
+    margin: 0;
+  }
+  
+  .input-number-group .input-number,
+  .input-number-group .input-number-decrement,
+  .input-number-group .input-number-increment {
+    border: 1px solid #cacaca;
+    height: 40px;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+    border-radius: 0;
+  }
+  
+
+/* fin style incrementer */
+.heading{
+
+  font-weight: 600;
+  font-size: 20px;
+  /* margin: 0;
+  cursor: pointer;
+  margin-bottom: 10px;
+  line-height: 100%;  */
+}
+
+.prestation ul{
+  list-style: none;
+}
+
+.prix_location, .content_depart, .content_retour{
+  padding-left: 0.5rem !important;
+}
+
+.prix_location .prix{
+  font-size: 20px;
+}
+
+.testfont{
+  font-family: 'Poppins', sans-serif;
+  color: black;
+}
+
+.bootstrap-datetimepicker-widget.dropdown-menu {
+  display: block;
+  margin: 2px 0;
+  padding: 4px;
+  width: 19em;
+  position: absolute;
+  z-index: 100;
+}
+.wizard_horizontal ul.wizard_steps  {
+  display: table;
+  list-style: none;
+  position: relative;
+  width: 100%;
+ 
+}
+.wizard_horizontal .stepContainer{
+  z-index: 1;
+}
+
+/* style checkbox */
+/* Customize the label (the container) */
+.label-container {
+  display: block;
+  position: relative;
+  padding-left: 25px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.label-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #eee;
+}
+
+/* On mouse-over, add a grey background color */
+.label-container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.label-container input:checked ~ .checkmark {
+  background-color: #ff0000;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.label-container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.label-container .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+/* style radio */
+.label-radio {
+  display: block;
+  position: relative;
+  padding-left: 27px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 14px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.label-radio input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Create a custom radio button */
+.checkmark-radio  {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 18px;
+  width: 18px;
+  background-color: #eee;
+  border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.label-radio:hover input ~ .checkmark-radio {
+  background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.label-radio input:checked ~ .checkmark-radio {
+  background-color: #fc0000;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark-radio:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.label-radio input:checked ~ .checkmark-radio:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.label-radio .checkmark-radio:after {
+ 	top: 5px;
+	left: 5px;
+	width: 9px;
+	height: 9px;
+	border-radius: 50%;
+	background: white;
+}
+
+/* style radio  conducteur*/
+.label-conducteur {
+  display: block;
+  position: relative;
+  padding-left: 27px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.label-conducteur input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Create a custom radio button */
+.checkmark-conducteur  {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 18px;
+  width: 18px;
+  background-color: #eee;
+  border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.label-conducteur:hover input ~ .checkmark-conducteur {
+  background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.label-conducteur input:checked ~ .checkmark-conducteur {
+  background-color: #fc0000;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark-conducteur:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.label-conducteur input:checked ~ .checkmark-conducteur:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.label-conducteur .checkmark-conducteur:after {
+ 	top: 5px;
+	left: 5px;
+	width: 9px;
+	height: 9px;
+	border-radius: 50%;
+	background: white;
+}
+
+/* ***********custom style smart wizard ********** */
+.btn .sw-btn-prev{
+  background-color: red;
+}
+.sw-theme-dots .toolbar > .btn {
+  color: #ffffff;
+  background-color: #000000;
+  border: 1px solid #000000;
+  padding: .375rem .75rem;
+  border-radius: .25rem;
+  font-weight: 400;
+}
+
+/* style step 2 */
+.caracteristiques ul li{
+  list-style: none;
+}
+
+/* style step 4 */
+
+.label-tarifTotal{
+  font-size: 22px;
+  font-weight: bold;
+}
+.tarifTotal{
+  font-size: 30px;
+  font-weight: bold;
+  color : red;
+}

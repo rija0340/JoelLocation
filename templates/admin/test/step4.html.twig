@@ -7,13 +7,15 @@
 {% block stylesheets %}
 	<link rel="stylesheet" href="{{asset('css/admin/jquery-ui.css')}}">
 	<link rel="stylesheet" href="{{asset('css/admin/steps.css')}}">
+	<link href="{{asset('css/admin/details_vehicule.css')}}" rel="stylesheet">
+	<link href="{{asset('css/admin/vente_comptoir.css')}}" rel="stylesheet">
 
 {% endblock %}
 {% block current_page_right %}
 
 	<div class="row">
 		<div class="col-auto text-center">
-			<i class="fa fa-circle icon-steps "></i>
+			<i class="fa fa-check-circle-o icon-steps "></i>
 			<p class="">
 				Etape 1
 				<br>
@@ -22,7 +24,7 @@
 
 		</div>
 		<div class="col-auto text-center">
-			<i class="fa fa-circle icon-steps "></i>
+			<i class="fa fa-check-circle-o icon-steps "></i>
 			<p>
 				Etape 2
 				<br>
@@ -30,7 +32,7 @@
 			</p>
 		</div>
 		<div class="col-auto text-center">
-			<i class="fa fa-circle icon-steps "></i>
+			<i class="fa fa-check-circle-o icon-steps "></i>
 			<p>
 				Etape 3
 				<br>
@@ -162,7 +164,7 @@
 				</div>
 				<div class="x_content">
 					<div class="form-group">
-						<form autocomplete="off" action="{{path('step5')}}" method="post" name="selectedClient" id="selectedClient">
+						<form autocomplete="off" method="post" name="selectedClient" id="selectedClient">
 							<div class="autocomplete">
 								<input id="selectClient" type="text" name="client" placeholder="Nom ou email du client" class="form-control" required="true">
 							</div>
@@ -202,7 +204,7 @@
 						</div>
 						<div class="mt-2 text-center">
 							<button class="btn btn-danger" type="submit">
-								Enregistrer</button>
+								Enregistrer le client</button>
 						</div>
 						{{ form_end(form) }}
 
@@ -215,11 +217,11 @@
 						<i class="fa fa-file-pdf-o mr-1"></i>Enregistrer le devis</button>
 				</div>
 				<div class="col-auto pr-0 pl-0">
-					<button class="btn btn-primary" id="enregistrerDevisEnvoi">
-						<i class="fa fa-envelope mr-1 "></i>Enregistrer le devis + envoi au client</button>
+					<button formaction="{{path('save_devis_send_mail')}}" form="selectedClient" type="submit" class="btn btn-primary" id="enregistrerDevisEnvoi">
+						<i class="fa fa-envelope mr-1 "></i>Enregistrer le devis + envoi au client</a>
 				</div>
 				<div class="col-auto pr-0 pl-0">
-					<button type="submit" form="selectedClient" class="btn btn-violet" id="enregistrerDevis">
+					<button type="submit" formaction="{{path('save_only_devis')}}" form="selectedClient" class="btn btn-violet" id="enregistrerDevis">
 						<i class="fa fa-check mr-1"></i>Enregistrer le devis</button>
 				</div>
 			</div>

@@ -1,11 +1,11 @@
-{% extends 'base2.html.twig' %}
+{% extends 'baseClient.html.twig' %}
 
 {% block title %}Réservation
 {% endblock %}
 
 
 {% block stylesheets %}
-	<link rel="stylesheet" href="{{asset('css/admin/steps.css')}}">
+	<link rel="stylesheet" href="{{asset('css/client/steps.css')}}">
 	<link href="{{asset('css/admin/details_vehicule.css')}}" rel="stylesheet">
 	<link href="{{asset('css/admin/vente_comptoir.css')}}" rel="stylesheet">
 
@@ -13,7 +13,7 @@
 {% block current_page_right %}
 
 	<div class="row">
-		<div class="col-auto text-center">
+		<div class="col-md-3 text-center">
 			<i class="fa fa-check-circle-o icon-steps "></i>
 			<p class="">
 				Etape 1
@@ -22,7 +22,7 @@
 			</p>
 
 		</div>
-		<div class="col-auto text-center">
+		<div class="col-md-3 text-center">
 			<i class="fa fa-check-circle-o icon-steps "></i>
 			<p>
 				Etape 2
@@ -30,7 +30,7 @@
 				Véhicules
 			</p>
 		</div>
-		<div class="col-auto text-center current-step">
+		<div class="col-md-3 text-center current-step">
 			<i class="fa fa-circle icon-steps "></i>
 			<p>
 				Etape 3
@@ -38,7 +38,7 @@
 				Options et garanties
 			</p>
 		</div>
-		<div class="col-auto text-center">
+		<div class="col-md-3 text-center">
 			<i class="fa fa-circle-o icon-steps "></i>
 			<p>
 				Etape 4
@@ -49,19 +49,19 @@
 	</div>
 {% endblock %}
 
-{% block content %}
+{% block body %}
 
-	<div class="text-center ">
+	<div class="text-center mb-3">
 		<button type='submit' class="btn btn-danger" form="options_garanties">
 			Enregistrer et passer à  l'étape 4
 		</button>
 	</div>
 
-	<form action="{{path('step3')}}" method='post' id="options_garanties">
+	<form action="{{path('client_step3')}}" method='post' id="options_garanties">
 
 		<div class="row">
 			<div class="col-md-3">
-				<div class="alert alert-secondary btn-block h-100">
+				<div class="card p-2 h-100">
 					<div class="x_title">
 						<h3>
 							<i class="fa fa-chevron-right"></i>
@@ -71,76 +71,85 @@
 					<img src="{{vich_uploader_asset(vehicule, 'imageFile') }}" alt="{{vehicule.marque}} {{vehicule.modele}}" style="width:100%;" id="vehicule_photo">
 
 					<div>
-						<h3 class="heading">Agence départ
-						</h3>
-						<div class="content_depart">
-							<p>
-								<i class="fa fa-map-marker"></i>
-								<span id="agence_depart">{{agenceDepart}}</span><br>
-								<span id="date_depart">{{dateDepart | date('d/m/Y') }}</span>
-								<span id="heure_depart">
-									{{dateDepart | date('H:i') }}</span>
-							</p>
-						</div>
-						<h3 class="heading">Agence retour
-						</h3>
-						<div class="content_retour">
-							<p>
-								<i class="fa fa-map-marker"></i>
-								<span id="agence_retour">{{agenceRetour}}</span><br>
-								<span id="date_retour">{{dateRetour | date('d/m/Y')}}</span>
-								<span id="heure_retour">{{dateRetour | date('H:i')}}</span>
-							</p>
-						</div>
-						<p>
-							Soit
-							<span id="nombre_jours_location">{{duree}}</span>
-							jours de location</p>
+						<div class="border-bottom mb-2">
 
-						<h3 class="heading">Prix de base de location</h3>
-						<div class="prix_location">
-							<span id="prixTotal">{{ tarifVehicule }}</span>
-							EUR<br>
-							soit
-							<span id="prixJournalier">{{ (tarifVehicule / duree)|number_format('2','.')}}</span>
-							euro/jour
+							<h3 class="heading">Agence départ
+							</h3>
+							<div class="content_depart">
+								<p>
+									<i class="fa fa-map-marker"></i>
+									<span id="agence_depart">{{agenceDepart}}</span><br>
+									<span id="date_depart">{{dateDepart | date('d/m/Y') }}</span>
+									<span id="heure_depart">
+										{{dateDepart | date('H:i') }}</span>
+								</p>
+							</div>
 						</div>
-						<div class="prestation">
-							<h3 class="heading">Prestations incluses</h3>
-							<ul class="pl-2">
-								<li>
-									<i class="fa fa-check"></i>
-									Kilométrage Illimité
-								</li>
-								<li>
-									<i class="fa fa-check"></i>
-									Assurance accidents causés aux tiers
-								</li>
-								<li>
-									<i class="fa fa-check"></i>
-									Assurance responsabilité civile
-								</li>
-								<li>
-									<i class="fa fa-check"></i>
-									Assurance collision (CDW)
-								</li>
-								<li>
-									<i class="fa fa-check"></i>
-									TVA 8.5 %
-								</li>
-							</ul>
+						<div class="border-bottom mb-2">
+							<h3 class="heading">Agence retour
+							</h3>
+							<div class="content_retour">
+								<p>
+									<i class="fa fa-map-marker"></i>
+									<span id="agence_retour">{{agenceRetour}}</span><br>
+									<span id="date_retour">{{dateRetour | date('d/m/Y')}}</span>
+									<span id="heure_retour">{{dateRetour | date('H:i')}}</span>
+								</p>
+							</div>
+						</div>
+						<div class="border-bottom mb-2">
+							<p>
+								Soit
+								<span id="nombre_jours_location">{{duree}}</span>
+								jours de location</p>
+
+							<h3 class="heading">Prix de base de location</h3>
+							<div class="prix_location">
+								<span id="prixTotal">{{ tarifVehicule }}</span>
+								€<br>
+								soit
+								<span id="prixJournalier">{{ (tarifVehicule / duree) | number_format('2','.')}}</span>
+								€/jour
+							</div>
+						</div>
+						<div class="border-bottom mb-2">
+
+							<div class="prestation">
+								<h3 class="heading">Prestations incluses</h3>
+								<ul class="pl-2">
+									<li>
+										<i class="fa fa-check"></i>
+										Kilométrage Illimité
+									</li>
+									<li>
+										<i class="fa fa-check"></i>
+										Assurance accidents causés aux tiers
+									</li>
+									<li>
+										<i class="fa fa-check"></i>
+										Assurance responsabilité civile
+									</li>
+									<li>
+										<i class="fa fa-check"></i>
+										Assurance collision (CDW)
+									</li>
+									<li>
+										<i class="fa fa-check"></i>
+										TVA 8.5 %
+									</li>
+								</ul>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="col-md-9">
 				<div class="x_panel">
-					<div class="x_title">
-						<h3>
-							<i class="fa fa-chevron-right"></i>
-							Choisir vos options
-						</h3>
-					</div>
+					<h3>
+						<i class="fa fa-chevron-right"></i>
+						Choisir vos options
+					</h3>
+					<div class="x_title"></div>
 
 					<div class="row">
 						<div class="col-md-6">
@@ -153,12 +162,12 @@
 								</div>
 								<div class="col-md-8">
 									<div class="x_title">
-										<h5>
+										<h4>
 											Conducteur additionnel
-										</h5>
+										</h4>
 
 									</div>
-									<p>
+									<p class="text-justify">
 										A Joel Location, nous savons que les longs trajets peuvent être fatigants, surtout après un bon bain de mer. C’est pour cela, que nous vous proposons l’ajout d’un deuxième conducteur gratuitement. De plus, les assurances responsabilités civiles et accidents causés aux tiers sont inclus dans votre forfait "location de voiture".
 									</p>
 
@@ -190,11 +199,11 @@
 								</div>
 								<div class="col-md-8">
 									<div class="x_title">
-										<h5>
+										<h4>
 											Siège bébé / enfant
-										</h5>
+										</h4>
 									</div>
-									<p>Nous mettons à votre disposition des sièges bébé et nourrissons, homologués NF, pour seulement 30 euros TTC. Les rehausseurs pour les enfants de + de 15kg sont totalement gratuits !</p>
+									<p class="text-justify">Nous mettons à votre disposition des sièges bébé et nourrissons, homologués NF, pour seulement 30 euros TTC. Les rehausseurs pour les enfants de + de 15kg sont totalement gratuits !</p>
 									{# test radio #}
 									{% for option in options %}
 
@@ -216,12 +225,11 @@
 				</div>
 
 				<div class="x_panel">
-					<div class="x_title">
-						<h3>
-							<i class="fa fa-chevron-right"></i>
 
-							Choisissez vos garanties</h3>
-					</div>
+					<h3>
+						<i class="fa fa-chevron-right"></i>
+						Choisissez vos garanties
+					</h3>
 					<div class="row">
 						{% for garantie in garanties %}
 							<div class="col-md-6">
@@ -234,11 +242,11 @@
 									</div>
 									<div class="col-md-8">
 										<div class="x_title">
-											<h5>
+											<h4>
 												{{garantie.appelation}}
-											</h5>
+											</h4>
 										</div>
-										<p>
+										<p class="text-justify">
 											{{garantie.description}}
 										</p>
 										<div
@@ -260,7 +268,7 @@
 			</div>
 		</div>
 	</form>
-	<div class="text-center mt-5">
+	<div class="text-center mt-3">
 		<button type='submit' class="btn btn-danger" form="options_garanties">
 			Enregistrer et passer à  l'étape 4
 		</button>

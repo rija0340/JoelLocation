@@ -4,123 +4,125 @@
 {% endblock %}
 {% block stylesheets %}{% endblock %}
 {% block body %}
-
-	<h4 class="mb-0 pb-0">Mes informations</h4>
-	<div class="clearfix"></div>
-	<div class="x_title"></div>
-
-	{{ form_start(formClient) }}
-
-	<div class="row">
-		<div class="form-group col-md-6">
-			<label for="">Nom :</label>
-			{{ form_widget(formClient.nom,{'attr' : { 'readonly' : 'readonly'}  } )}}
-		</div>
-		<div class="form-group col-md-6">
-			<label for="">Prénom :</label>
-			{{ form_widget(formClient.prenom,{'attr' : { 'readonly' : 'readonly'}  } )}}
-
-		</div>
-
-		<div class="form-group col-md-6">
-			<label for="">Adresse email :</label>
-			{{ form_widget(formClient.mail,{'attr' : { 'readonly' : 'readonly'}  } )}}
-
-		</div>
-		<div class="form-group col-md-3">
-			<label for="">Téléphone 1:</label>
-			{{ form_widget(formClient.telephone,{'attr' : { 'readonly' : 'readonly'}  } )}}
-
-		</div>
-		<div class="form-group col-md-3">
-			<label for="">Téléphone 2 :</label>
-			{{ form_widget(formClient.portable,{'attr' : { 'readonly' : 'readonly'}  } )}}
-
-		</div>
-
-		<div class="form-group col-md-6">
-			<label for="">Adresse :</label>
-			{{ form_widget(formClient.adresse,{'attr' : { 'readonly' : 'readonly'}  } )}}
-
-		</div>
-		<div class="form-group col-md-6">
-			<label for="">Complément adresse :</label>
-			{{ form_widget(formClient.complementAdresse,{'attr' : { 'readonly' : 'readonly'}  } )}}
-
-		</div>
-
-		<div class="form-group col-md-3">
-			<label for="">Ville :</label>
-			{{ form_widget(formClient.ville,{'attr' : { 'readonly' : 'readonly'}  } )}}
-
-		</div>
-		<div class="form-group col-md-3">
-			<label for="">Code postal :</label>
-			{{ form_widget(formClient.codePostal,{'attr' : { 'readonly' : 'readonly'}  } )}}
-
-		</div>
-
-		<div class="form-group col-md-6">
-			<label for="">Date de naissance :</label>
-			{{ form_widget(formClient.dateNaissance,{'attr' : { 'readonly' : 'readonly'}  } )}}
-
-		</div>
-		<div class="form-group col-md-6">
-			<label for="">Lieu de naissance :</label>
-			{{ form_widget(formClient.lieuNaissance,{'attr' : { 'readonly' : 'readonly'}  } )}}
-
-		</div>
-		<div class="form-group col-md-6">
-			<label for="">Numero permis :</label>
-			{{ form_widget(formClient.numeroPermis,{'attr' : { 'readonly' : 'readonly'}  } )}}
-
-		</div>
-		<div class="form-group col-md-6">
-			<label for="">Date permis :</label>
-			{{ form_widget(formClient.datePermis,{'attr' : { 'readonly' : 'readonly'}  } )}}
-
-		</div>
-
-		<div class="form-group col-md-6">
-			<label for="">Ville délivrance permis :</label>
-			{# {{form_label('test')}} #}
-			{{ form_widget(formClient.villeDelivrancePermis,{'attr' : { 'readonly' : 'readonly'}  } )}}
-
-		</div>
-
-
-	</div>
-
-	{{ form_end(formClient) }}
-	<div class="text-center">
-		<a href="{{ path('infoclient_edit', {'id': id}) }}" class="btn btn-danger ">
-			<i class="fa  fa-edit (alias)"></i>
-			Modifier
-		</a>
-	</div>
-
-
-	<div class="monCompte mt-4">
-
-		<h4 class="mb-0 pb-0">
-			<i class="fa fa-user"></i>
-			Mon compte
-		</h4>
-
+	<div class="x_panel">
+		<h4 class="mb-0 pb-0">Mes informations</h4>
 		<div class="clearfix"></div>
 		<div class="x_title"></div>
 
-		<div class="col-lg-8 col-md-8 ml-auto mr-auto">
-			{{ form_start(formClientCompte) }}
+		{{ form_start(formClient) }}
 
-			{{ form_widget(formClientCompte) }}
-			<div class="text-center mt-3">
-				<button class="btn btn-danger">
-					<i class="fa fa-book" aria-hidden="true"></i>
-					{{ button_label|default('Valider') }}
-				</button>
+		<div class="row">
+			<div class="form-group col-md-6">
+				<label for="">Nom :</label>
+				{{ form_widget(formClient.nom,{'attr' : { 'readonly' : 'readonly'}  } )}}
 			</div>
-			{{ form_end(formClientCompte) }}
+			<div class="form-group col-md-6">
+				<label for="">Prénom :</label>
+				{{ form_widget(formClient.prenom,{'attr' : { 'readonly' : 'readonly'}  } )}}
+
+			</div>
+
+			<div class="form-group col-md-6">
+				<label for="">Adresse email :</label>
+				{{ form_widget(formClient.mail,{'attr' : { 'readonly' : 'readonly'}  } )}}
+
+			</div>
+			<div class="form-group col-md-3">
+				<label for="">Téléphone 1:</label>
+				{{ form_widget(formClient.telephone,{'attr' : { 'readonly' : 'readonly'}  } )}}
+
+			</div>
+			<div class="form-group col-md-3">
+				<label for="">Téléphone 2 :</label>
+				{{ form_widget(formClient.portable,{'attr' : { 'readonly' : 'readonly'}  } )}}
+
+			</div>
+
+			<div class="form-group col-md-6">
+				<label for="">Adresse :</label>
+				{{ form_widget(formClient.adresse,{'attr' : { 'readonly' : 'readonly'}  } )}}
+
+			</div>
+			<div class="form-group col-md-6">
+				<label for="">Complément adresse :</label>
+				{{ form_widget(formClient.complementAdresse,{'attr' : { 'readonly' : 'readonly'}  } )}}
+
+			</div>
+
+			<div class="form-group col-md-3">
+				<label for="">Ville :</label>
+				{{ form_widget(formClient.ville,{'attr' : { 'readonly' : 'readonly'}  } )}}
+
+			</div>
+			<div class="form-group col-md-3">
+				<label for="">Code postal :</label>
+				{{ form_widget(formClient.codePostal,{'attr' : { 'readonly' : 'readonly'}  } )}}
+
+			</div>
+
+			<div class="form-group col-md-6">
+				<label for="">Date de naissance :</label>
+				{{ form_widget(formClient.dateNaissance,{'attr' : { 'readonly' : 'readonly'}  } )}}
+
+			</div>
+			<div class="form-group col-md-6">
+				<label for="">Lieu de naissance :</label>
+				{{ form_widget(formClient.lieuNaissance,{'attr' : { 'readonly' : 'readonly'}  } )}}
+
+			</div>
+			<div class="form-group col-md-6">
+				<label for="">Numero permis :</label>
+				{{ form_widget(formClient.numeroPermis,{'attr' : { 'readonly' : 'readonly'}  } )}}
+
+			</div>
+			<div class="form-group col-md-6">
+				<label for="">Date permis :</label>
+				{{ form_widget(formClient.datePermis,{'attr' : { 'readonly' : 'readonly'}  } )}}
+
+			</div>
+
+			<div class="form-group col-md-6">
+				<label for="">Ville délivrance permis :</label>
+				{# {{form_label('test')}} #}
+				{{ form_widget(formClient.villeDelivrancePermis,{'attr' : { 'readonly' : 'readonly'}  } )}}
+
+			</div>
+
+
+		</div>
+
+		{{ form_end(formClient) }}
+		<div class="text-center">
+			<a href="{{ path('infoclient_edit', {'id': id}) }}" class="btn btn-danger ">
+				<i class="fa  fa-edit (alias)"></i>
+				Modifier
+			</a>
+		</div>
+	</div>
+
+	<div class="x_panel">
+		<div class="monCompte mt-4">
+
+			<h4 class="mb-0 pb-0">
+				<i class="fa fa-user"></i>
+				Mon compte
+			</h4>
+
+			<div class="clearfix"></div>
+			<div class="x_title"></div>
+
+			<div class="col-lg-8 col-md-8 ml-auto mr-auto">
+				{{ form_start(formClientCompte) }}
+
+				{{ form_widget(formClientCompte) }}
+				<div class="text-center mt-3">
+					<button class="btn btn-danger">
+						<i class="fa fa-book" aria-hidden="true"></i>
+						{{ button_label|default('Valider') }}
+					</button>
+				</div>
+				{{ form_end(formClientCompte) }}
+			</div>
 		</div>
 	</div>
 

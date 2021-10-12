@@ -33,7 +33,7 @@ function addInput() {
     label.innerText = "Autre tarif : ";
     var input = document.createElement('input');
     input.type = 'text';
-    input.name = 'tarif';
+    input.name = 'tarifVehicule';
     input.classList.add("form-control");
     input.classList.add("inputTarif");
 

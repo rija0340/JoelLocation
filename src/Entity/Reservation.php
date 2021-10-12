@@ -174,6 +174,11 @@ class Reservation
      */
     private $prixGaranties;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable = true)
+     */
+    private $stripeSessionId;
+
     public function __construct()
     {
         $this->avis = new ArrayCollection();
@@ -619,6 +624,18 @@ class Reservation
     public function setPrixGaranties(?float $prixGaranties): self
     {
         $this->prixGaranties = $prixGaranties;
+
+        return $this;
+    }
+
+    public function getStripeSessionId(): ?string
+    {
+        return $this->stripeSessionId;
+    }
+
+    public function setStripeSessionId(string $stripeSessionId): self
+    {
+        $this->stripeSessionId = $stripeSessionId;
 
         return $this;
     }

@@ -1,37 +1,6 @@
-{# <div class="">
-	<ul class="nav flex-column" id="menu">
-		<li class="nav-item {% if app.request.attributes.get('_route') starts with 'espaceClient_index' %}current-menu w-100{% endif %}">
-			<a class="" href="{{path('espaceClient_index')}}">
-				<i class="fa fa-user mr-1"></i>Mes informations</a>
-		</li>
-		<li class="nav-item {% if app.request.attributes.get('_route') starts with 'client_reservations' %}current-menu w-100{% endif %}">
-			<a class="" href="{{path('client_reservations')}}">
-				<i class="fa fa-shopping-cart mr-1"></i>
-
-				Mes réservations</a>
-		</li>
-		<li class=" nav-item {% if app.request.attributes.get('_route') starts with 'client_nouvelleReserv' %}current-menu w-100{% endif %}">
-			<a class="" href="{{path('client_nouvelleReserv')}}">
-				<i class="fa fa-plus mr-1"></i>Nouvelle réservation</a>
-		</li>
-		<li class="nav-item {% if app.request.attributes.get('_route') starts with 'client_mesConducteurs' %}current-menu w-100{% endif %}">
-			<a class=" " tabindex="-1" class="text-dark" href="{{path('client_mesConducteurs')}}">
-				<i class="fa fa-list"></i>
-				Mes conducteurs</a>
-		</li>
-		<li class="nav-item">
-			<a class="btn btn-dark w-100 btnLogout" tabindex="-1" href="{{path('app_logout')}}" class="text-white">Deconnexion</a>
-		</li>
-		<li class="nav-item">
-			<a href="{{ path('accueil') }}" class="btn btn-warning w-100 p-1">Aller sur le site Joellocation</a>
-		</li>
-	</ul>
-</div> #}
-
-
-<nav class="navbar navbar-expand-lg navbar-light bg-light mdl-shadow--2dp ">
+<nav class="navbar navbar-expand-lg navbar-light bg-white mdl-shadow--2dp">
 	<a href="{{path('accueil')}}">
-		<img src="../../images/Joel-Location-new.png" width="70" height="70" class="d-inline-block align-top" alt="">
+		<img src="{{asset('images/Joel-Location-new.png')}}" width="100" height="100" class="d-inline-block align-top" alt="">
 	</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
@@ -42,20 +11,20 @@
 				<a class="nav-link" href="{{path('espaceClient_index')}}">
 					Mes informations</a>
 			</li>
-			<li class="nav-item">
+			<li class="nav-item {% if app.request.attributes.get('_route') starts with 'client_reservations' or app.request.attributes.get('_route') starts with 'validation' %} current {% endif %}">
 				<a class="nav-link" href="{{path('client_reservations')}}">
 					Mes réservations</a>
 			</li>
 
-			<li class="nav-item">
-				<a class="nav-link" href="{{path('client_nouvelleReserv')}}">
+			<li class="nav-item {% if app.request.attributes.get('_route') starts with 'client_step' %} current {% endif %}">
+				<a class="nav-link" href="{{path('client_step1')}}">
 					Nouvelle réseration</a>
 			</li>
-			<li class="nav-item">
+			<li class="nav-item {% if app.request.attributes.get('_route') starts with 'client_mesConducteurs' %} current {% endif %}">
 				<a class="nav-link" tabindex="-1" class="text-dark" href="{{path('client_mesConducteurs')}}">
 					Mes conducteurs</a>
 			</li>
-			<li class="nav-item">
+			<li class="nav-item ">
 				<a class=" btnLogout nav-link" tabindex="-1" href="{{path('app_logout')}}" class="text-white">Deconnexion</a>
 			</li>
 

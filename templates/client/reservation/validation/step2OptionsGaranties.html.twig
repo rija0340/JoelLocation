@@ -1,4 +1,4 @@
-{% extends 'baseClient2.html.twig' %}
+{% extends 'baseClient.html.twig' %}
 
 {% block title %}
 	options et garanties
@@ -23,7 +23,6 @@
 					<div class="marque_modele">{{devis.vehicule.marque}}
 						{{devis.vehicule.modele}}</div>
 					<img src="/uploads/vehicules/{{ devis.vehicule.image }}" alt="{{ devis.vehicule.image }}" class="img-circle  " style="width : 100%;">
-
 				</div>
 				<div>
 					<div class="divDepart border-bottom">
@@ -71,6 +70,16 @@
 							</li>
 						</ul>
 					</div>
+					<div class="divTarifVehicule border-bottom">
+						<h5>Prix de base de location</h5>
+						{{tarifVehicule}}
+						eur
+						<br>
+						soit
+						{{ (tarifVehicule / duree)|number_format(2,'.')}}
+						eur / jour
+
+					</div>
 					<div class="divOptions border-bottom">
 						<h5 class="heading">Option(s)
 						</h5>
@@ -111,13 +120,12 @@
 							{% endfor %}
 						</ul>
 					</div>
-
 				</div>
 			</div>
 			<div class="divTarifTotal text-center">
 				<h5 class="heading">Prix total pour
-					{{devis.duree}}
-					jours
+					{{(devis.duree)}}
+					jour(s)
 				</h5>
 				<span class="tarifTotal">{{devis.prix}}€</span><br>
 				<span class="tarifJournalier">Soit
@@ -165,9 +173,7 @@
 						</div>
 					</div>
 				{% endfor %}
-
 			</div>
-
 			<div class="card mdl-shadow--2dp divOptions">
 				<div class="text-center mt-4 mb-4">
 					<h2>VOS OPTIONS</h2>
@@ -214,7 +220,6 @@
 				</div>
 			</div>
 			{{ form_end(form) }}
-
 		</div>
 	</div>
 {% endblock %}

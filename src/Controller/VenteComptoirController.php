@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Classe\Mail;
 use App\Entity\User;
 use App\Entity\Devis;
 use GuzzleHttp\Client;
@@ -38,7 +39,6 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class VenteComptoirController extends AbstractController
 {
 
-
     private $userRepo;
     private $reservationRepo;
     private $dateTimestamp;
@@ -54,6 +54,8 @@ class VenteComptoirController extends AbstractController
     private $flashy;
     private $passwordEncoder;
     private $devisRepo;
+    private $reservationSession;
+    private $mail;
 
     public function __construct(
         FlashyNotifier $flashy,
@@ -69,9 +71,12 @@ class VenteComptoirController extends AbstractController
         OptionsRepository $optionsRepo,
         GarantieRepository $garantiesRepo,
         UserPasswordEncoderInterface $passwordEncoder,
-        DevisRepository $devisRepo
+        DevisRepository $devisRepo,
+        ClasseReservation $reservationSession,
+        Mail $mail
     ) {
 
+        $this->reservationSession = $reservationSession;
         $this->flashy = $flashy;
         $this->reservationRepo = $reservationRepo;
         $this->vehiculeRepo = $vehiculeRepo;
@@ -86,12 +91,13 @@ class VenteComptoirController extends AbstractController
         $this->em = $em;
         $this->passwordEncoder = $passwordEncoder;
         $this->devisRepo = $devisRepo;
+        $this->mail = $mail;
     }
 
     /**
-     * @Route("/testercode", name="testerCode", methods={"GET","POST"})
+     * @Route("/vente-comptoir/etape1", name="step1", methods={"GET","POST"})
      */
-    public function testerCode(Request $request, ClasseReservation $reservationSession, SessionInterface $session): Response
+    public function step1(Request $request, ClasseReservation $reservationSession, SessionInterface $session): Response
     {
 
         //remove contenu session avant toute chose
@@ -128,7 +134,7 @@ class VenteComptoirController extends AbstractController
     }
 
     /**
-     * @Route("/etape2", name="step2", methods={"GET","POST"})
+     * @Route("/vente-comptoir/etape2", name="step2", methods={"GET","POST"})
      */
     public function step2(Request $request, ClasseReservation $reservationSession, PaginatorInterface $paginator): Response
     {
@@ -155,16 +161,17 @@ class VenteComptoirController extends AbstractController
                 array_push($vehiculesDisponible, $veh);
             }
         }
-
         //ajout id véhicule dans session, erreur si on stock directement 
         //un objet vehicule dans session et ensuite on enregistre dans base de donnée
         if ($request->request->get('vehicule') != null) {
 
-            $tarif = $request->request->get('tarif');
+            $tarifVehicule = $request->request->get('tarifVehicule');
             $id_vehicule = $request->request->get('vehicule');
 
-            if ($tarif != null) {
-                $reservationSession->addTarif($tarif);
+            if ($tarifVehicule != null) {
+                $reservationSession->addTarifVehicule($tarifVehicule);
+            } else {
+                $reservationSession->addTarifVehicule(null);
             }
 
             $reservationSession->addVehicule($id_vehicule);
@@ -196,11 +203,13 @@ class VenteComptoirController extends AbstractController
         return $this->render('admin/test/step2.html.twig', [
             'vehiculesDisponible' => $vehiculesDisponible,
             'data' => $data,
+            'dateDepart' => $reservationSession->getDateDepart(),
+            'dateRetour' => $reservationSession->getDateRetour()
         ]);
     }
 
     /**
-     * @Route("/etape3", name="step3", methods={"GET","POST"})
+     * @Route("/vente-comptoir/etape3", name="step3", methods={"GET","POST"})
      */
     public function step3(Request $request, ClasseReservation $reservationSession)
     {
@@ -217,35 +226,31 @@ class VenteComptoirController extends AbstractController
             $optionsData = $request->request->get('checkboxOptions');
             $garantiesData = $request->request->get('checkboxGaranties');
 
-            //on met dans un tableau les objets corresponans aux options cochés
-            $optionsObjects = [];
-            foreach ($optionsData as $opt) {
-                array_push($optionsObjects,  $this->optionsRepo->find($opt));
-            }
-
-            //on met dans un tableau les objets corresponans aux garanties cochés
-            $garantiesObjects = [];
-            foreach ($garantiesData as $gar) {
-                array_push($garantiesObjects,  $this->garantiesRepo->find($gar));
-            }
-
             //ajout options et garanties (tableau d'objets) dans session 
-            $reservationSession->addOptions($optionsObjects);
-            $reservationSession->addGaranties($garantiesObjects);
+            $reservationSession->addOptions($optionsData);
+            $reservationSession->addGaranties($garantiesData);
 
             return $this->redirectToRoute('step4');
         }
 
+
         $dateDepart = $reservationSession->getDateDepart();
         $dateRetour = $reservationSession->getDateRetour();
         $vehicule =  $this->vehiculeRepo->find($reservationSession->getVehicule());
+
+        //si l'admin a entrée un autre tarif dans étape 2, alors on considère ce tarif
+        if ($reservationSession->getTarifVehicule()) {
+            $tarifVehicule = $reservationSession->getTarifVehicule();
+        } else {
+            $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
+        }
         return $this->render('admin/test/step3.html.twig', [
 
             'options' => $options,
             'garanties' => $garanties,
             'vehicule' => $vehicule,
-            'tarifVehicule' => $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule),
-            'duree' => date_diff($reservationSession->getDateDepart(), $reservationSession->getDateRetour())->format('%d'),
+            'tarifVehicule' => $tarifVehicule,
+            'duree' => $this->dateHelper->calculDuree($dateDepart, $dateRetour),
             'agenceDepart' => $reservationSession->getAgenceDepart(),
             'dateDepart' => $reservationSession->getDateDepart(),
             'agenceRetour' => $reservationSession->getAgenceRetour(),
@@ -256,7 +261,7 @@ class VenteComptoirController extends AbstractController
 
 
     /**
-     * @Route("/etape4", name="step4", methods={"GET","POST"})
+     * @Route("/vente-comptoir/etape4", name="step4", methods={"GET","POST"})
      */
     public function step4(Request $request, ClasseReservation $reservationSession): Response
     {
@@ -297,32 +302,72 @@ class VenteComptoirController extends AbstractController
                 // $form->
             }
         }
+        //on met dans un tableau les objets corresponans aux options cochés
+        $optionsObjects = [];
+        foreach ($reservationSession->getOptions() as $opt) {
+            array_push($optionsObjects,  $this->optionsRepo->find($opt));
+        }
+
+        //on met dans un tableau les objets corresponans aux garanties cochés
+        $garantiesObjects = [];
+        foreach ($reservationSession->getGaranties() as $gar) {
+            array_push($garantiesObjects,  $this->garantiesRepo->find($gar));
+        }
 
         $dateDepart = $reservationSession->getDateDepart();
         $dateRetour = $reservationSession->getDateRetour();
         $vehicule =  $this->vehiculeRepo->find($reservationSession->getVehicule());
 
+        //si l'admin a entrée un autre tarif dans étape 2, alors on considère ce tarif
+        if ($reservationSession->getTarifVehicule()) {
+            $tarifVehicule = $reservationSession->getTarifVehicule();
+        } else {
+            $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
+        }
+
         return $this->render('admin/test/step4.html.twig', [
 
             'form' => $form->createView(),
             'vehicule' => $vehicule,
-            'tarifVehicule' => $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule),
-            'duree' => date_diff($reservationSession->getDateDepart(), $reservationSession->getDateRetour())->format('%d'),
+            'tarifVehicule' => $tarifVehicule,
+            'duree' => $this->dateHelper->calculDuree($dateDepart, $dateRetour),
             'agenceDepart' => $reservationSession->getAgenceDepart(),
             'dateDepart' => $reservationSession->getDateDepart(),
             'agenceRetour' => $reservationSession->getAgenceRetour(),
             'dateRetour' => $reservationSession->getDateRetour(),
-            'options' => $reservationSession->getOptions(),
-            'garanties' => $reservationSession->getGaranties()
+            'options' => $optionsObjects,
+            'garanties' => $garantiesObjects
 
         ]);
     }
 
-
+    //enregistrement de devis dans base de données sans envoi mail au client
     /**
-     * @Route("/etape5", name="step5", methods={"GET","POST"})
+     * @Route("/vente-comptoir/enregistrer-devis", name="save_only_devis", methods={"GET","POST"})
      */
-    public function step5(Request $request, ClasseReservation $reservationSession): Response
+    public function saveOnlyDevis(Request $request): Response
+    {
+        $numDevis = $this->saveDevis($request);
+
+        $this->flashy->success('Le devis numero ' . $numDevis . 'a été enregistré avec succés');
+        return $this->redirectToRoute('devis_index');
+    }
+
+    //enregistrement de devis dans base de données sans envoi mail au client
+    /**
+     * @Route("/vente-comptoir/enregistrer-devis-envoi-mail", name="save_devis_send_mail", methods={"GET","POST"})
+     */
+    public function saveDevisSendMail(Request $request): Response
+    {
+        $numDevis = $this->saveDevis($request);
+        $Mailcontent = 'Un devis a été enregistré, veuillez vous connecter pour le consulter et le valider';
+        $this->mail->send($this->reservationSession->getClient()->getMail(), $this->reservationSession->getClient()->getNom(), 'Devis', $Mailcontent);
+
+        $this->flashy->success('Le devis a été enregistré avec succés et un mail a été envoyé au client');
+        return $this->redirectToRoute('devis_index');
+    }
+
+    public function saveDevis($request)
     {
         //extracion mail from string format : "nom prenom (mail)"
         $client = $request->request->get('client');
@@ -333,42 +378,62 @@ class VenteComptoirController extends AbstractController
         //recherche du client correspondant au mail
         $client = $this->userRepo->findOneBy(['mail' => $mailClient]);
         //ajout client dans session
-        $reservationSession->addClient($client);
+        $this->reservationSession->addClient($client);
 
         //enregistrement session dans devis
         $devis = new Devis();
 
         //utile pour eviter erreur new entity, cette erreur apparait lorsque on utilise directement objet véhicule dans session
-        $vehicule = $this->vehiculeRepo->find($reservationSession->getVehicule());
+        $vehicule = $this->vehiculeRepo->find($this->reservationSession->getVehicule());
         // dd($vehicule);
-
-        $devis->setAgenceDepart($reservationSession->getAgenceDepart());
-        $devis->setAgenceRetour($reservationSession->getAgenceRetour());
-        $devis->setDateDepart($reservationSession->getDateDepart());
-        $devis->setDateRetour($reservationSession->getDateRetour());
-        $devis->setVehicule($vehicule);
-        $devis->setLieuSejour($reservationSession->getLieuSejour());
-        $devis->setClient($reservationSession->getClient());
-        $devis->setDateCreation($this->dateHelper->dateNow());
-        if (date("H", $reservationSession->getDateRetour()->getTimestamp()) == 0) {
-            $devis->setDuree(ceil(1 + (($reservationSession->getDateRetour()->getTimestamp() - $reservationSession->getDateDepart()->getTimestamp()) / 60 / 60 / 24)));
-        } else {
-            $devis->setDuree(ceil((($reservationSession->getDateRetour()->getTimestamp() - $reservationSession->getDateDepart()->getTimestamp()) / 60 / 60 / 24)));
+        //trouver les options et garanties à l'aide des ID 
+        //on met dans un tableau les objets corresponans aux options cochés
+        $optionsObjects = [];
+        foreach ($this->reservationSession->getOptions() as $opt) {
+            array_push($optionsObjects,  $this->optionsRepo->find($opt));
         }
-        $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($reservationSession->getDateDepart(), $reservationSession->getDateRetour(), $vehicule);
+
+        //on met dans un tableau les objets corresponans aux garanties cochés
+        $garantiesObjects = [];
+        foreach ($this->reservationSession->getGaranties() as $gar) {
+            array_push($garantiesObjects,  $this->garantiesRepo->find($gar));
+        }
+
+        $devis->setAgenceDepart($this->reservationSession->getAgenceDepart());
+        $devis->setAgenceRetour($this->reservationSession->getAgenceRetour());
+        $devis->setDateDepart($this->reservationSession->getDateDepart());
+        $devis->setDateRetour($this->reservationSession->getDateRetour());
+        $devis->setVehicule($vehicule);
+        $devis->setLieuSejour($this->reservationSession->getLieuSejour());
+        $devis->setClient($this->reservationSession->getClient());
+        $devis->setDateCreation($this->dateHelper->dateNow());
+        if (date("H", $this->reservationSession->getDateRetour()->getTimestamp()) == 0) {
+            $devis->setDuree(ceil(1 + (($this->reservationSession->getDateRetour()->getTimestamp() - $this->reservationSession->getDateDepart()->getTimestamp()) / 60 / 60 / 24)));
+        } else {
+            $devis->setDuree(ceil((($this->reservationSession->getDateRetour()->getTimestamp() - $this->reservationSession->getDateDepart()->getTimestamp()) / 60 / 60 / 24)));
+        }
+
+        // si l'admin a entrée un autre tarif dans étape 2, alors on considère ce tarif
+        if ($this->reservationSession->getTarifVehicule()) {
+            $tarifVehicule = $this->reservationSession->getTarifVehicule();
+        } else {
+            $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($this->reservationSession->getDateDepart(), $this->reservationSession->getDateRetour(), $vehicule);
+        }
         $devis->setTarifVehicule($tarifVehicule);
-        $prixOptions = $this->tarifsHelper->sommeTarifsOptions($reservationSession->getOptions());
+        $prixOptions = $this->tarifsHelper->sommeTarifsOptions($optionsObjects);
         $devis->setPrixOptions($prixOptions);
-        $prixGaranties = $this->tarifsHelper->sommeTarifsGaranties($reservationSession->getGaranties());
+        $prixGaranties = $this->tarifsHelper->sommeTarifsGaranties($garantiesObjects);
         $devis->setPrixGaranties($prixGaranties);
         $devis->setPrix($tarifVehicule + $prixGaranties + $prixOptions);
         $devis->setConducteur(true);
         $devis->setTransformed(false);
+
+
         //options et garanties sont des tableaux d'objet dans session
-        foreach ($reservationSession->getOptions() as $option) {
+        foreach ($optionsObjects as $option) {
             $devis->addOption($option);
         }
-        foreach ($reservationSession->getGaranties() as $garantie) {
+        foreach ($garantiesObjects as $garantie) {
             $devis->addGaranty($garantie);
         }
         // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
@@ -384,11 +449,8 @@ class VenteComptoirController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($devis);
         $entityManager->flush();
-
-        $this->flashy->success('Le devis a été enregistré avec succés');
-        return $this->redirectToRoute('devis_index');
+        return $devis->getNumero();
     }
-
 
     /**
      * @Route("/listeclient/", name="client_list", methods={"GET","POST"})
@@ -419,6 +481,6 @@ class VenteComptoirController extends AbstractController
 
         $reservationSession->removeReservation();
 
-        return $this->redirectToRoute('testerCode');
+        return $this->redirectToRoute('step1');
     }
 }

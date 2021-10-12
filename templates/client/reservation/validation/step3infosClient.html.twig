@@ -1,16 +1,16 @@
-{% extends 'baseClient2.html.twig' %}
+{% extends 'baseClient.html.twig' %}
 
 {% block title %}
 	options et garanties
 {% endblock %}
 {% block stylesheets %}
+
 	<link href="{{ asset( 'css/client/validationDevis.css')}}" rel="stylesheet">
 	<link href="{{ asset( 'css/client/step3InfosClient.css')}}" rel="stylesheet">
 
 {% endblock %}
 {% block nav %}{% endblock %}
 {% block body %}
-
 
 	<div class="row">
 		<div class="col-md-3">
@@ -72,6 +72,15 @@
 							</li>
 						</ul>
 					</div>
+					<div class="divTarifVehicule border-bottom">
+						<h5>Prix de base de location</h5>
+						{{tarifVehicule}}
+						eur
+						<br>
+						soit
+						{{ (tarifVehicule / duree)|number_format(2,'.')}}
+						eur / jour
+					</div>
 					<div class="divOptions border-bottom">
 						<h5 class="heading">Option(s)
 						</h5>
@@ -112,7 +121,6 @@
 							{% endfor %}
 						</ul>
 					</div>
-
 				</div>
 			</div>
 			<div class="divTarifTotal text-center">
@@ -203,20 +211,16 @@
 					<span class="checkmark"></span>
 				</label>
 			</div>
-
 			<div class="text-center mt-3 mb-3">
 				<button class="btn btn-danger" id="validerPaiement">
-
-					{{ button_label|default('Enregistrer') }}</button>
+					{{ button_label|default('Enregistrer') }}
+				</button>
 			</div>
-
 			{{ form_end(formClient) }}
 		</div>
 	</div>
 {% endblock %}
 {% block javascripts %}
-
 	<script src="{{ asset('js/client/reservation/step3infosClient.js')}}"></script>
 	<script src="https://js.stripe.com/v3/"></script>
-
 {% endblock %}

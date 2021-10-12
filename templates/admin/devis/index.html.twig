@@ -54,7 +54,12 @@
 					{% for devis in devis %}
 						<tr>
 							<td>
-								<div class="badge badge-danger p-2">NOT</div>
+								{% if devis.transformed %}
+									<div class="badge badge-success p-2">YES</div>
+								{% else %}
+
+									<div class="badge badge-danger p-2">NOT</div>
+								{% endif %}
 							</td>
 							<td>{{ devis.dateCreation ? devis.dateCreation|date('d-m-Y H:i') : '' }}</td>
 							<td>{{ devis.client.prenom }}

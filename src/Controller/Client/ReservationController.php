@@ -16,6 +16,7 @@ use App\Repository\OptionsRepository;
 use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
 use App\Repository\ReservationRepository;
+use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -25,6 +26,7 @@ class ReservationController extends AbstractController
 {
 
     private $reservationRepo;
+    private $flashy;
     private $devisRepo;
     private $garantiesRepo;
     private $optionsRepo;
@@ -39,7 +41,8 @@ class ReservationController extends AbstractController
         GarantieRepository $garantiesRepo,
         DateHelper $dateHelper,
         TarifsHelper $tarifsHelper,
-        VehiculeRepository $vehiculeRepo
+        VehiculeRepository $vehiculeRepo,
+        FlashyNotifier $flashy
 
     ) {
         $this->reservationRepo = $reservationRepo;
@@ -49,6 +52,7 @@ class ReservationController extends AbstractController
         $this->dateHelper = $dateHelper;
         $this->tarifsHelper = $tarifsHelper;
         $this->vehiculeRepo = $vehiculeRepo;
+        $this->flashy = $flashy;
     }
 
     /** 
@@ -81,29 +85,6 @@ class ReservationController extends AbstractController
             'res_attente_dateDebut' => $res_attente_dateDebut,
         ]);
     }
-
-
-    /** 
-     * @Route("/espaceclient/new/reservation", name="client_nouvelleReserv", methods={"GET","POST"})
-     */
-    public function nouvelleReservation(Request $request): Response
-    {
-
-        //get options et garanties pour smart wizard
-        $options = $this->optionsRepo->findAll();
-        $garanties = $this->garantiesRepo->findAll();
-        $client = $this->getUser();
-        if ($client == null) {
-            return $this->redirectToRoute('app_login');
-        }
-        return $this->render('client/steps/index.html.twig', [
-            'options' => $options,
-            'garanties' => $garanties,
-            'clientID' => $client->getId()
-
-        ]);
-    }
-
 
     /**
      * @Route("/espaceclient/reservationWizard", name="client_reserverWizard",  methods={"GET","POST"})
@@ -195,10 +176,9 @@ class ReservationController extends AbstractController
         return $this->redirectToRoute('client_reservations');
     }
 
-
     //***********************processus validation devis***************** */
     /**
-     * @Route("/espaceclient/optionsGaranties", name="step2OptionsGaranties", methods={"GET","POST"})
+     * @Route("/espaceclient/validation/options-garanties", name="validation_step2", methods={"GET","POST"})
      */
     public function step2OptionsGaranties(Request $request): Response
     {
@@ -210,6 +190,10 @@ class ReservationController extends AbstractController
         }
 
         $devis = $this->devisRepo->find($devisID);
+        if (!$devis || $devis->getClient() != $this->getUser()) {
+            $this->flashy->error("Le devis n'existe pas");
+            return $this->redirectToRoute('espaceClient_index');
+        }
 
         $garanties = $this->garantiesRepo->findAll();
         $options = $this->optionsRepo->findAll();
@@ -219,16 +203,22 @@ class ReservationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            $devis->setPrix($this->tarifsHelper->sommeTarifsGaranties($devis->getGaranties()) + $this->tarifsHelper->sommeTarifsGaranties($devis->getOptions()) + $devis->getTarifVehicule());
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($devis);
             $entityManager->flush();
 
-            return $this->redirectToRoute('step3infosClient', ['devisID' => $devisID]);
+            return $this->redirectToRoute('validation_step3', ['devisID' => $devisID]);
         }
+
+        $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($devis->getDateDepart(), $devis->getDateRetour(), $devis->getVehicule());
+        $duree = $this->dateHelper->calculDuree($devis->getDateDepart(), $devis->getDateRetour());
 
         return $this->render('client/reservation/validation/step2OptionsGaranties.html.twig', [
 
             'garanties' => $garanties,
+            'tarifVehicule' => $tarifVehicule,
+            'duree' => $duree,
             'options' => $options,
             'devis' => $devis,
             'form' => $form->createView(),
@@ -238,16 +228,18 @@ class ReservationController extends AbstractController
 
 
     /**
-     * @Route("/espaceclient/infosClient/{devisID}", name="step3infosClient", methods={"GET","POST"})
+     * @Route("/espaceclient/validation/infos-client/{devisID}", name="validation_step3", methods={"GET","POST"})
      */
     public function step3infosClient(Request $request, $devisID, ReservationClient $reservationClientSession): Response
     {
         $garanties = $request->query->get('garanties');
         $devis = $this->devisRepo->find($devisID);
+        if (!$devis || $devis->getClient() != $this->getUser()) {
+            return $this->redirectToRoute('espaceClient_index');
+        }
         // dd($devis->getGaranties());
         // for ($i = 0; $i < count($garanties); $i++) {
         // }
-
 
         $client = $this->getUser();
         if ($client == null) {
@@ -259,9 +251,7 @@ class ReservationController extends AbstractController
         $formClient = $this->createForm(ClientInfoType::class, $client);
         $formClient->handleRequest($request);
 
-
         if ($formClient->isSubmitted() && $formClient->isValid()) {
-
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($client);
@@ -270,52 +260,23 @@ class ReservationController extends AbstractController
 
             // return $this->redirectToRoute('step4paiement', ['devisID' => $devisID]);
             //tester stripe
-            return $this->redirectToRoute('paiementStripe', ['devisID' => $devisID]);
+            $refDevis = $devis->getNumero();
+            //redirection vers un autre controller
+            return $this->redirectToRoute('paiementStripe', ['refDevis' => $refDevis]);
         }
 
+        $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($devis->getDateDepart(), $devis->getDateRetour(), $devis->getVehicule());
+        $duree = $this->dateHelper->calculDuree($devis->getDateDepart(), $devis->getDateRetour());
         if ($devis->getClient() == $client) {
             return $this->render('client/reservation/validation/step3infosClient.html.twig', [
                 'devis' => $devis,
                 'formClient' => $formClient->createView(),
-
+                'tarifVehicule' => $tarifVehicule,
+                'duree' => $duree
             ]);
         } else {
             return $this->render('client/reservation/validation/error.html.twig');
         }
-    }
-
-    //test de paiement par stripe
-    /**
-     * @Route("/espaceclient/paiement-stripe/{devisID}", name="paiementStripe", methods={"GET","POST"})
-     */
-    public function paiementStripe(Request $request, $devisID)
-    {
-
-        $devis = $this->devisRepo->find($devisID);
-
-
-        Stripe::setApiKey('sk_test_51JiGijGsAu4Sp9QQtyfjOoOQMb6kfGjE1z50X5vrW6nS7wLtK5y2HmodT3ByrI7tQl9dsvP69fkN4vVfH5676nDo00VgFOzXct');
-
-        $YOUR_DOMAIN = 'http://127.0.0.1:8000';
-        $checkout_session = Session::create([
-            'payment_method_types' => ['card'],
-            'line_items' => [[
-                'price_data' => [
-                    'currency' => 'eur',
-                    'product_data' => [
-                        'name' => 'Réservation du ' . $devis->getDateDepart()->format('d/m/Y H:i') . " au " . $devis->getDateRetour()->format('d/m/Y H:i'),
-                        'images' => [$YOUR_DOMAIN . "/uploads/vehicules" . $devis->getVehicule()->getImage()],
-                        'description' => $devis->getVehicule()->getMarque() . " " . $devis->getVehicule()->getModele()
-                    ],
-                    'unit_amount' => $devis->getPrix() * 100
-                ],
-                'quantity' => 1,
-            ]],
-            'mode' => 'payment',
-            'success_url' => 'https://example.com/success',
-            'cancel_url' => 'https://example.com/cancel',
-        ]);
-        return $this->redirect($checkout_session->url);
     }
 
     /**
@@ -331,22 +292,9 @@ class ReservationController extends AbstractController
         $listeDevis = $this->devisRepo->findBy(['client' => $client]);
         $devis = $this->devisRepo->find($devisID);
 
-        $modePaiement = $reservationClientSession->getModePaiment();
-        dd($modePaiement);
-        if ($modePaiement == 25) {
-            $sommePaiement = $this->tarifsHelper->VingtCinqPourcent($devis->getPrix());
-        }
-        if ($modePaiement == 50) {
-            $sommePaiement = $this->tarifsHelper->CinquantePourcent($devis->getPrix());
-        }
-        if ($modePaiement == 100) {
-            $sommePaiement = $devis->getPrix();
-        }
-
         if ($devis->getClient() == $client) {
             return $this->render('client/reservation/validation/step4paiement.html.twig', [
                 'devis' => $devis,
-                'sommePaiement' => $sommePaiement,
             ]);
         } else {
             return $this->render('client/reservation/validation/error.html.twig');
@@ -430,7 +378,6 @@ class ReservationController extends AbstractController
                 $currentID = $lastID[0]->getId() + 1;
             }
             $devis->setNumeroDevis($currentID);
-
 
             $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
             $prix = $this->tarifsHelper->calculTarifTotal($tarifVehicule,  $options, $garanties);

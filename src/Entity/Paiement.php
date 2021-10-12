@@ -55,6 +55,11 @@ class Paiement
      */
     private $motif;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $stripeSessionId;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -151,5 +156,17 @@ class Paiement
     public function __toString()
     {
         return $this->getMontant();
+    }
+
+    public function getStripeSessionId(): ?string
+    {
+        return $this->stripeSessionId;
+    }
+
+    public function setStripeSessionId(?string $stripeSessionId): self
+    {
+        $this->stripeSessionId = $stripeSessionId;
+
+        return $this;
     }
 }

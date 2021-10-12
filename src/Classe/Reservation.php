@@ -95,12 +95,19 @@ class Reservation
         $this->session->set('reservation', $data);
     }
 
-
-    public function addTarif($tarif)
+    public function addConducteur($conducteur)
     {
 
         $data = $this->session->get('reservation', []);
-        $data['tarif'] = $tarif;
+        $data['conducteur'] = $conducteur;
+        $this->session->set('reservation', $data);
+    }
+
+    public function addTarifVehicule($tarifVehicule)
+    {
+
+        $data = $this->session->get('reservation', []);
+        $data['tarifVehicule'] = $tarifVehicule;
         $this->session->set('reservation', $data);
     }
 
@@ -153,11 +160,15 @@ class Reservation
         return $this->session->get('reservation')['client'];
     }
     //tarif saisie par l'admin (optionel)
-    public  function getTarif()
+    public  function getTarifVehicule()
     {
-        return $this->session->get('reservation')['tarif'];
+        return $this->session->get('reservation')['tarifVehicule'];
     }
 
+    public  function getConducteur()
+    {
+        return $this->session->get('reservation')['conducteur'];
+    }
 
     public function removeReservation()
     {

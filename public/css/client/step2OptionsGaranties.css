@@ -6,7 +6,7 @@
     /* padding-left: 25px;
     margin-bottom: 12px; */
     cursor: pointer;
-    font-size: 30px;
+    font-size: 20px;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -27,8 +27,8 @@
     position: absolute;
     /* top: 0;
     left: 0; */
-    height: 40px;
-    width: 40px;
+    height: 30px;
+    width: 30px;
     background-color: #eee;
   }
   
@@ -56,10 +56,10 @@
   
   /* Style the checkmark/indicator */
   .label-container .checkmark:after {
-    left: 15px;
-    top: 6px;
-    width: 10px;
-    height: 25px;
+    left: 10px;
+    top: 5px;
+    width: 7px;
+    height: 20px;
     border: solid white;
     border-width: 0 3px 3px 0;
     -webkit-transform: rotate(45deg);
