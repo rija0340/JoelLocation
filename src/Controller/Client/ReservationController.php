@@ -16,10 +16,11 @@ use App\Repository\OptionsRepository;
 use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
 use App\Repository\ReservationRepository;
-use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\HttpFoundation\Request;
+use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Classe\ValidationReservationClientSession;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ReservationController extends AbstractController
@@ -33,6 +34,7 @@ class ReservationController extends AbstractController
     private $dateHelper;
     private $tarifsHelper;
     private $vehiculeRepo;
+    private $validationSession;
 
     public function __construct(
         ReservationRepository $reservationRepo,
@@ -42,7 +44,8 @@ class ReservationController extends AbstractController
         DateHelper $dateHelper,
         TarifsHelper $tarifsHelper,
         VehiculeRepository $vehiculeRepo,
-        FlashyNotifier $flashy
+        FlashyNotifier $flashy,
+        ValidationReservationClientSession $validationSession
 
     ) {
         $this->reservationRepo = $reservationRepo;
@@ -53,6 +56,7 @@ class ReservationController extends AbstractController
         $this->tarifsHelper = $tarifsHelper;
         $this->vehiculeRepo = $vehiculeRepo;
         $this->flashy = $flashy;
+        $this->validationSession = $validationSession;
     }
 
     /** 
@@ -64,7 +68,8 @@ class ReservationController extends AbstractController
         if ($client == null) {
             return $this->redirectToRoute('app_login');
         }
-        $date = new \DateTime('now');
+
+        $date = $this->dateHelper->dateNow();
 
         //récupération des réservations effectuée
         $reservationEffectuers = $this->reservationRepo->findReservationEffectuers($client, $date);
@@ -230,7 +235,7 @@ class ReservationController extends AbstractController
     /**
      * @Route("/espaceclient/validation/infos-client/{devisID}", name="validation_step3", methods={"GET","POST"})
      */
-    public function step3infosClient(Request $request, $devisID, ReservationClient $reservationClientSession): Response
+    public function step3infosClient(Request $request, $devisID): Response
     {
         $garanties = $request->query->get('garanties');
         $devis = $this->devisRepo->find($devisID);
@@ -256,7 +261,7 @@ class ReservationController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($client);
             $entityManager->flush();
-            $reservationClientSession->addModePaiment($request->request->get('modePaiement'));
+            $this->validationSession->addModePaiment($request->request->get('modePaiement'));
 
             // return $this->redirectToRoute('step4paiement', ['devisID' => $devisID]);
             //tester stripe
@@ -282,7 +287,7 @@ class ReservationController extends AbstractController
     /**
      * @Route("/espaceclient/paiement/{devisID}", name="step4paiement", methods={"GET","POST"})
      */
-    public function step4paiement(Request $request, $devisID,  ReservationClient $reservationClientSession): Response
+    public function step4paiement(Request $request, $devisID): Response
     {
 
         $client = $this->getUser();

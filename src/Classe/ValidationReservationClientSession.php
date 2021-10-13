@@ -6,7 +6,7 @@ namespace App\Classe;
 
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-class ReservationClient
+class ValidationReservationClientSession
 {
     private $session;
     public function __construct(SessionInterface $session)

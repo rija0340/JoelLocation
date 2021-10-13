@@ -1,12 +1,11 @@
 <?php
 
 
-
 namespace App\Classe;
 
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-class Reservation
+class ReservationSession
 {
 
     private $session;

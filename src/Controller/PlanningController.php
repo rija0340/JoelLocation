@@ -8,6 +8,8 @@ use App\Repository\VehiculeRepository;
 use App\Form\ReservationType;
 use App\Repository\ReservationRepository;
 use App\Service\DateHelper;
+use App\Service\ReservationHelper;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,18 +28,30 @@ class PlanningController extends AbstractController
     private $dateTimestamp;
     private $vehiculeRepo;
     private $dateHelper;
+    private $reservationHelper;
 
 
-    public function __construct(DateHelper $dateHelper, ReservationRepository $reservationRepo, VehiculeRepository $vehiculeRepo)
+    public function __construct(ReservationHelper $reservationHelper, DateHelper $dateHelper, ReservationRepository $reservationRepo, VehiculeRepository $vehiculeRepo)
     {
 
         $this->reservationRepo = $reservationRepo;
         $this->vehiculeRepo = $vehiculeRepo;
         $this->dateHelper = $dateHelper;
+        $this->reservationHelper = $reservationHelper;
     }
 
     /**
-     * @Route("/planningGeneralData", name="planningGeneralData", methods={"GET"})
+     * @Route("/planning-general", name="planGen", methods={"GET","POST"})
+     */
+    public function planGen(): Response
+    {
+
+        return $this->render('admin/planning/planGen.html.twig');
+    }
+
+
+    /**
+     * @Route("/planningGeneralData", name="planningGeneralData", methods={"GET","POST"})
      */
 
     public function planningGeneralData(Request $request, ReservationRepository $reservationRepo, VehiculeRepository $vehiculeRepo, NormalizerInterface $normalizer)
@@ -46,21 +60,14 @@ class PlanningController extends AbstractController
         $reservations = $reservationRepo->findBy(array(),  array('date_debut' => 'ASC'));
         $vehicules = $vehiculeRepo->findAll();
 
-        $i = 0;
+        //mettre toutes les véhicules reservées dans un tableau
         $vehiculesInvolved = [];
-
-        foreach ($vehicules as $vehicule) {
-            foreach ($reservations as $reservation) {
-                if ($vehicule == $reservation->getVehicule()) {
-
-                    $i++;
-                }
-            }
-            if ($i != 0) {
-                $vehiculesInvolved[] = $vehicule;
-            }
-            $i = 0;
+        foreach ($reservations as $res) {
+            array_push($vehiculesInvolved, $res->getVehicule());
         }
+
+        //se debarasser des doublons
+        $vehiculesInvolved = array_unique($vehiculesInvolved);
 
         //recuperation date debut et fin de l'ensemble des reservations liées à une voiture
 
@@ -98,7 +105,6 @@ class PlanningController extends AbstractController
             } else {
                 $datas[$key]['duration'] = ceil(($reservation->getDateFin()->getTimestamp() - $reservation->getDateDebut()->getTimestamp()) / 60 / 60 / 24);
             }
-
             $datas[$key]['end_date_formated'] = $reservation->getDateFin()->format('d-m-Y H:i');
             $datas[$key]['parent'] = $reservation->getVehicule()->getId();
             $datas[$key]['agenceDepart'] = $reservation->getAgenceDepart();
@@ -152,21 +158,30 @@ class PlanningController extends AbstractController
         return new JsonResponse($data2);
     }
 
-    /**
-     * @Route("/planningJournalierData", name="planningJournalierData", methods={"GET"})
-     */
 
+    /**
+     * @Route("/planning-journalier", name="planJour",methods={"GET","POST"})
+     */
+    public function planJour(): Response
+    {
+
+        return $this->render('admin/planning/planJour.html.twig');
+    }
+
+    /**
+     * @Route("/planningJournalierData", name="planningJournalierData", methods={"GET","POST"})
+     */
     public function planningJournalierData(Request $request, ReservationRepository $reservationRepo)
     {
         $date = $request->query->get('date');
 
         //creation d'une date valide en php à partir d'une date de javascript.
-
         $dateStarted = \DateTime::createFromFormat('D M d Y H:i:s e+', $date);
         $reservations = $reservationRepo->findPlanningJournaliers($dateStarted);
 
         $datas = array();
         foreach ($reservations as $key => $reservation) {
+
             $datas[$key]['identification'] = $reservation->getVehicule()->getMarque() . ' ' . $reservation->getVehicule()->getModele() . ' ' . $reservation->getVehicule()->getImmatriculation();
             $datas[$key]['client'] = $reservation->getClient()->getNom() . ' ' . $reservation->getClient()->getPrenom();
             $datas[$key]['start_date_formated'] = $reservation->getDateDebut()->format('d/m/Y - H\Hi');
@@ -177,139 +192,36 @@ class PlanningController extends AbstractController
     }
 
     /**
-     * @Route("/planning-general", name="planGen", methods={"GET"})
+     * @Route("/vehicule-dispo", name="vehiculeDispo", methods={"GET","POST"})
      */
-    public function planGen(): Response
+    public function vehiculeDispo(Request $request): Response
     {
+        //valeur par défaut de date
+        $defaultDate = $this->dateHelper->dateNow();
+        $reservations = $this->reservationRepo->findReservationIncludeDate($this->dateHelper->dateNow());
 
-        return $this->render('admin/planning/planGen.html.twig');
-    }
+        //lorsque la date est changée par l'utilisateur, on modifie la date de recherche 
 
-    /**
-     * @Route("/planning-journalier", name="planJour", methods={"GET"})
-     */
-    public function planJour(): Response
-    {
-
-        return $this->render('admin/planning/planJour.html.twig');
-    }
-
-
-    /**
-     * @Route("/vehiculeDispoData", name="vehiculeDispoData", methods={"GET"})
-     */
-
-    public function vehiculeDispoData(Request $request, VehiculeRepository $vehiculeRepo, ReservationRepository $reservationRepo)
-    {
-
-        $date = $request->query->get('date');
-
-        $date = \DateTime::createFromFormat('D M d Y H:i:s e+', $date);
-
-        $datas = array();
-        foreach ($this->getVehiculesDispo($date) as $key => $vehicule) {
-
-            $datas[$key]['id'] = $vehicule->getId();
-            $datas[$key]['immatriculation'] = $vehicule->getImmatriculation();
-            $datas[$key]['modele'] = $vehicule->getModele()->getLibelle();
-            if ($this->getLastReservation($vehicule, $date) != null) {
-                $datas[$key]['lastReservation'] = $this->getLastReservation($vehicule, $date)->getDateFin()->format('d-m-Y H:i');
-            } else {
-                $datas[$key]['lastReservation'] = "Pas de réservation";
-            }
-            if ($this->getNextReservation($vehicule, $date) != null) {
-                $datas[$key]['nextReservation'] =  $this->getNextReservation($vehicule, $date)->getDateDebut()->format('d-m-Y H:i');
-            } else {
-                $datas[$key]['nextReservation'] = "Pas de réservation";
-            }
+        if ($request->request->get('inputDate')) {
+            $dateInput = new DateTime($request->request->get('inputDate'));
+            $reservations = $this->reservationRepo->findReservationIncludeDate($dateInput);
+            $dateInput = new DateTime($request->request->get('inputDate'));
         }
-
-        return new JsonResponse($datas);
-    }
-
-    public function getVehiculesDispo($date)
-    {
-        $vehicules = $this->vehiculeRepo->findAll();
-        $reservations = $this->reservationRepo->findReservationIncludeDate($date);
-        $i = 0;
-        $vehiculeDispo = [];
-
-        // code pour vehicule avec reservation , mila manao condition ame tsy misy reservation mihitsy
-        foreach ($vehicules as $vehicule) {
-            foreach ($reservations as $reservation) {
-                if ($vehicule == $reservation->getVehicule()) {
-                    $i++;
-                }
-            }
-            if ($i == 0) {
-                $vehiculeDispo[] = $vehicule;
-            }
-            $i = 0;
-        }
-        return $vehiculeDispo;
-    }
-    public function getLastReservation($vehicule, $date)
-    {
-        // recuperer dernière et next reservation véhicule dispo
-
-        $lastReservations = $this->reservationRepo->findLastReservations($vehicule, $date);
-
-        if ($lastReservations != null) {
-
-            $dateTimestamp = $date->getTimestamp();
-            $minDiff = 365 * 10 *  24 * 60 * 60 * 1000; //une année en milliseconde
-
-            foreach ($lastReservations as $lastReservation) {
-
-                $lastReservationTimestamp = $lastReservation->getDateFin()->getTimestamp();
-
-                if ($dateTimestamp - $lastReservationTimestamp < $minDiff) {
-                    $minDiff =  $dateTimestamp - $lastReservationTimestamp;
-                    $theLastReserv = $lastReservation;
-                }
-            }
-
-            return $theLastReserv;
+        if ($dateInput) {
+            $date = $dateInput;
         } else {
-            return null;
+            $date = $defaultDate;
         }
-    }
 
-    public function getNextReservation($vehicule, $date)
-    {
+        $vehiculesDisponible = $this->reservationHelper->getVehiculesDisponible($reservations);
+        $listPastReservations = $this->reservationHelper->getPastReservations($vehiculesDisponible, $date);
+        $listNextReservations = $this->reservationHelper->getNextReservations($vehiculesDisponible, $date);
 
-        // recuperer next reservation pour véhicule dispo
-        $nextReservations = new Reservation();
-        $dateTimestamp = $date->getTimestamp();
-
-        $nextReservations = $this->reservationRepo->findNextReservations($vehicule, $date);
-        if ($nextReservations != null) {
-
-            $minDiff = 365 * 10 * 24 * 60 * 60 * 1000; //une année en milliseconde
-
-            foreach ($nextReservations as $nextReservation) {
-
-                $nextReservationTimestamp = $nextReservation->getDateDebut()->getTimestamp();
-
-                // echo $lastReservation->getDateFin()->format('d-m-Y') . '  ' .  $date->format('d-m-Y') . '  ' . $lastReservationTimestamp . '  ' . $dateTimestamp . '</br>';
-
-                if ($nextReservationTimestamp - $dateTimestamp    < $minDiff) {
-                    $minDiff =   $nextReservationTimestamp - $dateTimestamp;
-                    $theNextReserv = $nextReservation;
-                }
-            }
-            return $theNextReserv;
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * @Route("/vehicule-dispo", name="vehiculeDispo", methods={"GET"})
-     */
-    public function VehiculeDispo(VehiculeRepository $vehiculeRepo, ReservationRepository $reservationRepo): Response
-    {
-
-        return $this->render('admin/planning/vehicule_dispo.html.twig');
+        return $this->render('admin/planning/vehicule_dispo.html.twig', [
+            'vehiculesDisponible' => $vehiculesDisponible,
+            'date' => $date,
+            'listPastReservations' => $listPastReservations,
+            'listNextReservations' => $listNextReservations,
+        ]);
     }
 }

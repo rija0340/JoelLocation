@@ -82,7 +82,7 @@ class ReservationController extends AbstractController
             50/*limit per page*/
         );
         return $this->render('admin/reservation/crud/index.html.twig', [
-            'reservations' => $pagination,
+            'reservations' => $reservations,
         ]);
     }
 

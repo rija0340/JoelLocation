@@ -148,6 +148,7 @@ class ReservationRepository extends ServiceEntityRepository
             ->andWhere(' r.code_reservation != :code AND r.date_fin > :date')
             ->setParameter('code', 'stopSale')
             ->setParameter('date', $this->dateHelper->dateNow())
+            ->orderBy('r.id', 'DESC')
             ->getQuery()
             ->getResult();
     }

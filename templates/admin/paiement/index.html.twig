@@ -143,41 +143,33 @@
 
 
 						<tbody>
-							<tr>
-								<td>Michael Bruce</td>
-								<td>Javascript Developer</td>
-								<td>Singapore</td>
-								<td>
-									<div class="d-flex justify-content-center">
-										<span class="badge badge-warning"></span>
-									</div>
-								</td>
-								<td>2011/06/27</td>
-								<td>$183,000</td>
-								<td class="text-center">
-									<a href="">
-										<i class=" fa fa-info-circle" style="font-size: 2em !important;"></i>
-									</a>
-								</td>
-							</tr>
-							<tr>
-								<td>Donna Snider</td>
-								<td>Customer Support</td>
-								<td>New York</td>
-								<td>
-									<div class="d-flex justify-content-center">
-										<span class="badge badge-primary"></span>
-									</div>
-								</td>
-								<td>2011/01/25</td>
-								<td>2011/01/25</td>
-								<td class="text-center">
-									<a href="">
+							{% for paiement in paiements %}
+								<tr>
+									<td>{{paiement.reservation.reference}}</td>
+									<td>{{paiement.client}}</td>
+									<td>{{paiement.montant}}</td>
+									<td>
+										{% if paiement.montant < paiement.reservation.prix %}
 
-										<i class=" fa fa-info-circle" style="font-size: 2em !important;"></i>
-									</a>
-								</td>
-							</tr>
+											<div class="d-flex justify-content-center">
+												<span class="badge badge-warning"></span>
+											</div>
+										{% else %}
+											<div class="d-flex justify-content-center">
+												<span class="badge badge-success"></span>
+											</div>
+										{% endif %}
+									</td>
+									<td>{{paiement.modepaiement.libelle}}</td>
+									<td>{{paiement.datePaiement|date('d/m/Y')}}</td>
+									<td class="text-center">
+										<a href="">
+											<i class=" fa fa-info-circle" style="font-size: 2em !important;"></i>
+										</a>
+									</td>
+								</tr>
+							{% endfor %}
+
 						</tbody>
 					</table>
 				</div>

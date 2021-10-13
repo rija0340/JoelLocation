@@ -21,13 +21,15 @@ class PaiementController extends AbstractController
      */
     public function index(PaiementRepository $paiementRepository, Request $request, PaginatorInterface $paginator): Response
     {
-        $pagination = $paginator->paginate(
-            $paiementRepository->findBy([], ["id" => "DESC"]), /* query NOT result */
-            $request->query->getInt('page', 1)/*page number*/,
-            20/*limit per page*/
-        );
+        // $pagination = $paginator->paginate(
+        //     $paiementRepository->findBy([], ["id" => "DESC"]), /* query NOT result */
+        //     $request->query->getInt('page', 1)/*page number*/,
+        //     20/*limit per page*/
+        // );
+
+        $paiements = $paiementRepository->findAll(["id" => "DESC"]);
         return $this->render('admin/paiement/index.html.twig', [
-            'paiements' => $pagination,
+            'paiements' => $paiements,
         ]);
     }
 

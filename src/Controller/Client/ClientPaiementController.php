@@ -2,6 +2,7 @@
 
 namespace App\Controller\Client;
 
+use App\Classe\Mail;
 use Stripe\Stripe;
 use App\Entity\Devis;
 use App\Entity\Paiement;
@@ -12,6 +13,7 @@ use App\Entity\ModePaiement;
 use Stripe\Checkout\Session;
 use App\Service\TarifsHelper;
 use App\Classe\ReservationClient;
+use App\Classe\ValidationReservationClientSession;
 use App\Controller\DevisController;
 use App\Repository\DevisRepository;
 use App\Repository\OptionsRepository;
@@ -42,6 +44,8 @@ class ClientPaiementController extends AbstractController
     private $flashy;
     private $em;
     private $modePaiementRepo;
+    private $validationSession;
+    private $mail;
 
 
     public function __construct(
@@ -56,7 +60,9 @@ class ClientPaiementController extends AbstractController
         DevisRepository $devisRepo,
         FlashyNotifier $flashy,
         EntityManagerInterface $em,
-        ModePaiementRepository $modePaiementRepo
+        ModePaiementRepository $modePaiementRepo,
+        ValidationReservationClientSession $validationSession,
+        Mail $mail
 
     ) {
         $this->devisController = $devisController;
@@ -71,13 +77,15 @@ class ClientPaiementController extends AbstractController
         $this->flashy = $flashy;
         $this->em = $em;
         $this->modePaiementRepo = $modePaiementRepo;
+        $this->validationSession = $validationSession;
+        $this->mail = $mail;
     }
 
     //test de paiement par stripe (page de paiement hebergé sur site stripe)
     /**
      * @Route("/espaceclient/paiement-stripe/{refDevis}", name="paiementStripe", methods={"GET","POST"})
      */
-    public function paiementStripe(Request $request, $refDevis, ReservationClient $reservationClientSession)
+    public function paiementStripe(Request $request, $refDevis)
     {
 
         $devis = $this->devisRepo->findOneBy(['numero' => $refDevis]);
@@ -87,7 +95,7 @@ class ClientPaiementController extends AbstractController
             return $this->redirectToRoute('espaceClient_index');
         }
 
-        $modePaiement = $reservationClientSession->getModePaiment();
+        $modePaiement = $this->validationSession->getModePaiment();
 
         //sommepaiement en fonction de mode paiement choisis par le client
         if ($modePaiement == 25) {
@@ -115,7 +123,7 @@ class ClientPaiementController extends AbstractController
                         'images' => [$YOUR_DOMAIN . "/uploads/vehicules" . $devis->getVehicule()->getImage()],
                         'description' => $devis->getVehicule()->getMarque() . " " . $devis->getVehicule()->getModele()
                     ],
-                    'unit_amount' => $sommePaiement
+                    'unit_amount' => $sommePaiement * 100
                 ],
                 'quantity' => 1,
             ]],
@@ -135,9 +143,10 @@ class ClientPaiementController extends AbstractController
     /**
      * @Route("/espaceclient/paiement-stripe/succes/{stripeSessionId}", name="paiementStripeSucces", methods={"GET","POST"})
      */
-    public function paiementStripeSucces(Request $request, $stripeSessionId, ReservationClient $reservationClientSession)
+    public function paiementStripeSucces(Request $request, $stripeSessionId)
     {
         $devis = $this->devisRepo->findOneBy(['stripeSessionId' => $stripeSessionId]);
+
 
         //securité en cas de session non valide
         if (!$devis || $devis->getClient() != $this->getUser()) {
@@ -153,13 +162,12 @@ class ClientPaiementController extends AbstractController
         //enregistrement devis comme une réservation 
         $this->reserverDevis($devis, $stripeSessionId);
 
-        // dump($this->reservRepo->findOneBy(['stripeSessionId' => $stripeSessionId]));
 
         //enregistrer paiement dans table paiement
         $paiement = new Paiement;
 
         //sommepaiement en fonction de mode paiement choisis par le client
-        $modePaiement = $reservationClientSession->getModePaiment();
+        $modePaiement = $this->validationSession->getModePaiment();
         if ($modePaiement == 25) {
             $sommePaiement = $this->tarifsHelper->VingtCinqPourcent($devis->getPrix());
         }
@@ -179,7 +187,12 @@ class ClientPaiementController extends AbstractController
         $this->em->persist($paiement);
         $this->em->flush();
 
-        $this->flashy->success("Votre réservation a été effectué avec succès");
+        $reservation = $this->reservRepo->findOneBy(['stripeSessionId' => $stripeSessionId]);
+        //envoi de mail client
+        $contentMail = 'Votre réservation numero ' . $reservation->getReference() . 'a bien été payé';
+        $this->mail->send($reservation->getClient()->getMail(), $reservation->getClient()->getNom(), "Confirmation payement", $contentMail);
+
+        $this->flashy->success("Votre réservation a été effectué avec succès, un mail vous a été envoyé pour confirmation de votre paiement");
         return $this->redirectToRoute('client_reservations');
     }
 
@@ -272,7 +285,12 @@ class ClientPaiementController extends AbstractController
         }
 
         $reservation->setPrix($devis->getPrix());
-        $reservation->setDateReservation(new \DateTime('NOW'));
+        $reservation->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($devis->getOptions()));
+        $reservation->setPrixGaranties($this->tarifsHelper->sommeTarifsOptions($devis->getGaranties()));
+        $reservation->setDuree($this->dateHelper->calculDuree($devis->getDateDepart(), $devis->getDateRetour()));
+        $reservation->setTarifVehicule($this->tarifsHelper->calculTarifVehicule($devis->getDateDepart(), $devis->getDateRetour(), $devis->getVehicule()));
+        $reservation->setPrix($devis->getPrix());
+        $reservation->setDateReservation($this->dateHelper->dateNow());
         $reservation->setCodeReservation('devisTransformé');
         // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
         $lastID = $this->reservRepo->findBy(array(), array('id' => 'DESC'), 1);

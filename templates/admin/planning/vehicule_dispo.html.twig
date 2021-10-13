@@ -26,6 +26,7 @@
 			<h2>
 				<i class="fa fa-car"></i>
 				Véhicules disponibles
+
 			</h2>
 
 			<div class="clearfix"></div>
@@ -35,6 +36,7 @@
 			<h2 class="text-uppercase text-center">
 				<i class="fa fa-car"></i>
 				véhicules disponibles le
+				{{date|date('d/m/Y H:i')}}
 				<span id="dateSpanElem"></span>
 			</h2>
 			<div id="test" class="text-center"></div>
@@ -46,7 +48,12 @@
 				<div class="col-auto mb-3">
 					<div class="row">
 						<div class="col-auto pr-0">
-							<input id="dateInputElem" class="date-picker form-control" type="datetime-local">
+							<form action="{{path('vehiculeDispo')}}" id="formInputDate" method="post">
+								<input id="dateInputElem" class="date-picker form-control" type="datetime-local" name="inputDate">
+							</form>
+						</div>
+						<div class="col-auto">
+							<button type="submit" class="btn btn-danger" form="formInputDate">Rechercher</button>
 						</div>
 					</div>
 				</div>
@@ -60,6 +67,29 @@
 						<th class="text-nowrap">prochaine réservation</th>
 					</tr>
 				</thead>
+				<tbody>
+					{% for veh in vehiculesDisponible %}
+						<tr>
+							<td>{{veh.Immatriculation}}</td>
+							<td>{{veh.modele}}</td>
+							<td>
+								{% for data in listPastReservations %}
+									{% if data['vehicule']== veh %}
+										{{data['dateRetour']|date('d/m/Y H:i')}}
+									{% endif %}
+								{% endfor %}
+							</td>
+							<td>
+								{% for data in listNextReservations %}
+									{% if data['vehicule']== veh %}
+										{{data['dateDepart']|date('d/m/Y H:i')}}
+									{% endif %}
+								{% endfor %}
+							</td>
+
+						</tr>
+					{% endfor %}
+				</tbody>
 			</table>
 		{% endblock %}
 
@@ -80,5 +110,11 @@
 			<script src="../../admin/vendors/jszip/dist/jszip.min.js"></script>
 			<script src="../../admin/vendors/pdfmake/build/pdfmake.min.js"></script>
 			<script src="../../admin/vendors/pdfmake/build/vfs_fonts.js"></script>
-			<script src="../../js/admin/vehiculeDispo_ajax.js"></script>
+			{# // <script src="../../js/admin/vehiculeDispo_ajax.js"></script> #}
+
+			<script>
+				$(document).ready(function () {
+$('#vehiculeDispoDatatable').DataTable();
+});
+			</script>
 		{% endblock  %}
