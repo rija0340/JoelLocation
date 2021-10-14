@@ -307,35 +307,36 @@
 							</div>
 						</div>
 					</div>
-
-					<table class="table table-striped">
-						<thead class="bg-dark text-white">
-							<tr class="text-uppercase">
-								<th>date de création
-								</th>
-								<th>référence</th>
-								<th>client</th>
-								<th>montant</th>
-								<th>action</th>
-							</tr>
-						</thead>
-						<tbody>
-							{% for reservation in reservations %}
-
-								<tr>
-									<th scope="row">{{reservation.dateReservation |date('d/m/Y - H:i')}}</th>
-									<td>{{reservation.reference}}</td>
-									<td>{{reservation.client.nom}}</td>
-									<td>{{reservation.prix}}
-										€</td>
-									<td>
-										<a class="btn btn-dark text-white" href="{{ path('reservation_show', {'id': reservation.id} ) }}">Voir</a>
-									</td>
+					<div class="overflow-auto">
+						<table class="table table-striped">
+							<thead class="bg-dark text-white">
+								<tr class="text-uppercase">
+									<th>date de création
+									</th>
+									<th>référence</th>
+									<th>client</th>
+									<th>montant</th>
+									<th>action</th>
 								</tr>
-							{% endfor %}
+							</thead>
+							<tbody>
+								{% for reservation in reservations %}
 
-						</tbody>
-					</table>
+									<tr>
+										<th scope="row">{{reservation.dateReservation |date('d/m/Y - H:i')}}</th>
+										<td>{{reservation.reference}}</td>
+										<td>{{reservation.client.nom}}</td>
+										<td>{{reservation.prix}}
+											€</td>
+										<td>
+											<a class="btn btn-dark text-white" href="{{ path('reservation_show', {'id': reservation.id} ) }}">Voir</a>
+										</td>
+									</tr>
+								{% endfor %}
+
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -368,7 +369,42 @@
 						Liste dynamique des cinq derniers devis transformés. Le bouton orange au dessus du tableau vous permet d'accéder à l'onglet des nouvelles réservations
 					</div>
 					<div class="clearfix"></div>
-					<p class="text-center">Pas de nouvelle réservation</p>
+					{# devis transformé #}
+					{% if devis %}
+						<div class="overflow-auto">
+							<table class="table table-striped ">
+								<thead class="bg-dark text-white">
+									<tr class="text-uppercase">
+										<th>date de création
+										</th>
+										<th>référence</th>
+										<th>client</th>
+										<th>montant</th>
+										<th>action</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for devis in devis %}
+										<tr>
+											<th scope="row">{{devis.dateCreation |date('d/m/Y - H:i')}}</th>
+											<td>{{devis.numero}}</td>
+											<td>{{devis.client.nom}}</td>
+											<td>{{devis.prix}}
+												€</td>
+											<td>
+												<a class="btn btn-dark text-white" href="{{ path('devis_show', {'id': devis.id} ) }}">Voir</a>
+											</td>
+										</tr>
+									{% endfor %}
+
+								</tbody>
+							</table>
+						</div>
+					{% else %}
+						Pas de réservation
+					{% endif %}
+
+					{# fin devis transformé #}
 				</div>
 
 				<div class="x_title">
@@ -381,23 +417,28 @@
 						<i class="fa fa-info mr-1"></i>
 						Liste dynamique des derniers stop sales enregistrés
 					</div>
+					{% if stopSales %}
+						<table class="table">
 
-					<table class="table">
+							<tbody>
+								{% for stop in stopSales %}
+									<tr>
+										<td>{{stop.vehicule.immatriculation}}</td>
+										<td>{{stop.dateReservation | date('d/m/Y')}}</td>
+										<td>du
+											{{stop.dateDebut | date('d/m/Y')}}
+											au
+											{{stop.dateFin | date('d/m/Y')}}</td>
+									</tr>
+								{% endfor %}
 
-						<tbody>
-							{% for stop in stopSales %}
-								<tr>
-									<td>{{stop.vehicule.immatriculation}}</td>
-									<td>{{stop.dateReservation | date('d/m/Y')}}</td>
-									<td>du
-										{{stop.dateDebut | date('d/m/Y')}}
-										au
-										{{stop.dateFin | date('d/m/Y')}}</td>
-								</tr>
-							{% endfor %}
-
-						</tbody>
-					</table>
+							</tbody>
+						</table>
+					{% else %}
+						<div class="text-center">
+							Pas de stop sales
+						</div>
+					{% endif %}
 				</div>
 
 				<div class="x_title">

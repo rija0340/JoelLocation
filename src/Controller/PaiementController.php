@@ -5,17 +5,23 @@ namespace App\Controller;
 use App\Entity\Paiement;
 use App\Form\PaiementType;
 use App\Repository\PaiementRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\ReservationRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/paiement")
  */
 class PaiementController extends AbstractController
 {
+    private $reservRepo;
+    public function __construct(ReservationRepository $reservRepo)
+    {
+        $this->reservRepo = $reservRepo;
+    }
     /**
      * @Route("/", name="paiement_index", methods={"GET"})
      */
@@ -27,9 +33,11 @@ class PaiementController extends AbstractController
         //     20/*limit per page*/
         // );
 
+        $reservations = $this->reservRepo->findReservationsSansStopSales();
         $paiements = $paiementRepository->findAll(["id" => "DESC"]);
         return $this->render('admin/paiement/index.html.twig', [
             'paiements' => $paiements,
+            'reservations' => $reservations
         ]);
     }
 

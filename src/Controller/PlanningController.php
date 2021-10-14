@@ -192,7 +192,7 @@ class PlanningController extends AbstractController
     }
 
     /**
-     * @Route("/vehicule-dispo", name="vehiculeDispo", methods={"GET","POST"})
+     * @Route("/vehicules-disponibles", name="vehiculeDispo", methods={"GET","POST"})
      */
     public function vehiculeDispo(Request $request): Response
     {
@@ -201,15 +201,14 @@ class PlanningController extends AbstractController
         $reservations = $this->reservationRepo->findReservationIncludeDate($this->dateHelper->dateNow());
 
         //lorsque la date est changée par l'utilisateur, on modifie la date de recherche 
-
-        if ($request->request->get('inputDate')) {
+        $dateInput = $request->request->get('inputDate');
+        if ($dateInput) {
             $dateInput = new DateTime($request->request->get('inputDate'));
             $reservations = $this->reservationRepo->findReservationIncludeDate($dateInput);
             $dateInput = new DateTime($request->request->get('inputDate'));
-        }
-        if ($dateInput) {
             $date = $dateInput;
         } else {
+
             $date = $defaultDate;
         }
 

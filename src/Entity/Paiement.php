@@ -150,9 +150,9 @@ class Paiement
     }
 
     /**
-    * toString
-    * @return string
-    */
+     * toString
+     * @return string
+     */
     public function __toString()
     {
         return $this->getMontant();

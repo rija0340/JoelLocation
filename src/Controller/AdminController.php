@@ -12,6 +12,7 @@ use App\Form\RechercheAVType;
 use App\Form\ReservationType;
 use App\Service\TarifsHelper;
 use App\Form\ReservationStep1Type;
+use App\Repository\DevisRepository;
 use App\Repository\UserRepository;
 use App\Repository\MarqueRepository;
 use App\Repository\ModeleRepository;
@@ -47,8 +48,9 @@ class AdminController extends AbstractController
   private $tarifsHelper;
   private $marqueRepo;
   private $em;
+  private $devisRepo;
 
-  public function __construct(EntityManagerInterface $em, MarqueRepository $marqueRepo, ModeleRepository $modeleRepo, TarifsHelper $tarifsHelper, DateHelper $dateHelper, TarifsRepository $tarifsRepo, ReservationRepository $reservationRepo,  UserRepository $userRepo, VehiculeRepository $vehiculeRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
+  public function __construct(DevisRepository $devisRepo, EntityManagerInterface $em, MarqueRepository $marqueRepo, ModeleRepository $modeleRepo, TarifsHelper $tarifsHelper, DateHelper $dateHelper, TarifsRepository $tarifsRepo, ReservationRepository $reservationRepo,  UserRepository $userRepo, VehiculeRepository $vehiculeRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
   {
 
     $this->reservationRepo = $reservationRepo;
@@ -62,6 +64,7 @@ class AdminController extends AbstractController
     $this->modeleRepo = $modeleRepo;
     $this->marqueRepo = $marqueRepo;
     $this->em = $em;
+    $this->devisRepo = $devisRepo;
   }
 
 
@@ -70,13 +73,14 @@ class AdminController extends AbstractController
    */
   public function index(): Response
   {
-    $reservations = $this->reservationRepo->findReservationsSansStopSales(array(), array('id' => 'DESC'), 3);
-    $stopSales = $this->reservationRepo->findStopSales();
-
+    $reservations = $this->reservationRepo->findReservationsSansStopSales(array(), array('id' => 'DESC'), 5);
+    $devis = $this->devisRepo->findDevisTransformes(array(), array('id' => 'DESC'), 5);
+    $stopSales = $this->reservationRepo->findStopSales(array(), array('id' => 'DESC'), 5);
 
     return $this->render('admin/index.html.twig', [
       'reservations' => $reservations,
-      'stopSales' => $stopSales
+      'stopSales' => $stopSales,
+      'devis' => $devis
     ]);
   }
 

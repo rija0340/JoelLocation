@@ -140,28 +140,55 @@
 								<th>ACTION</th>
 							</tr>
 						</thead>
-
-
 						<tbody>
-							{% for paiement in paiements %}
+							{% for res in reservations %}
 								<tr>
-									<td>{{paiement.reservation.reference}}</td>
-									<td>{{paiement.client}}</td>
-									<td>{{paiement.montant}}</td>
+									<td>{{res.reference}}</td>
+									<td>{{res.client.nom}}</td>
 									<td>
-										{% if paiement.montant < paiement.reservation.prix %}
+										{# boucler tous les paiements et faire la somme des paiements relatifs à chaque réservation #}
+										{% set montantPaiement = 0 %}
+										{% for paiement in paiements %}
+											{% if paiement.reservation == res %}
+												{% set montantPaiement = montantPaiement + paiement.montant %}
+												{% set lastDatePaiement = paiement.datePaiement %}
+											{% endif %}
+										{% endfor %}
+										{% if montantPaiement != 0 %}
+											{{montantPaiement}}€
+										{% endif %}
 
-											<div class="d-flex justify-content-center">
-												<span class="badge badge-warning"></span>
-											</div>
-										{% else %}
-											<div class="d-flex justify-content-center">
-												<span class="badge badge-success"></span>
-											</div>
+									</td>
+									<td>
+										{# boucler tous les paiements et calculer la somme des paiements relatifs à une réservation  #}
+
+										{% set montantPaiement = 0 %}
+										{% set lastDatePaiement = null %}
+										{% set same = false %}
+
+										{% for paiement in paiements %}
+											{% if paiement.reservation == res %}
+												{% set montantPaiement = montantPaiement + paiement.montant %}
+												{% set lastDatePaiement = paiement.datePaiement %}
+												{% set same = true %}
+											{% endif %}
+										{% endfor %}
+										{% if same %}
+											{% if montantPaiement < res.prix %}
+												<div class="d-flex justify-content-center">
+													<span class="badge badge-warning"></span>
+												</div>
+												Reste :
+												{{res.prix - montantPaiement}}€
+											{% else %}
+												<div class="d-flex justify-content-center">
+													<span class="badge badge-success"></span>
+												</div>
+											{% endif %}
 										{% endif %}
 									</td>
-									<td>{{paiement.modepaiement.libelle}}</td>
-									<td>{{paiement.datePaiement|date('d/m/Y')}}</td>
+									<td>Carte banquaire</td>
+									<td>{{lastDatePaiement|date('d/m/Y H:i')}}</td>
 									<td class="text-center">
 										<a href="">
 											<i class=" fa fa-info-circle" style="font-size: 2em !important;"></i>
@@ -169,7 +196,6 @@
 									</td>
 								</tr>
 							{% endfor %}
-
 						</tbody>
 					</table>
 				</div>

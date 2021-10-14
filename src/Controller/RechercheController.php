@@ -146,16 +146,31 @@ class RechercheController extends AbstractController
     }
 
     /**
-     * @Route("/rechercher_res", name="rechercher_res")
+     * @Route("/rechercher_res", name="rechercher_res", methods ={"GET","POST"})
      */
     public function rechercher_res(Request $request): Response
     {
         $vehicules = $this->vehiculeRepo->findAll();
-        $form = $this->createForm(RechercheAVType::class);
+        $formRA = $this->createForm(RechercheAVType::class);
 
-        $form->handleRequest($request);
+        $dateNow = $this->dateHelper->dateNow();
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        //tous les resultats null par défaut
+        $resultatRS = null;
+        $resultatRIM = null;
+
+        $formRA->handleRequest($request);
+        //traiement pour recherche simple
+        if ($request->request->get("inputRechercheSimple")) {
+            $resultatRS = $this->getRechercheSimple($request->request->get("inputRechercheSimple"));
+        }
+
+        //traitement pour recherche Immatriculation
+        if ($request->request->get("inputVehicule_RIM") && $request->request->get("inputDate_RIM")) {
+            $resultatRIM = $this->getRechercheImmatriculation($request->request->get("inputVehicule_RIM"), $request->request->get("inputDate_RIM"));
+        }
+
+        if ($formRA->isSubmitted() && $formRA->isValid()) {
 
             $recherche_av = $request->request->get('recherche_av');
             $typeDate = $recherche_av["typeDate"];
@@ -199,8 +214,55 @@ class RechercheController extends AbstractController
 
         return $this->render('admin/reservation/recherche/rechercher_res.html.twig', [
             'vehicules' => $vehicules,
-            'form' => $form->createView(),
+            'formRA' => $formRA->createView(),
+            'resultatRS' => $resultatRS,
+            'resultatRIM' => $resultatRIM,
+            'dateNow' => $dateNow
 
         ]);
+    }
+
+    public function getRechercheSimple($recherche)
+    {
+
+        // dd($request);
+        // die();
+        $reservation[] = new Reservation();
+
+        if ($recherche != null) {
+            // $client_id = (int)$recherche;
+            $client_nom = $recherche;
+            // $client = new User();
+            $reservation[] = new Reservation();
+            //if($client_id){
+            // $client = $userRepository->findOneBy(["id" => $client_id]);
+            $client = $this->userRepo->findOneBy(["nom" => $client_nom]);
+            //}
+            // if ($client == null) {
+            //     $client = $userRepository->findOneBy(["nom" => $recherche]);
+            // }
+            if ($client != null) {
+                $reservation = $this->reservationRepo->findBy(["client" => $client]);
+            } else {
+                $reservation = $this->reservationRepo->findBy(["reference" => $recherche]);
+            }
+        }
+        return $reservation;
+    }
+
+    public function getRechercheImmatriculation($idVehicule, $date)
+    {
+
+        if ($idVehicule != null && $date != null) {
+            $date = new \DateTime($date);
+            $vehicule = $this->vehiculeRepo->find($idVehicule);
+
+            // dump($date, $vehicule);
+            // die();
+
+            $reservations = new Reservation();
+            $reservations = $this->reservationRepo->findRechercheIM($vehicule, $date);
+        }
+        return $reservations;
     }
 }

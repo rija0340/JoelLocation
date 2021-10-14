@@ -1,0 +1,27 @@
+{% extends 'baseClient.html.twig' %}
+
+{% block title %}Réservation
+{% endblock %}
+
+{% block stylesheets %}{% endblock %}
+
+{% block body %}
+	<div class="x_panel">
+		<div class="x_title">
+			<h3>Confirmation de commande</h3>
+		</div>
+		Bonjour
+		{{reservation.client.nom}},
+		<br>
+		Nous vous remercions pour votre commande numero
+		{{reservation.reference}}.
+		<br>
+		Une confirmation vient de vous être envoyée par email à l'adresse
+		{{reservation.client.mail}}.
+		<br>
+		Cliquer
+		<a href="{{path('client_reservations')}}">ici</a>
+		pour consulter vos réservations.
+	</div>
+{% endblock %}
+{% block javascripts %}{% endblock  %}

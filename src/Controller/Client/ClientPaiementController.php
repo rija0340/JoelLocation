@@ -139,14 +139,12 @@ class ClientPaiementController extends AbstractController
         return $this->redirect($checkout_session->url);
     }
 
-
     /**
-     * @Route("/espaceclient/paiement-stripe/succes/{stripeSessionId}", name="paiementStripeSucces", methods={"GET","POST"})
+     * @Route("/espaceclient/paiement-stripe/succes/{stripeSessionId}", name="payementSuccess", methods={"GET","POST"})
      */
-    public function paiementStripeSucces(Request $request, $stripeSessionId)
+    public function payementStripeSuccess(Request $request, $stripeSessionId)
     {
         $devis = $this->devisRepo->findOneBy(['stripeSessionId' => $stripeSessionId]);
-
 
         //securité en cas de session non valide
         if (!$devis || $devis->getClient() != $this->getUser()) {
@@ -161,7 +159,6 @@ class ClientPaiementController extends AbstractController
         }
         //enregistrement devis comme une réservation 
         $this->reserverDevis($devis, $stripeSessionId);
-
 
         //enregistrer paiement dans table paiement
         $paiement = new Paiement;
@@ -186,16 +183,29 @@ class ClientPaiementController extends AbstractController
         $paiement->setModePaiement($this->modePaiementRepo->findOneBy(['libelle' => 'CARTE BANCAIRE']));
         $this->em->persist($paiement);
         $this->em->flush();
-
+        //recupération entity reservation concerné
         $reservation = $this->reservRepo->findOneBy(['stripeSessionId' => $stripeSessionId]);
         //envoi de mail client
         $contentMail = 'Votre réservation numero ' . $reservation->getReference() . 'a bien été payé';
         $this->mail->send($reservation->getClient()->getMail(), $reservation->getClient()->getNom(), "Confirmation payement", $contentMail);
 
-        $this->flashy->success("Votre réservation a été effectué avec succès, un mail vous a été envoyé pour confirmation de votre paiement");
-        return $this->redirectToRoute('client_reservations');
+        //vider session validation paiement 
+        $this->validationSession->removeValidationSession();
+        return $this->render('client/paiement/success.html.twig', [
+            "reservation" => $reservation,
+        ]);
     }
 
+    /**
+     * @Route("/espaceclient/paiement-stripe/echec/{stripeSessionId}", name="payementFail", methods={"GET","POST"})
+     */
+    public function payementStripeFail(Request $request, $stripeSessionId)
+    {
+        $devis = $this->devisRepo->findOneBy(['stripeSessionId' => $stripeSessionId]);
+        return $this->render('client/paiement/fail.html.twig', [
+            'devis' => $devis
+        ]);
+    }
 
     /**
      * @Route("/payement", name="payement", methods={"GET","POST"})

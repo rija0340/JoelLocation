@@ -19,6 +19,23 @@ class DevisRepository extends ServiceEntityRepository
         parent::__construct($registry, Devis::class);
     }
 
+
+    /**
+     * @return Devis[] Returns an array of Devis objects
+     */
+
+    public function findDevisTransformes()
+    {
+        return $this->createQueryBuilder('d')
+            ->andWhere('d.transformed = :val')
+            ->setParameter('val', true)
+            ->orderBy('d.id', 'DESC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+    }
+
+
     // /**
     //  * @return Devis[] Returns an array of Devis objects
     //  */
