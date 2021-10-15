@@ -147,7 +147,7 @@ function getVehicules() {
         // var n = d.toString();
         $.ajax({
             type: 'GET',
-            url: '/reservation/vehiculeDispoFonctionDates',
+            url: '/reservation/liste-vehicules-disponibles',
             data: {
                 'dateDepart': dateDebutValue, 'dateRetour': dateFinValue
             },
@@ -156,7 +156,6 @@ function getVehicules() {
                 console.log(data);
                 populateSelectElem(data);
                 dataForSelect(data);
-
             },
             error: function (erreur) {
                 // alert('La requête n\'a pas abouti' + erreur);

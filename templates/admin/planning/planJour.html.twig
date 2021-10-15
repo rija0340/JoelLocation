@@ -38,55 +38,90 @@
 			<div class="text-center ">
 				<h5 class="font-weight-bold">
 					<i class="fa fa-calendar-o mr-2"></i>PLANNING du
-					<span id="dateSpan"></span>
+					<span id="dateSpan">{{date|date('d/m/Y')}}</span>
 				</h5>
 				<div id="btnExport"></div>
 
 			</div>
-			<div class="mb-4 mt-2 col-3">
-				<div class="">
-					<input type="date" id="datedebutplanning" class="form-control">
-				</div>
-			</div>
-			<div class=" row">
-				<div class="col-sm-12">
-					<div class="card-box table-responsive">
-						<table id="tblPlanningJournalier" class="display" width="100%">
-							<thead class="text-uppercase ">
-								<tr>
-									<th>Identification</th>
-									<th>Nom et Prénom</th>
-									<th class="text-nowrap">Date de début contrat</th>
-									<th class="text-nowrap">Date de fin contrat</th>
-									<th>actions</th>
-								</tr>
-							</thead>
-						</table>
+			<form action="{{path('planJour')}}" method="POST" class="mb-4">
+				<div class="row">
+					<div class="col-md-2">
+						<input type="date" id="datedebutplanning" class="form-control" required="required" name="inputDate">
+					</div>
+					<div class="col-md-2">
+						<button type="submit" class="btn btn-danger">
+							Rechercher</button>
 					</div>
 				</div>
-			</div>
-		</div>
-	{% endblock %}
+			</form>
 
-	{% block javascripts %}
-		<!-- Datatables -->
-		<script src="../../admin/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
-		<script src="../../admin/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-		<script src="../../admin/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-		<script src="../../admin/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
-		<script src="../../admin/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
-		<script src="../../admin/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
-		<script src="../../admin/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
-		<script src="../../admin/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
-		<script src="../../admin/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
-		<script src="../../admin/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-		<script src="../../admin/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-		<script src="../../admin/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
-		<script src="../../admin/vendors/jszip/dist/jszip.min.js"></script>
-		<script src="../../admin/vendors/pdfmake/build/pdfmake.min.js"></script>
-		<script src="../../admin/vendors/pdfmake/build/vfs_fonts.js"></script>
-		{# // <script src="../../js/admin/datatable.fr.js"></script> #}
-		<script src="../../js/admin/planningJour_ajax.js"></script>
+			<div class="card-box table-responsive">
+				<table id="tblPlanningJournalier" class="display" width="100%">
+					<thead class="text-uppercase ">
+						<tr>
+							<th>Identification</th>
+							<th>Nom et Prénom</th>
+							<th class="text-nowrap">Date de début contrat</th>
+							<th class="text-nowrap">Date de fin contrat</th>
+							<th>actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for reservation in reservations %}
+							{% if reservation.dateDebut|date('d/m/Y') == date|date('d/m/Y') %}
+								<tr class="bg-pink">
+									<td>{{reservation.vehicule.marque}}
+										{{reservation.vehicule.modele}}
+										{{reservation.vehicule.immatriculation}}
+									</td>
+									<td>{{reservation.client.nom }}
+										{{reservation.client.prenom}}</td>
+									<td>{{reservation.dateDebut|date('d/m/Y H:i')}}</td>
+									<td>{{reservation.dateFin|date('d/m/Y H:i')}}</td>
+									<td></td>
+								</tr>
+							{% elseif reservation.dateFin|date('d/m/Y') == date|date('d/m/Y') %}
+								<tr>
+									<td>{{reservation.vehicule.marque}}
+										{{reservation.vehicule.modele}}
+										{{reservation.vehicule.immatriculation}}
+									</td>
+									<td>{{reservation.client.nom }}
+										{{reservation.client.prenom}}</td>
+									<td>{{reservation.dateDebut|date('d/m/Y H:i')}}</td>
+									<td>{{reservation.dateFin|date('d/m/Y H:i')}}</td>
+									<td></td>
+								</tr>
+							{% endif %}
+						{% endfor %}
+					</tbody>
+				</th>
+			</tbody>
+		</table>
+	</div>
+</div>{% endblock %}{% block javascripts %}
+<!-- Datatables -->
+<script src="../../admin/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="../../admin/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="../../admin/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+<script src="../../admin/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+<script src="../../admin/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+<script src="../../admin/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+<script src="../../admin/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+<script src="../../admin/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+<script src="../../admin/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+<script src="../../admin/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="../../admin/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script src="../../admin/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+<script src="../../admin/vendors/jszip/dist/jszip.min.js"></script>
+<script src="../../admin/vendors/pdfmake/build/pdfmake.min.js"></script>
+<script src="../../admin/vendors/pdfmake/build/vfs_fonts.js"></script>
+<script>
+	$(document).ready(function () {
+$('#tblPlanningJournalier').DataTable();
+});
+</script>
+<script src="{{asset('js/admin/datatable.fr.js')}}"></script>
 
-
-	{% endblock  %}
+{# // <script src="../../js/admin/datatable.fr.js"></script> #}
+{# // <script src="../../js/admin/planningJour_ajax.js"></script> #}{% endblock  %}

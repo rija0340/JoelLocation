@@ -47,7 +47,7 @@
 
 {% extends 'base2.html.twig' %}
 
-{% block title %}Echec de paiement
+{% block title %}Paiements
 {% endblock %}
 
 
@@ -141,54 +141,14 @@
 							</tr>
 						</thead>
 						<tbody>
-							{% for res in reservations %}
+							{% for paiement in paiements %}
 								<tr>
-									<td>{{res.reference}}</td>
-									<td>{{res.client.nom}}</td>
-									<td>
-										{# boucler tous les paiements et faire la somme des paiements relatifs à chaque réservation #}
-										{% set montantPaiement = 0 %}
-										{% for paiement in paiements %}
-											{% if paiement.reservation == res %}
-												{% set montantPaiement = montantPaiement + paiement.montant %}
-												{% set lastDatePaiement = paiement.datePaiement %}
-											{% endif %}
-										{% endfor %}
-										{% if montantPaiement != 0 %}
-											{{montantPaiement}}€
-										{% endif %}
-
-									</td>
-									<td>
-										{# boucler tous les paiements et calculer la somme des paiements relatifs à une réservation  #}
-
-										{% set montantPaiement = 0 %}
-										{% set lastDatePaiement = null %}
-										{% set same = false %}
-
-										{% for paiement in paiements %}
-											{% if paiement.reservation == res %}
-												{% set montantPaiement = montantPaiement + paiement.montant %}
-												{% set lastDatePaiement = paiement.datePaiement %}
-												{% set same = true %}
-											{% endif %}
-										{% endfor %}
-										{% if same %}
-											{% if montantPaiement < res.prix %}
-												<div class="d-flex justify-content-center">
-													<span class="badge badge-warning"></span>
-												</div>
-												Reste :
-												{{res.prix - montantPaiement}}€
-											{% else %}
-												<div class="d-flex justify-content-center">
-													<span class="badge badge-success"></span>
-												</div>
-											{% endif %}
-										{% endif %}
-									</td>
-									<td>Carte banquaire</td>
-									<td>{{lastDatePaiement|date('d/m/Y H:i')}}</td>
+									<td>{{paiement.reservation.reference}}</td>
+									<td>{{paiement.reservation.client.nom}}</td>
+									<td>{{paiement.montant}}</td>
+									<td></td>
+									<td>{{paiement.modePaiement.libelle}}</td>
+									<td>{{paiement.datePaiement|date('d/m/Y H:i')}}</td>
 									<td class="text-center">
 										<a href="">
 											<i class=" fa fa-info-circle" style="font-size: 2em !important;"></i>
@@ -260,86 +220,5 @@
 	<script src="../../admin/vendors/pdfmake/build/vfs_fonts.js"></script>
 	<script src="../../js/admin/datatable.fr.js"></script>
 
-	<!-- bootstrap-daterangepicker -->
 
-	<script src="../../admin/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
-	<!--bootstrap-wysiwyg-->
-	<script src="../../admin/vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js"></script>
-	<script src="../../admin/vendors/jquery.hotkeys/jquery.hotkeys.js"></script>
-	<script src="../../admin/vendors/google-code-prettify/src/prettify.js"></script>
-	<!-- jQuery Tags Input -->
-	<script src="../../admin/vendors/jquery.tagsinput/src/jquery.tagsinput.js"></script>
-	<!-- Switchery -->
-	<script src="../../admin/vendors/switchery/dist/switchery.min.js"></script>
-	<!-- Select2 -->
-	<script src="../../admin/vendors/select2/dist/js/select2.full.min.js"></script>
-	<!-- Parsley -->
-	<script src="../../admin/vendors/parsleyjs/dist/parsley.min.js"></script>
-	<!-- Autosize -->
-	<script src="../../admin/vendors/autosize/dist/autosize.min.js"></script>
-	<!-- jQuery autocomplete -->
-	<script src="../../admin/vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js"></script>
-	<!-- starrr -->
-	<script src="../../admin/vendors/starrr/dist/starrr.js"></script>
-	<!-- Custom Theme Scripts -->
-	<script src="../../admin/build/js/custom.min.js"></script>
-	<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
-	<script src="../../admin/vendors/moment/moment.js"></script>
-	{# manova anle langue ho francais amle moment #}
-	<script src="../../plugins/moment/locale/fr.js"></script>
-	<script type="text/javascript" src="../../admin\vendors\bootstrap-daterangepicker\daterangepicker.js"></script>
-	<script src="../../plugins/daterangepicker/daterangepicker.js"></script>
-	<script src="../../js/admin/bootstrap-datepicker.fr.min.js"></script>
-	<script type="text/javascript">
-
-
-		$(function () {
-
-var start = moment().subtract(29, 'days');
-var end = moment();
-
-
-function cb(start, end) {
-$('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-}
-
-$('#reportrange').daterangepicker({
-
-startDate: start, endDate: end,
-// showDropdowns: true,
-// esoria le oe 1 mois fona ny intervalle
-// linkedCalendars: false,
-
-// maxYear: parseInt(moment().format('YYYY'), 10),
-// maxMouth: parseInt(moment().format('MMMM'), 10),
-ranges: {
-'Today': [
-moment(), moment()
-],
-'Yesterday': [
-moment().subtract(1, 'days'),
-moment().subtract(1, 'days')
-],
-'Last 7 Days': [
-moment().subtract(6, 'days'),
-moment()
-],
-'Last 30 Days': [
-moment().subtract(29, 'days'),
-moment()
-],
-'This Month': [
-moment().startOf('month'), moment().endOf('month')
-],
-'Last Month': [
-moment().subtract(1, 'month').startOf('month'),
-moment().subtract(1, 'month').endOf('month')
-]
-}
-}, cb);
-
-cb(start, end);
-
-});
-	</script>
 {% endblock  %}

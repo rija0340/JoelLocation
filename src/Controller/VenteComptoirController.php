@@ -23,6 +23,7 @@ use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ReservationRepository;
+use App\Service\ReservationHelper;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use MercurySeries\FlashyBundle\FlashyNotifier;
@@ -56,6 +57,7 @@ class VenteComptoirController extends AbstractController
     private $devisRepo;
     private $reservationSession;
     private $mail;
+    private $reservationHelper;
 
     public function __construct(
         FlashyNotifier $flashy,
@@ -73,7 +75,8 @@ class VenteComptoirController extends AbstractController
         UserPasswordEncoderInterface $passwordEncoder,
         DevisRepository $devisRepo,
         ReservationSession $reservationSession,
-        Mail $mail
+        Mail $mail,
+        ReservationHelper $reservationHelper
     ) {
 
         $this->reservationSession = $reservationSession;
@@ -92,6 +95,7 @@ class VenteComptoirController extends AbstractController
         $this->passwordEncoder = $passwordEncoder;
         $this->devisRepo = $devisRepo;
         $this->mail = $mail;
+        $this->reservationHelper = $reservationHelper;
     }
 
     /**
@@ -144,23 +148,9 @@ class VenteComptoirController extends AbstractController
 
         //un tableau contenant les véhicules utilisées dans les reservations se déroulant entre 
         //$dateDepart et $dateRetour
-        $vehiculesReserves  = [];
         $reservations = $this->reservationRepo->findReservationIncludeDates($dateDepart, $dateRetour);
-        $vehicules = $this->vehiculeRepo->findAll();
+        $vehiculesDisponible = $this->reservationHelper->getVehiculesDisponible($reservations);
 
-        //mettre toutes les véhicules reservées dans un tableau
-        foreach ($reservations as $res) {
-            array_push($vehiculesReserves, $res->getVehicule());
-        }
-
-        //detecter les véhicules reservé et retenir les autres qui sont disponible dans l'array $vehiculesDispobible
-        $vehiculesDisponible = [];
-        foreach ($vehicules as $veh) {
-            if (in_array($veh, $vehiculesReserves)) {
-            } else {
-                array_push($vehiculesDisponible, $veh);
-            }
-        }
         //ajout id véhicule dans session, erreur si on stock directement 
         //un objet vehicule dans session et ensuite on enregistre dans base de donnée
         if ($request->request->get('vehicule') != null) {
@@ -179,13 +169,8 @@ class VenteComptoirController extends AbstractController
             return $this->redirectToRoute('step3');
         }
 
-        //tarifs des vehicules
-        $dateDepart = $this->reservationSession->getDateDepart();
-        $dateRetour = $this->reservationSession->getDateRetour();
-
-        $vehicules = $vehiculesDisponible;
         $data = [];
-        foreach ($vehicules as $key => $veh) {
+        foreach ($vehiculesDisponible as $key => $veh) {
             $tarif = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $veh);
             $data[$key]['vehicule'] = $veh;
             $data[$key]['tarif'] = $tarif;

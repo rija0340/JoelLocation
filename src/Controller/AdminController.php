@@ -73,9 +73,11 @@ class AdminController extends AbstractController
    */
   public function index(): Response
   {
-    $reservations = $this->reservationRepo->findReservationsSansStopSales(array(), array('id' => 'DESC'), 5);
-    $devis = $this->devisRepo->findDevisTransformes(array(), array('id' => 'DESC'), 5);
-    $stopSales = $this->reservationRepo->findStopSales(array(), array('id' => 'DESC'), 5);
+
+    //find by accept limitation de résultats , param => criteria, sorting, number of results
+    $reservations = $this->reservationRepo->findBy(['code_reservation' => 'devisTransformé'], ['id' => 'DESC'], 5);
+    $devis = $this->devisRepo->findBy(['transformed' => true], ['id' => 'DESC'], 5);
+    $stopSales = $this->reservationRepo->findBy(['code_reservation' => 'stopSale'], ['id' => 'DESC'], 5);
 
     return $this->render('admin/index.html.twig', [
       'reservations' => $reservations,

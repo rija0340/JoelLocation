@@ -18,6 +18,7 @@
 					<th>Réservation/véhicule</th>
 					<th>Dates/Durée</th>
 					<th>Prix</th>
+					<th>Action</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -35,6 +36,16 @@
 						</td>
 						<td>{{ reserv.prix }}
 							€</td>
+						<td>
+							{% if reserv.prix > reserv.sommePaiements %}
+								<form action="{{path('paiement_sold')}}" method="POST">
+									<input type="hidden" name="montantSolde" value="{{reserv.prix - reserv.sommePaiements}}">
+									<input type="hidden" name="reservation" value="{{reserv.id}}">
+									<button class="btn btn-danger">Payer solde
+										{{reserv.prix - reserv.sommePaiements}}€</button>
+								</form>
+							{% endif %}
+						</td>
 					</tr>
 				{% endfor %}
 			</tbody>

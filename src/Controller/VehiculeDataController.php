@@ -8,6 +8,7 @@ use App\Repository\MarqueRepository;
 use App\Repository\ModeleRepository;
 use App\Repository\VehiculeRepository;
 use App\Repository\ReservationRepository;
+use App\Service\ReservationHelper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,6 +25,7 @@ class VehiculeDataController extends AbstractController
     private $reservationRepo;
     private $tarifsHelper;
     private $dateHelper;
+    private $reservationHelper;
 
     public function __construct(
         VehiculeRepository $vehiculeRepo,
@@ -31,7 +33,8 @@ class VehiculeDataController extends AbstractController
         ModeleRepository $modeleRepo,
         ReservationRepository $reservationRepo,
         TarifsHelper $tarifsHelper,
-        DateHelper $dateHelper
+        DateHelper $dateHelper,
+        ReservationHelper $reservationHelper
     ) {
 
         $this->vehiculeRepo = $vehiculeRepo;
@@ -40,6 +43,7 @@ class VehiculeDataController extends AbstractController
         $this->reservationRepo = $reservationRepo;
         $this->tarifsHelper = $tarifsHelper;
         $this->dateHelper = $dateHelper;
+        $this->reservationHelper = $reservationHelper;
     }
 
     /**
@@ -58,8 +62,8 @@ class VehiculeDataController extends AbstractController
         $data = array();
         $listeUnique = [];
         $listeVehiculesDispo = array();
-        $listeVehiculesDispo = $this->getVehiculesDispo($dateDebut, $dateFin);
-
+        $reservations = $this->reservationRepo->findReservationIncludeDates($dateDebut, $dateFin);
+        $listeVehiculesDispo = $this->reservationHelper->getVehiculesDisponible($reservations);
         foreach ($listeVehiculesDispo as $key => $vehicule) {
             $data[$key]['marque'] = $vehicule->getMarque()->getLibelle();
             $data[$key]['modele'] = $vehicule->getModele()->getLibelle();
@@ -84,7 +88,7 @@ class VehiculeDataController extends AbstractController
             $data2[$key]['modele'] = $vehicule->getModele()->getLibelle();
             $data2[$key]['carburation'] = $vehicule->getCarburation();
             $data2[$key]['carburation'] = $vehicule->getCarburation();
-            $data2[$key]['immatriculation'] = "";
+            $data2[$key]['immatriculation'] = $vehicule->getImmatriculation();
             $data2[$key]['vitesse'] = $vehicule->getVitesse();
             $data2[$key]['bagages'] = $vehicule->getBagages();
             $data2[$key]['atouts'] = $vehicule->getAtouts();
@@ -105,6 +109,44 @@ class VehiculeDataController extends AbstractController
         return new JsonResponse($data2);
     }
 
+
+    /**
+     * @Route("reservation/liste-vehicules-disponibles", name="vehicules_disponibles",methods={"GET","POST"}))
+     */
+    public function vehiculesDisponibles(Request $request)
+    {
+
+        $dateDepart = $request->query->get('dateDepart');
+        $dateRetour = $request->query->get('dateRetour');
+
+        $dateDebut = new \DateTime($dateDepart);
+        $dateFin = new \DateTime($dateRetour);
+
+        $listeUnique = [];
+        $listeVehiculesDispo = [];
+        $reservations = $this->reservationRepo->findReservationIncludeDates($dateDebut, $dateFin);
+        $listeVehiculesDispo = $this->reservationHelper->getVehiculesDisponible($reservations);
+
+        $data2 = array();
+        foreach ($listeVehiculesDispo as $key =>  $vehicule) {
+
+            $data2[$key]['id'] = $vehicule->getId();
+            $data2[$key]['marque'] = $vehicule->getMarque()->getLibelle();
+            $data2[$key]['modele'] = $vehicule->getModele()->getLibelle();
+            $data2[$key]['carburation'] = $vehicule->getCarburation();
+            $data2[$key]['carburation'] = $vehicule->getCarburation();
+            $data2[$key]['immatriculation'] = $vehicule->getImmatriculation();
+            $data2[$key]['vitesse'] = $vehicule->getVitesse();
+            $data2[$key]['bagages'] = $vehicule->getBagages();
+            $data2[$key]['atouts'] = $vehicule->getAtouts();
+            $data2[$key]['caution'] = $vehicule->getCaution();
+            $data2[$key]['portes'] = $vehicule->getPortes();
+            $data2[$key]['passagers'] = $vehicule->getPassagers();
+            $data2[$key]['image'] = $vehicule->getImage();
+        }
+
+        return new JsonResponse($data2);
+    }
     /**
      * @Route("reservation/listeVehicules", name="listeVehicules",methods={"GET","POST"}))
      */
@@ -127,30 +169,5 @@ class VehiculeDataController extends AbstractController
         }
 
         return new JsonResponse($datas);
-    }
-
-
-    public function getVehiculesDispo($dateDebut, $dateFin)
-    {
-        $vehicules = $this->vehiculeRepo->findAll();
-        $reservations = $this->reservationRepo->findReservationIncludeDates($dateDebut, $dateFin);
-        // dd($reservations);
-
-        $i = 0;
-        $vehiculeDispo = [];
-
-        // code pour vehicule avec reservation , mila manao condition amle tsy misy reservation mihitsy
-        foreach ($vehicules as $vehicule) {
-            foreach ($reservations as $reservation) {
-                if ($vehicule == $reservation->getVehicule()) {
-                    $i++;
-                }
-            }
-            if ($i == 0) {
-                $vehiculeDispo[] = $vehicule;
-            }
-            $i = 0;
-        }
-        return $vehiculeDispo;
     }
 }

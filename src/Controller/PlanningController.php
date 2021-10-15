@@ -75,7 +75,7 @@ class PlanningController extends AbstractController
         $datas = array();
         $data2 = [];
         $resArray = [];
-
+        //liste des véhicules pour être affiché sur le planning (colonne à gauche)
         foreach ($vehiculesInvolved as $key => $vehicule) {
             $i = 0;
             $reservationsV = $reservationRepo->findLastReservationsV($vehicule);
@@ -92,6 +92,7 @@ class PlanningController extends AbstractController
             $data1[$key]['end_date'] =   $reservationsV[$i - 1]->getDateFin()->format('d-m-Y H:i');
         }
 
+
         $c = 0;
         foreach ($reservations as $key => $reservation) {
             $datas[$key]['id'] =  uniqid();
@@ -101,9 +102,9 @@ class PlanningController extends AbstractController
             $datas[$key]['start_date_formated'] = $reservation->getDateDebut()->format('d-m-Y H:i');
 
             if (date("H", $reservation->getDateFin()->getTimestamp()) == 0) {
-                $datas[$key]['duration'] = ceil(1 + (($reservation->getDateFin()->getTimestamp() - $reservation->getDateDebut()->getTimestamp()) / 60 / 60 / 24));
+                $datas[$key]['duration'] = $this->dateHelper->calculDuree(1 + $reservation->getDateDebut(), $reservation->getDateFin());
             } else {
-                $datas[$key]['duration'] = ceil(($reservation->getDateFin()->getTimestamp() - $reservation->getDateDebut()->getTimestamp()) / 60 / 60 / 24);
+                $datas[$key]['duration'] = $this->dateHelper->calculDuree($reservation->getDateDebut(), $reservation->getDateFin());
             }
             $datas[$key]['end_date_formated'] = $reservation->getDateFin()->format('d-m-Y H:i');
             $datas[$key]['parent'] = $reservation->getVehicule()->getId();
@@ -113,7 +114,7 @@ class PlanningController extends AbstractController
             $datas[$key]['telClient'] = $reservation->getClient()->getTelephone();
             // $datas[$key]['unscheduled'] = true;
             $datas[$key]['text'] = ""; //util pour eviter erreur quick_info
-            // tester si une reservation est en cours
+            // tester si une reservation est en cours ou términé ou nouvelle
             if ($reservation->getDateDebut() < $this->dateHelper->dateNow() && $this->dateHelper->dateNow() < $reservation->getDateFin() && $reservation->getCodeReservation() != 'stopSale') {
 
                 $datas[$key]['etat'] = 'encours';
@@ -131,7 +132,7 @@ class PlanningController extends AbstractController
 
                 $datas[$key]['etat'] = 'stopSale';
             }
-
+            //definition couleur tâche en fonction point de départ et point de retour
             if ($reservation->getAgenceDepart() == "garage") {
                 $datas[$key]['color'] =  "#000000";
             } else if ($reservation->getAgenceDepart() == "AEROPORT DE POINT-A-PITRE") {
@@ -162,11 +163,55 @@ class PlanningController extends AbstractController
     /**
      * @Route("/planning-journalier", name="planJour",methods={"GET","POST"})
      */
-    public function planJour(): Response
+    public function planJour(Request $request): Response
     {
 
+        //valeur par défaut de date
+        $defaultDate = $this->dateHelper->dateNow();
+        $reservations = $this->reservationRepo->findPlanningJournaliers($this->dateHelper->dateNow());
+
+        //lorsque la date est changée par l'utilisateur, on modifie la date de recherche 
+        $dateInput = $request->request->get('inputDate');
+        if ($dateInput) {
+            $dateInput = new DateTime($request->request->get('inputDate'));
+            $reservations = $this->reservationRepo->findPlanningJournaliers($dateInput);
+            $dateInput = new DateTime($request->request->get('inputDate'));
+            $date = $dateInput;
+        } else {
+
+            $date = $defaultDate;
+        }
+
+        return $this->render('admin/planning/planJour.html.twig', [
+            'reservations' => $reservations,
+            'date' => $date,
+
+        ]);
         return $this->render('admin/planning/planJour.html.twig');
     }
+
+    // /**
+    //  * @Route("/planningJournalierData", name="planningJournalierData", methods={"GET","POST"})
+    //  */
+    // public function planningJournalierData(Request $request, ReservationRepository $reservationRepo)
+    // {
+    //     $date = $request->query->get('date');
+
+    //     //creation d'une date valide en php à partir d'une date de javascript.
+    //     $date1 = \DateTime::createFromFormat('D M d Y H:i:s e+', $date);
+    //     $reservations = $reservationRepo->findPlanningJournaliers($date1);
+
+    //     $datas = array();
+    //     foreach ($reservations as $key => $reservation) {
+
+    //         $datas[$key]['identification'] = $reservation->getVehicule()->getMarque() . ' ' . $reservation->getVehicule()->getModele() . ' ' . $reservation->getVehicule()->getImmatriculation();
+    //         $datas[$key]['client'] = $reservation->getClient()->getNom() . ' ' . $reservation->getClient()->getPrenom();
+    //         $datas[$key]['start_date_formated'] = $reservation->getDateDebut()->format('d/m/Y - H\Hi');
+    //         $datas[$key]['end_date_formated'] = $reservation->getDateFin()->format('d/m/Y - H\Hi');
+    //     }
+
+    //     return new JsonResponse($datas);
+    // }
 
     /**
      * @Route("/planningJournalierData", name="planningJournalierData", methods={"GET","POST"})
@@ -176,8 +221,8 @@ class PlanningController extends AbstractController
         $date = $request->query->get('date');
 
         //creation d'une date valide en php à partir d'une date de javascript.
-        $dateStarted = \DateTime::createFromFormat('D M d Y H:i:s e+', $date);
-        $reservations = $reservationRepo->findPlanningJournaliers($dateStarted);
+        $date1 = \DateTime::createFromFormat('D M d Y H:i:s e+', $date);
+        $reservations = $reservationRepo->findPlanningJournaliers($date1);
 
         $datas = array();
         foreach ($reservations as $key => $reservation) {

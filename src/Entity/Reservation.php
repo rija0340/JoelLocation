@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\PaiementRepository;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ReservationRepository;
 use App\Service\DateHelper;
@@ -178,6 +179,8 @@ class Reservation
      * @ORM\Column(type="string", length=255, nullable = true)
      */
     private $stripeSessionId;
+
+    private $sommePaiements;
 
     public function __construct()
     {
@@ -638,5 +641,15 @@ class Reservation
         $this->stripeSessionId = $stripeSessionId;
 
         return $this;
+    }
+
+    public function getSommePaiements()
+    {
+        $paiements = $this->getPaiements();
+        $this->sommePaiements = 0;
+        foreach ($paiements as $paiement) {
+            $this->sommePaiements = $this->sommePaiements + $paiement->getMontant();
+        }
+        return $this->sommePaiements;
     }
 }

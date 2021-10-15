@@ -30,14 +30,19 @@ class ReservationHelper
         $this->reservationRepo = $reservationRepo;
     }
 
+    //paramètres : reservations qui sont inclus durant l'intervalle de date de début et date de fin 
+    //cette fonction renvoi les véhicules disponibles qui ne sont pas occupées dans ces réservations
     public function getVehiculesDisponible($reservations)
     {
+
         $vehicules = $this->vehiculeRepo->findAll();
         //mettre toutes les véhicules reservées dans un tableau
         $vehiculesInvolved = [];
         foreach ($reservations as $res) {
             array_push($vehiculesInvolved, $res->getVehicule());
         }
+
+        $vehiculesInvolved = array_unique($vehiculesInvolved);
 
         //detecter les véhicules reservé et retenir les autres qui sont disponible dans l'array $vehiculesDispobible
         $vehiculesDisponible = [];

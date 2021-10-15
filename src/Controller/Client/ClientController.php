@@ -2,6 +2,7 @@
 
 namespace App\Controller\Client;
 
+use DateTime;
 use DateTimeZone;
 use App\Entity\Faq;
 use App\Entity\User;
@@ -87,6 +88,8 @@ class ClientController extends AbstractController
      */
     public function index(Request $request, UserPasswordEncoderInterface $encoder): Response
     {
+
+
         $client = $this->getUser();
         $notification_pwd = null;
 

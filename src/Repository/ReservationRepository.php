@@ -36,9 +36,11 @@ class ReservationRepository extends ServiceEntityRepository
     public function findReservationEffectuers($client, $date)
     {
         return $this->createQueryBuilder('r')
-            ->andWhere('r.client = :client AND r.date_fin < :date')
+            ->where('r.client = :client AND r.date_fin < :date')
+            ->andWhere('r.code_reservation = :code')
             ->setParameter('client', $client)
             ->setParameter('date', $date)
+            ->setParameter('code', 'devisTransformé')
             ->orderBy('r.date_fin', 'DESC')
             ->getQuery()
             ->getResult();
@@ -51,7 +53,9 @@ class ReservationRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('r')
             ->andWhere('r.date_fin < :date')
+            ->andWhere('r.code_reservation = :code')
             ->setParameter('date', $this->dateHelper->dateNow())
+            ->setParameter('code', 'devisTransformé')
             ->orderBy('r.date_fin', 'DESC')
             ->getQuery()
             ->getResult();
@@ -64,8 +68,10 @@ class ReservationRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('r')
             ->andWhere('r.client = :client AND r.date_fin > :date AND r.date_debut < :date')
+            ->andWhere('r.code_reservation = :code')
             ->setParameter('client', $client)
             ->setParameter('date', $date)
+            ->setParameter('code', 'devisTransformé')
             ->orderBy('r.date_debut', 'DESC')
             ->getQuery()
             ->getResult();
@@ -78,8 +84,10 @@ class ReservationRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('r')
             ->andWhere('r.client = :client AND r.date_debut > :date')
+            ->andWhere('r.code_reservation = :code')
             ->setParameter('client', $client)
             ->setParameter('date', $date)
+            ->setParameter('code', 'devisTransformé')
             ->orderBy('r.date_debut', 'DESC')
             ->getQuery()
             ->getResult();
@@ -93,8 +101,10 @@ class ReservationRepository extends ServiceEntityRepository
 
         return $this->createQueryBuilder('r')
             ->andWhere('r.client = :client AND r.date_debut > :date')
+            ->andWhere('r.code_reservation = :code')
             ->setParameter('client', $client)
             ->setParameter('date', $this->dateHelper->dateNow())
+            ->setParameter('code', 'devisTransformé')
             ->orderBy('r.id', 'DESC')
             ->getQuery()
             ->getResult();
@@ -108,7 +118,8 @@ class ReservationRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('r')
             ->where(' r.date_fin >= :date')
             ->andWhere('r.date_debut <= :date')
-
+            ->andWhere('r.code_reservation = :code')
+            ->setParameter('code', 'devisTransformé')
             ->setParameter('date', $date)
             ->getQuery()
             ->getResult();
@@ -122,6 +133,8 @@ class ReservationRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('r')
             ->where(' r.date_fin < :date')
             ->orWhere('r.date_debut > :date')
+            ->andWhere('r.code_reservation = :code')
+            ->setParameter('code', 'devisTransformé')
             ->setParameter('date', $date)
             ->getQuery()
             ->getResult();
@@ -158,10 +171,10 @@ class ReservationRepository extends ServiceEntityRepository
     public function findReservationIncludeDates($dateDebut, $dateFin)
     {
         return $this->createQueryBuilder('r')
-            ->where(' r.date_fin > :dateDebut AND r.date_debut < :dateDebut')
-            ->orWhere('r.date_fin > :dateFin AND r.date_debut < :dateFin')
-            ->orWhere('r.date_debut < :dateDebut AND  :dateFin < r.date_fin ')
-            ->orWhere('r.date_debut > :dateDebut AND  :dateFin > r.date_fin ')
+            ->where(' r.date_debut < :dateDebut AND r.date_fin > :dateDebut AND r.date_debut < :dateFin AND  r.date_fin < :dateFin ')
+            ->orWhere(' r.date_debut > :dateDebut AND r.date_fin > :dateDebut AND r.date_debut < :dateFin AND  r.date_fin < :dateFin ')
+            ->orWhere(' r.date_debut > :dateDebut AND r.date_fin < :dateDebut AND r.date_debut > :dateFin AND  r.date_fin < :dateFin ')
+            ->orWhere(' r.date_debut < :dateDebut AND r.date_fin > :dateDebut AND r.date_debut < :dateFin AND  r.date_fin > :dateFin ')
             // ->andWhere(' r.date_fin > :dateFin AND r.date_debut < :dateFin')
             ->setParameter('dateDebut', $dateDebut)
             ->setParameter('dateFin', $dateFin)

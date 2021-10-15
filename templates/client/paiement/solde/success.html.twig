@@ -8,20 +8,20 @@
 {% block body %}
 	<div class="x_panel">
 		<div class="x_title">
-			<h3>Confirmation de réservation</h3>
+			<h3>Confirmation de paiement de solde</h3>
 		</div>
 		Bonjour
 		{{reservation.client.nom}},
 		<br>
-		Nous vous remercions pour votre réservation N°
+		Nous vous remercions pour le paiement du solde de votre réservation N°
 		{{reservation.reference}}.
+		<br>
+		Montant du paiement
+		{{sommePaiement}}€
 		<br>
 		Une confirmation vient de vous être envoyée par email à l'adresse
 		{{reservation.client.mail}}.
-		<br>
-		Cliquer
-		<a href="{{path('client_reservations')}}">ici</a>
-		pour consulter vos réservations.
+
 	</div>
 {% endblock %}
 {% block javascripts %}{% endblock  %}

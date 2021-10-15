@@ -56,16 +56,12 @@
 					{% for res in resultatRS %}
 						<tr>
 							<td>
-								{% set prix = 0 %}
-								{% for paiement in res.paiements %}
-									{% set prix = prix + paiement.montant %}
-									{% if prix == res.prix %}
-										<span class="badge badge-success">FULL</span>
-									{% else %}
-										<span class="badge badge-warning">ACOMPTE</span>
+								{% if res.sommePaiements == res.prix %}
+									<span class="badge badge-success">FULL</span>
+								{% else %}
+									<span class="badge badge-warning">ACOMPTE</span>
 
-									{% endif %}
-								{% endfor %}
+								{% endif %}
 							</td>
 							<td>{{res.dateReservation|date('d/m/Y H:i')}}</td>
 							<td>{{res.client.nom}}</td>
@@ -182,16 +178,13 @@
 					{% for res in resultatRIM %}
 						<tr>
 							<td>
-								{% set prix = 0 %}
-								{% for paiement in res.paiements %}
-									{% set prix = prix + paiement.montant %}
-									{% if prix == res.prix %}
-										<span class="badge badge-success">FULL</span>
-									{% else %}
-										<span class="badge badge-warning">ACOMPTE</span>
 
-									{% endif %}
-								{% endfor %}
+								{% if res.sommePaiements == res.prix %}
+									<span class="badge badge-success">FULL</span>
+								{% else %}
+									<span class="badge badge-warning">ACOMPTE</span>
+
+								{% endif %}
 							</td>
 							<td>{{res.dateReservation|date('d/m/Y H:i')}}</td>
 							<td>{{res.client.nom}}</td>

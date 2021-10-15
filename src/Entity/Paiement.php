@@ -29,7 +29,7 @@ class Paiement
     private $montant;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="datetime")
      */
     private $date_paiement;
 

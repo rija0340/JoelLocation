@@ -30,7 +30,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class ClientPaiementController extends AbstractController
+class PaiementController extends AbstractController
 {
     private  $devisController;
     private $reservRepo;
@@ -211,7 +211,6 @@ class ClientPaiementController extends AbstractController
      * @Route("/payement", name="payement", methods={"GET","POST"})
      */
     public function payement(Request $request)
-
     {
 
         $client = $this->getUser();
