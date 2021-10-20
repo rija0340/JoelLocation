@@ -132,7 +132,7 @@ class VenteComptoirController extends AbstractController
             return $this->redirectToRoute('step2');
         }
 
-        return $this->render('admin/test/step1.html.twig', [
+        return $this->render('admin/vente_comptoir2/step1.html.twig', [
             'form' => $form->createView()
         ]);
     }
@@ -185,7 +185,7 @@ class VenteComptoirController extends AbstractController
             3 // Nombre de résultats par page
         );
 
-        return $this->render('admin/test/step2.html.twig', [
+        return $this->render('admin/vente_comptoir2/step2.html.twig', [
             'vehiculesDisponible' => $vehiculesDisponible,
             'data' => $data,
             'dateDepart' => $this->reservationSession->getDateDepart(),
@@ -229,7 +229,7 @@ class VenteComptoirController extends AbstractController
         } else {
             $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
         }
-        return $this->render('admin/test/step3.html.twig', [
+        return $this->render('admin/vente_comptoir2/step3.html.twig', [
 
             'options' => $options,
             'garanties' => $garanties,
@@ -310,7 +310,7 @@ class VenteComptoirController extends AbstractController
             $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
         }
 
-        return $this->render('admin/test/step4.html.twig', [
+        return $this->render('admin/vente_comptoir2/step4.html.twig', [
 
             'form' => $form->createView(),
             'vehicule' => $vehicule,

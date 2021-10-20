@@ -2,72 +2,69 @@
 
 {% block title %}Edit Reservation
 {% endblock %}
-{% block stylesheets %}
-	<!-- Bootstrap -->
-	<link
-	href="../../admin/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-	<!-- Font Awesome -->
-	<link
-	href="../../admin/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-	<!-- NProgress -->
-	<link
-	href="../../admin/vendors/nprogress/nprogress.css" rel="stylesheet">
-	<!-- iCheck -->
-	<link
-	href="../../admin/vendors/iCheck/skins/flat/green.css" rel="stylesheet">
-
-	<!-- bootstrap-progressbar -->
-	<link
-	href="../../admin/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
-	<!-- JQVMap -->
-	<link
-	href="../../admin/vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet"/>
-	<!-- bootstrap-daterangepicker -->
-	<link
-	href="../../admin/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
-
-	<!-- Custom Theme Style -->
-	<link
-	href="../../admin/build/css/custom.min.css" rel="stylesheet">
-
-	<!-- Custom header dynamic table -->
-	<link
-	href="../../css/admin/custom_datatable.css" rel="stylesheet">
-
-	<!-- Custom header dynamic table -->
-	<link href="../../css/admin/custom_styles.css" rel="stylesheet">
-
-{% endblock %}
+{% block stylesheets %}{% endblock %}
 
 {% block current_page %}
 	<h2>
 		<i class="fa fa-edit"></i>
-		Modifier
+		Modification de la réservation -
+		{{reservation.reference}}
 	</h2>
 {% endblock %}
 
 {% block content %}
-	<div class="x_panel">
-		<div class="x_title">
-			<h2>
-				<i class="fa fa-edit"></i>Modifier résérvation</h2>
-			<div class="clearfix"></div>
+	<div class="row">
+		<div class="col-md-3">
+			<div class="x_panel">
+				<div class="x_title">
+					<h2 class="text-wrap">
+						<i class="fa fa-edit"></i>Informations enregistrées</h2>
+					<div class="clearfix"></div>
+				</div>
+
+				<div>
+					<i class="fa  fa-map-marker"></i>
+					Agence de départ :
+					{{reservation.agenceDepart}}</div>
+				<div>
+					<i class="fa fa-chevron-right"></i>
+					Date et heure de départ :
+					{{reservation.dateDebut|date('d/m/Y H:i')}}</div>
+				<hr>
+				<div>
+					<i class="fa  fa-map-marker"></i>
+					Agence de retour :
+					{{reservation.agenceRetour}}</div>
+				<div>
+					<i class="fa fa-chevron-right"></i>
+					Date et heure de départ :
+					{{reservation.dateFin|date('d/m/Y H:i')}}</div>
+			</div>
 		</div>
+		<div class="col-md-9">
+			<div class="x_panel">
+				<div class="x_title">
+					<h2>
+						<i class="fa fa-edit"></i>Modification des dates de réservation</h2>
+					<div class="clearfix"></div>
+				</div>
 
-		{# pour set default value dans select #}
-		<div style="display : none !important">
-			<span id="imVeh">{{imVeh}}</span>
+				{# pour set default value dans select #}
+				<div style="display : none !important">
+					<span id="imVeh">{{imVeh}}</span>
+				</div>
+
+				{{ include('admin/reservation/crud/_form.html.twig', {'button_label': 'Modifier'}) }}
+
+				<a href="{{ path('reservation_index') }}" class="btn btn-dark">
+					<i class="fa fa-arrow-left" aria-hidden="true"></i>
+					retour</a>
+
+				{{ include('admin/reservation/crud/_delete_form.html.twig') }}
+			</div>
 		</div>
-
-
-		{{ include('admin/reservation/crud/_form.html.twig', {'button_label': 'Modifier'}) }}
-
-		<a href="{{ path('reservation_index') }}" class="btn btn-dark">
-			<i class="fa fa-arrow-left" aria-hidden="true"></i>
-			retour</a>
-
-		{{ include('admin/reservation/crud/_delete_form.html.twig') }}
 	</div>
+
 {% endblock %}
 {% block javascripts %}
 	<!-- jQuery -->

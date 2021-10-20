@@ -47,6 +47,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -65,8 +66,9 @@ class ClientController extends AbstractController
     private $conductRepo;
     private $devisController;
     private $flashy;
+    private $session;
 
-    public function __construct(FlashyNotifier $flashy, DevisController $devisController, ConducteurRepository $conductRepo,  UserRepository $userRepo, ReservationController $reservController, DateHelper $dateHelper, TarifsHelper $tarifsHelper, DevisRepository $devisRepo, ReservationRepository $reservRepo, UserPasswordEncoderInterface $passwordEncoder, VehiculeRepository $vehiculeRepository, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
+    public function __construct(SessionInterface $session, FlashyNotifier $flashy, DevisController $devisController, ConducteurRepository $conductRepo,  UserRepository $userRepo, ReservationController $reservController, DateHelper $dateHelper, TarifsHelper $tarifsHelper, DevisRepository $devisRepo, ReservationRepository $reservRepo, UserPasswordEncoderInterface $passwordEncoder, VehiculeRepository $vehiculeRepository, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
     {
         $this->passwordEncoder = $passwordEncoder;
         $this->vehiculeRepo = $vehiculeRepository;
@@ -81,6 +83,7 @@ class ClientController extends AbstractController
         $this->conductRepo = $conductRepo;
         $this->devisController = $devisController;
         $this->flashy = $flashy;
+        $this->session = $session;
     }
 
     /**
@@ -106,7 +109,7 @@ class ClientController extends AbstractController
         $formClientCompte = $this->createForm(ClientCompteType::class, $client);
         // $form->handleRequest($request);
         $formClientCompte->handleRequest($request);
-
+        // formulaire de changement de mot de passe 
         if ($formClientCompte->isSubmitted() && $formClientCompte->isValid()) {
             //traitement nouveau mot de passe 
             $old_pwd = $formClientCompte->get('old_password')->getData();
@@ -118,10 +121,10 @@ class ClientController extends AbstractController
                 $client->setPassword($password);
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->flush();
-                // $notification_pwd = "Votre mot de passe a bien été mise à jour.";
                 //redirection vers logout pour entrer nouveau mot de passe 
-                $this->flashy->success('Votre mot de passe a été modifié, veuillez vous connecter à nouveau');
-                return $this->redirectToRoute('app_logout');
+                $this->flashy->success("Votre mot de passe a été modifié avec succés");
+
+                return $this->redirectToRoute('espaceClient_index');
             } else {
                 $this->flashy->error("Votre mot de passe actuel n'est pas le bon");
             }
@@ -137,6 +140,36 @@ class ClientController extends AbstractController
             'formClientCompte' => $formClientCompte->createView(),
 
         ]);
+    }
+
+    /**
+     * @Route("/espaceclient/changer-mot-de-passe", name="espaceClient_edit_password")
+     */
+    public function changePassword(Request $request, UserPasswordEncoderInterface $encoder): Response
+    {
+        //verification si form existe 
+        if ($request->request->get('client_compte')) {
+            $client = $this->getUser();
+            $old_pwd = $request->request->get('client_compte')['old_password'];
+
+            if ($encoder->isPasswordValid($client, $old_pwd)) {
+
+                $new_pwd = $request->request->get('client_compte')['new_password']['first'];
+                $password = $encoder->encodePassword($client, $new_pwd);
+                $client->setPassword($password);
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->flush();
+                $this->flashy->success("essai");
+
+                return $this->redirectToRoute('app_logout');
+                $this->session->set('routeName', 'espaceClient_edit_password');
+            } else {
+                $this->flashy->error("Votre mot de passe actuel n'est pas le bon");
+                return $this->redirectToRoute('espaceClient_index');
+            }
+        }
+
+        return $this->redirectToRoute('espaceClient_index');
     }
 
     /**

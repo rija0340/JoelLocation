@@ -93,8 +93,15 @@ class PaiementSoldeController extends AbstractController
 
         $reservation = $this->reservRepo->find($id);
 
+
         if (!$reservation || $reservation->getClient() != $this->getUser()) {
             $this->flashy->error("Le devis n'existe pas");
+            return $this->redirectToRoute('espaceClient_index');
+        }
+
+        //au cas ou le client a déjà payé la réservation et le paiement est déjà complet (prevention d'une bug)
+        if ($reservation->getPaiements() >= $reservation->getPrix()) {
+            $this->flashy->error("Le paiement est déjà total pour cette réservation");
             return $this->redirectToRoute('espaceClient_index');
         }
 

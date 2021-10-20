@@ -115,12 +115,29 @@
 									<div class="col-md-6">
 										<div class="prestation">
 											<h3 class="heading">Prestations incluses</h3>
-											<p>
-												<i class="fa fa-check"></i>
-												<span>Conducteur :
-												</span>
-												<span id="span_conducteur"></span>
-											</p>
+
+																	<ul class="">
+							<li>
+								<i class="fa fa-check"></i>
+								Kilométrage Illimité
+							</li>
+							<li>
+								<i class="fa fa-check"></i>
+								Assurance accidents causés aux tiers
+							</li>
+							<li>
+								<i class="fa fa-check"></i>
+								Assurance responsabilité civile
+							</li>
+							<li>
+								<i class="fa fa-check"></i>
+								Assurance collision (CDW)
+							</li>
+							<li>
+								<i class="fa fa-check"></i>
+								TVA 8.5 %
+							</li>
+						</ul>
 										</div>
 									</div>
 								</div>
@@ -130,7 +147,14 @@
 								<div class="row">
 									<div class="col-md-6" id='listeOptions'>
 										<h3 class="heading">Option(s)</h3>
+									
 										<ul>
+											{% if conducteur == "true" %}
+										<li>
+										 Conducteur
+										</li>
+								
+										{% endif %}
 											{% for option in options %}
 												<li>{{option.appelation}}
 													:
@@ -165,6 +189,7 @@
 								</p>
 							</div>
 							<div class="col-auto">
+							<a href="{{path('client_step3')}}" class="btn btn-dark">Revenir à l'étape précédente</a>
 								<a href="{{path('client_saveDevis')}}" class="btn btn-danger" id="enregistrerDevis">
 									<i class="fa fa-check"></i>
 									Enregistrer le devis</a>

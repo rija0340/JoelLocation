@@ -39,72 +39,85 @@
 			<div class="clearfix"></div>
 		</div>
 		<div class="x_content">
-
-			<table id="datatable" class="table table-striped table-bordered" style="width:100%">
-				<thead class="text-uppercase bg-dark text-white text-center">
-					<tr>
-						<th>paiement</th>
-						<th class="text-nowrap">date création</th>
-						<th>client</th>
-						<th class="text-nowrap">résérvation / véhicule</th>
-						<th class="text-nowrap">dates / durées</th>
-						<th>prix</th>
-						<th>code</th>
-						<th>action</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for reservation in reservations %}
+			<div class="overflow-auto">
+				<table id="datatable" class="table table-striped table-bordered" style="width:100%">
+					<thead class="text-uppercase bg-dark text-white text-center">
 						<tr>
-							<td></td>
-							<td>{{ reservation.dateReservation|date('d-m-Y H:i')  }}</td>
-							<td>{{ reservation.client.nom }}</td>
-							<td>{{ reservation.vehicule.marque}}
-								{{ reservation.vehicule.modele}}
-								{{ reservation.vehicule.immatriculation}}</td>
-							<td class="text-center">{{  reservation.dateDebut|date('d-m-Y H:i')  }}
-								<br>
-								<span class="font-italic text-center">{{reservation.duree}}
-									jours</span>
-							</td>
-							<td>{{reservation.prix}}
-								€</td>
-							<td>{{ reservation.reference }}</td>
-							<td class=" content-center " style="min-width : 90px;">
-								<di class="row">
-									<div class="col-auto p-0 m-0">
-										<a id="btnEdit" href="{{ path('reservation_edit', {'id': reservation.id}) }}" class="btn btn-link">
-											<i class="fa  fa-gear (alias)"></i>
-										</a>
-									</div>
-									<div class="col-auto p-0 m-0">
-										<a href="{{ path('reservation_show', {'id': reservation.id}) }}" class="btn btn-link">
-											<i class="fa  fa-list-ul"></i>
-										</a>
-									</div>
-									<div class="col-auto p-0 m-0">
-										<form method="post" action="{{ path('reservation_delete', {'id': reservation.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer cet utilisateur?');">
-											<input type="hidden" name="_method" value="DELETE">
-											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ reservation.id) }}">
-											<button class="btn btn-link" style=" -webkit-appearance: none">
-												<i class="fa fa-trash" aria-hidden="true"></i>
-											</button>
-										</form>
-									</div>
-								</di>
-							</td>
+							<th>paiement</th>
+							<th class="text-nowrap">date création</th>
+							<th>client</th>
+							<th>résérvation / véhicule</th>
+							<th class="text-nowrap">dates / durées</th>
+							<th>prix</th>
+							<th>code</th>
+							<th>action</th>
 						</tr>
-					{% else %}
-						<tr>
-							<td colspan="8">Aucune reservation trouver</td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
+					</thead>
+					<tbody>
+						{% for reservation in reservations %}
+							<tr>
+								<td class="text-center">
+									{% if reservation.sommePaiements == 0  %}
+										<div class="badge badge-danger">NOT
+										</div>
+									{% elseif reservation.prix == reservation.sommePaiements %}
+										<div class="badge badge-success">FULL
+										</div>
+									{% elseif reservation.prix > reservation.sommePaiements  %}
+										<div class="badge badge-warning">ACOUNT
+										</div>
+									{% endif %}
+								</td>
+								<td>{{ reservation.dateReservation|date('d-m-Y H:i')  }}</td>
+								<td>{{ reservation.client.nom }}</td>
+								<td>{{ reservation.vehicule.marque}}
+									{{ reservation.vehicule.modele}}
+									<br>
+									{{ reservation.vehicule.immatriculation}}</td>
+								<td class="text-center">{{  reservation.dateDebut|date('d-m-Y H:i')  }}
+									<br>
+									<span class="font-italic text-center">{{reservation.duree}}
+										jours</span>
+								</td>
+								<td>{{reservation.prix}}
+									€</td>
+								<td>{{ reservation.reference }}</td>
+								<td class=" content-center " style="min-width : 90px;">
+									<di class="row">
+										<div class="col-auto p-0 m-0">
+											<a id="btnEdit" href="{{ path('reservation_edit', {'id': reservation.id}) }}" class="btn btn-link">
+												<i class="fa  fa-gear (alias)"></i>
+											</a>
+										</div>
+										<div class="col-auto p-0 m-0">
+											<a href="{{ path('reservation_show', {'id': reservation.id}) }}" class="btn btn-link">
+												<i class="fa  fa-list-ul"></i>
+											</a>
+										</div>
+										<div class="col-auto p-0 m-0">
+											<form method="post" action="{{ path('reservation_delete', {'id': reservation.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer cet utilisateur?');">
+												<input type="hidden" name="_method" value="DELETE">
+												<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ reservation.id) }}">
+												<button class="btn btn-link" style=" -webkit-appearance: none">
+													<i class="fa fa-trash" aria-hidden="true"></i>
+												</button>
+											</form>
+										</div>
+									</di>
+								</td>
+							</tr>
+						{% else %}
+							<tr>
+								<td colspan="8">Aucune reservation trouver</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
 
 			{# <div class="navigation">
-							{{ knp_pagination_render(reservations) }}
-						</div> #}
+																																																																									{{ knp_pagination_render(reservations) }}
+																																																																								</div> #}
 
 
 		</div>

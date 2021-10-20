@@ -11,7 +11,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class DevisClientType extends AbstractType
+class ValidationOptionsGarantiesType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

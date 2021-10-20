@@ -2,6 +2,7 @@
 
 namespace App\Controller\Client;
 
+use App\Classe\Mail;
 use App\Entity\User;
 use App\Service\DateHelper;
 use App\Form\ClientRegisterType;
@@ -22,19 +23,22 @@ class InscriptionController extends AbstractController
     private $dateHelper;
     private $flashy;
     private $encoder;
+    private $mail;
 
     public function __construct(
 
         UserPasswordEncoderInterface $passwordEncoder,
         DateHelper $dateHelper,
         FlashyNotifier $flashy,
-        EncoderFactoryInterface $encoder
+        EncoderFactoryInterface $encoder,
+        Mail $mail
 
     ) {
         $this->passwordEncoder = $passwordEncoder;
         $this->dateHelper = $dateHelper;
         $this->flashy = $flashy;
         $this->encoder = $encoder;
+        $this->mail = $mail;
     }
     /**
      * @Route("/inscription", name="inscription")
@@ -47,7 +51,6 @@ class InscriptionController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
 
             $user = $form->getData();
             $password = $this->passwordEncoder->encodePassword($user, $user->getPassword());
@@ -62,7 +65,7 @@ class InscriptionController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->flashy->success('Compte crée avec succés, Veuillez vous connecter');
+            $this->mail->send($user->getmail(), $user->getNom(), 'Confirmation de création de compte', "Bonjour" . $user->getNom() . "Votre compte a été créé");
 
             return $this->redirectToRoute('app_login');
         }

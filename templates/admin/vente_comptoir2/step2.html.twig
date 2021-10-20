@@ -57,9 +57,11 @@
 
 {% block content %}
 	<div class="d-flex justify-content-center mt-1 mb-1">
-
+		<a href="{{path('step1')}}"  class="btn btn-dark" >
+			Revenir à l'étape précédente
+		</a>
 		<button class="btn btn-danger" type="submit" form="formStep2">
-			Enregistrer et aller sur étape 3
+			Enregistrer
 		</button>
 	</div>
 	<form action="{{path('step2')}}" method="post" id="formStep2">
@@ -164,9 +166,12 @@
 				</div>
 			</div>
 			<div class="d-flex justify-content-center mt-2">
-				<button class="btn btn-danger" type="submit" form="formStep2">
-					Enregistrer et aller sur étape 3
-				</button>
+				<a href="{{path('step1')}}"  class="btn btn-dark" >
+			Revenir à l'étape précédente
+		</a>
+		<button class="btn btn-danger" type="submit" form="formStep2">
+			Enregistrer
+		</button>
 			</div>
 		</form>
 	{% endblock %}

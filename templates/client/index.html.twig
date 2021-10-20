@@ -100,18 +100,25 @@
 		</div>
 	</div>
 
-	<div class="x_panel">
-		<div class="monCompte mt-4">
-
-			<h4 class="mb-0 pb-0">
+<div class="x_panel">
+	<div id="accordion">
+  <div class="">
+    <div class="" id="headingOne">
+      <h5 class="mb-0">
+        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          <h4 class="mb-0 pb-0">
 				<i class="fa fa-user"></i>
 				Mon compte
 			</h4>
-
+        </button>
 			<div class="clearfix"></div>
 			<div class="x_title"></div>
+      </h5>
+    </div>
 
-			<div class="col-lg-8 col-md-8 ml-auto mr-auto">
+    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+      <div class="card-body">
+        			<div class="col-lg-8 col-md-8 ml-auto mr-auto">
 				{{ form_start(formClientCompte) }}
 
 				{{ form_widget(formClientCompte) }}
@@ -123,8 +130,11 @@
 				</div>
 				{{ form_end(formClientCompte) }}
 			</div>
-		</div>
-	</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 {% endblock %}
 {% block javascripts %}

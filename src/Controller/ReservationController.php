@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Classe\ClasseReservation;
+use App\Classe\Mail;
 use DateTime;
 use DateTimeZone;
 use App\Entity\User;
@@ -18,6 +19,7 @@ use App\Form\KilometrageType;
 use App\Form\ReservationType;
 use App\Service\TarifsHelper;
 use App\Form\EditStopSalesType;
+use App\Form\OptionsGarantiesType;
 use App\Repository\UserRepository;
 use App\Repository\TarifsRepository;
 use App\Repository\OptionsRepository;
@@ -28,6 +30,7 @@ use App\Repository\VehiculeRepository;
 use App\Repository\ReservationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -51,8 +54,10 @@ class ReservationController extends AbstractController
     private $tarifsHelper;
     private $marqueRepo;
     private $em;
+    private $mail;
+    private $flashy;
 
-    public function __construct(EntityManagerInterface $em, MarqueRepository $marqueRepo, ModeleRepository $modeleRepo, TarifsHelper $tarifsHelper, DateHelper $dateHelper, TarifsRepository $tarifsRepo, ReservationRepository $reservationRepo,  UserRepository $userRepo, VehiculeRepository $vehiculeRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
+    public function __construct(FlashyNotifier $flashy, Mail $mail, EntityManagerInterface $em, MarqueRepository $marqueRepo, ModeleRepository $modeleRepo, TarifsHelper $tarifsHelper, DateHelper $dateHelper, TarifsRepository $tarifsRepo, ReservationRepository $reservationRepo,  UserRepository $userRepo, VehiculeRepository $vehiculeRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
     {
 
         $this->reservationRepo = $reservationRepo;
@@ -66,6 +71,8 @@ class ReservationController extends AbstractController
         $this->modeleRepo = $modeleRepo;
         $this->marqueRepo = $marqueRepo;
         $this->em = $em;
+        $this->mail = $mail;
+        $this->flashy = $flashy;
     }
 
     /**
@@ -84,98 +91,6 @@ class ReservationController extends AbstractController
         return $this->render('admin/reservation/crud/index.html.twig', [
             'reservations' => $reservations,
         ]);
-    }
-
-
-    /**
-     * @Route("/newReservation", name="reserverVenteComptoir",  methods={"GET","POST"})
-     */
-    public function reserverVenteComptoir(Request $request): Response
-    {
-
-        if ($request->isXmlHttpRequest()) {
-
-            $reservation = new Reservation();
-
-            $options = [];
-            $garanties = [];
-
-            $idClient =  $request->query->get('idClient');
-            $agenceDepart = $request->query->get('agenceDepart');
-            $agenceRetour = $request->query->get('agenceRetour');
-            $lieuSejour = $request->query->get('lieuSejour');
-            $dateTimeDepart = $request->query->get('dateTimeDepart');
-            $dateTimeRetour = $request->query->get('dateTimeRetour');
-            $vehiculeIM = $request->query->get('vehiculeIM');
-            $conducteur = $request->query->get('conducteur');
-            $arrayOptionsID = (array) $request->query->get('arrayOptionsID');
-            $arrayGarantiesID = (array)$request->query->get('arrayGarantiesID');
-
-            $dateDepart = new \DateTime($dateTimeDepart);
-            $dateRetour = new \DateTime($dateTimeRetour);
-
-            $vehicule = $this->vehiculeRepo->findByIM($vehiculeIM);
-            $client = $this->userRepo->find($idClient);
-            $duree = $this->dateHelper->calculDuree($dateDepart, $dateRetour);
-            $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
-
-            $reservation->setVehicule($vehicule);
-            $reservation->setClient($client);
-            $reservation->setAgenceDepart($agenceDepart);
-            $reservation->setAgenceRetour($agenceRetour);
-            $reservation->setDateDebut($dateDepart);
-            $reservation->setDateFin($dateRetour);
-            //loop sur id des options
-            if ($arrayOptionsID != []) {
-                for ($i = 0; $i < count($arrayOptionsID); $i++) {
-
-                    $id = $arrayOptionsID[$i];
-                    $option = $this->optionsRepo->find($id);
-                    array_push($options, $option);
-                    $reservation->addOption($option);
-                }
-            }
-
-            //loop sur id des garanties
-            if ($arrayOptionsID != []) {
-
-                for ($i = 0; $i < count($arrayGarantiesID); $i++) {
-
-                    $id = $arrayGarantiesID[$i];
-                    $garantie = $this->garantiesRepo->find($id);
-                    array_push($garanties, $garantie);
-                    $reservation->addGaranty($garantie);
-                }
-            }
-
-            $reservation->setConducteur($conducteur);
-            $reservation->setLieu($lieuSejour);
-            $reservation->setDuree($duree);
-            $reservation->setDateReservation($this->dateHelper->dateNow());
-            $reservation->setCodeReservation($agenceDepart);
-            $reservation->setTarifVehicule($tarifVehicule);
-            // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
-
-            $lastID = $this->reservationRepo->findBy(array(), array('id' => 'DESC'), 1);
-            if ($lastID == null) {
-                $currentID = 1;
-            } else {
-                $currentID = $lastID[0]->getId() + 1;
-            }
-            $pref = "CPT";
-            $reservation->setRefRes($pref, $currentID);
-
-            $prix = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $options, $garanties);
-
-            $reservation->setPrix($prix);
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($reservation);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('reservation_index');
-        }
-        return $this->redirectToRoute('reservation_index');
     }
 
     /**
@@ -241,17 +156,10 @@ class ReservationController extends AbstractController
                 'reservation' => $reservation,
 
                 'formKM' => $formKM->createView(),
-                'tarifVehicule' => $this->tarifsHelper->calculTarifVehicule($reservation->getDateDebut(), $reservation->getDateFin(), $reservation->getVehicule()),
-                'tarifOptions' => $this->tarifsHelper->sommeTarifsOptions($reservation->getOptions()),
-                'tarifGaranties' => $this->tarifsHelper->sommeTarifsGaranties($reservation->getGaranties()),
             ]);
         }
-
         return $this->render('admin/reservation/crud/show.html.twig', [
             'reservation' => $reservation,
-            'tarifVehicule' => $this->tarifsHelper->calculTarifVehicule($reservation->getDateDebut(), $reservation->getDateFin(), $reservation->getVehicule()),
-            'tarifOptions' => $this->tarifsHelper->sommeTarifsOptions($reservation->getOptions()),
-            'tarifGaranties' => $this->tarifsHelper->sommeTarifsGaranties($reservation->getGaranties()),
             'formKM' => $formKM->createView()
         ]);
     }
@@ -291,5 +199,49 @@ class ReservationController extends AbstractController
         }
 
         return $this->redirectToRoute('reservation_index');
+    }
+
+
+    /**
+     *  @Route("/modifier/options-garanties/{id}", name="optionsGaranties_edit", methods={"GET","POST"})
+     */
+    public function optionsGarantiesEdit(Request $request, Reservation $reservation): Response
+    {
+
+        $form = $this->createForm(OptionsGarantiesType::class, $reservation);
+        $garanties = $this->garantiesRepo->findAll();
+        $options = $this->optionsRepo->findAll();
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $reservation->setPrixGaranties($reservation->getSommeGaranties());
+            $reservation->setPrixOptions($reservation->getSommeOptions());
+            $reservation->setPrix($reservation->getTarifVehicule() + $reservation->getPrixGaranties() + $reservation->getPrixOptions());
+            $this->em->flush();
+            return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
+        }
+        return $this->render('admin/reservation/crud/options_garanties/edit.html.twig', [
+            'form' => $form->createView(),
+            'reservation' => $reservation,
+            'garanties' => $garanties,
+            'options' => $options
+        ]);
+    }
+
+    /**
+     *  @Route("/envoi/identifiants-connexion/{id}", name="envoiIdentifiantsConnexion", methods={"GET","POST"})
+     */
+    public function EnvoiIdentifiantsConnexion(Request $request, Reservation $reservation): Response
+    {
+
+        $email_adress = $reservation->getClient()->getMail();
+        $name = $reservation->getClient()->getNom();
+        $subject =  "Indentifiants de connexion";
+        $content = "Bonjour, voici vos identifiants de connexion. Login : " . $email_adress . ". Mot de passe : 0000. Veuillez changer votre mot de passe le plus tôt possible";
+
+        $this->mail->send($email_adress, $name, $subject, $content);
+
+        $this->flashy->success("Les identifiants de connexion ont été envoyé au client");
+        return $this->redirectToRoute('reseration_show', ['id' => $reservation->getId()]);
     }
 }

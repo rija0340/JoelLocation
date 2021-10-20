@@ -309,7 +309,7 @@ class PaiementController extends AbstractController
             $currentID = $lastID[0]->getId() + 1;
         }
 
-        $reservation->setRefRes("CPTGP", $currentID);
+        $reservation->setRefRes("WEB", $currentID);
 
         $this->em->persist($reservation);
         $this->em->flush();

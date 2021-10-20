@@ -85,6 +85,11 @@
 						<h5 class="heading">Option(s)
 						</h5>
 						<ul class="pl-2 ">
+							{% if devis.conducteur %}
+						<li>
+						<i class="fa fa-check"></i>
+						Conducteur</li>
+						{% endif %}
 							{% for option in devis.options %}
 								<li>
 									<div class="d-flex">
@@ -183,7 +188,7 @@
 
 					<label class="label-radio">
 						Je paie un acompte de
-						{{ devis.prix / 2 }}€ (50%) et à mon arrivée
+						{{ devis.prix / 2 }}€ (50%) et avant la date de location je paie le reste de
 						{{devis.prix - ((devis.prix)/2)}}€
 						<input type="radio" value="50" name="modePaiement">
 						<span class="checkmark-radio"></span>
@@ -191,7 +196,7 @@
 
 					<label class="label-radio">
 						Je paie un acompte de
-						{{ devis.prix / 4 }}€ (25%) et à mon arrivée
+						{{ devis.prix / 4 }}€ (25%) et avant la date de location je paie le reste de
 						{{devis.prix - ((devis.prix)/4)}}€
 						<input type="radio" value="25" name="modePaiement">
 						<span class="checkmark-radio"></span>

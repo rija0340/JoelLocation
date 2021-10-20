@@ -146,13 +146,31 @@
 									<td>{{paiement.reservation.reference}}</td>
 									<td>{{paiement.reservation.client.nom}}</td>
 									<td>{{paiement.montant}}</td>
-									<td></td>
+									<td>
+										{% if paiement.reservation.sommePaiements == 0  %}
+											<div class="badge badge-danger">NOT
+											</div>
+										{% elseif paiement.reservation.prix == paiement.reservation.sommePaiements %}
+											<div class="badge badge-success">FULL
+											</div>
+										{% elseif paiement.reservation.prix > paiement.reservation.sommePaiements  %}
+											<div class="badge badge-warning">ACOUNT
+											</div>
+										{% endif %}
+									</td>
 									<td>{{paiement.modePaiement.libelle}}</td>
 									<td>{{paiement.datePaiement|date('d/m/Y H:i')}}</td>
 									<td class="text-center">
 										<a href="">
 											<i class=" fa fa-info-circle" style="font-size: 2em !important;"></i>
 										</a>
+										<form method="post" action="{{ path('paiement_delete', {'id': paiement.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer ce paiement ?');">
+											<input type="hidden" name="_method" value="DELETE">
+											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ paiement.id) }}">
+											<button class="btn btn-link" style=" -webkit-appearance: none">
+												<i class="fa fa-trash" aria-hidden="true"></i>
+											</button>
+										</form>
 									</td>
 								</tr>
 							{% endfor %}

@@ -6,6 +6,7 @@ use App\Repository\PaiementRepository;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ReservationRepository;
 use App\Service\DateHelper;
+use App\Service\TarifsHelper;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -16,6 +17,19 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 class Reservation
 {
+
+    private $sommeTarifsGaranties;
+    private $sommeTarifsOptions;
+
+    public function __construct()
+    {
+
+        $this->avis = new ArrayCollection();
+        $this->paiements = new ArrayCollection();
+        $this->options = new ArrayCollection();
+        $this->garanties = new ArrayCollection();
+    }
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -182,13 +196,6 @@ class Reservation
 
     private $sommePaiements;
 
-    public function __construct()
-    {
-        $this->avis = new ArrayCollection();
-        $this->paiements = new ArrayCollection();
-        $this->options = new ArrayCollection();
-        $this->garanties = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -651,5 +658,23 @@ class Reservation
             $this->sommePaiements = $this->sommePaiements + $paiement->getMontant();
         }
         return $this->sommePaiements;
+    }
+
+    public function getSommeGaranties()
+    {
+        $somme = 0;
+        foreach ($this->getGaranties() as $garantie) {
+            $somme = $somme +  $garantie->getPrix();
+        }
+        return $somme;
+    }
+
+    public function getSommeOptions()
+    {
+        $somme = 0;
+        foreach ($this->getOptions() as $option) {
+            $somme = $somme +  $option->getPrix();
+        }
+        return $somme;
     }
 }

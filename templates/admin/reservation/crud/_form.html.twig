@@ -8,67 +8,35 @@
 
 {{ form_start(form) }}
 <div class="row">
-
-	<div class="form-group col-md-3">
-		<label for="">Date résérvation :</label>
-		{{ form_widget(form.date_reservation) }}
-	</div>
-	<div class="form-group col-md-3">
-		<label for="">Date début:</label>
+	<div class="form-group col-md-6">
+		<label for="">Date et heure de départ:</label>
 		{{ form_widget(form.date_debut) }}
 	</div>
-	<div class="form-group col-md-3">
-		<label for="">Date fin :</label>
+	<div class="form-group col-md-6">
+		<label for="">Date et heure de retour :</label>
 		{{ form_widget(form.date_fin) }}
 	</div>
-	<div class="form-group col-md-3">
+	<div class="form-group col-md-6">
 		<label for="">Agence de départ:</label>
 		{{ form_widget(form.agenceDepart) }}
 	</div>
-	<div class="form-group col-md-3">
+	<div class="form-group col-md-6">
 		<label for="">Agence de retour:</label>
 		{{ form_widget(form.agenceRetour) }}
 	</div>
 
-	<div class="form-group col-md-3">
-		<label for="">Mode résérvation :</label>
-		{{ form_widget(form.mode_reservation) }}
-
-	</div>
 	<div class="form-group col-md-6">
-		<label for="">Type :</label>
-		{{ form_widget(form.type) }}
-	</div>
-	<div class="form-group col-md-6">
-		<label for="">Client :</label>
-		{{ form_widget(form.client) }}
-
-	</div>
-	{# <div class="form-group col-md-3">
-																<label for="">Utilisateur :</label>
-																{{ form_widget(form.utilisateur) }}
-														
-															</div> #}
-	<div class="form-group col-md-3">
-		<label for="">Code résérvation :</label>
-		{{ form_widget(form.code_reservation) }}
-	</div>
-	<div class="form-group col-md-3">
 		<label for="">Véhicule :</label>
 		<select name="select" id="selectVehicule" class="form-control"></select>
 		{# {{ form_widget(form.vehicule) }} #}
 
 	</div>
-	<div class="form-group col-md-6">
-		<label for="">Lieu :</label>
-		{{ form_widget(form.lieu) }}
+	{# <div class="form-group col-md-6">
+					<label for="">Lieu :</label>
+					{{ form_widget(form.lieu) }}
+			
+				</div> #}
 
-	</div>
-	<div class="form-group col-md-6">
-		<label for="">Etat résérvation :</label>
-		{{ form_widget(form.etat_reservation) }}
-
-	</div>
 </div>
 <div class="">
 	<button class="btn btn-danger">

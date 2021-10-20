@@ -4,13 +4,13 @@ namespace App\Controller\Client;
 
 use App\Service\DateHelper;
 use App\Form\ClientInfoType;
-use App\Form\DevisClientType;
 use App\Service\TarifsHelper;
 use App\Repository\DevisRepository;
 use App\Repository\OptionsRepository;
 use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
 use App\Repository\ReservationRepository;
+use App\Form\ValidationOptionsGarantiesType;
 use Symfony\Component\HttpFoundation\Request;
 use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\HttpFoundation\Response;
@@ -75,12 +75,12 @@ class ValidationDevisController extends AbstractController
         $garanties = $this->garantiesRepo->findAll();
         $options = $this->optionsRepo->findAll();
 
-        $form = $this->createForm(DevisClientType::class, $devis);
+        $form = $this->createForm(ValidationOptionsGarantiesType::class, $devis);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $devis->setPrix($this->tarifsHelper->sommeTarifsGaranties($devis->getGaranties()) + $this->tarifsHelper->sommeTarifsGaranties($devis->getOptions()) + $devis->getTarifVehicule());
+            $devis->setPrix($this->tarifsHelper->sommeTarifsGaranties($devis->getGaranties()) + $this->tarifsHelper->sommeTarifsOptions($devis->getOptions()) + $devis->getTarifVehicule());
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($devis);
             $entityManager->flush();

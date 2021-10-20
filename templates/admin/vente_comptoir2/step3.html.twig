@@ -52,8 +52,13 @@
 {% block content %}
 
 	<div class="text-center ">
+
+		<a href="{{path('step2')}}"  class="btn btn-dark" >
+			Revenir à l'étape précédente
+		</a>
+
 		<button type='submit' class="btn btn-danger" form="options_garanties">
-			Enregistrer et passer à  l'étape 4
+			Enregistrer
 		</button>
 	</div>
 
@@ -261,8 +266,12 @@
 		</div>
 	</form>
 	<div class="text-center mt-5">
+			<a href="{{path('step2')}}"  class="btn btn-dark" >
+			Revenir à l'étape précédente
+		</a>
+
 		<button type='submit' class="btn btn-danger" form="options_garanties">
-			Enregistrer et passer à  l'étape 4
+			Enregistrer
 		</button>
 	</div>
 
