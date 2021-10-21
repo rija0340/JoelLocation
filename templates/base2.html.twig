@@ -48,7 +48,8 @@
 
 		<link href="{{ asset( 'css/admin/nav.css')}}" rel="stylesheet">
 		<link href="{{ asset( 'css/admin/easypiechart.css')}}" rel="stylesheet">
-		<link rel="stylesheet" href="{{ asset('bundles/mercuryseriesflashy/css/flashy.css') }}"> {% block stylesheets %}{% endblock %}
+		<link rel="stylesheet" href="{{ asset('bundles/mercuryseriesflashy/css/flashy.css') }}">
+		<link rel="stylesheet" href="{{ asset('jquery-confirm/jquery-confirm.min.css') }}"> {% block stylesheets %}{% endblock %}
 
 		</head>
 
@@ -107,6 +108,7 @@
 	<script src="../../js/admin/nav.js"></script>
 	<!-- Load Flashy default JavaScript -->
 	<script src="{{ asset('bundles/mercuryseriesflashy/js/flashy.js') }}"></script>
+	<script src="{{ asset('jquery-confirm/jquery-confirm.js') }}"></script>
 	{% block javascripts %}{% endblock %}
 	<!-- Include Flashy default partial -->
 	{{ include('@MercurySeriesFlashy/flashy.html.twig') }}

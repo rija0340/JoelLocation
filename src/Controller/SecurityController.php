@@ -31,18 +31,25 @@ class SecurityController extends AbstractController
         // get the referer, it can be empty!
         $referer = $request->headers->get('referer');
         if (!\is_string($referer) || !$referer) {
-            echo 'Referer is invalid or empty.';
         }
 
-        $refererPathInfo = Request::create($referer)->getPathInfo();
+        if ($referer != null) {
+            $refererPathInfo = Request::create($referer)->getPathInfo();
 
-        // try to match the path with the application routing
-        $routeInfos = $router->match($refererPathInfo);
+            // try to match the path with the application routing
+            $routeInfos = $router->match($refererPathInfo);
 
-        // get the Symfony route name if it exists
-        $refererRoute = $routeInfos['_route'] ?? '';
-        dump($referer);
-        dump($refererRoute);
+            // get the Symfony route name if it exists
+            $refererRoute = $routeInfos['_route'] ?? '';
+            switch ($refererRoute) {
+                case "inscription":
+                    $this->flashy->success('Compte créé avec succés, Veuillez vous connecter');
+                    break;
+            }
+            dump($referer);
+            dump($refererRoute);
+        }
+
 
 
         // if ($this->getUser()) {
@@ -54,11 +61,7 @@ class SecurityController extends AbstractController
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        switch ($refererRoute) {
-            case "inscription":
-                $this->flashy->success('Compte créé avec succés, Veuillez vous connecter');
-                break;
-        }
+
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
 

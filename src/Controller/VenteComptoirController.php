@@ -7,11 +7,13 @@ use App\Entity\User;
 use App\Entity\Devis;
 use App\Entity\Tarifs;
 use GuzzleHttp\Client;
+use App\Entity\Reservation;
 use App\Service\DateHelper;
 use App\Service\TarifsHelper;
 use App\Classe\ReservationSession;
 use App\Form\ReservationStep1Type;
 use App\Repository\UserRepository;
+use App\Service\ReservationHelper;
 use App\Form\ClientNewComptoirType;
 use App\Form\Step4SelectClientType;
 use App\Repository\DevisRepository;
@@ -23,7 +25,6 @@ use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ReservationRepository;
-use App\Service\ReservationHelper;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use MercurySeries\FlashyBundle\FlashyNotifier;
@@ -143,6 +144,10 @@ class VenteComptoirController extends AbstractController
     public function step2(Request $request, PaginatorInterface $paginator): Response
     {
 
+        if ($this->reservationSession->getReservation() == null) {
+            return $this->redirectToRoute('step1');
+        }
+
         $dateDepart = $this->reservationSession->getDateDepart();
         $dateRetour = $this->reservationSession->getDateRetour();
 
@@ -188,8 +193,8 @@ class VenteComptoirController extends AbstractController
         return $this->render('admin/vente_comptoir2/step2.html.twig', [
             'vehiculesDisponible' => $vehiculesDisponible,
             'data' => $data,
-            'dateDepart' => $this->reservationSession->getDateDepart(),
-            'dateRetour' => $this->reservationSession->getDateRetour()
+            'dateDepart' => $dateDepart,
+            'dateRetour' => $dateRetour
         ]);
     }
 
@@ -198,6 +203,10 @@ class VenteComptoirController extends AbstractController
      */
     public function step3(Request $request)
     {
+
+        if ($this->reservationSession->getReservation() == null) {
+            return $this->redirectToRoute('step1');
+        }
         //recupérer liste options et  garanties dans base de données
         $options = $this->optionsRepo->findAll();
         $garanties = $this->garantiesRepo->findAll();
@@ -214,6 +223,7 @@ class VenteComptoirController extends AbstractController
             //ajout options et garanties (tableau d'objets) dans session 
             $this->reservationSession->addOptions($optionsData);
             $this->reservationSession->addGaranties($garantiesData);
+            $this->reservationSession->addConducteur($conducteur);
 
             return $this->redirectToRoute('step4');
         }
@@ -250,6 +260,10 @@ class VenteComptoirController extends AbstractController
      */
     public function step4(Request $request): Response
     {
+        // securité pour empecher de sauter directement
+        if ($this->reservationSession->getReservation() == null) {
+            return $this->redirectToRoute('step1');
+        }
 
         $form = $this->createForm(ClientNewComptoirType::class);
         $form->handleRequest($request);
@@ -321,7 +335,8 @@ class VenteComptoirController extends AbstractController
             'agenceRetour' => $this->reservationSession->getAgenceRetour(),
             'dateRetour' => $this->reservationSession->getDateRetour(),
             'options' => $optionsObjects,
-            'garanties' => $garantiesObjects
+            'garanties' => $garantiesObjects,
+            'conducteur' => $this->reservationSession->getConducteur()
 
         ]);
     }
@@ -372,17 +387,7 @@ class VenteComptoirController extends AbstractController
         $vehicule = $this->vehiculeRepo->find($this->reservationSession->getVehicule());
         // dd($vehicule);
         //trouver les options et garanties à l'aide des ID 
-        //on met dans un tableau les objets corresponans aux options cochés
-        $optionsObjects = [];
-        foreach ($this->reservationSession->getOptions() as $opt) {
-            array_push($optionsObjects,  $this->optionsRepo->find($opt));
-        }
 
-        //on met dans un tableau les objets corresponans aux garanties cochés
-        $garantiesObjects = [];
-        foreach ($this->reservationSession->getGaranties() as $gar) {
-            array_push($garantiesObjects,  $this->garantiesRepo->find($gar));
-        }
 
         $devis->setAgenceDepart($this->reservationSession->getAgenceDepart());
         $devis->setAgenceRetour($this->reservationSession->getAgenceRetour());
@@ -405,20 +410,19 @@ class VenteComptoirController extends AbstractController
             $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($this->reservationSession->getDateDepart(), $this->reservationSession->getDateRetour(), $vehicule);
         }
         $devis->setTarifVehicule($tarifVehicule);
-        $prixOptions = $this->tarifsHelper->sommeTarifsOptions($optionsObjects);
+        $prixOptions = $this->tarifsHelper->sommeTarifsOptions($this->optionsObjectsFromSession());
         $devis->setPrixOptions($prixOptions);
-        $prixGaranties = $this->tarifsHelper->sommeTarifsGaranties($garantiesObjects);
+        $prixGaranties = $this->tarifsHelper->sommeTarifsGaranties($this->garantiesObjectsFromSession());
         $devis->setPrixGaranties($prixGaranties);
         $devis->setPrix($tarifVehicule + $prixGaranties + $prixOptions);
         $devis->setConducteur(true);
         $devis->setTransformed(false);
 
-
         //options et garanties sont des tableaux d'objet dans session
-        foreach ($optionsObjects as $option) {
+        foreach ($this->optionsObjectsFromSession() as $option) {
             $devis->addOption($option);
         }
-        foreach ($garantiesObjects as $garantie) {
+        foreach ($this->garantiesObjectsFromSession() as $garantie) {
             $devis->addGaranty($garantie);
         }
         // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
@@ -467,5 +471,144 @@ class VenteComptoirController extends AbstractController
         $this->reservationSession->removeReservation();
 
         return $this->redirectToRoute('step1');
+    }
+
+    /**
+     * @Route("/vente-comptoir/enregistrer-devis-pdf", name="saveDevis_pdf", methods={"GET","POST"})
+     */
+    public function saveDevisAsPdf(Request $request): Response
+    {
+
+        //extracion mail from string format : "nom prenom (mail)"
+
+
+        $client = $request->query->get('client');
+        $client = explode('(', $client);
+        $mailClient = explode(')', $client[1]);
+        $mailClient = $mailClient[0];
+
+        //recherche du client correspondant au mail
+        $client = $this->userRepo->findOneBy(['mail' => $mailClient]);
+        //ajout client dans session
+        $this->reservationSession->addClient($client);
+
+        $data = array();
+        $dateDepart = $this->reservationSession->getDateDepart();
+        $dateRetour = $this->reservationSession->getDateDepart();
+        $vehicule = $this->vehiculeRepo->find($this->reservationSession->getVehicule());
+        $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
+        $prixGaranties = $this->tarifsHelper->sommeTarifsGaranties($this->garantiesObjectsFromSession());
+        $prixOptions = $this->tarifsHelper->sommeTarifsOptions($this->optionsObjectsFromSession());
+        $tarifTotal = $tarifVehicule + $prixGaranties + $prixOptions;
+
+        //numero du devis
+        $lastID = $this->reservationRepo->findBy(array(), array('id' => 'DESC'), 1);
+        $currentID = $lastID[0]->getId() + 1;
+        if ($currentID > 100) {
+            $numeroDevis = "00" . $currentID;
+        } else {
+
+            $numeroDevis = "000" . $currentID;
+        }
+
+        $data['dateDepartValue'] = $this->reservationSession->getDateDepart()->format('d/m/Y H:i');
+        $data['dateRetourValue'] = $this->reservationSession->getDateRetour()->format('d/m/Y H:i');
+        $data['nomClientValue'] = $this->reservationSession->getClient()->getNom();
+        $data['prenomClientValue'] = $this->reservationSession->getClient()->getPrenom();
+        $data['adresseClientValue'] = $this->reservationSession->getClient()->getAdresse();
+        $data['vehiculeValue'] = $vehicule->getMarque() . " " . $vehicule->getModele() . " " . $vehicule->getImmatriculation();
+        $data['dureeValue'] = $this->dateHelper->calculDuree($dateDepart, $this->reservationSession->getDateRetour());
+        $data['agenceDepartValue'] = $this->reservationSession->getAgenceDepart();
+        $data['agenceRetourValue'] = $this->reservationSession->getAgenceRetour();
+        $data['numeroDevisValue'] = $numeroDevis;
+        $data['tarifValue'] = $tarifTotal;
+
+        return new JsonResponse($data);
+    }
+
+    /**
+     * @Route("/vente-comptoir/reserver-devis", name="reserver_devis", methods={"GET","POST"})
+     */
+    public function reserverDevis(Request $request): Response
+    {
+        // dd($request);
+        //extracion mail from string format : "nom prenom (mail)"
+        $client = $request->request->get('client');
+        $montantPaiement = $request->request->get('montant');
+        $client = explode('(', $client);
+        $mailClient = explode(')', $client[1]);
+        $mailClient = $mailClient[0];
+
+        //recherche du client correspondant au mail
+        $client = $this->userRepo->findOneBy(['mail' => $mailClient]);
+
+        $dateDepart = $this->reservationSession->getDateDepart();
+        $dateRetour = $this->reservationSession->getDateRetour();
+        $vehicule = $this->vehiculeRepo->find($this->reservationSession->getVehicule());
+
+        $reservation = new Reservation();
+        $reservation->setVehicule($vehicule);
+        $reservation->setClient($client);
+        $reservation->setDateDebut($dateDepart);
+        $reservation->setDateFin($dateRetour);
+        $reservation->setAgenceDepart($this->reservationSession->getAgenceDepart());
+        $reservation->setAgenceRetour($this->reservationSession->getAgenceRetour());
+        //boucle pour ajout options 
+        foreach ($this->optionsObjectsFromSession() as $option) {
+            $reservation->addOption($option);
+        }
+
+        //boucle pour ajout garantie 
+        foreach ($this->garantiesObjectsFromSession() as $garantie) {
+            $reservation->addGaranty($garantie);
+        }
+
+        $reservation->setPrix($this->tarifsHelper->calculTarifTotal($this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule), $this->optionsObjectsFromSession(), $this->garantiesObjectsFromSession()));
+        $reservation->setTarifVehicule($this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule));
+        $reservation->setPrixGaranties($this->tarifsHelper->sommeTarifsGaranties($this->garantiesObjectsFromSession()));
+        $reservation->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($this->optionsObjectsFromSession()));
+        $reservation->setDateReservation($this->dateHelper->dateNow());
+        $reservation->setCodeReservation('devisTransformé');
+        // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
+        $lastID = $this->reservationRepo->findBy(array(), array('id' => 'DESC'), 1);
+        $currentID = $lastID[0]->getId() + 1;
+        $reservation->setRefRes("CPTGP", $currentID);
+
+        $this->em->persist($reservation);
+        $this->em->flush();
+        // dump($reservation);
+        // die();
+        $this->flashy->success("Réservation effectuée avec succès");
+        return $this->redirectToRoute('reservation_index');
+    }
+
+    //return an array of objects of options
+    public function optionsObjectsFromSession()
+    {
+        //on met dans un tableau les objets corresponans aux options cochés
+        $optionsObjects = [];
+        foreach ($this->reservationSession->getOptions() as $opt) {
+            array_push($optionsObjects,  $this->optionsRepo->find($opt));
+        }
+        return $optionsObjects;
+    }
+
+    //return an array of objects of garanties
+    public function garantiesObjectsFromSession()
+    {
+        //on met dans un tableau les objets corresponans aux garanties cochés
+        $garantiesObjects = [];
+        foreach ($this->reservationSession->getGaranties() as $gar) {
+            array_push($garantiesObjects,  $this->garantiesRepo->find($gar));
+        }
+        return $garantiesObjects;
+    }
+
+    /**
+     * @Route("/vente-comptoir/test", name="reserver_test", methods={"GET","POST"})
+     */
+    public function test(Request $request): Response
+    {
+        return $this->render('admin/test.html.twig');
     }
 }

@@ -202,6 +202,7 @@ class ReservationController extends AbstractController
     }
 
 
+
     /**
      *  @Route("/modifier/options-garanties/{id}", name="optionsGaranties_edit", methods={"GET","POST"})
      */

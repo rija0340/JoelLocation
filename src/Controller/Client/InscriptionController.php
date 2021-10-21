@@ -65,7 +65,7 @@ class InscriptionController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->mail->send($user->getmail(), $user->getNom(), 'Confirmation de création de compte', "Bonjour" . $user->getNom() . "Votre compte a été créé");
+            // $this->mail->send($user->getmail(), $user->getNom(), 'Confirmation de création de compte', "Bonjour" . $user->getNom() . "Votre compte a été créé");
 
             return $this->redirectToRoute('app_login');
         }
