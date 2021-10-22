@@ -1,0 +1,51 @@
+{% extends 'baseClient.html.twig' %}
+
+{% block title %}Avis client
+{% endblock %}
+{% block stylesheets %}{% endblock %}
+{% block body %}
+
+	<div class="x_panel">
+		<h2>Reservation N°
+			{{reservation.reference}}</h2>
+		<form action="{{path('save_avis')}}" method="POST">
+			<input type="hidden" name="idReservation" value="{{reservation.id}}">
+			<div class="mb-4">
+				<label for="global" class="control-label">GLOBAL</label>
+				<input id="global" name="global" class="rating rating-loading">
+			</div>
+			<div>
+				<label for="ponctualite" class="control-label">PONCTUALITÉ</label>
+				<input id="ponctualite" name="ponctualite" class="rating rating-loading" data-min="0" data-max="5" data-step="1">
+			</div>
+			<div>
+				<label for="accueil" class="control-label">ACCUEIL</label>
+				<input id="accueil" name="accueil" class="rating rating-loading" data-min="0" data-max="5" data-step="1">
+			</div>
+			<div>
+				<label for="service" class="control-label">SERVICE</label>
+				<input id="service" name="service" class="rating rating-loading" data-min="0" data-max="5" data-step="1">
+			</div>
+			<div>
+				<label for="commentaire">Commentaire</label>
+				<input type="textarea" class="form-control" name="commentaire">
+			</div>
+
+			<button class="btn btn-danger" type="submit">Enregistrer</button>
+		</form>
+
+	</div>
+
+
+{% endblock %}
+{% block javascripts %}
+	<script>
+		$("#global").rating({
+min: 0,
+max: 5,
+step: 1,
+size: 'md',
+starCaptions: false
+});
+	</script>
+{% endblock %}

@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Entity\Devis;
 use App\Entity\Tarifs;
 use GuzzleHttp\Client;
+use App\Entity\Paiement;
 use App\Entity\Reservation;
 use App\Service\DateHelper;
 use App\Service\TarifsHelper;
@@ -22,6 +23,7 @@ use App\Repository\ModeleRepository;
 use App\Repository\TarifsRepository;
 use App\Repository\OptionsRepository;
 use App\Repository\GarantieRepository;
+use App\Repository\ModePaiementRepository;
 use App\Repository\VehiculeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ReservationRepository;
@@ -59,8 +61,10 @@ class VenteComptoirController extends AbstractController
     private $reservationSession;
     private $mail;
     private $reservationHelper;
+    private $modePaiementRepo;
 
     public function __construct(
+        ModePaiementRepository $modePaiementRepo,
         FlashyNotifier $flashy,
         EntityManagerInterface $em,
         MarqueRepository $marqueRepo,
@@ -97,6 +101,7 @@ class VenteComptoirController extends AbstractController
         $this->devisRepo = $devisRepo;
         $this->mail = $mail;
         $this->reservationHelper = $reservationHelper;
+        $this->modePaiementRepo = $modePaiementRepo;
     }
 
     /**
@@ -301,17 +306,6 @@ class VenteComptoirController extends AbstractController
                 // $form->
             }
         }
-        //on met dans un tableau les objets corresponans aux options cochés
-        $optionsObjects = [];
-        foreach ($this->reservationSession->getOptions() as $opt) {
-            array_push($optionsObjects,  $this->optionsRepo->find($opt));
-        }
-
-        //on met dans un tableau les objets corresponans aux garanties cochés
-        $garantiesObjects = [];
-        foreach ($this->reservationSession->getGaranties() as $gar) {
-            array_push($garantiesObjects,  $this->garantiesRepo->find($gar));
-        }
 
         $dateDepart = $this->reservationSession->getDateDepart();
         $dateRetour = $this->reservationSession->getDateRetour();
@@ -334,9 +328,10 @@ class VenteComptoirController extends AbstractController
             'dateDepart' => $this->reservationSession->getDateDepart(),
             'agenceRetour' => $this->reservationSession->getAgenceRetour(),
             'dateRetour' => $this->reservationSession->getDateRetour(),
-            'options' => $optionsObjects,
-            'garanties' => $garantiesObjects,
-            'conducteur' => $this->reservationSession->getConducteur()
+            'options' => $this->optionsObjectsFromSession(),
+            'garanties' => $this->garantiesObjectsFromSession(),
+            'conducteur' => $this->reservationSession->getConducteur(),
+            'tarifTotal' => $this->tarifsHelper->calculTarifTotal($tarifVehicule, $this->optionsObjectsFromSession(), $this->garantiesObjectsFromSession())
 
         ]);
     }
@@ -576,10 +571,24 @@ class VenteComptoirController extends AbstractController
 
         $this->em->persist($reservation);
         $this->em->flush();
+
+        //enregistrement montant et reservation dans table paiement 
+
+        $paiement  = new Paiement();
+        $paiement->setClient($client);
+        $paiement->setDatePaiement($this->dateHelper->dateNow());
+        $paiement->setMontant($montantPaiement);
+        $paiement->setReservation($reservation);
+        $paiement->setModePaiement($this->modePaiementRepo->findOneBy(['libelle' => 'ESPECE']));
+        $paiement->setMotif("Réservation");
+        $this->em->persist($paiement);
+        $this->em->flush();
+        //on vide la session après reservation et paiement
+        $this->reservationSession->removeReservation();
         // dump($reservation);
         // die();
         $this->flashy->success("Réservation effectuée avec succès");
-        return $this->redirectToRoute('reservation_index');
+        return new JsonResponse($reservation->getReference());
     }
 
     //return an array of objects of options
@@ -605,10 +614,10 @@ class VenteComptoirController extends AbstractController
     }
 
     /**
-     * @Route("/vente-comptoir/test", name="reserver_test", methods={"GET","POST"})
+     * @Route("/vente-comptoir/montant-paiement", name="input_montant", methods={"GET","POST"})
      */
-    public function test(Request $request): Response
+    public function loadInputMontant(Request $request): Response
     {
-        return $this->render('admin/test.html.twig');
+        return $this->render('admin/vente_comptoir2/montant_paiement.html.twig');
     }
 }

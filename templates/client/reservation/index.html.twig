@@ -45,6 +45,9 @@
 										{{reserv.prix - reserv.sommePaiements}}€</button>
 								</form>
 							{% endif %}
+							<div class="mt-2">
+								<a href="{{path('add_avis', {'id': reserv.id})}}" class="btn btn-dark">Donner avis</a>
+							</div>
 						</td>
 					</tr>
 				{% endfor %}
@@ -69,7 +72,7 @@
 			</thead>
 			<tbody>
 				{% for reserv in devis %}
-			
+
 					<tr>
 						<td id="devisID " class="hide">{{reserv.id}}</td>
 						<td>{{ reserv.numero }}</td>

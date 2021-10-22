@@ -42,7 +42,7 @@
 						<tbody class="text-center">
 							{% for avi in avis %}
 								<tr>
-									<td>{{ avi.id }}</td>
+									<td>{{ avi.reservation.reference }}</td>
 									<td>{{ avi.global }}</td>
 									<td>{{ avi.ponctualite }}</td>
 									<td>{{ avi.accueil }}</td>
@@ -70,6 +70,13 @@
 			</div>
 		</div>
 	</div>
+
+
+	<span class="fa fa-star checked"></span>
+	<span class="fa fa-star checked"></span>
+	<span class="fa fa-star checked"></span>
+	<span class="fa fa-star"></span>
+	<span class="fa fa-star"></span>
 	{# fin content #}
 {% endblock %}
 {% block javascripts %}

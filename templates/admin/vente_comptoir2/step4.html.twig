@@ -58,92 +58,103 @@
 					</h3>
 				</div>
 				<img src="{{vich_uploader_asset(vehicule, 'imageFile') }}" alt="{{vehicule.marque}} {{vehicule.modele}}" style="width:100%;" id="vehicule_photo">
-				<div>
-					<h3 class="heading">Agence départ
-					</h3>
-					<div class="content_depart">
-						<p>
-							<i class="fa fa-map-marker"></i>
-							<span id="agence_depart">{{agenceDepart}}</span><br>
-							<span id="date_depart">{{dateDepart | date('d/m/Y') }}</span>
-							<span id="heure_depart">
-								{{dateDepart | date('H:i') }}</span>
-						</p>
-					</div>
-					<h3 class="heading">Agence retour
-					</h3>
-					<div class="content_retour">
-						<p>
-							<i class="fa fa-map-marker"></i>
-							<span id="agence_retour">{{agenceRetour}}</span><br>
-							<span id="date_retour">{{dateRetour | date('d/m/Y')}}</span>
-							<span id="heure_retour">{{dateRetour | date('H:i')}}</span>
-						</p>
-					</div>
+
+				<h3 class="heading">Agence départ
+				</h3>
+				<div class="content_depart">
 					<p>
-						Soit
-						<span id="nombre_jours_location">{{duree}}</span>
-						jours de location</p>
+						<i class="fa fa-map-marker"></i>
+						<span id="agence_depart">{{agenceDepart}}</span><br>
+						<span id="date_depart">{{dateDepart | date('d/m/Y') }}</span>
+						<span id="heure_depart">
+							{{dateDepart | date('H:i') }}</span>
+					</p>
+				</div>
+				<h3 class="heading">Agence retour
+				</h3>
+				<div class="content_retour">
+					<p>
+						<i class="fa fa-map-marker"></i>
+						<span id="agence_retour">{{agenceRetour}}</span><br>
+						<span id="date_retour">{{dateRetour | date('d/m/Y')}}</span>
+						<span id="heure_retour">{{dateRetour | date('H:i')}}</span>
+					</p>
+				</div>
+				<p>
+					Soit
+					<span id="nombre_jours_location">{{duree}}</span>
+					jours de location</p>
 
-					<h3 class="heading">Prix de base de location</h3>
-					<div class="prix_location">
-						<span id="prixTotal">{{ tarifVehicule }}</span>
-						EUR<br>
-						soit
-						<span id="prixJournalier">{{ tarifVehicule / duree}}</span>
-						euro/jour
-					</div>
-					<div class="prestation">
-						<h3 class="heading">Prestations incluses</h3>
-						<ul class="">
-							<li>
-								<i class="fa fa-check"></i>
-								Kilométrage Illimité
-							</li>
-							<li>
-								<i class="fa fa-check"></i>
-								Assurance accidents causés aux tiers
-							</li>
-							<li>
-								<i class="fa fa-check"></i>
-								Assurance responsabilité civile
-							</li>
-							<li>
-								<i class="fa fa-check"></i>
-								Assurance collision (CDW)
-							</li>
-							<li>
-								<i class="fa fa-check"></i>
-								TVA 8.5 %
-							</li>
-						</ul>
-					</div>
-					<div class="options">
-						<h3 class="heading">Options</h3>
+				<h3 class="heading">Prix de base de location</h3>
+				<div class="prix_location">
+					<span id="prixTotal">{{ tarifVehicule }}</span>
+					EUR<br>
+					soit
+					<span id="prixJournalier">{{ tarifVehicule / duree}}</span>
+					euro/jour
+				</div>
+				<div class="prestation">
+					<h3 class="heading">Prestations incluses</h3>
+					<ul class="">
+						<li>
+							<i class="fa fa-check"></i>
+							Kilométrage Illimité
+						</li>
+						<li>
+							<i class="fa fa-check"></i>
+							Assurance accidents causés aux tiers
+						</li>
+						<li>
+							<i class="fa fa-check"></i>
+							Assurance responsabilité civile
+						</li>
+						<li>
+							<i class="fa fa-check"></i>
+							Assurance collision (CDW)
+						</li>
+						<li>
+							<i class="fa fa-check"></i>
+							TVA 8.5 %
+						</li>
+					</ul>
+				</div>
+				<div class="options">
+					<h3 class="heading">Options</h3>
 
-						<ul>
-							{% if conducteur == "true" %}
-								<li>Conducteur</li>
-							{% endif %}
-							{% for option in options %}
-								<li>{{option.appelation}}
-									:
-									{{option.prix}}
-									€</li>
-							{% endfor %}
-						</ul>
-					</div>
-					<div class="garanties">
-						<h3 class="heading">Garanties</h3>
-						<ul>
-							{% for garantie in garanties %}
-								<li>{{garantie.appelation}}
-									:
-									{{garantie.prix}}
-									€</li>
-							{% endfor %}
-						</ul>
-					</div>
+					<ul>
+						{% if conducteur == "true" %}
+							<li>Conducteur</li>
+						{% endif %}
+						{% for option in options %}
+							<li>{{option.appelation}}
+								:
+								{{option.prix}}
+								€</li>
+						{% endfor %}
+					</ul>
+				</div>
+				<div class="garanties">
+					<h3 class="heading">Garanties</h3>
+					<ul>
+						{% for garantie in garanties %}
+							<li>{{garantie.appelation}}
+								:
+								{{garantie.prix}}
+								€</li>
+						{% endfor %}
+					</ul>
+				</div>
+				<hr>
+				<div class="divTarifTotal text-center">
+					<h5 class="heading">Prix total pour
+						{{duree}}
+						jours
+					</h5>
+					<span class="tarifTotal">
+						<h5 class="text-danger">{{tarifTotal}}€</h5>
+					</span><br>
+					<span class="tarifJournalier">Soit
+						{{(tarifTotal / duree)|number_format(2,'.') }}€ / jour</span>
 				</div>
 			</div>
 		</div>

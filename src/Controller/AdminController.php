@@ -134,23 +134,6 @@ class AdminController extends AbstractController
     return $this->render('admin/reservation/non_solde/detail.html.twig');
   }
 
-
-  /**
-   * @Route("/echec_paiement", name="echec_paiement", methods={"GET"})
-   */
-  public function echec_paiement(): Response
-  {
-    return $this->render('admin/reservation/echec_paiement/index.html.twig');
-  }
-
-  /**
-   * @Route("/detail_echec_paiement", name="detail_echec_paiement", methods={"GET"})
-   */
-  public function detail_echec_paiement(): Response
-  {
-    return $this->render('admin/reservation/echec_paiement/detail.html.twig');
-  }
-
   /**
    * @Route("/devis_reservation", name="devis_reservation", methods={"GET"})
    */

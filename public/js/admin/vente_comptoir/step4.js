@@ -26,7 +26,7 @@ function checkClientInput() {
             title: 'Erreur',
             icon: 'fa fa-warning',
             type: 'red',
-            content: '<h4>Veuillez saisir le nom ou email du client</h4>',
+            content: '<p>Veuillez indiquer le nom du client</p>',
         });
     } else {
         saveDevisAsPdf();
@@ -87,12 +87,12 @@ function checkClientAndPaiement() {
             title: 'Erreur',
             icon: 'fa fa-warning',
             type: 'red',
-            content: '<h4>Veuillez saisir le nom ou email du client</h4>',
+            content: '<p>Veuillez indiquer le nom client</p>',
         });
     } else {
         $.confirm({
-            title: 'Montant de paiement du client',
-            content: 'url:test',
+            title: 'Montant de paiement du client (€)',
+            content: 'url:montant-paiement',
             buttons: {
                 sayMyName: {
                     text: 'Valider',
@@ -107,8 +107,7 @@ function checkClientAndPaiement() {
                             });
                             return false;
                         } else {
-                            $.alert('Hello ' + input.val() + ', i hope you have a great day!');
-                            console.log(input.val());
+
                             montantPaiement = input.val();
                             reserverDevis(selectClientElement.value, montantPaiement);
 
@@ -131,7 +130,12 @@ function reserverDevis(client, montant) {
         url: '/backoffice/vente-comptoir/reserver-devis',
         data: { 'client': client, 'montant': montant },
         success: function (data) {
-
+            $.alert({
+                title: 'Succès',
+                icon: 'fa fa-smile-o',
+                type: 'green',
+                content: '<p>La réservation N°' + data + 'a été effectuée avec succès</p>',
+            });
             window.location.href = '/reservation';
 
         },

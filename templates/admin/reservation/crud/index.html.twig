@@ -31,7 +31,7 @@
 					</h2>
 				</div>
 				<div class="col-auto ml-auto">
-					<a href="{{path('vente_comptoir')}}" class="btn btn-danger">
+					<a href="{{path('step1')}}" class="btn btn-danger">
 						<i class="fa fa-plus"></i>
 						Nouvelle réservation</a>
 				</div>
@@ -65,7 +65,7 @@
 										<div class="badge badge-success">FULL
 										</div>
 									{% elseif reservation.prix > reservation.sommePaiements  %}
-										<div class="badge badge-warning">ACOUNT
+										<div class="badge badge-warning">ACOMPTE
 										</div>
 									{% endif %}
 								</td>
@@ -116,8 +116,8 @@
 			</div>
 
 			{# <div class="navigation">
-																																																																																		{{ knp_pagination_render(reservations) }}
-																																																																																	</div> #}
+																																																																																																	{{ knp_pagination_render(reservations) }}
+																																																																																																</div> #}
 
 
 		</div>
