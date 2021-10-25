@@ -57,7 +57,7 @@
 				<a class="dropdown-item" href="#">Mail de confirmation</a>
 				<a class="dropdown-item" href="#">Annuler la réservation</a>
 				<a class="dropdown-item" href="#">Fermer le contrat</a>
-				<a class="dropdown-item" href="#">Archiver la réservation</a>
+				<a class="dropdown-item" href="{{path('reservation_archive', {'id':reservation.id})}}">Archiver la réservation</a>
 			</div>
 		</div>
 
@@ -428,7 +428,7 @@
 						<a class="dropdown-item" href="#">Mail de confirmation</a>
 						<a class="dropdown-item" href="#">Annuler la réservation</a>
 						<a class="dropdown-item" href="#">Fermer le contrat</a>
-						<a class="dropdown-item" href="#">Archiver la réservation</a>
+						<a class="dropdown-item" href="{{path('reservation_archive', {'id':reservation.id})}}">Archiver la réservation</a>
 					</div>
 				</div>
 			</div>

@@ -48,9 +48,11 @@ class Avis
     private $date;
 
     /**
-     * @ORM\OneToOne(targetEntity=Reservation::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Reservation::class, inversedBy="avis", cascade={"persist", "remove"})
      */
     private $reservation;
+
+
 
     public function getId(): ?int
     {
@@ -139,12 +141,12 @@ class Avis
         return $this->getCommentaire();
     }
 
-    public function getReservation(): ?reservation
+    public function getReservation(): ?Reservation
     {
         return $this->reservation;
     }
 
-    public function setReservation(?reservation $reservation): self
+    public function setReservation(?Reservation $reservation): self
     {
         $this->reservation = $reservation;
 

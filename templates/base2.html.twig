@@ -25,7 +25,7 @@
 		<link href="{{ asset( 'admin/vendors/nprogress/nprogress.css')}}" rel="stylesheet">
 		<!-- iCheck -->
 		{# <link
-												href="{{ asset( 'admin/vendors/iCheck/skins/flat/green.css')}}" rel="stylesheet"> #}
+																																		href="{{ asset( 'admin/vendors/iCheck/skins/flat/green.css')}}" rel="stylesheet"> #}
 
 		<!-- bootstrap-progressbar -->
 		<link
@@ -47,7 +47,13 @@
 		<link href="{{ asset( 'css/admin/nav.css')}}" rel="stylesheet">
 		<link href="{{ asset( 'css/admin/easypiechart.css')}}" rel="stylesheet">
 		<link rel="stylesheet" href="{{ asset('bundles/mercuryseriesflashy/css/flashy.css') }}">
-		<link rel="stylesheet" href="{{ asset('jquery-confirm/jquery-confirm.min.css') }}"> {% block stylesheets %}{% endblock %}
+		<link
+		rel="stylesheet" href="{{ asset('jquery-confirm/jquery-confirm.min.css') }}">
+		{# star rating #}
+		<link rel="stylesheet" href="{{asset('kartik-v-bootstrap-star-rating/css/star-rating.min.css')}}">
+		<link rel="stylesheet" href="{{asset('kartik-v-bootstrap-star-rating/themes/krajee-fa/theme.css')}}" media="all" type="text/css"/>
+		<link rel="stylesheet" href="{{asset('kartik-v-bootstrap-star-rating/themes/krajee-svg/theme.css')}}" media="all" type="text/css"/>
+		<link rel="stylesheet" href="{{asset('kartik-v-bootstrap-star-rating/themes/krajee-uni/theme.css')}}" media="all" type="text/css"/> {% block stylesheets %}{% endblock %}
 
 		</head>
 
@@ -75,7 +81,10 @@
 
 
 						<!-- page content -->
-						<div class="right_col" role="main"> {% block content %}{% endblock %}
+						<div class="right_col" role="main">
+							<a class="btn btn-danger" href="{{path('contrat_pdf', {'id':4})}}">
+								telecharger pdf</a>
+							{% block content %}{% endblock %}
 
 							<!-- /page content -->
 
@@ -107,6 +116,14 @@
 	<!-- Load Flashy default JavaScript -->
 	<script src="{{ asset('bundles/mercuryseriesflashy/js/flashy.js') }}"></script>
 	<script src="{{ asset('jquery-confirm/jquery-confirm.js') }}"></script>
+
+	{# star rating #}
+	<script src="{{asset('kartik-v-bootstrap-star-rating/css/star-rating.min.js')}}"></script>
+	<script src="{{asset('kartik-v-bootstrap-star-rating/js/star-rating.js')}}" type="text/javascript"></script>
+	<script src="{{asset('kartik-v-bootstrap-star-rating/themes/krajee-fa/theme.js')}}" type="text/javascript"></script>
+	<script src="{{asset('kartik-v-bootstrap-star-rating/themes/krajee-svg/theme.js')}}" type="text/javascript"></script>
+	<script src="{{asset('kartik-v-bootstrap-star-rating/themes/krajee-gly/theme.js')}}" type="text/javascript"></script>
+	<script src="{{asset('kartik-v-bootstrap-star-rating/themes/krajee-uni/theme.js')}}" type="text/javascript"></script>
 	{% block javascripts %}{% endblock %}
 	<!-- Include Flashy default partial -->
 	{{ include('@MercurySeriesFlashy/flashy.html.twig') }}

@@ -104,10 +104,7 @@ class Reservation
      */
     private $etat_reservation;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Avis::class, mappedBy="reservation")
-     */
-    private $avis;
+
 
     /**
      * @ORM\OneToMany(targetEntity=Paiement::class, mappedBy="reservation")
@@ -195,6 +192,16 @@ class Reservation
     private $stripeSessionId;
 
     private $sommePaiements;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Avis::class, mappedBy="reservation", cascade={"persist", "remove"})
+     */
+    private $avis;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $archived;
 
 
     public function getId(): ?int
@@ -334,35 +341,6 @@ class Reservation
         return $this;
     }
 
-    /**
-     * @return Collection|Avis[]
-     */
-    public function getAvis(): Collection
-    {
-        return $this->avis;
-    }
-
-    public function addAvi(Avis $avi): self
-    {
-        if (!$this->avis->contains($avi)) {
-            $this->avis[] = $avi;
-            $avi->setReservation($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAvi(Avis $avi): self
-    {
-        if ($this->avis->removeElement($avi)) {
-            // set the owning side to null (unless already changed)
-            if ($avi->getReservation() === $this) {
-                $avi->setReservation(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection|Paiement[]
@@ -676,5 +654,39 @@ class Reservation
             $somme = $somme +  $option->getPrix();
         }
         return $somme;
+    }
+
+    public function getAvis(): ?Avis
+    {
+        return $this->avis;
+    }
+
+    public function setAvis(?Avis $avis): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($avis === null && $this->avis !== null) {
+            $this->avis->setReservation(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($avis !== null && $avis->getReservation() !== $this) {
+            $avis->setReservation($this);
+        }
+
+        $this->avis = $avis;
+
+        return $this;
+    }
+
+    public function getArchived(): ?bool
+    {
+        return $this->archived;
+    }
+
+    public function setArchived(bool $archived): self
+    {
+        $this->archived = $archived;
+
+        return $this;
     }
 }

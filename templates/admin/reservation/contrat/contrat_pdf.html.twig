@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Devis de location</title>
+		<!-- Bootstrap -->
+		<link
+		href="{{ asset( 'admin/vendors/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet">
+		<!-- Font Awesome -->
+		<link href="{{ asset( 'admin/vendors/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet">
+		<style>
+			.table-bordered th,
+			.table-bordered td {
+				border: 1px solid #dee2e6 !important;
+			}
+			.table1 {
+				display: inline-block;
+				vertical-align: top;
+				width: 350px;
+			}
+			.logo {
+				display: inline-block;
+				vertical-align: top;
+				/* width: 350px; */
+				border: 1px solid black;
+
+			}
+			.adresse {
+				margin-left: 75px;
+				display: inline-block;
+				vertical-align: top;
+				border: 1px solid black;
+
+			}
+			.tableaux {
+				margin-left: 100px;
+				display: inline-block;
+				vertical-align: top;
+				border: 1px solid black;
+				/* width: 20px; */
+			}
+			.d-inline-block {
+				display: inline-block;
+				vertical-align: top;
+			}
+
+			.recu-depot {
+				display: inline-block;
+				vertical-align: top;
+				width: 340px;
+			}
+			.table2 {
+				display: inline-block;
+				vertical-align: top;
+				width: 350px;
+
+			}
+			.table-border {
+
+				border-collapse: collapse;
+				border: 1px solid black;
+			}
+			.table-border td {
+
+				border-collapse: collapse;
+				border: 1px solid black;
+			}
+
+			.row {
+				display: -ms-flexbox;
+				display: flex;
+				-ms-flex-wrap: wrap;
+				flex-wrap: wrap;
+				margin-right: -15px;
+				margin-left: -15px;
+			}
+			.d-flex {
+				display: -ms-flexbox !important;
+				display: flex !important;
+			}
+			.text-white {
+				color: #fff !important;
+			}
+			.bg-danger {
+				background-color: red !important;
+			}
+			.p-0 {
+				padding: 0 !important;
+			}
+			.m-0 {
+				margin: 0 !important;
+			}
+			.text-center {
+				text-align: center !important;
+			}
+			body {
+				;
+				/* font-size: 10px; */
+			}
+			.fs-10 {
+				font-size: 10px;
+			}
+			.fs-12 {
+				font-size: 12px;
+			}
+			.text-uppercase {
+				text-transform: uppercase !important;
+			}
+			@font-face {
+				font-family: 'FontAwesome';
+				src: url('../fonts/fontawesome-webfont.eot?v=4.5.0');
+				src: url('../fonts/fontawesome-webfont.eot?#iefix&v=4.5.0') format('embedded-opentype'), url('../fonts/fontawesome-webfont.woff2?v=4.5.0') format('woff2'), url('../fonts/fontawesome-webfont.woff?v=4.5.0') format('woff'), url('../fonts/fontawesome-webfont.ttf?v=4.5.0') format('truetype'), url('../fonts/fontawesome-webfont.svg?v=4.5.0#fontawesomeregular') format('svg');
+				font-weight: normal;
+				font-style: normal;
+			}
+			.fa {
+				display: inline-block;
+				font: normal normal normal 14px / 1 FontAwesome;
+				font-size: inherit;
+				text-rendering: auto;
+				-webkit-font-smoothing: antialiased;
+				-moz-osx-font-smoothing: grayscale;
+			}
+			.fa-square-o:before {
+				content: "\f096";
+			}
+		</style>
+	</head>
+	<body>
+		<div style="margin-top : -10px;">
+			<div class="logo"><img src="{{ logo }}" alt="logo" width="100px" height="100px" type="images/png"></div>
+			<div class="adresse">
+				94 Chemin de la hache<br>
+				97160 le moul
+				<br>
+				Tél: 0690737674 / 0767321447<br>
+				Email: joel@joellocation.com<br>
+				SIRET : 87868990000016<br>
+
+			</div>
+			<div class="tableaux">
+				<h2 class="p-0">Contrat de location
+				</h2>
+				<div class="d-inline-block">
+					<table class="table-border">
+						<tbody>
+							<tr>
+								<td class="bg-danger  text-white text-center fs-12">Numéro de contrant</td>
+							</tr>
+							<tr>
+								<td>DV100</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="d-inline-block">
+					<table class="table-border">
+						<tbody>
+							<tr>
+								<td class="bg-danger text-white text-center fs-12">Date de contrat</td>
+							</tr>
+							<tr>
+								<td>22 Mars 2021</td>
+							</tr>
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+		<p>Location de voiture du 14-10-2021 16:13à____h_____ au 22-10-2021 13:13à____h_____</p>
+		{# table gauche droite, info client et conducteurs #}
+		<div class="p-0 ">
+			<div class="table1 p-0 ">
+				<table class="table-border p-0 " style="width : 100%;">
+					<tbody class="fs-12">
+						<tr style="background-color : red">
+							<td colspan="2" class="text-white">LOCATAIRE</td>
+						</tr>
+						<tr>
+							<td>Nom</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Prénom</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Adresse permanante</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Téléhone(s)</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Email</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Date/lieu de naissance</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>N°/Date de permis</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td colspan="2" class="text-center text-white bg-danger">INFOS TRANSFERT
+							</td>
+						</tr>
+						<tr>
+							<td>Infos arrivée</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Infos retour
+							</td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			{# table droite #}
+			<div class="table2 p-0 ">
+				<table style="width : 100%;" class=" table-border p-0 ">
+					<tbody class="fs-12">
+						<tr class="bg-danger text-center text-white">
+							<td colspan="2">
+								AUTRE(S) CONDUCTEURS
+							</td>
+						</tr>
+						<tr>
+							<td>Nom</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Prénom</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Date/lieu de naissance</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>
+								N°/Date de permis</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Téléphone(s)
+							</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Nom</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Prénom</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Date/lieu de naissance</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>
+								N°/Date de permis</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td colspan="2" class="bg-danger text-center text-white text-uppercase">adresse en guadeloupe</td>
+						</tr>
+						<tr>
+							<td colspan="2"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		{# table contenant details voiture #}
+		<div style="margin-top : -190px">
+			<table class="table-border" style="width : 100%">
+				<tbody class="fs-12">
+					<tr class="bg-danger">
+						<td colspan="8" style="color : white" class="text-uppercase text-white bg-danger">Voiture</td>
+					</tr>
+					<tr>
+						<td>Marque/Modèle</td>
+						<td>Renault Clio IV
+						</td>
+						<td>Carburant</td>
+						<td>Ess
+						</td>
+						<td>N° Immat.
+						</td>
+						<td></td>
+						<td>Kilométrage</td>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		{# etat interieur #}
+		<div style="border : 1px solid black; margin-bottom : 2px" class="bg-danger text-white text-uppercase fs-12">
+			Etat intérieur
+		</div>
+		<div class="fs-10" style="border : 1px solid black; margin-bottom : 2px">
+			Sièges__________Console centrale tableau de bord:__________ Ciel de toit:__________ Garnitures intérieures:_____________
+			<br>
+			Revêtement de sol:__________ Coffre:__________ Portes__________
+			<br>
+			Légende intérieur: S sale  - D déchiré - T troué - E endommagé - M manque - A autre dommage – RAS Rien à signaler
+		</div>
+		{# etat extérieur #}
+		<div class="bg-danger text-white text-uppercase fs-12" style="border : 1px solid black; margin-bottom : 2px">
+			Etat extérieur
+		</div>
+		<table class="table-border " style="width : 100%;">
+			<tbody class="fs-12">
+				<tr>
+					<td colspan="4">
+						Obsérvations de départ
+					</td>
+					<td colspan="5">
+						<img src="{{ logo }}" alt="véhicule" width="100px" height="150px" type="images/png">
+					</td>
+					<td colspan="4">
+						Obsérvations à l'arrivée</td>
+				</tr>
+				<tr>
+					<td colspan="4"></td>
+					<td colspan="5"></td>
+					<td colspan="4"></td>
+				</tr>
+				<tr>
+					<td colspan="4">Carburant au départ</td>
+					<td>Pneus/Jantes</td>
+					<td>AV gauche</td>
+					<td>
+						AV droite</td>
+					<td>AR gauche</td>
+					<td>AR droite
+					</td>
+					<td colspan="4">Carburant à l’arrivée</td>
+				</tr>
+				<tr>
+					<td rowspan="2">1/4
+					</td>
+					<td rowspan="2">1/2</td>
+					<td rowspan="2">3/4</td>
+					<td rowspan="2">1/1</td>
+					<td>
+						Marque</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td rowspan="2">1/4</td>
+					<td rowspan="2">1/2</td>
+					<td rowspan="2">3/4
+					</td>
+					<td rowspan="2">1/1</td>
+				</tr>
+				<tr>
+					<td>
+						Etat</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			</tbody>
+		</table>
+		<p class="fs-12">
+			Légende extérieur: P projection de pierres - R rouille - A autre dommage - R rayure - C creux - D dégât accident -</p>
+		<div
+			class="table1">
+			{# prestations #}
+			<table class="table-border" style="width : 100%">
+				<tbody class="fs-12">
+					<tr>
+						<td class="bg-danger text-white text-center" colspan="2">PRESTATIONS</td>
+					</tr>
+					<tr>
+						<td>location (31/01-12/02) et (31/01-12/02)</td>
+						<td>
+							123456</td>
+					</tr>
+					<tr>
+						<td>lavage (35.5€)</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>Multi-conducteurs (50,00€)</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>Refuelling (80.00€)</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>Siège auto (30.00€)</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>Total TTC</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>ACOMPTE</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>RESTE A PAYER</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>CAUTION</td>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="fs-12">
+				<div></div>
+				Espèce
+				<input type="checkbox" class="p-0 m-0">
+				CB
+				<input type="checkbox" class="p-0 m-0">
+				Chèque Vacances
+				<input type="checkbox" class="p-0 m-0">
+				Chèque
+				<input type="checkbox" class="p-0 m-0">
+				<br>
+				Aucune location est remboursable. Létat des lieux du véhicule est réalisé sur véhicule propre intérieur et extérieur</div>
+		</div>
+		<div
+			class="recu-depot">
+			{# RECU DE DEPOT CAUTION ET FRANCHISE #}
+			<table class="table-border ">
+				<tbody class="fs-12">
+					<tr>
+						<td class="bg-danger text-white text-center">
+							RECU DE DEPOT CAUTION ET FRANCHISE
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Je soussignée autorise la société Joellocation a prélevé sur mon compte à l'aide de l'empreinte de ma carte bancaire, le montant de la franchise ou caution du présent contrat ceci en cas d'accident responsable, de vol, tentative de vol ou dommage occasionné au véhicule loué.
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			{# table dessous table recu de depot #}
+			<table class="table-border" style="width : 100%">
+				<tbody class="fs-12">
+					<tr>
+						<td>Date départ</td>
+						<td>26 Mars 2021</td>
+						<td>Date retour</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>JOELLOCATION</td>
+						<td></td>
+						<td>JOELLOCATION</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>Locataire (lu et apprové)</td>
+						<td></td>
+						<td>Locataire</td>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
+			<table>
+				<tbody>
+					<tr>
+						<td class="fs-12">
+							Le locataire déclare adhérer à toutes les conditions générales de location
+						</td>
+
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<div class="bg-danger text-white text-center fs-12" style="margin-top : 20px">
+			SIRET : 87868990000016 APE: 7711a
+			<br>
+			N°TVA FR40878689900
+			<br>
+			www.joellocation.com
+		</div>
+	</body>
+</html>

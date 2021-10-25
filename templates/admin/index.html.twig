@@ -455,79 +455,70 @@
 					<table class="table">
 
 						<tbody>
-							<tr>
-								<td>FH819AF21236549871</td>
-								<td>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<br>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<br>
-									<i class="fa fa-star"></i>
+							{% for avis in avis %}
+								<tr>
+									<td>{{avis.reservation.reference}}</td>
+									<td>
+										{% if avis.global == 5 %}
+											{# 0 star  #}
+											<i class="fa fa-star"></i><br>
+											<i class="fa fa-star"></i><br>
+											<i class="fa fa-star"></i><br>
+											<i class="fa fa-star"></i><br>
+											<i class="fa fa-star"></i>
+										{% elseif avis.global == 4 %}
 
-								</td>
-								<td class="text-center">
-									<button class="btn btn-danger">
-										<i class="fa fa-info"></i>
-									</button>
-									<button class="btn btn-gray2" type="button" data-toggle="modal" data-target=".bs-example-modal-lg">
-										<i class="fa fa-newspaper-o"></i>
-									</button>
-								</td>
-							</tr>
-							<tr>
-								<td>FH819AF</td>
-								<td>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<br>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<br>
-									<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star-o"></i>
+										{% elseif avis.global == 3 %}
 
-								</td>
-								<td class="text-center">
-									<button class="btn btn-danger">
-										<i class="fa fa-info"></i>
-									</button>
-									<button class="btn btn-gray2">
-										<i class="fa fa-newspaper-o"></i>
-									</button>
-								</td>
-							</tr>
-							<tr>
-								<td>FH819AF</td>
-								<td>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<br>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<br>
-									<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i><br>
+											<i class="fa fa-star"></i><br>
+											<i class="fa fa-star"></i><br>
+											<i class="fa fa-star-o"></i><br>
+											<i class="fa fa-star-o"></i>
+										{% elseif avis.global == 2 %}
 
-								</td>
-								<td class="text-center">
-									<button class="btn btn-danger">
-										<i class="fa fa-info"></i>
-									</button>
-									<button class="btn btn-gray2">
-										<i class="fa fa-newspaper-o"></i>
-									</button>
-								</td>
-							</tr>
+											<i class="fa fa-star"></i><br>
+											<i class="fa fa-star"></i><br>
+											<i class="fa fa-star-o"></i><br>
+											<i class="fa fa-star-o"></i><br>
+											<i class="fa fa-star-o"></i>
+										{% elseif avis.global == 1 %}
+
+											<i class="fa fa-star"></i><br>
+											<i class="fa fa-star-o"></i><br>
+											<i class="fa fa-star-o"></i><br>
+											<i class="fa fa-star-o"></i><br>
+											<i class="fa fa-star-o"></i>
+										{% elseif avis.global == 0 %}
+
+											<i class="fa fa-star-o"></i><br>
+											<i class="fa fa-star-o"></i><br>
+											<i class="fa fa-star-o"></i><br>
+											<i class="fa fa-star-o"></i><br>
+											<i class="fa fa-star-o"></i>
+										{% endif %}
+
+									</td>
+									<td class="text-center">
+										<button class="btn btn-danger">
+											<i class="fa fa-info"></i>
+										</button>
+										<button class="btn btn-gray2">
+											<i class="fa fa-newspaper-o"></i>
+										</button>
+									</td>
+								</tr>
+							{% endfor %}
 						</tbody>
 					</table>
 				</div>
 			</div>
-		</div>
-
-		<!-- Large modal -->
-		{# <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Large modal</button> #}
-
-		<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+		</div><!-- Large modal -->{# <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Large modal</button> #}<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
 			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
 
@@ -613,20 +604,13 @@
 							<i class="fa fa-close"></i>
 							Fermer</button>
 					</div>
-
 				</div>
 			</div>
-		</div>
-		{# fin modal #}
-
-	</div>
+		</div>{# fin modal #}</div>
 {% endblock %}
-{% block javascripts %}
-	<!-- easy-pie-chart -->
-	<script src="../../plugins/jquery/jquery.min.js"></script>
+{% block javascripts %}<!-- easy-pie-chart --><script src="../../plugins/jquery/jquery.min.js"></script>
 	<script src="../../admin/build/js/jquery.easypiechart.min.js"></script>
 	<script src="{{asset('/js/admin/flashy.js')}}"></script>
-
 	<script>
 		$(function () {
 $('.chart').easyPieChart({

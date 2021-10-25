@@ -201,6 +201,18 @@ class ReservationController extends AbstractController
         return $this->redirectToRoute('reservation_index');
     }
 
+    /**
+     * @Route("/archiver/{id}", name="reservation_archive", methods={"GET", "POST"})
+     */
+    public function archiver(Request $request, Reservation $reservation): Response
+    {
+        $reservation->setArchived(true);
+        $this->em->flush();
+
+        // dd($reservation);
+        $this->flashy->success("La réservation N° " . $reservation->getReference() . " a été archivée");
+        return $this->redirectToRoute('reservation_index');
+    }
 
 
     /**

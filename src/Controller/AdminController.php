@@ -12,6 +12,7 @@ use App\Form\RechercheAVType;
 use App\Form\ReservationType;
 use App\Service\TarifsHelper;
 use App\Form\ReservationStep1Type;
+use App\Repository\AvisRepository;
 use App\Repository\DevisRepository;
 use App\Repository\UserRepository;
 use App\Repository\MarqueRepository;
@@ -49,8 +50,9 @@ class AdminController extends AbstractController
   private $marqueRepo;
   private $em;
   private $devisRepo;
+  private $avisRepo;
 
-  public function __construct(DevisRepository $devisRepo, EntityManagerInterface $em, MarqueRepository $marqueRepo, ModeleRepository $modeleRepo, TarifsHelper $tarifsHelper, DateHelper $dateHelper, TarifsRepository $tarifsRepo, ReservationRepository $reservationRepo,  UserRepository $userRepo, VehiculeRepository $vehiculeRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
+  public function __construct(AvisRepository $avisRepo, DevisRepository $devisRepo, EntityManagerInterface $em, MarqueRepository $marqueRepo, ModeleRepository $modeleRepo, TarifsHelper $tarifsHelper, DateHelper $dateHelper, TarifsRepository $tarifsRepo, ReservationRepository $reservationRepo,  UserRepository $userRepo, VehiculeRepository $vehiculeRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
   {
 
     $this->reservationRepo = $reservationRepo;
@@ -65,6 +67,7 @@ class AdminController extends AbstractController
     $this->marqueRepo = $marqueRepo;
     $this->em = $em;
     $this->devisRepo = $devisRepo;
+    $this->avisRepo = $avisRepo;
   }
 
 
@@ -78,11 +81,14 @@ class AdminController extends AbstractController
     $reservations = $this->reservationRepo->findBy(['code_reservation' => 'devisTransformé'], ['id' => 'DESC'], 5);
     $devis = $this->devisRepo->findBy(['transformed' => true], ['id' => 'DESC'], 5);
     $stopSales = $this->reservationRepo->findBy(['code_reservation' => 'stopSale'], ['id' => 'DESC'], 5);
+    $avis = $this->avisRepo->findBy(array(), ['id' => 'DESC'], 5);
+
 
     return $this->render('admin/index.html.twig', [
       'reservations' => $reservations,
       'stopSales' => $stopSales,
-      'devis' => $devis
+      'devis' => $devis,
+      'avis' => $avis,
     ]);
   }
 
