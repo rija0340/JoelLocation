@@ -40,6 +40,8 @@
 								</tr>
 							</thead>
 							<tbody>
+							{% for reservation in reservations %}
+								
 								<tr>
 									<td>
 										<div>
@@ -48,19 +50,16 @@
 
 										</div>
 									</td>
-									<td>24 Février 2020 - 15H14</td>
+									<td>{{reservation.dateReservation|date('d/m/Y H:i')}}</td>
 									<td class="text-nowrap">
-										<span>BARYOER Nicolas</span><br>
-										<span class="font-weight-bold text-primary">
-											<i class="fa fa-user"></i>
-											Joel location</span>
+									{{reservation.client.nom}}
 									</td>
 									<td class="text-nowrap">
 										<span class="mb-0">
-											WEBGP2020FEV134286
+											{{reservation.reference}}
 										</span><br>
 										<span>
-											HSMR II VOLSWAGEN POLO
+											{{reservation.vehicule.marque}} {{reservation.vehicule.modele}} {{reservation.vehicule.immatriculation}}
 										</span><br>
 										<span class="text-danger font-weight-bolder">
 											Annulation en attente de décision du client
@@ -68,11 +67,11 @@
 									</td>
 									<td class="text-nowrap">
 										<span>
-											19 Mars 2020 - 15H00
+											{{reservation.dateDebut|date('d/m/Y H:i')}}
 										</span><br>
-										<span class="font-italic">16 jours</span>
+										<span class="font-italic">{{reservation.duree}} jours</span>
 									</td>
-									<td>183,80 €</td>
+									<td>{{reservation.prix}} €</td>
 									<td></td>
 									<td class="text-center">
 										<a href="{{ path('annulation_attente') }}">
@@ -80,46 +79,8 @@
 										</a>
 									</td>
 								</tr>
-								<tr>
-									<td>
-										<div>
-
-											<span class="badge badge-success p-2">FUL</span>
-
-										</div>
-									</td>
-									<td>24 Février 2020 - 15H14</td>
-									<td class="text-nowrap">
-										<span>BARYOER Nicolas</span><br>
-										<span class="font-weight-bold text-primary">
-											<i class="fa fa-user"></i>
-											Joel location</span>
-									</td>
-									<td class="text-nowrap">
-										<span class="mb-0">
-											WEBGP2020FEV134286
-										</span><br>
-										<span>
-											HSMR II VOLSWAGEN POLO
-										</span><br>
-										<span class="text-danger font-weight-bolder">
-											Annulation avec avoir
-										</span>
-									</td>
-									<td class="text-nowrap">
-										<span>
-											19 Mars 2020 - 15H00
-										</span><br>
-										<span class="font-italic">16 jours</span>
-									</td>
-									<td>183,80 €</td>
-									<td></td>
-									<td class="text-center">
-										<a href="{{ path('annulation_attente') }}">
-											<i class=" fa fa-info-circle" style="font-size: 2em !important;"></i>
-										</a>
-									</td>
-								</tr>
+							{% endfor %}
+							
 							</tbody>
 						</table>
 					</div>

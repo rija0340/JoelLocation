@@ -135,7 +135,7 @@ class ReservationController extends AbstractController
     }
 
     /**
-     * @Route("/show/{id}", name="reservation_show", methods={"GET"},requirements={"id":"\d+"})
+     * @Route("/details/{id}", name="reservation_show", methods={"GET"},requirements={"id":"\d+"})
      */
     public function show(Reservation $reservation, Request $request): Response
     {
@@ -213,6 +213,7 @@ class ReservationController extends AbstractController
         $this->flashy->success("La réservation N° " . $reservation->getReference() . " a été archivée");
         return $this->redirectToRoute('reservation_index');
     }
+
 
 
     /**

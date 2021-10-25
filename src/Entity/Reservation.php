@@ -24,7 +24,6 @@ class Reservation
     public function __construct()
     {
 
-        $this->avis = new ArrayCollection();
         $this->paiements = new ArrayCollection();
         $this->options = new ArrayCollection();
         $this->garanties = new ArrayCollection();
@@ -195,6 +194,7 @@ class Reservation
 
     /**
      * @ORM\OneToOne(targetEntity=Avis::class, mappedBy="reservation", cascade={"persist", "remove"})
+     * 
      */
     private $avis;
 
@@ -202,6 +202,11 @@ class Reservation
      * @ORM\Column(type="boolean")
      */
     private $archived;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $canceled;
 
 
     public function getId(): ?int
@@ -686,6 +691,18 @@ class Reservation
     public function setArchived(bool $archived): self
     {
         $this->archived = $archived;
+
+        return $this;
+    }
+
+    public function getCanceled(): ?bool
+    {
+        return $this->canceled;
+    }
+
+    public function setCanceled(bool $canceled): self
+    {
+        $this->canceled = $canceled;
 
         return $this;
     }

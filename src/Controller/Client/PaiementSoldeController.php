@@ -137,7 +137,7 @@ class PaiementSoldeController extends AbstractController
     }
 
     /**
-     * @Route("/espaceclient/paiement-solde/succes/{stripeSessionId}", name="payementSuccess", methods={"GET","POST"})
+     * @Route("/espaceclient/paiement-solde/succes/{stripeSessionId}", name="payement_sold_success", methods={"GET","POST"})
      */
     public function payementSoldeSuccess(Request $request, $stripeSessionId)
     {
@@ -181,7 +181,7 @@ class PaiementSoldeController extends AbstractController
     }
 
     /**
-     * @Route("/espaceclient/paiement-solde/echec/{stripeSessionId}", name="payementFail", methods={"GET","POST"})
+     * @Route("/espaceclient/paiement-solde/echec/{stripeSessionId}", name="payement_sold_fail", methods={"GET","POST"})
      */
     public function payementSoldeFail(Request $request, $stripeSessionId)
     {

@@ -156,14 +156,6 @@ class AdminController extends AbstractController
     return $this->render('admin/reservation/devis/detail.html.twig');
   }
 
-  /**
-   * @Route("/annulation_reservation", name="annulation_reservation", methods={"GET"})
-   */
-  public function annulation_reservation(): Response
-  {
-    return $this->render('admin/reservation/annulation/index.html.twig');
-  }
-
 
   /**
    * @Route("/annulation_attente", name="annulation_attente", methods={"GET"})
