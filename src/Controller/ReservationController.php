@@ -2,10 +2,9 @@
 
 namespace App\Controller;
 
-use App\Classe\ClasseReservation;
-use App\Classe\Mail;
 use DateTime;
 use DateTimeZone;
+use App\Classe\Mail;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Entity\Garantie;
@@ -19,20 +18,22 @@ use App\Form\KilometrageType;
 use App\Form\ReservationType;
 use App\Service\TarifsHelper;
 use App\Form\EditStopSalesType;
+use App\Classe\ClasseReservation;
 use App\Form\OptionsGarantiesType;
 use App\Repository\UserRepository;
+use App\Repository\MarqueRepository;
+use App\Repository\ModeleRepository;
 use App\Repository\TarifsRepository;
 use App\Repository\OptionsRepository;
 use App\Repository\GarantieRepository;
-use App\Repository\MarqueRepository;
-use App\Repository\ModeleRepository;
 use App\Repository\VehiculeRepository;
-use App\Repository\ReservationRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\ReservationRepository;
 use Knp\Component\Pager\PaginatorInterface;
-use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\HttpFoundation\Request;
+use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -242,20 +243,36 @@ class ReservationController extends AbstractController
         ]);
     }
 
+
     /**
-     *  @Route("/envoi/identifiants-connexion/{id}", name="envoiIdentifiantsConnexion", methods={"GET","POST"})
+     * @Route("/envoi-identification-connexion/{id}", name="reservation_ident_connex", methods={"GET","POST"})
      */
-    public function EnvoiIdentifiantsConnexion(Request $request, Reservation $reservation): Response
+    public function envoyerIdentConnex(Request $request, Reservation $reservation, RouterInterface $router): Response
     {
 
-        $email_adress = $reservation->getClient()->getMail();
-        $name = $reservation->getClient()->getNom();
-        $subject =  "Indentifiants de connexion";
-        $content = "Bonjour, voici vos identifiants de connexion. Login : " . $email_adress . ". Mot de passe : 0000. Veuillez changer votre mot de passe le plus tôt possible";
+        $mail = $reservation->getClient()->getMail();
+        $nom = $reservation->getClient()->getNom();
+        $mdp = uniqid();
+        $content = "Bonjour, voici vos identifications de connexion. Mot de passe: " . $mdp;
 
-        $this->mail->send($email_adress, $name, $subject, $content);
+        $this->mail->send($mail, $nom, "Identifiants de connexion", $content);
 
-        $this->flashy->success("Les identifiants de connexion ont été envoyé au client");
-        return $this->redirectToRoute('reseration_show', ['id' => $reservation->getId()]);
+        // get the referer, it can be empty!
+        $referer = $request->headers->get('referer');
+        if (!\is_string($referer) || !$referer) {
+        }
+
+        if ($referer != null) {
+            $refererPathInfo = Request::create($referer)->getPathInfo();
+
+            // try to match the path with the application routing
+            $routeInfos = $router->match($refererPathInfo);
+
+            // get the Symfony route name if it exists
+            $refererRoute = $routeInfos['_route'] ?? '';
+
+            $this->flashy->success("Vos identifians ont été envoyés");
+            return $this->redirectToRoute($refererRoute, ['id' => $reservation->getId()]);
+        }
     }
 }

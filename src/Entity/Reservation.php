@@ -640,6 +640,7 @@ class Reservation
         foreach ($paiements as $paiement) {
             $this->sommePaiements = $this->sommePaiements + $paiement->getMontant();
         }
+        // dd($this->sommePaiements);
         return $this->sommePaiements;
     }
 

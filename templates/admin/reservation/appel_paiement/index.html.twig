@@ -34,10 +34,9 @@
 							<thead class="text-uppercase">
 								<tr>
 									<th>réservation</th>
-									<th class="text-nowrap">montant</th>
+									<th class="">montant</th>
 									<th>type</th>
-									<th class="text-nowrap">partenaire</th>
-									<th class="text-nowrap">utilisateur</th>
+									<th class="">utilisateur</th>
 									<th>date demande</th>
 									<th>clic utilisateur</th>
 									<th>payé</th>
@@ -48,46 +47,25 @@
 
 
 							<tbody>
-								<tr>
-									<td>Michael Bruce</td>
-									<td>Javascript Developer</td>
-									<td>Singapore</td>
-									<td>29</td>
-									<td>2011/06/27</td>
-									<td>$183,000</td>
-									<td>$183,000</td>
-									<td>
-										<button class="btn text-danger">
-											<i class="fa fa-close"></i>
-										</button>
-									</td>
-									<td>$183,000</td>
-									<td class="text-center">
-										<a href="">
-											<i class=" fa fa-info-circle" style="font-size: 2em !important;"></i>
-										</a>
-									</td>
-								</tr>
-								<tr>
-									<td>Michael Bruce</td>
-									<td>Javascript Developer</td>
-									<td>Singapore</td>
-									<td>29</td>
-									<td>2011/06/27</td>
-									<td>$183,000</td>
-									<td>$183,000</td>
-									<td>
-										<button class="btn text-success">
-											<i class="fa fa-check"></i>
-										</button>
-									</td>
-									<td>$183,000</td>
-									<td class="text-center">
-										<a href="">
-											<i class=" fa fa-info-circle" style="font-size: 2em !important;"></i>
-										</a>
-									</td>
-								</tr>
+								{% for reservation in reservations %}
+									<tr>
+										<td>{{reservation.reference}}</td>
+										<td>{{reservation.prix - reservation.sommePaiements}}</td>
+										<td></td>
+										<td>{{reservation.client.nom}}</td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td>
+											{# <button class="btn text-danger"><i class="fa fa-close"></i></button> #}
+										</td>
+										<td class="text-center">
+											<a href="">
+												<i class=" fa fa-info-circle" style="font-size: 2em !important;"></i>
+											</a>
+										</td>
+									</tr>
+								{% endfor %}
 							</tbody>
 						</table>
 					</div>

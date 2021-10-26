@@ -83,27 +83,11 @@
 									€</td>
 								<td>{{ reservation.reference }}</td>
 								<td class=" content-center " style="min-width : 90px;">
-									<di class="row">
-										<div class="col-auto p-0 m-0">
-											<a id="btnEdit" href="{{ path('reservation_edit', {'id': reservation.id}) }}" class="btn btn-link">
-												<i class="fa  fa-gear (alias)"></i>
-											</a>
-										</div>
-										<div class="col-auto p-0 m-0">
-											<a href="{{ path('reservation_show', {'id': reservation.id}) }}" class="btn btn-link">
-												<i class="fa  fa-list-ul"></i>
-											</a>
-										</div>
-										<div class="col-auto p-0 m-0">
-											<form method="post" action="{{ path('reservation_delete', {'id': reservation.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer cet utilisateur?');">
-												<input type="hidden" name="_method" value="DELETE">
-												<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ reservation.id) }}">
-												<button class="btn btn-link" style=" -webkit-appearance: none">
-													<i class="fa fa-trash" aria-hidden="true"></i>
-												</button>
-											</form>
-										</div>
-									</di>
+									<div class="col-auto p-0 m-0">
+										<a href="{{ path('reservation_show', {'id': reservation.id}) }}" class="btn btn-link">
+											<i class=" fa fa-info-circle" style="font-size: 2em !important;"></i>
+										</a>
+									</div>
 								</td>
 							</tr>
 						{% else %}
@@ -114,12 +98,6 @@
 					</tbody>
 				</table>
 			</div>
-
-			{# <div class="navigation">
-																																																																																																	{{ knp_pagination_render(reservations) }}
-																																																																																																</div> #}
-
-
 		</div>
 	</div>
 {% endblock %}

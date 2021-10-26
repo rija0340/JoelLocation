@@ -57,6 +57,7 @@ class PlanningController extends AbstractController
     public function planningGeneralData(Request $request, ReservationRepository $reservationRepo, VehiculeRepository $vehiculeRepo, NormalizerInterface $normalizer)
     {
 
+        //toutes les réservations , stopsales et tous
         $reservations = $reservationRepo->findBy(array(),  array('date_debut' => 'ASC'));
         $vehicules = $vehiculeRepo->findAll();
 

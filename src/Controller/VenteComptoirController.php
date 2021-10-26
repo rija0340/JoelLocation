@@ -548,6 +548,8 @@ class VenteComptoirController extends AbstractController
         $reservation->setDateFin($dateRetour);
         $reservation->setAgenceDepart($this->reservationSession->getAgenceDepart());
         $reservation->setAgenceRetour($this->reservationSession->getAgenceRetour());
+        $reservation->setCanceled(false);
+        $reservation->setArchived(false);
         //boucle pour ajout options 
         foreach ($this->optionsObjectsFromSession() as $option) {
             $reservation->addOption($option);
@@ -558,7 +560,17 @@ class VenteComptoirController extends AbstractController
             $reservation->addGaranty($garantie);
         }
 
-        $reservation->setPrix($this->tarifsHelper->calculTarifTotal($this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule), $this->optionsObjectsFromSession(), $this->garantiesObjectsFromSession()));
+        //si l'admin a entrée un autre tarif dans étape 2, alors on considère ce tarif
+        if ($this->reservationSession->getTarifVehicule()) {
+            $tarifVehicule = $this->reservationSession->getTarifVehicule();
+        } else {
+            $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
+        }
+
+        $prixOptions = $this->tarifsHelper->sommeTarifsOptions($this->optionsObjectsFromSession());
+        $prixGaranties = $this->tarifsHelper->sommeTarifsGaranties($this->garantiesObjectsFromSession());
+
+        $reservation->setPrix($tarifVehicule + $prixOptions + $prixGaranties);
         $reservation->setTarifVehicule($this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule));
         $reservation->setPrixGaranties($this->tarifsHelper->sommeTarifsGaranties($this->garantiesObjectsFromSession()));
         $reservation->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($this->optionsObjectsFromSession()));

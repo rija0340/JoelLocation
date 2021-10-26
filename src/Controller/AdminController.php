@@ -191,13 +191,7 @@ class AdminController extends AbstractController
     ]);
   }
 
-  /**
-   * @Route("/appel_paiement", name="appel_paiement", methods={"GET"})
-   */
-  public function appel_paiement(): Response
-  {
-    return $this->render('admin/reservation/appel_paiement/index.html.twig');
-  }
+
 
   /**
    * @Route("/chiffre_affaire", name="chiffre_affaire", methods={"GET"})
