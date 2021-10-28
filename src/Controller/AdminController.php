@@ -200,12 +200,4 @@ class AdminController extends AbstractController
   {
     return $this->render('admin/chiffre_affaire/index.html.twig');
   }
-
-  /**
-   * @Route("/paiement", name="paiement", methods={"GET"})
-   */
-  public function paiement(): Response
-  {
-    return $this->render('admin/paiement/index.html.twig');
-  }
 }

@@ -159,6 +159,16 @@ class User implements UserInterface
      */
     private $villeDelivrancePermis;
 
+    /**
+     * @ORM\OneToOne(targetEntity=InfosResa::class, cascade={"persist", "remove"})
+     */
+    private $infosResa;
+
+    /**
+     * @ORM\OneToOne(targetEntity=InfosVolResa::class, cascade={"persist", "remove"})
+     */
+    private $infosVolResa;
+
     public function __construct()
     {
         $this->messages = new ArrayCollection();
@@ -615,6 +625,30 @@ class User implements UserInterface
     public function setVilleDelivrancePermis(?string $villeDelivrancePermis): self
     {
         $this->villeDelivrancePermis = $villeDelivrancePermis;
+
+        return $this;
+    }
+
+    public function getInfosResa(): ?InfosResa
+    {
+        return $this->infosResa;
+    }
+
+    public function setInfosResa(?InfosResa $infosResa): self
+    {
+        $this->infosResa = $infosResa;
+
+        return $this;
+    }
+
+    public function getInfosVolResa(): ?InfosVolResa
+    {
+        return $this->infosVolResa;
+    }
+
+    public function setInfosVolResa(?InfosVolResa $infosVolResa): self
+    {
+        $this->infosVolResa = $infosVolResa;
 
         return $this;
     }
