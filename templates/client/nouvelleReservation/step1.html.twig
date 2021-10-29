@@ -100,4 +100,7 @@
 		</button>
 	</div>
 	{{ form_end(form) }}
-</div>{% endblock %}{% block javascripts %}{% endblock  %}
+{% endblock %}
+{% block javascripts %}
+	<script src="{{asset('js/client/reservation/nouvelle/step1.js')}}"></script>
+{% endblock  %}

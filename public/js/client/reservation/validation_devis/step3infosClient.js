@@ -37,17 +37,33 @@ function valider(e) {
     if (checkedModePaiement && checkedCondition) {
     } else {
         if (!checkedModePaiement && !checkedCondition) {
-            alert("Veuillez choisir un mode de paiement et accepter les conditions générales de vente");
+            $.alert({
+                title: 'Erreur',
+                icon: 'fa fa-warning',
+                type: 'red',
+                content: '<p>"Veuillez choisir un mode de paiement et accepter les conditions générales de vente"</p>',
+            });
             e.preventDefault();
         }
         if (!checkedCondition && checkedModePaiement) {
-            alert("Veuillez accepter les conditions générales de vente");
+            $.alert({
+                title: 'Erreur',
+                icon: 'fa fa-warning',
+                type: 'red',
+                content: '<p>"Veuillez accepter les conditions générales de vente"</p>',
+            });
             e.preventDefault();
         }
 
         if (!checkedModePaiement && checkedCondition) {
-            alert("Veuillez choisir un mode de paiement ");
+            $.alert({
+                title: 'Erreur',
+                icon: 'fa fa-warning',
+                type: 'red',
+                content: '<p>"Veuillez choisir un mode de paiement"</p>',
+            });
             e.preventDefault();
+
         }
     }
 }

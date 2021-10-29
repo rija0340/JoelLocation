@@ -19,6 +19,16 @@ class InfosVolResaType extends AbstractType
                     'Air Antilles Express' => 'Air Antilles Express',
                     'Air Belgium' => 'Air Belgium',
                     'Air Canada' => 'Air Canada',
+                    'Air Caraîbes' => 'Air Caraîbes',
+                    'Air France' => 'Air France',
+                    'Air Transat' => 'Air Transat',
+                    'American Airlines' => 'American Airlines',
+                    'Autres' => 'Autres',
+                    'CorsAir' => 'CorsAir',
+                    'Jet Blue' => 'Jet Blue',
+                    'Level' => 'Level',
+                    'Norvegian' => 'Norvegian',
+                    'XL Airways' => 'XL Airways',
                 ],
             ])
             ->add('compagnieRetour', ChoiceType::class, [
@@ -26,6 +36,16 @@ class InfosVolResaType extends AbstractType
                     'Air Antilles Express' => 'Air Antilles Express',
                     'Air Belgium' => 'Air Belgium',
                     'Air Canada' => 'Air Canada',
+                    'Air Caraîbes' => 'Air Caraîbes',
+                    'Air France' => 'Air France',
+                    'Air Transat' => 'Air Transat',
+                    'American Airlines' => 'American Airlines',
+                    'Autres' => 'Autres',
+                    'CorsAir' => 'CorsAir',
+                    'Jet Blue' => 'Jet Blue',
+                    'Level' => 'Level',
+                    'Norvegian' => 'Norvegian',
+                    'XL Airways' => 'XL Airways',
                 ],
             ])
             ->add('numVolAller')

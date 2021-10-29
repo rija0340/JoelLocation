@@ -3,9 +3,10 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<title>Espace client</title>
+		<title>JoelLocation-Espace client</title>
 		<link
-		rel="icon" type="image/x-icon" href="../../images/Joel-Location-new.png"/>
+		rel="icon" href="{{ asset( 'images/Joel-Location-new.png') }}" type="image/png"/>
+
 		<!-- Bootstrap -->
 		<link
 		href="{{ asset( 'admin/vendors/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet">
@@ -14,6 +15,13 @@
 		<link href="{{ asset( 'css/client/style.css')}}" rel="stylesheet">
 		<link
 		rel="stylesheet" href="{{ asset('bundles/mercuryseriesflashy/css/flashy.css') }}">
+
+		{# jquery confirm modal alert ... #}
+		<link
+		rel="stylesheet" href="{{ asset('jquery-confirm/jquery-confirm.min.css') }}">
+		{# style pour pop-up #}
+		<link
+		rel="stylesheet" href="{{ asset('css/pop-up/pop-up.css') }}">
 		{# star rating #}
 		<link rel="stylesheet" href="{{asset('kartik-v-bootstrap-star-rating/css/star-rating.min.css')}}">
 		<link rel="stylesheet" href="{{asset('kartik-v-bootstrap-star-rating/themes/krajee-fa/theme.css')}}" media="all" type="text/css"/>
@@ -52,11 +60,17 @@
 						<!--Required JS files-->
 						<!-- jQuery -->
 						<script src="{{asset('plugins/jquery/jquery.min.js')}}"></script>
+						<script type="text/javascript" src="{{asset('plugins/popper/popper.min.js') }}"></script>
 						<script src="/assets/js/vendor/bootstrap.min.js"></script>
+
 						<script src="/dist/js/bootstrap.bundle.min.js"></script>
 						<!-- Load Flashy default JavaScript -->
 						<script src="{{ asset('bundles/mercuryseriesflashy/js/flashy.js') }}"></script>
 
+						{# jquery confirm, alert, modal ... #}
+						<script src="{{ asset('jquery-confirm/jquery-confirm.js') }}"></script>
+						{# js pour pop-up ... #}
+						<script src="{{ asset('js/pop-up/pop-up.js') }}"></script>
 						{# star rating #}
 						<script src="{{asset('kartik-v-bootstrap-star-rating/css/star-rating.min.js')}}"></script>
 						<script src="{{asset('kartik-v-bootstrap-star-rating/js/star-rating.js')}}" type="text/javascript"></script>

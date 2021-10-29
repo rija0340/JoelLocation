@@ -240,6 +240,7 @@ class PaiementController extends AbstractController
         $reservation->setDateReservation($this->dateHelper->dateNow());
         $reservation->setCodeReservation('devisTransformé');
         $reservation->setArchived(false);
+        $reservation->setCanceled(false);
         // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
         $lastID = $this->reservRepo->findBy(array(), array('id' => 'DESC'), 1);
         if ($lastID == null) {
