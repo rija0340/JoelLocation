@@ -46,6 +46,7 @@ security:
         - { path: ^/connexion$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         # - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/client, roles: ROLE_CLIENT }
+        - { path: ^/espaceclient, roles: ROLE_CLIENT }
         - { path: ^/carte, roles: ROLE_CLIENT }
         - { path: ^/payement, roles: ROLE_CLIENT }
         - { path: ^/vehicule, roles: ROLE_USER }

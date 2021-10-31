@@ -2,40 +2,49 @@
 
 namespace App\Controller;
 
-use App\Classe\ClasseReservation;
-use App\Classe\Mail;
 use DateTime;
 use DateTimeZone;
+use App\Classe\Mail;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Entity\Garantie;
 use App\Entity\Vehicule;
+use App\Entity\InfosResa;
 use App\Form\VehiculeType;
 use App\Entity\Reservation;
+use App\Form\InfosResaType;
 use App\Form\StopSalesType;
 use App\Service\DateHelper;
+use App\Entity\InfosVolResa;
+use App\Form\ClientEditType;
 use App\Form\UserClientType;
 use App\Form\KilometrageType;
 use App\Form\ReservationType;
 use App\Service\TarifsHelper;
+use App\Form\InfosVolResaType;
 use App\Form\EditStopSalesType;
+use App\Classe\ClasseReservation;
 use App\Form\OptionsGarantiesType;
 use App\Repository\UserRepository;
+use App\Repository\MarqueRepository;
+use App\Repository\ModeleRepository;
 use App\Repository\TarifsRepository;
 use App\Repository\OptionsRepository;
 use App\Repository\GarantieRepository;
-use App\Repository\MarqueRepository;
-use App\Repository\ModeleRepository;
 use App\Repository\VehiculeRepository;
-use App\Repository\ReservationRepository;
+use App\Form\EditClientReservationType;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\ReservationRepository;
 use Knp\Component\Pager\PaginatorInterface;
-use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\HttpFoundation\Request;
+use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
  * @Route("/reservation")
@@ -43,6 +52,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ReservationController extends AbstractController
 {
     private $userRepo;
+    private $router;
     private $reservationRepo;
     private $dateTimestamp;
     private $vehiculeRepo;
@@ -57,7 +67,7 @@ class ReservationController extends AbstractController
     private $mail;
     private $flashy;
 
-    public function __construct(FlashyNotifier $flashy, Mail $mail, EntityManagerInterface $em, MarqueRepository $marqueRepo, ModeleRepository $modeleRepo, TarifsHelper $tarifsHelper, DateHelper $dateHelper, TarifsRepository $tarifsRepo, ReservationRepository $reservationRepo,  UserRepository $userRepo, VehiculeRepository $vehiculeRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
+    public function __construct(RouterInterface $router, FlashyNotifier $flashy, Mail $mail, EntityManagerInterface $em, MarqueRepository $marqueRepo, ModeleRepository $modeleRepo, TarifsHelper $tarifsHelper, DateHelper $dateHelper, TarifsRepository $tarifsRepo, ReservationRepository $reservationRepo,  UserRepository $userRepo, VehiculeRepository $vehiculeRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
     {
 
         $this->reservationRepo = $reservationRepo;
@@ -73,10 +83,11 @@ class ReservationController extends AbstractController
         $this->em = $em;
         $this->mail = $mail;
         $this->flashy = $flashy;
+        $this->router = $router;
     }
 
     /**
-     * @Route("/", name="reservation_index", methods={"GET"})
+     * @Route("/", name="reservation_index", methods={"GET"},requirements={"id":"\d+"})
      */
     public function index(ReservationRepository $reservationRepository, Request $request, PaginatorInterface $paginator): Response
     {
@@ -94,7 +105,7 @@ class ReservationController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="reservation_new", methods={"GET","POST"})
+     * @Route("/new", name="reservation_new", methods={"GET","POST"},requirements={"id":"\d+"})
      */
     public function new(Request $request, VehiculeRepository $vehiculeRepository): Response
     {
@@ -135,7 +146,7 @@ class ReservationController extends AbstractController
     }
 
     /**
-     * @Route("/show/{id}", name="reservation_show", methods={"GET"},requirements={"id":"\d+"})
+     * @Route("/details/{id}", name="reservation_show", methods={"GET"},requirements={"id":"\d+"})
      */
     public function show(Reservation $reservation, Request $request): Response
     {
@@ -201,11 +212,23 @@ class ReservationController extends AbstractController
         return $this->redirectToRoute('reservation_index');
     }
 
+    /**
+     * @Route("/archiver/{id}", name="reservation_archive", methods={"GET", "POST"},requirements={"id":"\d+"})
+     */
+    public function archiver(Request $request, Reservation $reservation): Response
+    {
+        $reservation->setArchived(true);
+        $this->em->flush();
+
+        // dd($reservation);
+        $this->flashy->success("La réservation N° " . $reservation->getReference() . " a été archivée");
+        return $this->redirectToRoute('reservation_index');
+    }
 
     /**
-     *  @Route("/modifier/options-garanties/{id}", name="optionsGaranties_edit", methods={"GET","POST"})
+     *  @Route("/modifier/options-garanties/{id}", name="optionsGaranties_edit", methods={"GET","POST"},requirements={"id":"\d+"})
      */
-    public function optionsGarantiesEdit(Request $request, Reservation $reservation): Response
+    public function editOptionsGaranties(Request $request, Reservation $reservation): Response
     {
 
         $form = $this->createForm(OptionsGarantiesType::class, $reservation);
@@ -228,20 +251,70 @@ class ReservationController extends AbstractController
         ]);
     }
 
+
     /**
-     *  @Route("/envoi/identifiants-connexion/{id}", name="envoiIdentifiantsConnexion", methods={"GET","POST"})
+     * @Route("/envoi-identification-connexion/{id}", name="reservation_ident_connex", methods={"GET","POST"},requirements={"id":"\d+"})
      */
-    public function EnvoiIdentifiantsConnexion(Request $request, Reservation $reservation): Response
+    public function envoyerIdentConnex(Request $request, Reservation $reservation): Response
     {
 
-        $email_adress = $reservation->getClient()->getMail();
-        $name = $reservation->getClient()->getNom();
-        $subject =  "Indentifiants de connexion";
-        $content = "Bonjour, voici vos identifiants de connexion. Login : " . $email_adress . ". Mot de passe : 0000. Veuillez changer votre mot de passe le plus tôt possible";
+        $mail = $reservation->getClient()->getMail();
+        $nom = $reservation->getClient()->getNom();
+        $mdp = uniqid();
+        $content = "Bonjour, voici vos identifications de connexion. Mot de passe: " . $mdp;
 
-        $this->mail->send($email_adress, $name, $subject, $content);
+        $this->mail->send($mail, $nom, "Identifiants de connexion", $content);
 
-        $this->flashy->success("Les identifiants de connexion ont été envoyé au client");
-        return $this->redirectToRoute('reseration_show', ['id' => $reservation->getId()]);
+        $this->flashy->success("Vos identifians ont été envoyés");
+        return $this->redirectToRoute($this->getReferer($request), ['id' => $reservation->getId()]);
+    }
+
+    /**
+     *  @Route("/modifier/{id}/infos-client/", name="reservation_infosClient_edit", methods={"GET","POST"},requirements={"id":"\d+"})
+     *
+     */
+    public function editInfosClient(Request $request, Reservation $reservation): Response
+    {
+        //form pour client
+        $client = $this->reservationRepo->find($reservation->getId())->getClient();
+        $form = $this->createForm(EditClientReservationType::class, $client);
+
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->em->persist($client);
+            $this->em->flush();
+
+            $this->flashy->success("La réservation a bien été modifié");
+            return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
+        }
+
+        return $this->render('admin/reservation/crud/infos_client/edit.html.twig', [
+
+            'form' => $form->createView(),
+            'reservation' => $reservation
+
+        ]);
+    }
+
+    //return referer->route avant la rédirection (source)
+    public function getReferer($request)
+    {
+        // get the referer, it can be empty!
+        $referer = $request->headers->get('referer');
+        if (!\is_string($referer) || !$referer) {
+        }
+
+        if ($referer != null) {
+            $refererPathInfo = Request::create($referer)->getPathInfo();
+
+            // try to match the path with the application routing
+            $routeInfos = $this->router->match($refererPathInfo);
+
+            // get the Symfony route name if it exists
+            $refererRoute = $routeInfos['_route'] ?? '';
+
+            return $refererRoute;
+        }
     }
 }

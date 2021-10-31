@@ -84,11 +84,11 @@
 						<h5 class="heading">Option(s)
 						</h5>
 						<ul class="pl-2 ">
-						{% if devis.conducteur %}
-						<li>
-						<i class="fa fa-check"></i>
-						Conducteur</li>
-						{% endif %}
+							{% if devis.conducteur %}
+								<li>
+									<i class="fa fa-check"></i>
+									Conducteur</li>
+							{% endif %}
 							{% for option in devis.options %}
 								<li>
 									<div class="d-flex">
@@ -229,5 +229,5 @@
 	</div>
 {% endblock %}
 {% block javascripts %}
-	<script src="{{ asset('js/client/reservation/step2OptionsGaranties.js')}}"></script>
+	<script src="{{ asset('js/client/reservation/validation_devis/step2OptionsGaranties.js')}}"></script>
 {% endblock %}

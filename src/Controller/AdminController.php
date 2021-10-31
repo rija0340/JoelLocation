@@ -12,6 +12,7 @@ use App\Form\RechercheAVType;
 use App\Form\ReservationType;
 use App\Service\TarifsHelper;
 use App\Form\ReservationStep1Type;
+use App\Repository\AvisRepository;
 use App\Repository\DevisRepository;
 use App\Repository\UserRepository;
 use App\Repository\MarqueRepository;
@@ -49,8 +50,9 @@ class AdminController extends AbstractController
   private $marqueRepo;
   private $em;
   private $devisRepo;
+  private $avisRepo;
 
-  public function __construct(DevisRepository $devisRepo, EntityManagerInterface $em, MarqueRepository $marqueRepo, ModeleRepository $modeleRepo, TarifsHelper $tarifsHelper, DateHelper $dateHelper, TarifsRepository $tarifsRepo, ReservationRepository $reservationRepo,  UserRepository $userRepo, VehiculeRepository $vehiculeRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
+  public function __construct(AvisRepository $avisRepo, DevisRepository $devisRepo, EntityManagerInterface $em, MarqueRepository $marqueRepo, ModeleRepository $modeleRepo, TarifsHelper $tarifsHelper, DateHelper $dateHelper, TarifsRepository $tarifsRepo, ReservationRepository $reservationRepo,  UserRepository $userRepo, VehiculeRepository $vehiculeRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
   {
 
     $this->reservationRepo = $reservationRepo;
@@ -65,6 +67,7 @@ class AdminController extends AbstractController
     $this->marqueRepo = $marqueRepo;
     $this->em = $em;
     $this->devisRepo = $devisRepo;
+    $this->avisRepo = $avisRepo;
   }
 
 
@@ -78,11 +81,14 @@ class AdminController extends AbstractController
     $reservations = $this->reservationRepo->findBy(['code_reservation' => 'devisTransformé'], ['id' => 'DESC'], 5);
     $devis = $this->devisRepo->findBy(['transformed' => true], ['id' => 'DESC'], 5);
     $stopSales = $this->reservationRepo->findBy(['code_reservation' => 'stopSale'], ['id' => 'DESC'], 5);
+    $avis = $this->avisRepo->findBy(array(), ['id' => 'DESC'], 5);
+
 
     return $this->render('admin/index.html.twig', [
       'reservations' => $reservations,
       'stopSales' => $stopSales,
-      'devis' => $devis
+      'devis' => $devis,
+      'avis' => $avis,
     ]);
   }
 
@@ -134,23 +140,6 @@ class AdminController extends AbstractController
     return $this->render('admin/reservation/non_solde/detail.html.twig');
   }
 
-
-  /**
-   * @Route("/echec_paiement", name="echec_paiement", methods={"GET"})
-   */
-  public function echec_paiement(): Response
-  {
-    return $this->render('admin/reservation/echec_paiement/index.html.twig');
-  }
-
-  /**
-   * @Route("/detail_echec_paiement", name="detail_echec_paiement", methods={"GET"})
-   */
-  public function detail_echec_paiement(): Response
-  {
-    return $this->render('admin/reservation/echec_paiement/detail.html.twig');
-  }
-
   /**
    * @Route("/devis_reservation", name="devis_reservation", methods={"GET"})
    */
@@ -165,14 +154,6 @@ class AdminController extends AbstractController
   public function detail_devis(): Response
   {
     return $this->render('admin/reservation/devis/detail.html.twig');
-  }
-
-  /**
-   * @Route("/annulation_reservation", name="annulation_reservation", methods={"GET"})
-   */
-  public function annulation_reservation(): Response
-  {
-    return $this->render('admin/reservation/annulation/index.html.twig');
   }
 
 
@@ -210,13 +191,7 @@ class AdminController extends AbstractController
     ]);
   }
 
-  /**
-   * @Route("/appel_paiement", name="appel_paiement", methods={"GET"})
-   */
-  public function appel_paiement(): Response
-  {
-    return $this->render('admin/reservation/appel_paiement/index.html.twig');
-  }
+
 
   /**
    * @Route("/chiffre_affaire", name="chiffre_affaire", methods={"GET"})
@@ -224,13 +199,5 @@ class AdminController extends AbstractController
   public function chiffre_affaire(): Response
   {
     return $this->render('admin/chiffre_affaire/index.html.twig');
-  }
-
-  /**
-   * @Route("/paiement", name="paiement", methods={"GET"})
-   */
-  public function paiement(): Response
-  {
-    return $this->render('admin/paiement/index.html.twig');
   }
 }

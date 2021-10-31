@@ -46,7 +46,11 @@
 	</div>
 
 	<div class="x_panel">
-
+		{% if reservation.archived %}
+			<div>
+				<h4 class="text-danger">Réservation archivée</h4>
+			</div>
+		{% endif %}
 		<div class="btn-group mb-4">
 			<button type="button" class="btn btn-warning dropdown-toggle text-white font-weight-bold" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 				Réservation
@@ -58,13 +62,13 @@
 				<form class=" dropdown-item m-0 p-0" method="post" action="{{ path('reservation_delete', {'id': reservation.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer cette réservation ?');">
 					<input type="hidden" name="_method" value="DELETE">
 					<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ reservation.id) }}">
-					<button class="btn btn-link" style=" -webkit-appearance: none">
+					<a href="{{path('reservation_cancel', {'id': reservation.id})}}" class="btn btn-link" style=" -webkit-appearance: none">
 						Annuler la réservation
-					</button>
+					</a>
 				</form>
 
 				<a class="dropdown-item" href="#">Fermer le contrat</a>
-				<a class="dropdown-item" href="#">Archiver la réservation</a>
+				<a class="dropdown-item" href="{{path('reservation_archive', {'id':reservation.id})}}" onclick="confirm('Voulez-vous vraiment archiver cette réservation ')">Archiver la réservation</a>
 			</div>
 		</div>
 
@@ -165,7 +169,7 @@
 					</div>
 				</div>
 				<div class=" text-center">
-					<a type="button" class="btn btn-primary text-nowrap" href="{{path('client_edit', {'id': reservation.client.id})}}">
+					<a type="button" class="btn btn-primary text-nowrap" href="{{path('reservation_infosClient_edit', {'id': reservation.id})}}">
 						<i class="fa fa-user mr-1"></i>Modifier les informations</a>
 					<button type="button" class="btn btn-dark text-nowrap">
 						<i class="fa fa-reply-all mr-1"></i>Retour anticipé</button>
@@ -176,7 +180,7 @@
 						<i class="fa fa-edit (alias)"></i>
 						Modifier les options & garanties</a>
 
-					<a href="{{path('envoiIdentifiantsConnexion', {'id' : reservation.id })}}" type="button" class="btn btn-violet text-nowrap">
+					<a href="{{path('reservation_ident_connex', {'id' : reservation.id })}}" type="button" class="btn btn-violet text-nowrap">
 						<i class="fa  fa-send-o (alias)"></i>
 						Envoyer les identifians de connexion</a>
 				</div>
@@ -429,9 +433,9 @@
 					<div class="dropdown-menu">
 						<a class="dropdown-item" href="#">Reporter la réservation</a>
 						<a class="dropdown-item" href="#">Mail de confirmation</a>
-						<a class="dropdown-item" href="#">Annuler la réservation</a>
+						<a class="dropdown-item" href="{{path('reservation_cancel', {'id': reservation.id})}}">Annuler la réservation</a>
 						<a class="dropdown-item" href="#">Fermer le contrat</a>
-						<a class="dropdown-item" href="#">Archiver la réservation</a>
+						<a class="dropdown-item" href="{{path('reservation_archive', {'id':reservation.id})}}">Archiver la réservation</a>
 					</div>
 				</div>
 			</div>

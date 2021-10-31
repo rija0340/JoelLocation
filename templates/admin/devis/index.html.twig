@@ -42,10 +42,10 @@
 					<tr>
 						<th>référence</th>
 						<th>PAIEMENT</th>
-						<th class="text-nowrap">DATE CREATION</th>
+						<th class="">DATE CREATION</th>
 						<th>CLIENT</th>
-						<th class="text-nowrap">RESERVATION/VEHICULE</th>
-						<th class="text-nowrap">DATES / DUREES</th>
+						<th class="">VEHICULE</th>
+						<th class="">DATES/DUREES</th>
 						<th>PRIX</th>
 						<th>CODE</th>
 						<th>ACTION</th>
@@ -54,7 +54,7 @@
 				<tbody>
 					{% for devis in devis %}
 						<tr>
-						<td>{{devis.numero}}</td>
+							<td>{{devis.numero}}</td>
 							<td>
 								{% if devis.transformed %}
 									<div class="badge badge-success p-2">YES</div>

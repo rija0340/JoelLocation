@@ -17,25 +17,23 @@ class Avis
      */
     private $id;
 
-
-
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable = true)
      */
     private $global;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable = true)
      */
     private $ponctualite;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable = true)
      */
     private $accueil;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable = true)
      */
     private $service;
 
@@ -48,6 +46,13 @@ class Avis
      * @ORM\Column(type="date")
      */
     private $date;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Reservation::class, inversedBy="avis", cascade={"persist", "remove"})
+     */
+    private $reservation;
+
+
 
     public function getId(): ?int
     {
@@ -134,5 +139,17 @@ class Avis
     public function __toString()
     {
         return $this->getCommentaire();
+    }
+
+    public function getReservation(): ?Reservation
+    {
+        return $this->reservation;
+    }
+
+    public function setReservation(?Reservation $reservation): self
+    {
+        $this->reservation = $reservation;
+
+        return $this;
     }
 }

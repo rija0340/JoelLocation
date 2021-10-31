@@ -5,19 +5,117 @@
 {% endblock %}
 {% block stylesheets %}
 	<link href="{{ asset( 'css/client/validationDevis.css')}}" rel="stylesheet">
-	<link href="{{asset('css/client/step2OptionsGaranties.css')}}" rel="stylesheet">
+	<link href="{{asset('css/admin/options_garanties/edit.css')}}" rel="stylesheet">
 
 {% endblock %}
 {% block content %}
 
 	<div class="row">
-		<div class="col-md-3"></div>
+		<div class="col-md-3">
+
+			<div class="x_panel">
+				<div class="x_title">
+					<h2 class="text-wrap">
+						<i class="fa  fa-chevron-right"></i>Options souscrites :
+					</h2>
+					<div class="clearfix"></div>
+				</div>
+				<div class="options">
+					<ul>
+						{% for option in reservation.options %}
+							<li>{{option.appelation}}
+								:
+								{{option.prix}}€</li>
+						{% endfor %}
+					</ul>
+				</div>
+				<div class="sommeOptions">
+					<div class="x_title">
+						<h2 class="text-wrap">
+							Total TTC options :
+						</h2>
+						<div class="clearfix"></div>
+					</div>
+					<h5 id="prixOptions" class="alert alert-secondary text-center"></h5>
+
+				</div>
+				<div class="x_title">
+					<h2 class="text-wrap">
+						<i class="fa  fa-chevron-right"></i>Garanties souscrites :
+					</h2>
+					<div class="clearfix"></div>
+				</div>
+				<div class="garanties">
+					<ul>
+						{% for garantie in reservation.garanties %}
+							<li>{{garantie.appelation}}
+								:
+								{{garantie.prix}}€</li>
+						{% endfor %}
+					</ul>
+
+				</div>
+				<div class="sommeGaranties">
+					<div class="x_title">
+						<h2 class="text-wrap">
+							Total TTC garanties :
+						</h2>
+						<div class="clearfix"></div>
+					</div>
+					<h5 id="prixGaranties" class="alert alert-secondary text-center"></h5>
+
+				</div>
+			</div>
+
+		</div>
 		<div class="col-md-9 ">
 			{% form_theme form 'form_div_layout.html.twig'  %}
 			{{ form_start(form) }}
+
+			<div class="card mdl-shadow--2dp divOptions mb-2">
+				<div class="text-center mt-1 mb-1">
+					<h3 class="text-bold text-danger">VOS OPTIONS</h3>
+				</div>
+				<div class="p-3">
+					<div class="x_title">
+						<h5>
+							Siège bébé / enfant
+						</h5>
+					</div>
+					<p>Nous mettons à votre disposition des sièges bébé et nourrissons, homologués NF, pour seulement 30 euros TTC. Les rehausseurs pour les enfants de + de 15kg sont totalement gratuits !</p>
+				</div>
+				<div class="">
+					{% for option in form.options %}
+						<div class="card p-3 mt-1">
+							<div class="row">
+								<div class="col-md-1">
+									<label class="label-container ">
+										{{ form_widget(option) }}
+										<span class="checkmark "></span>
+									</label>
+								</div>
+								<div class="col-md-11">
+									<h5>
+										{{option.vars.label}}
+
+										{% for opt in options %}
+											{% if opt.id == option.vars.value %}
+												:
+												{{opt.prix}}
+												€
+											{% endif %}
+										{% endfor %}
+									</h5>
+								</div>
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+
+			</div>
 			<div class="card mdl-shadow--2dp divGaranties">
-				<div class="text-center mt-4 mb-4">
-					<h2>VOS GARANTIES</h2>
+				<div class="text-center mt-1 mb-1">
+					<h3 class="text-bold text-danger">VOS GARANTIES</h3>
 				</div>
 
 				{% for garantie in form.garanties %}
@@ -53,53 +151,16 @@
 					</div>
 				{% endfor %}
 			</div>
-			<div class="card mdl-shadow--2dp divOptions">
-				<div class="text-center mt-4 mb-4">
-					<h2>VOS OPTIONS</h2>
-				</div>
-				<div class="p-3">
-					<div class="x_title">
-						<h4>
-							Siège bébé / enfant
-						</h4>
-					</div>
-					<p>Nous mettons à votre disposition des sièges bébé et nourrissons, homologués NF, pour seulement 30 euros TTC. Les rehausseurs pour les enfants de + de 15kg sont totalement gratuits !</p>
-				</div>
-				<div class="">
-					{% for option in form.options %}
-						<div class="card p-3 mt-1">
-							<div class="row">
-								<div class="col-md-1">
-									<label class="label-container ">
-										{{ form_widget(option) }}
-										<span class="checkmark "></span>
-									</label>
-								</div>
-								<div class="col-md-11">
-									<h5>
-										{{option.vars.label}}
 
-										{% for opt in options %}
-											{% if opt.id == option.vars.value %}
-												:
-												{{opt.prix}}
-												€
-											{% endif %}
-										{% endfor %}
-									</h5>
-								</div>
-							</div>
-						</div>
-					{% endfor %}
-				</div>
-				<div class="text-center mt-3 mb-3">
-					<button class="btn btn-danger ">
-						<i class="fa fa-book" aria-hidden="true"></i>
-						{{ button_label|default('Enregistrer') }}</button>
-				</div>
+			<div class="text-center mt-2 mb-2">
+				<button class="btn btn-danger ">
+					<i class="fa fa-book" aria-hidden="true"></i>
+					{{ button_label|default('Enregistrer') }}</button>
 			</div>
 			{{ form_end(form) }}
 		</div>
 	</div>
 {% endblock %}
-{% block javascripts %}{% endblock %}
+{% block javascripts %}
+	<script src="{{asset('js/admin/options_garanties/edit.js')}}"></script>
+{% endblock %}

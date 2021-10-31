@@ -32,8 +32,12 @@ class ClientRegisterType extends AbstractType
             ->add('mail', EmailType::class, [
                 'invalid_message' => 'Cette adresse mail est déjà utilisée'
             ])
-            ->add('telephone', TelType::class)
-            ->add('portable', TelType::class)
+            ->add('telephone', TelType::class, [
+                'required' => true
+            ])
+            ->add('portable', TelType::class, [
+                'required' => false
+            ])
             ->add('dateNaissance', DateType::class, [
                 'widget' => 'single_text',
                 'required' => false

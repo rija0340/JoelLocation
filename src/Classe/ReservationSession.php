@@ -118,59 +118,108 @@ class ReservationSession
 
     public  function getDateDepart()
     {
-        return $this->session->get('reservation')['dateDepart'];
+        if ($this->getReservation() != null) {
+            return $this->session->get('reservation')['dateDepart'];
+        } else {
+            return null;
+        }
     }
     public  function getAgenceDepart()
     {
-        return $this->session->get('reservation')['agenceDepart'];
+        if ($this->getReservation() != null) {
+            return $this->session->get('reservation')['agenceDepart'];
+        } else {
+            return null;
+        }
     }
 
     public  function getAgenceRetour()
     {
-        return $this->session->get('reservation')['agenceRetour'];
+        if ($this->getReservation() != null) {
+            return $this->session->get('reservation')['agenceRetour'];
+        } else {
+            return null;
+        }
     }
     public  function getDateRetour()
     {
-        return $this->session->get('reservation')['dateRetour'];
+        if ($this->getReservation() != null) {
+            return $this->session->get('reservation')['dateRetour'];
+        } else {
+            return null;
+        }
     }
 
     public  function getLieuSejour()
     {
-        return $this->session->get('reservation')['lieuSejour'];
+        if ($this->getReservation() != null) {
+            return $this->session->get('reservation')['lieuSejour'];
+        } else {
+            return null;
+        }
     }
     public  function getTypeVehiculle()
     {
-        return $this->session->get('reservation')['typeVehicule'];
+        if ($this->getReservation() != null) {
+            return $this->session->get('reservation')['typeVehicule'];
+        } else {
+            return null;
+        }
     }
     public  function getGaranties()
     {
-        return $this->session->get('reservation')['garanties'];
+        if ($this->getReservation() != null) {
+            return $this->session->get('reservation')['garanties'];
+        } else {
+            return null;
+        }
     }
     public  function getOptions()
     {
-        return $this->session->get('reservation')['options'];
+        if ($this->getReservation() != null) {
+            return $this->session->get('reservation')['options'];
+        } else {
+            return null;
+        }
     }
     public  function getVehicule()
     {
-        return $this->session->get('reservation')['vehicule'];
+        if ($this->getReservation() != null) {
+            return $this->session->get('reservation')['vehicule'];
+        } else {
+            return null;
+        }
     }
     public  function getClient()
     {
-        return $this->session->get('reservation')['client'];
+        if ($this->getReservation() != null) {
+            return $this->session->get('reservation')['client'];
+        } else {
+            return null;
+        }
     }
     //tarif saisie par l'admin (optionel)
     public  function getTarifVehicule()
     {
-        return $this->session->get('reservation')['tarifVehicule'];
+        if ($this->getReservation() != null) {
+            return $this->session->get('reservation')['tarifVehicule'];
+        } else {
+            return null;
+        }
     }
 
     public  function getConducteur()
     {
-        return $this->session->get('reservation')['conducteur'];
+        if ($this->getReservation() != null) {
+            return $this->session->get('reservation')['conducteur'];
+        } else {
+            return null;
+        }
     }
 
     public function removeReservation()
     {
+
         return $this->session->remove('reservation');
     }
 }

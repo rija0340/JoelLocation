@@ -15,12 +15,11 @@ function addEventListener() {
 function redirectController(e) {
 
     e.preventDefault();
-    alert('ato le izy zao ');
+
     $.ajax({
         type: 'POST',
         url: '/espaceclient/infosClient',
         data: {
-
         },
         headear: xhr.setRequestHeader,
         Type: "json",
@@ -35,7 +34,7 @@ function redirectController(e) {
             window.location = "/espaceclient/infosClient";
         },
         error: function (erreur) {
-            // alert('La requête n\'a pas abouti' + erreur);
+
             console.log(erreur.responseText);
         }
     });

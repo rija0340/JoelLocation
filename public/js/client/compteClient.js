@@ -1,19 +1,18 @@
-var alert;
+var notif;
 getElements();
 
 function getElements() {
-    alert = document.getElementById('notification_pwd');
+    notif = document.getElementById('notification_pwd');
 }
-if (alert) {
+if (notif) {
     setTimeout(closeAlert, 5000);
 
 } else {
-    alert('tsy misy');
 
 }
 
 
 function closeAlert() {
-    alert.classList.add('hide');
+    nofif.classList.add('hide');
 
 }

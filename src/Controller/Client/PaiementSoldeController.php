@@ -100,7 +100,7 @@ class PaiementSoldeController extends AbstractController
         }
 
         //au cas ou le client a déjà payé la réservation et le paiement est déjà complet (prevention d'une bug)
-        if ($reservation->getPaiements() >= $reservation->getPrix()) {
+        if ($reservation->getSommePaiements() >= $reservation->getPrix()) {
             $this->flashy->error("Le paiement est déjà total pour cette réservation");
             return $this->redirectToRoute('espaceClient_index');
         }
@@ -137,7 +137,7 @@ class PaiementSoldeController extends AbstractController
     }
 
     /**
-     * @Route("/espaceclient/paiement-solde/succes/{stripeSessionId}", name="payementSuccess", methods={"GET","POST"})
+     * @Route("/espaceclient/paiement-solde/succes/{stripeSessionId}", name="payement_sold_success", methods={"GET","POST"})
      */
     public function payementSoldeSuccess(Request $request, $stripeSessionId)
     {
@@ -181,7 +181,7 @@ class PaiementSoldeController extends AbstractController
     }
 
     /**
-     * @Route("/espaceclient/paiement-solde/echec/{stripeSessionId}", name="payementFail", methods={"GET","POST"})
+     * @Route("/espaceclient/paiement-solde/echec/{stripeSessionId}", name="payement_sold_fail", methods={"GET","POST"})
      */
     public function payementSoldeFail(Request $request, $stripeSessionId)
     {

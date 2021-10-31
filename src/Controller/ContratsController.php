@@ -2,10 +2,13 @@
 
 namespace App\Controller;
 
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use Knp\Snappy\Pdf;
 use App\Entity\Reservation;
 use App\Form\KilometrageType;
-use App\Repository\ReservationRepository;
 use App\Service\TarifsHelper;
+use App\Repository\ReservationRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -136,5 +139,42 @@ class ContratsController extends AbstractController
         }
 
         return $this->redirectToRoute('reservation_index');
+    }
+
+    /**
+     * @Route("reservation/contrat-pdf/{id}", name="contrat_pdf", methods={"GET"})
+     */
+    public function pdfcontrat(Pdf $knpSnappyPdf, Reservation $reservation)
+    {
+        // Configure Dompdf according to your needs
+        $pdfOptions = new Options();
+        $pdfOptions->set('defaultFont', 'Arial');
+        // Instantiate Dompdf with our options
+        $dompdf = new Dompdf($pdfOptions);
+        $logo = $this->getParameter('logo') . '/Joel-Location-new.png';
+        $logo_data = base64_encode(file_get_contents($logo));
+        $logo_src = 'data:image/png;base64,' . $logo_data;
+        $html = $this->renderView('admin/reservation/contrat/contrat_pdf.html.twig', [
+            'logo' => $logo_src,
+        ]);
+
+        /* return new PdfResponse(
+                $knpSnappyPdf->getOutputFromHtml($html),
+                'file.pdf'
+            ); */
+
+        // Load HTML to Dompdf
+        $dompdf->loadHtml($html);
+
+        // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser (force download)
+        $dompdf->stream("contrat_" . $reservation->getReference() . ".pdf", [
+            "Attachment" => true,
+        ]);
     }
 }

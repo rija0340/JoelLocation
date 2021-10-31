@@ -55,9 +55,9 @@
 			<div class="dropdown-menu">
 				<a class="dropdown-item" href="#">Reporter la réservation</a>
 				<a class="dropdown-item" href="#">Mail de confirmation</a>
-				<a class="dropdown-item" href="#">Annuler la réservation</a>
+				<a class="dropdown-item"  href="{{path('reservation_cancel', {'id':reservation.id})}}">Annuler la réservation</a>
 				<a class="dropdown-item" href="#">Fermer le contrat</a>
-				<a class="dropdown-item" href="#">Archiver la réservation</a>
+				<a class="dropdown-item" href="{{path('reservation_archive', {'id':reservation.id})}}">Archiver la réservation</a>
 			</div>
 		</div>
 
@@ -174,10 +174,9 @@
 					<a type="button" class="btn btn-danger text-nowrap" href="{{path('reservation_edit', {'id': reservation.id} ) }}">
 						<i class="fa fa-edit (alias)"></i>
 						Modifier les options & garanties</a>
-
-					<button type="button" class="btn btn-violet text-nowrap">
+					<a href="{{path('reservation_ident_connex', {'id' : reservation.id })}}" type="button" class="btn btn-violet text-nowrap">
 						<i class="fa  fa-send-o (alias)"></i>
-						Envoyer les identifians de connexion</button>
+						Envoyer les identifians de connexion</a>
 				</div>
 			</div>
 		</div>
@@ -426,9 +425,9 @@
 					<div class="dropdown-menu">
 						<a class="dropdown-item" href="#">Reporter la réservation</a>
 						<a class="dropdown-item" href="#">Mail de confirmation</a>
-						<a class="dropdown-item" href="#">Annuler la réservation</a>
+						<a class="dropdown-item" href="{{path('reservation_cancel', {'id':reservation.id})}}">Annuler la réservation</a>
 						<a class="dropdown-item" href="#">Fermer le contrat</a>
-						<a class="dropdown-item" href="#">Archiver la réservation</a>
+						<a class="dropdown-item" href="{{path('reservation_archive', {'id':reservation.id})}}">Archiver la réservation</a>
 					</div>
 				</div>
 			</div>

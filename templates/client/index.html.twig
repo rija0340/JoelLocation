@@ -92,53 +92,55 @@
 		</div>
 
 		{{ form_end(formClient) }}
+
 		<div class="text-center">
-			<a href="{{ path('infoclient_edit', {'id': id}) }}" class="btn btn-danger ">
+			<a href="{{ path('infoclient_edit', {'id': id}) }}" class="btn btn-danger popup " id="editInfosClient" onmouseover="showPopUp()" onmouseout="hidePopUp()">
+				<span class="popuptext" id="myPopup">Modifier vos informations</span>
 				<i class="fa  fa-edit (alias)"></i>
 				Modifier
 			</a>
 		</div>
 	</div>
 
-<div class="x_panel">
-	<div id="accordion">
-  <div class="">
-    <div class="" id="headingOne">
-      <h5 class="mb-0">
-        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-          <h4 class="mb-0 pb-0">
-				<i class="fa fa-user"></i>
-				Mon compte
-			</h4>
-        </button>
-			<div class="clearfix"></div>
-			<div class="x_title"></div>
-      </h5>
-    </div>
-
-    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
-      <div class="card-body">
-        			<div class="col-lg-8 col-md-8 ml-auto mr-auto">
-				{{ form_start(formClientCompte) }}
-
-				{{ form_widget(formClientCompte) }}
-				<div class="text-center mt-3">
-					<button class="btn btn-danger">
-						<i class="fa fa-book" aria-hidden="true"></i>
-						{{ button_label|default('Valider') }}
-					</button>
+	<div class="x_panel">
+		<div id="accordion">
+			<div class="">
+				<div class="" id="headingOne">
+					<h5 class="mb-0">
+						<button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+							<h4 class="mb-0 pb-0">
+								<i class="fa fa-user"></i>
+								Mon compte
+							</h4>
+						</button>
+						<div class="clearfix"></div>
+						<div class="x_title"></div>
+					</h5>
 				</div>
-				{{ form_end(formClientCompte) }}
+
+				<div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+					<div class="card-body">
+						<div class="col-lg-8 col-md-8 ml-auto mr-auto">
+							{{ form_start(formClientCompte) }}
+
+							{{ form_widget(formClientCompte) }}
+							<div class="text-center mt-3">
+								<button class="btn btn-danger">
+									<i class="fa fa-book" aria-hidden="true"></i>
+									{{ button_label|default('Valider') }}
+								</button>
+							</div>
+							{{ form_end(formClientCompte) }}
+						</div>
+					</div>
+				</div>
 			</div>
-      </div>
-    </div>
-  </div>
-</div>
+		</div>
 
 
-{% endblock %}
-{% block javascripts %}
+	{% endblock %}
+	{% block javascripts %}
 
-	<script src="{{asset('js/client/compteClient.js')}}"></script>
+		<script src="{{asset('js/client/compteClient.js')}}"></script>
 
-{% endblock %}
+	{% endblock %}

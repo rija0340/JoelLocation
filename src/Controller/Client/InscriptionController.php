@@ -65,8 +65,9 @@ class InscriptionController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
+            $url = "http://localhost:8000/connexion";
 
-            $this->mail->send($user->getmail(), $user->getNom(), 'Confirmation de création de compte', "Bonjour" . $user->getNom() . "Votre compte a été créé");
+            $this->mail->send($user->getmail(), $user->getNom(), 'Confirmation de création de compte', "Bonjour " . $user->getNom() . " Votre compte a été créé. Veuillez  <a href='" . $url . "'>vous connecter</a> pour acceder à votre espace client");
 
             return $this->redirectToRoute('app_login');
         }
