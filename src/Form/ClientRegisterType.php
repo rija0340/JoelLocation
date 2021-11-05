@@ -26,9 +26,9 @@ class ClientRegisterType extends AbstractType
             //         'max' => 20
             //     ]),
             // ])
-            ->add('nom')
-            ->add('prenom')
-            ->add('adresse')
+            ->add('nom', TextType::class)
+            ->add('prenom', TextType::class)
+            ->add('adresse', TextType::class)
             ->add('mail', EmailType::class, [
                 'invalid_message' => 'Cette adresse mail est déjà utilisée'
             ])
@@ -42,16 +42,16 @@ class ClientRegisterType extends AbstractType
                 'widget' => 'single_text',
                 'required' => false
             ])
-            ->add('numeroPermis')
+            ->add('numeroPermis', TextType::class)
             ->add('datePermis', DateType::class, [
                 'widget' => 'single_text',
                 'required' => false
             ])
-            ->add('lieuNaissance')
-            ->add('complementAdresse')
-            ->add('ville')
+            ->add('lieuNaissance', TextType::class)
+            ->add('complementAdresse', TextType::class)
+            ->add('ville', TextType::class)
             ->add('codePostal', TextType::class)
-            ->add('villeDelivrancePermis')
+            ->add('villeDelivrancePermis', TextType::class)
             ->add('password', RepeatedType::class, [
 
                 'type' => PasswordType::class,

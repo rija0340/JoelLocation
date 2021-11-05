@@ -41,9 +41,9 @@ class InscriptionController extends AbstractController
         $this->mail = $mail;
     }
     /**
-     * @Route("/inscription", name="inscription")
+     * @Route("/inscription", name="inscription", methods={"GET","POST"})
      */
-    public function inscription(Request $request, UserRepository $userrepo): Response
+    public function inscription(Request $request): Response
     {
 
         $user = new User();
@@ -57,7 +57,8 @@ class InscriptionController extends AbstractController
             $user->setRoles(['ROLE_CLIENT']);
 
             $user->setPassword($password);
-            $user->setUsername($request->request->get('client_register')['nom']);
+            //$user->setUsername($request->request->get('client_register')['nom']);
+            $user->setUsername($user->getNom());
             $user->setRecupass($user->getPassword());
             $user->setPresence(1);
             $user->setDateInscription($this->dateHelper->dateNow());
