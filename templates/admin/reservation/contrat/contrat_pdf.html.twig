@@ -19,29 +19,32 @@
 				width: 350px;
 			}
 			.logo {
+
 				display: inline-block;
 				vertical-align: top;
 				/* width: 350px; */
-				border: 1px solid black;
 
 			}
 			.adresse {
-				margin-left: 75px;
 				display: inline-block;
 				vertical-align: top;
-				border: 1px solid black;
+				padding-left: 20px;
 
 			}
-			.tableaux {
-				margin-left: 100px;
+			.contrat_location {
 				display: inline-block;
 				vertical-align: top;
-				border: 1px solid black;
-				/* width: 20px; */
+				margin-top: -30px;
+				margin-left: 100px;
 			}
+		
 			.d-inline-block {
 				display: inline-block;
 				vertical-align: top;
+			}
+			.d-inline-block-bottom {
+				display: inline-block;
+				vertical-align: bottom;
 			}
 
 			.recu-depot {
@@ -90,6 +93,12 @@
 			.m-0 {
 				margin: 0 !important;
 			}
+			.p-2 {
+				padding: 2px !important;
+			}
+			.m-2 {
+				margin: 2px !important;
+			}
 			.text-center {
 				text-align: center !important;
 			}
@@ -124,11 +133,14 @@
 			.fa-square-o:before {
 				content: "\f096";
 			}
+			.div-voiture{
+				margin-top : -170px;
+			}
 		</style>
 	</head>
 	<body>
-		<div style="margin-top : -10px;">
-			<div class="logo"><img src="{{ logo }}" alt="logo" width="100px" height="100px" type="images/png"></div>
+		<div >
+			<div class="logo"><img src="{{ logo }}" alt="logo" width="125px" height="90px" type="images/png"></div>
 			<div class="adresse">
 				94 Chemin de la hache<br>
 				97160 le moul
@@ -138,7 +150,7 @@
 				SIRET : 87868990000016<br>
 
 			</div>
-			<div class="tableaux">
+			<div class="contrat_location" >
 				<h2 class="p-0">Contrat de location
 				</h2>
 				<div class="d-inline-block">
@@ -148,7 +160,7 @@
 								<td class="bg-danger  text-white text-center fs-12">Numéro de contrant</td>
 							</tr>
 							<tr>
-								<td>DV100</td>
+								<td>DV10000</td>
 							</tr>
 						</tbody>
 					</table>
@@ -168,8 +180,7 @@
 				</div>
 			</div>
 		</div>
-
-		<p>Location de voiture du 14-10-2021 16:13à____h_____ au 22-10-2021 13:13à____h_____</p>
+		<p>Location de voiture du {{reservation.dateDebut|date('d/m/Y')}} à {{reservation.dateDebut|date('H:i')}} au {{reservation.dateFin|date('d/m/Y')}} à {{reservation.dateFin|date('H:i')}}</p>
 		{# table gauche droite, info client et conducteurs #}
 		<div class="p-0 ">
 			<div class="table1 p-0 ">
@@ -180,35 +191,35 @@
 						</tr>
 						<tr>
 							<td>Nom</td>
-							<td></td>
+							<td>{{reservation.client.nom}}</td>
 						</tr>
 						<tr>
 							<td>Prénom</td>
-							<td></td>
+							<td>{{reservation.client.prenom}}</td>
 						</tr>
 						<tr>
 							<td>Adresse permanante</td>
-							<td></td>
+							<td>{{reservation.client.adresse}}</td>
 						</tr>
 						<tr>
 							<td></td>
-							<td></td>
+							<td>{{reservation.client.complementAdresse}}</td>
 						</tr>
 						<tr>
 							<td>Téléhone(s)</td>
-							<td></td>
+							<td>{{reservation.client.telephone}}</td>
 						</tr>
 						<tr>
 							<td>Email</td>
-							<td></td>
+							<td>{{reservation.client.mail}}</td>
 						</tr>
 						<tr>
 							<td>Date/lieu de naissance</td>
-							<td></td>
+							<td>{{reservation.client.dateNaissance|date('d/m/Y')}} à {{reservation.client.lieuNaissance}}</td>
 						</tr>
 						<tr>
 							<td>N°/Date de permis</td>
-							<td></td>
+							<td>{{reservation.client.numeroPermis}} le {{reservation.client.datePermis|date('d/m/Y')}}</td>
 						</tr>
 						<tr>
 							<td colspan="2" class="text-center text-white bg-danger">INFOS TRANSFERT
@@ -216,12 +227,14 @@
 						</tr>
 						<tr>
 							<td>Infos arrivée</td>
-							<td></td>
+							<td>{{reservation.client.infosVolResa.heureVolAller|date('d/m/Y')}}, Vol {{reservation.client.infosVolResa.numVolAller}} à {{reservation.client.infosVolResa.heureVolAller|date('H:i')}}</td>
 						</tr>
 						<tr>
 							<td>Infos retour
 							</td>
-							<td></td>
+							<td>
+								{{reservation.client.infosVolResa.heureVolRetour|date('d/m/Y')}}, Vol {{reservation.client.infosVolResa.numVolRetour}} à {{reservation.client.infosVolResa.heureVolRetour|date('H:i')}}
+							</td>
 						</tr>
 					</tbody>
 				</table>
@@ -235,45 +248,26 @@
 								AUTRE(S) CONDUCTEURS
 							</td>
 						</tr>
+						 {% for conducteur in reservation.client.conducteurs %}
 						<tr>
 							<td>Nom</td>
-							<td></td>
+							<td>{{conducteur.nom}}</td>
 						</tr>
 						<tr>
 							<td>Prénom</td>
-							<td></td>
+							<td>{{conducteur.prenom}}</td>
 						</tr>
 						<tr>
 							<td>Date/lieu de naissance</td>
-							<td></td>
+							<td>{{conducteur.dateNaissance|date('d/m/Y')}} à {{conducteur.villeNaissance}}</td>
 						</tr>
 						<tr>
 							<td>
 								N°/Date de permis</td>
-							<td></td>
+							<td>{{conducteur.numeroPermis}} le {{conducteur.dateDelivrance|date('d/m/Y')}}</td>
 						</tr>
-						<tr>
-							<td>Téléphone(s)
-							</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>Nom</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>Prénom</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>Date/lieu de naissance</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>
-								N°/Date de permis</td>
-							<td></td>
-						</tr>
+
+						 {%endfor%}
 						<tr>
 							<td colspan="2" class="bg-danger text-center text-white text-uppercase">adresse en guadeloupe</td>
 						</tr>
@@ -285,7 +279,7 @@
 			</div>
 		</div>
 		{# table contenant details voiture #}
-		<div style="margin-top : -190px">
+		<div class="div-voiture">
 			<table class="table-border" style="width : 100%">
 				<tbody class="fs-12">
 					<tr class="bg-danger">
@@ -293,16 +287,17 @@
 					</tr>
 					<tr>
 						<td>Marque/Modèle</td>
-						<td>Renault Clio IV
+						<td>{{reservation.vehicule.marque}}
+							{{reservation.vehicule.modele}}
 						</td>
 						<td>Carburant</td>
-						<td>Ess
+						<td>{{reservation.vehicule.carburation}}
 						</td>
 						<td>N° Immat.
 						</td>
-						<td></td>
+						<td>{{reservation.vehicule.immatriculation}}</td>
 						<td>Kilométrage</td>
-						<td></td>
+						<td> départ : {{reservation.vehicule.kmDepart}} Km, retour : {{reservation.vehicule.kmRetour}} Km</td>
 					</tr>
 				</tbody>
 			</table>
@@ -316,7 +311,7 @@
 			<br>
 			Revêtement de sol:__________ Coffre:__________ Portes__________
 			<br>
-			Légende intérieur: S sale  - D déchiré - T troué - E endommagé - M manque - A autre dommage – RAS Rien à signaler
+			Légende intérieur: <strong>S</strong> sale  - <strong>D</strong> déchiré - <strong>T</strong> troué - <strong>E</strong> endommagé - <strong>M</strong> manque - <strong>A</strong> autre dommage – <strong>RAS</strong> Rien à signaler
 		</div>
 		{# etat extérieur #}
 		<div class="bg-danger text-white text-uppercase fs-12" style="border : 1px solid black; margin-bottom : 2px">
@@ -325,20 +320,26 @@
 		<table class="table-border " style="width : 100%;">
 			<tbody class="fs-12">
 				<tr>
-					<td colspan="4">
+					<td colspan="4" >
 						Obsérvations de départ
+					</td> 
+					<td colspan="5"  >
 					</td>
-					<td colspan="5">
-						<img src="{{ logo }}" alt="véhicule" width="100px" height="150px" type="images/png">
-					</td>
-					<td colspan="4">
+					<td colspan="4" >
+					
 						Obsérvations à l'arrivée</td>
 				</tr>
 				<tr>
-					<td colspan="4"></td>
-					<td colspan="5"></td>
-					<td colspan="4"></td>
+					<td colspan="4" >
+					</td> 
+					<td colspan="5">
+						<img src="{{ vehicule }}" alt="véhicule" width="400px" height="150px" type="images/png">
+					</td>
+					<td colspan="4" >
+					
+						</td>
 				</tr>
+			
 				<tr>
 					<td colspan="4">Carburant au départ</td>
 					<td>Pneus/Jantes</td>
@@ -350,7 +351,7 @@
 					</td>
 					<td colspan="4">Carburant à l’arrivée</td>
 				</tr>
-				<tr>
+				<tr class="text-center">
 					<td rowspan="2">1/4
 					</td>
 					<td rowspan="2">1/2</td>
@@ -368,7 +369,7 @@
 					</td>
 					<td rowspan="2">1/1</td>
 				</tr>
-				<tr>
+				<tr  class="text-center">
 					<td>
 						Etat</td>
 					<td></td>
@@ -378,8 +379,8 @@
 				</tr>
 			</tbody>
 		</table>
-		<p class="fs-12">
-			Légende extérieur: P projection de pierres - R rouille - A autre dommage - R rayure - C creux - D dégât accident -</p>
+		<p class="fs-12 p-0 m-0" >
+			Légende extérieur: <strong> P </strong> projection de pierres - <strong>R</strong> rouille - <strong>A</strong> autre dommage - <strong>R</strong> rayure - <strong>C</strong> creux - <strong>D</strong> dégât accident -</p>
 		<div
 			class="table1">
 			{# prestations #}
@@ -389,9 +390,9 @@
 						<td class="bg-danger text-white text-center" colspan="2">PRESTATIONS</td>
 					</tr>
 					<tr>
-						<td>location (31/01-12/02) et (31/01-12/02)</td>
+						<td>location ({{reservation.dateDebut|date('d/m')}}-{{reservation.dateFin|date('d/m')}})</td>
 						<td>
-							123456</td>
+							{{reservation.prix}}€</td>
 					</tr>
 					<tr>
 						<td>lavage (35.5€)</td>
@@ -432,15 +433,28 @@
 				</tbody>
 			</table>
 			<div class="fs-12">
-				<div></div>
-				Espèce
+				 <span class="d-inline-block-bottom p-2">	Espèce</span>
+				 <div class="d-inline-block-bottom">	
 				<input type="checkbox" class="p-0 m-0">
+				 </div>
+				<div class="d-inline-block-bottom p-2">	
 				CB
+				</div>
+				<div class="d-inline-block-bottom">	
 				<input type="checkbox" class="p-0 m-0">
+				</div>
+				<div class="d-inline-block-bottom p-2">	
 				Chèque Vacances
+				</div>
+				<div class="d-inline-block-bottom">	
 				<input type="checkbox" class="p-0 m-0">
+				</div>
+				<div class="d-inline-block-bottom p-2">
 				Chèque
+				</div>
+				<div class="d-inline-block-bottom">	
 				<input type="checkbox" class="p-0 m-0">
+				</div>
 				<br>
 				Aucune location est remboursable. Létat des lieux du véhicule est réalisé sur véhicule propre intérieur et extérieur</div>
 		</div>
@@ -456,7 +470,7 @@
 					</tr>
 					<tr>
 						<td>
-							Je soussignée autorise la société Joellocation a prélevé sur mon compte à l'aide de l'empreinte de ma carte bancaire, le montant de la franchise ou caution du présent contrat ceci en cas d'accident responsable, de vol, tentative de vol ou dommage occasionné au véhicule loué.
+							Je soussignée___ <strong> {{reservation.client.nom}}</strong>___autorise la société Joellocation a prélevé sur mon compte à l'aide de l'empreinte de ma carte bancaire, le montant de la franchise ou caution du présent contrat ceci en cas d'accident responsable, de vol, tentative de vol ou dommage occasionné au véhicule loué.
 						</td>
 					</tr>
 				</tbody>
@@ -466,9 +480,9 @@
 				<tbody class="fs-12">
 					<tr>
 						<td>Date départ</td>
-						<td>26 Mars 2021</td>
+						<td>{{reservation.dateDebut|date('d/m/Y')}}</td>
 						<td>Date retour</td>
-						<td></td>
+						<td>{{reservation.dateDebut|date('d/m/Y')}}</td>
 					</tr>
 					<tr>
 						<td>JOELLOCATION</td>
@@ -496,7 +510,7 @@
 			</table>
 		</div>
 
-		<div class="bg-danger text-white text-center fs-12" style="margin-top : 20px">
+		<div class="bg-danger text-white text-center fs-12">
 			SIRET : 87868990000016 APE: 7711a
 			<br>
 			N°TVA FR40878689900

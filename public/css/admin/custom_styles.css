@@ -2,6 +2,12 @@
 body{
     font-family: 'Poppins', sans-serif;
 }
+
+/*couleur backgroud colonne droite*/
+
+  body .container.body .right_col {
+  background: #d9d9d9; 
+}
 /* taille de police pour les btn */
 .btn {
     font-size : 13px;

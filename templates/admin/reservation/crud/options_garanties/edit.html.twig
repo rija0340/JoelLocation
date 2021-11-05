@@ -21,6 +21,7 @@
 					<div class="clearfix"></div>
 				</div>
 				<div class="options">
+
 					<ul>
 						{% for option in reservation.options %}
 							<li>{{option.appelation}}
@@ -153,6 +154,7 @@
 			</div>
 
 			<div class="text-center mt-2 mb-2">
+				<a href="{{path(routeReferer, {id : reservation.id})}}" class="btn btn-dark">Annuler</a>
 				<button class="btn btn-danger ">
 					<i class="fa fa-book" aria-hidden="true"></i>
 					{{ button_label|default('Enregistrer') }}</button>

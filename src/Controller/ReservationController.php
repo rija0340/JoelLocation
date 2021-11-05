@@ -10,6 +10,7 @@ use App\Form\UserType;
 use App\Entity\Garantie;
 use App\Entity\Vehicule;
 use App\Entity\InfosResa;
+use App\Entity\Conducteur;
 use App\Form\VehiculeType;
 use App\Entity\Reservation;
 use App\Form\InfosResaType;
@@ -17,6 +18,7 @@ use App\Form\StopSalesType;
 use App\Service\DateHelper;
 use App\Entity\InfosVolResa;
 use App\Form\ClientEditType;
+use App\Form\ConducteurType;
 use App\Form\UserClientType;
 use App\Form\KilometrageType;
 use App\Form\ReservationType;
@@ -45,6 +47,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Knp\Snappy\Pdf;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+
 
 /**
  * @Route("/reservation")
@@ -146,31 +152,35 @@ class ReservationController extends AbstractController
     }
 
     /**
-     * @Route("/details/{id}", name="reservation_show", methods={"GET"},requirements={"id":"\d+"})
+     * @Route("/details/{id}", name="reservation_show", methods={"GET", "POST"},requirements={"id":"\d+"})
      */
     public function show(Reservation $reservation, Request $request): Response
     {
-        // return $this->render('admin/reservation/crud/show.html.twig', [
-        //     'reservation' => $reservation,
-        // ]);
 
-        $formKM = $this->createForm(KilometrageType::class, $reservation);
+        $vehicule = $reservation->getVehicule();
+        $formKM = $this->createForm(KilometrageType::class, $vehicule);
         $formKM->handleRequest($request);
 
+        //extraction d'un conducteur parmi les conducteurs du client
+        $conducteurs =  $reservation->getConducteursClient();
+        $conducteur = $conducteurs[0];
+
         if ($formKM->isSubmitted() && $formKM->isValid()) {
+            //sauvegarde données de kilométrage du véhicule
+            $this->em->persist($vehicule);
+            $this->em->flush();
 
-            $entityManager = $this->reservController->getDoctrine()->getManager();
-            $entityManager->persist($reservation);
-            $entityManager->flush();
-
+            // notification pour réussite enregistrement
+            $this->flashy->success("Les kilométrages sont bien enregistrés");
             return $this->render('admin/reservation/crud/show.html.twig', [
                 'reservation' => $reservation,
-
+                'conducteur' => $conducteur,
                 'formKM' => $formKM->createView(),
             ]);
         }
         return $this->render('admin/reservation/crud/show.html.twig', [
             'reservation' => $reservation,
+            'conducteur' => $conducteur,
             'formKM' => $formKM->createView()
         ]);
     }
@@ -195,6 +205,7 @@ class ReservationController extends AbstractController
             'reservation' => $reservation,
             'imVeh' => $reservation->getVehicule()->getImmatriculation(), //utile pour val par défaut select
             'form' => $form->createView(),
+            'routeReferer' => $this->getRouteForRedirection($reservation)
         ]);
     }
 
@@ -247,7 +258,9 @@ class ReservationController extends AbstractController
             'form' => $form->createView(),
             'reservation' => $reservation,
             'garanties' => $garanties,
-            'options' => $options
+            'options' => $options,
+            'routeReferer' => $this->getRouteForRedirection($reservation)
+
         ]);
     }
 
@@ -279,23 +292,88 @@ class ReservationController extends AbstractController
         $client = $this->reservationRepo->find($reservation->getId())->getClient();
         $form = $this->createForm(EditClientReservationType::class, $client);
 
-
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->persist($client);
             $this->em->flush();
 
             $this->flashy->success("La réservation a bien été modifié");
-            return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
+            return $this->redirectToRoute($this->getRouteForRedirection($reservation), ['id' => $reservation->getId()]);
         }
 
         return $this->render('admin/reservation/crud/infos_client/edit.html.twig', [
 
             'form' => $form->createView(),
-            'reservation' => $reservation
+            'reservation' => $reservation,
+            'routeReferer' => $this->getRouteForRedirection($reservation)
 
         ]);
     }
+
+    /**
+     *  @Route("/ajouter-conducteur/", name="add_conducteur", methods={"GET","POST"},requirements={"id":"\d+"})
+     *
+     */
+    public function addConducteur(Request $request): Response
+    {
+        if ($request->query->get('id_reservation') != null) {
+
+            $id = $request->query->get('id_reservation');
+            $reservation = $this->reservationRepo->find($id);
+        } else {
+            $refReservation = null;
+        }
+
+        $conducteur  = new Conducteur();
+        $form = $this->createForm(ConducteurType::class, $conducteur);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isSubmitted()) {
+
+            // ajouter un conducteur
+            $this->em->persist($conducteur);
+            $this->em->flush();
+
+            // ajouter conducteur à une réservation
+            $reservation->addConducteursClient($conducteur);
+            $this->em->flush();
+
+            //notification succes
+            $this->flashy->success('Le conducteur a bien été ajouté');
+            return $this->redirectToRoute($this->getRouteForRedirection($reservation), ['id' => $id]);
+        }
+        return $this->render('admin/reservation/crud/conducteur/new.html.twig', [
+
+            'form' => $form->createView(),
+            'refReservation' => $reservation->getReference(),
+            'reservation' => $reservation,
+            'routeReferer' => $this->getRouteForRedirection($reservation)
+        ]);
+    }
+
+    //return route en fonction date (comparaison avec dateNow pour savoir statut réservation)
+    public function getRouteForRedirection($reservation)
+    {
+
+        $dateDepart = $reservation->getDateDebut();
+        $dateRetour = $reservation->getDateFin();
+        $dateNow = $this->dateHelper->dateNow();
+
+        //classement des réservations
+
+        // 1-nouvelle réservation -> dateNow > dateReservation
+        if ($dateNow > $dateDepart) {
+            $routeReferer = 'reservation_show';
+        }
+        if ($dateDepart < $dateNow && $dateNow < $dateRetour) {
+            $routeReferer = 'contrats_show';
+        }
+        if ($dateNow > $dateRetour) {
+            $routeReferer = 'contrat_termine_show';
+        }
+        return $routeReferer;
+    }
+
 
     //return referer->route avant la rédirection (source)
     public function getReferer($request)

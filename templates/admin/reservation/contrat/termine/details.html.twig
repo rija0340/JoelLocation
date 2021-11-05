@@ -16,7 +16,6 @@
 	<link href="../../admin/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 	<link href="../../css/admin/detail.css" rel="stylesheet">
 
-
 {% endblock %}
 
 {% block current_page %}
@@ -55,7 +54,7 @@
 			<div class="dropdown-menu">
 				<a class="dropdown-item" href="#">Reporter la réservation</a>
 				<a class="dropdown-item" href="#">Mail de confirmation</a>
-				<a class="dropdown-item"  href="{{path('reservation_cancel', {'id':reservation.id})}}">Annuler la réservation</a>
+				<a class="dropdown-item" href="{{path('reservation_cancel', {'id':reservation.id})}}">Annuler la réservation</a>
 				<a class="dropdown-item" href="#">Fermer le contrat</a>
 				<a class="dropdown-item" href="{{path('reservation_archive', {'id':reservation.id})}}">Archiver la réservation</a>
 			</div>
@@ -73,9 +72,9 @@
 				<i class="fa  fa-car"></i>
 				kilometrage</button>
 
-			<button type="button" id="genererContratPDF" class="btn btn-outline-danger text-uppercase p-1">
+			<a href="{{path('contrat_pdf', {'id': reservation.id})}}" type="button" id="" class="btn btn-outline-danger text-uppercase p-1">
 				<i class="fa fa-newspaper-o"></i>
-				Générer le contrat</button>
+				Générer le contrat</a>
 
 
 			<button type="button" class="btn btn-outline-info text-uppercase p-1" id="genererFacturePDF">
@@ -146,14 +145,14 @@
 				<div class="row">
 					<div class="col-md-3">
 						<span class="label_client">Km départ :
-							{{reservation.kmDepart}}
+							{{reservation.vehicule.kmDepart}}
 							Km
 						</span>
 
 					</div>
 					<div class="col-md-3">
 						<span class="label_client">Km retour :
-							{{reservation.kmRetour}}
+							{{reservation.vehicule.kmRetour}}
 							Km</span>
 					</div>
 					<div class="col-md-3">

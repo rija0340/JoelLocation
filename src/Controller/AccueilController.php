@@ -2,41 +2,49 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
-use App\Entity\Reservation;
-use App\Entity\ModeReservation;
-use App\Entity\EtatReservation;
-use App\Entity\Vehicule;
-use App\Entity\ModePaiement;
-use App\Entity\Paiement;
 use App\Entity\Faq;
-use App\Form\ClientType;
+use App\Entity\Mail;
+use App\Entity\User;
 use App\Form\LoginType;
-use App\Form\ReservationclientType;
+use App\Entity\Paiement;
+use App\Entity\Vehicule;
+use App\Form\ClientType;
+use App\Entity\Reservation;
+use App\Entity\ModePaiement;
+use App\Entity\EtatReservation;
+use App\Entity\ModeReservation;
 use App\Repository\UserRepository;
-use App\Repository\ReservationRepository;
-use App\Repository\ModeReservationRepository;
-use App\Repository\EtatReservationRepository;
+use App\Form\ReservationclientType;
 use App\Repository\VehiculeRepository;
-use MercurySeries\FlashyBundle\FlashyNotifier;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\ReservationRepository;
+use App\Repository\EtatReservationRepository;
+use App\Repository\ModeReservationRepository;
+use App\Service\DateHelper;
+use App\Service\SymfonyMailer;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AccueilController extends AbstractController
 {
     private $passwordEncoder;
     private $vehiculeRepo;
     private $flashy;
+    private $em;
+    private $dateHelper;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder, VehiculeRepository $vehiculeRepository, FlashyNotifier $flashy)
+    public function __construct(DateHelper $dateHelper, EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder, VehiculeRepository $vehiculeRepository, FlashyNotifier $flashy)
     {
         $this->passwordEncoder = $passwordEncoder;
         $this->vehiculeRepo = $vehiculeRepository;
         $this->flashy = $flashy;
+        $this->em = $em;
+        $this->dateHelper = $dateHelper;
     }
 
     /**
@@ -182,8 +190,31 @@ class AccueilController extends AbstractController
     /**
      * @Route("/formulaire-contact", name="formulaire-contact")
      */
-    public function formcontact(): Response
+    public function formcontact(Request $request): Response
     {
+        if ($request->request->get('email') != null) {
+
+            $nom = $request->request->get('nom');
+            $email_user = $request->request->get('email');
+            $telephone = $request->request->get('telephone');
+            $adresse = $request->request->get('adresse');
+            $objet = $request->request->get('objet');
+            $message = $request->request->get('message');
+
+            $email = new Mail();
+            $email->setNom($nom);
+            $email->setMail($email_user);
+            $email->setObjet($objet);
+            $email->setContenu($message);
+            $email->setDateReception($this->dateHelper->dateNow());
+
+
+            $this->em->persist($email);
+            $this->em->flush();
+
+            $this->flashy->success("Votre message a bien été envoyée");
+            return $this->redirectToRoute('accueil');
+        }
         return $this->render('accueil/contact.html.twig');
     }
 

@@ -67,7 +67,7 @@ class ConducteurController extends AbstractController
         if ($formConducteur->isSubmitted() && $formConducteur->isValid()) {
 
             $entityManager = $this->getDoctrine()->getManager();
-            $conducteur->setClient($client);
+            $conducteur->setReservation($client);
             $entityManager->persist($conducteur);
             $entityManager->flush();
 

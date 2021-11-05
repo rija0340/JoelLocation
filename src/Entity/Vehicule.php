@@ -134,6 +134,16 @@ class Vehicule
      */
     private $marque;
 
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $kmDepart;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $kmRetour;
+
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
@@ -445,6 +455,30 @@ class Vehicule
     public function setMarque(?Marque $marque): self
     {
         $this->marque = $marque;
+
+        return $this;
+    }
+
+    public function getKmDepart(): ?float
+    {
+        return $this->kmDepart;
+    }
+
+    public function setKmDepart(?float $kmDepart): self
+    {
+        $this->kmDepart = $kmDepart;
+
+        return $this;
+    }
+
+    public function getKmRetour(): ?float
+    {
+        return $this->kmRetour;
+    }
+
+    public function setKmRetour(?float $kmRetour): self
+    {
+        $this->kmRetour = $kmRetour;
 
         return $this;
     }

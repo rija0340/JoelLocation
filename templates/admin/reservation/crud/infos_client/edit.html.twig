@@ -6,7 +6,6 @@
 {% block stylesheets %}{% endblock %}
 {% block content %}
 
-
 	{{form_start(form)}}
 	<div class="x_panel">
 		<div class="x_title">
@@ -87,8 +86,6 @@
 				<label for="">Informations internes</label>
 				{{ form_widget(form.infosResa.infosInternes) }}</div>
 		</div>
-
-
 	</div>
 
 	<div class="x_panel">
@@ -124,12 +121,10 @@
 
 				{{ form_widget(form.infosVolResa.heureVolRetour) }}</div>
 		</div>
-
-
 	</div>
-	<div class="text-center">
 
-		<a href="{{path('reservation_index')}}" class="btn btn-dark">Annuler</a>
+	<div class="text-center">
+		<a href="{{path(routeReferer, {id : reservation.id})}}" class="btn btn-dark">Annuler</a>
 		<button type="submit" class="btn btn-danger">Enregistrer</button>
 	</div>
 	{{form_end(form)}}

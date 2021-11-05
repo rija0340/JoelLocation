@@ -46,7 +46,6 @@
 	</div>
 
 	<div class="x_panel">
-
 		<div class="btn-group mb-4">
 			<button type="button" class="btn btn-warning dropdown-toggle text-white font-weight-bold" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 				Réservation
@@ -72,10 +71,9 @@
 				<i class="fa  fa-car"></i>
 				kilometrage</button>
 
-			<button type="button" id="genererContratPDF" class="btn btn-outline-danger text-uppercase p-1">
+			<a href="{{path('contrat_pdf', {'id': reservation.id})}}" type="button" id="" class="btn btn-outline-danger text-uppercase p-1">
 				<i class="fa fa-newspaper-o"></i>
-				Générer le contrat</button>
-
+				Générer le contrat</a>
 
 			<button type="button" class="btn btn-outline-info text-uppercase p-1" id='genererFacturePDF'>
 				<i class="fa fa-send (alias)"></i>
@@ -155,16 +153,17 @@
 					<div class="col-md-3">
 						<span class="label_client">Km saisie par :</span>
 					</div>
+
 				</div>
 				<div class=" text-center">
-					<a type="button" class="btn btn-primary text-nowrap" href="{{path('client_edit', {'id': reservation.client.id})}}">
+					<a type="button" class="btn btn-primary text-nowrap" href="{{path('reservation_infosClient_edit', {'id': reservation.id})}}">
 						<i class="fa fa-user mr-1"></i>Modifier les informations</a>
 					<button type="button" class="btn btn-dark text-nowrap">
 						<i class="fa fa-reply-all mr-1"></i>Retour anticipé</button>
 					<a type="button" class="btn btn-warning text-nowrap" href="{{path('reservation_edit', {'id': reservation.id} ) }}">
 						<i class="fa fa-cog"></i>
 						Modifier la réservation</a>
-					<a type="button" class="btn btn-danger text-nowrap" href="{{path('reservation_edit', {'id': reservation.id} ) }}">
+					<a type="button" class="btn btn-danger text-nowrap" href="{{path('optionsGaranties_edit', {'id' : reservation.id})}}">
 						<i class="fa fa-edit (alias)"></i>
 						Modifier les options & garanties</a>
 
@@ -184,9 +183,13 @@
 		</div>
 		<div class="x_content ">
 			<div class="text-center">
-				<button class="btn btn-primary" id="ajouterConducteur">
-					<i class="fa fa-plus"></i>
-					Ajouter conducteur</button>
+				<form action="{{path('add_conducteur')}}">
+					<input type="hidden" name="id_reservation" value="{{reservation.id}}">
+
+					<button type="submit" class="btn btn-primary" id="">
+						<i class="fa fa-plus"></i>
+						Ajouter conducteur</button>
+				</form>
 			</div>
 
 			<div class="x_title">
@@ -195,25 +198,34 @@
 			<p class="text-success font-weight-bold font-italic">Conducteur principal</p>
 			<div class="row info_conducteur">
 				<div class="col-md-3">
-					<span class="label_conducteur">Nom/Prénom :</span>
+					<span class="label_conducteur">Nom/Prénom :
+						{{conducteur.nom }}
+						{{conducteur.prenom }}</span>
 				</div>
 				<div class="col-md-3">
-					<span class="label_conducteur">Permis :</span>
+					<span class="label_conducteur">Permis :
+						{{conducteur.numeroPermis }}</span>
 				</div>
 				<div class="col-md-3">
-					<span class="label_conducteur">Obtention :</span>
+					<span class="label_conducteur">Obtention :
+						{{conducteur.dateObtention|date('d/m/Y') }}
+					</span>
 				</div>
 				<div class="col-md-3">
-					<span class="label_conducteur">Date délivrance :</span>
+					<span class="label_conducteur">Date délivrance :
+						{{conducteur.dateDelivrance|date('d/m/Y') }}</span>
 				</div>
 				<div class="col-md-3">
-					<span class="label_conducteur">Ville délivrance :</span>
+					<span class="label_conducteur">Ville délivrance :
+						{{conducteur.villeDelivrance }}</span>
 				</div>
 				<div class="col-md-3">
-					<span class="label_conducteur">Date de naissance :</span>
+					<span class="label_conducteur">Date de naissance :
+						{{conducteur.dateNaissance|date('d/m/Y') }}</span>
 				</div>
 				<div class="col-md-3">
-					<span class="label_conducteur">Ville de naissance :</span>
+					<span class="label_conducteur">Ville de naissance :
+						{{conducteur.villeNaissance }}</span>
 				</div>
 				<div class="col-md-3">
 					<button class="btn btn-warning">
@@ -505,6 +517,6 @@
 	<script src="../../js/admin/jspdf.min.js"></script>
 	<script src="../../js/admin/jspdf.plugin.autotable.js"></script>
 	<script src="../../js/admin/factureJsPDF.js"></script>
-	<script src="../../js/admin/details_contrats.js"></script>
+	{# // <script src="../../js/admin/details_contrats.js"></script> #}
 
 {% endblock  %}

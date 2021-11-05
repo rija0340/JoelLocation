@@ -2,32 +2,33 @@
 
 namespace App\Controller;
 
-use Dompdf\Dompdf;
-use Dompdf\Options;
-use Knp\Snappy\Pdf;
 use App\Entity\Reservation;
 use App\Form\KilometrageType;
-use App\Service\TarifsHelper;
 use App\Repository\ReservationRepository;
+use App\Service\DateHelper;
+use App\Service\TarifsHelper;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use Knp\Component\Pager\PaginatorInterface;
+use Knp\Snappy\Pdf;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ContratsController extends AbstractController
 {
 
-
     private $reservController;
     private $tarifsHelper;
+    private $dateHelper;
 
-
-    public function __construct(TarifsHelper $tarifsHelper, ReservationController $reservController)
+    public function __construct(DateHelper $dateHelper, TarifsHelper $tarifsHelper, ReservationController $reservController)
     {
 
         $this->reservController = $reservController;
         $this->tarifsHelper = $tarifsHelper;
+        $this->dateHelper = $dateHelper;
     }
 
     /**
@@ -36,7 +37,7 @@ class ContratsController extends AbstractController
     public function enCours(ReservationRepository $reservationRepository, Request $request, PaginatorInterface $paginator): Response
     {
 
-        $reservations = $reservationRepository->findReservationIncludeDate(new \DateTime('NOW'));
+        $reservations = $reservationRepository->findReservationIncludeDate($this->dateHelper->dateNow());
 
         return $this->render('admin/reservation/contrat/en_cours/index.html.twig', [
             'reservations' => $reservations,
@@ -49,17 +50,17 @@ class ContratsController extends AbstractController
      */
     public function showEnCours(Reservation $reservation, Request $request): Response
     {
-        $formKM = $this->createForm(KilometrageType::class, $reservation);
+        $vehicule = $reservation->getVehicule();
+        $formKM = $this->createForm(KilometrageType::class, $vehicule);
         $formKM->handleRequest($request);
-
-
+        $conducteurs =  $reservation->getConducteursClient();
+        $conducteur = $conducteurs[0];
         if ($formKM->isSubmitted() && $formKM->isValid()) {
 
-            $entityManager = $this->reservController->getDoctrine()->getManager();
-            $entityManager->persist($reservation);
-            $entityManager->flush();
+            $this->em->persist($vehicule);
+            $this->em->flush();
 
-            return $this->render('admin/reservation/contrat/termine/details.html.twig', [
+            return $this->render('admin/reservation/contrat/en_cours/details.html.twig', [
                 'reservation' => $reservation,
                 'formKM' => $formKM->createView(),
                 'tarifVehicule' => $this->tarifsHelper->calculTarifVehicule($reservation->getDateDebut(), $reservation->getDateFin(), $reservation->getVehicule()),
@@ -69,16 +70,15 @@ class ContratsController extends AbstractController
             ]);
         }
 
-
-        return $this->render('admin/reservation/contrat/termine/details.html.twig', [
+        return $this->render('admin/reservation/contrat/en_cours/details.html.twig', [
             'reservation' => $reservation,
+            'conducteur' => $conducteur,
             'formKM' => $formKM->createView(),
             'tarifVehicule' => $this->tarifsHelper->calculTarifVehicule($reservation->getDateDebut(), $reservation->getDateFin(), $reservation->getVehicule()),
             'tarifOptions' => $this->tarifsHelper->sommeTarifsOptions($reservation->getOptions()),
             'tarifGaranties' => $this->tarifsHelper->sommeTarifsGaranties($reservation->getGaranties()),
         ]);
     }
-
 
     /**
      * @Route("/reservation/contrats_termines", name="contrats_termines_index", methods={"GET"})
@@ -98,15 +98,14 @@ class ContratsController extends AbstractController
      */
     public function showTermine(Reservation $reservation, Request $request): Response
     {
-        $formKM = $this->createForm(KilometrageType::class, $reservation);
+        $vehicule = $reservation->getVehicule();
+        $formKM = $this->createForm(KilometrageType::class, $vehicule);
         $formKM->handleRequest($request);
-
 
         if ($formKM->isSubmitted() && $formKM->isValid()) {
 
-            $entityManager = $this->reservController->getDoctrine()->getManager();
-            $entityManager->persist($reservation);
-            $entityManager->flush();
+            $this->em->persist($vehicule);
+            $this->em->flush();
 
             return $this->render('admin/reservation/contrat/termine/details.html.twig', [
                 'reservation' => $reservation,
@@ -139,42 +138,5 @@ class ContratsController extends AbstractController
         }
 
         return $this->redirectToRoute('reservation_index');
-    }
-
-    /**
-     * @Route("reservation/contrat-pdf/{id}", name="contrat_pdf", methods={"GET"})
-     */
-    public function pdfcontrat(Pdf $knpSnappyPdf, Reservation $reservation)
-    {
-        // Configure Dompdf according to your needs
-        $pdfOptions = new Options();
-        $pdfOptions->set('defaultFont', 'Arial');
-        // Instantiate Dompdf with our options
-        $dompdf = new Dompdf($pdfOptions);
-        $logo = $this->getParameter('logo') . '/Joel-Location-new.png';
-        $logo_data = base64_encode(file_get_contents($logo));
-        $logo_src = 'data:image/png;base64,' . $logo_data;
-        $html = $this->renderView('admin/reservation/contrat/contrat_pdf.html.twig', [
-            'logo' => $logo_src,
-        ]);
-
-        /* return new PdfResponse(
-                $knpSnappyPdf->getOutputFromHtml($html),
-                'file.pdf'
-            ); */
-
-        // Load HTML to Dompdf
-        $dompdf->loadHtml($html);
-
-        // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
-        $dompdf->setPaper('A4', 'portrait');
-
-        // Render the HTML as PDF
-        $dompdf->render();
-
-        // Output the generated PDF to Browser (force download)
-        $dompdf->stream("contrat_" . $reservation->getReference() . ".pdf", [
-            "Attachment" => true,
-        ]);
     }
 }

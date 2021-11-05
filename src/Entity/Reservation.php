@@ -27,6 +27,7 @@ class Reservation
         $this->paiements = new ArrayCollection();
         $this->options = new ArrayCollection();
         $this->garanties = new ArrayCollection();
+        $this->conducteursClient = new ArrayCollection();
     }
 
     /**
@@ -111,11 +112,6 @@ class Reservation
     private $paiements;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
-     */
-    private $conducteur;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $commentaire;
@@ -150,15 +146,6 @@ class Reservation
      */
     private $reference;
 
-    /**
-     * @ORM\Column(type="float", nullable=true)
-     */
-    private $kmDepart;
-
-    /**
-     * @ORM\Column(type="float", nullable=true)
-     */
-    private $kmRetour;
 
     /**
      * @ORM\Column(type="float", nullable=true)
@@ -207,6 +194,16 @@ class Reservation
      * @ORM\Column(type="boolean")
      */
     private $canceled;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Conducteur::class, mappedBy="reservation")
+     */
+    private $conducteursClient;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $conducteur;
 
 
     public function getId(): ?int
@@ -377,20 +374,6 @@ class Reservation
         return $this;
     }
 
-    // dernière modification
-
-    public function getConducteur(): ?string
-    {
-        return $this->conducteur;
-    }
-
-    public function setConducteur(?string $conducteur): self
-    {
-        $this->conducteur = $conducteur;
-
-        return $this;
-    }
-
     public function getCommentaire(): ?string
     {
         return $this->commentaire;
@@ -511,30 +494,6 @@ class Reservation
 
     public function frenchMouth()
     {
-    }
-
-    public function getKmDepart(): ?float
-    {
-        return $this->kmDepart;
-    }
-
-    public function setKmDepart(?float $kmDepart): self
-    {
-        $this->kmDepart = $kmDepart;
-
-        return $this;
-    }
-
-    public function getKmRetour(): ?float
-    {
-        return $this->kmRetour;
-    }
-
-    public function setKmRetour(?float $kmRetour): self
-    {
-        $this->kmRetour = $kmRetour;
-
-        return $this;
     }
 
     public function getTarifVehicule(): ?float
@@ -704,6 +663,48 @@ class Reservation
     public function setCanceled(bool $canceled): self
     {
         $this->canceled = $canceled;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Conducteur[]
+     */
+    public function getConducteursClient(): Collection
+    {
+        return $this->conducteursClient;
+    }
+
+    public function addConducteursClient(Conducteur $conducteursClient): self
+    {
+        if (!$this->conducteursClient->contains($conducteursClient)) {
+            $this->conducteursClient[] = $conducteursClient;
+            $conducteursClient->setReservation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConducteursClient(Conducteur $conducteursClient): self
+    {
+        if ($this->conducteursClient->removeElement($conducteursClient)) {
+            // set the owning side to null (unless already changed)
+            if ($conducteursClient->getReservation() === $this) {
+                $conducteursClient->setReservation(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getConducteur(): ?bool
+    {
+        return $this->conducteur;
+    }
+
+    public function setConducteur(?bool $conducteur): self
+    {
+        $this->conducteur = $conducteur;
 
         return $this;
     }

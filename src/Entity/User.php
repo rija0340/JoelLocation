@@ -149,10 +149,7 @@ class User implements UserInterface
      */
     private $codePostal;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Conducteur::class, mappedBy="client")
-     */
-    private $conducteurs;
+
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -587,23 +584,6 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @return Collection|Conducteur[]
-     */
-    public function getConducteurs(): Collection
-    {
-        return $this->conducteurs;
-    }
-
-    public function addConducteur(Conducteur $conducteur): self
-    {
-        if (!$this->conducteurs->contains($conducteur)) {
-            $this->conducteurs[] = $conducteur;
-            $conducteur->setClient($this);
-        }
-
-        return $this;
-    }
 
     public function removeConducteur(Conducteur $conducteur): self
     {

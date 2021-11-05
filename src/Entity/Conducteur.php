@@ -52,15 +52,17 @@ class Conducteur
      */
     private $dateObtention;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="conducteurs")
-     */
-    private $client;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $prenom;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Reservation::class, inversedBy="conducteursClient")
+     */
+    private $reservation;
+
 
     public function getId(): ?int
     {
@@ -78,8 +80,6 @@ class Conducteur
 
         return $this;
     }
-
-
 
     public function getDateNaissance(): ?\DateTimeInterface
     {
@@ -153,17 +153,6 @@ class Conducteur
         return $this;
     }
 
-    public function getClient(): ?User
-    {
-        return $this->client;
-    }
-
-    public function setClient(?User $client): self
-    {
-        $this->client = $client;
-
-        return $this;
-    }
 
     public function getPrenom(): ?string
     {
@@ -173,6 +162,18 @@ class Conducteur
     public function setPrenom(?string $prenom): self
     {
         $this->prenom = $prenom;
+
+        return $this;
+    }
+
+    public function getReservation(): ?Reservation
+    {
+        return $this->reservation;
+    }
+
+    public function setReservation(?Reservation $reservation): self
+    {
+        $this->reservation = $reservation;
 
         return $this;
     }

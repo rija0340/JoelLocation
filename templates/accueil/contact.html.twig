@@ -17,35 +17,35 @@
 		</div>
 
 		<div class="container">
-			<form action="#">
+			<form action="{{path('formulaire-contact')}}" name="contact" method="POST">
 				<div class="p-5">
 					<div class="row">
 						<div class="col-lg-6">
 							<div class="form-group">
 								<label for="inputUsername" class="bmd-label-floating" style="color:white;font-weight:500">Nom :</label>
 
-								<input type="text" class="form-control">
+								<input type="text" class="form-control" name="nom" required>
 							</div>
 						</div>
 						<div class="col-lg-6">
 							<div class="form-group">
-								<label for="inputUsername" class="bmd-label-floating" style="color:white;font-weight:500">Email :</label>
+								<label for="email" class="bmd-label-floating" style="color:white;font-weight:500">Email :</label>
 
-								<input type="email" class="form-control">
+								<input type="email" class="form-control" name="email" required>
 							</div>
 						</div>
 						<div class="col-lg-6">
 							<div class="form-group">
-								<label for="inputUsername" class="bmd-label-floating" style="color:white;font-weight:500">Téléphone :</label>
+								<label for="telephone" class="bmd-label-floating" style="color:white;font-weight:500">Téléphone :</label>
 
-								<input type="text" class="form-control">
+								<input type="text" class="form-control" name="telephone" required>
 							</div>
 						</div>
 						<div class="col-lg-6">
 							<div class="form-group">
-								<label for="inputUsername" class="bmd-label-floating" style="color:white;font-weight:500">Adresse :</label>
+								<label for="adresse" class="bmd-label-floating" style="color:white;font-weight:500">Adresse :</label>
 
-								<input type="text" class="form-control">
+								<input type="text" class="form-control" name="adresse" required>
 							</div>
 						</div>
 
@@ -53,7 +53,7 @@
 							<div class="form-group">
 								<label for="Objet" class="labelObjet">Objet* :
 								</label>
-								<select name="Objet" id="Objet">
+								<select id="Objet" name="objet">
 									<option value="devis">Demande de devis</option>
 									<option value="renseignement">Demande de renseignement</option>
 									<option value="autre">Autre</option>
@@ -63,7 +63,7 @@
 						<div class="col-lg-12">
 							<div class="form-group">
 								<label for="exampleMessage" class="">Message :</label>
-								<textarea type="email" class="form-control" rows="4" id="exampleMessage" placeholder="Pour une demande de devis, veuillez préciser vos dates de retrait et de retour ainsi que le lieu (Aéroport ou autre)."></textarea>
+								<textarea type="text" name="message" class="form-control" rows="4" id="exampleMessage" placeholder="Pour une demande de devis, veuillez préciser vos dates de retrait et de retour ainsi que le lieu (Aéroport ou autre)." required></textarea>
 							</div>
 						</div>
 
