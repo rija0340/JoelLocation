@@ -9,89 +9,85 @@
 		<div class="clearfix"></div>
 		<div class="x_title"></div>
 
-		{{ form_start(formClient) }}
 
 		<div class="row">
 			<div class="form-group col-md-6">
 				<label for="">Nom :</label>
-				{{ form_widget(formClient.nom,{'attr' : { 'readonly' : 'readonly'}  } )}}
+				<input readonly class="form-control" value="{{client.nom}}">
 			</div>
 			<div class="form-group col-md-6">
 				<label for="">Prénom :</label>
-				{{ form_widget(formClient.prenom,{'attr' : { 'readonly' : 'readonly'}  } )}}
+				<input readonly class="form-control" value="{{client.prenom}}">
 
 			</div>
 
 			<div class="form-group col-md-6">
 				<label for="">Adresse email :</label>
-				{{ form_widget(formClient.mail,{'attr' : { 'readonly' : 'readonly'}  } )}}
+				<input readonly class="form-control" value="{{client.mail}}">
 
 			</div>
 			<div class="form-group col-md-3">
 				<label for="">Téléphone 1:</label>
-				{{ form_widget(formClient.telephone,{'attr' : { 'readonly' : 'readonly'}  } )}}
+				<input readonly class="form-control" value="{{client.telephone}}">
 
 			</div>
 			<div class="form-group col-md-3">
 				<label for="">Téléphone 2 :</label>
-				{{ form_widget(formClient.portable,{'attr' : { 'readonly' : 'readonly'}  } )}}
+				<input readonly class="form-control" value="{{client.portable}}">
 
 			</div>
 
 			<div class="form-group col-md-6">
 				<label for="">Adresse :</label>
-				{{ form_widget(formClient.adresse,{'attr' : { 'readonly' : 'readonly'}  } )}}
+				<input readonly class="form-control" value="{{client.adresse}}">
 
 			</div>
 			<div class="form-group col-md-6">
 				<label for="">Complément adresse :</label>
-				{{ form_widget(formClient.complementAdresse,{'attr' : { 'readonly' : 'readonly'}  } )}}
+				<input readonly class="form-control" value="{{client.complementAdresse}}">
 
 			</div>
 
 			<div class="form-group col-md-3">
 				<label for="">Ville :</label>
-				{{ form_widget(formClient.ville,{'attr' : { 'readonly' : 'readonly'}  } )}}
+				<input readonly class="form-control" value="{{client.ville}}">
 
 			</div>
 			<div class="form-group col-md-3">
 				<label for="">Code postal :</label>
-				{{ form_widget(formClient.codePostal,{'attr' : { 'readonly' : 'readonly'}  } )}}
+				<input readonly class="form-control" value="{{client.codePostal}}">
 
 			</div>
 
 			<div class="form-group col-md-6">
 				<label for="">Date de naissance :</label>
-				{{ form_widget(formClient.dateNaissance,{'attr' : { 'readonly' : 'readonly'}  } )}}
+				<input readonly class="form-control" value="{{client.dateNaissance|date('d/m/Y')}}">
 
 			</div>
 			<div class="form-group col-md-6">
 				<label for="">Lieu de naissance :</label>
-				{{ form_widget(formClient.lieuNaissance,{'attr' : { 'readonly' : 'readonly'}  } )}}
+				<input readonly class="form-control" value="{{client.lieuNaissance}}">
 
 			</div>
 			<div class="form-group col-md-6">
 				<label for="">Numero permis :</label>
-				{{ form_widget(formClient.numeroPermis,{'attr' : { 'readonly' : 'readonly'}  } )}}
+				<input readonly class="form-control" value="{{client.numeroPermis}}">
 
 			</div>
 			<div class="form-group col-md-6">
 				<label for="">Date permis :</label>
-				{{ form_widget(formClient.datePermis,{'attr' : { 'readonly' : 'readonly'}  } )}}
+				<input readonly class="form-control" value="{{client.datePermis|date('d/m/Y')}}">
 
 			</div>
 
 			<div class="form-group col-md-6">
 				<label for="">Ville délivrance permis :</label>
 				{# {{form_label('test')}} #}
-				{{ form_widget(formClient.villeDelivrancePermis,{'attr' : { 'readonly' : 'readonly'}  } )}}
+				<input readonly class="form-control" value="{{client.villeDelivrancePermis}}">
 
 			</div>
 
-
 		</div>
-
-		{{ form_end(formClient) }}
 
 		<div class="text-center">
 			<a href="{{ path('infoclient_edit', {'id': id}) }}" id="editInfosClient" class="btn btn-danger popup " onmouseover="showPopUp()" onmouseout="hidePopUp()">
@@ -123,7 +119,7 @@
 						<div class="col-lg-8 col-md-8 ml-auto mr-auto">
 							{{ form_start(formClientCompte) }}
 
-							{{ form_widget(formClientCompte) }}
+							{{form_widget(formClientCompte)}}
 							<div class="text-center mt-3">
 								<button class="btn btn-danger">
 									<i class="fa fa-book" aria-hidden="true"></i>

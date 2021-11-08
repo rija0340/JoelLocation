@@ -2,7 +2,7 @@
 
 namespace App\Controller\Client;
 
-use App\Classe\Mail;
+use App\Classe\Mailjet;
 use Stripe\Stripe;
 use App\Entity\Devis;
 use App\Entity\Paiement;
@@ -62,7 +62,7 @@ class PaiementSoldeController extends AbstractController
         EntityManagerInterface $em,
         ModePaiementRepository $modePaiementRepo,
         ValidationReservationClientSession $validationSession,
-        Mail $mail
+        Mailjet $mail
 
     ) {
         $this->devisController = $devisController;

@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Classe\Mail;
+use App\Classe\Mailjet;
 use App\Entity\User;
 use App\Entity\Devis;
 use App\Entity\Tarifs;
@@ -80,7 +80,7 @@ class VenteComptoirController extends AbstractController
         UserPasswordEncoderInterface $passwordEncoder,
         DevisRepository $devisRepo,
         ReservationSession $reservationSession,
-        Mail $mail,
+        Mailjet $mail,
         ReservationHelper $reservationHelper
     ) {
 
