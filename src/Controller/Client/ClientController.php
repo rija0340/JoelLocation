@@ -94,7 +94,6 @@ class ClientController extends AbstractController
 
 
         $client = $this->getUser();
-        $notification_pwd = null;
 
         if ($client == null) {
             return $this->redirectToRoute('app_login');
@@ -105,7 +104,8 @@ class ClientController extends AbstractController
         $reservation = new Reservation();
         $mode_reservation = $this->getDoctrine()->getRepository(ModeReservation::class)->findOneBy(['id' => 3]);
         $etat_reservation = $this->getDoctrine()->getRepository(EtatReservation::class)->findOneBy(['id' => 1]);
-        $formClient = $this->createForm(ClientType::class, $client);
+        // $formClient = $this->createForm(ClientType::class, $client);
+        // dd($formClient);
         $formClientCompte = $this->createForm(ClientCompteType::class, $client);
         // $form->handleRequest($request);
         $formClientCompte->handleRequest($request);
@@ -135,8 +135,9 @@ class ClientController extends AbstractController
 
             'client' => $client->getUsername(),
             'id' => $client->getId(),
+            'client' => $client,
             // 'form' => $form->createView(),
-            'formClient' => $formClient->createView(),
+            // 'formClient' => $formClient->createView(),
             'formClientCompte' => $formClientCompte->createView(),
 
         ]);

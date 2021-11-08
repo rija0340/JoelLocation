@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Classe\Mailjet;
 use App\Entity\Faq;
 use App\Entity\Mail;
 use App\Entity\User;
@@ -37,14 +38,16 @@ class AccueilController extends AbstractController
     private $flashy;
     private $em;
     private $dateHelper;
+    private $mailjet;
 
-    public function __construct(DateHelper $dateHelper, EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder, VehiculeRepository $vehiculeRepository, FlashyNotifier $flashy)
+    public function __construct(Mailjet $mailjet, DateHelper $dateHelper, EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder, VehiculeRepository $vehiculeRepository, FlashyNotifier $flashy)
     {
         $this->passwordEncoder = $passwordEncoder;
         $this->vehiculeRepo = $vehiculeRepository;
         $this->flashy = $flashy;
         $this->em = $em;
         $this->dateHelper = $dateHelper;
+        $this->mailjet = $mailjet;
     }
 
     /**
@@ -190,7 +193,7 @@ class AccueilController extends AbstractController
     /**
      * @Route("/formulaire-contact", name="formulaire-contact")
      */
-    public function formcontact(Request $request): Response
+    public function formcontact(Request $request, SymfonyMailer $mailer): Response
     {
         if ($request->request->get('email') != null) {
 
@@ -199,20 +202,11 @@ class AccueilController extends AbstractController
             $telephone = $request->request->get('telephone');
             $adresse = $request->request->get('adresse');
             $objet = $request->request->get('objet');
-            $message = $request->request->get('message');
+            $message = "Adresse email du client :" . $email_user . "Message : " . $request->request->get('message');
 
-            $email = new Mail();
-            $email->setNom($nom);
-            $email->setMail($email_user);
-            $email->setObjet($objet);
-            $email->setContenu($message);
-            $email->setDateReception($this->dateHelper->dateNow());
+            $this->mailjet->send("joel@joellocation.com", $nom, $objet, $message);
 
-
-            $this->em->persist($email);
-            $this->em->flush();
-
-            $this->flashy->success("Votre message a bien été envoyée");
+            $this->flashy->success("Votre mail a bien été envoyé");
             return $this->redirectToRoute('accueil');
         }
         return $this->render('accueil/contact.html.twig');

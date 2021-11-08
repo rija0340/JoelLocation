@@ -1,0 +1,297 @@
+{% extends 'baseClient.html.twig' %}
+
+{% block title %}Détails reservation
+{% endblock %}
+
+
+{% block stylesheets %}{% endblock %}
+
+
+{% block body %}
+
+	<div class="row">
+		<div class="col-md-3">
+			<div class="x_panel"></div>
+		</div>
+		<div class="col-md-9">
+			<div class="x_panel">
+				<div class="infosClient">
+					<div class="x_title">
+						<h4 class="text-uppercase">
+							informations client</h4>
+					</div>
+					<div class="x_content">
+						<strong>Nom/Prénom :</strong>
+						<span>
+							{{reservation.client.nom}}
+							{{reservation.client.prenom}}
+						</span>
+						<br>
+						<strong>Téléphone :</strong>
+						<span>
+							{{reservation.client.telephone}}
+						</span>
+
+						<br>
+						<strong>Email :</strong>
+						<span>
+							{{reservation.client.mail}}
+						</span>
+
+					</div>
+
+				</div>
+			</div>
+			<div class="x_panel">
+				<div class="conducteurs">
+					<div class="x_title">
+						<h4 class="text-uppercase">Conducteur(s)</h4>
+					</div>
+					<a href="{{path('client_add_conducteur', {'reference': reservation.reference})}}" class="btn btn-danger">
+						<i class="fa fa-plus"></i>
+						Ajouter</a>
+
+					<div class="x_content">
+						{% for conducteur in reservation.conducteursClient %}
+							<div class="row">
+								<div class="col-md-4">{{conducteur.nom}}
+									{{conducteur.prenom}}</div>
+								<div class="col-md-4">
+									<strong>Numéro de permis :
+									</strong>
+									{{conducteur.numeroPermis}}
+									<br>
+									<strong>Date de délivrance :
+									</strong>
+									{{conducteur.dateDelivrance|date('d/m/Y')}}
+									<br>
+									<strong>Ville de délivrance :
+									</strong>
+									{{conducteur.villeDelivrance}}
+								</div>
+								<div class="col-md-1"></div>
+								<div class="col-md-3">
+									<button class="btn btn-success">
+										<i class="fa fa-check"></i>
+									</button>
+									<button class="btn btn-warning">
+										<i class="fa fa-reply"></i>
+									</button>
+									<button class="btn btn-danger">
+										<i class="fa fa-close (alias)"></i>
+									</button>
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+			<div class="x_panel">
+				<div class="periode_location">
+					<div class="x_title">
+						<h4 class="text-uppercase">période de location</h4>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<strong>Départ :
+							</strong>
+							{{reservation.agenceDepart}}
+							<br>
+							{{reservation.dateDebut|date('d/m/Y')}}-{{reservation.dateDebut|date('H:i')}}
+						</div>
+						<div class="col-md-6">
+							<strong>Rétour :
+							</strong>
+							{{reservation.agenceRetour}}
+							<br>
+							{{reservation.dateFin|date('d/m/Y')}}-{{reservation.dateFin|date('H:i')}}
+						</div>
+						<div class="col-md-6">
+							<strong>Jours de location :
+							</strong>
+							{{reservation.duree}}
+						</div>
+						<div class="col-md-6">
+							<strong>Nombre de personnes :
+							</strong><br>
+							<span class="font-italic">Adulte(s) :
+							</span>
+							{{reservation.client.infosResa.nbrAdultes}}
+							<br>
+							<span class="font-italic">Enfant(s) :
+							</span>
+							{{reservation.client.infosResa.nbrEnfants}}
+							<br>
+							<span class="font-italic">Bébé(s) :
+								{{reservation.client.infosResa.nbrBebes}}
+							</span>
+
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="x_panel">
+				<div class="options_garanties">
+					<div class="x_title">
+						<h4 class="text-uppercase">options et garanties souscrites</h4>
+					</div>
+					<strong>Option(s) souscrite(s) :
+					</strong><br>
+					<ul>
+						{% if reservation.conducteur %}
+							<li>Conducteur</li>
+						{% endif %}
+
+						{% for option in reservation.options %}
+							<li>
+								{{option}}</li>
+						{% endfor %}
+					</ul>
+					<strong>Garantie(s) souscrite(s) :
+					</strong><br>
+					<ul>
+						{% for garantie in reservation.garanties %}
+							<li>
+								{{garantie}}</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+			<div class="x_panel">
+				<div class="montant_reservation">
+					<div class="x_title">
+						<div class="row">
+							<div class="col-auto pl-2">
+								<h2>
+									<h4 class="text-uppercase">montant total de la réservation</h4>
+								</h2>
+							</div>
+							<div class="col-auto ml-auto d-flex align-items-center">
+								<div class="js-prix">
+									{{reservation.prix}}
+									€
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="x_content ">
+						<div class="row">
+							<div class="col-md-8 col-sm-8 col-xs-8">
+								<i class="fa fa-chevron-right"></i>Location NDMR
+								{{ reservation.duree }}
+								jours
+							</div>
+							<div class="col-md-4 col-sm-4 col-xs-4">
+								<div class="text-right">
+									{{reservation.tarifVehicule}}€
+								</div>
+							</div>
+
+							<div class="col-md-8 col-sm-8 col-xs-8">
+								<i class="fa fa-chevron-right"></i>Total dépassements horaires
+							</div>
+							<div class="col-md-4 col-sm-4 col-xs-4">
+								<div class="text-right">
+									0 €
+								</div>
+							</div>
+
+							<div class="col-md-8 col-sm-8 col-xs-8">
+								<i class="fa fa-chevron-right"></i>Total options souscrites
+							</div>
+							<div class="col-md-4 col-sm-4 col-xs-4">
+								<div class="text-right">{{reservation.prixGaranties}}€</div>
+							</div>
+
+							<div class="col-md-8 col-sm-8 col-xs-8">
+								<i class="fa fa-chevron-right"></i>Total garanties souscrites
+
+							</div>
+							<div class="col-md-4 col-sm-4 col-xs-4">
+								<div class="text-right">
+									{{reservation.prixOptions}}
+									€
+								</div>
+							</div>
+
+							<div class="col-md-8 col-sm-8 col-xs-8">
+								<i class="fa fa-chevron-right"></i>Montant de la remise
+							</div>
+							<div class="col-md-4 col-sm-4 col-xs-4">
+								<div class="text-right">
+									0 €
+								</div>
+							</div>
+
+							<div class="col-md-8 col-sm-8 col-xs-8">
+								<i class="fa fa-chevron-right"></i>Montant à régler
+							</div>
+							<div class="col-md-4 col-sm-4 col-xs-4">
+								<div class="text-right">
+									{{reservation.prix}}
+									€
+								</div>
+							</div>
+
+
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<div class="x_panel">
+				<div class="reglement">
+					<div class="x_title">
+						<h4 class="text-uppercase">réglement</h4>
+					</div>
+					<div class="x_content">
+						{% for paiement in reservation.paiements %}
+							<table class="table-bordered w-100 bg-dark">
+								<tr>
+									<td>
+										{{paiement.datePaiement|date('d/m/Y H:i')}}
+									</td>
+									<td class="text-center">
+										{{paiement.modePaiement.libelle}}
+									</td>
+									<td class="text-right">
+										{{paiement.montant}}€
+									</td>
+								</tr>
+							</table>
+
+						{% endfor %}
+						<div class="row">
+							<div class="col-md-6">-Total payé</div>
+							<div class="col-md-6 text-right">{{reservation.sommePaiements}}€</div>
+							<br>
+							<div class="col-md-6">-Solde</div>
+							<div class="col-md-6 text-right">{{reservation.prix - reservation.sommePaiements}}€</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+{% block javascripts %}
+	<!-- Datatables -->
+	<script src="../../admin/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+	<script src="../../admin/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+	<script src="../../admin/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+	<script src="../../admin/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+	<script src="../../admin/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+	<script src="../../admin/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+	<script src="../../admin/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+	<script src="../../admin/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+	<script src="../../admin/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+	<script src="../../admin/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+	<script src="../../admin/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+	<script src="../../admin/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+	<script src="../../admin/vendors/jszip/dist/jszip.min.js"></script>
+	<script src="../../admin/vendors/pdfmake/build/pdfmake.min.js"></script>
+	<script src="../../admin/vendors/pdfmake/build/vfs_fonts.js"></script>
+	<script src="../../js/admin/jspdf.min.js"></script>
+	<script src="../../js/admin/jspdf.plugin.autotable.js"></script>
+	<script src="../../js/admin/factureJsPDF.js"></script>
+{% endblock  %}

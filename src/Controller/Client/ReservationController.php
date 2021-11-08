@@ -4,9 +4,11 @@ namespace App\Controller\Client;
 
 use Stripe\Stripe;
 use App\Entity\Devis;
+use App\Entity\Conducteur;
 use App\Entity\Reservation;
 use App\Service\DateHelper;
 use App\Form\ClientInfoType;
+use App\Form\ConducteurType;
 use Stripe\Checkout\Session;
 use App\Form\DevisClientType;
 use App\Service\TarifsHelper;
@@ -89,5 +91,56 @@ class ReservationController extends AbstractController
             'devis' => $devis,
             'res_attente_dateDebut' => $res_attente_dateDebut,
         ]);
+    }
+
+    /**
+     *  @Route("espaceclient/ajouter-conducteur/{reference}", name="client_add_conducteur", methods={"GET","POST"},requirements={"id":"\d+"})
+     *
+     */
+    public function addConducteur(Request $request, Reservation $reservation): Response
+    {
+        $conducteur = new Conducteur();
+        $formConducteur = $this->createForm(ConducteurType::class);
+
+        if ($formConducteur->isSubmitted() && $formConducteur->isValid()) {
+            dump($formConducteur->getData());
+        }
+        return $this->render('client/conducteur/new.html.twig', [
+            'formConducteur' => $formConducteur
+        ]);
+    }
+
+    /**
+     * @Route("espaceclient/details-reservation/{reference}", name="client_reservation_show", methods={"GET", "POST"},requirements={"id":"\d+"})
+     */
+    public function detailsReservation(Reservation $reservation, Request $request): Response
+    {
+
+        return $this->render('client/reservation/details_reservation.html.twig', [
+            'reservation' => $reservation
+        ]);
+    }
+
+    //return route en fonction date (comparaison avec dateNow pour savoir statut réservation)
+    public function getRouteForRedirection($reservation)
+    {
+
+        $dateDepart = $reservation->getDateDebut();
+        $dateRetour = $reservation->getDateFin();
+        $dateNow = $this->dateHelper->dateNow();
+
+        //classement des réservations
+
+        // 1-nouvelle réservation -> dateNow > dateReservation
+        if ($dateNow > $dateDepart) {
+            $routeReferer = 'reservation_show';
+        }
+        if ($dateDepart < $dateNow && $dateNow < $dateRetour) {
+            $routeReferer = 'contrats_show';
+        }
+        if ($dateNow > $dateRetour) {
+            $routeReferer = 'contrat_termine_show';
+        }
+        return $routeReferer;
     }
 }

@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use DateTime;
 use DateTimeZone;
-use App\Classe\Mail;
+use App\Classe\Mailjet;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Entity\Garantie;
@@ -73,7 +73,7 @@ class ReservationController extends AbstractController
     private $mail;
     private $flashy;
 
-    public function __construct(RouterInterface $router, FlashyNotifier $flashy, Mail $mail, EntityManagerInterface $em, MarqueRepository $marqueRepo, ModeleRepository $modeleRepo, TarifsHelper $tarifsHelper, DateHelper $dateHelper, TarifsRepository $tarifsRepo, ReservationRepository $reservationRepo,  UserRepository $userRepo, VehiculeRepository $vehiculeRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
+    public function __construct(RouterInterface $router, FlashyNotifier $flashy, Mailjet $mail, EntityManagerInterface $em, MarqueRepository $marqueRepo, ModeleRepository $modeleRepo, TarifsHelper $tarifsHelper, DateHelper $dateHelper, TarifsRepository $tarifsRepo, ReservationRepository $reservationRepo,  UserRepository $userRepo, VehiculeRepository $vehiculeRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
     {
 
         $this->reservationRepo = $reservationRepo;

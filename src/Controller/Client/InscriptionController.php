@@ -2,7 +2,7 @@
 
 namespace App\Controller\Client;
 
-use App\Classe\Mail;
+use App\Classe\Mailjet;
 use App\Entity\User;
 use App\Service\DateHelper;
 use App\Form\ClientRegisterType;
@@ -31,7 +31,7 @@ class InscriptionController extends AbstractController
         DateHelper $dateHelper,
         FlashyNotifier $flashy,
         EncoderFactoryInterface $encoder,
-        Mail $mail
+        Mailjet $mail
 
     ) {
         $this->passwordEncoder = $passwordEncoder;

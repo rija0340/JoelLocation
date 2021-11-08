@@ -48,6 +48,11 @@
 							<div class="mt-2">
 								<a href="{{path('add_avis', {'id': reserv.id})}}" class="btn btn-dark">Donner avis</a>
 							</div>
+							<div>
+								<a href="{{path('client_reservation_show', {'reference' : reserv.reference})}}">
+									<i class="fa fa-info-circle" style="font-size : 30px"></i>
+								</a>
+							</div>
 						</td>
 					</tr>
 				{% endfor %}
@@ -122,6 +127,7 @@
 				<th>Réservation/véhicule</th>
 				<th>Dates/Durée</th>
 				<th>Prix</th>
+				<th>Action</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -140,6 +146,11 @@
 					</td>
 					<td>{{ reserv.prix }}
 						€</td>
+					<td>
+						<a href="{{path('client_reservation_show', {'reference' : reserv.reference})}}">
+							<i class="fa fa-info-circle" style="font-size : 30px"></i>
+						</a>
+					</td>
 				</tr>
 			{% endfor %}
 		</tbody>
@@ -187,9 +198,10 @@
 							<div class="mt-2">
 								<a href="{{path('add_avis', {'id': reserv.id})}}" class="btn btn-dark">Donner avis</a>
 							</div>
-							{% else %}
-
 						{% endif %}
+						<a href="{{path('client_reservation_show', {'reference' : reserv.reference})}}">
+							<i class="fa fa-info-circle" style="font-size : 30px"></i>
+						</a>
 					</td>
 				</tr>
 			{% endfor %}
