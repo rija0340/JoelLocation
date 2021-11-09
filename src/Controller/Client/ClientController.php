@@ -92,7 +92,6 @@ class ClientController extends AbstractController
     public function index(Request $request, UserPasswordEncoderInterface $encoder): Response
     {
 
-
         $client = $this->getUser();
 
         if ($client == null) {
@@ -216,8 +215,6 @@ class ClientController extends AbstractController
                 $reservation->addGaranty($garantie);
             }
         }
-
-
 
         $reservation->setPrix($devis->getPrix());
         $reservation->setNumDevis($devis->getNumero());

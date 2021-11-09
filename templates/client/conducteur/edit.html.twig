@@ -8,15 +8,13 @@
 	<link rel="stylesheet" href="/css/client/style.css">
 {% endblock %}
 {% block body %}
-	<div class="container">
-		<div class="section-title red text-center mt-4 mb-4">
-			<h2>Modification
-			</h2>
+	<div class="x_panel">
+		<div class="x_title">
+			<h5>
+				<i class="fa fa-edit (alias)"></i>
+				Modification conducteur
+			</h5>
 		</div>
 		{{ include('client/conducteur/_formConducteur.html.twig', {'button_label': 'Modifier'}) }}
-
-		<a href="{{ path('client_mesConducteurs') }}" class="btn btn-dark">
-			<i class="fa fa-arrow-left" aria-hidden="true"></i>
-			Retour</a>
 	</div>
 {% endblock %}

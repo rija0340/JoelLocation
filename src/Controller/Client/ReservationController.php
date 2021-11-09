@@ -23,6 +23,8 @@ use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Classe\ValidationReservationClientSession;
+use App\Repository\ConducteurRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ReservationController extends AbstractController
@@ -37,6 +39,9 @@ class ReservationController extends AbstractController
     private $tarifsHelper;
     private $vehiculeRepo;
     private $validationSession;
+    private $em;
+    private $conducteurRepo;
+
 
     public function __construct(
         ReservationRepository $reservationRepo,
@@ -47,7 +52,10 @@ class ReservationController extends AbstractController
         TarifsHelper $tarifsHelper,
         VehiculeRepository $vehiculeRepo,
         FlashyNotifier $flashy,
-        ValidationReservationClientSession $validationSession
+        ValidationReservationClientSession $validationSession,
+        EntityManagerInterface $em,
+        ConducteurRepository $conducteurRepo
+
 
     ) {
         $this->reservationRepo = $reservationRepo;
@@ -59,6 +67,8 @@ class ReservationController extends AbstractController
         $this->vehiculeRepo = $vehiculeRepo;
         $this->flashy = $flashy;
         $this->validationSession = $validationSession;
+        $this->em = $em;
+        $this->conducteurRepo = $conducteurRepo;
     }
 
     /** 
@@ -93,32 +103,62 @@ class ReservationController extends AbstractController
         ]);
     }
 
+
     /**
-     *  @Route("espaceclient/ajouter-conducteur/{reference}", name="client_add_conducteur", methods={"GET","POST"},requirements={"id":"\d+"})
+     * @Route("espaceclient/details-reservation/{id}", name="client_reservation_show", methods={"GET", "POST"},requirements={"id":"\d+"})
+     */
+    public function detailsReservation(Reservation $reservation, Request $request): Response
+    {
+        $conducteurs =  $this->conducteurRepo->findBy(['client' => $this->getUser(), 'reservation' => null]);
+        return $this->render('client/reservation/details_reservation.html.twig', [
+            'reservation' => $reservation,
+            'conducteurs' => $conducteurs
+        ]);
+    }
+
+
+    //*******************************conducteur dans details reservation****************************************
+    /**
+     *  @Route("espaceclient/ajouter-conducteur/{id}", name="client_add_conducteur", methods={"GET","POST"},requirements={"id":"\d+"})
      *
      */
     public function addConducteur(Request $request, Reservation $reservation): Response
     {
-        $conducteur = new Conducteur();
-        $formConducteur = $this->createForm(ConducteurType::class);
 
-        if ($formConducteur->isSubmitted() && $formConducteur->isValid()) {
-            dump($formConducteur->getData());
+        if ($request->request->get('conducteur') != null) {
+
+            $conducteur = $this->conducteurRepo->find($request->request->get('conducteur'));
+            $reservation->addConducteursClient($conducteur);
+            $this->em->flush();
+            $this->flashy->success("Le conducteur a été ajouté avec succès");
+
+            return $this->redirectToRoute('client_reservation_show', ['id' => $reservation->getId()]);
         }
-        return $this->render('client/conducteur/new.html.twig', [
-            'formConducteur' => $formConducteur
-        ]);
+        return $this->redirectToRoute('client_reservation_show', ['id' => $reservation->getId()]);
+    }
+    /** 
+     *  @Route("espaceclient/conducteur-principal/{id}", name="make_conducteur_principal", methods={"GET","POST"},requirements={"id":"\d+"})
+     */
+    public function makeConducteurPrincipal(Request $request, Reservation $reservation)
+    {
+        return $this->redirectToRoute('client_reservation_show', ['id ' => $reservation->getId()]);
     }
 
-    /**
-     * @Route("espaceclient/details-reservation/{reference}", name="client_reservation_show", methods={"GET", "POST"},requirements={"id":"\d+"})
-     */
-    public function detailsReservation(Reservation $reservation, Request $request): Response
-    {
 
-        return $this->render('client/reservation/details_reservation.html.twig', [
-            'reservation' => $reservation
-        ]);
+    /**
+     * @Route("espaceclient/supprimer-conducteur/{id}", name="client_conducteur_delete", methods={"DELETE"},requirements={"id":"\d+"})
+     */
+    public function deleteConducteur(Request $request, Conducteur $conducteur): Response
+    {
+        $id = $this->reservationRepo->find($request->request->get('reservation'));
+        $reservation = $this->reservationRepo->find($id);
+        if ($this->isCsrfTokenValid('delete' . $conducteur->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($conducteur);
+            $entityManager->flush();
+            $this->flashy->success('le conducteur a été supprimé');
+            return $this->redirectToRoute('client_reservations');
+        }
     }
 
     //return route en fonction date (comparaison avec dateNow pour savoir statut réservation)

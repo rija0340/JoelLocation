@@ -3,8 +3,11 @@
 namespace App\Controller\Client;
 
 use App\Entity\Conducteur;
+use App\Entity\Reservation;
 use App\Form\ConducteurType;
 use App\Repository\ConducteurRepository;
+use App\Repository\ReservationRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,19 +17,23 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ConducteurController extends AbstractController
 {
 
-
     private $conducteurRepo;
     private $flashy;
-
+    private $reservationRepo;
+    private $em;
 
     public function __construct(
 
         ConducteurRepository $conducteurRepo,
-        FlashyNotifier $flashy
+        FlashyNotifier $flashy,
+        ReservationRepository $reservationRepo,
+        EntityManagerInterface $em
 
     ) {
         $this->conducteurRepo = $conducteurRepo;
         $this->flashy = $flashy;
+        $this->reservationRepo = $reservationRepo;
+        $this->em = $em;
     }
 
 
@@ -36,9 +43,11 @@ class ConducteurController extends AbstractController
     public function index(Request $request): Response
     {
         $client = $this->getUser();
+
         if ($client == null) {
             return $this->redirectToRoute('app_login');
         }
+
         $conducteurs = $this->conducteurRepo->findBy(['client' => $client]);
 
         // $formClient = $this->createForm(ClientType::class, $client);
@@ -66,8 +75,8 @@ class ConducteurController extends AbstractController
 
         if ($formConducteur->isSubmitted() && $formConducteur->isValid()) {
 
+            $conducteur->setClient($client);
             $entityManager = $this->getDoctrine()->getManager();
-            $conducteur->setReservation($client);
             $entityManager->persist($conducteur);
             $entityManager->flush();
 
@@ -99,7 +108,7 @@ class ConducteurController extends AbstractController
         }
 
         return $this->render('client/conducteur/edit.html.twig', [
-            'formConducteur' => $formConducteur->createView(),
+            'formConducteur' => $formConducteur->createView()
         ]);
     }
 }

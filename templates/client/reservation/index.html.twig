@@ -49,7 +49,7 @@
 								<a href="{{path('add_avis', {'id': reserv.id})}}" class="btn btn-dark">Donner avis</a>
 							</div>
 							<div>
-								<a href="{{path('client_reservation_show', {'reference' : reserv.reference})}}">
+								<a href="{{path('client_reservation_show', {'id' : reserv.id})}}">
 									<i class="fa fa-info-circle" style="font-size : 30px"></i>
 								</a>
 							</div>
@@ -147,7 +147,7 @@
 					<td>{{ reserv.prix }}
 						€</td>
 					<td>
-						<a href="{{path('client_reservation_show', {'reference' : reserv.reference})}}">
+						<a href="{{path('client_reservation_show', {'id' : reserv.id})}}">
 							<i class="fa fa-info-circle" style="font-size : 30px"></i>
 						</a>
 					</td>
@@ -199,7 +199,7 @@
 								<a href="{{path('add_avis', {'id': reserv.id})}}" class="btn btn-dark">Donner avis</a>
 							</div>
 						{% endif %}
-						<a href="{{path('client_reservation_show', {'reference' : reserv.reference})}}">
+						<a href="{{path('client_reservation_show', {'id' : reserv.id})}}">
 							<i class="fa fa-info-circle" style="font-size : 30px"></i>
 						</a>
 					</td>

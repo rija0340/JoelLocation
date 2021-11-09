@@ -4,11 +4,15 @@
 {% endblock %}
 {% block stylesheets %}{% endblock %}
 {% block body %}
-	<h4 class="mb-0 pb-0">Ajout conducteur</h4>
-	<div class="clearfix"></div>
-	<div class="x_title"></div>
+	<div class="x_panel">
+		<h4 class="mb-0 pb-0">
+			<i class="fa fa-plus"></i>
+			Ajout conducteur</h4>
+		<div class="clearfix"></div>
+		<div class="x_title"></div>
 
-	{% include "client/conducteur/_formConducteur.html.twig" %}
+		{% include "client/conducteur/_formConducteur.html.twig" %}
+	</div>
 
 {% endblock %}
 {% block javascripts %}{% endblock %}

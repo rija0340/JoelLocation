@@ -214,7 +214,6 @@ class NouvelleReservationController extends AbstractController
      */
     public function step4(Request $request)
     {
-        dump($this->reservationSession->getConducteur());
 
         $dateDepart = $this->reservationSession->getDateDepart();
         $dateRetour = $this->reservationSession->getDateRetour();
