@@ -17,14 +17,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ConducteurController extends AbstractController
 {
 
-
     private $conducteurRepo;
     private $flashy;
     private $reservationRepo;
     private $em;
-
-
-
 
     public function __construct(
 

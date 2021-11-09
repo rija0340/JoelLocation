@@ -9,7 +9,7 @@
 					<span aria-hidden="true">×</span>
 				</button>
 			</div>
-			<form action="{{path('client_add_conducteur', {'reference': reservation.reference})}}" method="POST">
+			<form action="{{path('client_add_conducteur', {'id': reservation.id})}}" method="POST">
 				<div class="modal-body">
 					<label>Sélectionner un conducteur à ajouter à la réservation :</label>
 					<select id="monselect" class="form-control" name="conducteur">
