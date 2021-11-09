@@ -9,9 +9,31 @@
 
 {% block body %}
 
+	<div class="x_panel">
+		<div class="row">
+			<div class="col-md-6">
+				<h5>
+					<i class="fa fa-folder-open-o"></i>
+					RESERVATION -
+					{{reservation.reference}}
+				</h5>
+			</div>
+			<div class="col-md-6 text-right">
+				<a href="{{path('client_reservations')}}" class="btn btn-dark">
+					<i class="fa fa-reply"></i>
+					Mes réservations</a>
+			</div>
+		</div>
+	</div>
 	<div class="row">
 		<div class="col-md-3">
-			<div class="x_panel"></div>
+			<div class="x_panel">
+				<h6>
+					{{reservation.vehicule.marque}}
+					{{reservation.vehicule.modele}}</h6>
+
+				<img src="{{vich_uploader_asset(reservation.vehicule, 'imageFile') }}" alt="{{ reservation.vehicule.image }}" class="img-circle  " style="width : 250px;">
+			</div>
 		</div>
 		<div class="col-md-9">
 			<div class="x_panel">
@@ -47,39 +69,57 @@
 					<div class="x_title">
 						<h4 class="text-uppercase">Conducteur(s)</h4>
 					</div>
-					<a href="{{path('client_add_conducteur', {'reference': reservation.reference})}}" class="btn btn-danger">
-						<i class="fa fa-plus"></i>
-						Ajouter</a>
+					{% if reservation.conducteursClient|length < 2 %}
+						<button type="button" class="btn btn-danger " data-toggle="modal" data-target=".modalKM">
+							<i class="fa  fa-plus"></i>
+							Ajouter</button>
+					{% endif %}
 
 					<div class="x_content">
 						{% for conducteur in reservation.conducteursClient %}
-							<div class="row">
-								<div class="col-md-4">{{conducteur.nom}}
-									{{conducteur.prenom}}</div>
-								<div class="col-md-4">
-									<strong>Numéro de permis :
-									</strong>
-									{{conducteur.numeroPermis}}
-									<br>
-									<strong>Date de délivrance :
-									</strong>
-									{{conducteur.dateDelivrance|date('d/m/Y')}}
-									<br>
-									<strong>Ville de délivrance :
-									</strong>
-									{{conducteur.villeDelivrance}}
-								</div>
-								<div class="col-md-1"></div>
-								<div class="col-md-3">
-									<button class="btn btn-success">
-										<i class="fa fa-check"></i>
-									</button>
-									<button class="btn btn-warning">
-										<i class="fa fa-reply"></i>
-									</button>
-									<button class="btn btn-danger">
-										<i class="fa fa-close (alias)"></i>
-									</button>
+							<div class="mb-3 border-blue">
+								<div class="row ">
+									<div class="col-md-4">{{conducteur.nom}}
+										{{conducteur.prenom}}</div>
+									<div class="col-md-4">
+										<strong>Numéro de permis :
+										</strong>
+										{{conducteur.numeroPermis}}
+										<br>
+										<strong>Date de délivrance :
+										</strong>
+										{{conducteur.dateDelivrance|date('d/m/Y')}}
+										<br>
+										<strong>Ville de délivrance :
+										</strong>
+										{{conducteur.villeDelivrance}}
+									</div>
+									<div class="col-md-1"></div>
+									<div class="col-md-3">
+										<div class="row">
+											<div class="col-md-4 col-sm-4 col-xs-4 text-right">
+												<a href="{{path('make_conducteur_principal', {'id': conducteur.id})}}" class="btn btn-success">
+													<i class="fa fa-check"></i>
+												</a>
+											</div>
+											<div class="col-md-4 col-sm-4 col-xs-4 text-right">
+												<a href="{{path('conducteur_edit', {'id': conducteur.id})}}" class="btn btn-warning">
+													<i class="fa fa-reply"></i>
+												</a>
+											</div>
+											<div class="col-md-4 col-sm-4 col-xs-4">
+												<form method="post" action="{{ path('client_conducteur_delete', {'id': conducteur.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer ce conducteur ?');">
+													<input type="hidden" name="_method" value="DELETE">
+													<input type="hidden" name="reservation" value="{{reservation.id}}">
+
+													<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ conducteur.id) }}">
+													<button class="btn btn-danger">
+														<i class="fa fa-close (alias)" aria-hidden="true"></i>
+													</button>
+												</form>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
 						{% endfor %}
@@ -273,6 +313,9 @@
 			</div>
 		</div>
 	</div>
+
+	{% include "client/reservation/modalConducteur.html.twig" %}
+
 {% endblock %}
 {% block javascripts %}
 	<!-- Datatables -->

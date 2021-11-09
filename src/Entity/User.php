@@ -166,6 +166,11 @@ class User implements UserInterface
      */
     private $infosVolResa;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Conducteur::class, mappedBy="client")
+     */
+    private $conducteurs;
+
     public function __construct()
     {
         $this->messages = new ArrayCollection();
@@ -629,6 +634,24 @@ class User implements UserInterface
     public function setInfosVolResa(?InfosVolResa $infosVolResa): self
     {
         $this->infosVolResa = $infosVolResa;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Conducteur[]
+     */
+    public function getConducteurs(): Collection
+    {
+        return $this->conducteurs;
+    }
+
+    public function addConducteur(Conducteur $conducteur): self
+    {
+        if (!$this->conducteurs->contains($conducteur)) {
+            $this->conducteurs[] = $conducteur;
+            $conducteur->setClient($this);
+        }
 
         return $this;
     }
