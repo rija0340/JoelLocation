@@ -204,7 +204,8 @@ class AccueilController extends AbstractController
             $objet = $request->request->get('objet');
             $message = "Adresse email du client :" . $email_user . "Message : " . $request->request->get('message');
 
-            $this->mailjet->send("joel@joellocation.com", $nom, $objet, $message);
+            //to, client_nom, objet, message du client
+            $this->mailjet->send("rakotoarinelinarija@gmail.com", $nom, $objet, $message);
 
             $this->flashy->success("Votre mail a bien été envoyé");
             return $this->redirectToRoute('accueil');

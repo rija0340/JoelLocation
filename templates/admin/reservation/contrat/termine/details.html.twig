@@ -39,6 +39,9 @@
 
 
 {% block content %}
+	{# utile pour autocompletion #}
+	<input
+	type="hidden" value="{{reservation.id}}" id="idReservation">
 	<!-- div contenant extra information utile pour javascript -->
 	<div class="hide">
 		<span class="js-vehCarb">{{reservation.vehicule.carburation}}</span>
@@ -189,9 +192,12 @@
 		</div>
 		<div class="x_content ">
 			<div class="text-center">
-				<button class="btn btn-primary" id="ajouterConducteur">
-					<i class="fa fa-plus"></i>
-					Ajouter conducteur</button>
+				<form action="{{path('add_conducteur')}}">
+					<input type="hidden" name="id_reservation" value="{{reservation.id}}">
+					<button type="submit" class="btn btn-primary" id="">
+						<i class="fa fa-plus"></i>
+						Ajouter conducteur</button>
+				</form>
 			</div>
 
 			<div class="x_title">

@@ -24,18 +24,27 @@
 
 {% block content %}
 
+	<input type="hidden" value="{{reservation.id}}" id="idReservation">
+
+	{{form_start(form)}}
 	<div class="x_panel">
+		<div class="x_title">
+			chercher un conducteur :
+		</div>
+		<div class="x_content">
+			<input type="text" class="form-control" id="selectConducteur">
+		</div>
+
 		<div class="x_title">
 
 			<h2>
 				<i class="fa fa-plus"></i>
-				Ajouter un conducteur
+				Information conducteur
 			</h2>
 
 			<div class="clearfix"></div>
 		</div>
 
-		{{form_start(form)}}
 		<div class="row">
 			<div class="col-md-6 form-group">
 				<label>
@@ -66,20 +75,33 @@
 
 				{{form_widget(form.villeNaissance)}}
 			</div>
-			<div class="col-md-6 form-group">
+
+		</div>
+		<div class="x_title">
+
+			<h2>
+				<i class="fa fa-plus"></i>
+				Information permis
+			</h2>
+
+			<div class="clearfix"></div>
+		</div>
+		<div class="row mb-3">
+
+			<div class="col-md-3 form-group">
 				<label>
 					Numero permis :
 				</label>
 
 				{{form_widget(form.numeroPermis)}}
 			</div>
-			<div class="col-md-6 form-group">
+			<div class="col-md-3 form-group">
 				<label>
 					Ville de délivrance :
 				</label>
 				{{form_widget(form.villeDelivrance)}}
 			</div>
-			<div class="col-md-6 ">
+			<div class="col-md-3 ">
 				<label>
 					Date de délivrance :
 				</label>
@@ -87,7 +109,7 @@
 				{{form_widget(form.dateDelivrance)}}
 			</div>
 
-			<div class="col-md-6 ">
+			<div class="col-md-3 ">
 				<label>
 					Date d'obtention :
 				</label>
@@ -102,9 +124,8 @@
 				Enregistrer
 			</button>
 		</div>
-		{{form_end(form)}}
 	</div>
-
+	{{form_end(form)}}
 {% endblock %}
 {% block javascripts %}
 	<!-- Datatables -->
@@ -123,4 +144,9 @@
 	<script src="../../admin/vendors/jszip/dist/jszip.min.js"></script>
 	<script src="../../admin/vendors/pdfmake/build/pdfmake.min.js"></script>
 	<script src="../../admin/vendors/pdfmake/build/vfs_fonts.js"></script>
+
+	{# for autocompletion #}
+	<script src="{{asset("js/admin/jquery-ui.js")}}"></script>
+	<script src="{{asset("js/admin/reservation/ajout_conducteur.js")}}"></script>
+
 {% endblock %}

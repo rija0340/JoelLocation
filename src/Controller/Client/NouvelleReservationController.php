@@ -2,6 +2,7 @@
 
 namespace App\Controller\Client;
 
+use App\Classe\Mailjet;
 use App\Entity\Devis;
 use App\Service\DateHelper;
 use App\Service\TarifsHelper;
@@ -34,6 +35,7 @@ class NouvelleReservationController extends AbstractController
     private $tarifsHelper;
     private $vehiculeRepo;
     private $reservationHelper;
+    private $mailjet;
     private $reservationSession;
 
     public function __construct(
@@ -47,7 +49,8 @@ class NouvelleReservationController extends AbstractController
         VehiculeRepository $vehiculeRepo,
         FlashyNotifier $flashy,
         ReservationHelper $reservationHelper,
-        ReservationSession $reservationSession
+        ReservationSession $reservationSession,
+        Mailjet $mailjet
 
     ) {
         $this->reservationRepo = $reservationRepo;
@@ -60,6 +63,7 @@ class NouvelleReservationController extends AbstractController
         $this->flashy = $flashy;
         $this->reservationHelper = $reservationHelper;
         $this->reservationSession = $reservationSession;
+        $this->mailjet = $mailjet;
     }
 
     /**
@@ -328,6 +332,11 @@ class NouvelleReservationController extends AbstractController
 
         $this->flashy->success('Le devis a été enregistré avec succés');
         //effacher session reservation
+
+
+        //to, client_nom, objet, message du client
+        $this->mailjet->send("rija0340@gmail.com", "Rija", "devis enregistré", "ceci est un test");
+
         return $this->redirectToRoute('client_reservations');
     }
 }

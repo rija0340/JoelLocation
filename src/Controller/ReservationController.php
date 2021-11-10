@@ -35,6 +35,7 @@ use App\Repository\OptionsRepository;
 use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
 use App\Form\EditClientReservationType;
+use App\Repository\ConducteurRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ReservationRepository;
 use Knp\Component\Pager\PaginatorInterface;
@@ -58,6 +59,7 @@ use Dompdf\Options;
 class ReservationController extends AbstractController
 {
     private $userRepo;
+    private $conducteurRepo;
     private $router;
     private $reservationRepo;
     private $dateTimestamp;
@@ -73,7 +75,7 @@ class ReservationController extends AbstractController
     private $mail;
     private $flashy;
 
-    public function __construct(RouterInterface $router, FlashyNotifier $flashy, Mailjet $mail, EntityManagerInterface $em, MarqueRepository $marqueRepo, ModeleRepository $modeleRepo, TarifsHelper $tarifsHelper, DateHelper $dateHelper, TarifsRepository $tarifsRepo, ReservationRepository $reservationRepo,  UserRepository $userRepo, VehiculeRepository $vehiculeRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
+    public function __construct(ConducteurRepository $conducteurRepo, RouterInterface $router, FlashyNotifier $flashy, Mailjet $mail, EntityManagerInterface $em, MarqueRepository $marqueRepo, ModeleRepository $modeleRepo, TarifsHelper $tarifsHelper, DateHelper $dateHelper, TarifsRepository $tarifsRepo, ReservationRepository $reservationRepo,  UserRepository $userRepo, VehiculeRepository $vehiculeRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
     {
 
         $this->reservationRepo = $reservationRepo;
@@ -90,6 +92,7 @@ class ReservationController extends AbstractController
         $this->mail = $mail;
         $this->flashy = $flashy;
         $this->router = $router;
+        $this->conducteurRepo = $conducteurRepo;
     }
 
     /**
@@ -339,7 +342,7 @@ class ReservationController extends AbstractController
             $this->em->flush();
 
             //notification succes
-            $this->flashy->success('Le conducteur a bien été ajouté');
+            $this->flashy->success('Le conducteur a bienc été ajouté');
             return $this->redirectToRoute($this->getRouteForRedirection($reservation), ['id' => $id]);
         }
         return $this->render('admin/reservation/crud/conducteur/new.html.twig', [
@@ -349,6 +352,20 @@ class ReservationController extends AbstractController
             'reservation' => $reservation,
             'routeReferer' => $this->getRouteForRedirection($reservation)
         ]);
+    }
+
+
+    /**
+     *  @Route("/liste-conducteurs/", name="liste_conducteurs", methods={"GET","POST"},requirements={"id":"\d+"})
+     *
+     */
+    public function listeConduteurs(Request $request): Response
+    {
+        $id = $request->query->get('idReservation');
+        $reservation = $this->reservationRepo->find($id);
+        $conducteurs = $this->conducteurRepo->findBy(['client' => $reservation->getClient(), 'reservation' => null]);
+
+        return new JsonResponse($conducteurs);
     }
 
     //return route en fonction date (comparaison avec dateNow pour savoir statut réservation)
@@ -373,7 +390,6 @@ class ReservationController extends AbstractController
         }
         return $routeReferer;
     }
-
 
     //return referer->route avant la rédirection (source)
     public function getReferer($request)
