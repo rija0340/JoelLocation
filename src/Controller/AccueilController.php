@@ -202,10 +202,10 @@ class AccueilController extends AbstractController
             $telephone = $request->request->get('telephone');
             $adresse = $request->request->get('adresse');
             $objet = $request->request->get('objet');
-            $message = "Adresse email du client :" . $email_user . "Message : " . $request->request->get('message');
+            $message = "Adresse email du client :" . $email_user . '<br>' . " Message : " . $request->request->get('message');
 
             //to, client_nom, objet, message du client
-            $this->mailjet->send("rakotoarinelinarija@gmail.com", $nom, $objet, $message);
+            $this->mailjet->send("contact.joellocation@gmail.com", $nom, $objet, $message);
 
             $this->flashy->success("Votre mail a bien été envoyé");
             return $this->redirectToRoute('accueil');

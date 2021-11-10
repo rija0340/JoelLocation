@@ -3,6 +3,7 @@ var idClient;
 
 getElements();
 getListConducteurs();
+autocomplete(listeConducteurs);
 
 
 function getElements() {
@@ -27,7 +28,7 @@ function getListConducteurs() {
 
             console.log(data);
             for (let i = 0; i < data.length; i++) {
-                listeConducteurs.push(data[i].prenom + ' ' + data[i].nom);
+                listeConducteurs.push(data[i].nom + ' ' + data[i].prenom + ' (' + data[i].numPermis + ')');
             }
         },
         error: function () {

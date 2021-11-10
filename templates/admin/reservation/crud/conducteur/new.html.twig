@@ -19,22 +19,37 @@
 	<link href="../../admin/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
 	<link href="../../admin/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
 	<link href="../../admin/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
-	<link href="../../admin/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+	<link
+	href="../../admin/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+
+	{# autocompletion css #}
+	<link rel="stylesheet" href="{{asset('css/admin/jquery-ui.css')}}">
 {% endblock %}
 
 {% block content %}
 
-	<input type="hidden" value="{{reservation.id}}" id="idReservation">
 
-	{{form_start(form)}}
 	<div class="x_panel">
 		<div class="x_title">
 			chercher un conducteur :
 		</div>
-		<div class="x_content">
-			<input type="text" class="form-control" id="selectConducteur">
-		</div>
+		<form action="{{ path("add_selected_conducteur") }}" name="selectedConducteur" method="POST">
+			<div class="x_content">
+				<input type="hidden" value="{{reservation.id}}" id="idReservation" name="idReservation">
+				<input type="text" class="form-control" id="selectConducteur" name="selectedConducteur">
+			</div>
 
+			<div class="text-center">
+				<button class="btn btn-danger" type="submit">
+					Enregistrer
+				</button>
+			</div>
+		</form>
+	</div>
+
+	{{form_start(form)}}
+	<input type="hidden" value="{{reservation.id}}" id="idReservation" name="idReservation">
+	<div class="x_panel">
 		<div class="x_title">
 
 			<h2>
@@ -147,6 +162,7 @@
 
 	{# for autocompletion #}
 	<script src="{{asset("js/admin/jquery-ui.js")}}"></script>
-	<script src="{{asset("js/admin/reservation/ajout_conducteur.js")}}"></script>
 
+	{# javascript pour autocompletion rechercher conducteur #}
+	<script src="{{asset("js/admin/reservation/ajout_conducteur.js")}}"></script>
 {% endblock %}

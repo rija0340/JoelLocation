@@ -324,7 +324,7 @@ class ReservationController extends AbstractController
             $id = $request->query->get('id_reservation');
             $reservation = $this->reservationRepo->find($id);
         } else {
-            $refReservation = null;
+            $reservation = null;
         }
 
         $conducteur  = new Conducteur();
@@ -354,6 +354,29 @@ class ReservationController extends AbstractController
         ]);
     }
 
+    /**
+     * from autocompletion input
+     *  @Route("/ajouter-conducteur-selection/", name="add_selected_conducteur", methods={"GET","POST"},requirements={"id":"\d+"})
+     *
+     */
+    public function addSelectedConducteur(Request $request)
+    {
+        //extracion mail from string format : "nom prenom (mail)"
+        $conducteur = $request->request->get('selectedConducteur');
+        $conducteur = explode('(', $conducteur);
+        $numPermis = explode(')', $conducteur[1]);
+        $numeroPermis = $numPermis[0];
+
+        $conducteur =  $this->conducteurRepo->findOneBy(['numeroPermis' => $numeroPermis]);
+        $reservation = $this->reservationRepo->find($request->request->get('idReservation'));
+
+        $reservation->addConducteursClient($conducteur);
+        $this->em->flush();
+
+        $this->flashy->success("Le conducteur a été ajouté aved succès");
+        return $this->redirectToRoute($this->getRouteForRedirection($reservation), ['id' => $reservation->getId()]);
+    }
+
 
     /**
      *  @Route("/liste-conducteurs/", name="liste_conducteurs", methods={"GET","POST"},requirements={"id":"\d+"})
@@ -365,7 +388,16 @@ class ReservationController extends AbstractController
         $reservation = $this->reservationRepo->find($id);
         $conducteurs = $this->conducteurRepo->findBy(['client' => $reservation->getClient(), 'reservation' => null]);
 
-        return new JsonResponse($conducteurs);
+        $data = array();
+        foreach ($conducteurs as $key => $conducteur) {
+
+            $data[$key]['nom'] = $conducteur->getNom();
+            $data[$key]['prenom'] = $conducteur->getNom();
+            $data[$key]['numPermis'] = $conducteur->getNumeroPermis();
+        }
+
+
+        return new JsonResponse($data);
     }
 
     //return route en fonction date (comparaison avec dateNow pour savoir statut réservation)

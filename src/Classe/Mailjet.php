@@ -11,18 +11,18 @@ class Mailjet
     //dans dashboard> preference du compte> gestion API key
 
     //key pour compte rija0340@gmail.com
-    private $api_key = '353d0fe96ebc139412ba9d5a065d0826';
-    private $api_key_secret =  '466090d3e5f229fa7bb780e76cb2f503';
-    private $email_from = "rija0340@gmail.com";
-    private $templateID  = 3190943;
+    // private $api_key = '353d0fe96ebc139412ba9d5a065d0826';
+    // private $api_key_secret =  '466090d3e5f229fa7bb780e76cb2f503';
+    // private $email_from = "rija0340@gmail.com";
+    // private $templateID  = 3190943;
 
-    // key pour compte joel@joellocation.com
-    // private $api_key = '9e0c14700d557919360cc8f742d1a15b';
-    // private $api_key_secret =  '048654946039a06c8ea77ede2d5b2ec4';
-    // private $email_from = "joel@joellocation.com";
-    // private $templateID  = 3324755;
+    // key pour compte contact.joellocation@gmail.com
+    private $api_key = 'affab7bbb2f993c330acfdd8deac52b7';
+    private $api_key_secret =  '78d2b360a2025239389a1f9032c0e5d8';
+    private $email_from = "contact.joellocation@gmail.com";
+    private $templateID  = 3331640;
 
-    public function send($to_email, $to_name, $subject, $content)
+    public function send($to_email, $to_name, $subject, $message)
     {
 
         $mj = new Client($this->api_key, $this->api_key_secret, true, ['version' => 'v3.1']);
@@ -45,13 +45,12 @@ class Mailjet
                     'Subject' => $subject,
                     'Variables' => [
                         'objet' => $subject,
-                        'content' => $content,
+                        'message' => $message,
                     ]
                 ]
             ]
         ];
         $response = $mj->post(Resources::$Email, ['body' => $body]);
         $response->success();
-        dd($response->getData());
     }
 }
