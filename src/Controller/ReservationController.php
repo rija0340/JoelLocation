@@ -54,7 +54,7 @@ use Dompdf\Options;
 
 
 /**
- * @Route("/reservation")
+ * @Route("backoffice/reservation")
  */
 class ReservationController extends AbstractController
 {
@@ -392,12 +392,53 @@ class ReservationController extends AbstractController
         foreach ($conducteurs as $key => $conducteur) {
 
             $data[$key]['nom'] = $conducteur->getNom();
-            $data[$key]['prenom'] = $conducteur->getNom();
+            $data[$key]['prenom'] = $conducteur->getPrenom();
             $data[$key]['numPermis'] = $conducteur->getNumeroPermis();
         }
 
 
         return new JsonResponse($data);
+    }
+
+
+    /**
+     * @Route("/modifier-conducteur/{id}/{reservation}", name="reservation_conducteur_edit", methods={"GET","POST"})
+     */
+    public function editConducteur(Request $request, Conducteur $conducteur, Reservation $reservation): Response
+    {
+        $form = $this->createForm(ConducteurType::class, $conducteur);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $this->getDoctrine()->getManager()->flush();
+            $this->flashy->success('Votre conducteur a bien été modifié');
+            return $this->redirectToRoute($this->getRouteForRedirection($reservation), ['id' =>  $reservation->getId()]);
+        }
+
+        return $this->render('admin/reservation/crud/conducteur/edit.html.twig', [
+            'form' => $form->createView(),
+            'routeReferer' => $this->getRouteForRedirection($reservation),
+            'reservation' => $reservation
+
+        ]);
+    }
+
+
+    /**
+     * @Route("supprimer-conducteur/{id}/{reservation}", name="client_conducteur_delete", methods={"DELETE"},requirements={"id":"\d+"})
+     */
+    public function deleteConducteur(Request $request, Conducteur $conducteur, Reservation $reservation): Response
+    {
+        $id = $this->reservationRepo->find($request->request->get('reservation'));
+        $reservation = $this->reservationRepo->find($id);
+        if ($this->isCsrfTokenValid('delete' . $conducteur->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($conducteur);
+            $entityManager->flush();
+            $this->flashy->success('le conducteur a été supprimé');
+            return $this->redirectToRoute($this->getRouteForRedirection($reservation), ['id' => $reservation->getId()]);
+        }
     }
 
     //return route en fonction date (comparaison avec dateNow pour savoir statut réservation)

@@ -165,11 +165,6 @@ class User implements UserInterface
      */
     private $infosVolResa;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Conducteur::class, mappedBy="client")
-     */
-    private $conducteurs;
-
     public function __construct()
     {
         $this->messages = new ArrayCollection();
@@ -177,7 +172,6 @@ class User implements UserInterface
         $this->utilisateur = new ArrayCollection();
         $this->paiements = new ArrayCollection();
         $this->devis = new ArrayCollection();
-        $this->conducteurs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -588,19 +582,6 @@ class User implements UserInterface
         return $this;
     }
 
-
-    public function removeConducteur(Conducteur $conducteur): self
-    {
-        if ($this->conducteurs->removeElement($conducteur)) {
-            // set the owning side to null (unless already changed)
-            if ($conducteur->getClient() === $this) {
-                $conducteur->setClient(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getVilleDelivrancePermis(): ?string
     {
         return $this->villeDelivrancePermis;
@@ -609,48 +590,6 @@ class User implements UserInterface
     public function setVilleDelivrancePermis(?string $villeDelivrancePermis): self
     {
         $this->villeDelivrancePermis = $villeDelivrancePermis;
-
-        return $this;
-    }
-
-    public function getInfosResa(): ?InfosResa
-    {
-        return $this->infosResa;
-    }
-
-    public function setInfosResa(?InfosResa $infosResa): self
-    {
-        $this->infosResa = $infosResa;
-
-        return $this;
-    }
-
-    public function getInfosVolResa(): ?InfosVolResa
-    {
-        return $this->infosVolResa;
-    }
-
-    public function setInfosVolResa(?InfosVolResa $infosVolResa): self
-    {
-        $this->infosVolResa = $infosVolResa;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Conducteur[]
-     */
-    public function getConducteurs(): Collection
-    {
-        return $this->conducteurs;
-    }
-
-    public function addConducteur(Conducteur $conducteur): self
-    {
-        if (!$this->conducteurs->contains($conducteur)) {
-            $this->conducteurs[] = $conducteur;
-            $conducteur->setClient($this);
-        }
 
         return $this;
     }

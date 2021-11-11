@@ -22,7 +22,7 @@ function autocomplete(listeConducteurs) {
 function getListConducteurs() {
     $.ajax({
         type: 'GET',
-        url: '/reservation/liste-conducteurs',
+        url: 'backoffice/reservation/liste-conducteurs',
         data: { 'idReservation': idReservation },
         success: function (data) {
 
