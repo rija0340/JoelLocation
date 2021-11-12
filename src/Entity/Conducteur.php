@@ -64,6 +64,11 @@ class Conducteur
      */
     private $reservation;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="conducteurs")
+     */
+    private $client;
+
 
     public function getId(): ?int
     {
@@ -175,6 +180,18 @@ class Conducteur
     public function setReservation(?Reservation $reservation): self
     {
         $this->reservation = $reservation;
+
+        return $this;
+    }
+
+    public function getClient(): ?User
+    {
+        return $this->client;
+    }
+
+    public function setClient(?User $client): self
+    {
+        $this->client = $client;
 
         return $this;
     }

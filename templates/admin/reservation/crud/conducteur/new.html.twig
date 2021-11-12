@@ -4,13 +4,11 @@
 {% endblock %}
 {% block current_page %}
 
-	{% if refReservation %}
-		<h2>
-			<i class="fa fa-plus"></i>
-			Réservation N°
-			{{refReservation}}</h2>
+	<h2>
+		<i class="fa fa-plus"></i>
+		Réservation N°
+		{{reservation.reference}}</h2>
 
-	{% endif %}
 
 {% endblock %}
 {% block stylesheets %}

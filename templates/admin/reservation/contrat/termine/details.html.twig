@@ -173,7 +173,7 @@
 					<a type="button" class="btn btn-warning text-nowrap" href="{{path('reservation_edit', {'id': reservation.id} ) }}">
 						<i class="fa fa-cog"></i>
 						Modifier la réservation</a>
-					<a type="button" class="btn btn-danger text-nowrap" href="{{path('reservation_edit', {'id': reservation.id} ) }}">
+					<a type="button" class="btn btn-danger text-nowrap" href="{{path('optionsGaranties_edit', {'id': reservation.id} ) }}">
 						<i class="fa fa-edit (alias)"></i>
 						Modifier les options & garanties</a>
 					<a href="{{path('reservation_ident_connex', {'id' : reservation.id })}}" type="button" class="btn btn-violet text-nowrap">
@@ -193,12 +193,11 @@
 		<div class="x_content ">
 			{% if reservation.conducteursClient|length < 2  %}
 				<div class="text-center">
-					<form action="{{path('add_conducteur')}}">
-						<input type="hidden" name="id_reservation" value="{{reservation.id}}">
-						<button type="submit" class="btn btn-primary" id="">
-							<i class="fa fa-plus"></i>
-							Ajouter conducteur</button>
-					</form>
+
+					<a href="{{path('add_conducteur', {'reservation' : reservation.id})}}" type="submit" class="btn btn-primary">
+						<i class="fa fa-plus"></i>
+						Ajouter conducteur</a>
+
 				</div>
 			{% endif %}
 
@@ -210,7 +209,7 @@
 					<h4 class="text-danger font-weight-bold mb-0">Conducteur n°
 						{{i}}</h4>
 				</div>
-				<p class="text-success font-weight-bold font-italic">Conducteur principal</p>
+				{# <p class="text-success font-weight-bold font-italic">Conducteur principal</p> #}
 				<div class="row info_conducteur">
 					<div class="col-md-3">
 						<span class="label_conducteur">
@@ -260,7 +259,7 @@
 							<a class="btn btn-warning" href="{{path('reservation_conducteur_edit', {'id' : conducteur.id, 'reservation' : reservation.id})}}">
 								<i class="fa fa-reply"></i>
 							</a>
-							<form method="post" action="{{ path('client_conducteur_delete', {'id': conducteur.id, 'reservation' : reservation.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer ce conducteur ?');">
+							<form method="post" action="{{ path('reservation_conducteur_delete', {'id': conducteur.id, 'reservation' : reservation.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer ce conducteur ?');">
 								<input type="hidden" name="_method" value="DELETE">
 								<input type="hidden" name="reservation" value="{{reservation.id}}">
 
@@ -466,14 +465,11 @@
 							Autre réglement
 						</button>
 						<div class="dropdown-menu">
-							<a class="dropdown-item" href="#">Reporter la réservation</a>
-							<a class="dropdown-item" href="#">Mail de confirmation</a>
-							<a class="dropdown-item" href="{{path('reservation_cancel', {'id':reservation.id})}}">Annuler la réservation</a>
-							<a class="dropdown-item" href="#">Fermer le contrat</a>
-							<a class="dropdown-item" href="{{path('reservation_archive', {'id':reservation.id})}}">Archiver la réservation</a>
+							<button class="dropdown-item" id="btnAjouterPaiement">Ajouter un paiement</button>
 						</div>
 					</div>
 				</div>
+				<form action="{{ path("reservation_add_paiement", {'id' : reservation.id }) }}" id="formAjoutPaiement" method="POST"></form>
 				<table class="table table-bordered text-center">
 					<thead class="bg-dark text-white text-uppercase">
 						<tr>
@@ -487,150 +483,172 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<th scope="row">1</th>
-							<td>Mark</td>
-							<td>Otto</td>
-							<td>@mdo</td>
-							<td>@mdo</td>
-							<td>@mdo</td>
-							<td>
-								<button class="btn btn-danger">
-									<i class="fa fa-trash"></i>
-									Supprimer</button>
-							</td>
-						</tr>
+						{% if reservation.paiements|length > 0 %}
+							{% for paiement in reservation.paiements %}
+								<tr>
+									<td>{{paiement.datePaiement|date('d/m/Y H:i')}}</td>
+									<td>Débit</td>
+									<td>{{paiement.modePaiement.libelle}}</td>
+									<td></td>
+									<td>{{paiement.montant}}</td>
+									<td></td>
+									<td>
+										<button class="btn btn-danger">
+											<i class="fa fa-trash"></i>
+											Supprimer</button>
+									</td>
+								</tr>
+							{% endfor %}
+						{% else %}
+							<tr>
+								<td colspan="7">
+									Aucun paiement effectué
+								</td>
+							</tr>
 
-					</tbody>
-				</table>
-
-
-				<div class="row">
-					<div class="col-md-8 col-sm-8 col-xs-8">
-						<i class="fa fa-chevron-right"></i>Montant de la remise
-					</div>
-					<div class="col-md-4 col-sm-4 col-xs-4">
-						<div class="text-right">
-							300.00€
-						</div>
-					</div>
-
-					<div class="col-md-8 col-sm-8 col-xs-8">
-						<i class="fa fa-chevron-right"></i>Montant à régler
-					</div>
-					<div class="col-md-4 col-sm-4 col-xs-4">
-						<div class="text-right">
-							300.00€
-						</div>
+						</td>
+					{% endif %}
+				</tbody>
+			</table>
+			<div class="row">
+				<div class="col-md-8 col-sm-8 col-xs-8">
+					<i class="fa fa-chevron-right"></i>Total des règlements effectués :
+				</div>
+				<div class="col-md-4 col-sm-4 col-xs-4">
+					<div class="text-right">
+						{{reservation.sommePaiements}}€
 					</div>
 				</div>
-			</div>
 
-			{# avis client #}
-			<div class="x_title">
-				<h2>
-					<i class="fa fa-chevron-right"></i>avis client
-				</h2>
-				<div class="clearfix"></div>
-			</div>
-			<div class="x_content">
-				<div class="row">
-					<div class="col-md-4">
-						<div class="row">
-							<div class="col-auto">
-								<p>Global</p>
-							</div>
-							<div class="col-auto">
-								<i class="fa fa-star"></i>
-								<i class="fa fa-star"></i>
-
-								<i class="fa fa-star"></i>
-								<i class="fa fa-star"></i>
-
-								<i class="fa fa-star"></i>
-							</div>
-
-						</div>
-
-					</div>
-					<div class="col-md-4">
-						<div class="row">
-							<div class="col-auto">
-								<p>Ponctualité</p>
-							</div>
-							<div class="col-auto">
-								<i class="fa fa-star"></i>
-								<i class="fa fa-star"></i>
-
-								<i class="fa fa-star"></i>
-								<i class="fa fa-star"></i>
-
-								<i class="fa fa-star"></i>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="row">
-							<div class="col-auto">
-								<p>Accueil</p>
-							</div>
-							<div class="col-auto">
-								<i class="fa fa-star"></i>
-								<i class="fa fa-star"></i>
-
-								<i class="fa fa-star"></i>
-								<i class="fa fa-star"></i>
-
-								<i class="fa fa-star"></i>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="row">
-							<div class="col-auto">
-								<p>Service:
-								</p>
-							</div>
-							<div class="col-auto">
-								<i class="fa fa-star"></i>
-								<i class="fa fa-star"></i>
-
-								<i class="fa fa-star"></i>
-								<i class="fa fa-star"></i>
-
-								<i class="fa fa-star"></i>
-							</div>
-						</div>
+				<div class="col-md-8 col-sm-8 col-xs-8">
+					<i class="fa fa-chevron-right"></i>Solde
+				</div>
+				<div class="col-md-4 col-sm-4 col-xs-4">
+					<div class="text-right">
+						{{reservation.prix - reservation.sommePaiements}}€
 					</div>
 				</div>
 			</div>
 		</div>
 
-		<!-- Large modal -->
-		{# <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Large modal</button> #}
-		{% include "admin/reservation/contrat/termine/modalKM.html.twig" %}
+		{# avis client #}
+		<div class="x_title">
+			<h2>
+				<i class="fa fa-chevron-right"></i>avis client
+			</h2>
+			<div class="clearfix"></div>
+		</div>
 
-		{# fin modal #}
-	{% endblock %}
-	{% block javascripts %}
-		<!-- Datatables -->
-		<script src="../../admin/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
-		<script src="../../admin/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-		<script src="../../admin/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-		<script src="../../admin/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
-		<script src="../../admin/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
-		<script src="../../admin/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
-		<script src="../../admin/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
-		<script src="../../admin/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
-		<script src="../../admin/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
-		<script src="../../admin/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-		<script src="../../admin/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-		<script src="../../admin/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
-		<script src="../../admin/vendors/jszip/dist/jszip.min.js"></script>
-		<script src="../../admin/vendors/pdfmake/build/pdfmake.min.js"></script>
-		<script src="../../admin/vendors/pdfmake/build/vfs_fonts.js"></script>
-		<script src="../../js/admin/jspdf.min.js"></script>
-		<script src="../../js/admin/jspdf.plugin.autotable.js"></script>
-		<script src="../../js/admin/factureJsPDF.js"></script>
-		<script src="../../js/admin/details_contrats.js"></script>
-	{% endblock  %}
+		{% if reservation.avis %}
+
+			<div class="x_content">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="row">
+							<div class="col-auto">
+								Global
+							</div>
+							<div class="col-auto">
+								<div class="x_content">
+									{% for i in 1..(reservation.avis.global)  %}
+										<i class="fa fa-star"></i>
+									{% endfor %}
+									{% if reservation.avis.global != 5 %}
+										{% for j in 1..(5 - reservation.avis.global)  %}
+											<i class="fa fa-star-o"></i>
+										{% endfor %}
+									{% endif %}
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="row">
+							<div class="col-auto">
+								Ponctualité
+							</div>
+							<div class="col-auto">
+								<div class="x_content">
+									{% for i in 1..(reservation.avis.ponctualite)  %}
+										<i class="fa fa-star"></i>
+									{% endfor %}
+									{% if reservation.avis.ponctualite != 5 %}
+										{% for j in 1..(5 - reservation.avis.ponctualite)  %}
+											<i class="fa fa-star-o"></i>
+										{% endfor %}
+									{% endif %}
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="row">
+							<div class="col-auto">
+								Accueil
+							</div>
+							<div class="col-auto">
+								<div class="x_content">
+									{% for i in 1..(reservation.avis.accueil)  %}
+										<i class="fa fa-star"></i>
+									{% endfor %}
+									{% if reservation.avis.accueil != 5 %}
+										{% for j in 1..(5 - reservation.avis.accueil)  %}
+											<i class="fa fa-star-o"></i>
+										{% endfor %}
+									{% endif %}
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="row">
+							<div class="col-auto">
+								Service:
+							</div>
+							<div class="col-auto">
+								<div class="x_content">
+									{% for i in 1..(reservation.avis.service)  %}
+										<i class="fa fa-star"></i>
+									{% endfor %}
+									{% if reservation.avis.service != 5 %}
+										{% for j in 1..(5 - reservation.avis.service)  %}
+											<i class="fa fa-star-o"></i>
+										{% endfor %}
+									{% endif %}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endif %}
+	</div>
+
+	<!-- Large modal -->
+	{# <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Large modal</button> #}
+	{% include "admin/reservation/contrat/termine/modalKM.html.twig" %}
+
+	{# fin modal #}
+{% endblock %}
+{% block javascripts %}
+	<!-- Datatables -->
+	<script src="../../admin/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+	<script src="../../admin/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+	<script src="../../admin/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+	<script src="../../admin/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+	<script src="../../admin/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+	<script src="../../admin/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+	<script src="../../admin/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+	<script src="../../admin/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+	<script src="../../admin/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+	<script src="../../admin/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+	<script src="../../admin/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+	<script src="../../admin/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+	<script src="../../admin/vendors/jszip/dist/jszip.min.js"></script>
+	<script src="../../admin/vendors/pdfmake/build/pdfmake.min.js"></script>
+	<script src="../../admin/vendors/pdfmake/build/vfs_fonts.js"></script>
+	<script src="../../js/admin/jspdf.min.js"></script>
+	<script src="../../js/admin/jspdf.plugin.autotable.js"></script>
+	<script src="../../js/admin/factureJsPDF.js"></script>
+	<script src="../../js/admin/reservation/ajout_paiement.js"></script>
+{% endblock  %}
