@@ -37,7 +37,7 @@
 				margin-top: -30px;
 				margin-left: 100px;
 			}
-		
+
 			.d-inline-block {
 				display: inline-block;
 				vertical-align: top;
@@ -133,13 +133,13 @@
 			.fa-square-o:before {
 				content: "\f096";
 			}
-			.div-voiture{
-				margin-top : -170px;
+			.div-voiture {
+				margin-top: -170px;
 			}
 		</style>
 	</head>
 	<body>
-		<div >
+		<div>
 			<div class="logo"><img src="{{ logo }}" alt="logo" width="125px" height="90px" type="images/png"></div>
 			<div class="adresse">
 				94 Chemin de la hache<br>
@@ -150,7 +150,7 @@
 				SIRET : 87868990000016<br>
 
 			</div>
-			<div class="contrat_location" >
+			<div class="contrat_location">
 				<h2 class="p-0">Contrat de location
 				</h2>
 				<div class="d-inline-block">
@@ -180,7 +180,14 @@
 				</div>
 			</div>
 		</div>
-		<p>Location de voiture du {{reservation.dateDebut|date('d/m/Y')}} à {{reservation.dateDebut|date('H:i')}} au {{reservation.dateFin|date('d/m/Y')}} à {{reservation.dateFin|date('H:i')}}</p>
+		<p>Location de voiture du
+			{{reservation.dateDebut|date('d/m/Y')}}
+			à
+			{{reservation.dateDebut|date('H:i')}}
+			au
+			{{reservation.dateFin|date('d/m/Y')}}
+			à
+			{{reservation.dateFin|date('H:i')}}</p>
 		{# table gauche droite, info client et conducteurs #}
 		<div class="p-0 ">
 			<div class="table1 p-0 ">
@@ -215,11 +222,15 @@
 						</tr>
 						<tr>
 							<td>Date/lieu de naissance</td>
-							<td>{{reservation.client.dateNaissance|date('d/m/Y')}} à {{reservation.client.lieuNaissance}}</td>
+							<td>{{reservation.client.dateNaissance|date('d/m/Y')}}
+								à
+								{{reservation.client.lieuNaissance}}</td>
 						</tr>
 						<tr>
 							<td>N°/Date de permis</td>
-							<td>{{reservation.client.numeroPermis}} le {{reservation.client.datePermis|date('d/m/Y')}}</td>
+							<td>{{reservation.client.numeroPermis}}
+								le
+								{{reservation.client.datePermis|date('d/m/Y')}}</td>
 						</tr>
 						<tr>
 							<td colspan="2" class="text-center text-white bg-danger">INFOS TRANSFERT
@@ -227,13 +238,19 @@
 						</tr>
 						<tr>
 							<td>Infos arrivée</td>
-							<td>{{reservation.client.infosVolResa.heureVolAller|date('d/m/Y')}}, Vol {{reservation.client.infosVolResa.numVolAller}} à {{reservation.client.infosVolResa.heureVolAller|date('H:i')}}</td>
+							<td>{{reservation.client.infosVolResa.heureVolAller|date('d/m/Y')}}, Vol
+								{{reservation.client.infosVolResa.numVolAller}}
+								à
+								{{reservation.client.infosVolResa.heureVolAller|date('H:i')}}</td>
 						</tr>
 						<tr>
 							<td>Infos retour
 							</td>
 							<td>
-								{{reservation.client.infosVolResa.heureVolRetour|date('d/m/Y')}}, Vol {{reservation.client.infosVolResa.numVolRetour}} à {{reservation.client.infosVolResa.heureVolRetour|date('H:i')}}
+								{{reservation.client.infosVolResa.heureVolRetour|date('d/m/Y')}}, Vol
+								{{reservation.client.infosVolResa.numVolRetour}}
+								à
+								{{reservation.client.infosVolResa.heureVolRetour|date('H:i')}}
 							</td>
 						</tr>
 					</tbody>
@@ -248,32 +265,37 @@
 								AUTRE(S) CONDUCTEURS
 							</td>
 						</tr>
-						 {% for conducteur in reservation.client.conducteurs %}
-						<tr>
-							<td>Nom</td>
-							<td>{{conducteur.nom}}</td>
-						</tr>
-						<tr>
-							<td>Prénom</td>
-							<td>{{conducteur.prenom}}</td>
-						</tr>
-						<tr>
-							<td>Date/lieu de naissance</td>
-							<td>{{conducteur.dateNaissance|date('d/m/Y')}} à {{conducteur.villeNaissance}}</td>
-						</tr>
-						<tr>
-							<td>
-								N°/Date de permis</td>
-							<td>{{conducteur.numeroPermis}} le {{conducteur.dateDelivrance|date('d/m/Y')}}</td>
-						</tr>
+						{% for conducteur in reservation.conducteursClient %}
+							<tr>
+								<td>Nom</td>
+								<td>{{conducteur.nom}}</td>
+							</tr>
+							<tr>
+								<td>Prénom</td>
+								<td>{{conducteur.prenom}}</td>
+							</tr>
+							<tr>
+								<td>Date/lieu de naissance</td>
+								<td>{{conducteur.dateNaissance|date('d/m/Y')}}
+									à
+									{{conducteur.villeNaissance}}</td>
+							</tr>
+							<tr>
+								<td>
+									N°/Date de permis</td>
+								<td>{{conducteur.numeroPermis}}
+									le
+									{{conducteur.dateDelivrance|date('d/m/Y')}}</td>
+							</tr>
 
-						 {%endfor%}
-						<tr>
-							<td colspan="2" class="bg-danger text-center text-white text-uppercase">adresse en guadeloupe</td>
-						</tr>
-						<tr>
-							<td colspan="2"></td>
-						</tr>
+							{%endfor%}
+							<tr>
+								<td colspan="2" class="bg-danger text-center text-white text-uppercase">adresse en guadeloupe</td>
+							</tr>
+							<tr>
+								<td colspan="2"></td>
+							</tr>
+						</tbody>
 					</tbody>
 				</table>
 			</div>
@@ -297,7 +319,12 @@
 						</td>
 						<td>{{reservation.vehicule.immatriculation}}</td>
 						<td>Kilométrage</td>
-						<td> départ : {{reservation.vehicule.kmDepart}} Km, retour : {{reservation.vehicule.kmRetour}} Km</td>
+						<td>
+							départ :
+							{{reservation.vehicule.kmDepart}}
+							Km, retour :
+							{{reservation.vehicule.kmRetour}}
+							Km</td>
 					</tr>
 				</tbody>
 			</table>
@@ -311,7 +338,21 @@
 			<br>
 			Revêtement de sol:__________ Coffre:__________ Portes__________
 			<br>
-			Légende intérieur: <strong>S</strong> sale  - <strong>D</strong> déchiré - <strong>T</strong> troué - <strong>E</strong> endommagé - <strong>M</strong> manque - <strong>A</strong> autre dommage – <strong>RAS</strong> Rien à signaler
+			Légende intérieur:
+			<strong>S</strong>
+			sale  -
+			<strong>D</strong>
+			déchiré -
+			<strong>T</strong>
+			troué -
+			<strong>E</strong>
+			endommagé -
+			<strong>M</strong>
+			manque -
+			<strong>A</strong>
+			autre dommage –
+			<strong>RAS</strong>
+			Rien à signaler
 		</div>
 		{# etat extérieur #}
 		<div class="bg-danger text-white text-uppercase fs-12" style="border : 1px solid black; margin-bottom : 2px">
@@ -320,26 +361,22 @@
 		<table class="table-border " style="width : 100%;">
 			<tbody class="fs-12">
 				<tr>
-					<td colspan="4" >
+					<td colspan="4">
 						Obsérvations de départ
-					</td> 
-					<td colspan="5"  >
 					</td>
-					<td colspan="4" >
-					
+					<td colspan="5"></td>
+					<td colspan="4">
+
 						Obsérvations à l'arrivée</td>
 				</tr>
 				<tr>
-					<td colspan="4" >
-					</td> 
+					<td colspan="4"></td>
 					<td colspan="5">
 						<img src="{{ vehicule }}" alt="véhicule" width="400px" height="150px" type="images/png">
 					</td>
-					<td colspan="4" >
-					
-						</td>
+					<td colspan="4"></td>
 				</tr>
-			
+
 				<tr>
 					<td colspan="4">Carburant au départ</td>
 					<td>Pneus/Jantes</td>
@@ -369,7 +406,7 @@
 					</td>
 					<td rowspan="2">1/1</td>
 				</tr>
-				<tr  class="text-center">
+				<tr class="text-center">
 					<td>
 						Etat</td>
 					<td></td>
@@ -379,8 +416,22 @@
 				</tr>
 			</tbody>
 		</table>
-		<p class="fs-12 p-0 m-0" >
-			Légende extérieur: <strong> P </strong> projection de pierres - <strong>R</strong> rouille - <strong>A</strong> autre dommage - <strong>R</strong> rayure - <strong>C</strong> creux - <strong>D</strong> dégât accident -</p>
+		<p class="fs-12 p-0 m-0">
+			Légende extérieur:
+			<strong>
+				P
+			</strong>
+			projection de pierres -
+			<strong>R</strong>
+			rouille -
+			<strong>A</strong>
+			autre dommage -
+			<strong>R</strong>
+			rayure -
+			<strong>C</strong>
+			creux -
+			<strong>D</strong>
+			dégât accident -</p>
 		<div
 			class="table1">
 			{# prestations #}
@@ -433,27 +484,28 @@
 				</tbody>
 			</table>
 			<div class="fs-12">
-				 <span class="d-inline-block-bottom p-2">	Espèce</span>
-				 <div class="d-inline-block-bottom">	
-				<input type="checkbox" class="p-0 m-0">
-				 </div>
-				<div class="d-inline-block-bottom p-2">	
-				CB
-				</div>
-				<div class="d-inline-block-bottom">	
-				<input type="checkbox" class="p-0 m-0">
-				</div>
-				<div class="d-inline-block-bottom p-2">	
-				Chèque Vacances
-				</div>
-				<div class="d-inline-block-bottom">	
-				<input type="checkbox" class="p-0 m-0">
+				<span class="d-inline-block-bottom p-2">
+					Espèce</span>
+				<div class="d-inline-block-bottom">
+					<input type="checkbox" class="p-0 m-0">
 				</div>
 				<div class="d-inline-block-bottom p-2">
-				Chèque
+					CB
 				</div>
-				<div class="d-inline-block-bottom">	
-				<input type="checkbox" class="p-0 m-0">
+				<div class="d-inline-block-bottom">
+					<input type="checkbox" class="p-0 m-0">
+				</div>
+				<div class="d-inline-block-bottom p-2">
+					Chèque Vacances
+				</div>
+				<div class="d-inline-block-bottom">
+					<input type="checkbox" class="p-0 m-0">
+				</div>
+				<div class="d-inline-block-bottom p-2">
+					Chèque
+				</div>
+				<div class="d-inline-block-bottom">
+					<input type="checkbox" class="p-0 m-0">
 				</div>
 				<br>
 				Aucune location est remboursable. Létat des lieux du véhicule est réalisé sur véhicule propre intérieur et extérieur</div>
@@ -470,7 +522,9 @@
 					</tr>
 					<tr>
 						<td>
-							Je soussignée___ <strong> {{reservation.client.nom}}</strong>___autorise la société Joellocation a prélevé sur mon compte à l'aide de l'empreinte de ma carte bancaire, le montant de la franchise ou caution du présent contrat ceci en cas d'accident responsable, de vol, tentative de vol ou dommage occasionné au véhicule loué.
+							Je soussignée___
+							<strong>
+								{{reservation.client.nom}}</strong>___autorise la société Joellocation a prélevé sur mon compte à l'aide de l'empreinte de ma carte bancaire, le montant de la franchise ou caution du présent contrat ceci en cas d'accident responsable, de vol, tentative de vol ou dommage occasionné au véhicule loué.
 						</td>
 					</tr>
 				</tbody>

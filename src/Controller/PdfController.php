@@ -25,7 +25,6 @@ class PdfController extends AbstractController
     public function pdfcontrat(Pdf $knpSnappyPdf, Reservation $reservation)
     {
 
-        $reservation = new Reservation();
 
         // Configure Dompdf according to your needs7
         $pdfOptions = new Options();

@@ -4,13 +4,11 @@
 {% endblock %}
 {% block current_page %}
 
-	{% if refReservation %}
-		<h2>
-			<i class="fa fa-plus"></i>
-			Réservation N°
-			{{refReservation}}</h2>
+	<h2>
+		<i class="fa fa-plus"></i>
+		Réservation N°
+		{{reservation.reference}}</h2>
 
-	{% endif %}
 
 {% endblock %}
 {% block stylesheets %}
@@ -19,23 +17,47 @@
 	<link href="../../admin/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
 	<link href="../../admin/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
 	<link href="../../admin/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
-	<link href="../../admin/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+	<link
+	href="../../admin/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+
+	{# autocompletion css #}
+	<link rel="stylesheet" href="{{asset('css/admin/jquery-ui.css')}}">
 {% endblock %}
 
 {% block content %}
 
+
+	<div class="x_panel">
+		<div class="x_title">
+			chercher un conducteur :
+		</div>
+		<form action="{{ path("add_selected_conducteur") }}" name="selectedConducteur" method="POST">
+			<div class="x_content">
+				<input type="hidden" value="{{reservation.id}}" id="idReservation" name="idReservation">
+				<input type="text" class="form-control" id="selectConducteur" name="selectedConducteur">
+			</div>
+
+			<div class="text-center">
+				<button class="btn btn-danger" type="submit">
+					Enregistrer
+				</button>
+			</div>
+		</form>
+	</div>
+
+	{{form_start(form)}}
+	<input type="hidden" value="{{reservation.id}}" id="idReservation" name="idReservation">
 	<div class="x_panel">
 		<div class="x_title">
 
 			<h2>
 				<i class="fa fa-plus"></i>
-				Ajouter un conducteur
+				Information conducteur
 			</h2>
 
 			<div class="clearfix"></div>
 		</div>
 
-		{{form_start(form)}}
 		<div class="row">
 			<div class="col-md-6 form-group">
 				<label>
@@ -66,20 +88,33 @@
 
 				{{form_widget(form.villeNaissance)}}
 			</div>
-			<div class="col-md-6 form-group">
+
+		</div>
+		<div class="x_title">
+
+			<h2>
+				<i class="fa fa-plus"></i>
+				Information permis
+			</h2>
+
+			<div class="clearfix"></div>
+		</div>
+		<div class="row mb-3">
+
+			<div class="col-md-3 form-group">
 				<label>
 					Numero permis :
 				</label>
 
 				{{form_widget(form.numeroPermis)}}
 			</div>
-			<div class="col-md-6 form-group">
+			<div class="col-md-3 form-group">
 				<label>
 					Ville de délivrance :
 				</label>
 				{{form_widget(form.villeDelivrance)}}
 			</div>
-			<div class="col-md-6 ">
+			<div class="col-md-3 ">
 				<label>
 					Date de délivrance :
 				</label>
@@ -87,7 +122,7 @@
 				{{form_widget(form.dateDelivrance)}}
 			</div>
 
-			<div class="col-md-6 ">
+			<div class="col-md-3 ">
 				<label>
 					Date d'obtention :
 				</label>
@@ -102,9 +137,8 @@
 				Enregistrer
 			</button>
 		</div>
-		{{form_end(form)}}
 	</div>
-
+	{{form_end(form)}}
 {% endblock %}
 {% block javascripts %}
 	<!-- Datatables -->
@@ -123,4 +157,10 @@
 	<script src="../../admin/vendors/jszip/dist/jszip.min.js"></script>
 	<script src="../../admin/vendors/pdfmake/build/pdfmake.min.js"></script>
 	<script src="../../admin/vendors/pdfmake/build/vfs_fonts.js"></script>
+
+	{# for autocompletion #}
+	<script src="{{asset("js/admin/jquery-ui.js")}}"></script>
+
+	{# javascript pour autocompletion rechercher conducteur #}
+	<script src="{{asset("js/admin/reservation/ajout_conducteur.js")}}"></script>
 {% endblock %}

@@ -1,0 +1,110 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}Modifier conducteur
+{% endblock %}
+
+{% block stylesheets %}{% endblock %}
+{% block content %}
+	<div class="x_panel">
+		<div class="x_title">
+			<h5>
+				<i class="fa fa-edit (alias)"></i>
+				Modification conducteur
+			</h5>
+		</div>
+		{{form_start(form)}}
+		{# <input type="hidden" value="{{reservation.id}}" id="idReservation" name="idReservation"> #}
+		<div class="x_panel">
+			<div class="x_title">
+
+				<h2>
+					<i class="fa fa-plus"></i>
+					Information conducteur
+				</h2>
+
+				<div class="clearfix"></div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-6 form-group">
+					<label>
+						Nom :
+					</label>
+
+					{{form_widget(form.nom)}}
+				</div>
+				<div class="col-md-6 form-group">
+					<label>
+						Prénom :
+					</label>
+
+					{{form_widget(form.prenom)}}
+				</div>
+				<div class="col-md-6 ">
+					<label>
+						Date de naissance :
+					</label>
+
+					{{form_widget(form.dateNaissance)}}
+				</div>
+
+				<div class="col-md-6 form-group">
+					<label>
+						Ville naissance :
+					</label>
+
+					{{form_widget(form.villeNaissance)}}
+				</div>
+
+			</div>
+			<div class="x_title">
+
+				<h2>
+					<i class="fa fa-plus"></i>
+					Information permis
+				</h2>
+
+				<div class="clearfix"></div>
+			</div>
+			<div class="row mb-3">
+
+				<div class="col-md-3 form-group">
+					<label>
+						Numero permis :
+					</label>
+
+					{{form_widget(form.numeroPermis)}}
+				</div>
+				<div class="col-md-3 form-group">
+					<label>
+						Ville de délivrance :
+					</label>
+					{{form_widget(form.villeDelivrance)}}
+				</div>
+				<div class="col-md-3 ">
+					<label>
+						Date de délivrance :
+					</label>
+
+					{{form_widget(form.dateDelivrance)}}
+				</div>
+
+				<div class="col-md-3 ">
+					<label>
+						Date d'obtention :
+					</label>
+
+					{{form_widget(form.dateObtention)}}
+				</div>
+
+			</div>
+			<div class="text-center mt-4">
+				<a href="{{path(routeReferer, {id : reservation.id})}}" class="btn btn-dark">Annuler</a>
+				<button class="btn btn-danger" type="submit">
+					Enregistrer
+				</button>
+			</div>
+		</div>
+		{{form_end(form)}}
+	</div>
+{% endblock %}

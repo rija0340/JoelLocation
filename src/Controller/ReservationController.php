@@ -4,10 +4,14 @@ namespace App\Controller;
 
 use DateTime;
 use DateTimeZone;
-use App\Classe\Mailjet;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use Knp\Snappy\Pdf;
 use App\Entity\User;
 use App\Form\UserType;
+use App\Classe\Mailjet;
 use App\Entity\Garantie;
+use App\Entity\Paiement;
 use App\Entity\Vehicule;
 use App\Entity\InfosResa;
 use App\Entity\Conducteur;
@@ -35,6 +39,8 @@ use App\Repository\OptionsRepository;
 use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
 use App\Form\EditClientReservationType;
+use App\Repository\ConducteurRepository;
+use App\Repository\ModePaiementRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ReservationRepository;
 use Knp\Component\Pager\PaginatorInterface;
@@ -47,17 +53,15 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Knp\Snappy\Pdf;
-use Dompdf\Dompdf;
-use Dompdf\Options;
 
 
 /**
- * @Route("/reservation")
+ * @Route("/backoffice/reservation")
  */
 class ReservationController extends AbstractController
 {
     private $userRepo;
+    private $conducteurRepo;
     private $router;
     private $reservationRepo;
     private $dateTimestamp;
@@ -72,8 +76,9 @@ class ReservationController extends AbstractController
     private $em;
     private $mail;
     private $flashy;
+    private $modePaiementRepo;
 
-    public function __construct(RouterInterface $router, FlashyNotifier $flashy, Mailjet $mail, EntityManagerInterface $em, MarqueRepository $marqueRepo, ModeleRepository $modeleRepo, TarifsHelper $tarifsHelper, DateHelper $dateHelper, TarifsRepository $tarifsRepo, ReservationRepository $reservationRepo,  UserRepository $userRepo, VehiculeRepository $vehiculeRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
+    public function __construct(ModePaiementRepository $modePaiementRepo, ConducteurRepository $conducteurRepo, RouterInterface $router, FlashyNotifier $flashy, Mailjet $mail, EntityManagerInterface $em, MarqueRepository $marqueRepo, ModeleRepository $modeleRepo, TarifsHelper $tarifsHelper, DateHelper $dateHelper, TarifsRepository $tarifsRepo, ReservationRepository $reservationRepo,  UserRepository $userRepo, VehiculeRepository $vehiculeRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
     {
 
         $this->reservationRepo = $reservationRepo;
@@ -90,6 +95,8 @@ class ReservationController extends AbstractController
         $this->mail = $mail;
         $this->flashy = $flashy;
         $this->router = $router;
+        $this->conducteurRepo = $conducteurRepo;
+        $this->modePaiementRepo = $modePaiementRepo;
     }
 
     /**
@@ -109,6 +116,7 @@ class ReservationController extends AbstractController
             'reservations' => $reservations,
         ]);
     }
+
 
     /**
      * @Route("/new", name="reservation_new", methods={"GET","POST"},requirements={"id":"\d+"})
@@ -150,6 +158,10 @@ class ReservationController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+
+
+
 
     /**
      * @Route("/details/{id}", name="reservation_show", methods={"GET", "POST"},requirements={"id":"\d+"})
@@ -311,18 +323,11 @@ class ReservationController extends AbstractController
     }
 
     /**
-     *  @Route("/ajouter-conducteur/", name="add_conducteur", methods={"GET","POST"},requirements={"id":"\d+"})
+     *  @Route("/ajouter-conducteur/{reservation}", name="add_conducteur", methods={"GET","POST"},requirements={"id":"\d+"})
      *
      */
-    public function addConducteur(Request $request): Response
+    public function addConducteur(Request $request, Reservation $reservation): Response
     {
-        if ($request->query->get('id_reservation') != null) {
-
-            $id = $request->query->get('id_reservation');
-            $reservation = $this->reservationRepo->find($id);
-        } else {
-            $refReservation = null;
-        }
 
         $conducteur  = new Conducteur();
         $form = $this->createForm(ConducteurType::class, $conducteur);
@@ -339,16 +344,132 @@ class ReservationController extends AbstractController
             $this->em->flush();
 
             //notification succes
-            $this->flashy->success('Le conducteur a bien été ajouté');
-            return $this->redirectToRoute($this->getRouteForRedirection($reservation), ['id' => $id]);
+            $this->flashy->success('Le conducteur a bienc été ajouté');
+            return $this->redirectToRoute($this->getRouteForRedirection($reservation), ['id' => $reservation->getId()]);
         }
         return $this->render('admin/reservation/crud/conducteur/new.html.twig', [
 
             'form' => $form->createView(),
-            'refReservation' => $reservation->getReference(),
             'reservation' => $reservation,
             'routeReferer' => $this->getRouteForRedirection($reservation)
         ]);
+    }
+
+    /**
+     * from autocompletion input
+     *  @Route("/ajouter-conducteur-selection/", name="add_selected_conducteur", methods={"GET","POST"},requirements={"id":"\d+"})
+     *
+     */
+    public function addSelectedConducteur(Request $request)
+    {
+        //extracion mail from string format : "nom prenom (mail)"
+        $conducteur = $request->request->get('selectedConducteur');
+        $conducteur = explode('(', $conducteur);
+        $numPermis = explode(')', $conducteur[1]);
+        $numeroPermis = $numPermis[0];
+
+        $conducteur =  $this->conducteurRepo->findOneBy(['numeroPermis' => $numeroPermis, 'reservation' => null]);
+        $reservation = $this->reservationRepo->find($request->request->get('idReservation'));
+
+
+        $reservation->addConducteursClient($conducteur);
+        $this->em->flush();
+
+        $this->flashy->success("Le conducteur a été ajouté aved succès");
+        return $this->redirectToRoute($this->getRouteForRedirection($reservation), ['id' => $reservation->getId()]);
+    }
+
+
+    /**
+     *  @Route("/liste-conducteurs/", name="liste_conducteurs", methods={"GET","POST"},requirements={"id":"\d+"})
+     *
+     */
+    public function listeConduteurs(Request $request): Response
+    {
+        $id = $request->query->get('idReservation');
+        $reservation = $this->reservationRepo->find($id);
+        $conducteurs = $this->conducteurRepo->findBy(['client' => $reservation->getClient(), 'reservation' => null]);
+
+        $data = array();
+        foreach ($conducteurs as $key => $conducteur) {
+
+            $data[$key]['nom'] = $conducteur->getNom();
+            $data[$key]['prenom'] = $conducteur->getPrenom();
+            $data[$key]['numPermis'] = $conducteur->getNumeroPermis();
+        }
+
+
+        return new JsonResponse($data);
+    }
+
+
+    /**
+     * @Route("/modifier-conducteur/{id}/{reservation}", name="reservation_conducteur_edit", methods={"GET","POST"})
+     */
+    public function editConducteur(Request $request, Conducteur $conducteur, Reservation $reservation): Response
+    {
+        $form = $this->createForm(ConducteurType::class, $conducteur);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $this->getDoctrine()->getManager()->flush();
+            $this->flashy->success('Votre conducteur a bien été modifié');
+            return $this->redirectToRoute($this->getRouteForRedirection($reservation), ['id' =>  $reservation->getId()]);
+        }
+
+        return $this->render('admin/reservation/crud/conducteur/edit.html.twig', [
+            'form' => $form->createView(),
+            'routeReferer' => $this->getRouteForRedirection($reservation),
+            'reservation' => $reservation
+
+        ]);
+    }
+
+
+    /**
+     * @Route("supprimer-conducteur/{id}/{reservation}", name="reservation_conducteur_delete", methods={"DELETE"},requirements={"id":"\d+"})
+     */
+    public function deleteConducteur(Request $request, Conducteur $conducteur, Reservation $reservation): Response
+    {
+        $id = $this->reservationRepo->find($request->request->get('reservation'));
+        $reservation = $this->reservationRepo->find($id);
+        if ($this->isCsrfTokenValid('delete' . $conducteur->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($conducteur);
+            $entityManager->flush();
+            $this->flashy->success('le conducteur a été supprimé');
+            return $this->redirectToRoute($this->getRouteForRedirection($reservation), ['id' => $reservation->getId()]);
+        }
+    }
+
+
+
+
+    /**
+     * @Route("ajouter-paiement/{id}", name="reservation_add_paiement", methods={"GET","POST"},requirements={"id":"\d+"})
+     */
+    public function ajoutPaiement(Request $request, Reservation $reservation)
+    {
+
+        // dd($request);
+        if ($request->request->get('montant') != null) {
+            $montant =  $request->request->get('montant');
+
+            $paiement = new Paiement();
+            $paiement->setDatePaiement($this->dateHelper->dateNow());
+            $paiement->setModePaiement($this->modePaiementRepo->findOneBy(['libelle' => 'ESPECE']));
+            $paiement->setClient($reservation->getClient());
+            $paiement->setMontant($montant);
+            $paiement->setMotif("Ajout paiement");
+            $paiement->setReservation($reservation);
+
+            $this->em->persist($paiement);
+            $this->em->flush();
+
+            $this->flashy->success("Le paiement a été ajouté avec succès");
+            return $this->redirectToRoute($this->getRouteForRedirection($reservation), ['id' => $reservation->getId()]);
+        }
     }
 
     //return route en fonction date (comparaison avec dateNow pour savoir statut réservation)
@@ -373,7 +494,6 @@ class ReservationController extends AbstractController
         }
         return $routeReferer;
     }
-
 
     //return referer->route avant la rédirection (source)
     public function getReferer($request)

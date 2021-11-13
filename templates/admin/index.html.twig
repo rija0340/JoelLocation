@@ -459,50 +459,16 @@
 								<tr>
 									<td>{{avis.reservation.reference}}</td>
 									<td>
-										{% if avis.global == 5 %}
-											{# 0 star  #}
-											<i class="fa fa-star"></i><br>
-											<i class="fa fa-star"></i><br>
-											<i class="fa fa-star"></i><br>
-											<i class="fa fa-star"></i><br>
+										{% for i in 1..(avis.global)  %}
 											<i class="fa fa-star"></i>
-										{% elseif avis.global == 4 %}
-
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star-o"></i>
-										{% elseif avis.global == 3 %}
-
-											<i class="fa fa-star"></i><br>
-											<i class="fa fa-star"></i><br>
-											<i class="fa fa-star"></i><br>
-											<i class="fa fa-star-o"></i><br>
-											<i class="fa fa-star-o"></i>
-										{% elseif avis.global == 2 %}
-
-											<i class="fa fa-star"></i><br>
-											<i class="fa fa-star"></i><br>
-											<i class="fa fa-star-o"></i><br>
-											<i class="fa fa-star-o"></i><br>
-											<i class="fa fa-star-o"></i>
-										{% elseif avis.global == 1 %}
-
-											<i class="fa fa-star"></i><br>
-											<i class="fa fa-star-o"></i><br>
-											<i class="fa fa-star-o"></i><br>
-											<i class="fa fa-star-o"></i><br>
-											<i class="fa fa-star-o"></i>
-										{% elseif avis.global == 0 %}
-
-											<i class="fa fa-star-o"></i><br>
-											<i class="fa fa-star-o"></i><br>
-											<i class="fa fa-star-o"></i><br>
-											<i class="fa fa-star-o"></i><br>
-											<i class="fa fa-star-o"></i>
+											<br>
+										{% endfor %}
+										{% if avis.global != 5 %}
+											{% for j in 1..(5 - avis.global)  %}
+												<i class="fa fa-star-o"></i>
+												<br>
+											{% endfor %}
 										{% endif %}
-
 									</td>
 									<td class="text-center">
 										<button class="btn btn-danger">

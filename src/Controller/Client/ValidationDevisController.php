@@ -126,6 +126,7 @@ class ValidationDevisController extends AbstractController
         $devis = $this->devisRepo->find($devisID);
 
         $formClient = $this->createForm(ClientInfoType::class, $client);
+        dd($request);
         $formClient->handleRequest($request);
 
         if ($formClient->isSubmitted() && $formClient->isValid()) {
