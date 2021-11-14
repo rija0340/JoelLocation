@@ -8,8 +8,6 @@
 		<h4 class="mb-0 pb-0">Mes informations</h4>
 		<div class="clearfix"></div>
 		<div class="x_title"></div>
-
-
 		<div class="row">
 			<div class="form-group col-md-6">
 				<label for="">Nom :</label>
@@ -84,14 +82,11 @@
 				<label for="">Ville délivrance permis :</label>
 				{# {{form_label('test')}} #}
 				<input readonly class="form-control" value="{{client.villeDelivrancePermis}}">
-
 			</div>
-
 		</div>
 
 		<div class="text-center">
-			<a href="{{ path('infoclient_edit', {'id': id}) }}" id="editInfosClient" class="btn btn-danger popup " onmouseover="showPopUp()" onmouseout="hidePopUp()">
-				<span class="popuptext" id="myPopup">Modifier vos informations</span>
+			<a href="{{ path('infoclient_edit', {'id': id}) }}" id="editInfosClient" class="btn btn-danger ">
 				<i class="fa  fa-edit (alias)"></i>
 				Modifier
 			</a>
@@ -138,5 +133,8 @@
 	{% block javascripts %}
 
 		<script src="{{asset('js/client/compteClient.js')}}"></script>
+
+		{# js pour pop-up btn ... #}
+		<script src="{{ asset('js/admin/pop-up/infos-client.js') }}"></script>
 
 	{% endblock %}

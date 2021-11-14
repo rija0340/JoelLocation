@@ -40,7 +40,7 @@
 							{{conducteur.villeDelivrance}}
 						</td>
 						<td>
-							<a class="btn btn-danger" href="{{ path('conducteur_edit', {'id': conducteur.id}) }}">
+							<a class="btn btn-danger" href="{{ path('conducteur_edit', {'id': conducteur.id}) }}" id="editConducteur">
 								<i class="fa fa-edit (alias)"></i>
 							</a>
 						</td>
@@ -50,4 +50,6 @@
 		</table>
 	</div>
 {% endblock %}
-{% block javascripts %}{% endblock %}
+{% block javascripts %}
+	<script src="{{ asset('js/client/pop-up/conducteur.js') }}"></script>
+{% endblock %}

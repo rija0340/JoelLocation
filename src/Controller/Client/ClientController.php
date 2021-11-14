@@ -236,26 +236,20 @@ class ClientController extends AbstractController
     }
 
 
-
     /**
      * @Route("/espaceclient/modifier/{id}", name="infoclient_edit", methods={"GET","POST"})
      */
     public function editInfoClient(Request $request, User $user): Response
     {
         $form = $this->createForm(ClientEditType::class, $user);
-
-        // dump($request);
-        // die();
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setPassword($this->passwordEncoder->encodePassword(
-                $user,
-                $user->getPassword()
-            ));
+            // $user->setPassword($this->passwordEncoder->encodePassword(
+            //     $user,
+            //     $user->getPassword()
+            // ));
             $this->getDoctrine()->getManager()->flush();
-
             $this->flashy->success('Votre modification a été enregistré');
             return $this->redirectToRoute('app_logout');
         }

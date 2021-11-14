@@ -37,22 +37,34 @@
 						<td>{{ reserv.prix }}
 							€</td>
 						<td>
-							{% if reserv.prix > reserv.sommePaiements %}
-								<form action="{{path('paiement_sold')}}" method="POST">
-									<input type="hidden" name="montantSolde" value="{{reserv.prix - reserv.sommePaiements}}">
-									<input type="hidden" name="reservation" value="{{reserv.id}}">
-									<button class="btn btn-danger">Payer solde
-										{{reserv.prix - reserv.sommePaiements}}€</button>
-								</form>
-							{% endif %}
-							<div class="mt-2">
-								<a href="{{path('add_avis', {'id': reserv.id})}}" class="btn btn-dark">Donner avis</a>
+							{# dropdown #}
+							<div class="btn-group p-0" role="group">
+								<button id="btnGroupDrop1" class="btn btn-link-danger" type="button" class="btn btn-link p-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<i class="fa fa-bars"></i>
+								</button>
+								<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+									<div class="dropdown-item">
+										{% if reserv.prix > reserv.sommePaiements %}
+											<form action="{{path('paiement_sold')}}" method="POST">
+												<input type="hidden" name="montantSolde" value="{{reserv.prix - reserv.sommePaiements}}">
+												<input type="hidden" name="reservation" value="{{reserv.id}}">
+												<button class="btn btn-link-danger">Payer solde
+													{{reserv.prix - reserv.sommePaiements}}€</button>
+											</form>
+										{% endif %}
+									</div>
+									<div class="dropdown-item">
+										<a href="{{path('add_avis', {'id': reserv.id})}}" class="btn btn-link-dark">Ajouter avis</a>
+									</div>
+									<div class="dropdown-item">
+										<a href="{{path('client_reservation_show', {'id' : reserv.id})}} " class="btn btn-link-dark">
+											Détails
+										</a>
+									</div>
+								</div>
 							</div>
-							<div>
-								<a href="{{path('client_reservation_show', {'id' : reserv.id})}}">
-									<i class="fa fa-info-circle" style="font-size : 30px"></i>
-								</a>
-							</div>
+							{# fin dropdown #}
+
 						</td>
 					</tr>
 				{% endfor %}
@@ -92,15 +104,15 @@
 							€</td>
 						<td class=" d-flex justify-content-center ">
 							<div class="row">
-								<div class="col-auto m-0 p-0">
-									<a id="telechargerDevis">
+								<div class="col-auto mr-4 p-0">
+									<a class="telechargerDevis" id="telechargerDevis">
 										<i class="fa fa-arrow-circle-o-down" style="font-size: 1.5em !important;"></i>
 									</a>
 								</div>
 								<div class="col-auto m-0 p-0">
 									<form method="post" action="{{ path('validation_step2') }}">
 										<input type="hidden" name="reservID" value="{{reserv.id}}">
-										<button class="btn btn-link m-0 p-0" style=" -webkit-appearance: none">
+										<button class="btn btn-link m-0 p-0" style=" -webkit-appearance: none" type="submit" id="validerDevis">
 											<i class="fa fa-check" style="font-size: 1.5em !important;"></i>
 										</button>
 									</form>
@@ -193,15 +205,39 @@
 					</td>
 					<td>{{ reserv.prix }}
 						€</td>
-					<td>
-						{% if reserv.avis == null %}
-							<div class="mt-2">
-								<a href="{{path('add_avis', {'id': reserv.id})}}" class="btn btn-dark">Donner avis</a>
+					<td
+						class="text-center">
+
+						{# dropdown #}
+						<div class="btn-group p-0" role="group">
+							<button id="btnGroupDrop1" class="btn btn-link-danger" type="button" class="btn btn-link p-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<i class="fa fa-bars"></i>
+							</button>
+							<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+								<div class="dropdown-item">
+									{% if reserv.prix > reserv.sommePaiements %}
+										<form action="{{path('paiement_sold')}}" method="POST">
+											<input type="hidden" name="montantSolde" value="{{reserv.prix - reserv.sommePaiements}}">
+											<input type="hidden" name="reservation" value="{{reserv.id}}">
+											<button class="btn btn-link-danger">Payer solde
+												{{reserv.prix - reserv.sommePaiements}}€</button>
+										</form>
+									{% endif %}
+								</div>
+								{% if reserv.avis == null %}
+									<div class="dropdown-item">
+										<a href="{{path('add_avis', {'id': reserv.id})}}" class="btn btn-link-dark">Ajouter avis</a>
+									</div>
+								{% endif %}
+								<div class="dropdown-item">
+									<a href="{{path('client_reservation_show', {'id' : reserv.id})}} " class="btn btn-link-dark">
+										Détails
+									</a>
+								</div>
 							</div>
-						{% endif %}
-						<a href="{{path('client_reservation_show', {'id' : reserv.id})}}">
-							<i class="fa fa-info-circle" style="font-size : 30px"></i>
-						</a>
+						</div>
+						{# fin dropdown #}
+
 					</td>
 				</tr>
 			{% endfor %}
@@ -212,4 +248,6 @@
 <script src="{{ asset( 'js/admin/jspdf.min.js')}}"></script>
 <script src="{{ asset( 'js/admin/jspdf.plugin.autotable.js')}}"></script>
 <script src="{{ asset( 'js/admin/devisJsPDF.js')}}"></script>
-<script src="{{ asset( 'js/client/reservation.js')}}"></script>{% endblock %}
+<script src="{{ asset( 'js/client/reservation.js')}}"></script>
+{# js pour pop-up btn ... #}
+<script src="{{ asset('js/client/pop-up/reservation.js') }}"></script>{% endblock %}

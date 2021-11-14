@@ -44,190 +44,50 @@
 								<tr>
 									<td>{{ avis.reservation.reference }}</td>
 									<td>
-										{% if avis.global == 5 %}
-											{# 0 star  #}
+										{% for i in 1..(avis.global)  %}
 											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-										{% elseif avis.global == 4 %}
-
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star-o"></i>
-										{% elseif avis.global == 3 %}
-
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-										{% elseif avis.global == 2 %}
-
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-										{% elseif avis.global == 1 %}
-
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-										{% elseif avis.global == 0 %}
-
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
+										{% endfor %}
+										{% if avis.global != 5 %}
+											{% for j in 1..(5 - avis.global)  %}
+												<i class="fa fa-star-o"></i>
+											{% endfor %}
 										{% endif %}
 									</td>
 									<td>
-										{% if avis.ponctualite == 5 %}
-											{# 0 star  #}
+										{% for i in 1..(avis.ponctualite)  %}
 											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-										{% elseif avis.ponctualite == 4 %}
-
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star-o"></i>
-										{% elseif avis.ponctualite == 3 %}
-
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-										{% elseif avis.ponctualite == 2 %}
-
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-										{% elseif avis.ponctualite == 1 %}
-
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-										{% elseif avis.ponctualite == 0 %}
-
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
+										{% endfor %}
+										{% if avis.ponctualite != 5 %}
+											{% for j in 1..(5 - avis.ponctualite)  %}
+												<i class="fa fa-star-o"></i>
+											{% endfor %}
 										{% endif %}
 									</td>
 									<td>
-										{% if avis.accueil == 5 %}
-											{# 0 star  #}
+										{% for i in 1..(avis.accueil)  %}
 											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-										{% elseif avis.accueil == 4 %}
-
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star-o"></i>
-										{% elseif avis.accueil == 3 %}
-
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-										{% elseif avis.accueil == 2 %}
-
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-										{% elseif avis.accueil == 1 %}
-
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-										{% elseif avis.accueil == 0 %}
-
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
+										{% endfor %}
+										{% if avis.accueil != 5 %}
+											{% for j in 1..(5 - avis.accueil)  %}
+												<i class="fa fa-star-o"></i>
+											{% endfor %}
 										{% endif %}
 									</td>
 									<td>
-										{% if avis.service == 5 %}
-											{# 0 star  #}
+										{% for i in 1..(avis.service)  %}
 											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-										{% elseif avis.service == 4 %}
-
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star-o"></i>
-										{% elseif avis.service == 3 %}
-
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-										{% elseif avis.service == 2 %}
-
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-										{% elseif avis.service == 1 %}
-
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-										{% elseif avis.service == 0 %}
-
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
-											<i class="fa fa-star-o"></i>
+										{% endfor %}
+										{% if avis.service != 5 %}
+											{% for j in 1..(5 - avis.service)  %}
+												<i class="fa fa-star-o"></i>
+											{% endfor %}
 										{% endif %}
 									</td>
 									<td>{{ avis.commentaire }}</td>
-									<td>{{ avis.date ? avis.date|date('Y-m-d') : '' }}</td>
+									<td>{{ avis.date ? avis.date|date('d/m/Y H:i') : '' }}</td>
 									<td>
 										<a href="{{ path('avis_show', {'id': avis.id}) }}">
-											<i class="fa fa-info" aria-hidden="true"></i>
+											<i class="fa fa-info-circle" aria-hidden="true" style="width : 40px"></i>
 										</a>
 									</td>
 								</tr>

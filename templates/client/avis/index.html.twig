@@ -1,41 +1,228 @@
 {% extends 'baseClient.html.twig' %}
-
 {% block title %}Avis client
 {% endblock %}
 {% block stylesheets %}{% endblock %}
 {% block body %}
+	<div class="row">
+		<div class="col-md-8">
+			<div
+				class="x_panel">
+				{# <div class="alert alert-secondary btn-block h-90"> #}
+				<div class="x_title">
+					<h3>
+						<i class="fa fa-chevron-right"></i>
+						Reservation N°
+						{{reservation.reference}}
+					</h3>
+				</div>
+				<div class="row">
+					<div class="col-md-3">
+						<img src="{{vich_uploader_asset(reservation.vehicule, 'imageFile') }}" alt="{{reservation.vehicule.marque}} {{reservation.vehicule.modele}}" style="width:100%;" id="vehicule_photo">
+					</div>
+					<div class="col-md-9">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="row">
+									<div class="col-md-6">
+										<h3 class="heading">Agence départ
+										</h3>
+										<div class="content_depart">
+											<p>
+												<i class="fa fa-map-marker"></i>
+												<span id="agence_depart">{{reservation.agenceDepart}}</span><br>
+												<span id="date_depart">{{reservation.dateDebut|date('m/d/Y')}}</span>
+												<span id="heure_depart">{{reservation.dateDebut|date('H:i')}}</span>
+											</p>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<h3 class="heading">Agence retour
+										</h3>
+										<div class="content_retour">
+											<p>
+												<i class="fa fa-map-marker"></i>
+												<span id="agence_retour">{{reservation.agenceRetour}}</span><br>
+												<span id="date_retour">{{reservation.dateFin|date('m/d/Y')}}</span>
+												<span id="heure_retour">{{reservation.dateFin|date('H:i')}}</span>
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="row">
+									<div class="col-md-6">
+										<p>
+											Soit
+											<span id="nombre_jours_location">{{reservation.duree}}</span>
+											jours de location</p>
 
-	<div class="x_panel">
-		<h2>Reservation N°
-			{{reservation.reference}}</h2>
-		<form action="{{path('save_avis')}}" method="POST">
-			<input type="hidden" name="idReservation" value="{{reservation.id}}">
-			<div class="mb-4">
-				<label for="global" class="control-label">GLOBAL</label>
-				<input id="global" name="global" class="rating rating-loading">
-			</div>
-			<div>
-				<label for="ponctualite" class="control-label">PONCTUALITÉ</label>
-				<input id="ponctualite" name="ponctualite" class="rating rating-loading" data-min="0" data-max="5" data-step="1">
-			</div>
-			<div>
-				<label for="accueil" class="control-label">ACCUEIL</label>
-				<input id="accueil" name="accueil" class="rating rating-loading" data-min="0" data-max="5" data-step="1">
-			</div>
-			<div>
-				<label for="service" class="control-label">SERVICE</label>
-				<input id="service" name="service" class="rating rating-loading" data-min="0" data-max="5" data-step="1">
-			</div>
-			<div>
-				<label for="commentaire">Commentaire</label>
-				<input type="textarea" class="form-control" name="commentaire">
-			</div>
+										<h3 class="heading">Prix de base de location</h3>
+										<div class="prix_location">
+											<span id="prixTotal">{{reservation.tarifVehicule}}</span>
+											EUR<br>
+											soit
+											<span id="prixJournalier">{{(reservation.tarifVehicule / reservation.duree)|number_format(2,'.')}}</span>
+											euro/jour
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="prestation">
+											<h3 class="heading">Prestations incluses</h3>
+											<ul class="">
+												<li>
+													<i class="fa fa-check"></i>
+													Kilométrage Illimité
+												</li>
+												<li>
+													<i class="fa fa-check"></i>
+													Assurance accidents causés aux tiers
+												</li>
+												<li>
+													<i class="fa fa-check"></i>
+													Assurance responsabilité civile
+												</li>
+												<li>
+													<i class="fa fa-check"></i>
+													Assurance collision (CDW)
+												</li>
+												<li>
+													<i class="fa fa-check"></i>
+													TVA 8.5 %
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="row">
+									<div class="col-md-6" id='listeOptions'>
+										<h3 class="heading">Option(s)</h3>
 
-			<button class="btn btn-danger" type="submit">Enregistrer</button>
-		</form>
+										<ul>
+											{% if reservation.conducteur == "true" %}
+												<li>
+													Conducteur
+												</li>
 
+											{% endif %}
+											{% for option in reservation.options %}
+												<li>{{option.appelation}}
+													:
+													{{option.prix}}
+													€</li>
+											{% endfor %}
+										</ul>
+									</div>
+									<div class="col-md-6" id='listeGaranties'>
+										<h3 class="heading">Garantie(s)</h3>
+										<ul>
+											{% for garantie in reservation.garanties %}
+												<li>{{garantie.appelation}}
+													:
+													{{garantie.prix}}
+													€</li>
+											{% endfor %}
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+						<hr>
+						<div class="row">
+							<div class="col-auto mr-auto">
+								<p>
+									<span class="label-tarifTotal">
+										Total prix :
+									</span>
+
+									<span class="tarifTotal">{{reservation.prix}}€</span>
+								</p>
+							</div>
+						</div>
+
+					</div>
+				</div>
+				{# </div> #}
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="x_panel">
+				<div class="x_title">
+					<h3>
+						<i class="fa fa-chevron-right"></i>
+						Ajouter un avis
+					</h3>
+				</div>
+				<form
+					action="{{path('save_avis')}}" method="POST">
+					{# avis global #}
+					<input type="hidden" name="idReservation" value="{{reservation.id}}">
+					<div class="form-group row">
+						<div class="col-sm-4 ">
+							<div class="d-flex align-items-center mb-3" style="height : 50px">
+								<label for="global">GLOBAL :
+								</label>
+							</div>
+						</div>
+						<div class="col-sm-8 ">
+							<input id="global" name="global" class="rating rating-loading ">
+						</div>
+					</div>
+					{# avis ponctualité #}
+					<div class="form-group row">
+						<div class="col-sm-4 ">
+							<div class="d-flex align-items-center mb-3" style="height : 50px">
+								<label for="ponctualite">PONCTUALITÉ :
+								</label>
+							</div>
+						</div>
+						<div class="col-sm-8 ">
+							<input id="ponctualite" name="ponctualite" class="rating rating-loading ">
+						</div>
+					</div>
+					{# avis accueil #}
+					<div class="form-group row">
+						<div class="col-sm-4 ">
+							<div class="d-flex align-items-center mb-3" style="height : 50px">
+								<label for="accueil">ACCUEIL :
+								</label>
+							</div>
+						</div>
+						<div class="col-sm-8 ">
+							<input id="accueil" name="accueil" class="rating rating-loading ">
+						</div>
+					</div>
+					{# avis service #}
+					<div class="form-group row">
+						<div class="col-sm-4 ">
+							<div class="d-flex align-items-center mb-3" style="height : 50px">
+								<label for="service">SERVICE :
+								</label>
+							</div>
+						</div>
+						<div class="col-sm-8 ">
+							<input id="service" name="service" class="rating rating-loading ">
+						</div>
+					</div>
+
+					{# avis commentaire #}
+					<div class="mb-3">
+						<div>
+							<label for="commentaire">Commentaire</label>
+						</div>
+						<div>
+							<textarea name="commentaire" id="commentaire" class="form-control"></textarea>
+						</div>
+					</div>
+					<button class="btn btn-danger" type="submit">Enregistrer</button>
+				</form>
+			</div>
+		</div>
 	</div>
 
+	{# end step 4 #}
 
 {% endblock %}
 {% block javascripts %}
@@ -44,8 +231,42 @@
 min: 0,
 max: 5,
 step: 1,
-size: 'md',
-starCaptions: false
+size: 'sm',
+language: 'fr',
+starCaptions: false,
+showClear: false,
+showCaption: false
+});
+
+$("#ponctualite").rating({
+min: 0,
+max: 5,
+step: 1,
+size: 'sm',
+language: 'fr',
+starCaptions: false,
+showClear: false,
+showCaption: false
+});
+$("#accueil").rating({
+min: 0,
+max: 5,
+step: 1,
+size: 'sm',
+language: 'fr',
+starCaptions: false,
+showClear: false,
+showCaption: false
+});
+$("#service").rating({
+min: 0,
+max: 5,
+step: 1,
+size: 'sm',
+language: 'fr',
+starCaptions: false,
+showClear: false,
+showCaption: false
 });
 	</script>
 {% endblock %}
