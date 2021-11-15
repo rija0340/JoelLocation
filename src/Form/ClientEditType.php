@@ -12,32 +12,34 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
 class ClientEditType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nom')
-            ->add('prenom')
-            ->add('adresse')
-            ->add('complementAdresse')
-            ->add('ville')
-            ->add('codePostal')
-            ->add('mail')
-            ->add('telephone')
-            ->add('portable')
+            ->add('nom', TextType::class)
+            ->add('prenom', TextType::class)
+            ->add('adresse', TextType::class)
+            ->add('complementAdresse', TextType::class)
+            ->add('ville', TextType::class)
+            ->add('codePostal', NumberType::class)
+            ->add('mail', TextType::class)
+            ->add('telephone', TextType::class)
+            ->add('portable', TextType::class)
             ->add('dateNaissance', DateType::class, [
                 'widget' => 'single_text',
                 'required' => false
             ])
-            ->add('lieuNaissance')
-            ->add('numeroPermis')
+            ->add('lieuNaissance', TextType::class)
+            ->add('numeroPermis', TextType::class)
             ->add('datePermis', DateType::class, [
                 'widget' => 'single_text',
                 'required' => false
             ])
-            ->add('villeDelivrancePermis');
+            ->add('villeDelivrancePermis', TextType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)

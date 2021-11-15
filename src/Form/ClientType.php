@@ -19,12 +19,12 @@ class ClientType extends AbstractType
     {
         $builder
             ->add('id', HiddenType::class)
-            ->add('nom')
-            ->add('prenom')
-            ->add('adresse')
-            ->add('complementAdresse')
-            ->add('ville')
-            ->add('codePostal')
+            ->add('nom', TextType::class)
+            ->add('prenom', TextType::class)
+            ->add('adresse', TextType::class)
+            ->add('complementAdresse', TextType::class)
+            ->add('ville', TextType::class)
+            ->add('codePostal', TextType::class)
             ->add('mail', EmailType::class)
             ->add('telephone', TelType::class)
             ->add('portable', TelType::class)
@@ -32,13 +32,13 @@ class ClientType extends AbstractType
                 'widget' => 'single_text',
                 'required' => false
             ])
-            ->add('lieuNaissance')
-            ->add('numeroPermis')
+            ->add('lieuNaissance', TextType::class)
+            ->add('numeroPermis', TextType::class)
             ->add('datePermis', DateType::class, [
                 'widget' => 'single_text',
                 'required' => false
             ])
-            ->add('villeDelivrancePermis');
+            ->add('villeDelivrancePermis', TextType::class);
         //->add('presence')
         //->add('date_inscription')
     }

@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class DevisType extends AbstractType
 {
@@ -39,8 +40,8 @@ class DevisType extends AbstractType
                     'GARE MARITIME DE BERGERVIN' => 'gareMaritime',
                 ],
             ])
-            ->add('lieuSejour')
-            ->add('conducteur')
+            ->add('lieuSejour', TextType::class)
+            ->add('conducteur', TextType::class)
             ->add('options', EntityType::class, [
                 'class' => Options::class,
                 'multiple' => true,
