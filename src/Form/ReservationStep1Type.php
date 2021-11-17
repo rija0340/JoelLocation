@@ -40,7 +40,7 @@ class ReservationStep1Type extends AbstractType
             ->add('dateRetour', DateTimeType::class, [
                 'widget' => 'single_text',
             ])
-            ->add('lieuSejour');
+            ->add('lieuSejour', TextType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)

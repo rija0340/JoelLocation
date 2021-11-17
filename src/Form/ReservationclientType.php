@@ -20,9 +20,9 @@ class ReservationclientType extends AbstractType
             ->add('date_fin', DateTimeType::class, [
                 'widget' => 'single_text',
             ])
-            ->add('type')
+            ->add('type', TextType::class)
             //->add('date_reservation')
-            ->add('lieu')
+            ->add('lieu', TextType::class)
             //->add('code_reservation')
             //->add('client')
             // ->add('vehicule')

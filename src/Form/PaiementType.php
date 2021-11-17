@@ -9,6 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class PaiementType extends AbstractType
 {
@@ -21,10 +22,10 @@ class PaiementType extends AbstractType
                 'required' => false
             ])
             ->add('motif', TextType::class)
-            ->add('reservation')
-            ->add('mode_paiement')
-            ->add('utilisateur')
-            ->add('client')
+            ->add('reservation', EntityType::class)
+            ->add('mode_paiement', EntityType::class)
+            ->add('utilisateur', EntityType::class)
+            ->add('client', EntityType::class)
         ;
     }
 

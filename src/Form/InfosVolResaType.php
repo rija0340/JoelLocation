@@ -49,8 +49,8 @@ class InfosVolResaType extends AbstractType
                     'XL Airways' => 'XL Airways',
                 ],
             ])
-            ->add('numVolAller')
-            ->add('numVolRetour')
+            ->add('numVolAller', TextType::class)
+            ->add('numVolRetour', TextType::class)
             ->add('heureVolAller', DateTimeType::class, [
                 'widget' => 'single_text',
             ])

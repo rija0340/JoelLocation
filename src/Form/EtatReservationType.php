@@ -13,7 +13,7 @@ class EtatReservationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('libelle')
+            ->add('libelle', TextType::class)
         ;
     }
 

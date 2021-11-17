@@ -9,21 +9,22 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
 class EditClientReservationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nom')
-            ->add('prenom')
-            ->add('adresse')
-            ->add('complementAdresse')
-            ->add('ville')
-            ->add('codePostal')
-            ->add('mail')
-            ->add('telephone')
-            ->add('portable')
+            ->add('nom', TextType::class)
+            ->add('prenom', TextType::class)
+            ->add('adresse', TextType::class)
+            ->add('complementAdresse', TextType::class)
+            ->add('ville', TextType::class)
+            ->add('codePostal', NumberType::class)
+            ->add('mail', TextType::class)
+            ->add('telephone', TextType::class)
+            ->add('portable', TextType::class)
             ->add('infosResa', InfosResaType::class)
             ->add('infosVolResa', InfosVolResaType::class);
     }

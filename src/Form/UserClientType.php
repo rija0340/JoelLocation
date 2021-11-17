@@ -23,19 +23,19 @@ class UserClientType extends AbstractType
         ];
         $builder
             ->add('password', PasswordType::class)
-            ->add('nom')
-            ->add('prenom')
-            ->add('adresse')
-            ->add('complementAdresse')
-            ->add('ville')
-            ->add('mail')
-            ->add('telephone')
-            ->add('portable')
+            ->add('nom', TextType::class)
+            ->add('prenom', TextType::class)
+            ->add('adresse', TextType::class)
+            ->add('complementAdresse', TextType::class)
+            ->add('ville', TextType::class)
+            ->add('mail', TextType::class)
+            ->add('telephone', TextType::class)
+            ->add('portable', TextType::class)
             ->add('dateNaissance',  DateType::class, [
                 'widget' => 'single_text',
             ])
-            ->add('lieuNaissance')
-            ->add('numeroPermis')
+            ->add('lieuNaissance', TextType::class)
+            ->add('numeroPermis', TextType::class)
             ->add('datePermis',  DateType::class, [
                 'widget' => 'single_text',
             ])

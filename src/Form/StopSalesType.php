@@ -16,7 +16,7 @@ class StopSalesType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('type')
+            ->add('type', TextType::class)
             // ->add('date_reservation')
             ->add('date_debut', DateTimeType::class, [
                 'widget' => 'single_text',

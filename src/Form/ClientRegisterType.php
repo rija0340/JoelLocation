@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
 class ClientRegisterType extends AbstractType
 {
@@ -50,7 +51,7 @@ class ClientRegisterType extends AbstractType
             ->add('lieuNaissance', TextType::class)
             ->add('complementAdresse', TextType::class)
             ->add('ville', TextType::class)
-            ->add('codePostal', TextType::class)
+            ->add('codePostal', NumberType::class)
             ->add('villeDelivrancePermis', TextType::class)
             ->add('password', RepeatedType::class, [
 

@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
 class ClientType extends AbstractType
 {
@@ -24,7 +25,7 @@ class ClientType extends AbstractType
             ->add('adresse', TextType::class)
             ->add('complementAdresse', TextType::class)
             ->add('ville', TextType::class)
-            ->add('codePostal', TextType::class)
+            ->add('codePostal', NumberType::class)
             ->add('mail', EmailType::class)
             ->add('telephone', TelType::class)
             ->add('portable', TelType::class)
