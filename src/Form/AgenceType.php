@@ -13,10 +13,10 @@ class AgenceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nom')
+            ->add('nom', TextType::class)
             ->add('presentation')
-            ->add('mail')
-            ->add('telephone')
+            ->add('mail', TextType::class)
+            ->add('telephone', TextType::class)
         ;
     }
 
