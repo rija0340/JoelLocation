@@ -166,10 +166,10 @@ class ReservationRepository extends ServiceEntityRepository
     public function findReservationsSansStopSales()
     {
         return $this->createQueryBuilder('r')
-            ->andWhere(' r.code_reservation != :code AND r.date_fin > :date')
+            ->andWhere(' r.code_reservation != :code ')
             ->setParameter('code', 'stopSale')
             ->andWhere('r.canceled = FALSE AND r.archived = FALSE')
-            ->setParameter('date', $this->dateHelper->dateNow())
+            // ->setParameter('date', $this->dateHelper->dateNow())
             ->orderBy('r.date_reservation', 'DESC')
             ->getQuery()
             ->getResult();

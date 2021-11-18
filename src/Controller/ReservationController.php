@@ -264,7 +264,7 @@ class ReservationController extends AbstractController
             $reservation->setPrixOptions($reservation->getSommeOptions());
             $reservation->setPrix($reservation->getTarifVehicule() + $reservation->getPrixGaranties() + $reservation->getPrixOptions());
             $this->em->flush();
-            return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
+            return $this->redirectToRoute($this->getRouteForRedirection($reservation), ['id' => $reservation->getId()]);
         }
         return $this->render('admin/reservation/crud/options_garanties/edit.html.twig', [
             'form' => $form->createView(),

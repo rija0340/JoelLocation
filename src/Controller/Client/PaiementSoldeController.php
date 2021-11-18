@@ -20,6 +20,8 @@ use App\Repository\OptionsRepository;
 use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
 use App\Controller\ReservationController;
+use App\Entity\AppelPaiement;
+use App\Repository\AppelPaiementRepository;
 use App\Repository\ModePaiementRepository;
 use App\Repository\ReservationRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -46,6 +48,7 @@ class PaiementSoldeController extends AbstractController
     private $modePaiementRepo;
     private $validationSession;
     private $mail;
+    private $appelPaiementRepo;
 
 
     public function __construct(
@@ -62,7 +65,8 @@ class PaiementSoldeController extends AbstractController
         EntityManagerInterface $em,
         ModePaiementRepository $modePaiementRepo,
         ValidationReservationClientSession $validationSession,
-        Mailjet $mail
+        Mailjet $mail,
+        AppelPaiementRepository $appelPaiementRepo
 
     ) {
         $this->devisController = $devisController;
@@ -79,6 +83,7 @@ class PaiementSoldeController extends AbstractController
         $this->modePaiementRepo = $modePaiementRepo;
         $this->validationSession = $validationSession;
         $this->mail = $mail;
+        $this->appelPaiementRepo = $appelPaiementRepo;
     }
 
     //paiement sold du client (link dans espace client)
@@ -171,6 +176,14 @@ class PaiementSoldeController extends AbstractController
         //envoi de mail client
         $contentMail = "Bonjour, Le solde concernant votre réservation numero " . $reservation->getReference() . "d'un montant de " . $sommePaiement . " € a été payé avec succès ";
         $this->mail->send($reservation->getClient()->getMail(), $reservation->getClient()->getNom(), "Confirmation payement de solde", $contentMail);
+
+
+        // ajouer le paiement dans l'entité appelPaiement correspondant
+        $appel = $this->appelPaiementRepo->findOneBy(['reservation' => $reservation]);
+        $appel->setDatePaiement($this->dateHelper->dateNow());
+        $appel->setPayed(true);
+        $appel->setType('CARTE BANCAIRE');
+        $this->em->flush();
 
         //vider session validation paiement 
         $this->validationSession->removeValidationSession();

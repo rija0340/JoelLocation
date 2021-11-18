@@ -58,7 +58,7 @@
 					</div>
 				</div>
 			</div>
-			<table id="vehiculeDispoDatatable" class="table table-hover" style="width : 100%">
+			<table id="datatable" class="table table-hover" style="width : 100%">
 				<thead class="bg-dark text-white text-uppercase text-center">
 					<tr>
 						<th>Immatriculation</th>
@@ -110,11 +110,5 @@
 			<script src="../../admin/vendors/jszip/dist/jszip.min.js"></script>
 			<script src="../../admin/vendors/pdfmake/build/pdfmake.min.js"></script>
 			<script src="../../admin/vendors/pdfmake/build/vfs_fonts.js"></script>
-			{# // <script src="../../js/admin/vehiculeDispo_ajax.js"></script> #}
-
-			<script>
-				$(document).ready(function () {
-$('#vehiculeDispoDatatable').DataTable();
-});
-			</script>
-		{% endblock  %}
+			<script src="{{asset('js/admin/datatable.fr.js')}}"></script>
+		{% endblock %}

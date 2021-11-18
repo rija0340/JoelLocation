@@ -47,22 +47,39 @@
 
 
 							<tbody>
-								{% for reservation in reservations %}
+								{% for appelPaiement in appelPaiements %}
 									<tr>
-										<td>{{reservation.reference}}</td>
-										<td>{{reservation.prix - reservation.sommePaiements}}</td>
-										<td></td>
-										<td>{{reservation.client.nom}}</td>
-										<td></td>
-										<td></td>
-										<td></td>
+										<td>{{appelPaiement.reservation.reference}}</td>
+										<td>{{appelPaiement.montant}}</td>
+										<td>{{appelPaiement.type}}</td>
+
+										<td>{{appelPaiement.reservation.client.nom}}</td>
 										<td>
-											{# <button class="btn text-danger"><i class="fa fa-close"></i></button> #}
+											{% if appelPaiement.dateDemande %}
+												{{appelPaiement.dateDemande|date('d/m/Y H:i')}}
+											{% endif %}
+										</td>
+										<td></td>
+
+										<td>
+											{% if appelPaiement.payed %}
+												<i class="fa fa-check" style="color : red"></i>
+											{% elseif (appelPaiement.payed == false or appelPaiement.payed == null)  %}
+												<i class="fa-fa-close (alias)"></i>
+											{% endif %}
+										</td>
+										<td>
+											{% if appelPaiement.datePaiement %}
+												{{appelPaiement.datePaiement|date('d/m/Y H:i')}}
+											{% endif %}
 										</td>
 										<td class="text-center">
-											<a href="">
-												<i class=" fa fa-info-circle" style="font-size: 2em !important;"></i>
-											</a>
+											{% if appelPaiement.payed == false %}
+
+												<a href="{{path('envoi_email_appel_paiement_index', {'id': appelPaiement.id})}}" class="btn btn-danger">
+													envoyer
+												</a>
+											{% endif %}
 										</td>
 									</tr>
 								{% endfor %}
