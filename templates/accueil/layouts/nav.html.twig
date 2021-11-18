@@ -19,17 +19,17 @@
 					<a href="{{ path('nosvehicules') }}">Nos véhicules</a>
 				</li>
 				{# <li class="{% if app.request.attributes.get('_route') starts with 'app_login' %}current-menu-item{% endif %}">
-																	{% if is_granted("ROLE_CLIENT") %}
-																		<a href="{{ path('espaceClient_index') }}">Mon compte</a>
-																	{% elseif is_granted("ROLE_PERSONNEL") %}
-																		<a href="{{ path('admin_index') }}">Mon compte</a>
-																	{% else %}
-																		<a href="{{ path('app_login') }}">Mon compte</a>
-																	{% endif %}
-																</li> #}
-				<li class="{% if app.request.attributes.get('_route') starts with 'formulaire-contact' %}current-menu-item{% endif %}">
-					<a href="{{ path('formulaire-contact') }}">Contact</a>
-				</li>
+																					{% if is_granted("ROLE_CLIENT") %}
+																						<a href="{{ path('espaceClient_index') }}">Mon compte</a>
+																					{% elseif is_granted("ROLE_PERSONNEL") %}
+																						<a href="{{ path('admin_index') }}">Mon compte</a>
+																					{% else %}
+																						<a href="{{ path('app_login') }}">Mon compte</a>
+																					{% endif %}
+																				</li> #}
+				{# <li class="{% if app.request.attributes.get('_route') starts with 'formulaire-contact' %}current-menu-item{% endif %}">
+									<a href="{{ path('formulaire-contact') }}">Contact</a>
+								</li> #}
 				<li class="{% if app.request.attributes.get('_route') starts with 'foireauxquestion' %}current-menu-item{% endif %}">
 					<a href="{{ path('foireauxquestion') }}">FAQ</a>
 				</li>
