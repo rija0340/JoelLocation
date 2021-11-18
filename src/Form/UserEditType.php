@@ -32,18 +32,18 @@ class UserEditType extends AbstractType
                 'required' => false,
                 'empty_data' => '',
             ])
-            ->add('nom')
-            ->add('prenom')
-            ->add('adresse')
-            ->add('mail')
-            ->add('telephone')
-            ->add('portable')
+            ->add('nom', TextType::class)
+            ->add('prenom', TextType::class)
+            ->add('adresse', TextType::class)
+            ->add('mail', TextType::class)
+            ->add('telephone', TextType::class)
+            ->add('portable', TextType::class)
             ->add('dateNaissance', DateType::class, [
                 'widget' => 'single_text',
                 'required' => false
             ])
-            ->add('lieuNaissance')
-            ->add('numeroPermis')
+            ->add('lieuNaissance', TextType::class)
+            ->add('numeroPermis', TextType::class)
             ->add('datePermis', DateType::class, [
                 'widget' => 'single_text',
                 'required' => false

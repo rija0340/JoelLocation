@@ -28,22 +28,19 @@ class VehiculeType extends AbstractType
             ->add('date_mise_location', DateType::class, [
                 'widget' => 'single_text',
             ])
-            ->add('prix_acquisition')
-            ->add(
-                'marque'
-            )
-            ->add('type')
-            ->add('details')
-            ->add('carburation')
-            ->add('caution')
-            ->add('vitesse')
-            ->add('bagages')
-            ->add('portes')
-            ->add('passagers')
-            ->add('atouts')
+            ->add('prix_acquisition', NumberType::class)
+            ->add('marque', EntityType::class)
+            ->add('type', EntityType::class)
+            ->add('details', TextareaType::class)
+            ->add('carburation', Text::class)
+            ->add('caution', NumberType::class)
+            ->add('vitesse', Text::class)
+            ->add('bagages', Text::class)
+            ->add('portes', Text::class)
+            ->add('passagers', Text::class)
+            ->add('atouts', Text::class)
             ->add('imageFile', VichFileType::class, [
                 'required' => false,
-
             ]);
     }
 

@@ -7,16 +7,17 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class AgenceType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nom')
-            ->add('presentation')
-            ->add('mail')
-            ->add('telephone')
+            ->add('nom', TextType::class)
+            ->add('presentation', TextareaType::class)
+            ->add('mail', TextType::class)
+            ->add('telephone', TextType::class)
         ;
     }
 

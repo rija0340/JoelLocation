@@ -11,18 +11,19 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
 class TarifsType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('troisJours')
-            ->add('septJours')
-            ->add('quinzeJours')
-            ->add('trenteJours')
+            ->add('troisJours', NumberType::class)
+            ->add('septJours', NumberType::class)
+            ->add('quinzeJours', NumberType::class)
+            ->add('trenteJours', NumberType::class)
 
-            ->add('marque');
+            ->add('marque', EntityType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)

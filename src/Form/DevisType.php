@@ -56,8 +56,8 @@ class DevisType extends AbstractType
                 // 'choice_label' => 'id'
                 // 'choice_label' => 'description',
             ])
-            ->add('client')
-            ->add('vehicule');
+            ->add('client', EntityType::class)
+            ->add('vehicule', EntityType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)
