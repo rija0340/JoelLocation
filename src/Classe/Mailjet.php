@@ -53,4 +53,40 @@ class Mailjet
         $response = $mj->post(Resources::$Email, ['body' => $body]);
         $response->success();
     }
+
+    public function sendToMe($nom, $email, $telephone, $adresse, $objet, $message)
+    {
+
+        $mj = new Client($this->api_key, $this->api_key_secret, true, ['version' => 'v3.1']);
+
+        $body = [
+            'Messages' => [
+                [
+                    'From' => [
+                        'Email' => "contact.joellocation@gmail.com",
+                        'Name' => $nom
+                    ],
+                    'To' => [
+                        [
+                            'Email' => "contact.joellocation@gmail.com",
+                            'Name' => "JOEL LOCATION"
+                        ]
+                    ],
+                    'TemplateID' => 3357170, //template codé en html dans mailjet
+                    'TemplateLanguage' => true,
+                    'Subject' => $objet,
+                    'Variables' => [
+                        'nom' => $nom,
+                        'email' => $email,
+                        'telephone' => $telephone,
+                        'adresse' => $adresse,
+                        'objet' => $objet,
+                        'message' => $message,
+                    ]
+                ]
+            ]
+        ];
+        $response = $mj->post(Resources::$Email, ['body' => $body]);
+        return $response->success();
+    }
 }

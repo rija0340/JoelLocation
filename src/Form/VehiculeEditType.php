@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Marque;
 use App\Entity\Modele;
 use App\Entity\Vehicule;
 use Symfony\Component\Form\AbstractType;
@@ -12,7 +13,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\Extension\Core\Type\NumbreType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 
@@ -29,11 +30,18 @@ class VehiculeEditType extends AbstractType
                 'widget' => 'single_text',
             ])
             ->add('prix_acquisition', NumberType::class)
-            ->add('marque', EntityType::class)
-            ->add('type', EntityType::class)
+
+            ->add('marque', EntityType::class, [
+                'class' => Marque::class,
+            ])
+
+            ->add('type', EntityType::class, [
+                'class' => Modele::class
+            ])
+
             ->add('modele', HiddenType::class)
             ->add('details', TextareaType::class)
-            ->add('carburation', Text::class)
+            ->add('carburation', TextType::class)
             ->add('caution', NumberType::class)
             ->add('vitesse', TextType::class)
             ->add('bagages', TextType::class)

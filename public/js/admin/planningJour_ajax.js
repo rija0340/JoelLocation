@@ -331,6 +331,7 @@ function LoadCurrentReport(data) {
         if (data.length != 0) {
 
             planJourDT.buttons().container().appendTo('#btnExport');
+            
         }
     } else {
         // table.dataTable().fnClearTable();

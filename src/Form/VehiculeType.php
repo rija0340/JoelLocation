@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Marque;
 use App\Entity\Modele;
 use App\Entity\Vehicule;
 use Symfony\Component\Form\AbstractType;
@@ -12,8 +13,10 @@ use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class VehiculeType extends AbstractType
 {
@@ -29,16 +32,16 @@ class VehiculeType extends AbstractType
                 'widget' => 'single_text',
             ])
             ->add('prix_acquisition', NumberType::class)
-            ->add('marque', EntityType::class)
-            ->add('type', EntityType::class)
+            ->add('marque', EntityType::class, ['class' => Marque::class])
+            ->add('type', EntityType::class, ['class' => Modele::class])
             ->add('details', TextareaType::class)
-            ->add('carburation', Text::class)
+            ->add('carburation', TextType::class)
             ->add('caution', NumberType::class)
-            ->add('vitesse', Text::class)
-            ->add('bagages', Text::class)
-            ->add('portes', Text::class)
-            ->add('passagers', Text::class)
-            ->add('atouts', Text::class)
+            ->add('vitesse', TextType::class)
+            ->add('bagages', TextType::class)
+            ->add('portes', TextType::class)
+            ->add('passagers', TextType::class)
+            ->add('atouts', TextType::class)
             ->add('imageFile', VichFileType::class, [
                 'required' => false,
             ]);

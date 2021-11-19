@@ -185,12 +185,16 @@ class ReservationController extends AbstractController
                 'reservation' => $reservation,
                 'conducteur' => $conducteur,
                 'formKM' => $formKM->createView(),
+                'tarifOptions' => $reservation->getSommeOptions(),
+                'tarifGaranties' => $reservation->getSommeGaranties()
             ]);
         }
         return $this->render('admin/reservation/crud/show.html.twig', [
             'reservation' => $reservation,
             'conducteur' => $conducteur,
-            'formKM' => $formKM->createView()
+            'formKM' => $formKM->createView(),
+            'tarifOptions' => $reservation->getSommeOptions(),
+            'tarifGaranties' => $reservation->getSommeGaranties()
         ]);
     }
 
@@ -300,12 +304,11 @@ class ReservationController extends AbstractController
         //form pour client
         $client = $this->reservationRepo->find($reservation->getId())->getClient();
         $form = $this->createForm(EditClientReservationType::class, $client);
-
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->persist($client);
             $this->em->flush();
-
             $this->flashy->success("La réservation a bien été modifié");
             return $this->redirectToRoute($this->getRouteForRedirection($reservation), ['id' => $reservation->getId()]);
         }
@@ -480,7 +483,7 @@ class ReservationController extends AbstractController
         //classement des réservations
 
         // 1-nouvelle réservation -> dateNow > dateReservation
-        if ($dateNow > $dateDepart) {
+        if ($dateNow < $dateDepart) {
             $routeReferer = 'reservation_show';
         }
         if ($dateDepart < $dateNow && $dateNow < $dateRetour) {

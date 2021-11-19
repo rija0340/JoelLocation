@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\InfosVolResaRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=InfosVolResaRepository::class)
@@ -39,6 +40,7 @@ class InfosVolResa
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Assert\GreaterThan("+1 hour")
      */
     private $heureVolAller;
 

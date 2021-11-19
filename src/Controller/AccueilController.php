@@ -2,27 +2,28 @@
 
 namespace App\Controller;
 
-use App\Classe\Mailjet;
 use App\Entity\Faq;
 use App\Entity\Mail;
 use App\Entity\User;
+use App\Classe\Mailjet;
 use App\Form\LoginType;
 use App\Entity\Paiement;
 use App\Entity\Vehicule;
 use App\Form\ClientType;
 use App\Entity\Reservation;
+use App\Service\DateHelper;
 use App\Entity\ModePaiement;
+use App\Service\SymfonyMailer;
 use App\Entity\EtatReservation;
 use App\Entity\ModeReservation;
 use App\Repository\UserRepository;
+use App\Form\FormulaireContactType;
 use App\Form\ReservationclientType;
 use App\Repository\VehiculeRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ReservationRepository;
 use App\Repository\EtatReservationRepository;
 use App\Repository\ModeReservationRepository;
-use App\Service\DateHelper;
-use App\Service\SymfonyMailer;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\HttpFoundation\Response;
@@ -195,22 +196,31 @@ class AccueilController extends AbstractController
      */
     public function formcontact(Request $request, SymfonyMailer $mailer): Response
     {
-        if ($request->request->get('email') != null) {
+        $form = $this->createForm(FormulaireContactType::class);
+        $form->handleRequest($request);
 
-            $nom = $request->request->get('nom');
-            $email_user = $request->request->get('email');
-            $telephone = $request->request->get('telephone');
-            $adresse = $request->request->get('adresse');
-            $objet = $request->request->get('objet');
-            $message = "Adresse email du client :" . $email_user . '<br>' . " Message : " . $request->request->get('message');
+        if ($form->isSubmitted() && $form->isValid()) {
 
+            $nom = $form->getData()['nom'];
+            $email = $form->getData()['email'];
+            $telephone = $form->getData()['telephone'];
+            $adresse = $form->getData()['adresse'];
+            $objet = $form->getData()['objet'];
+            $message = $form->getData()['message'];
             //to, client_nom, objet, message du client
-            $this->mailjet->send("contact.joellocation@gmail.com", $nom, $objet, $message);
+            $status = $this->mailjet->sendToMe($nom, $email, $telephone, $adresse, $objet, $message);
 
-            $this->flashy->success("Votre mail a bien été envoyé");
+
+            if ($status) {
+                $this->flashy->success("Votre email a bien été envoyé");
+            } else {
+                $this->flashy->error("Votre email n'a pas été envoyé");
+            }
             return $this->redirectToRoute('accueil');
         }
-        return $this->render('accueil/contact.html.twig');
+        return $this->render('accueil/contact.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 
 

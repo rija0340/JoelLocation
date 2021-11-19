@@ -17,62 +17,67 @@
 		</div>
 
 		<div class="container">
-			<form action="{{path('formulaire-contact')}}" name="contact" method="POST">
-				<div class="p-5">
-					<div class="row">
-						<div class="col-lg-6">
-							<div class="form-group">
-								<label for="inputUsername" class="bmd-label-floating" style="color:white;font-weight:500">Nom :</label>
+			{{form_start(form)}}
 
-								<input type="text" class="form-control" name="nom" required>
-							</div>
-						</div>
-						<div class="col-lg-6">
-							<div class="form-group">
-								<label for="email" class="bmd-label-floating" style="color:white;font-weight:500">Email :</label>
-
-								<input type="email" class="form-control" name="email" required>
-							</div>
-						</div>
-						<div class="col-lg-6">
-							<div class="form-group">
-								<label for="telephone" class="bmd-label-floating" style="color:white;font-weight:500">Téléphone :</label>
-
-								<input type="text" class="form-control" name="telephone" required>
-							</div>
-						</div>
-						<div class="col-lg-6">
-							<div class="form-group">
-								<label for="adresse" class="bmd-label-floating" style="color:white;font-weight:500">Adresse :</label>
-
-								<input type="text" class="form-control" name="adresse" required>
-							</div>
-						</div>
-
-						<div class="col-lg-12">
-							<div class="form-group">
-								<label for="Objet" class="labelObjet">Objet* :
-								</label>
-								<select id="Objet" name="objet">
-									<option value="Demande de devis">Demande de devis</option>
-									<option value="Demande de renseignement">Demande de renseignement</option>
-									<option value="Autre">Autre</option>
-								</select>
-							</div>
-						</div>
-						<div class="col-lg-12">
-							<div class="form-group">
-								<label for="exampleMessage" class="">Message :</label>
-								<textarea type="text" name="message" class="form-control" rows="4" id="exampleMessage" placeholder="Pour une demande de devis, veuillez préciser vos dates de retrait et de retour ainsi que le lieu (Aéroport ou autre)." required></textarea>
-							</div>
-						</div>
-
-						<div class="col-lg-12">
-							<input class="button" type="submit" value="Envoyer Message">
+			<div class="p-5">
+				<div class="row">
+					<div class="col-lg-6">
+						<div class="form-group">
+							<label for="inputUsername" class="bmd-label-floating" style="color:white;font-weight:500">Nom :</label>
+							{{form_widget(form.nom)}}
+							{# <input type="text" class="form-control" name="nom" required> #}
 						</div>
 					</div>
+					<div class="col-lg-6">
+						<div class="form-group">
+							<label for="email" class="bmd-label-floating" style="color:white;font-weight:500">Email :</label>
+							{{form_widget(form.email)}}
+
+							{# <input type="email" class="form-control" name="email" required> #}
+						</div>
+					</div>
+					<div class="col-lg-6">
+						<div class="form-group">
+							<label for="telephone" class="bmd-label-floating" style="color:white;font-weight:500">Téléphone :</label>
+							{{form_widget(form.telephone)}}
+
+							{# <input type="text" class="form-control" name="telephone" required> #}
+						</div>
+					</div>
+					<div class="col-lg-6">
+						<div class="form-group">
+							<label for="adresse" class="bmd-label-floating" style="color:white;font-weight:500">Adresse :</label>
+							{{form_widget(form.adresse)}}
+
+						</div>
+					</div>
+
+					<div class="col-lg-12">
+						<div class="form-group">
+							<label for="Objet" class="labelObjet">Objet* :
+							</label>
+							<div class="col-3">
+								{{form_widget(form.objet)}}
+							</div>
+
+						</div>
+					</div>
+					<div class="col-lg-12">
+						<div class="form-group">
+							<label for="exampleMessage" class="">Message :</label>
+							{{form_widget(form.message, {'attr': {'placeholder': 'Pour une demande de devis, veuillez préciser vos dates de retrait et de retour ainsi que le lieu (Aéroport ou autre).', "rows":"4"}})}}
+
+						</div>
+					</div>
+
+					<div class="col-lg-12">
+						<input class="button" type="submit" value="Envoyer Message">
+					</div>
 				</div>
-			</form>
+			</div>
+
+			{{form_end(form)}}
+
 		</div>
 
 	</div>
