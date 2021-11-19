@@ -160,9 +160,6 @@ class ReservationController extends AbstractController
     }
 
 
-
-
-
     /**
      * @Route("/details/{id}", name="reservation_show", methods={"GET", "POST"},requirements={"id":"\d+"})
      */

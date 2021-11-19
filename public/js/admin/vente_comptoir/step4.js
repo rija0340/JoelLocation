@@ -133,7 +133,7 @@ function reserverDevis(client, montant) {
             $.alert({
                 title: 'Succès',
                 icon: 'fa fa-smile-o',
-                type: 'green',
+                type: 'red',
                 content: '<p>La réservation N°' + data + 'a été effectuée avec succès</p>',
             });
             window.location.href = '/reservation';

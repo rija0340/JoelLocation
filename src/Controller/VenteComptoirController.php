@@ -578,7 +578,11 @@ class VenteComptoirController extends AbstractController
         $reservation->setCodeReservation('devisTransformé');
         // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
         $lastID = $this->reservationRepo->findBy(array(), array('id' => 'DESC'), 1);
-        $currentID = $lastID[0]->getId() + 1;
+        if ($lastID == null) {
+            $currentID = 1;
+        } else {
+            $currentID = $lastID[0]->getId() + 1;
+        }
         $reservation->setRefRes("CPTGP", $currentID);
 
         $this->em->persist($reservation);

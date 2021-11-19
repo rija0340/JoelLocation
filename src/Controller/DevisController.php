@@ -309,11 +309,16 @@ class DevisController extends AbstractController
         $reservation->setPrix($devis->getPrix());
         $reservation->setDateReservation(new \DateTime('NOW'));
         $reservation->setCodeReservation('devisTransformé');
+
         // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
         $lastID = $this->reservationRepo->findBy(array(), array('id' => 'DESC'), 1);
-        $currentID = $lastID[0]->getId() + 1;
-        $reservation->setRefRes("CPTGP", $currentID);
+        if ($lastID == null) {
+            $currentID = 1;
+        } else {
+            $currentID = $lastID[0]->getId() + 1;
+        }
 
+        $reservation->setRefRes("CPTGP", $currentID);
         $entityManager = $this->reservController->getDoctrine()->getManager();
         $entityManager->persist($reservation);
         $entityManager->flush();
@@ -341,10 +346,10 @@ class DevisController extends AbstractController
         $quantite = date_diff($devis->getDateDepart(), $devis->getDateRetour());
         $logo = $this->getParameter('logo') . '/Joel-Location-new.png';
         $logo_data = base64_encode(file_get_contents($logo));
-        $logo_src = 'data:image/png;base64,'.$logo_data;
+        $logo_src = 'data:image/png;base64,' . $logo_data;
         $prixunitaire = $devis->getPrix();
         $prixht = $prixunitaire * $quantite->d;
-        $tva = 8.5/100;
+        $tva = 8.5 / 100;
         $montant = $tva * $prixht;
         $total = $prixht * (1 + $tva);
         $html = $this->renderView('admin/devis/pdfdevis.html.twig', [
