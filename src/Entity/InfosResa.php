@@ -18,17 +18,17 @@ class InfosResa
     private $id;
 
     /**
-     * @ORM\Column(type="float", nullable=true)
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $nbrAdultes;
 
     /**
-     * @ORM\Column(type="float", nullable=true)
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $nbrEnfants;
 
     /**
-     * @ORM\Column(type="float", nullable=true)
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $nbrBebes;
 

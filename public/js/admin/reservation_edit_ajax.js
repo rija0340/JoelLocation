@@ -39,15 +39,12 @@ function addEventListener() {
 
 
 function getDatesValues() {
-    console.log(document.getElementById("reservation_date_debut").value);
-    console.log(document.getElementById("reservation_date_fin").value);
     retrieveDataAjax();
 }
 
 
 function getDateDebutValue() {
     dateDebutValue = this.value;
-    console.log('ity ilay date ' + dateDebutValue);
 
     if (dateFinValue != null) {
 
@@ -107,7 +104,6 @@ function retrieveDataAjax() {
         },
         Type: "json",
         success: function (data) {
-            console.log(data);
 
             populateSelectElem(data);
             dataForSelect(data)
@@ -115,7 +111,6 @@ function retrieveDataAjax() {
         },
         error: function (erreur) {
             // alert('La requête n\'a pas abouti' + erreur);
-            console.log(erreur.responseText);
         }
     });
 }
@@ -130,7 +125,6 @@ function populateSelectElem(options) {
     for (var i = 0; i < options.length; i++) {
 
         var opt = options[i];
-        console.log('ity ny opt ' + opt.marque);
         var option = document.createElement("option");
         option.text = opt.marque + ' ' + opt.modele + ' ' + opt.immatriculation;
         option.value = opt.id;
@@ -155,7 +149,6 @@ function dataForSelect(data) {
         });
 
     }
-    console.log(data2);
     return data2;
 }
 

@@ -15,10 +15,18 @@ class InfosResaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nbrAdultes', NumberType::class)
-            ->add('nbrEnfants', NumberType::class)
-            ->add('nbrBebes', NumberType::class)
-            ->add('infosInternes', TextareaType::class);
+            ->add('nbrAdultes', NumberType::class, [
+                'required' => false
+            ])
+            ->add('nbrEnfants', NumberType::class, [
+                'required' => false
+            ])
+            ->add('nbrBebes', NumberType::class, [
+                'required' => false
+            ])
+            ->add('infosInternes', TextareaType::class, [
+                'required' => false
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

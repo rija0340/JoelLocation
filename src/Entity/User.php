@@ -75,7 +75,7 @@ class User implements UserInterface
     private $presence;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="datetime")
      */
     private $date_inscription;
 

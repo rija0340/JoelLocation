@@ -140,7 +140,7 @@
 	</head>
 	<body>
 		<div>
-			<div class="logo"><img src="{{ logo }}" alt="logo" width="125px" height="90px" type="images/png"></div>
+			<div class="logo"><img src="{{ logo }}" alt="logo" width="125px" height="80px" type="images/png"></div>
 			<div class="adresse">
 				94 Chemin de la hache<br>
 				97160 le moul
@@ -189,7 +189,7 @@
 			à
 			{{reservation.dateFin|date('H:i')}}</p>
 		{# table gauche droite, info client et conducteurs #}
-		<div class="p-0 ">
+		<div class="p-0 " sytle="">
 			<div class="table1 p-0 ">
 				<table class="table-border p-0 " style="width : 100%;">
 					<tbody class="fs-12">
@@ -238,19 +238,19 @@
 						</tr>
 						<tr>
 							<td>Infos arrivée</td>
-							<td>{{reservation.client.infosVolResa.heureVolAller|date('d/m/Y')}}, Vol
-								{{reservation.client.infosVolResa.numVolAller}}
+							<td>{{reservation.client.infosVolResa ? reservation.client.infosVolResa.heureVolAller|date('d/m/Y') : "  " }}, Vol
+								{{reservation.client.infosVolResa ? reservation.client.infosVolResa.numVolAller : "   " }}
 								à
-								{{reservation.client.infosVolResa.heureVolAller|date('H:i')}}</td>
+								{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.heureVolAller|date('H:i') : "   " }}</td>
 						</tr>
 						<tr>
 							<td>Infos retour
 							</td>
 							<td>
-								{{reservation.client.infosVolResa.heureVolRetour|date('d/m/Y')}}, Vol
-								{{reservation.client.infosVolResa.numVolRetour}}
+								{{reservation.client.infosVolResa ? reservation.client.infosVolResa.heureVolRetour|date('d/m/Y') : "  " }}, Vol
+								{{reservation.client.infosVolResa ? reservation.client.infosVolResa.numVolRetour : "   " }}
 								à
-								{{reservation.client.infosVolResa.heureVolRetour|date('H:i')}}
+								{{reservation.client.infosVolResa ? reservation.client.infosVolResa.heureVolRetour|date('H:i') :  "   "}}
 							</td>
 						</tr>
 					</tbody>
@@ -301,7 +301,7 @@
 			</div>
 		</div>
 		{# table contenant details voiture #}
-		<div class="div-voiture">
+		<div class="div-voiture" style="margin-top:-30px;">
 			<table class="table-border" style="width : 100%">
 				<tbody class="fs-12">
 					<tr class="bg-danger">
@@ -534,9 +534,9 @@
 				<tbody class="fs-12">
 					<tr>
 						<td>Date départ</td>
-						<td>{{reservation.dateDebut|date('d/m/Y')}}</td>
+						<td>{{reservation.dateDebut|date('d/m/Y H:i')}}</td>
 						<td>Date retour</td>
-						<td>{{reservation.dateDebut|date('d/m/Y')}}</td>
+						<td>{{reservation.dateFin|date('d/m/Y H:i')}}</td>
 					</tr>
 					<tr>
 						<td>JOELLOCATION</td>

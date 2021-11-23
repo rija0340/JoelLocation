@@ -144,6 +144,16 @@ class Vehicule
      */
     private $kmRetour;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $dateKm;
+
+    /**
+     * @ORM\OneToOne(targetEntity=User::class, cascade={"persist", "remove"})
+     */
+    private $saisisseurKm;
+
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
@@ -479,6 +489,30 @@ class Vehicule
     public function setKmRetour(?float $kmRetour): self
     {
         $this->kmRetour = $kmRetour;
+
+        return $this;
+    }
+
+    public function getDateKm(): ?\DateTimeInterface
+    {
+        return $this->dateKm;
+    }
+
+    public function setDateKm(?\DateTimeInterface $dateKm): self
+    {
+        $this->dateKm = $dateKm;
+
+        return $this;
+    }
+
+    public function getSaisisseurKm(): ?User
+    {
+        return $this->saisisseurKm;
+    }
+
+    public function setSaisisseurKm(?User $saisisseurKm): self
+    {
+        $this->saisisseurKm = $saisisseurKm;
 
         return $this;
     }

@@ -79,10 +79,11 @@
 				<i class="fa fa-newspaper-o"></i>
 				Générer le contrat</a>
 
+			{# <button type="button" class="btn btn-outline-info text-uppercase p-1" id="genererFacturePDF"><i class="fa fa-send (alias)"></i>générer facture</button> #}
 
-			<button type="button" class="btn btn-outline-info text-uppercase p-1" id="genererFacturePDF">
+			<a href="{{path('facture_pdf', {'id': reservation.id})}}" type="button" class="btn btn-outline-info text-uppercase p-1">
 				<i class="fa fa-send (alias)"></i>
-				générer facture</button>
+				générer facture</a>
 
 		</div>
 		<div class="row mt-3">
@@ -126,7 +127,6 @@
 						<span class="js-categorie">{{reservation.vehicule.marque}}{{reservation.vehicule.modele}}</span>
 					</div>
 				</div>
-
 				<div class="row">
 					<div class="col-md-4">
 						<span class="label_client">Véhicule :</span>
@@ -136,9 +136,7 @@
 					<div class="col-md-4">
 						<span class="label_client">Code affilié :</span>
 					</div>
-
 				</div>
-
 				<div class="row">
 
 					<div class="col-md-4">
@@ -151,7 +149,6 @@
 							{{reservation.vehicule.kmDepart}}
 							Km
 						</span>
-
 					</div>
 					<div class="col-md-3">
 						<span class="label_client">Km retour :
@@ -159,10 +156,15 @@
 							Km</span>
 					</div>
 					<div class="col-md-3">
-						<span class="label_client">Date mise à jour km :</span>
+						<span class="label_client">Date mise à jour km :
+							{{reservation.vehicule.dateKm|date('d/m/Y H:i')}}</span>
 					</div>
 					<div class="col-md-3">
-						<span class="label_client">Km saisie par :</span>
+						<span class="label_client">Km saisie par :
+						</span>
+						{% if reservation.vehicule.saisisseurKm %}
+							{{reservation.vehicule.saisisseurKm.nom}}
+						{% endif %}
 					</div>
 				</div>
 				<div class=" text-center">
@@ -413,7 +415,7 @@
 						<i class="fa fa-chevron-right"></i>Total options souscrites
 					</div>
 					<div class="col-md-4 col-sm-4 col-xs-4">
-						<div class="text-right">{{tarifGaranties}}€</div>
+						<div class="text-right">{{reservation.prixGaranties}}€</div>
 					</div>
 
 					<div class="col-md-8 col-sm-8 col-xs-8">
@@ -422,7 +424,7 @@
 					</div>
 					<div class="col-md-4 col-sm-4 col-xs-4">
 						<div class="text-right">
-							{{tarifOptions}}
+							{{reservation.prixOptions}}
 							€
 						</div>
 					</div>
@@ -459,18 +461,32 @@
 				<div class="clearfix"></div>
 			</div>
 			<div class="x_content">
-				<div class="d-flex justify-content-end">
-					<div class="btn-group mb-1">
-						<button type="button" class="btn btn-danger dropdown-toggle font-weight-bold " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							Autre réglement
-						</button>
-						<div class="dropdown-menu">
-							<button class="dropdown-item" id="btnAjouterPaiement">Ajouter un paiement</button>
+				{% if reservation.sommePaiements < reservation.prix %}
+					<div class="d-flex justify-content-end">
+						<div class="btn-group mb-1">
+							<button type="button" class="btn btn-danger dropdown-toggle font-weight-bold " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								Autre réglement
+							</button>
+							<div class="dropdown-menu">
+								<button class="dropdown-item" id="btnAjouterPaiement">Ajouter un paiement</button>
+							</div>
 						</div>
 					</div>
+				{% endif %}
+				<div id="formAjoutPaiement" class="hide">
+					{{form_start(formAjoutPaiement)}}
+					{{form_label(formAjoutPaiement.montant)}}
+					<div class="row">
+						<div class="col-3">
+							{{form_widget(formAjoutPaiement.montant)}}
+						</div>
+						<div class="col-2">
+							<button type="submit" class="btn btn-danger">Enregistrer</button>
+						</div>
+					</div>
+					{{form_end(formAjoutPaiement)}}
 				</div>
-				<form action="{{ path("reservation_add_paiement", {'id' : reservation.id }) }}" id="formAjoutPaiement" method="POST"></form>
-				<table class="table table-bordered text-center">
+				<table class="table table-bordered text-center mt-2">
 					<thead class="bg-dark text-white text-uppercase">
 						<tr>
 							<th>date</th>
@@ -493,9 +509,14 @@
 									<td>{{paiement.montant}}</td>
 									<td></td>
 									<td>
-										<button class="btn btn-danger">
-											<i class="fa fa-trash"></i>
-											Supprimer</button>
+										<form method="post" action="{{ path('reservation_paiement_delete', {'id': paiement.id, 'reservation' : reservation.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer ce paiement ?');">
+											<input type="hidden" name="_method" value="DELETE">
+											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ paiement.id) }}">
+											<button class="btn btn-danger">
+												<i class="fa fa-trash (alias)" aria-hidden="true"></i>
+												Supprimer
+											</button>
+										</form>
 									</td>
 								</tr>
 							{% endfor %}
@@ -510,10 +531,12 @@
 					{% endif %}
 				</tbody>
 			</table>
+
 			<div class="row">
 				<div class="col-md-8 col-sm-8 col-xs-8">
 					<i class="fa fa-chevron-right"></i>Total des règlements effectués :
 				</div>
+
 				<div class="col-md-4 col-sm-4 col-xs-4">
 					<div class="text-right">
 						{{reservation.sommePaiements}}€
@@ -621,7 +644,12 @@
 					</div>
 				</div>
 			</div>
+		{% else %}
+			<div class="text-center">
+				Aucun avis pour cette réservation
+			</div>
 		{% endif %}
+
 	</div>
 
 	<!-- Large modal -->
@@ -650,5 +678,10 @@
 	<script src="{{asset('js/admin/jspdf.min.js')}}"></script>
 	<script src="{{asset('js/admin/jspdf.plugin.autotable.js')}}"></script>
 	<script src="{{asset('js/admin/factureJsPDF.js')}}"></script>
-	<script src="{{asset('js/admin/reservation/ajout_paiement.js')}}"></script>
+	{% if reservation.sommePaiements < reservation.prix %}
+		<script src="{{asset('js/admin/reservation/ajout_paiement.js')}}"></script>
+	{% endif %}
+	{# generer facture avec jsPDf mais doomPDF est plus pratique à cause des conditions à considerer #}
+	{# // <script src="{{asset('js/admin/reservation/generer_facture.js')}}"></script> #}
+
 {% endblock  %}

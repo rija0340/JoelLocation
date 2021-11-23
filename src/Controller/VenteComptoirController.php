@@ -383,7 +383,6 @@ class VenteComptoirController extends AbstractController
         // dd($vehicule);
         //trouver les options et garanties à l'aide des ID 
 
-
         $devis->setAgenceDepart($this->reservationSession->getAgenceDepart());
         $devis->setAgenceRetour($this->reservationSession->getAgenceRetour());
         $devis->setDateDepart($this->reservationSession->getDateDepart());
@@ -443,9 +442,7 @@ class VenteComptoirController extends AbstractController
     {
 
         $clients = $this->userRepo->findClients();
-
         $data = array();
-
         foreach ($clients as $key => $client) {
 
             $data[$key]['id'] = $client->getId();
@@ -464,7 +461,6 @@ class VenteComptoirController extends AbstractController
     {
 
         $this->reservationSession->removeReservation();
-
         return $this->redirectToRoute('step1');
     }
 
@@ -475,7 +471,6 @@ class VenteComptoirController extends AbstractController
     {
 
         //extracion mail from string format : "nom prenom (mail)"
-
 
         $client = $request->query->get('client');
         $client = explode('(', $client);
@@ -548,6 +543,7 @@ class VenteComptoirController extends AbstractController
         $reservation->setDateFin($dateRetour);
         $reservation->setAgenceDepart($this->reservationSession->getAgenceDepart());
         $reservation->setAgenceRetour($this->reservationSession->getAgenceRetour());
+        $reservation->setDuree($this->dateHelper->calculDuree($dateDepart, $dateRetour));
         $reservation->setCanceled(false);
         $reservation->setArchived(false);
         //boucle pour ajout options 
@@ -571,7 +567,7 @@ class VenteComptoirController extends AbstractController
         $prixGaranties = $this->tarifsHelper->sommeTarifsGaranties($this->garantiesObjectsFromSession());
 
         $reservation->setPrix($tarifVehicule + $prixOptions + $prixGaranties);
-        $reservation->setTarifVehicule($this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule));
+        $reservation->setTarifVehicule($tarifVehicule);
         $reservation->setPrixGaranties($this->tarifsHelper->sommeTarifsGaranties($this->garantiesObjectsFromSession()));
         $reservation->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($this->optionsObjectsFromSession()));
         $reservation->setDateReservation($this->dateHelper->dateNow());
@@ -589,22 +585,22 @@ class VenteComptoirController extends AbstractController
         $this->em->flush();
 
         //enregistrement montant et reservation dans table paiement 
-
-        $paiement  = new Paiement();
-        $paiement->setClient($client);
-        $paiement->setDatePaiement($this->dateHelper->dateNow());
-        $paiement->setMontant($montantPaiement);
-        $paiement->setReservation($reservation);
-        $paiement->setModePaiement($this->modePaiementRepo->findOneBy(['libelle' => 'ESPECE']));
-        $paiement->setMotif("Réservation");
-        $this->em->persist($paiement);
-        $this->em->flush();
+        // $paiement  = new Paiement();
+        // $paiement->setClient($client);
+        // $paiement->setDatePaiement($this->dateHelper->dateNow());
+        // $paiement->setMontant($montantPaiement);
+        // $paiement->setReservation($reservation);
+        // $paiement->setModePaiement($this->modePaiementRepo->findOneBy(['libelle' => 'ESPECE']));
+        // $paiement->setMotif("Réservation");
+        // $this->em->persist($paiement);
+        // $this->em->flush();
         //on vide la session après reservation et paiement
         $this->reservationSession->removeReservation();
         // dump($reservation);
         // die();
         $this->flashy->success("Réservation effectuée avec succès");
-        return new JsonResponse($reservation->getReference());
+        return $this->redirectToRoute('reservation_index');
+        // return new JsonResponse($reservation->getReference());
     }
 
     //return an array of objects of options

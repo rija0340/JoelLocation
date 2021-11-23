@@ -136,7 +136,7 @@ function reserverDevis(client, montant) {
                 type: 'red',
                 content: '<p>La réservation N°' + data + 'a été effectuée avec succès</p>',
             });
-            window.location.href = '/reservation';
+            window.location.href = '/backoffice/reservation';
 
         },
         error: function () {

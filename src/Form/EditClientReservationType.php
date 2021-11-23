@@ -6,11 +6,13 @@ use App\Entity\User;
 use App\Form\InfosResaType;
 use App\Form\InfosVolResaType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 class EditClientReservationType extends AbstractType
 {
@@ -23,9 +25,9 @@ class EditClientReservationType extends AbstractType
             ->add('complementAdresse', TextType::class)
             ->add('ville', TextType::class)
             ->add('codePostal', NumberType::class)
-            ->add('mail', TextType::class)
-            ->add('telephone', TextType::class)
-            ->add('portable', TextType::class)
+            ->add('mail', EmailType::class)
+            ->add('telephone', TelType::class)
+            ->add('portable', TelType::class)
             ->add('infosResa', InfosResaType::class)
             ->add('infosVolResa', InfosVolResaType::class);
     }

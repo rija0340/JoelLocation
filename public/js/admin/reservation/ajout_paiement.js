@@ -7,10 +7,11 @@ addEventListener();
 function getElements() {
     btnAjouterPaiement = document.getElementById('btnAjouterPaiement');
     formAjoutPaiement = document.getElementById('formAjoutPaiement');
+    console.log
 }
 
 function addEventListener() {
-    btnAjouterPaiement.addEventListener('click', addFormPaiement, false);
+    btnAjouterPaiement.addEventListener('click', toggleAjoutPaiement, false);
 }
 
 function addFormPaiement() {
@@ -50,4 +51,9 @@ function addFormPaiement() {
 
 }
 
+function toggleAjoutPaiement() {
+
+    formAjoutPaiement.classList.toggle('hide');
+
+}
 

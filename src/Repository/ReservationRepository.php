@@ -30,6 +30,26 @@ class ReservationRepository extends ServiceEntityRepository
         parent::__construct($registry, Reservation::class);
     }
 
+
+
+
+    /**
+     * @return Reservation[] Returns an array of Reservation objects
+     */
+    public function findNouvelleReservations()
+    {
+        return $this->createQueryBuilder('r')
+            ->where(' :dateNow < r.date_debut')
+            ->andWhere('r.code_reservation = :code')
+            ->andWhere('r.canceled = FALSE AND r.archived = FALSE')
+            ->setParameter('dateNow', $this->dateHelper->dateNow())
+            ->setParameter('code', 'devisTransformé')
+            ->orderBy('r.date_fin', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+
     /**
      * @return Reservation[] Returns an array of Reservation objects
      */

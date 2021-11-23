@@ -30,6 +30,7 @@ use App\Service\TarifsHelper;
 use App\Form\InfosVolResaType;
 use App\Form\EditStopSalesType;
 use App\Classe\ClasseReservation;
+use App\Form\AjoutPaiementType;
 use App\Form\OptionsGarantiesType;
 use App\Repository\UserRepository;
 use App\Repository\MarqueRepository;
@@ -46,6 +47,7 @@ use App\Repository\ReservationRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use MercurySeries\FlashyBundle\FlashyNotifier;
+use phpDocumentor\Reflection\Types\This;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -105,7 +107,8 @@ class ReservationController extends AbstractController
     public function index(ReservationRepository $reservationRepository, Request $request, PaginatorInterface $paginator): Response
     {
 
-        $reservations = $reservationRepository->findReservationsSansStopSales();
+        // liste des reservations dont les dates de début sont supérieurs à la date now
+        $reservations = $reservationRepository->findNouvelleReservations();
 
         $pagination = $paginator->paginate(
             $reservations, /* query NOT result */
@@ -165,8 +168,8 @@ class ReservationController extends AbstractController
      */
     public function show(Reservation $reservation, Request $request): Response
     {
-
         $vehicule = $reservation->getVehicule();
+        // form pour kilométrage vehicule
         $formKM = $this->createForm(KilometrageType::class, $vehicule);
         $formKM->handleRequest($request);
 
@@ -174,27 +177,45 @@ class ReservationController extends AbstractController
         $conducteurs =  $reservation->getConducteursClient();
         $conducteur = $conducteurs[0];
 
+        //form pour ajout paiement
+        $formAjoutPaiement = $this->createForm(AjoutPaiementType::class);
+        $formAjoutPaiement->handleRequest($request);
+
+        if ($formAjoutPaiement->isSubmitted() && $formAjoutPaiement->isValid()) {
+
+            // enregistrement montant et reservation dans table paiement 
+            $paiement  = new Paiement();
+            $paiement->setClient($reservation->getClient());
+            $paiement->setDatePaiement($this->dateHelper->dateNow());
+            $paiement->setMontant($formAjoutPaiement->getData()['montant']);
+            $paiement->setReservation($reservation);
+            $paiement->setModePaiement($this->modePaiementRepo->findOneBy(['libelle' => 'ESPECE']));
+            $paiement->setMotif("Réservation");
+            $this->em->persist($paiement);
+            $this->em->flush();
+
+            // notification pour réussite enregistrement
+            $this->flashy->success("L'ajout du paiement a été effectué avec succès");
+            return $this->redirectToRoute($this->getRouteForRedirection($reservation), ['id' => $reservation->getId()]);
+        }
+
+        //gestion de la formulaire kilometrage
         if ($formKM->isSubmitted() && $formKM->isValid()) {
             //sauvegarde données de kilométrage du véhicule
+            $vehicule->setSaisisseurKm($this->getUser());
+            $vehicule->setDateKm($this->dateHelper->dateNow());
             $this->em->persist($vehicule);
             $this->em->flush();
 
             // notification pour réussite enregistrement
             $this->flashy->success("Les kilométrages sont bien enregistrés");
-            return $this->render('admin/reservation/crud/show.html.twig', [
-                'reservation' => $reservation,
-                'conducteur' => $conducteur,
-                'formKM' => $formKM->createView(),
-                'tarifOptions' => $reservation->getSommeOptions(),
-                'tarifGaranties' => $reservation->getSommeGaranties()
-            ]);
+            return $this->redirectToRoute($this->getRouteForRedirection($reservation), ['id' => $reservation->getId()]);
         }
         return $this->render('admin/reservation/crud/show.html.twig', [
             'reservation' => $reservation,
-            'conducteur' => $conducteur,
             'formKM' => $formKM->createView(),
-            'tarifOptions' => $reservation->getSommeOptions(),
-            'tarifGaranties' => $reservation->getSommeGaranties()
+            'formAjoutPaiement' => $formAjoutPaiement->createView(),
+
         ]);
     }
 
@@ -472,6 +493,19 @@ class ReservationController extends AbstractController
         }
     }
 
+    /**
+     * @Route("effacer-paiement/{id}/{reservation}", name="reservation_paiement_delete", methods={"DELETE"})
+     */
+    public function deletePaiement(Request $request, Paiement $paiement, Reservation $reservation): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $paiement->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($paiement);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute($this->getRouteForRedirection($reservation), ['id' => $reservation->getId()]);
+    }
     //return route en fonction date (comparaison avec dateNow pour savoir statut réservation)
     public function getRouteForRedirection($reservation)
     {

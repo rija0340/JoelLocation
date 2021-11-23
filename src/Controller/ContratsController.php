@@ -2,19 +2,21 @@
 
 namespace App\Controller;
 
-use App\Entity\Reservation;
-use App\Form\KilometrageType;
-use App\Repository\ReservationRepository;
-use App\Service\DateHelper;
-use App\Service\TarifsHelper;
 use Dompdf\Dompdf;
 use Dompdf\Options;
-use Knp\Component\Pager\PaginatorInterface;
 use Knp\Snappy\Pdf;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Paiement;
+use App\Entity\Reservation;
+use App\Service\DateHelper;
+use App\Form\KilometrageType;
+use App\Service\TarifsHelper;
+use App\Form\AjoutPaiementType;
+use App\Repository\ReservationRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ContratsController extends AbstractController
 {
@@ -110,19 +112,36 @@ class ContratsController extends AbstractController
             return $this->render('admin/reservation/contrat/termine/details.html.twig', [
                 'reservation' => $reservation,
                 'formKM' => $formKM->createView(),
-                'tarifVehicule' => $this->tarifsHelper->calculTarifVehicule($reservation->getDateDebut(), $reservation->getDateFin(), $reservation->getVehicule()),
-                'tarifOptions' => $this->tarifsHelper->sommeTarifsOptions($reservation->getOptions()),
-                'tarifGaranties' => $this->tarifsHelper->sommeTarifsGaranties($reservation->getGaranties()),
+
 
             ]);
         }
+        //form pour ajout paiement
+        $formAjoutPaiement = $this->createForm(AjoutPaiementType::class);
+        $formAjoutPaiement->handleRequest($request);
 
+        if ($formAjoutPaiement->isSubmitted() && $formAjoutPaiement->isValid()) {
+
+            // enregistrement montant et reservation dans table paiement 
+            $paiement  = new Paiement();
+            $paiement->setClient($reservation->getClient());
+            $paiement->setDatePaiement($this->dateHelper->dateNow());
+            $paiement->setMontant($formAjoutPaiement->getData()['montant']);
+            $paiement->setReservation($reservation);
+            $paiement->setModePaiement($this->modePaiementRepo->findOneBy(['libelle' => 'ESPECE']));
+            $paiement->setMotif("Réservation");
+            $this->em->persist($paiement);
+            $this->em->flush();
+
+            // notification pour réussite enregistrement
+            $this->flashy->success("L'ajout du paiement a été effectué avec succès");
+            return $this->redirectToRoute($this->getRouteForRedirection($reservation), ['id' => $reservation->getId()]);
+        }
         return $this->render('admin/reservation/contrat/termine/details.html.twig', [
             'reservation' => $reservation,
             'formKM' => $formKM->createView(),
-            'tarifVehicule' => $this->tarifsHelper->calculTarifVehicule($reservation->getDateDebut(), $reservation->getDateFin(), $reservation->getVehicule()),
-            'tarifOptions' => $this->tarifsHelper->sommeTarifsOptions($reservation->getOptions()),
-            'tarifGaranties' => $this->tarifsHelper->sommeTarifsGaranties($reservation->getGaranties()),
+            'formAjoutPaiement' => $formAjoutPaiement->createView()
+
         ]);
     }
 
@@ -138,5 +157,28 @@ class ContratsController extends AbstractController
         }
 
         return $this->redirectToRoute('reservation_index');
+    }
+
+    //return route en fonction date (comparaison avec dateNow pour savoir statut réservation)
+    public function getRouteForRedirection($reservation)
+    {
+
+        $dateDepart = $reservation->getDateDebut();
+        $dateRetour = $reservation->getDateFin();
+        $dateNow = $this->dateHelper->dateNow();
+
+        //classement des réservations
+
+        // 1-nouvelle réservation -> dateNow > dateReservation
+        if ($dateNow < $dateDepart) {
+            $routeReferer = 'reservation_show';
+        }
+        if ($dateDepart < $dateNow && $dateNow < $dateRetour) {
+            $routeReferer = 'contrats_show';
+        }
+        if ($dateNow > $dateRetour) {
+            $routeReferer = 'contrat_termine_show';
+        }
+        return $routeReferer;
     }
 }

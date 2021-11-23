@@ -18,8 +18,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Reservation
 {
 
-    private $sommeTarifsGaranties;
-    private $sommeTarifsOptions;
+    private $tarifsGaranties;
+    private $tarifsOptions;
 
     public function __construct()
     {

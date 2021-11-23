@@ -9,7 +9,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class UserClientType extends AbstractType
@@ -22,15 +25,15 @@ class UserClientType extends AbstractType
             'Administrateur' => '[ROLE_ADMIN]'
         ];
         $builder
-            ->add('password', PasswordType::class)
             ->add('nom', TextType::class)
             ->add('prenom', TextType::class)
             ->add('adresse', TextType::class)
             ->add('complementAdresse', TextType::class)
             ->add('ville', TextType::class)
-            ->add('mail', TextType::class)
-            ->add('telephone', TextType::class)
-            ->add('portable', TextType::class)
+            ->add('codePostal', NumberType::class)
+            ->add('mail', EmailType::class)
+            ->add('telephone', TelType::class)
+            ->add('portable', TelType::class)
             ->add('dateNaissance',  DateType::class, [
                 'widget' => 'single_text',
             ])
@@ -39,6 +42,7 @@ class UserClientType extends AbstractType
             ->add('datePermis',  DateType::class, [
                 'widget' => 'single_text',
             ])
+            ->add('villeDelivrancePermis', TextType::class)
             //->add('presence')
             /* ->add('date_inscription', DateTimeType::class, [
                 'widget' => 'single_text',
