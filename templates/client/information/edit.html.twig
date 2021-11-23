@@ -9,14 +9,16 @@
 {% endblock %}
 {% block body %}
 	<div class="container">
-		<div class="section-title red text-center mt-3 mb-5">
-			<h2>Modification de mes informations</h2>
+		<div class="x_panel">
+			<div class="section-title red text-center mt-3 mb-5">
+				<h2>Modification de mes informations</h2>
+			</div>
+			{{ include('client/information/_formEditClient.html.twig', {'button_label': 'Modifier'}) }}
+
+			<a href="{{ path('espaceClient_index') }}" class="btn btn-dark">
+				<i class="fa fa-arrow-left" aria-hidden="true"></i>
+				Retour</a>
+
 		</div>
-		{{ include('client/information/_formEditClient.html.twig', {'button_label': 'Modifier'}) }}
-
-		<a href="{{ path('espaceClient_index') }}" class="btn btn-dark">
-			<i class="fa fa-arrow-left" aria-hidden="true"></i>
-			Retour</a>
-
 	</div>
 {% endblock %}

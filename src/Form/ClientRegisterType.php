@@ -21,12 +21,7 @@ class ClientRegisterType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            // ->add('username', TextType::class, [
-            //     'constraints' => new Length([
-            //         'min' => 2,
-            //         'max' => 20
-            //     ]),
-            // ])
+
             ->add('nom', TextType::class)
             ->add('prenom', TextType::class)
             ->add('adresse', TextType::class)
@@ -34,10 +29,12 @@ class ClientRegisterType extends AbstractType
                 'invalid_message' => 'Cette adresse mail est déjà utilisée'
             ])
             ->add('telephone', TelType::class, [
-                'required' => true
+                'required' => true,
+                'constraints' => [new Length(['min' => 10])],
             ])
             ->add('portable', TelType::class, [
-                'required' => false
+                'required' => false,
+                'constraints' => [new Length(['min' => 10])],
             ])
             ->add('dateNaissance', DateType::class, [
                 'widget' => 'single_text',
@@ -54,7 +51,6 @@ class ClientRegisterType extends AbstractType
             ->add('codePostal', NumberType::class)
             ->add('villeDelivrancePermis', TextType::class)
             ->add('password', RepeatedType::class, [
-
                 'type' => PasswordType::class,
                 'invalid_message' => ' le mot de passe et la confirmation doivent être identique',
                 'required' => true,

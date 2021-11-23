@@ -50,8 +50,6 @@
 									<th>ACTION</th>
 								</tr>
 							</thead>
-
-
 							<tbody>
 								{% for reservation in reservations %}
 									<tr>
@@ -81,7 +79,7 @@
 										<td>{{reservation.prix}}
 											€</td>
 										<td class="text-center">
-											<a href="{{ path('contrat_termine_show', {'id': reservation.id}) }}">
+											<a href="{{ path('reservation_show', {'id': reservation.id}) }}">
 												<i class=" fa fa-info-circle" style="font-size: 2em !important;"></i>
 											</a>
 										</td>

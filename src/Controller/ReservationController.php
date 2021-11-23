@@ -23,14 +23,15 @@ use App\Service\DateHelper;
 use App\Entity\InfosVolResa;
 use App\Form\ClientEditType;
 use App\Form\ConducteurType;
+use App\Form\ReportResaType;
 use App\Form\UserClientType;
 use App\Form\KilometrageType;
 use App\Form\ReservationType;
 use App\Service\TarifsHelper;
 use App\Form\InfosVolResaType;
+use App\Form\AjoutPaiementType;
 use App\Form\EditStopSalesType;
 use App\Classe\ClasseReservation;
-use App\Form\AjoutPaiementType;
 use App\Form\OptionsGarantiesType;
 use App\Repository\UserRepository;
 use App\Repository\MarqueRepository;
@@ -41,13 +42,13 @@ use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
 use App\Form\EditClientReservationType;
 use App\Repository\ConducteurRepository;
-use App\Repository\ModePaiementRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use phpDocumentor\Reflection\Types\This;
 use App\Repository\ReservationRepository;
+use App\Repository\ModePaiementRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use MercurySeries\FlashyBundle\FlashyNotifier;
-use phpDocumentor\Reflection\Types\This;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -181,22 +182,32 @@ class ReservationController extends AbstractController
         $formAjoutPaiement = $this->createForm(AjoutPaiementType::class);
         $formAjoutPaiement->handleRequest($request);
 
+        //form pour report reservation
+        $formReportResa = $this->createForm(ReportResaType::class, $reservation);
+        $formReportResa->handleRequest($request);
+
         if ($formAjoutPaiement->isSubmitted() && $formAjoutPaiement->isValid()) {
+            // tester si la somme des paiements dépasse le prix
+            if ($reservation->getSommePaiements()  + $formAjoutPaiement->getData()['montant'] >= $reservation->getPrix()) {
 
-            // enregistrement montant et reservation dans table paiement 
-            $paiement  = new Paiement();
-            $paiement->setClient($reservation->getClient());
-            $paiement->setDatePaiement($this->dateHelper->dateNow());
-            $paiement->setMontant($formAjoutPaiement->getData()['montant']);
-            $paiement->setReservation($reservation);
-            $paiement->setModePaiement($this->modePaiementRepo->findOneBy(['libelle' => 'ESPECE']));
-            $paiement->setMotif("Réservation");
-            $this->em->persist($paiement);
-            $this->em->flush();
+                $this->flashy->error("Le total du paiement est supérieur au due");
+                return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
+            } else {
+                // enregistrement montant et reservation dans table paiement 
+                $paiement  = new Paiement();
+                $paiement->setClient($reservation->getClient());
+                $paiement->setDatePaiement($this->dateHelper->dateNow());
+                $paiement->setMontant($formAjoutPaiement->getData()['montant']);
+                $paiement->setReservation($reservation);
+                $paiement->setModePaiement($this->modePaiementRepo->findOneBy(['libelle' => 'ESPECE']));
+                $paiement->setMotif("Réservation");
+                $this->em->persist($paiement);
+                $this->em->flush();
 
-            // notification pour réussite enregistrement
-            $this->flashy->success("L'ajout du paiement a été effectué avec succès");
-            return $this->redirectToRoute($this->getRouteForRedirection($reservation), ['id' => $reservation->getId()]);
+                // notification pour réussite enregistrement
+                $this->flashy->success("L'ajout du paiement a été effectué avec succès");
+                return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
+            }
         }
 
         //gestion de la formulaire kilometrage
@@ -209,12 +220,21 @@ class ReservationController extends AbstractController
 
             // notification pour réussite enregistrement
             $this->flashy->success("Les kilométrages sont bien enregistrés");
-            return $this->redirectToRoute($this->getRouteForRedirection($reservation), ['id' => $reservation->getId()]);
+            return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
+        }
+
+
+        //gestion form report reservation
+        if ($formReportResa->isSubmitted() && $formReportResa->isValid()) {
+            $this->flashy->success("La réservation a été reportée");
+            $this->em->flush();
+            return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
         }
         return $this->render('admin/reservation/crud/show.html.twig', [
             'reservation' => $reservation,
             'formKM' => $formKM->createView(),
             'formAjoutPaiement' => $formAjoutPaiement->createView(),
+            'formReportResa' => $formReportResa->createView()
 
         ]);
     }
@@ -239,7 +259,7 @@ class ReservationController extends AbstractController
             'reservation' => $reservation,
             'imVeh' => $reservation->getVehicule()->getImmatriculation(), //utile pour val par défaut select
             'form' => $form->createView(),
-            'routeReferer' => $this->getRouteForRedirection($reservation)
+            'routeReferer' => 'reservation_show'
         ]);
     }
 
@@ -286,14 +306,14 @@ class ReservationController extends AbstractController
             $reservation->setPrixOptions($reservation->getSommeOptions());
             $reservation->setPrix($reservation->getTarifVehicule() + $reservation->getPrixGaranties() + $reservation->getPrixOptions());
             $this->em->flush();
-            return $this->redirectToRoute($this->getRouteForRedirection($reservation), ['id' => $reservation->getId()]);
+            return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
         }
         return $this->render('admin/reservation/crud/options_garanties/edit.html.twig', [
             'form' => $form->createView(),
             'reservation' => $reservation,
             'garanties' => $garanties,
             'options' => $options,
-            'routeReferer' => $this->getRouteForRedirection($reservation)
+            'routeReferer' => 'reservation_show'
 
         ]);
     }
@@ -331,14 +351,14 @@ class ReservationController extends AbstractController
             $this->em->persist($client);
             $this->em->flush();
             $this->flashy->success("La réservation a bien été modifié");
-            return $this->redirectToRoute($this->getRouteForRedirection($reservation), ['id' => $reservation->getId()]);
+            return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
         }
 
         return $this->render('admin/reservation/crud/infos_client/edit.html.twig', [
 
             'form' => $form->createView(),
             'reservation' => $reservation,
-            'routeReferer' => $this->getRouteForRedirection($reservation)
+            'routeReferer' => 'reservation_show'
 
         ]);
     }
@@ -366,13 +386,13 @@ class ReservationController extends AbstractController
 
             //notification succes
             $this->flashy->success('Le conducteur a bienc été ajouté');
-            return $this->redirectToRoute($this->getRouteForRedirection($reservation), ['id' => $reservation->getId()]);
+            return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
         }
         return $this->render('admin/reservation/crud/conducteur/new.html.twig', [
 
             'form' => $form->createView(),
             'reservation' => $reservation,
-            'routeReferer' => $this->getRouteForRedirection($reservation)
+            'routeReferer' => 'reservation_show'
         ]);
     }
 
@@ -397,7 +417,7 @@ class ReservationController extends AbstractController
         $this->em->flush();
 
         $this->flashy->success("Le conducteur a été ajouté aved succès");
-        return $this->redirectToRoute($this->getRouteForRedirection($reservation), ['id' => $reservation->getId()]);
+        return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
     }
 
 
@@ -436,12 +456,12 @@ class ReservationController extends AbstractController
 
             $this->getDoctrine()->getManager()->flush();
             $this->flashy->success('Votre conducteur a bien été modifié');
-            return $this->redirectToRoute($this->getRouteForRedirection($reservation), ['id' =>  $reservation->getId()]);
+            return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
         }
 
         return $this->render('admin/reservation/crud/conducteur/edit.html.twig', [
             'form' => $form->createView(),
-            'routeReferer' => $this->getRouteForRedirection($reservation),
+            'routeReferer' => 'reservation_show',
             'reservation' => $reservation
 
         ]);
@@ -460,38 +480,10 @@ class ReservationController extends AbstractController
             $entityManager->remove($conducteur);
             $entityManager->flush();
             $this->flashy->success('le conducteur a été supprimé');
-            return $this->redirectToRoute($this->getRouteForRedirection($reservation), ['id' => $reservation->getId()]);
+            return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
         }
     }
 
-
-
-
-    /**
-     * @Route("ajouter-paiement/{id}", name="reservation_add_paiement", methods={"GET","POST"},requirements={"id":"\d+"})
-     */
-    public function ajoutPaiement(Request $request, Reservation $reservation)
-    {
-
-        // dd($request);
-        if ($request->request->get('montant') != null) {
-            $montant =  $request->request->get('montant');
-
-            $paiement = new Paiement();
-            $paiement->setDatePaiement($this->dateHelper->dateNow());
-            $paiement->setModePaiement($this->modePaiementRepo->findOneBy(['libelle' => 'ESPECE']));
-            $paiement->setClient($reservation->getClient());
-            $paiement->setMontant($montant);
-            $paiement->setMotif("Ajout paiement");
-            $paiement->setReservation($reservation);
-
-            $this->em->persist($paiement);
-            $this->em->flush();
-
-            $this->flashy->success("Le paiement a été ajouté avec succès");
-            return $this->redirectToRoute($this->getRouteForRedirection($reservation), ['id' => $reservation->getId()]);
-        }
-    }
 
     /**
      * @Route("effacer-paiement/{id}/{reservation}", name="reservation_paiement_delete", methods={"DELETE"})
@@ -504,29 +496,7 @@ class ReservationController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute($this->getRouteForRedirection($reservation), ['id' => $reservation->getId()]);
-    }
-    //return route en fonction date (comparaison avec dateNow pour savoir statut réservation)
-    public function getRouteForRedirection($reservation)
-    {
-
-        $dateDepart = $reservation->getDateDebut();
-        $dateRetour = $reservation->getDateFin();
-        $dateNow = $this->dateHelper->dateNow();
-
-        //classement des réservations
-
-        // 1-nouvelle réservation -> dateNow > dateReservation
-        if ($dateNow < $dateDepart) {
-            $routeReferer = 'reservation_show';
-        }
-        if ($dateDepart < $dateNow && $dateNow < $dateRetour) {
-            $routeReferer = 'contrats_show';
-        }
-        if ($dateNow > $dateRetour) {
-            $routeReferer = 'contrat_termine_show';
-        }
-        return $routeReferer;
+        return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
     }
 
     //return referer->route avant la rédirection (source)

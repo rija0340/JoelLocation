@@ -45,7 +45,7 @@ class PdfController extends AbstractController
         $vehicule_data = base64_encode(file_get_contents($vehicule));
         $vehicule_src = 'data:image/png;base64,' . $vehicule_data;
 
-        $html = $this->renderView('admin/reservation/contrat/contrat_pdf.html.twig', [
+        $html = $this->renderView('admin/reservation/pdf/contrat_pdf.html.twig', [
 
             'logo' => $logo_src,
             'reservation' => $reservation,

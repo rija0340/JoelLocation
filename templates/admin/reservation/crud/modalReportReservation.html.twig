@@ -1,24 +1,23 @@
-<div class="modal fade modalKM" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade modalReportReservation" tabindex="-1" role="dialog" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 
 			<div class="modal-header">
 				<h5 class="modal-title" id="myModalLabel">
 					<i class="fa fa-car"></i>
-					Saisir le kilométrage du véhicule</h5>
+					Saisir les date de départ et date de retour</h5>
 				<button type="button" class="close" data-dismiss="modal">
 					<span aria-hidden="true">×</span>
 				</button>
 			</div>
 			<div class="modal-body">
-
-				{{ form_start(formKM) }}
+				{{ form_start(formReportResa) }}
 				<div class="row">
 					<div class="col-md-6">
-						{{ form_widget(formKM.kmDepart) }}
+						{{ form_widget(formReportResa.date_debut) }}
 					</div>
 					<div class="col-md-6">
-						{{ form_widget(formKM.kmRetour) }}
+						{{ form_widget(formReportResa.date_fin) }}
 					</div>
 				</div>
 				<div class="d-flex">
@@ -31,12 +30,8 @@
 							{{ button_label|default('Valider') }}</button>
 					</div>
 				</div>
-
-				{{ form_end(formKM) }}
-
+				{{ form_end(formReportResa) }}
 			</div>
-
-
 		</div>
 	</div>
 </div>

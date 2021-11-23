@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Contact;
 use App\Form\ContactType;
 use App\Repository\ContactRepository;
+use App\Repository\ModePaiementRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -89,7 +90,7 @@ class ContactController extends AbstractController
      */
     public function delete(Request $request, Contact $contact): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$contact->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $contact->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($contact);
             $entityManager->flush();

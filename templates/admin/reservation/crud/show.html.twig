@@ -55,7 +55,7 @@
 				Réservation
 			</button>
 			<div class="dropdown-menu">
-				<a class="dropdown-item" href="#">Reporter la réservation</a>
+				<a class="dropdown-item" data-toggle="modal" data-target=".modalReportReservation">Reporter la réservation</a>
 				<a class="dropdown-item" href="#">Mail de confirmation</a>
 				<a class="dropdown-item" href="{{path('reservation_cancel', {'id':reservation.id})}}">Annuler la réservation</a>
 				<a class="dropdown-item" href="#">Fermer le contrat</a>
@@ -654,8 +654,9 @@
 
 	<!-- Large modal -->
 	{# <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Large modal</button> #}
-	{% include "admin/reservation/contrat/termine/modalKM.html.twig" %}
+	{% include "admin/reservation/crud/modalKM.html.twig" %}
 
+	{% include "admin/reservation/crud/modalReportReservation.html.twig" %}
 	{# fin modal #}
 {% endblock %}
 {% block javascripts %}

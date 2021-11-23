@@ -97,9 +97,9 @@
 			</div>
 		</form>
 
-		<a href="{{ path('client_index') }}" class="btn btn-primary">
+		<a href="{{ path('client_index') }}" class="btn btn-dark">
 			<i class="fa fa-arrow-left" aria-hidden="true"></i>
-			retour</a>
+			Retour</a>
 		<div>
 			{% if is_granted("ROLE_ADMIN") %}
 				{{ include('admin/user/_deleteClient_form.html.twig') }}
