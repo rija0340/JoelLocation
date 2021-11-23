@@ -57,6 +57,11 @@ class ContratsController extends AbstractController
         $formKM->handleRequest($request);
         $conducteurs =  $reservation->getConducteursClient();
         $conducteur = $conducteurs[0];
+
+        //form pour ajout paiement
+        $formAjoutPaiement = $this->createForm(AjoutPaiementType::class);
+        $formAjoutPaiement->handleRequest($request);
+
         if ($formKM->isSubmitted() && $formKM->isValid()) {
 
             $this->em->persist($vehicule);
@@ -65,20 +70,34 @@ class ContratsController extends AbstractController
             return $this->render('admin/reservation/contrat/en_cours/details.html.twig', [
                 'reservation' => $reservation,
                 'formKM' => $formKM->createView(),
-                'tarifVehicule' => $this->tarifsHelper->calculTarifVehicule($reservation->getDateDebut(), $reservation->getDateFin(), $reservation->getVehicule()),
-                'tarifOptions' => $this->tarifsHelper->sommeTarifsOptions($reservation->getOptions()),
-                'tarifGaranties' => $this->tarifsHelper->sommeTarifsGaranties($reservation->getGaranties()),
+                'formAjoutPaiement' => $formAjoutPaiement->createView()
 
             ]);
         }
 
+        if ($formAjoutPaiement->isSubmitted() && $formAjoutPaiement->isValid()) {
+
+            // enregistrement montant et reservation dans table paiement 
+            $paiement  = new Paiement();
+            $paiement->setClient($reservation->getClient());
+            $paiement->setDatePaiement($this->dateHelper->dateNow());
+            $paiement->setMontant($formAjoutPaiement->getData()['montant']);
+            $paiement->setReservation($reservation);
+            $paiement->setModePaiement($this->modePaiementRepo->findOneBy(['libelle' => 'ESPECE']));
+            $paiement->setMotif("Réservation");
+            $this->em->persist($paiement);
+            $this->em->flush();
+
+            // notification pour réussite enregistrement
+            $this->flashy->success("L'ajout du paiement a été effectué avec succès");
+            return $this->redirectToRoute($this->getRouteForRedirection($reservation), ['id' => $reservation->getId()]);
+        }
         return $this->render('admin/reservation/contrat/en_cours/details.html.twig', [
             'reservation' => $reservation,
-            'conducteur' => $conducteur,
             'formKM' => $formKM->createView(),
-            'tarifVehicule' => $this->tarifsHelper->calculTarifVehicule($reservation->getDateDebut(), $reservation->getDateFin(), $reservation->getVehicule()),
-            'tarifOptions' => $this->tarifsHelper->sommeTarifsOptions($reservation->getOptions()),
-            'tarifGaranties' => $this->tarifsHelper->sommeTarifsGaranties($reservation->getGaranties()),
+            'formAjoutPaiement' => $formAjoutPaiement->createView()
+
+
         ]);
     }
 
@@ -103,6 +122,9 @@ class ContratsController extends AbstractController
         $vehicule = $reservation->getVehicule();
         $formKM = $this->createForm(KilometrageType::class, $vehicule);
         $formKM->handleRequest($request);
+        //form pour ajout paiement
+        $formAjoutPaiement = $this->createForm(AjoutPaiementType::class);
+        $formAjoutPaiement->handleRequest($request);
 
         if ($formKM->isSubmitted() && $formKM->isValid()) {
 
@@ -112,13 +134,11 @@ class ContratsController extends AbstractController
             return $this->render('admin/reservation/contrat/termine/details.html.twig', [
                 'reservation' => $reservation,
                 'formKM' => $formKM->createView(),
+                'formAjoutPaiement' => $formAjoutPaiement->createView()
 
 
             ]);
         }
-        //form pour ajout paiement
-        $formAjoutPaiement = $this->createForm(AjoutPaiementType::class);
-        $formAjoutPaiement->handleRequest($request);
 
         if ($formAjoutPaiement->isSubmitted() && $formAjoutPaiement->isValid()) {
 
