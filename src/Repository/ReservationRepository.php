@@ -41,10 +41,24 @@ class ReservationRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('r')
             ->where(' :dateNow < r.date_debut')
             ->andWhere('r.code_reservation = :code')
-            ->andWhere('r.canceled = FALSE AND r.archived = FALSE')
+            ->andWhere('r.canceled = FALSE AND r.archived = FALSE AND r.reported = FALSE')
             ->setParameter('dateNow', $this->dateHelper->dateNow())
             ->setParameter('code', 'devisTransformé')
             ->orderBy('r.date_fin', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Reservation[] Returns an array of Reservation objects
+     */
+    public function findReportedReservations()
+    {
+        return $this->createQueryBuilder('r')
+            ->where('r.code_reservation = :code')
+            ->andWhere('r.canceled = FALSE AND r.archived = FALSE AND r.reported = TRUE')
+            ->setParameter('code', 'devisTransformé')
+            ->orderBy('r.id', 'DESC')
             ->getQuery()
             ->getResult();
     }

@@ -129,9 +129,7 @@ class ReservationController extends AbstractController
     {
 
         $reservation = new Reservation();
-
         $form = $this->createForm(ReservationType::class, $reservation);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -226,6 +224,7 @@ class ReservationController extends AbstractController
 
         //gestion form report reservation
         if ($formReportResa->isSubmitted() && $formReportResa->isValid()) {
+            $reservation->setReported(true);
             $this->flashy->success("La réservation a été reportée");
             $this->em->flush();
             return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);

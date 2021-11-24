@@ -133,17 +133,17 @@ class UtilitesController extends AbstractController
 
         $data = array();
 
-        $data['numeroDevis'] = $devis->getNumero();
-        $data['dateDepart'] = $devis->getDateDepart()->format('d/m/Y H:i');
-        $data['dateRetour'] = $devis->getDateRetour()->format('d/m/Y H:i');
-        $data['nomClient'] = $devis->getClient()->getNom();
-        $data['prenomClient'] = $devis->getClient()->getPrenom();
-        $data['vehicule'] = $devis->getVehicule()->getMarque()->getLibelle() . " " . $devis->getVehicule()->getModele()->getLibelle() . " " . $devis->getVehicule()->getImmatriculation();
-        $data['duree'] = $devis->getDuree();
-        $data['agenceDepart'] = $devis->getAgenceDepart();
-        $data['agenceRetour'] = $devis->getAgenceRetour();
-        $data['tarif'] = $devis->getPrix();
-        $data['adresseClient'] = $devis->getClient()->getAdresse();
+        $data['numeroDevisValue'] = $devis->getNumero();
+        $data['dateDepartValue'] = $devis->getDateDepart()->format('d/m/Y H:i');
+        $data['dateRetourValue'] = $devis->getDateRetour()->format('d/m/Y H:i');
+        $data['nomClientValue'] = $devis->getClient()->getNom();
+        $data['prenomClientValue'] = $devis->getClient()->getPrenom();
+        $data['vehiculeValue'] = $devis->getVehicule()->getMarque()->getLibelle() . " " . $devis->getVehicule()->getModele()->getLibelle() . " " . $devis->getVehicule()->getImmatriculation();
+        $data['dureeValue'] = $devis->getDuree();
+        $data['agenceDepartValue'] = $devis->getAgenceDepart();
+        $data['agenceRetourValue'] = $devis->getAgenceRetour();
+        $data['tarifValue'] = $devis->getPrix();
+        $data['adresseClientValue'] = $devis->getClient()->getAdresse();
 
         return new JsonResponse($data);
     }

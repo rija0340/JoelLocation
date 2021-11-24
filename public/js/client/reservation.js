@@ -10,7 +10,6 @@ function getElements() {
     btnsDevisPDF = document.querySelectorAll("a[id='telechargerDevis']");
     btnValiderDevis = document.querySelectorAll("a[id='validerDevis']");
 
-    console.log(btnsDevisPDF);
 }
 
 function addEventListener() {
@@ -29,31 +28,30 @@ function generatePDF() {
     //get the ID of the devis
     devisID = parseInt(this.parentElement.parentElement.parentElement.parentElement.firstElementChild.innerText);
 
-    console.log(devisID);
 
     $.ajax({
         type: 'GET',
         url: '/espaceclient/devisPDF/' + devisID,
         Type: "json",
-        success: function (data) {
+        success: function(data) {
 
-            dateDepartValue = data['dateDepart'];
-            dateRetourValue = data['dateRetour'];
-            nomClientValue = data['nomClient'];
-            prenomClientValue = data['prenomClient'];
-            adresseClientValue = data['adresseClient'];
-            vehiculeValue = data['vehicule'];
-            dureeValue = data['duree'];
-            agenceDepartValue = data['agenceDepart'];
-            agenceRetourValue = data['agenceRetour'];
-            tarifValue = data['tarif'];
-            numeroDevisValue = data['numeroDevis'];
+            // dateDepartValue = data['dateDepart'];
+            // dateRetourValue = data['dateRetour'];
+            // nomClientValue = data['nomClient'];
+            // prenomClientValue = data['prenomClient'];
+            // adresseClientValue = data['adresseClient'];
+            // vehiculeValue = data['vehicule'];
+            // dureeValue = data['duree'];
+            // agenceDepartValue = data['agenceDepart'];
+            // agenceRetourValue = data['agenceRetour'];
+            // tarifValue = data['tarif'];
+            // numeroDevisValue = data['numeroDevis'];
 
             // /** this function is defined in another file devisJsPDF.js */
-            devis();
+            devis(data);
 
         },
-        error: function (erreur) {
+        error: function(erreur) {
             // alert('La requête n\'a pas abouti' + erreur);
             console.log(erreur.responseText);
         }
@@ -72,21 +70,20 @@ function redirectToStep3(e) {
             'devisID': devisID
         },
         Type: "json",
-        beforeSend: function (xhr) {
+        beforeSend: function(xhr) {
 
             xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
 
 
         },
-        success: function (data) {
+        success: function(data) {
 
             // window.location = "/espaceclient/optionsGaranties";
         },
-        error: function (erreur) {
+        error: function(erreur) {
             // alert('La requête n\'a pas abouti' + erreur);
             console.log(erreur.responseText);
         }
     });
 
 }
-

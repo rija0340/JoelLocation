@@ -28,6 +28,7 @@ class Reservation
         $this->options = new ArrayCollection();
         $this->garanties = new ArrayCollection();
         $this->conducteursClient = new ArrayCollection();
+        $this->setReportedFalseValue();
     }
 
     /**
@@ -204,6 +205,11 @@ class Reservation
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $conducteur;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $reported;
 
 
     public function getId(): ?int
@@ -707,5 +713,22 @@ class Reservation
         $this->conducteur = $conducteur;
 
         return $this;
+    }
+
+    public function getReported(): ?bool
+    {
+        return $this->reported;
+    }
+
+    public function setReported(bool $reported): self
+    {
+        $this->reported = $reported;
+
+        return $this;
+    }
+
+    public function setReportedFalseValue()
+    {
+        $this->setReported(false);
     }
 }
