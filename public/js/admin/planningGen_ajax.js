@@ -33,7 +33,7 @@ function getData(data) {
 }
 
 
-window.onload = function () {
+window.onload = function() {
     ganttInit();
     retrieveDataAjax();
 };
@@ -44,7 +44,7 @@ function retrieveDataAjax() {
         type: 'GET',
         url: '/planningGeneralData',
         timeout: 3000,
-        success: function (data) {
+        success: function(data) {
             console.log(data);
             getData(data);
             createCheckboxes(getUniqueListVehicules(data));
@@ -54,7 +54,7 @@ function retrieveDataAjax() {
             // ganttLoadData(thedata);
 
         },
-        error: function () {
+        error: function() {
             alert('La requête n\'a pas abouti');
         }
     });
@@ -62,26 +62,22 @@ function retrieveDataAjax() {
 
 function ganttInit(startDateScale, endDateScale) {
     gantt.config.readonly = true;
-    gantt.config.columns = [
-        {
-            name: "text",
-            label: "RESSOURCES",
-            tree: false,
-            width: 175,
-            resize: false,
+    gantt.config.columns = [{
+        name: "text",
+        label: "RESSOURCES",
+        tree: false,
+        width: 175,
+        resize: false,
 
-        }
-    ];
+    }];
     //affichage scale (organisation date, mois, jours, année)
-    gantt.config.scales = [
-        {
-            unit: "day",
-            step: 1,
-            format: "%d %M"
-        }
-    ];
+    gantt.config.scales = [{
+        unit: "day",
+        step: 1,
+        format: "%d %M"
+    }];
     // test sur les bares de taches 
-    gantt.templates.task_text = function (start, end, task) {
+    gantt.templates.task_text = function(start, end, task) {
         if (task.client != undefined) {
 
             return task.client + " " + task.start_date_formated + " - " + task.end_date_formated;
@@ -101,12 +97,12 @@ function ganttInit(startDateScale, endDateScale) {
 
     }
     //highlight weekend
-    gantt.templates.scale_cell_class = function (date) {
+    gantt.templates.scale_cell_class = function(date) {
         if (date.getDay() == 0 || date.getDay() == 6) {
             return "weekend";
         }
     };
-    gantt.templates.timeline_cell_class = function (item, date) {
+    gantt.templates.timeline_cell_class = function(item, date) {
         if (date.getDay() == 0 || date.getDay() == 6) {
             return "weekend"
         }
@@ -127,38 +123,25 @@ function ganttInit(startDateScale, endDateScale) {
 
     gantt.init("gantt_here");
 
-    gantt.attachEvent("onTaskDblClick", function (id, e) {
+    //redirection vers des urls selon l'etat de la réservation 
+    gantt.attachEvent("onTaskDblClick", function(id, e) {
         var taskID = gantt.getTask(id).id_r;
         var etat = gantt.getTask(id).etat;
         if (etat == 'encours') {
-            window.document.location = '/reservation/contrats_en_cours/' + taskID;
+            window.document.location = '/backoffice/reservation/details/' + taskID;
         }
         if (etat == 'termine') {
-            window.document.location = '/reservation/contrat_termine/' + taskID;
+            window.document.location = '/backoffice/reservation/details/' + taskID;
         }
         if (etat == 'nouvelle') {
-            window.document.location = '/reservation/show/' + taskID;
+            window.document.location = '/backoffice/reservation/details/' + taskID;
         }
         if (etat == 'stopSale') {
             window.document.location = '';
         }
 
     });
-    //colorer task en fonction valeur "color"
-    // gantt.templates.task_class = function (start, end, task) {
-    //     if (task.color == "agence") {
-    //         return "rgb(255,0,0)";
-    //     } else if (task.color == "aeroport") {
-    //         return "#000000";
-    //     } else if (task.color == "gareMaritime") {
-    //         return "#FFC0CB";
-    //     } else if (task.color == "indisponible") {
-    //         return "#A9A9A9";
 
-    //     } else if (task.color == "pointLivraison") {
-    //         return "0d00ff";
-    //     }
-    // };
 }
 
 function ganttLoadData(data, startDatePeriode, endDatePeriode) {
@@ -225,7 +208,7 @@ function ganttLoadData(data, startDatePeriode, endDatePeriode) {
 
 // datedebutplanning = document.getElementById('datedebutplanning');
 
-datedebutplanning.onchange = function () {
+datedebutplanning.onchange = function() {
     dateValue = this.value;
     ganttInit(dateValue, startDatePlus2Mouths(dateValue));
     ganttLoadData(thedata, dateValue, startDatePlus2Mouths(dateValue));
@@ -239,6 +222,7 @@ function startDatePlus7Days(startDate) {
     return newDate(endDateTimestamp);
 
 }
+
 function startDatePlus14Days(startDate) {
 
     var startDateTimestamp = dateToTimestamp(startDate);
@@ -246,6 +230,7 @@ function startDatePlus14Days(startDate) {
     return newDate(endDateTimestamp);
 
 }
+
 function startDatePlus1Mouth(startDate) {
 
     var startDateTimestamp = dateToTimestamp(startDate);
@@ -253,6 +238,7 @@ function startDatePlus1Mouth(startDate) {
     return newDate(endDateTimestamp);
 
 }
+
 function startDatePlus2Mouths(startDate) {
 
     var startDateTimestamp = dateToTimestamp(startDate);
@@ -270,6 +256,7 @@ function dateToTimestamp(date) {
     return new Date(date).getTime();
 
 }
+
 function newDate(date) {
     return new Date(date);
 }
@@ -322,6 +309,7 @@ function changeScale7jours() {
     }
 
 }
+
 function changeScale14jours() {
     if (datedebutplanning.value == 0) {
         var startDate = newDate(Date.now());
@@ -350,6 +338,7 @@ function changeScale14jours() {
 
     }
 }
+
 function changeScale1mois() {
     if (datedebutplanning.value == 0) {
         var startDate = newDate(Date.now());
@@ -378,6 +367,7 @@ function changeScale1mois() {
 
     }
 }
+
 function changeScale2mois() {
     if (datedebutplanning.value == 0) {
         var startDate = newDate(Date.now());
@@ -534,6 +524,7 @@ function checkAllClickCallback() {
 
     }
 }
+
 function checkboxClickCallback() {
 
     sortData(completeData);

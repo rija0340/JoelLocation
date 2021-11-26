@@ -76,18 +76,18 @@
 							<td>
 								{# contrat en cours #}
 								{% if (res.dateDebut < dateNow) and  (dateNow < res.dateFin) %}
-									<a class="btn btn-dark" href="{{path('contrats_show', {'id' : res.id })}}">
-										<i class="fa fa-info"></i>
+									<a class="btn btn-dark text-white" href="{{path('reservation_show', {'id' : res.id })}}">
+										<i class="fa fa-info bg-dark"></i>
 									</a>
 									{# contrat terminé #}
 								{% elseif res.dateDebut < dateNow and  dateNow > res.dateFin %}
-									<a class="btn btn-dark" href="{{path('contrat_termine_show', {'id' : res.id })}}">
-										<i class="fa fa-info"></i>
+									<a class="btn btn-dark text-white" href="{{path('reservation_show', {'id' : res.id })}}">
+										<i class="fa fa-info bg-dark"></i>
 									</a>
 									{# reservation à venir	 #}
 								{% elseif res.dateDebut > dateNow and  dateNow < res.dateFin %}
-									<a class="btn btn-dark" href="{{path('reservation_show', {'id' : res.id })}}">
-										<i class="fa  fa-info"></i>
+									<a class="btn btn-dark text-white" href="{{path('reservation_show', {'id' : res.id })}}">
+										<i class="fa  fa-info bg-dark"></i>
 									</a>
 								{% endif %}
 

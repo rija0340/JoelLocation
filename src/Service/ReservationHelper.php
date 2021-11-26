@@ -73,11 +73,13 @@ class ReservationHelper
                 foreach ($pastReservations as  $res) {
                     array_push($datesFin, $res->getDateFin());
                 }
-                $data = array(
-                    'vehicule' => $vehicule,
-                    'dateRetour' => max($datesFin), //the nearer the input date
+                $dateRetour = max($datesFin);
+                $listPastReservations = array(
+                    // 'vehicule' => $vehicule,
+                    // 'dateRetour' => $dateRetour, //the nearer the input date
+                    'reservation' => $this->reservationRepo->findBy(['vehicule' => $vehicule, 'date_fin' => $dateRetour])
                 );
-                array_push($listPastReservations, $data);
+                // array_push($listPastReservations, $data);
             }
         }
         return $listPastReservations;
@@ -101,11 +103,15 @@ class ReservationHelper
                 foreach ($nextReservations as  $res) {
                     array_push($datesDepart, $res->getDateDebut());
                 }
-                $data = array(
-                    'vehicule' => $vehicule,
-                    'dateDepart' => min($datesDepart), //the nearer the input date
+                $datesDepart = min($datesDepart);
+
+                $listNextReservations = array(
+                    // 'vehicule' => $vehicule,
+                    // 'dateDepart' => $datesDepart, //the nearer the input date
+                    'reservation' => $this->reservationRepo->findBy(['vehicule' => $vehicule, 'date_debut' => $datesDepart])
+
                 );
-                array_push($listNextReservations, $data);
+                // array_push($listNextReservations, $data);
             }
         }
 

@@ -27,6 +27,8 @@
 							<a href="{{ path('modele_edit', {'id': modele.id}) }}" class="btn btn-danger">
 								<i class="fa fa-trash" aria-hidden="true"></i>
 								Modifier</a>
+
+							{{ include('admin/modele/_delete_form.html.twig') }}
 						{% endif %}
 					</td>
 				</tr>

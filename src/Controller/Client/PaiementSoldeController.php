@@ -170,6 +170,7 @@ class PaiementSoldeController extends AbstractController
         $paiement->setDatePaiement($this->dateHelper->dateNow());
         $paiement->setClient($this->reservRepo->findOneBy(['stripeSessionId' => $stripeSessionId])->getClient());
         $paiement->setMotif("Réservation");
+        $paiement->setCreatedAt($this->dateHelper->dateNow());
         $paiement->setModePaiement($this->modePaiementRepo->findOneBy(['libelle' => 'CARTE BANCAIRE']));
         $this->em->persist($paiement);
         $this->em->flush();

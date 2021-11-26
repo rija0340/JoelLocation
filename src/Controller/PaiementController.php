@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Paiement;
+use App\Form\CalculPaiementsType;
 use App\Form\PaiementType;
 use App\Repository\PaiementRepository;
 use App\Repository\ReservationRepository;
@@ -18,26 +19,47 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class PaiementController extends AbstractController
 {
     private $reservRepo;
-    public function __construct(ReservationRepository $reservRepo)
+    private $paiementRepo;
+    public function __construct(PaiementRepository $paiementRepo, ReservationRepository $reservRepo)
     {
         $this->reservRepo = $reservRepo;
+        $this->paiementRepo = $paiementRepo;
     }
     /**
-     * @Route("/", name="paiement_index", methods={"GET"})
+     * @Route("/", name="paiement_index", methods={"GET", "POST"})
      */
     public function index(PaiementRepository $paiementRepository, Request $request, PaginatorInterface $paginator): Response
     {
-        // $pagination = $paginator->paginate(
-        //     $paiementRepository->findBy([], ["id" => "DESC"]), /* query NOT result */
-        //     $request->query->getInt('page', 1)/*page number*/,
-        //     20/*limit per page*/
-        // );
-
         $reservations = $this->reservRepo->findReservationsSansStopSales();
         $paiements = $paiementRepository->findAll(["id" => "DESC"]);
+
+        $form = $this->createForm(CalculPaiementsType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $dateDebut = $form->getData()['dateDebut'];
+            $dateFin = $form->getData()['dateFin'];
+
+            $paiments = $this->paiementRepo->findByDates($dateDebut, $dateFin);
+
+            $somme = 0;
+            foreach ($paiments as $paiment) {
+                $somme = $somme  + $paiment->getMontant();
+                return $this->render('admin/paiement/index.html.twig', [
+                    'paiements' => $paiements,
+                    'reservations' => $reservations,
+                    'form' => $form->createView(),
+                    'somme' => $somme
+                ]);
+            }
+        }
         return $this->render('admin/paiement/index.html.twig', [
             'paiements' => $paiements,
-            'reservations' => $reservations
+            'reservations' => $reservations,
+            'form' => $form->createView(),
+            'somme' => null
+
         ]);
     }
 

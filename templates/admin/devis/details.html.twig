@@ -6,15 +6,15 @@
 
 {% block stylesheets %}
 	<!-- Datatables -->
-	<link href="../../admin/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
-	<link href="../../admin/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
-	<link href="../../admin/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
-	<link href="../../admin/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+	<link href="{{asset('admin/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css')}}" rel="stylesheet">
+	<link href="{{asset('admin/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css')}}" rel="stylesheet">
+	<link href="{{asset('admin/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css')}}" rel="stylesheet">
+	<link href="{{asset('admin/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css')}}" rel="stylesheet">
 	<link
-	href="../../admin/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+	href="{{asset('admin/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css')}}" rel="stylesheet">
 	<!-- Font Awesome -->
-	<link href="../../admin/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-	<link href="../../css/admin/detail.css" rel="stylesheet">
+	<link href="{{asset('admin/vendors/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet">
+	<link href="{{asset('css/admin/detail.css')}}" rel="stylesheet">
 
 {% endblock %}
 
@@ -42,18 +42,6 @@
 	<!-- top tiles -->
 	<div class="x_panel">
 
-		<div class="btn-group mb-1">
-			<button type="button" class="btn btn-warning dropdown-toggle text-white font-weight-bold" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				Réservation
-			</button>
-			<div class="dropdown-menu">
-				<a class="dropdown-item" href="#">Reporter la réservation</a>
-				<a class="dropdown-item" href="#">Mail de confirmation</a>
-				<a class="dropdown-item" href="#">Annuler la réservation</a>
-				<a class="dropdown-item" href="#">Fermer le contrat</a>
-				<a class="dropdown-item" href="#">Archiver la réservation</a>
-			</div>
-		</div>
 		{% if devis.vehicule == null %}
 			<div class="alert alert-warning2  " role="alert">
 				<div class=" text-center">
@@ -98,22 +86,12 @@
 				</div>
 				<div class="col-auto ml-auto pr-0">
 					<div class="d-flex align-items-center">
-						<a id="btnGenererPDf" type="button" class="btn btn-outline-success text-uppercase p-1">
+						<a href="{{path('devis_pdf', {'id': devis.id})}}" type="button" class="btn btn-outline-success text-uppercase p-1">
 							<i class="fa  fa-file-pdf-o"></i>
 							Générer le devis</a>
 						<button type="button" class="btn btn-outline-warning text-uppercase p-1">
 							<i class="fa fa-file-archive-o"></i>
-							Envoyer la devis</button>
-						<button type="button" class="btn btn-outline-violet text-uppercase p-1">
-							<i class="fa fa-send (alias)"></i>
-							Générer détail</button>
-						<a type="button" class="btn btn-outline-info text-uppercase p-1" id="btnGenererFacturePDF">
-							<i class="fa fa-send (alias)"></i>
-							générer facture</a>
-						<a type="button" class="btn btn-outline-success text-uppercase p-1">
-							<i class="fa fa-send (alias)"></i>
-							Envoyer facture</a>
-
+							Envoyer le- devis</button>
 					</div>
 				</div>
 			</div>
@@ -169,102 +147,21 @@
 						<span class="js-vehicule">{{devis.vehicule}}</span>
 						<span class="js-idVehicule hide">{{devis.vehicule.id}}</span>
 					</div>
-					<div class="col-md-4">
-						<span class="label_client">Code affilié :</span>
-					</div>
 
 				</div>
 
-				<div class="row">
-
-					<div class="col-md-4">
-						<span class="label_client">Destination :</span>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-3">
-						<span class="label_client">Km départ :</span>
-					</div>
-					<div class="col-md-3">
-						<span class="label_client">Km retour :</span>
-					</div>
-					<div class="col-md-3">
-						<span class="label_client">Date mise à jour km :</span>
-					</div>
-					<div class="col-md-3">
-						<span class="label_client">Km saisie par :</span>
-					</div>
-				</div>
 				<div class=" text-center">
-					<a type="button" class="btn btn-primary text-nowrap" href="{{path('client_edit', {'id': devis.client.id})}}">
+					<a type="button" class="btn btn-primary text-nowrap" href="{{path('devis_infosClient_edit', {'id': devis.id})}}">
 						<i class="fa fa-user mr-1"></i>Modifier les informations</a>
-					<button type="button" class="btn btn-dark text-nowrap">
-						<i class="fa fa-reply-all mr-1"></i>Retour anticipé</button>
-					<a type="button" class="btn btn-warning text-nowrap" href="{{path('devis_edit', {'id': devis.id} ) }}">
-						<i class="fa fa-cog"></i>
-						Modifier la réservation</a>
-					<a type="button" class="btn btn-danger text-nowrap" href="{{path('devis_edit', {'id': devis.id} ) }}">
+					<a type="button" class="btn btn-danger text-nowrap" href="{{path('devis_optionsGaranties_edit', {'id': devis.id} ) }}">
 						<i class="fa fa-edit (alias)"></i>
 						Modifier les options & garanties</a>
 
-					<button type="button" class="btn btn-violet text-nowrap">
+					<a href="{{path('devis_ident_connex', {'id':devis.id})}}" type="button" class="btn btn-violet text-nowrap">
 						<i class="fa  fa-send-o (alias)"></i>
-						Envoyer les identifians de connexion</button>
+						Envoyer les identifians de connexion</a>
 				</div>
 			</div>
-		</div>
-
-		<div class="x_title">
-			<h2>
-				<i class="fa fa-chevron-right"></i>INFORMATIONS CONDUCTEUR(S)
-			</h2>
-
-			<div class="clearfix"></div>
-		</div>
-		<div class="x_content ">
-			<div class="text-center">
-				<button class="btn btn-primary">
-					<i class="fa fa-plus"></i>
-					Ajouter conducteur</button>
-			</div>
-
-			<div class="x_title">
-				<h4 class="text-danger font-weight-bold mb-0">Conducteur n°1</h4>
-			</div>
-			<p class="text-success font-weight-bold font-italic">Conducteur principal</p>
-			<div class="row info_conducteur">
-				<div class="col-md-3">
-					<span class="label_conducteur">Nom/Prénom :</span>
-				</div>
-				<div class="col-md-3">
-					<span class="label_conducteur">Permis :</span>
-				</div>
-				<div class="col-md-3">
-					<span class="label_conducteur">Obtention :</span>
-				</div>
-				<div class="col-md-3">
-					<span class="label_conducteur">Date délivrance :</span>
-				</div>
-				<div class="col-md-3">
-					<span class="label_conducteur">Ville délivrance :</span>
-				</div>
-				<div class="col-md-3">
-					<span class="label_conducteur">Date de naissance :</span>
-				</div>
-				<div class="col-md-3">
-					<span class="label_conducteur">Ville de naissance :</span>
-				</div>
-				<div class="col-md-3">
-					<button class="btn btn-warning">
-						<i class="fa fa-reply"></i>
-					</button>
-					<button class="btn btn-danger">
-						<i class="fa fa-close (alias)"></i>
-					</button>
-				</div>
-			</div>
-
-
 		</div>
 
 		{# périod de location #}
@@ -442,58 +339,28 @@
 			</div>
 
 		</div>
-
-		{# options et garanties souscrites #}
-		<div class="x_title">
-			<h2>
-				<i class="fa fa-chevron-right"></i>réglement(s)
-			</h2>
-			<div class="clearfix"></div>
-		</div>
-		<div class="x_content">
-			<div class="row">
-				<div class="col-md-8 col-sm-8 col-xs-8">
-					<i class="fa fa-chevron-right"></i>Total des règlements effectués :
-				</div>
-				<div class="col-md-4 col-sm-4 col-xs-4">
-					<div class="text-right">
-						0 €
-					</div>
-				</div>
-
-				<div class="col-md-8 col-sm-8 col-xs-8">
-					<i class="fa fa-chevron-right"></i>Solde
-				</div>
-				<div class="col-md-4 col-sm-4 col-xs-4">
-					<div class="text-right">
-						{{devis.prix}}
-						€
-					</div>
-				</div>
-			</div>
-		</div>
 	</div>
 {% endblock %}
 {% block javascripts %}
 	<!-- Datatables -->
-	<script src="../../admin/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
-	<script src="../../admin/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-	<script src="../../admin/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-	<script src="../../admin/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
-	<script src="../../admin/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
-	<script src="../../admin/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
-	<script src="../../admin/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
-	<script src="../../admin/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
-	<script src="../../admin/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
-	<script src="../../admin/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-	<script src="../../admin/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-	<script src="../../admin/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
-	<script src="../../admin/vendors/jszip/dist/jszip.min.js"></script>
-	<script src="../../admin/vendors/pdfmake/build/pdfmake.min.js"></script>
-	<script src="../../admin/vendors/pdfmake/build/vfs_fonts.js"></script>
-	<script src="../../js/admin/jspdf.min.js"></script>
-	<script src="../../js/admin/jspdf.plugin.autotable.js"></script>
-	<script src="../../js/admin/devisJsPDF.js"></script>
-	<script src="../../js/admin/factureJsPDF.js"></script>
-	<script src="../../js/admin/details_devis.js"></script>
+	<script src="{{asset('admin/vendors/datatables.net/js/jquery.dataTables.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/datatables.net-buttons/js/dataTables.buttons.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/datatables.net-buttons/js/buttons.flash.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/datatables.net-buttons/js/buttons.html5.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/datatables.net-buttons/js/buttons.print.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js')}}"></script>
+	<script src="{{asset('admin/vendors/datatables.net-scroller/js/dataTables.scroller.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/jszip/dist/jszip.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/pdfmake/build/pdfmake.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/pdfmake/build/vfs_fonts.js')}}"></script>
+	<script src="{{asset('js/admin/jspdf.min.js')}}"></script>
+	<script src="{{asset('js/admin/jspdf.plugin.autotable.js')}}"></script>
+	<script src="{{asset('js/admin/devisJsPDF.js')}}"></script>
+	<script src="{{asset('js/admin/factureJsPDF.js')}}"></script>
+	<script src="{{asset('js/admin/details_devis.js')}}"></script>
 {% endblock  %}

@@ -34,6 +34,7 @@
 							<thead class="text-uppercase">
 								<tr>
 									<th>réservation</th>
+									<th>Date de départ</th>
 									<th class="">montant</th>
 									<th>type</th>
 									<th class="">utilisateur</th>
@@ -49,7 +50,11 @@
 							<tbody>
 								{% for appelPaiement in appelPaiements %}
 									<tr>
-										<td>{{appelPaiement.reservation.reference}}</td>
+										<td>
+											<a href="{{path('reservation_show', {'id':appelPaiement.reservation.id})}}" class="">{{appelPaiement.reservation.reference}}</a>
+
+										</td>
+										<td>{{appelPaiement.reservation.dateDebut|date('d/m/Y H:i')}}</td>
 										<td>{{appelPaiement.montant}}</td>
 										<td>{{appelPaiement.type}}</td>
 
@@ -60,12 +65,12 @@
 											{% endif %}
 										</td>
 										<td></td>
-
 										<td>
-											{% if appelPaiement.payed %}
+
+											{% if appelPaiement.payed == true %}
 												<i class="fa fa-check" style="color : red"></i>
 											{% elseif (appelPaiement.payed == false or appelPaiement.payed == null)  %}
-												<i class="fa-fa-close (alias)"></i>
+												<i class="fa fa-close (alias)"></i>
 											{% endif %}
 										</td>
 										<td>
@@ -75,7 +80,6 @@
 										</td>
 										<td class="text-center">
 											{% if appelPaiement.payed == false %}
-
 												<a href="{{path('envoi_email_appel_paiement_index', {'id': appelPaiement.id})}}" class="btn btn-danger">
 													envoyer
 												</a>

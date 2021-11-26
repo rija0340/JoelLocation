@@ -132,6 +132,7 @@ class PaiementController extends AbstractController
         $paiement->setDatePaiement($this->dateHelper->dateNow());
         $paiement->setClient($this->reservRepo->findOneBy(['stripeSessionId' => $stripeSessionId])->getClient());
         $paiement->setMotif("Réservation");
+        $paiement->setMotif($this->dateHelper->dateNow());
         $paiement->setModePaiement($this->modePaiementRepo->findOneBy(['libelle' => 'CARTE BANCAIRE']));
         $this->em->persist($paiement);
         $this->em->flush();
@@ -205,7 +206,6 @@ class PaiementController extends AbstractController
         // rediriger vers page de paiement hebergé sur stripe
         return $this->redirect($checkout_session->url);
     }
-
 
 
     public function reserverDevis(Devis $devis, $stripeSessionId)

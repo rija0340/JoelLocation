@@ -19,6 +19,23 @@ class PaiementRepository extends ServiceEntityRepository
         parent::__construct($registry, Paiement::class);
     }
 
+    /**
+     * @return Paiement[] Returns an array of Paiement objects
+     */
+
+    public function findByDates($dateDebut, $dateFin)
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere(':dateDebut <  p.createdAt AND p.createdAt < :dateFin ')
+            ->setParameter('dateDebut', $dateDebut)
+            ->setParameter('dateFin', $dateFin)
+            ->orderBy('p.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+
+
     // /**
     //  * @return Paiement[] Returns an array of Paiement objects
     //  */

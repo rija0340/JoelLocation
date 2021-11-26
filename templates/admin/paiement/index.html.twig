@@ -33,44 +33,36 @@
 		</div>
 
 		{# datepicker range #}
-		<div class="row mb-4">
-			<div class="col-auto">
-				<div class="row">
-					<div class="col-auto">
-						<label for="periode">Période :</label>
-					</div>
-					<!-- Force next columns to break to new line -->
-					<div class="w-100"></div>
-					<div class="col-auto">
-						<div class="row">
-							<div class="col-auto">
-								<div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
-									<i class="fa fa-calendar"></i>&nbsp;
-									<span></span>
-									<i class="fa fa-caret-down"></i>
-								</div>
-							</div>
-							<div class="col-auto">
-								<button class="btn btn-primary">
-									<i class="fa fa-search mr-2"></i>Calculer</button>
-							</div>
+		<div class=" mb-4">
+			<div class="row">
+				<div class="col-auto">
+					<label for="periode">Période :</label>
+				</div>
+				<!-- Force next columns to break to new line -->
+				<div class="w-100"></div>
+				<div class="col-auto">
+					{{form_start(form)}}
+					<div class="row">
+
+						<div class="col-auto">{{form_widget(form.dateDebut)}}</div>
+						<div class="col-auto">{{form_widget(form.dateFin)}}</div>
+						<div class="col-auto">
+							<button class="btn btn-danger " type="submit">
+								<i class="fa fa-search mr-2"></i>Calculer
+							</button>
 						</div>
 					</div>
+					{{form_end(form)}}
 				</div>
+				{% if somme != null %}
+					<div class="text-center">
+						<h3>
+							La somme de paiement durant cette période est
+							{{somme}}
+						</h3>
+					</div>
+				{% endif %}
 			</div>
-
-			<div class="col-auto ml-auto">
-				<div class="form-group">
-					<label for="select">Filtres :</label>
-					<select id="heard" class="form-control" required>
-						<option value="">Choose..</option>
-						<option value="press">Press</option>
-						<option value="net">Internet</option>
-						<option value="mouth">Word of mouth</option>
-					</select>
-				</div>
-			</div>
-
 		</div>
 
 		{# fin datepicker #}
@@ -114,16 +106,9 @@
 									<td>{{paiement.modePaiement.libelle}}</td>
 									<td>{{paiement.datePaiement|date('d/m/Y H:i')}}</td>
 									<td class="text-center">
-										<a href="">
-											<i class=" fa fa-info-circle" style="font-size: 2em !important;"></i>
+										<a href="{{path('reservation_show', {'id': paiement.reservation.id})}}">
+											<i class=" fa fa-info-circle text-danger" style="font-size: 2em !important; "></i>
 										</a>
-										<form method="post" action="{{ path('paiement_delete', {'id': paiement.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer ce paiement ?');">
-											<input type="hidden" name="_method" value="DELETE">
-											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ paiement.id) }}">
-											<button class="btn btn-link" style=" -webkit-appearance: none">
-												<i class="fa fa-trash" aria-hidden="true"></i>
-											</button>
-										</form>
 									</td>
 								</tr>
 							{% endfor %}

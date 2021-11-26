@@ -2,12 +2,18 @@
 
 namespace App\Controller;
 
+use App\Classe\Mailjet;
+use DateTimeZone;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use Knp\Snappy\Pdf;
+use App\Entity\User;
 use App\Entity\Devis;
 use App\Form\DevisType;
-use App\Entity\User;
 use App\Entity\Vehicule;
 use App\Entity\Reservation;
+use App\Service\DateHelper;
+use App\Service\TarifsHelper;
 use App\Repository\UserRepository;
 use App\Form\DevisEditVehiculeType;
 use App\Repository\DevisRepository;
@@ -15,20 +21,20 @@ use App\Repository\TarifsRepository;
 use App\Repository\OptionsRepository;
 use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
+use App\Form\EditClientReservationType;
+use App\Form\Devis\OptionsGarantiesType;
+use Doctrine\ORM\EntityManagerInterface;
 use App\Controller\ReservationController;
 use App\Repository\ReservationRepository;
-use App\Service\DateHelper;
-use App\Service\TarifsHelper;
-use DateTimeZone;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+// Include Dompdf required namespaces
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
+use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-// Include Dompdf required namespaces
-use Dompdf\Dompdf;
-use Dompdf\Options;
+use Symfony\Component\Security\Core\Encoder\PasswordHasherEncoder;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class DevisController extends AbstractController
 {
@@ -44,9 +50,11 @@ class DevisController extends AbstractController
     private $tarifsHelper;
     private $dateHelper;
     private $em;
+    private $mailjet;
+    private $flashy;
 
 
-    public function __construct(EntityManagerInterface $em, DateHelper $dateHelper, TarifsHelper $tarifsHelper,  UserRepository $userRepo, DevisRepository $devisRepo, ReservationRepository $reservationRepo, VehiculeRepository $vehiculeRepo,   TarifsRepository $tarifsRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo, ReservationController $reservController)
+    public function __construct(FlashyNotifier $flashy, Mailjet $mailjet, EntityManagerInterface $em, DateHelper $dateHelper, TarifsHelper $tarifsHelper,  UserRepository $userRepo, DevisRepository $devisRepo, ReservationRepository $reservationRepo, VehiculeRepository $vehiculeRepo,   TarifsRepository $tarifsRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo, ReservationController $reservController)
     {
 
         $this->reservationRepo = $reservationRepo;
@@ -60,6 +68,8 @@ class DevisController extends AbstractController
         $this->dateHelper = $dateHelper;
         $this->tarifsHelper = $tarifsHelper;
         $this->em = $em;
+        $this->mailjet = $mailjet;
+        $this->flashy = $flashy;
     }
 
     /**
@@ -177,7 +187,7 @@ class DevisController extends AbstractController
 
 
     /**
-     * @Route("devis/{id}", name="devis_show", methods={"GET"})
+     * @Route("devis/details/{id}", name="devis_show", methods={"GET"})
      */
     public function show(Devis $devis): Response
     {
@@ -383,5 +393,86 @@ class DevisController extends AbstractController
         $dompdf->stream("devis.pdf", [
             "Attachment" => true,
         ]);
+    }
+
+
+    // fonction dans details devis -*/****************************** */
+
+
+    /**
+     *  @Route("devis/modifier-infos-client/{id}", name="devis_infosClient_edit", methods={"GET","POST"},requirements={"id":"\d+"})
+     *
+     */
+    public function editInfosClient(Request $request, Devis $devis): Response
+    {
+        //form pour client
+        $client = $devis->getClient();
+        $form = $this->createForm(EditClientReservationType::class, $client);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->em->persist($client);
+            $this->em->flush();
+            $this->flashy->success("La réservation a bien été modifié");
+            return $this->redirectToRoute('devis_show', ['id' => $devis->getId()]);
+        }
+
+        return $this->render('admin/devis/infos_client/edit.html.twig', [
+
+            'form' => $form->createView(),
+            'devis' => $devis,
+
+        ]);
+    }
+
+    /**
+     *  @Route("devis/modifier-options-garanties/{id}", name="devis_optionsGaranties_edit", methods={"GET","POST"},requirements={"id":"\d+"})
+     */
+    public function editOptionsGaranties(Request $request, Devis $devis): Response
+    {
+
+        $form = $this->createForm(OptionsGarantiesType::class, $devis);
+        $garanties = $this->garantiesRepo->findAll();
+        $options = $this->optionsRepo->findAll();
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $devis->setPrix($devis->getTarifVehicule() + $devis->getPrixGaranties() + $devis->getPrixOptions());
+            $this->em->flush();
+            return $this->redirectToRoute('reservation_show', ['id' => $devis->getId()]);
+        }
+        return $this->render('admin/devis/options_garanties/edit.html.twig', [
+            'form' => $form->createView(),
+            'devis' => $devis,
+            'garanties' => $garanties,
+            'options' => $options,
+            'routeReferer' => 'reservation_show'
+
+        ]);
+    }
+
+
+    /**
+     * @Route("devis/envoi-identification-connexion/{id}", name="devis_ident_connex", methods={"GET","POST"},requirements={"id":"\d+"})
+     */
+    public function envoyerIdentConnex(Request $request, Devis $devis, UserPasswordEncoderInterface $passwordEncoder): Response
+    {
+
+        $mail = $devis->getClient()->getMail();
+        $nom = $devis->getClient()->getNom();
+        $mdp = uniqid();
+        $content = "Bonjour, " . '<br>' .  "voici vos identifications de connexion." . '<br>' . " Mot de passe: " . $mdp . '<br>' . "Email : votre email";
+
+        $devis->getClient()->setPassword($passwordEncoder->encodePassword(
+            $devis->getClient(),
+            $mdp
+        ));
+        $this->em->flush();
+
+        $this->mailjet->send($mail, $nom, "Identifiants de connexion", $content);
+
+        $this->flashy->success("Les identifians de connexion du client ont été envoyés");
+        return $this->redirectToRoute('devis_show', ['id' => $devis->getId()]);
     }
 }

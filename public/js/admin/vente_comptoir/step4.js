@@ -40,12 +40,12 @@ function saveDevisAsPdf() {
         type: 'GET',
         url: '/backoffice/vente-comptoir/enregistrer-devis-pdf',
         data: { 'client': selectClientElement.value },
-        success: function (data) {
+        success: function(data) {
             // function called from another file (devisJsPDF.js with is define above this step4.js file)
             devis(data);
 
         },
-        error: function () {
+        error: function() {
             alert('La requête n\'a pas abouti');
         }
     });
@@ -54,7 +54,7 @@ function saveDevisAsPdf() {
 
 //enabled by library jquery.ui
 function autocomplete(listeClients) {
-    $(function () {
+    $(function() {
         $("#selectClient").autocomplete({ source: listeClients });
     });
 }
@@ -64,14 +64,13 @@ function getListClients() {
     $.ajax({
         type: 'GET',
         url: '/backoffice/listeclient',
-        success: function (data) {
+        success: function(data) {
 
-            console.log(data);
             for (let i = 0; i < data.length; i++) {
                 listeClients.push(data[i].prenom + ' ' + data[i].nom + ' (' + data[i].email + ')');
             }
         },
-        error: function () {
+        error: function() {
             alert('La requête n\'a pas abouti');
         }
     });
@@ -97,7 +96,7 @@ function checkClientAndPaiement() {
                 sayMyName: {
                     text: 'Valider',
                     btnClass: 'btn-danger',
-                    action: function () {
+                    action: function() {
                         var input = this.$content.find('input#input-paiement');
                         var errorText = this.$content.find('.text-danger');
                         if (!input.val().trim()) {
@@ -115,7 +114,7 @@ function checkClientAndPaiement() {
                         }
                     }
                 },
-                later: function () {
+                later: function() {
                     // do nothing.
                 }
             }
@@ -129,7 +128,7 @@ function reserverDevis(client, montant) {
         type: 'POST',
         url: '/backoffice/vente-comptoir/reserver-devis',
         data: { 'client': client, 'montant': montant },
-        success: function (data) {
+        success: function(data) {
             $.alert({
                 title: 'Succès',
                 icon: 'fa fa-smile-o',
@@ -139,7 +138,7 @@ function reserverDevis(client, montant) {
             window.location.href = '/backoffice/reservation';
 
         },
-        error: function () {
+        error: function() {
             alert('La requête n\'a pas abouti');
         }
     });
@@ -149,16 +148,14 @@ function reserverDevis(client, montant) {
 //utilisation de jquery-confirm pour alert, confirm modals
 
 
-$('.increment').click(function () {
+$('.increment').click(function() {
     var $input = $(this).parents('.input-number-group').find('.input-number');
     var val = parseInt($input.val(), 10);
     $input.val(val + 1);
 });
 
-$('.decrement').click(function () {
+$('.decrement').click(function() {
     var $input = $(this).parents('.input-number-group').find('.input-number');
     var val = parseInt($input.val(), 10);
     $input.val(val - 1);
 })
-
-

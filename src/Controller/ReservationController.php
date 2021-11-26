@@ -188,7 +188,7 @@ class ReservationController extends AbstractController
             // tester si la somme des paiements dépasse le prix
             if ($reservation->getSommePaiements()  + $formAjoutPaiement->getData()['montant'] >= $reservation->getPrix()) {
 
-                $this->flashy->error("Le total du paiement est supérieur au due");
+                $this->flashy->error("Erreur sur l'ajout de paiement car le total du paiement est supérieur au due");
                 return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
             } else {
                 // enregistrement montant et reservation dans table paiement 
@@ -199,6 +199,7 @@ class ReservationController extends AbstractController
                 $paiement->setReservation($reservation);
                 $paiement->setModePaiement($this->modePaiementRepo->findOneBy(['libelle' => 'ESPECE']));
                 $paiement->setMotif("Réservation");
+                $paiement->setCreatedAt($this->dateHelper->dateNow());
                 $this->em->persist($paiement);
                 $this->em->flush();
 
@@ -213,7 +214,7 @@ class ReservationController extends AbstractController
             //sauvegarde données de kilométrage du véhicule
             $vehicule->setSaisisseurKm($this->getUser());
             $vehicule->setDateKm($this->dateHelper->dateNow());
-            $this->em->persist($vehicule);
+            // $this->em->persist($vehicule);
             $this->em->flush();
 
             // notification pour réussite enregistrement
@@ -224,7 +225,17 @@ class ReservationController extends AbstractController
 
         //gestion form report reservation
         if ($formReportResa->isSubmitted() && $formReportResa->isValid()) {
+
+            $dateDepart = $reservation->getDateDebut();
+            $dateRetour = $reservation->getDateFin();
+            $duree = $this->dateHelper->calculDuree($dateDepart, $dateRetour);
+            $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $reservation->getVehicule());
+
             $reservation->setReported(true);
+            $reservation->setDuree($duree);
+            $reservation->setTarifVehicule($tarifVehicule);
+            $reservation->setPrix($tarifVehicule + $reservation->getPrixGaranties() + $reservation->getPrixOptions());
+
             $this->flashy->success("La réservation a été reportée");
             $this->em->flush();
             return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
@@ -324,14 +335,21 @@ class ReservationController extends AbstractController
     public function envoyerIdentConnex(Request $request, Reservation $reservation): Response
     {
 
+
         $mail = $reservation->getClient()->getMail();
         $nom = $reservation->getClient()->getNom();
         $mdp = uniqid();
-        $content = "Bonjour, voici vos identifications de connexion. Mot de passe: " . $mdp;
+        $content = "Bonjour, " . '<br>' .  "voici vos identifications de connexion." . '<br>' . " Mot de passe: " . $mdp . '<br>' . "Email : votre email";
 
+        $reservation->getClient()->setPassword($this->passwordEncoder->encodePassword(
+            $reservation->getClient(),
+            $mdp
+        ));
+        $this->em->flush();
         $this->mail->send($mail, $nom, "Identifiants de connexion", $content);
 
-        $this->flashy->success("Vos identifians ont été envoyés");
+
+        $this->flashy->success("Les identifians de connexion du client ont été envoyés");
         return $this->redirectToRoute($this->getReferer($request), ['id' => $reservation->getId()]);
     }
 

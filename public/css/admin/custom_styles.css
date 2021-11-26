@@ -179,3 +179,10 @@ h2 .fa-chevron-right {
     background-color: #0d00ff;
     border-radius: 0%;
 }
+
+
+/* couleur text dans btn dropdown */
+
+.dropdown-item {
+    color: #000000;
+}
