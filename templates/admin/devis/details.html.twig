@@ -3,7 +3,6 @@
 {% block title %}Détails devis
 {% endblock %}
 
-
 {% block stylesheets %}
 	<!-- Datatables -->
 	<link href="{{asset('admin/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css')}}" rel="stylesheet">
@@ -68,16 +67,13 @@
 				</div>
 			</div>
 		{% endif %}
-
 		<div id="js-alertVehicule" class="text-center mb-5 hide">
 			<h1>cette véhicule est déjà prise</h1>
 			<a type="button" class="btn btn-danger text-nowrap" href="{{path('devis_edit_vehicule', {'id': devis.id} ) }}">
 				<i class="fa fa-edit (alias)"></i>
 				Modifier véhicule</a>
 		</div>
-
 		<div class="x_title">
-
 			<div class="row info_client">
 				<div class="col-auto pl-2">
 					<h2>
@@ -230,15 +226,16 @@
 			<p class="font-weight-bold label">
 				Option(s) souscrite(s):
 			</p>
-			{% if devis.conducteur ==1 %}
-				<p>Conducteur : Oui</p>
-			{% else %}
-				<p>Conducteur : Non</p>
-			{% endif %}
-			{% for option in devis.options %}
+			<ul class="">
+				{% if devis.conducteur ==1 %}
+					<li>Conducteur</li>
 
-				<p class="js-siege">{{option}}</p>
-			{% endfor %}
+				{% endif %}
+				{% for option in devis.options %}
+
+					<li class="js-siege">{{option}}</li>
+				{% endfor %}
+			</ul>
 			{# <p class="font-italic">Aucune option souscrite.</p> #}
 			<p class="font-weight-bold label">
 				Garantie(s) souscrite(s):

@@ -516,6 +516,44 @@ class ReservationController extends AbstractController
         return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
     }
 
+    /**
+     * @Route("/retour-anticipe/{id}", name="reservation_retour_anticipe", methods={"GET", "POST"})
+     */
+    public function retourAnticipe(Request $request,  Reservation $reservation): Response
+    {
+
+        $reservation->setDateFin($this->dateHelper->dateNow());
+        $this->em->flush();
+
+        $this->flashy->success("Le retour anticipé a été éfféctué avec succès");
+
+        return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
+    }
+
+    /**
+     * @Route("/annuler-reservation/{id}", name="reservation_cancel", methods={"GET", "POST"})
+     */
+    public function annuler(Request $request, Reservation $reservation): Response
+    {
+        $reservation->setCanceled(true);
+        $this->em->flush();
+
+        // dd($reservation);
+        $this->flashy->success("La réservation N° " . $reservation->getReference() . " a été annulée");
+        return $this->redirectToRoute('reservation_cancel_index');
+    }
+
+    /**
+     * @Route("/resas-non-solde", name="reserv_non_solde", methods={"GET"})
+     */
+    public function resas_non_solde(): Response
+    {
+        $reservations = $this->reservationRepo->findResasNonSoldes();
+        return $this->render('admin/reservation/non_solde/reserv_non_solde.html.twig', [
+            'reservations' => $reservations
+        ]);
+    }
+
     //return referer->route avant la rédirection (source)
     public function getReferer($request)
     {

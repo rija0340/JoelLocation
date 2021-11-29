@@ -29,7 +29,6 @@ addEventListner();
 function getData(data) {
     thedata = data;
     completeData = data;
-    console.log(thedata);
 }
 
 
@@ -45,7 +44,6 @@ function retrieveDataAjax() {
         url: '/planningGeneralData',
         timeout: 3000,
         success: function(data) {
-            console.log(data);
             getData(data);
             createCheckboxes(getUniqueListVehicules(data));
 
@@ -494,7 +492,6 @@ function createCheckboxes(data) {
 
 function checkAllClickCallback() {
     var checkboxes = document.querySelectorAll('div .vehicule');
-    console.log(checkboxes)
 
     if (this.checked) {
         for (let i = 0; i < checkboxes.length; i++) {
@@ -515,7 +512,6 @@ function checkAllClickCallback() {
 
     } else {
         for (let i = 0; i < checkboxes.length; i++) {
-            console.log(checkboxes[i]);
             checkboxes[i].firstElementChild.checked = false;
             checkboxes[i].firstElementChild.disabled = false;
         }
@@ -532,7 +528,6 @@ function checkboxClickCallback() {
 }
 
 function sortData(data) {
-    console.log(data);
 
     var list = document.querySelectorAll('.form-check-input');
     var checkedVehicules = [];
@@ -574,7 +569,6 @@ function sortData(data) {
 
         }
     }
-    console.log(selectedVehicules);
     thedata = selectedVehicules;
 
     if (datedebutplanning.value == 0) {

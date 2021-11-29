@@ -33,7 +33,7 @@ class VehiculeType extends AbstractType
             ])
             ->add('prix_acquisition', NumberType::class)
             ->add('marque', EntityType::class, ['class' => Marque::class])
-            ->add('type', EntityType::class, ['class' => Modele::class])
+            ->add('modele', EntityType::class, ['class' => Modele::class])
             ->add('details', TextareaType::class)
             ->add('carburation', TextType::class)
             ->add('caution', NumberType::class)

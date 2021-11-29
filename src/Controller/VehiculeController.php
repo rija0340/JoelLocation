@@ -56,10 +56,11 @@ class VehiculeController extends AbstractController
         $vehicule = new Vehicule();
         $form = $this->createForm(VehiculeType::class, $vehicule);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $modele = $this->modeleRepo->find($request->request->get('select'));
-            $vehicule->setModele($modele);
+            // $modele = $this->modeleRepo->find($request->request->get('select'));
+            // $vehicule->setModele($modele);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($vehicule);
             $entityManager->flush();

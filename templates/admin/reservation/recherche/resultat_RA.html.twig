@@ -94,7 +94,18 @@
 				<tbody>
 					{% for res in reservations %}
 						<tr>
-							<td></td>
+							<td class="text-center">
+								{% if res.sommePaiements == 0  %}
+									<div class="badge badge-danger">NOT
+									</div>
+								{% elseif res.prix == res.sommePaiements %}
+									<div class="badge badge-success">FULL
+									</div>
+								{% elseif res.prix > res.sommePaiements  %}
+									<div class="badge badge-warning">ACOMPTE
+									</div>
+								{% endif %}
+							</td>
 							<td>{{res.client.nom}}
 								{{res.client.prenom}}
 							</td>
@@ -112,7 +123,7 @@
 								€
 							</td>
 							<td>
-								<a href="{{ path('contrats_show', {'id': res.id}) }}">
+								<a href="{{ path('reservation_show', {'id': res.id}) }}">
 									<i class=" fa fa-info-circle" style="font-size: 2em !important;"></i>
 								</a>
 							</td>

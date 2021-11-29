@@ -6,11 +6,11 @@
 
 {% block stylesheets %}
 	<!-- Datatables -->
-	<link href="../../admin/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
-	<link href="../../admin/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
-	<link href="../../admin/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
-	<link href="../../admin/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
-	<link href="../../admin/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+	<link href="{{asset('admin/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css')}}" rel="stylesheet">
+	<link href="{{asset('admin/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css')}}" rel="stylesheet">
+	<link href="{{asset('admin/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css')}}" rel="stylesheet">
+	<link href="{{asset('admin/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css')}}" rel="stylesheet">
+	<link href="{{asset('admin/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css')}}" rel="stylesheet">
 
 {% endblock %}
 {% block current_page %}
@@ -31,9 +31,9 @@
 			<div class="row">
 				<div class="col-sm-12">
 					<div class="card-box table-responsive">
-						<div class="alert alert-info">
+						<div class="alert alert-info text-dark">
 							<i class="fa fa-info-circle"></i>
-							The Buttons extension for DataTables provides a common set of options, API methods and styling to display buttons on a page that will interact with a DataTable. The core library provides the based framework upon which plug-ins can built.
+							Liste des réservations à date échue (contrat terminé) affichant un solde à régler avec bouton d'accès à la fiche résa pour mettre à jour le règlement. Une zone de recherche permet de filtrer le résultat de façon instantanée (exemple : en saisissant le début du nom du client ou les chiffres de la référence de réservation.
 						</div>
 						<table id="datatable" class="table table-striped table-bordered text-center" style="width:100%">
 							<thead class="text-uppercase">
@@ -51,23 +51,27 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td>Donna Snider</td>
-									<td>Customer Support</td>
-									<td>New York</td>
-									<td>27</td>
-									<td>2011/01/25</td>
-									<td>$112,000</td>
-									<td>$112,000</td>
-									<td>$112,000</td>
-									<td>
-										<button class="btn btn-primary">
-											<a href="{{path('reserv_non_solde_detail')}}">
+								{% for reservation  in reservations %}
+
+									<tr>
+										<td>{{reservation.dateReservation|date('d/m/Y')}}</td>
+										<td>{{reservation.reference}}</td>
+										<td>{{reservation.client.nom}}
+											<br>
+											{{reservation.client.prenom}}
+										</td>
+										<td>{{reservation.dateDebut|date('d/m/Y')}}</td>
+										<td>{{reservation.dateFin|date('d/m/Y')}}</td>
+										<td>{{reservation.prix}}</td>
+										<td>{{reservation.sommePaiements}}</td>
+										<td>{{reservation.prix - reservation.sommePaiements }}</td>
+										<td>
+											<a class="btn btn-danger text-white" href="{{path('reservation_show', {'id': reservation.id})}}">
 												<i class="fa fa-info"></i>
 											</a>
-										</button>
-									</td>
-								</tr>
+										</td>
+									</tr>
+								{% endfor %}
 							</tbody>
 						</table>
 					</div>
@@ -76,22 +80,21 @@
 
 			{% block javascripts %}
 				<!-- Datatables -->
-				<script src="../../admin/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
-				<script src="../../admin/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-				<script src="../../admin/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-				<script src="../../admin/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
-				<script src="../../admin/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
-				<script src="../../admin/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
-				<script src="../../admin/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
-				<script src="../../admin/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
-				<script src="../../admin/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
-				<script src="../../admin/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-				<script src="../../admin/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-				<script src="../../admin/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
-				<script src="../../admin/vendors/jszip/dist/jszip.min.js"></script>
-				<script src="../../admin/vendors/pdfmake/build/pdfmake.min.js"></script>
-				<script src="../../admin/vendors/pdfmake/build/vfs_fonts.js"></script>
-				<script src="../../js/admin/datatable.fr.js"></script>
-
+				<script src="{{asset('admin/vendors/datatables.net/js/jquery.dataTables.min.js')}}"></script>
+				<script src="{{asset('admin/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js')}}"></script>
+				<script src="{{asset('admin/vendors/datatables.net-buttons/js/dataTables.buttons.min.js')}}"></script>
+				<script src="{{asset('admin/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js')}}"></script>
+				<script src="{{asset('admin/vendors/datatables.net-buttons/js/buttons.flash.min.js')}}"></script>
+				<script src="{{asset('admin/vendors/datatables.net-buttons/js/buttons.html5.min.js')}}"></script>
+				<script src="{{asset('admin/vendors/datatables.net-buttons/js/buttons.print.min.js')}}"></script>
+				<script src="{{asset('admin/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js')}}"></script>
+				<script src="{{asset('admin/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js')}}"></script>
+				<script src="{{asset('admin/vendors/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
+				<script src="{{asset('admin/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js')}}"></script>
+				<script src="{{asset('admin/vendors/datatables.net-scroller/js/dataTables.scroller.min.js')}}"></script>
+				<script src="{{asset('admin/vendors/jszip/dist/jszip.min.js')}}"></script>
+				<script src="{{asset('admin/vendors/pdfmake/build/pdfmake.min.js')}}"></script>
+				<script src="{{asset('admin/vendors/pdfmake/build/vfs_fonts.js')}}"></script>
+				<script src="{{asset('js/admin/datatable.fr.js')}}"></script>
 
 			{% endblock  %}

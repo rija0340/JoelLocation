@@ -31,6 +31,25 @@
 {% endblock %}
 
 {% block javascripts %}
-	<script src="{{ asset( 'js/admin/populateSelect.js')}}"></script>
+	<script>
+		$.ajax({
+type: 'GET',
+url: '/modele/liste',
+data: {
+'marqueID': marqueID
+},
+Type: "json",
+success: function (data) {
+console.log(data);
+populateSelectNew(data, "selectModele", "libelle");
+
+},
+error: function (erreur) { // alert('La requête n\'a pas abouti' + erreur);
+console.log(erreur.responseText);
+}
+});
+	</script>
 	<script src="{{ asset( 'js/admin/newVehicule_ajax.js')}}"></script>
+	{# // <script src="{{ asset( 'js/admin/populateSelect.js')}}"></script> #}
+	<script></script>
 {% endblock %}

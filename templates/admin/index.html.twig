@@ -8,6 +8,7 @@
 	<link href="../../css/admin/owl.carousel.css" rel="stylesheet">
 	<link href="../../css/admin/accueil.css" rel="stylesheet">
 	<link href="{{asset('css/admin/flashy.css')}}" rel="stylesheet">
+	<link href="{{asset('css/admin/easypiechart.css')}}" rel="stylesheet">
 
 {% endblock %}
 {% block current_page %}
@@ -101,119 +102,40 @@
 												<div class="testimonial-carousel">
 													<div class="single-testimonial">
 														<div class="row pt-4 mr-4">
-															<div class="col-md-2 col-sm-3">
-																<span class="chart" data-percent="86">
-																	<span class="percent"></span>
-																</span>
-																<div class="text-center">Janvier
-																	<br>
-																	2020
-																</div>
-															</div>
-															<div class="col-md-2 col-sm-3">
-																<span class="chart" data-percent="73">
-																	<span class="percent"></span>
-																</span>
-																<div class="text-center">Février
-																	<br>
-																	2020
-																</div>
-															</div>
-															<div class="col-md-2 col-sm-3">
-																<span class="chart" data-percent="60">
-																	<span class="percent"></span>
-																</span>
-																<div class="text-center">Mars
-																	<br>
-																	2020
-																</div>
-															</div>
-															<div class="col-md-2 col-sm-3">
-																<span class="chart" data-percent="50">
-																	<span class="percent"></span>
-																</span>
-																<div class="text-center">Avril
-																	<br>
-																	2020
-																</div>
-															</div>
-															<div class="col-md-2 col-sm-3">
-																<span class="chart" data-percent="45">
-																	<span class="percent"></span>
-																</span>
-																<div class="text-center">Mai
-																	<br>
-																	2020
-																</div>
-															</div>
-															<div class="col-md-2 col-sm-3">
-																<span class="chart" data-percent="75">
-																	<span class="percent"></span>
-																</span>
-																<div class="text-center">Juin
-																	<br>
-																	2020
-																</div>
-															</div>
+															{% set i = 0 %}
+															{% for key, item in reservationsParcVehicules   %}
+																{% if i < 6 %}
+																	<div class="col-md-2 col-sm-3">
+																		<span class="chart" data-percent="{{item}}">
+																			<span class="percent"></span>
+																		</span>
+																		<div class="text-center">
+																			{{key}}
+																		</div>
+																	</div>
+																{% endif %}
+																{% set i = i + 1 %}
+															{% endfor %}
+
 															<div class="clearfix"></div>
 														</div>
 													</div>
 													<div class="single-testimonial">
 														<div class="row pt-4 mr-4">
-															<div class="col-md-2 col-sm-3">
-																<span class="chart" data-percent="86">
-																	<span class="percent"></span>
-																</span>
-																<div class="text-center">Juillet
-																	<br>
-																	2020
-																</div>
-															</div>
-															<div class="col-md-2 col-sm-3">
-																<span class="chart" data-percent="73">
-																	<span class="percent"></span>
-																</span>
-																<div class="text-center">Aôut
-																	<br>
-																	2020
-																</div>
-															</div>
-															<div class="col-md-2 col-sm-3">
-																<span class="chart" data-percent="60">
-																	<span class="percent"></span>
-																</span>
-																<div class="text-center">Septembre
-																	<br>
-																	2020
-																</div>
-															</div>
-															<div class="col-md-2 col-sm-3">
-																<span class="chart" data-percent="50">
-																	<span class="percent"></span>
-																</span>
-																<div class="text-center">Octobre
-																	<br>
-																	2020
-																</div>
-															</div>
-															<div class="col-md-2 col-sm-3">
-																<span class="chart" data-percent="45">
-																	<span class="percent"></span>
-																</span>
-																<div class="text-center">Octobre
-																	<br>
-																	2020
-																</div>
-															</div>
-															<div class="col-md-2 col-sm-3">
-																<span class="chart" data-percent="75">
-																	<span class="percent"></span>
-																</span>
-																<div class="text-center">Octobre
-																	<br>
-																	2020
-																</div>
-															</div>
+															{% set i = 0 %}
+															{% for key, item in reservationsParcVehicules   %}
+																{% if i > 5 %}
+																	<div class="col-md-2 col-sm-3">
+																		<span class="chart" data-percent="{{item}}">
+																			<span class="percent"></span>
+																		</span>
+																		<div class="text-center">
+																			{{key}}
+																		</div>
+																	</div>
+																{% endif %}
+																{% set i = i + 1 %}
+															{% endfor %}
 															<div class="clearfix"></div>
 														</div>
 													</div>
@@ -223,7 +145,6 @@
 									</div>
 								</div>
 								{# fin caroussel  #}
-
 							</div>
 						</div>
 					</div>
@@ -234,50 +155,61 @@
 					<h2 class="text-uppercase">
 						<i class="fa fa-area-chart"></i>
 						taux d'occupation catégories</h2>
-
 					<div class="clearfix"></div>
 					<div class="alert alert-danger alert-dismissible " role="alert">
 						<i class="fa fa-info mr-1"></i>
-						Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet veritatis sint, adipisci sit architecto voluptatum culpa blanditiis itaque nihil sapiente dolorum id temporibus consectetur reiciendis dolore sunt molestias corporis debitis.
+						Visualizer votre niveau de réservation exprimé en pourcentage sur l'ensembre des véhicules d'une même catégorie pour le mois en cours et les 5 mois à venir. Les flèches sur fond gris au dessus des graphiques vous permettent de parcourir les différentes catégories composant votre flotte de véhicules.
 					</div>
 				</div>
 				<div class="x_content">
-
 					<div class="clearfix"></div>
-
-
 					<div class="row">
 						<div class="col-md-12">
-							<div class="panel panel-body">
+							<div
+								class="panel panel-body">
 
-								<div class="row">
-									<div class="col-md-4 text-center">
-										<span class="chart" data-percent="86">
-											<span class="percent"></span>
-										</span>
-										<div class="text-center">
-											Renault Captur
 
+								{# debut caroussel #}
+								<div class="testimonial-area pb-100">
+									<div class="container">
+										<div class="row">
+											<div class="col-lg-12 col-md-12">
+												<div
+													class="testimonial-carousel">
+													{# {{dump(reservationsParModele)}} #}
+													{% for key,  reservationsParMois in reservationsParModele %}
+														<div class="single-testimonial">
+															<div class="text-center">
+																<h5>
+																	{{key}}
+																	<br>
+																	{{reservationsParMois['nombreVehicules']}}
+																	véhicule(s)
+																</h5>
+															</div>
+															<div class="row pt-4 mr-4">
+																{% for key, reservation in reservationsParMois['parMois']  %}
+																	<div class="col-md-2 col-sm-3">
+																		<span class="chart" data-percent="{{reservation}}">
+																			<span class="percent"></span>
+																		</span>
+																		<div class="text-center">
+																			{{key}}
+																		</div>
+																	</div>
+																{% endfor %}
+																<div class="clearfix"></div>
+															</div>
+														</div>
+													{% endfor %}
+												</div>
+											</div>
 										</div>
 									</div>
-									<div class="col-md-4 text-center">
-										<span class="chart" data-percent="73">
-											<span class="percent"></span>
-										</span>
-										<div class="text-center">
-											Renault Twingo
-										</div>
-									</div>
-									<div class="col-md-4 text-center">
-										<span class="chart" data-percent="60">
-											<span class="percent"></span>
-										</span>
-										<div class="text-center">
-											Renault
-										</div>
-									</div>
-									<div class="clearfix"></div>
 								</div>
+								{# fin caroussel  #}
+
+
 							</div>
 						</div>
 					</div>
@@ -296,7 +228,7 @@
 						<div class="col-md-11">
 							<div class="alert alert-danger alert-dismissible " role="alert">
 								<i class="fa fa-info mr-1"></i>
-								Liste dynamique des cinq derniers devis transformés. Le bouton orange au dessus du tableau vous permet d'accéder à l'onglet des nouvelles réservations
+								Liste dynamique des cinq derniers devis transformés. Le bouton noir au dessus du tableau vous permet d'accéder à l'onglet des nouvelles réservations
 							</div>
 						</div>
 						<div class="col-md-1 d-flex align-items-center ">
@@ -320,7 +252,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								{% for reservation in reservations %}
+								{% for reservation in cinqDernieresreservations %}
 
 									<tr>
 										<th scope="row">{{reservation.dateReservation |date('d/m/Y - H:i')}}</th>
@@ -366,7 +298,7 @@
 					</div>
 					<div class="alert alert-danger alert-dismissible " role="alert">
 						<i class="fa fa-info mr-1"></i>
-						Liste dynamique des cinq derniers devis transformés. Le bouton orange au dessus du tableau vous permet d'accéder à l'onglet des nouvelles réservations
+						Liste dynamique des cinq derniers devis transformés. Le bouton noir au dessus du tableau vous permet d'accéder à l'onglet des nouvelles réservations
 					</div>
 					<div class="clearfix"></div>
 					{# devis transformé #}
@@ -576,14 +508,16 @@
 {% endblock %}
 {% block javascripts %}<!-- easy-pie-chart --><script src="../../plugins/jquery/jquery.min.js"></script>
 	<script src="../../admin/build/js/jquery.easypiechart.min.js"></script>
+	<script src="../../admin/vendors/jquery.easy-pie-chart/src/easypiechart2.js"></script>
 	<script src="{{asset('/js/admin/flashy.js')}}"></script>
+
 	<script>
 		$(function () {
 $('.chart').easyPieChart({
 barColor: '#000',
-trackColor: '#f9f9f9',
+trackColor: '#949494',
 scaleColor: false,
-scaleLength: 5,
+scaleLength: 0,
 lineCap: 'square',
 lineWidth: 15,
 // percent: 75,
@@ -602,4 +536,5 @@ $(this.el).find('.percent').text(Math.round(percent));
 	</script>
 	<script src="../../js/admin/owl.carousel.min.js"></script>
 	<script src="../../js/admin/accueil.js"></script>
+	<script src="../../chartjs/js/chart.js"></script>
 {% endblock %}

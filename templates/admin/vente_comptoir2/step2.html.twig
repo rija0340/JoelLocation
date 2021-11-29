@@ -9,10 +9,10 @@
 
 {% endblock %}
 {% block current_page %}
-	Date départ :
+	<strong class="text-dark">Date départ :</strong>
 	{{dateDepart|date('d/m/Y H:i')}}
 	<br>
-	Date retour :
+	<strong class="text-dark">Date Retour :</strong>
 	{{dateRetour|date('d/m/Y H:i')}}
 	<h5>Les véhicules disponibles</h5>
 {% endblock %}
@@ -56,123 +56,139 @@
 {% endblock %}
 
 {% block content %}
-	<div class="d-flex justify-content-center mt-1 mb-1">
+	<div class="d-flex justify-content-center mt-2">
 		<a href="{{path('step1')}}" class="btn btn-dark">
 			Revenir à l'étape précédente
 		</a>
-		<button class="btn btn-danger" type="submit" form="formStep2">
-			Enregistrer
-		</button>
+		{% if vehiculesDisponible|length > 0 %}
+			<button class="btn btn-danger" type="submit" form="formStep2">
+				Enregistrer
+			</button>
+		{% endif %}
 	</div>
 	<form action="{{path('step2')}}" method="post" id="formStep2">
-		{% for vehicule in vehiculesDisponible %}
-			<div class="card mb-3" style="height : auto;">
-				<div class="card-body">
-					<div class="row">
-						<div class="col-md-4 col-sm-4">
-							<img src="{{vich_uploader_asset(vehicule, 'imageFile') }}" style="width:70%;" id="vehicule_photo">
-						</div>
-						<div class="col-md-8 col-sm-8">
-							<div class="row">
-								<div class="col-md-4">
-									<div class="caracteristiques">
-										<ul>
-											<li>
-												<i class="fa fa-road"></i>
-												Marque :
-												<span id="vehicule_marque">
-													{{vehicule.marque}}</span>
-											</li>
-											<li>
-												<i class="fa fa-wrench"></i>
-												Modele :
-												<span id="vehicule_modele">{{vehicule.modele}}</span>
-											</li>
-											<li>
-												<i class="fa fa-plus-square"></i>
-												Immatriculation :
-												<span id="vehicule_immatriculation">{{vehicule.immatriculation}}</span>
-											</li>
-											<li>
-												<i class="fa fa-battery-full"></i>
-												Carburant :
-												<span id="vehicule_carburation">{{vehicule.carburation}}</span>
-											</li>
-											<li>
-												<i class="fa fa-sun-o" aria-hidden="true"></i>
-												Boite de vitesse :
-												<span id="vehicule_vitesse"></span>
-											</li>
-										</ul>
-									</div>
-								</div>
-								<div class="col-md-4">
-									<div class="caracteristiques">
-										<ul>
-											<li>
-												<i class="fa fa-shopping-bag" aria-hidden="true"></i>
-												Nombre max de bagages :
-												<span id="vehicule_bagage"></span>
-											</li>
-											<li>
-												<i class="fa fa-car" aria-hidden="true"></i>
-												Nombre de portes :
-												<span id="vehicule_portes"></span>
-											</li>
-											<li>
-												<i class="fa fa-users" aria-hidden="true"></i>
-												Max passagers:
-												<span id="vehicule_passagers"></span>
-											</li>
-											<li>
-												<i class="fa fa-rss" aria-hidden="true"></i>
-												Atouts :
-												<span id="vehicule_atouts"></span>
-											</li>
-											<li>
-												<i class="fa fa-rss" aria-hidden="true"></i>
-												Caution :
-												<span id="vehicule_caution"></span>
-											</li>
 
-										</ul>
+		{% if vehiculesDisponible|length > 0 %}
+			{% for vehicule in vehiculesDisponible %}
+				<div class="card mb-3" style="height : auto;">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-md-4 col-sm-4">
+								<img src="{{vich_uploader_asset(vehicule, 'imageFile') }}" style="width:70%;" id="vehicule_photo">
+							</div>
+							<div class="col-md-8 col-sm-8">
+								<div class="row">
+									<div class="col-md-4">
+										<div class="caracteristiques">
+											<ul>
+												<li>
+													<i class="fa fa-road"></i>
+													Marque :
+													<span id="vehicule_marque">
+														{{vehicule.marque}}</span>
+												</li>
+												<li>
+													<i class="fa fa-wrench"></i>
+													Modele :
+													<span id="vehicule_modele">{{vehicule.modele}}</span>
+												</li>
+												<li>
+													<i class="fa fa-plus-square"></i>
+													Immatriculation :
+													<span id="vehicule_immatriculation">{{vehicule.immatriculation}}</span>
+												</li>
+												<li>
+													<i class="fa fa-battery-full"></i>
+													Carburant :
+													<span id="vehicule_carburation">{{vehicule.carburation}}</span>
+												</li>
+												<li>
+													<i class="fa fa-sun-o" aria-hidden="true"></i>
+													Boite de vitesse :
+													<span id="vehicule_vitesse">{{vehicule.vitesse}}</span>
+												</li>
+											</ul>
+										</div>
 									</div>
-								</div>
-								<div class="col-md-4">
-									<label for="">Choisir</label>
-									<input type="radio" name="vehicule" value="{{vehicule.id}}" required="true" class="radio">
-									<div>
-										{% for data in data %}
-											{% if data['vehicule'] == vehicule %}
-												Tarif :
-												{{data['tarif']}}
-												€
-											{% endif %}
-										{% endfor %}
+									<div class="col-md-4">
+										<div class="caracteristiques">
+											<ul>
+												<li>
+													<i class="fa fa-shopping-bag" aria-hidden="true"></i>
+													Nombre max de bagages :
+													<span id="vehicule_bagage">{{vehicule.bagages}}</span>
+												</li>
+												<li>
+													<i class="fa fa-car" aria-hidden="true"></i>
+													Nombre de portes :
+													<span id="vehicule_portes">{{vehicule.portes}}</span>
+												</li>
+												<li>
+													<i class="fa fa-users" aria-hidden="true"></i>
+													Max passagers:
+													<span id="vehicule_passagers">{{vehicule.passagers}}</span>
+												</li>
+												<li>
+													<i class="fa fa-rss" aria-hidden="true"></i>
+													Atouts :
+													<span id="vehicule_atouts">{{vehicule.atouts}}</span>
+												</li>
+												<li>
+													<i class="fa fa-rss" aria-hidden="true"></i>
+													Caution :
+													<span id="vehicule_caution">{{vehicule.caution}}</span>
+												</li>
+
+											</ul>
+										</div>
 									</div>
-									<br>
-										<div></div>
+									<div class="col-md-4">
+										<label for="">Choisir</label>
+										<input type="radio" name="vehicule" value="{{vehicule.id}}" required="true" class="radio">
+										<div>
+											{% for data in data %}
+												{% if data['vehicule'] == vehicule %}
+													Tarif :
+													{{data['tarif']}}
+													€
+												{% endif %}
+											{% endfor %}
+										</div>
+										<br>
+											<div></div>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
+				{% endfor %}
+			{% else %}
+				<div class="x_panel">
+					<div class="text-center">
+						<h3>Il n'y a pas de véhicule disponibles du
+							{{dateDepart|date('d/m/Y')}}
+							au
+							{{dateRetour|date('d/m/Y')}}</h3>
+					</div>
 				</div>
-			{% endfor %}
+			{% endif %}
 
 			<div class="d-flex justify-content-center mt-1">
 				<div class=" ">
 					{{ knp_pagination_render(vehiculesDisponible) }}
 				</div>
 			</div>
-			<div class="d-flex justify-content-center mt-2">
-				<a href="{{path('step1')}}" class="btn btn-dark">
-					Revenir à l'étape précédente
-				</a>
-				<button class="btn btn-danger" type="submit" form="formStep2">
-					Enregistrer
-				</button>
-			</div>
+			{% if vehiculesDisponible|length > 0 %}
+				<div class="d-flex justify-content-center mt-2">
+					<a href="{{path('step1')}}" class="btn btn-dark">
+						Revenir à l'étape précédente
+					</a>
+					<button class="btn btn-danger" type="submit" form="formStep2">
+						Enregistrer
+					</button>
+				</div>
+			{% endif %}
 		</form>
 	{% endblock %}
 	{% block javascripts %}

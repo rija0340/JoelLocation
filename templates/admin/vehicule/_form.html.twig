@@ -11,6 +11,11 @@
 		<label for="">Marque :</label>
 		{{ form_widget(form.marque) }}
 	</div>
+
+	<div class="form-group col-md-6">
+		<label for="">Modele :</label>
+		{{ form_widget(form.modele) }}
+	</div>
 	<div class="form-group col-md-6">
 		<label for="">Date mise en service :</label>
 		{{ form_widget(form.date_mise_service) }}
@@ -21,17 +26,11 @@
 
 	</div>
 
-	<div class="form-group col-md-6">
-		<label for="">Modèle :</label>
-		<select name="select" id="selectModele" class="form-control"></select>
-		{# {{ form_widget(form.vehicule) }} #}
+	{# <div class="form-group col-md-6">
+				<label for="">Modèle :</label>
+				<select name="select" id="selectModele" class="form-control"></select>
+			</div> #}
 
-	</div>
-	<div class="form-group col-md-6">
-		<label for="">Type :</label>
-		{{ form_widget(form.type) }}
-
-	</div>
 	<div class="form-group col-md-6">
 		<label for="">Détails :</label>
 		{{ form_widget(form.details) }}

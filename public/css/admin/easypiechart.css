@@ -1,23 +1,29 @@
-.chart-pie {
+.chart {
     position: relative;
     display: inline-block;
     width: 110px;
     height: 110px;
+    margin-top: 5px;
+    margin-bottom: 5px;
     text-align: center;
-  }
-  .chart-pie canvas {
+    color: red;
+}
+
+.chart canvas {
     position: absolute;
     top: 0;
     left: 0;
-  }
-  /* .percent {
+}
+
+.percent {
     display: inline-block;
-    line-height: 110px;
+    /* line-height: 110px; */
     z-index: 2;
     font-size: 18px;
 }
-  .percent:after {
-    content: '%';
+
+.percent:after {
+    /* content: '%'; */
     margin-left: 0.1em;
     font-size: .8em;
-  } */
+}

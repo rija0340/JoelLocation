@@ -96,8 +96,6 @@
 					{% endfor %}
 				</tbody>
 			</table>
-		{% else %}
-			<p>Aucun resultat trouvé</p>
 		{% endif %}
 		{# tableau pour résultat ajax  #}
 		<div class=" hide" id="resultRechSimple">
@@ -199,12 +197,12 @@
 							<td>
 								{# contrat en cours #}
 								{% if (res.dateDebut < dateNow) and  (dateNow < res.dateFin) %}
-									<a class="btn btn-dark" href="{{path('contrats_show', {'id' : res.id })}}">
+									<a class="btn btn-dark" href="{{path('reservation_show', {'id' : res.id })}}">
 										<i class="fa fa-info"></i>
 									</a>
 									{# contrat terminé #}
 								{% elseif res.dateDebut < dateNow and  dateNow > res.dateFin %}
-									<a class="btn btn-dark" href="{{path('contrat_termine_show', {'id' : res.id })}}">
+									<a class="btn btn-dark" href="{{path('reservation_show', {'id' : res.id })}}">
 										<i class="fa fa-info"></i>
 									</a>
 									{# reservation à venir	 #}
@@ -218,8 +216,7 @@
 					{% endfor %}
 				</tbody>
 			</table>
-		{% else %}
-			<p>Aucun resultat trouvé</p>
+
 		{% endif %}
 	</div>
 	<div class="x_panel">

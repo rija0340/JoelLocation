@@ -138,4 +138,17 @@ class DateHelper
     {
         return new DateTime($date, new DateTimeZone('+0300'));
     }
+
+    //return current month + 5 next months
+    function getCurrentAndFiveNextMonths()
+    {
+        $monthsList = [];
+
+        for ($i = 0; $i < 6; $i++) {
+            $currentDate =   new \DateTime("now " . "+" . $i . "month");
+
+            array_push($monthsList, $this->getMonthFullName($currentDate) . " " . $currentDate->format('Y'));
+        }
+        return $monthsList;
+    }
 }

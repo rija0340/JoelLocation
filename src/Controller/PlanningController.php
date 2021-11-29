@@ -57,8 +57,8 @@ class PlanningController extends AbstractController
     public function planningGeneralData(Request $request, ReservationRepository $reservationRepo, VehiculeRepository $vehiculeRepo, NormalizerInterface $normalizer)
     {
 
-        //toutes les réservations , stopsales et tous
-        $reservations = $reservationRepo->findBy(array(),  array('date_debut' => 'ASC'));
+        //toutes les réservations sauf canceled , stopsales et tous
+        $reservations = $reservationRepo->findReservationsSansCanceled();
         $vehicules = $vehiculeRepo->findAll();
 
         //mettre toutes les véhicules reservées dans un tableau
@@ -86,11 +86,11 @@ class PlanningController extends AbstractController
             $data1[$key]['id'] = $vehicule->getId();
             $data1[$key]['text'] = $vehicule->getMarque() . " " . $vehicule->getModele() . " " . $vehicule->getImmatriculation();
             $data1[$key]['marque_modele'] = $vehicule->getMarque() . " " . $vehicule->getModele();
-            $data1[$key]['start_date'] =  $reservationsV[0]->getDateFin()->format('d-m-Y H:i');
+            // $data1[$key]['start_date'] =  $reservationsV[0]->getDateFin()->format('d-m-Y H:i');
             // $data1[$key]['type'] =  "project";
             $data1[$key]['render'] =  "split";
             $data1[$key]['parent'] =  0;
-            $data1[$key]['end_date'] =   $reservationsV[$i - 1]->getDateFin()->format('d-m-Y H:i');
+            // $data1[$key]['end_date'] =   $reservationsV[$i - 1]->getDateFin()->format('d-m-Y H:i');
         }
 
 
@@ -257,10 +257,14 @@ class PlanningController extends AbstractController
 
             $date = $defaultDate;
         }
-
+        //tableau contenant  les véhicules disponilbes
         $vehiculesDisponible = $this->reservationHelper->getVehiculesDisponible($reservations);
+
+        // tableau contenant listes des reservations passé des véhicules dispobibles 
         $listPastReservations = $this->reservationHelper->getPastReservations($vehiculesDisponible, $date);
+        // tableau contenant listes des reservations futur des véhicules dispobibles 
         $listNextReservations = $this->reservationHelper->getNextReservations($vehiculesDisponible, $date);
+
 
         return $this->render('admin/planning/vehicule_dispo.html.twig', [
             'vehiculesDisponible' => $vehiculesDisponible,

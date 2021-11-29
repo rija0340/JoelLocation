@@ -23,6 +23,7 @@ use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ReservationRepository;
+use DoctrineExtensions\Query\Mysql\Format;
 use GuzzleHttp\RetryMiddleware;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -78,17 +79,71 @@ class AdminController extends AbstractController
   {
 
     //find by accept limitation de résultats , param => criteria, sorting, number of results
-    $reservations = $this->reservationRepo->findBy(['code_reservation' => 'devisTransformé'], ['id' => 'DESC'], 5);
+    $cinqDernieresreservations = $this->reservationRepo->findBy(['code_reservation' => 'devisTransformé'], ['id' => 'DESC'], 5);
     $devis = $this->devisRepo->findBy(['transformed' => true], ['id' => 'DESC'], 5);
     $stopSales = $this->reservationRepo->findBy(['code_reservation' => 'stopSale'], ['id' => 'DESC'], 5);
     $avis = $this->avisRepo->findBy(array(), ['id' => 'DESC'], 5);
+    $vehicules = $this->vehiculeRepo->findAll();
+    $modelesVehicules = $this->modeleRepo->findAll();
 
+    // trouver toute les réservations sans stopSales
+    $allReservations = $this->reservationRepo->findReservationsSansStopSales();
+    //***************************reservation par modeles de véhicules****************************************** */
+    $parModele = [];
+    foreach ($modelesVehicules as $modele) {
+      $reservationsParModele = [];
+      // mettre dans la table $reservationsParModele toutes les réservations concerné
+      foreach ($allReservations as $reservation) {
+        if ($reservation->getVehicule()->getModele() == $modele) {
+          array_push($reservationsParModele, $reservation);
+        }
+      }
+      //trier la table $reservationParModele par mois, mois courant et les 5 mois à venir
+      //cela consiste à indiquer nombre de reservation par mois pour un modele
+      // novembre 2021 => 2 
+      // décembre 2021 => 4
+      //.... 
+      //mois courant et les 5 prochains à venir
+      $reservationParMois = [];
+      for ($i = 0; $i < 7; $i++) {
+        $somme = 0;
+        $currentDate =   new \DateTime("now " . "+" . $i . "month");
+        foreach ($reservationsParModele as $reservation) {
+          if ($reservation->getDateDebut()->format('m') == $currentDate->format('m') && $reservation->getDateDebut()->format('Y') == $currentDate->format('Y')) {
+            $somme = $somme + 1;
+          }
+        }
+        //mettre dans un tableau key valeur , mois => nombre reservations, pour un modele
+        $reservationParMois[$this->dateHelper->getMonthFullName($currentDate) . " " . $currentDate->format('Y')] = $somme;
+      }
+
+      //inserer dans un table key valeur , modele=> tableau(contenant mois-annee => nombre reservations)
+      //nombre de véhicules par modele inclus
+      //exemple : [Renault Clio => ['parMois' => [Novembre 2021' => 10, 'Décembre 2021'=> 5 ], 'nombreVehicules'=> 2]] 
+      $parModele[$modele->getMarque()->getLibelle() . " " . $modele->getLibelle()]['parMois'] = $reservationParMois;
+      $parModele[$modele->getMarque()->getLibelle() . " " . $modele->getLibelle()]['nombreVehicules'] = $modele->getVehicules()->count();
+    }
+    //********************************************************reservation parc véhicules en général par mois******************************** */
+    $reservationsParcVehicules = [];
+    for ($i = 0; $i < 12; $i++) {
+      $dates = new \DateTime('01 january +' . $i . 'month');
+      $nombre = 0;
+      foreach ($allReservations as $reservation) {
+        if ($reservation->getDateDebut()->format('m') == $dates->format('m') && $reservation->getDateDebut()->format('Y') == $dates->format('Y')) {
+          $nombre = $nombre + 1;
+        }
+        $reservationsParcVehicules[$this->dateHelper->getMonthFullName($dates) . " " . $dates->format('Y')] = $nombre;
+      }
+    }
 
     return $this->render('admin/index.html.twig', [
-      'reservations' => $reservations,
+      'cinqDernieresreservations' => $cinqDernieresreservations,
       'stopSales' => $stopSales,
       'devis' => $devis,
       'avis' => $avis,
+      'vehicules' => $vehicules,
+      'reservationsParModele' => $parModele, //reservation categorisé par modèle
+      'reservationsParcVehicules' => $reservationsParcVehicules //reservation parc véhicule en général par mois
     ]);
   }
 
@@ -118,13 +173,7 @@ class AdminController extends AbstractController
   }
 
 
-  /**
-   * @Route("/reserv_non_solde", name="reserv_non_solde", methods={"GET"})
-   */
-  public function reserv_non_solde(): Response
-  {
-    return $this->render('admin/reservation/non_solde/reserv_non_solde.html.twig');
-  }
+
 
   /**
    * @Route("/reserv_non_solde_detail", name="reserv_non_solde_detail", methods={"GET"})

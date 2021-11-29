@@ -31,6 +31,22 @@ class ReservationRepository extends ServiceEntityRepository
     }
 
 
+    /**
+     * @return Reservation[] Returns an array of Reservation objects
+     */
+    public function findResasNonSoldes()
+    {
+
+        // find all reservations whose have not been payed completely
+        $nouvelleResas =  $this->findNouvelleReservations();
+        $resasNonSoldes = [];
+        foreach ($nouvelleResas as $resa) {
+            if ($resa->getSommePaiements() < $resa->getPrix()) {
+                array_push($resasNonSoldes, $resa);
+            }
+        }
+        return $resasNonSoldes;
+    }
 
 
     /**
@@ -43,6 +59,37 @@ class ReservationRepository extends ServiceEntityRepository
             ->andWhere('r.code_reservation = :code')
             ->andWhere('r.canceled = FALSE AND r.archived = FALSE AND r.reported = FALSE')
             ->setParameter('dateNow', $this->dateHelper->dateNow())
+            ->setParameter('code', 'devisTransformé')
+            ->orderBy('r.date_fin', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Reservation[] Returns an array of Reservation objects
+     */
+    public function findReservationsSansCanceled()
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.code_reservation = :code')
+            ->andWhere('r.canceled = FALSE AND r.archived = FALSE')
+            ->setParameter('code', 'devisTransformé')
+            ->orderBy('r.date_debut', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    /**
+     * @return Reservation[] Returns an array of Reservation objects
+     */
+    public function findReservationsByMarqueAndModele($modele)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.code_reservation = :code')
+            ->andWhere('r.vehicule.modele = :modele')
+            ->andWhere('r.canceled = FALSE AND r.archived = FALSE AND r.reported = FALSE')
+            ->setParameter('modele', $modele)
             ->setParameter('code', 'devisTransformé')
             ->orderBy('r.date_fin', 'DESC')
             ->getQuery()

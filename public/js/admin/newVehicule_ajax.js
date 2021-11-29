@@ -1,10 +1,8 @@
 var vehiculeMarqueElem;
 var marqueID;
 
-
 getElements();
 addEventListener();
-
 
 function getElements() {
     vehiculeMarqueElem = document.getElementById('vehicule_marque');
@@ -28,15 +26,14 @@ function retrieveModeleAjax() {
             'marqueID': marqueID
         },
         Type: "json",
-        success: function (data) {
+        success: function(data) {
             console.log(data);
             populateSelectNew(data, "selectModele", "libelle");
 
         },
-        error: function (erreur) {
+        error: function(erreur) {
             // alert('La requête n\'a pas abouti' + erreur);
             console.log(erreur.responseText);
         }
     });
 }
-

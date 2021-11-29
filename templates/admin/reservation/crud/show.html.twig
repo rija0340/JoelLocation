@@ -133,16 +133,9 @@
 						<span class="js-vehicule">{{reservation.vehicule}}</span>
 						<span class="js-idVehicule hide">{{reservation.vehicule.id}}</span>
 					</div>
-					<div class="col-md-4">
-						<span class="label_client">Code affilié :</span>
-					</div>
-				</div>
-				<div class="row">
 
-					<div class="col-md-4">
-						<span class="label_client">Destination :</span>
-					</div>
 				</div>
+
 				<div class="row">
 					<div class="col-md-3">
 						<span class="label_client">Km départ :
@@ -171,8 +164,8 @@
 				<div class=" text-center">
 					<a type="button" class="btn btn-primary text-nowrap" href="{{path('reservation_infosClient_edit', {'id': reservation.id})}}">
 						<i class="fa fa-user mr-1"></i>Modifier les informations</a>
-					<button type="button" class="btn btn-dark text-nowrap">
-						<i class="fa fa-reply-all mr-1"></i>Retour anticipé</button>
+					<a href="{{path('reservation_retour_anticipe', {'id' : reservation.id })}}" type="button" class="btn btn-dark text-nowrap">
+						<i class="fa fa-reply-all mr-1"></i>Retour anticipé</a>
 					<a type="button" class="btn btn-warning text-nowrap" href="{{path('reservation_edit', {'id': reservation.id} ) }}">
 						<i class="fa fa-cog"></i>
 						Modifier la réservation</a>
@@ -215,7 +208,7 @@
 				{# <p class="text-success font-weight-bold font-italic">Conducteur principal</p> #}
 				<div class="row info_conducteur">
 					<div class="col-md-3">
-						<span class="label_conducteur">
+						<span class="">
 							<strong>
 								Nom/Prénom :{{conducteur.nom}}
 							</strong>
@@ -223,39 +216,39 @@
 						</span>
 					</div>
 					<div class="col-md-3">
-						<span class="label_conducteur">
+						<span class="">
 							<strong>Permis :
 							</strong>
 							{{conducteur.numeroPermis}}
 						</span>
 					</div>
 					<div class="col-md-3">
-						<span class="label_conducteur">
+						<span class="">
 							<strong>Obtention :</strong>
 							{{conducteur.dateObtention|date('d/m/Y')}}
 						</span>
 					</div>
 					<div class="col-md-3">
-						<span class="label_conducteur">
+						<span class="">
 							<strong>Date délivrance :</strong>
 							{{conducteur.dateDelivrance|date('d/m/Y')}}
 						</span>
 					</div>
 					<div class="col-md-3">
-						<span class="label_conducteur">
+						<span class="">
 							<strong>Ville délivrance :</strong>
 							{{conducteur.villeDelivrance}}
 						</span>
 					</div>
 					<div class="col-md-3">
-						<span class="label_conducteur">
+						<span class="">
 							<strong>Date de naissance :</strong>
 							{{conducteur.dateNaissance|date('d/m/Y')}}
 						</span>
 					</div>
 					<div class="col-md-3">
-						<span class="label_conducteur">
-							<strong>Ville de naissance :</span>
+						<span class="">
+							<strong>Ville de naissance :</strong>
 							{{conducteur.villeNaissance}}
 						</div>
 						<div class="col-md-3">
@@ -291,14 +284,18 @@
 				<div class="row">
 					<div class="col-md-6">
 						<span class="label_periode">Départ :</span>
-						<p class="js-agenceDepart">{{reservation.agenceDepart}}
-						</p>
+						<br>
+						<span class="js-agenceDepart">{{reservation.agenceDepart}}
+						</span>
+						<br>
 						<span class="js-dateDepart">{{reservation.dateDebut|date('d-m-Y H:i')}}</span>
 					</div>
 					<div class="col-md-6">
 						<span class="label_periode">Retour :</span>
-						<p class="js-agenceRetour">{{reservation.agenceRetour}}
-						</p>
+						<br>
+						<span class="js-agenceRetour">{{reservation.agenceRetour}}
+						</span>
+						<br>
 						<span class="js-dateRetour">{{reservation.dateFin|date('d-m-Y H:i')}}</span>
 
 					</div>
@@ -306,17 +303,37 @@
 						<span class="label_periode">
 							Vol arrivée :
 						</span>
+						<br>
 						{{reservation.client.infosVolResa.numVolRetour}}
 					</div>
 					<div class="col-md-6">
-						<span class="label_periode">Vol retour :</span>
+						<strong class="label_periode">Vol retour :</strong>
+						<br>
 						{{reservation.client.infosVolResa.numVolAller}}
 
 					</div>
 					<div class="col-md-6">
 						<span class="label_periode">Nombre de personne :</span>
-						{{reservation.client.infosResa.nbrAdultes}}
+						<br>
+						{% if reservation.client.infosResa.nbrAdultes == null  %}
+							Adulte(s): 0
+						{% else %}
+							Adulte(s):
+							{{reservation.client.infosResa.nbrAdultes}},
+						{% endif %}
 
+						{% if reservation.client.infosResa.nbrAdultes == null  %}
+							Enfant(s): 0
+						{% else %}
+							Enfant(s):
+							{{reservation.client.infosResa.nbrEnfants}},
+						{% endif %}
+						{% if reservation.client.infosResa.nbrAdultes == null  %}
+							Bébé(s): 0,
+						{% else %}
+							Bébé(s):
+							{{reservation.client.infosResa.nbrBebes}}
+						{% endif %}
 					</div>
 					<div class="col-md-6">
 						<span class="label_periode">Note client :</span>
@@ -352,16 +369,16 @@
 				<p class="font-weight-bold label">
 					Option(s) souscrite(s):
 				</p>
-				{% if reservation.conducteur ==1 %}
-					<p>Conducteur : Oui</p>
-				{% else %}
-					<p>Conducteur : Non</p>
-				{% endif %}
+				<ul class="">
+					{% if reservation.conducteur ==1 %}
+						<li>Conducteur</li>
 
-				{% for opt in reservation.options %}
-					<p class="js-siege">{{opt}}</p>
+					{% endif %}
+					{% for option in reservation.options %}
 
-				{% endfor %}
+						<li class="js-siege">{{option}}</li>
+					{% endfor %}
+				</ul>
 				{# <p class="font-italic">Aucune option souscrite.</p> #}
 				<p class="font-weight-bold label">
 					Garantie(s) souscrite(s):

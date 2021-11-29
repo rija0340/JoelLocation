@@ -29,17 +29,4 @@ class ReservationAnnulationController extends AbstractController
             'reservations' => $reservations
         ]);
     }
-
-    /**
-     * @Route("backoffice/reservation/annuler/{id}", name="reservation_cancel", methods={"GET", "POST"})
-     */
-    public function annuler(Request $request, Reservation $reservation): Response
-    {
-        $reservation->setCanceled(true);
-        $this->em->flush();
-
-        // dd($reservation);
-        $this->flashy->success("La réservation N° " . $reservation->getReference() . " a été annulée");
-        return $this->redirectToRoute('reservation_index');
-    }
 }
