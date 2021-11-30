@@ -24,6 +24,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ReservationRepository;
 use App\Repository\EtatReservationRepository;
 use App\Repository\ModeReservationRepository;
+use Doctrine\ORM\Mapping\Id;
 use Symfony\Component\HttpFoundation\Request;
 use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\HttpFoundation\Response;
@@ -201,21 +202,42 @@ class AccueilController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+
             $nom = $form->getData()['nom'];
             $email = $form->getData()['email'];
             $telephone = $form->getData()['telephone'];
             $adresse = $form->getData()['adresse'];
             $objet = $form->getData()['objet'];
             $message = $form->getData()['message'];
-            //to, client_nom, objet, message du client
-            $status = $this->mailjet->sendToMe($nom, $email, $telephone, $adresse, $objet, $message);
 
-
-            if ($status) {
-                $this->flashy->success("Votre email a bien été envoyé");
+            //tester si presence de lien hypertexte dans le message envoyé par le client et blocké s'il y en a
+            //tester aussi longueur message et envoyer si < 255
+            //tester aussi adresse mail no-reply, be pas envoyer si présence 
+            if (stristr($message, 'http://') || stristr($message, 'https://')) {
+                $status = false;
+                $this->flashy->error("Veuillez contacter le service client par téléphone ou WhatsApp si vous avez besoin d'envoyer plus d'éléments dans ce message");
             } else {
-                $this->flashy->error("Votre email n'a pas été envoyé");
+                //si inférieur envoyer le message
+                if (strlen($message) < 255) {
+
+                    if (substr($email, 0, 7) == "noreply" || substr($email, 0, 7) == "no-repl") {
+                        $status = false;
+                        $this->flashy->success("Votre email a bien été envoyé");
+                    } else {
+                        // envoyer le mail
+                        $status = $this->mailjet->sendToMe($nom, $email, $telephone, $adresse, $objet, $message);
+                    }
+                } else {
+                    $status = false;
+                    $this->flashy->error("Ne pas dépasser 250 caractères pour le message");
+                }
             }
+
+            // if ($status) {
+            //     $this->flashy->success("Votre email a bien été envoyé");
+            // } else {
+            //     $this->flashy->error("Votre email n'a pas été envoyé");
+            // }
             return $this->redirectToRoute('accueil');
         }
         return $this->render('accueil/contact.html.twig', [
