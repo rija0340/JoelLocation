@@ -47,3 +47,10 @@ i .fa-chevron-right {
     background-color: red;
     color: red;
 }
+
+.dropdown-item.active,
+.dropdown-item:active {
+    color: #fff;
+    text-decoration: none;
+    background-color: #ff0000;
+}

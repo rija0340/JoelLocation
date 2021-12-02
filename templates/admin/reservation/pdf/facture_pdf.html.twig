@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>Devis de location</title>
+		<title>Facture</title>
 		<!-- Bootstrap -->
 		<link
 		href="{{ asset( 'admin/vendors/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet">
@@ -52,7 +52,7 @@
 			.table1 {
 				display: inline-block;
 				vertical-align: top;
-				padding-left: 10px;
+				width: 260px;
 
 			}
 
@@ -215,7 +215,7 @@
 			<br>de paiement est de 80EUR.
 		</div>
 		<div class="table1">
-			<table style="width : 37%;">
+			<table style="width : 100%;">
 				<tr class="bg-pink">
 					<td>Montant HT</td>
 					<td class="text-right">{{reservation.prix }}€</td>

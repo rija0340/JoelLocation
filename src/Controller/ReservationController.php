@@ -32,6 +32,8 @@ use App\Form\InfosVolResaType;
 use App\Form\AjoutPaiementType;
 use App\Form\EditStopSalesType;
 use App\Classe\ClasseReservation;
+use App\Entity\AnnulationReservation;
+use App\Form\AnnulationType;
 use App\Form\OptionsGarantiesType;
 use App\Repository\UserRepository;
 use App\Repository\MarqueRepository;
@@ -184,6 +186,11 @@ class ReservationController extends AbstractController
         $formReportResa = $this->createForm(ReportResaType::class, $reservation);
         $formReportResa->handleRequest($request);
 
+        //form pour report reservation
+        $annulation = new AnnulationReservation();
+        $formAnnulation = $this->createForm(AnnulationType::class, $annulation);
+        $formAnnulation->handleRequest($request);
+
         if ($formAjoutPaiement->isSubmitted() && $formAjoutPaiement->isValid()) {
             // tester si la somme des paiements dépasse le prix
             if ($reservation->getSommePaiements()  + $formAjoutPaiement->getData()['montant'] >= $reservation->getPrix()) {
@@ -240,11 +247,28 @@ class ReservationController extends AbstractController
             $this->em->flush();
             return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
         }
+
+        //gestion annulation reservation
+        if ($formAnnulation->isSubmitted() && $formAnnulation->isValid()) {
+
+            $annulation->setReservation($reservation);
+            $annulation->setCreatedAt($this->dateHelper->dateNow());
+            $this->em->persist($annulation);
+            $this->em->flush();
+            $reservation->setCanceled(true);
+            $this->em->flush();
+
+            $this->flashy->success("L'annulation dela réservation N°" . $reservation->getReference() . "a été effectué avec succès");
+            $this->em->flush();
+            return $this->redirectToRoute('reservation_cancel_index');
+        }
+
         return $this->render('admin/reservation/crud/show.html.twig', [
             'reservation' => $reservation,
             'formKM' => $formKM->createView(),
             'formAjoutPaiement' => $formAjoutPaiement->createView(),
-            'formReportResa' => $formReportResa->createView()
+            'formReportResa' => $formReportResa->createView(),
+            'formAnnulation' => $formAnnulation->createView()
 
         ]);
     }
@@ -528,19 +552,6 @@ class ReservationController extends AbstractController
         $this->flashy->success("Le retour anticipé a été éfféctué avec succès");
 
         return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
-    }
-
-    /**
-     * @Route("/annuler-reservation/{id}", name="reservation_cancel", methods={"GET", "POST"})
-     */
-    public function annuler(Request $request, Reservation $reservation): Response
-    {
-        $reservation->setCanceled(true);
-        $this->em->flush();
-
-        // dd($reservation);
-        $this->flashy->success("La réservation N° " . $reservation->getReference() . " a été annulée");
-        return $this->redirectToRoute('reservation_cancel_index');
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Classe\Mail;
+use App\Classe\Mailjet;
 use App\Entity\ResetPassword;
 use App\Form\ResetPasswordType;
 use App\Repository\ResetPasswordRepository;
@@ -82,7 +83,7 @@ class ResetPasswordController extends AbstractController
                 $content = "Bonjour " . $user->getNom() . "<br/> Vous avez demandé à réinitialiser votre mot de passe sur le site Joel Location";
                 $content .= "Merci de bien vouloir cliquer sur le lien suivant pour <a href='" . $url . "'>mettre à jour votre mot de passe.</a>";
 
-                $mail = new Mail();
+                $mail = new Mailjet();
                 $mail->send($user->getMail(), $user->getNom() . " " . $user->getPrenom(), "Réinitialiser votre mot de passe", $content);
 
                 $this->flashy->success("Vous allez recevoir un email avec la procédure pour réinitialiser votre mot de passe");

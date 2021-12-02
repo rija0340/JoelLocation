@@ -382,6 +382,8 @@ class VenteComptoirController extends AbstractController
         $vehicule = $this->vehiculeRepo->find($this->reservationSession->getVehicule());
         // dd($vehicule);
         //trouver les options et garanties à l'aide des ID 
+        //ajout de ID unique dans la base pour pouvoir telecharger par un lien envoyé au client par mail
+        $devis->setDownloadId(uniqid());
 
         $devis->setAgenceDepart($this->reservationSession->getAgenceDepart());
         $devis->setAgenceRetour($this->reservationSession->getAgenceRetour());

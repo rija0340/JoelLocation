@@ -1,0 +1,42 @@
+<div class="modal fade modalAnnulation" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+
+			<div class="modal-header">
+				<h5 class="modal-title" id="myModalLabel">
+					<i class="fa fa-car"></i>
+					Saisir le kilométrage du véhicule</h5>
+				<button type="button" class="close" data-dismiss="modal">
+					<span aria-hidden="true">×</span>
+				</button>
+			</div>
+			<div class="modal-body">
+
+				{{ form_start(formAnnulation) }}
+				<div class="row">
+					<div class="col-md-12">
+						<label for="">Motif de l'annulation :</label>
+
+						{{ form_widget(formAnnulation.motif, {'attr': { 'type' : 'textarea' }}) }}
+					</div>
+					<div class="col-md-12">
+						<label for="">Type de l'annulation :</label>
+
+						{{ form_widget(formAnnulation.type) }}
+					</div>
+				</div>
+				<div class="d-flex">
+					<div class="ml-auto mt-3">
+						<button type="button" class="btn btn-dark" data-dismiss="modal">
+							<i class="fa fa-close"></i>
+							Fermer</button>
+						<button class="btn btn-danger">
+							<i class="fa fa-book" aria-hidden="true"></i>
+							{{ button_label|default('Valider') }}</button>
+					</div>
+				</div>
+				{{ form_end(formAnnulation) }}
+			</div>
+		</div>
+	</div>
+</div>

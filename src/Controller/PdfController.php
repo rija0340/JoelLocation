@@ -73,7 +73,7 @@ class PdfController extends AbstractController
 
         // Output the generated PDF to Browser (force download)
         $dompdf->stream("devis_" . $devis->getNumero() . ".pdf", [
-            "Attachment" => true,
+            "Attachment" => false,
         ]);
     }
 

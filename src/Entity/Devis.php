@@ -115,6 +115,11 @@ class Devis
      */
     private $stripeSessionId;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $downloadId;
+
 
     public function __construct()
     {
@@ -395,6 +400,18 @@ class Devis
     public function setStripeSessionId(?string $stripeSessionId): self
     {
         $this->stripeSessionId = $stripeSessionId;
+
+        return $this;
+    }
+
+    public function getDownloadId(): ?string
+    {
+        return $this->downloadId;
+    }
+
+    public function setDownloadId(?string $downloadId): self
+    {
+        $this->downloadId = $downloadId;
 
         return $this;
     }

@@ -33,7 +33,17 @@
 		</div>
 
 		{# datepicker range #}
+		{# datepicker bootstrap #}
+		<div class="col-4">
+			<div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+				<i class="fa fa-calendar"></i>&nbsp;
+				<span></span>
+				<i class="fa fa-caret-down"></i>
+			</div>
+		</div>
+		{# fin datepicker #}
 		<div class=" mb-4">
+
 			<div class="row">
 				<div class="col-auto">
 					<label for="periode">Période :</label>
@@ -175,6 +185,13 @@
 	<script src="{{asset('admin/vendors/pdfmake/build/pdfmake.min.js')}}"></script>
 	<script src="{{asset('admin/vendors/pdfmake/build/vfs_fonts.js')}}"></script>
 	<script src="{{asset('js/admin/datatable.fr.js')}}"></script>
-
+	{# daterangepicker #}
+	<script src="{{asset('admin/vendors/moment/moment.js')}}"></script>
+	{# manova anle langue ho francais amle moment izay ampiasain'ny date picker #}
+	<script src="{{asset('plugins/moment/locale/fr.js')}}"></script>
+	<script type="text/javascript" src="{{asset('admin\vendors\bootstrap-daterangepicker\daterangepicker.js')}}"></script>
+	<script src="{{asset('plugins/daterangepicker/daterangepicker.js')}}"></script>
+	<script src="{{asset('js/admin/bootstrap-datepicker.fr.min.js')}}"></script>
+	<script type="text/javascript" src="{{asset('js/admin/paiement/daterangepicker.js')}}"></script>
 
 {% endblock  %}

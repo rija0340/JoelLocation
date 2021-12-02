@@ -6,11 +6,11 @@
 
 {% block stylesheets %}
 	<!-- Datatables -->
-	<link href="../../admin/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
-	<link href="../../admin/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
-	<link href="../../admin/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
-	<link href="../../admin/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
-	<link href="../../admin/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+	<link href="{{asset('admin/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css')}}" rel="stylesheet">
+	<link href="{{asset('admin/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css')}}" rel="stylesheet">
+	<link href="{{asset('admin/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css')}}" rel="stylesheet">
+	<link href="{{asset('admin/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css')}}" rel="stylesheet">
+	<link href="{{asset('admin/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css')}}" rel="stylesheet">
 
 {% endblock %}
 
@@ -40,47 +40,48 @@
 								</tr>
 							</thead>
 							<tbody>
-							{% for reservation in reservations %}
-								
-								<tr>
-									<td>
-										<div>
+								{% for annulation in annulations %}
+									<tr>
+										<td>
+											<div>
+												<span class="badge badge-warning p-2">DEP</span>
+											</div>
+										</td>
+										<td>{{annulation.reservation.dateReservation|date('d/m/Y H:i')}}</td>
+										<td class="text-nowrap">
+											{{annulation.reservation.client.nom}}
+										</td>
+										<td class="text-nowrap">
+											<span class="mb-0">
+												{{annulation.reservation.reference}}
+											</span><br>
+											<span>
+												{{annulation.reservation.vehicule.marque}}
+												{{annulation.reservation.vehicule.modele}}
+												{{annulation.reservation.vehicule.immatriculation}}
+											</span><br>
+											<span class="text-danger font-weight-bolder">
+												{{annulation.type}}
+											</span>
+										</td>
+										<td class="text-nowrap">
+											<span>
+												{{annulation.reservation.dateDebut|date('d/m/Y H:i')}}
+											</span><br>
+											<span class="font-italic">{{annulation.reservation.duree}}
+												jours</span>
+										</td>
+										<td>{{annulation.reservation.prix}}
+											€</td>
+										<td></td>
+										<td class="text-center">
+											<a href="{{ path('reservation_show', {'id' : annulation.reservation.id}) }}">
+												<i class=" fa fa-info-circle" style="font-size: 2em !important;"></i>
+											</a>
+										</td>
+									</tr>
+								{% endfor %}
 
-											<span class="badge badge-warning p-2">DEP</span>
-
-										</div>
-									</td>
-									<td>{{reservation.dateReservation|date('d/m/Y H:i')}}</td>
-									<td class="text-nowrap">
-									{{reservation.client.nom}}
-									</td>
-									<td class="text-nowrap">
-										<span class="mb-0">
-											{{reservation.reference}}
-										</span><br>
-										<span>
-											{{reservation.vehicule.marque}} {{reservation.vehicule.modele}} {{reservation.vehicule.immatriculation}}
-										</span><br>
-										<span class="text-danger font-weight-bolder">
-											Annulation en attente de décision du client
-										</span>
-									</td>
-									<td class="text-nowrap">
-										<span>
-											{{reservation.dateDebut|date('d/m/Y H:i')}}
-										</span><br>
-										<span class="font-italic">{{reservation.duree}} jours</span>
-									</td>
-									<td>{{reservation.prix}} €</td>
-									<td></td>
-									<td class="text-center">
-										<a href="{{ path('annulation_attente') }}">
-											<i class=" fa fa-info-circle" style="font-size: 2em !important;"></i>
-										</a>
-									</td>
-								</tr>
-							{% endfor %}
-							
 							</tbody>
 						</table>
 					</div>
@@ -93,21 +94,21 @@
 {% block javascripts %}
 
 	<!-- Datatables -->
-	<script src="../../admin/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
-	<script src="../../admin/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-	<script src="../../admin/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-	<script src="../../admin/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
-	<script src="../../admin/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
-	<script src="../../admin/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
-	<script src="../../admin/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
-	<script src="../../admin/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
-	<script src="../../admin/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
-	<script src="../../admin/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-	<script src="../../admin/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-	<script src="../../admin/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
-	<script src="../../admin/vendors/jszip/dist/jszip.min.js"></script>
-	<script src="../../admin/vendors/pdfmake/build/pdfmake.min.js"></script>
-	<script src="../../admin/vendors/pdfmake/build/vfs_fonts.js"></script>
-	<script src="../../js/admin/datatable.fr.js"></script>
+	<script src="{{asset('admin/vendors/datatables.net/js/jquery.dataTables.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/datatables.net-buttons/js/dataTables.buttons.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/datatables.net-buttons/js/buttons.flash.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/datatables.net-buttons/js/buttons.html5.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/datatables.net-buttons/js/buttons.print.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js')}}"></script>
+	<script src="{{asset('admin/vendors/datatables.net-scroller/js/dataTables.scroller.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/jszip/dist/jszip.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/pdfmake/build/pdfmake.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/pdfmake/build/vfs_fonts.js')}}"></script>
+	<script src="{{asset('js/admin/datatable.fr.js')}}"></script>
 
 {% endblock  %}

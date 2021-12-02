@@ -67,7 +67,6 @@ class ContratsController extends AbstractController
     {
 
         $reservations = $reservationRepository->findReservationsTermines();
-
         return $this->render('admin/reservation/contrat/termine/index.html.twig', [
             'reservations' => $reservations,
         ]);

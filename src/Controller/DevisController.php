@@ -475,4 +475,23 @@ class DevisController extends AbstractController
         $this->flashy->success("Les identifians de connexion du client ont été envoyés");
         return $this->redirectToRoute('devis_show', ['id' => $devis->getId()]);
     }
+    /**
+     * @Route("devis/envoyer-devis/{id}", name="envoyer_devis", methods={"GET","POST"},requirements={"id":"\d+"})
+     */
+    public function envoyerDevis(Request $request, Devis $devis): Response
+    {
+
+        $mail = $devis->getClient()->getMail();
+        $nom = $devis->getClient()->getNom();
+
+        $url   = $this->generateUrl('devis_pdf', ['id' => $devis->getId()]);
+        $url = "http://localhost:8000" . $url;
+
+        $content = "Bonjour, " . '<br>' . "Vous pouvez télécharger votre devis N°" . $devis->getNumero() . "en cliquant sur ce <a href='" . $url . "'>lien</a>.";
+
+        $this->mailjet->send($mail, $nom, "devis", $content);
+
+        $this->flashy->success("L'url de téléchargement du devis N°" . $devis->getNumero() . " a été envoyé");
+        return $this->redirectToRoute('devis_show', ['id' => $devis->getId()]);
+    }
 }

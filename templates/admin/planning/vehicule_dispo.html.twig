@@ -74,15 +74,15 @@
 							<td>{{veh.modele}}</td>
 							<td>
 								{% for reservation in listPastReservations %}
-									{% if reservation.vehicule == veh %}
+									{% if (reservation.vehicule == veh) %}
 										{{ reservation.dateFin|date('d/m/Y H:i') }}
 									{% endif %}
 								{% endfor %}
 							</td>
 							<td>
 								{% for reservation in listNextReservations %}
-									{% if reservation.vehicule == veh %}
-										{{ reservation.dateDepart|date('d/m/Y H:i') }}
+									{% if (reservation.vehicule == veh) %}
+										{{ reservation.dateDebut|date('d/m/Y H:i') }}
 									{% endif %}
 								{% endfor %}
 							</td>

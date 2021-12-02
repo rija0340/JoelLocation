@@ -13,11 +13,6 @@
 			.table-bordered td {
 				border: 1px solid #dee2e6 !important;
 			}
-			.table1 {
-				display: inline-block;
-				vertical-align: top;
-				width: 350px;
-			}
 			.logo {
 
 				display: inline-block;
@@ -37,6 +32,34 @@
 				margin-top: -30px;
 				margin-left: 100px;
 			}
+			/* details locataire */
+			.locataire {
+				display: inline-block;
+				vertical-align: top;
+				border: 1px solid red;
+				width: 346px;
+			}
+			/* autre conducteurs */
+			.autre_conducteur {
+				display: inline-block;
+				vertical-align: top;
+				border: 1px solid black;
+				width: 346px;
+
+			}
+			/* details véhicule */
+			.voiture {}
+			.prestations {
+
+				display: inline-block;
+				vertical-align: top;
+				width: 346px;
+			}
+			.recu_depot {
+				display: inline-block;
+				vertical-align: top;
+				width: 346px;
+			}
 
 			.d-inline-block {
 				display: inline-block;
@@ -47,17 +70,7 @@
 				vertical-align: bottom;
 			}
 
-			.recu-depot {
-				display: inline-block;
-				vertical-align: top;
-				width: 340px;
-			}
-			.table2 {
-				display: inline-block;
-				vertical-align: top;
-				width: 350px;
 
-			}
 			.table-border {
 
 				border-collapse: collapse;
@@ -133,9 +146,6 @@
 			.fa-square-o:before {
 				content: "\f096";
 			}
-			.div-voiture {
-				margin-top: -170px;
-			}
 		</style>
 	</head>
 	<body>
@@ -189,119 +199,117 @@
 			à
 			{{reservation.dateFin|date('H:i')}}</p>
 		{# table gauche droite, info client et conducteurs #}
-		<div class="p-0 " sytle="">
-			<div class="table1 p-0 ">
-				<table class="table-border p-0 " style="width : 100%;">
-					<tbody class="fs-12">
-						<tr style="background-color : red">
-							<td colspan="2" class="text-white">LOCATAIRE</td>
-						</tr>
+		<div class="locataire p-0 ">
+			<table class="table-border p-0 " style="width : 100%;">
+				<tbody class="fs-12">
+					<tr style="background-color : red">
+						<td colspan="2" class="text-white">LOCATAIRE</td>
+					</tr>
+					<tr>
+						<td>Nom</td>
+						<td>{{reservation.client.nom}}</td>
+					</tr>
+					<tr>
+						<td>Prénom</td>
+						<td>{{reservation.client.prenom}}</td>
+					</tr>
+					<tr>
+						<td>Adresse permanante</td>
+						<td>{{reservation.client.adresse}}</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>{{reservation.client.complementAdresse}}</td>
+					</tr>
+					<tr>
+						<td>Téléhone(s)</td>
+						<td>{{reservation.client.telephone}}</td>
+					</tr>
+					<tr>
+						<td>Email</td>
+						<td>{{reservation.client.mail}}</td>
+					</tr>
+					<tr>
+						<td>Date/lieu de naissance</td>
+						<td>{{reservation.client.dateNaissance|date('d/m/Y')}}
+							à
+							{{reservation.client.lieuNaissance}}</td>
+					</tr>
+					<tr>
+						<td>N°/Date de permis</td>
+						<td>{{reservation.client.numeroPermis}}
+							le
+							{{reservation.client.datePermis|date('d/m/Y')}}</td>
+					</tr>
+					<tr>
+						<td colspan="2" class="text-center text-white bg-danger">INFOS TRANSFERT
+						</td>
+					</tr>
+					<tr>
+						<td>Infos arrivée</td>
+						<td>{{reservation.client.infosVolResa ? reservation.client.infosVolResa.heureVolAller|date('d/m/Y') : "  " }}, Vol
+							{{reservation.client.infosVolResa ? reservation.client.infosVolResa.numVolAller : "   " }}
+							à
+							{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.heureVolAller|date('H:i') : "   " }}</td>
+					</tr>
+					<tr>
+						<td>Infos retour
+						</td>
+						<td>
+							{{reservation.client.infosVolResa ? reservation.client.infosVolResa.heureVolRetour|date('d/m/Y') : "  " }}, Vol
+							{{reservation.client.infosVolResa ? reservation.client.infosVolResa.numVolRetour : "   " }}
+							à
+							{{reservation.client.infosVolResa ? reservation.client.infosVolResa.heureVolRetour|date('H:i') :  "   "}}
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		{# table droite #}
+		<div class="autre_conducteur p-0 ">
+			<table style="width : 100%;" class=" table-border p-0 ">
+				<tbody class="fs-12">
+					<tr class="bg-danger text-center text-white">
+						<td colspan="2">
+							AUTRE(S) CONDUCTEURS
+						</td>
+					</tr>
+					{% for conducteur in reservation.conducteursClient %}
 						<tr>
 							<td>Nom</td>
-							<td>{{reservation.client.nom}}</td>
+							<td>{{conducteur.nom}}</td>
 						</tr>
 						<tr>
 							<td>Prénom</td>
-							<td>{{reservation.client.prenom}}</td>
-						</tr>
-						<tr>
-							<td>Adresse permanante</td>
-							<td>{{reservation.client.adresse}}</td>
-						</tr>
-						<tr>
-							<td></td>
-							<td>{{reservation.client.complementAdresse}}</td>
-						</tr>
-						<tr>
-							<td>Téléhone(s)</td>
-							<td>{{reservation.client.telephone}}</td>
-						</tr>
-						<tr>
-							<td>Email</td>
-							<td>{{reservation.client.mail}}</td>
+							<td>{{conducteur.prenom}}</td>
 						</tr>
 						<tr>
 							<td>Date/lieu de naissance</td>
-							<td>{{reservation.client.dateNaissance|date('d/m/Y')}}
+							<td>{{conducteur.dateNaissance|date('d/m/Y')}}
 								à
-								{{reservation.client.lieuNaissance}}</td>
+								{{conducteur.villeNaissance}}</td>
 						</tr>
 						<tr>
-							<td>N°/Date de permis</td>
-							<td>{{reservation.client.numeroPermis}}
-								le
-								{{reservation.client.datePermis|date('d/m/Y')}}</td>
-						</tr>
-						<tr>
-							<td colspan="2" class="text-center text-white bg-danger">INFOS TRANSFERT
-							</td>
-						</tr>
-						<tr>
-							<td>Infos arrivée</td>
-							<td>{{reservation.client.infosVolResa ? reservation.client.infosVolResa.heureVolAller|date('d/m/Y') : "  " }}, Vol
-								{{reservation.client.infosVolResa ? reservation.client.infosVolResa.numVolAller : "   " }}
-								à
-								{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.heureVolAller|date('H:i') : "   " }}</td>
-						</tr>
-						<tr>
-							<td>Infos retour
-							</td>
 							<td>
-								{{reservation.client.infosVolResa ? reservation.client.infosVolResa.heureVolRetour|date('d/m/Y') : "  " }}, Vol
-								{{reservation.client.infosVolResa ? reservation.client.infosVolResa.numVolRetour : "   " }}
-								à
-								{{reservation.client.infosVolResa ? reservation.client.infosVolResa.heureVolRetour|date('H:i') :  "   "}}
-							</td>
+								N°/Date de permis</td>
+							<td>{{conducteur.numeroPermis}}
+								le
+								{{conducteur.dateDelivrance|date('d/m/Y')}}</td>
 						</tr>
-					</tbody>
-				</table>
-			</div>
-			{# table droite #}
-			<div class="table2 p-0 ">
-				<table style="width : 100%;" class=" table-border p-0 ">
-					<tbody class="fs-12">
-						<tr class="bg-danger text-center text-white">
-							<td colspan="2">
-								AUTRE(S) CONDUCTEURS
-							</td>
-						</tr>
-						{% for conducteur in reservation.conducteursClient %}
-							<tr>
-								<td>Nom</td>
-								<td>{{conducteur.nom}}</td>
-							</tr>
-							<tr>
-								<td>Prénom</td>
-								<td>{{conducteur.prenom}}</td>
-							</tr>
-							<tr>
-								<td>Date/lieu de naissance</td>
-								<td>{{conducteur.dateNaissance|date('d/m/Y')}}
-									à
-									{{conducteur.villeNaissance}}</td>
-							</tr>
-							<tr>
-								<td>
-									N°/Date de permis</td>
-								<td>{{conducteur.numeroPermis}}
-									le
-									{{conducteur.dateDelivrance|date('d/m/Y')}}</td>
-							</tr>
 
-							{%endfor%}
-							<tr>
-								<td colspan="2" class="bg-danger text-center text-white text-uppercase">adresse en guadeloupe</td>
-							</tr>
-							<tr>
-								<td colspan="2"></td>
-							</tr>
-						</tbody>
+						{%endfor%}
+						<tr>
+							<td colspan="2" class="bg-danger text-center text-white text-uppercase">adresse en guadeloupe</td>
+						</tr>
+						<tr>
+							<td colspan="2"></td>
+						</tr>
 					</tbody>
-				</table>
-			</div>
+				</tbody>
+			</table>
 		</div>
 		{# table contenant details voiture #}
-		<div class="div-voiture" style="margin-top:-30px;">
+		<div class="voiture">
 			<table class="table-border" style="width : 100%">
 				<tbody class="fs-12">
 					<tr class="bg-danger">
@@ -433,7 +441,7 @@
 			<strong>D</strong>
 			dégât accident -</p>
 		<div
-			class="table1">
+			class="prestations">
 			{# prestations #}
 			<table class="table-border" style="width : 100%">
 				<tbody class="fs-12">
@@ -511,9 +519,9 @@
 				Aucune location est remboursable. Létat des lieux du véhicule est réalisé sur véhicule propre intérieur et extérieur</div>
 		</div>
 		<div
-			class="recu-depot">
+			class="recu_depot">
 			{# RECU DE DEPOT CAUTION ET FRANCHISE #}
-			<table class="table-border ">
+			<table class="table-border " style="width : 100%">
 				<tbody class="fs-12">
 					<tr>
 						<td class="bg-danger text-white text-center">

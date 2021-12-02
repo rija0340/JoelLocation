@@ -30,6 +30,7 @@
 	<link href="../../admin/vendors/ion.rangeSlider/css/ion.rangeSlider.css" rel="stylesheet">
 	<link href="../../admin/vendors/ion.rangeSlider/css/ion.rangeSlider.skinFlat.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
+	<link href="../../css/admin/daterangepicker/custom_style.css" rel="stylesheet">
 
 {% endblock %}
 
@@ -58,14 +59,14 @@
 					</div>
 
 				</div>
-				<div class="col-auto">
-					<label for="" class="font-weight-bold text-white">test
-					</label>
-					<div>
-						<button class="btn btn-primary">
-							<i class="fa fa-search mr-2"></i>Calculer</button>
-					</div>
-				</div>
+				{# <div class="col-auto">
+													<label for="" class="font-weight-bold text-white">test
+													</label>
+													<div>
+														<button class="btn btn-danger" id="btnCalculer">
+															<i class="fa fa-search mr-2"></i>Calculer</button>
+													</div>
+												</div> #}
 			</div>
 			<table class="table table-bordered simpletable ">
 				<thead class="text-center">
@@ -140,61 +141,10 @@
 	<script src="../../admin/build/js/custom.min.js"></script>
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
 	<script src="../../admin/vendors/moment/moment.js"></script>
-	{# manova anle langue ho francais amle moment #}
+	{# manova anle langue ho francais amle moment izay ampiasain'ny date picker #}
 	<script src="../../plugins/moment/locale/fr.js"></script>
 	<script type="text/javascript" src="../../admin\vendors\bootstrap-daterangepicker\daterangepicker.js"></script>
 	<script src="../../plugins/daterangepicker/daterangepicker.js"></script>
 	<script src="../../js/admin/bootstrap-datepicker.fr.min.js"></script>
-	<script type="text/javascript">
-
-
-		$(function () {
-
-var start = moment().subtract(29, 'days');
-var end = moment();
-
-
-function cb(start, end) {
-$('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-}
-
-$('#reportrange').daterangepicker({
-
-startDate: start, endDate: end,
-// showDropdowns: true,
-// esoria le oe 1 mois fona ny intervalle
-// linkedCalendars: false,
-
-// maxYear: parseInt(moment().format('YYYY'), 10),
-// maxMouth: parseInt(moment().format('MMMM'), 10),
-ranges: {
-'Today': [
-moment(), moment()
-],
-'Yesterday': [
-moment().subtract(1, 'days'),
-moment().subtract(1, 'days')
-],
-'Last 7 Days': [
-moment().subtract(6, 'days'),
-moment()
-],
-'Last 30 Days': [
-moment().subtract(29, 'days'),
-moment()
-],
-'This Month': [
-moment().startOf('month'), moment().endOf('month')
-],
-'Last Month': [
-moment().subtract(1, 'month').startOf('month'),
-moment().subtract(1, 'month').endOf('month')
-]
-}
-}, cb);
-
-cb(start, end);
-
-});
-	</script>
+	<script type="text/javascript" src="{{asset('js/admin/chiffre_affaire/daterangepicker.js')}}"></script>
 {% endblock  %}

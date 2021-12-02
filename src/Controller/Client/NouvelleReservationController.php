@@ -309,6 +309,8 @@ class NouvelleReservationController extends AbstractController
         $devis->setPrix($tarifVehicule + $prixGaranties + $prixOptions);
         $devis->setConducteur(true);
         $devis->setTransformed(false);
+        //ajout de ID unique dans la base pour pouvoir telecharger par un lien envoyé au client par mail
+        $devis->setDownloadId(uniqid());
         //options et garanties sont des tableaux d'objet dans session
         foreach ($optionsObjects as $option) {
             $devis->addOption($option);

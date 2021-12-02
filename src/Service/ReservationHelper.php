@@ -21,7 +21,6 @@ class ReservationHelper
 
     public function __construct(ReservationRepository $reservationRepo, DateHelper $dateHelper, TarifsRepository $tarifsRepo, VehiculeRepository $vehiculeRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
     {
-
         $this->vehiculeRepo = $vehiculeRepo;
         $this->optionsRepo = $optionsRepo;
         $this->garantiesRepo = $garantiesRepo;
@@ -34,7 +33,6 @@ class ReservationHelper
     //cette fonction renvoi les véhicules disponibles qui ne sont pas occupées dans ces réservations
     public function getVehiculesDisponible($reservations)
     {
-
         $vehicules = $this->vehiculeRepo->findAll();
         //mettre toutes les véhicules reservées dans un tableau
         $vehiculesInvolved = [];
@@ -98,7 +96,7 @@ class ReservationHelper
                     array_push($datesDepart, $res->getDateDebut());
                 }
                 $datesDepart = min($datesDepart);
-                array_push($listNextReservations, $this->reservationRepo->findBy(['vehicule' => $vehicule, 'date_debut' => $datesDepart]));
+                array_push($listNextReservations, $this->reservationRepo->findOneBy(['vehicule' => $vehicule, 'date_debut' => $datesDepart]));
             }
         }
 
