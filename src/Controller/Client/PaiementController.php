@@ -21,6 +21,7 @@ use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
 use App\Controller\ReservationController;
 use App\Repository\ModePaiementRepository;
+use App\Repository\ModeReservationRepository;
 use App\Repository\ReservationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use MercurySeries\FlashyBundle\FlashyNotifier;
@@ -46,9 +47,12 @@ class PaiementController extends AbstractController
     private $modePaiementRepo;
     private $validationSession;
     private $mail;
+    private $modeReservationRepo;
 
 
     public function __construct(
+
+        ModeReservationRepository $modeReservationRepo,
         DevisController $devisController,
         ReservationRepository $reservRepo,
         ReservationController $reservController,
@@ -63,6 +67,7 @@ class PaiementController extends AbstractController
         ModePaiementRepository $modePaiementRepo,
         ValidationReservationClientSession $validationSession,
         Mailjet $mail
+
 
     ) {
         $this->devisController = $devisController;
@@ -79,6 +84,7 @@ class PaiementController extends AbstractController
         $this->modePaiementRepo = $modePaiementRepo;
         $this->validationSession = $validationSession;
         $this->mail = $mail;
+        $this->modeReservationRepo = $modeReservationRepo;
     }
 
     /**
@@ -132,7 +138,7 @@ class PaiementController extends AbstractController
         $paiement->setDatePaiement($this->dateHelper->dateNow());
         $paiement->setClient($this->reservRepo->findOneBy(['stripeSessionId' => $stripeSessionId])->getClient());
         $paiement->setMotif("Réservation");
-        $paiement->setMotif($this->dateHelper->dateNow());
+        $paiement->setDatePaiement($this->dateHelper->dateNow());
         $paiement->setModePaiement($this->modePaiementRepo->findOneBy(['libelle' => 'CARTE BANCAIRE']));
         $this->em->persist($paiement);
         $this->em->flush();
@@ -241,6 +247,7 @@ class PaiementController extends AbstractController
         $reservation->setCodeReservation('devisTransformé');
         $reservation->setArchived(false);
         $reservation->setCanceled(false);
+        $reservation->setModeReservation($this->modeReservationRepo->findOneBy(['libelle' => 'WEB']));
         // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
         $lastID = $this->reservRepo->findBy(array(), array('id' => 'DESC'), 1);
         if ($lastID == null) {
@@ -249,7 +256,7 @@ class PaiementController extends AbstractController
             $currentID = $lastID[0]->getId() + 1;
         }
 
-        $reservation->setRefRes("WEB", $currentID);
+        $reservation->setRefRes($reservation->getModeReservation()->getLibelle(), $currentID);
 
         $this->em->persist($reservation);
         $this->em->flush();

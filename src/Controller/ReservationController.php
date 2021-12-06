@@ -193,7 +193,7 @@ class ReservationController extends AbstractController
 
         if ($formAjoutPaiement->isSubmitted() && $formAjoutPaiement->isValid()) {
             // tester si la somme des paiements dépasse le prix
-            if ($reservation->getSommePaiements()  + $formAjoutPaiement->getData()['montant'] >= $reservation->getPrix()) {
+            if ($reservation->getSommePaiements()  + $formAjoutPaiement->getData()['montant'] > $reservation->getPrix()) {
 
                 $this->flashy->error("Erreur sur l'ajout de paiement car le total du paiement est supérieur au due");
                 return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);

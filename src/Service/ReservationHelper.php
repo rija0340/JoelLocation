@@ -102,4 +102,16 @@ class ReservationHelper
 
         return $listNextReservations;
     }
+    /***
+     * @param reservations
+     * @return array of vehicules occupé
+     */
+    public function getVehiculesInvolved($reservations)
+    {
+        $vehicules = [];
+        foreach ($reservations as $reservation) {
+            array_push($vehicules, $reservation->getVehicule());
+        }
+        return array_unique($vehicules);
+    }
 }

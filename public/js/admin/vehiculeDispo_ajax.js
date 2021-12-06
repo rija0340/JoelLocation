@@ -14,7 +14,7 @@ var dateMinutes;
 getElements();
 addEventListener();
 
-window.onload = function () {
+window.onload = function() {
 
     dateInputValue = new Date(Date.now());
     retrieveDataAjax();
@@ -30,7 +30,7 @@ function retrieveDataAjax() {
         // data: { "day": dateDay, "month": dateMonth, "year": dateYear, "hours": dateHours, "minutes": dateMinutes },
         data: { 'date': new Date(dateInputValue) },
         Type: "json",
-        success: function (data) {
+        success: function(data) {
             var arrData = [];
             var len = data.length;
 
@@ -48,7 +48,7 @@ function retrieveDataAjax() {
             addDateToHtml(dateInputValue);
             LoadDataDatatable(arrData);
         },
-        error: function (erreur) {
+        error: function(erreur) {
             // alert('La requête n\'a pas abouti' + erreur);
             console.log(erreur.responseText);
         }
@@ -567,57 +567,6 @@ function LoadDataDatatable(data) {
 
 }
 
-// function addDateToHtml() {
-
-//     switch (dateMonth) {
-//         case 1:
-//             month = 'Janvier';
-//             break;
-//         case 2:
-//             month = 'Fevrier';
-//             break;
-
-//         case 3:
-//             month = 'Mars';
-//             break;
-//         case 4:
-//             month = 'Avril';
-//             break;
-//         case 5:
-//             month = 'Mai';
-//             break;
-//         case 6:
-//             month = 'Juin';
-//             break;
-//         case 7:
-//             month = 'Juillet';
-//             break;
-//         case 8:
-//             month = 'Août';
-//             break;
-//         case 9:
-//             month = 'Septembre';
-//             break;
-//         case 10:
-//             month = 'Octobre';
-//             break;
-//         case 11:
-//             month = 'Novembre';
-//             break;
-//         case 12:
-//             month = 'Décembre';
-//             break;
-//     }
-
-//     if (day < 10) {
-//         dateSpanElem.innerText = "0" + dateDay + " " + month + " " + dateYear;
-//     } else {
-//         dateSpanElem.innerText = dateDay + " " + month + " " + dateYear;
-//     }
-
-
-
-// }
 
 
 function formatDate(date) {
@@ -680,6 +629,3 @@ function addDateToHtml(date) {
     dateSpanElem.innerText = formatDate(date);
 
 }
-
-
-

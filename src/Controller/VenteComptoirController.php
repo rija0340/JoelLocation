@@ -24,6 +24,7 @@ use App\Repository\TarifsRepository;
 use App\Repository\OptionsRepository;
 use App\Repository\GarantieRepository;
 use App\Repository\ModePaiementRepository;
+use App\Repository\ModeReservationRepository;
 use App\Repository\VehiculeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ReservationRepository;
@@ -62,8 +63,10 @@ class VenteComptoirController extends AbstractController
     private $mail;
     private $reservationHelper;
     private $modePaiementRepo;
+    private $modeReservationRepo;
 
     public function __construct(
+        ModeReservationRepository $modeReservationRepo,
         ModePaiementRepository $modePaiementRepo,
         FlashyNotifier $flashy,
         EntityManagerInterface $em,
@@ -102,6 +105,7 @@ class VenteComptoirController extends AbstractController
         $this->mail = $mail;
         $this->reservationHelper = $reservationHelper;
         $this->modePaiementRepo = $modePaiementRepo;
+        $this->modeReservationRepo = $modeReservationRepo;
     }
 
     /**
@@ -548,6 +552,8 @@ class VenteComptoirController extends AbstractController
         $reservation->setDuree($this->dateHelper->calculDuree($dateDepart, $dateRetour));
         $reservation->setCanceled(false);
         $reservation->setArchived(false);
+        //mode reservation
+        $reservation->setModeReservation($this->modeReservationRepo->findOneBy(['libelle' => 'CPT']));
         //boucle pour ajout options 
         foreach ($this->optionsObjectsFromSession() as $option) {
             $reservation->addOption($option);
@@ -581,7 +587,7 @@ class VenteComptoirController extends AbstractController
         } else {
             $currentID = $lastID[0]->getId() + 1;
         }
-        $reservation->setRefRes("CPTGP", $currentID);
+        $reservation->setRefRes($reservation->getModeReservation()->getLibelle(), $currentID);
 
         $this->em->persist($reservation);
         $this->em->flush();

@@ -29,12 +29,19 @@
 		</div>
 		<div class="alert alert-info">
 			<i class="mr-2 fa fa-info-circle"></i>
-			Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut corrupti voluptatem quaerat a autem dolor necessitatibus tempora ducimus assumenda ipsam, nesciunt maiores porro debitis molestiae similique nostrum numquam, illum temporibus?
+			Liste des paiements effectués sur une période de recherche définie en cliquant sur le champs "période" (période par défaut mais courant). Filtrage du résulatt par le menu situé sur la droite au dessus du tableau en sélectionnant le type de réglement. Les petits carrés de couleur visibles dans le tableau sont légendés sous le tableau. Une zone de recherche vous permet de filtrer dans la liste de façon instantanée (exemple en saisissant le début du nom du client ou quelques chiffres de la référence de la réservation).
 		</div>
 
+		<div class=" ">
+			<div class="row">
+				<div class="col-auto">
+					<label for="periode">Période :</label>
+				</div>
+			</div>
+		</div>
 		{# datepicker range #}
-		{# datepicker bootstrap #}
-		<div class="col-4">
+
+		<div class="col-4 mb-4">
 			<div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
 				<i class="fa fa-calendar"></i>&nbsp;
 				<span></span>
@@ -42,40 +49,7 @@
 			</div>
 		</div>
 		{# fin datepicker #}
-		<div class=" mb-4">
 
-			<div class="row">
-				<div class="col-auto">
-					<label for="periode">Période :</label>
-				</div>
-				<!-- Force next columns to break to new line -->
-				<div class="w-100"></div>
-				<div class="col-auto">
-					{{form_start(form)}}
-					<div class="row">
-
-						<div class="col-auto">{{form_widget(form.dateDebut)}}</div>
-						<div class="col-auto">{{form_widget(form.dateFin)}}</div>
-						<div class="col-auto">
-							<button class="btn btn-danger " type="submit">
-								<i class="fa fa-search mr-2"></i>Calculer
-							</button>
-						</div>
-					</div>
-					{{form_end(form)}}
-				</div>
-				{% if somme != null %}
-					<div class="text-center">
-						<h3>
-							La somme de paiement durant cette période est
-							{{somme}}
-						</h3>
-					</div>
-				{% endif %}
-			</div>
-		</div>
-
-		{# fin datepicker #}
 
 		<div class="row">
 			<div class="col-sm-12">
@@ -89,40 +63,14 @@
 								<th class="text-nowrap">Client
 								</th>
 								<th class="text-nowrap">Montant</th>
-								<th></th>
+								{# <th></th> #}
 								<th class="text-nowrap">Type</th>
 								<th>Date</th>
 								<th>ACTION</th>
+								{# <th>ACTION</th> #}
 							</tr>
 						</thead>
-						<tbody>
-							{% for paiement in paiements %}
-								<tr>
-									<td>{{paiement.reservation.reference}}</td>
-									<td>{{paiement.reservation.client.nom}}</td>
-									<td>{{paiement.montant}}</td>
-									<td>
-										{% if paiement.reservation.sommePaiements == 0  %}
-											<div class="badge badge-danger">NOT
-											</div>
-										{% elseif paiement.reservation.prix == paiement.reservation.sommePaiements %}
-											<div class="badge badge-success">FULL
-											</div>
-										{% elseif paiement.reservation.prix > paiement.reservation.sommePaiements  %}
-											<div class="badge badge-warning">ACOUNT
-											</div>
-										{% endif %}
-									</td>
-									<td>{{paiement.modePaiement.libelle}}</td>
-									<td>{{paiement.datePaiement|date('d/m/Y H:i')}}</td>
-									<td class="text-center">
-										<a href="{{path('reservation_show', {'id': paiement.reservation.id})}}">
-											<i class=" fa fa-info-circle text-danger" style="font-size: 2em !important; "></i>
-										</a>
-									</td>
-								</tr>
-							{% endfor %}
-						</tbody>
+
 					</table>
 				</div>
 			</div>
@@ -184,14 +132,14 @@
 	<script src="{{asset('admin/vendors/jszip/dist/jszip.min.js')}}"></script>
 	<script src="{{asset('admin/vendors/pdfmake/build/pdfmake.min.js')}}"></script>
 	<script src="{{asset('admin/vendors/pdfmake/build/vfs_fonts.js')}}"></script>
-	<script src="{{asset('js/admin/datatable.fr.js')}}"></script>
+	{# // <script src="{{asset('js/admin/datatable.fr.js')}}"></script> #}
 	{# daterangepicker #}
 	<script src="{{asset('admin/vendors/moment/moment.js')}}"></script>
 	{# manova anle langue ho francais amle moment izay ampiasain'ny date picker #}
 	<script src="{{asset('plugins/moment/locale/fr.js')}}"></script>
 	<script type="text/javascript" src="{{asset('admin\vendors\bootstrap-daterangepicker\daterangepicker.js')}}"></script>
 	<script src="{{asset('plugins/daterangepicker/daterangepicker.js')}}"></script>
-	<script src="{{asset('js/admin/bootstrap-datepicker.fr.min.js')}}"></script>
+	{# // <script src="{{asset('js/admin/bootstrap-datepicker.fr.min.js')}}"></script> #}
 	<script type="text/javascript" src="{{asset('js/admin/paiement/daterangepicker.js')}}"></script>
 
 {% endblock  %}

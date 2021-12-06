@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Paiement;
 use App\Form\PaiementType;
-use App\Form\CalculPaiementsType;
 use App\Repository\PaiementRepository;
 use App\Repository\ReservationRepository;
 use Knp\Component\Pager\PaginatorInterface;
@@ -27,31 +26,30 @@ class PaiementController extends AbstractController
         $this->paiementRepo = $paiementRepo;
     }
     /**
-     * @Route("/chiffre-affaire-paiement", name="all_paiements", methods={"GET","POST"},requirements={"id":"\d+"})
+     * @Route("/liste-paiements", name="liste_paiements", methods={"GET","POST"},requirements={"id":"\d+"})
      */
-    public function chiffreAffaire(Request $request)
+    public function paiementsBydates(Request $request)
     {
 
         $dateDebut = new \DateTime($request->query->get('dateDebut'));
         $dateFin = new \DateTime($request->query->get('dateFin'));
 
-        $somme = 0;
-
         $paiements = $this->paiementRepo->findByDates($dateDebut, $dateFin);
-        foreach ($paiements as $paiement) {
 
-            $somme = $somme + $paiement->getMontant();
-        }
         // dd($paiements, $dateDebut, $dateFin);
 
-        // foreach ($paiements as $paiement) {
-        // $data = array();
+        $data = array();
+        foreach ($paiements as $key => $paiement) {
 
-        //     $data['numeroDevisValue'] = $paiement->getMontant();
-        //     $data['dateDepartValue'] = $paiement->getDateDepart()->format('d/m/Y H:i');
-        // }
+            $data[$key]['reservation'] = $paiement->getReservation()->getReference();
+            $data[$key]['montant'] = $paiement->getMontant();
+            $data[$key]['client'] = $paiement->getReservation()->getClient()->getNom();
+            $data[$key]['type'] = $paiement->getModePaiement()->getLibelle();
+            $data[$key]['date'] = $paiement->getCreatedAt()->format('d/m/Y H:i');
+            $data[$key]['reservationID'] = $paiement->getReservation()->getId();
+        }
 
-        return new JsonResponse($somme);
+        return new JsonResponse($data);
     }
     /**
      * @Route("/", name="paiement_index", methods={"GET", "POST"})
@@ -61,33 +59,10 @@ class PaiementController extends AbstractController
         $reservations = $this->reservRepo->findReservationsSansStopSales();
         $paiements = $paiementRepository->findAll(["id" => "DESC"]);
 
-        $form = $this->createForm(CalculPaiementsType::class);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            $dateDebut = $form->getData()['dateDebut'];
-            $dateFin = $form->getData()['dateFin'];
-
-            $paiments = $this->paiementRepo->findByDates($dateDebut, $dateFin);
-
-            $somme = 0;
-            foreach ($paiments as $paiment) {
-                $somme = $somme  + $paiment->getMontant();
-                return $this->render('admin/paiement/index.html.twig', [
-                    'paiements' => $paiements,
-                    'reservations' => $reservations,
-                    'form' => $form->createView(),
-                    'somme' => $somme
-                ]);
-            }
-        }
         return $this->render('admin/paiement/index.html.twig', [
             'paiements' => $paiements,
             'reservations' => $reservations,
-            'form' => $form->createView(),
-            'somme' => null
-
         ]);
     }
 

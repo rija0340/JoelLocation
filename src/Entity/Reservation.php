@@ -105,8 +105,6 @@ class Reservation
      */
     private $etat_reservation;
 
-
-
     /**
      * @ORM\OneToMany(targetEntity=Paiement::class, mappedBy="reservation")
      */

@@ -44,10 +44,9 @@
 		<div class="text-center ">
 			<h2 style=" font-weight: 900 !important;">CHIFFRE D'AFFAIRE</h2>
 			<h2 class="text-uppercase text-danger font-weight-bold">
-				du 01 octobre 2020 au 31 octobre 2020
+				<span id="datesRange"></span>
 			</h2>
 		</div>
-
 		<div class="x_content">
 			<div class="row mb-4">
 				<div class="col-auto">
@@ -57,18 +56,9 @@
 						<span></span>
 						<i class="fa fa-caret-down"></i>
 					</div>
-
 				</div>
-				{# <div class="col-auto">
-													<label for="" class="font-weight-bold text-white">test
-													</label>
-													<div>
-														<button class="btn btn-danger" id="btnCalculer">
-															<i class="fa fa-search mr-2"></i>Calculer</button>
-													</div>
-												</div> #}
 			</div>
-			<table class="table table-bordered simpletable ">
+			<table id="table" class="table table-bordered simpletable ">
 				<thead class="text-center">
 					<tr>
 						<th>FAMILLE</th>
@@ -80,35 +70,7 @@
 						<th>STOP SALE</th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr>
-						<th scope="row">1</th>
-						<td>Mark</td>
-						<td>Mark</td>
-						<td>Mark</td>
-						<td>Mark</td>
-						<td>Otto</td>
-						<td>@mdo</td>
-					</tr>
-					<tr>
-						<th scope="row">2</th>
-						<td>Jacob</td>
-						<td>Thornton</td>
-						<td>Thornton</td>
-						<td>Thornton</td>
-						<td>Thornton</td>
-						<td>@fat</td>
-					</tr>
-					<tr>
-						<th scope="row">3</th>
-						<td>Larry</td>
-						<td>the Bird</td>
-						<td>the Bird</td>
-						<td>the Bird</td>
-						<td>the Bird</td>
-						<td>@twitter</td>
-					</tr>
-				</tbody>
+				<tbody id='tbody'></tbody>
 			</table>
 
 		</div>
@@ -116,35 +78,13 @@
 {% endblock %}
 
 {% block javascripts %}
-	<!-- bootstrap-daterangepicker -->
 
-	<script src="../../admin/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
-	<!--bootstrap-wysiwyg-->
-	<script src="../../admin/vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js"></script>
-	<script src="../../admin/vendors/jquery.hotkeys/jquery.hotkeys.js"></script>
-	<script src="../../admin/vendors/google-code-prettify/src/prettify.js"></script>
-	<!-- jQuery Tags Input -->
-	<script src="../../admin/vendors/jquery.tagsinput/src/jquery.tagsinput.js"></script>
-	<!-- Switchery -->
-	<script src="../../admin/vendors/switchery/dist/switchery.min.js"></script>
-	<!-- Select2 -->
-	<script src="../../admin/vendors/select2/dist/js/select2.full.min.js"></script>
-	<!-- Parsley -->
-	<script src="../../admin/vendors/parsleyjs/dist/parsley.min.js"></script>
-	<!-- Autosize -->
-	<script src="../../admin/vendors/autosize/dist/autosize.min.js"></script>
-	<!-- jQuery autocomplete -->
-	<script src="../../admin/vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js"></script>
-	<!-- starrr -->
-	<script src="../../admin/vendors/starrr/dist/starrr.js"></script>
-	<!-- Custom Theme Scripts -->
-	<script src="../../admin/build/js/custom.min.js"></script>
-	<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
 	<script src="../../admin/vendors/moment/moment.js"></script>
 	{# manova anle langue ho francais amle moment izay ampiasain'ny date picker #}
 	<script src="../../plugins/moment/locale/fr.js"></script>
 	<script type="text/javascript" src="../../admin\vendors\bootstrap-daterangepicker\daterangepicker.js"></script>
 	<script src="../../plugins/daterangepicker/daterangepicker.js"></script>
-	<script src="../../js/admin/bootstrap-datepicker.fr.min.js"></script>
-	<script type="text/javascript" src="{{asset('js/admin/chiffre_affaire/daterangepicker.js')}}"></script>
+	{# // <script src="../../js/admin/bootstrap-datepicker.fr.min.js"></script> #}
+	<script src="{{asset('js/admin/chiffre_affaire/daterangepicker.js')}}"></script>
+
 {% endblock  %}
