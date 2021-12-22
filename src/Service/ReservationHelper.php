@@ -112,6 +112,7 @@ class ReservationHelper
         foreach ($reservations as $reservation) {
             array_push($vehicules, $reservation->getVehicule());
         }
+
         return array_unique($vehicules);
     }
 }

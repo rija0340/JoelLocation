@@ -88,7 +88,27 @@ class AdminController extends AbstractController
 
     // trouver toute les réservations sans stopSales
     $allReservations = $this->reservationRepo->findReservationsSansStopSales();
-    //***************************reservation par modeles de véhicules****************************************** */
+    //------------------------chiffre d'affaire total, web, cpt, ca --------------------------------------
+    //trier les réservations par catégorie -> web, cpt, 
+    $CA_WEB_moinsEncours = 0;
+    $CA_CPT_moinsEncours = 0;
+    $CA_anneeEnCours = 0;
+    //chiffre d'affaire mois en cours
+    foreach ($allReservations as $reservation) {
+      if ($this->dateHelper->dateNow()->format('m') == $reservation->getDateDebut()->format('m')) {
+        if ($reservation->getModeReservation()->getLibelle() == 'WEB') {
+          $CA_WEB_moinsEncours = $CA_WEB_moinsEncours +  $reservation->getPrix();
+        } else {
+          $CA_CPT_moinsEncours = $CA_CPT_moinsEncours +  $reservation->getPrix();
+        }
+      }
+      //chiffre d'affaire année en cours
+      if ($this->dateHelper->dateNow()->format('Y') == $reservation->getDateDebut()->format('Y')) {
+        $CA_anneeEnCours = $CA_anneeEnCours + $reservation->getPrix();
+      }
+    }
+
+    //***************************reservation par modeles de véhicules TAUX D'OCCUPATION CATEGORIES****************************************** */
     $parModele = [];
     foreach ($modelesVehicules as $modele) {
       $reservationsParModele = [];
@@ -100,12 +120,13 @@ class AdminController extends AbstractController
       }
       //trier la table $reservationParModele par mois, mois courant et les 5 mois à venir
       //cela consiste à indiquer nombre de reservation par mois pour un modele
-      // novembre 2021 => 2 
-      // décembre 2021 => 4
+      //exemple : 
+      // novembre 2021 => 2 réservations
+      // décembre 2021 => 4 réservations
       //.... 
       //mois courant et les 5 prochains à venir
       $reservationParMois = [];
-      for ($i = 0; $i < 7; $i++) {
+      for ($i = 0; $i < 6; $i++) {
         $somme = 0;
         $currentDate =   new \DateTime("now " . "+" . $i . "month");
         foreach ($reservationsParModele as $reservation) {
@@ -123,7 +144,7 @@ class AdminController extends AbstractController
       $parModele[$modele->getMarque()->getLibelle() . " " . $modele->getLibelle()]['parMois'] = $reservationParMois;
       $parModele[$modele->getMarque()->getLibelle() . " " . $modele->getLibelle()]['nombreVehicules'] = $modele->getVehicules()->count();
     }
-    //********************************************************reservation parc véhicules en général par mois******************************** */
+    //********************************************************reservation parc véhicules en général par mois TAUX D'OCCUPATION GENERAL ******************************** */
     $reservationsParcVehicules = [];
     for ($i = 0; $i < 12; $i++) {
       $dates = new \DateTime('01 january +' . $i . 'month');
@@ -143,7 +164,10 @@ class AdminController extends AbstractController
       'avis' => $avis,
       'vehicules' => $vehicules,
       'reservationsParModele' => $parModele, //reservation categorisé par modèle
-      'reservationsParcVehicules' => $reservationsParcVehicules //reservation parc véhicule en général par mois
+      'reservationsParcVehicules' => $reservationsParcVehicules, //reservation parc véhicule en général par mois
+      'CA_WEB_moinsEncours' => $CA_WEB_moinsEncours,
+      'CA_CPT_moinsEncours' => $CA_CPT_moinsEncours,
+      'CA_anneeEnCours' => $CA_anneeEnCours,
     ]);
   }
 

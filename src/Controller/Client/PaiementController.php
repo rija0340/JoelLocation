@@ -20,6 +20,7 @@ use App\Repository\OptionsRepository;
 use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
 use App\Controller\ReservationController;
+use App\Entity\AppelPaiement;
 use App\Repository\ModePaiementRepository;
 use App\Repository\ModeReservationRepository;
 use App\Repository\ReservationRepository;
@@ -121,6 +122,7 @@ class PaiementController extends AbstractController
         //enregistrer paiement dans table paiement
         $paiement = new Paiement;
 
+
         //sommepaiement en fonction de mode paiement choisis par le client
         $modePaiement = $this->validationSession->getModePaiment();
         if ($modePaiement == 25) {
@@ -140,13 +142,24 @@ class PaiementController extends AbstractController
         $paiement->setMotif("Réservation");
         $paiement->setDatePaiement($this->dateHelper->dateNow());
         $paiement->setModePaiement($this->modePaiementRepo->findOneBy(['libelle' => 'CARTE BANCAIRE']));
+        $paiement->setCreatedAt($this->dateHelper->dateNow());
         $this->em->persist($paiement);
         $this->em->flush();
+
+
         //recupération entity reservation concerné
         $reservation = $this->reservRepo->findOneBy(['stripeSessionId' => $stripeSessionId]);
         //envoi de mail client
         $contentMail = 'Votre réservation numero ' . $reservation->getReference() . 'a bien été payé';
         $this->mail->send($reservation->getClient()->getMail(), $reservation->getClient()->getNom(), "Confirmation payement", $contentMail);
+
+        //ajouter dans appel à paiement si somme paiement inférieur à due
+        if ($sommePaiement < $devis->getPrix()) {
+            $appel = new AppelPaiement();
+            $appel->setReservation($reservation);
+            $appel->setPayed(false);
+            $appel->setMontant($sommePaiement);
+        }
 
         //vider session validation paiement 
         $this->validationSession->removeValidationSession();

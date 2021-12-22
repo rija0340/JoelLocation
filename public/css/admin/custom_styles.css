@@ -186,3 +186,10 @@ h2 .fa-chevron-right {
 .dropdown-item {
     color: #000000;
 }
+
+.dropdown-item.active,
+.dropdown-item:active {
+    color: #fff;
+    text-decoration: none;
+    background-color: #ff0000;
+}

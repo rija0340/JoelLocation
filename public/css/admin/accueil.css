@@ -1,26 +1,48 @@
 /*----------------------------------------*/
+
+
 /*  4. Testimonial Area
 /*----------------------------------------*/
-.testimonial-image > img {
+
+.testimonial-image>img {
     border: 1px solid #efefef;
     border-radius: 50%;
 }
-.testimonial-image {float: left;}
+
+.testimonial-image {
+    float: left;
+}
+
 .testimonial-text {
     overflow: hidden;
     padding-left: 35px;
     padding-top: 38px;
     text-align: right;
 }
-.testimonial-text > p {
+
+.testimonial-text>p {
     color: #666666;
     font-size: 26px;
     font-weight: 300;
     line-height: 40px;
 }
-.testimonial-text span {font-size: 30px; font-weight: 700;}
-.testimonial-text > h4 {color: #333333; margin-bottom: 15px; padding-top: 27px;}
-.testimonial-text > h5 {color: #666666; line-height: 18px;}
+
+.testimonial-text span {
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.testimonial-text>h4 {
+    color: #333333;
+    margin-bottom: 15px;
+    padding-top: 27px;
+}
+
+.testimonial-text>h5 {
+    color: #666666;
+    line-height: 18px;
+}
+
 .testimonial-carousel .owl-nav div {
     background: #eeeeee none repeat scroll 0 0;
     border-radius: 50%;
@@ -35,6 +57,7 @@
     transition: all 0.3s ease 0s;
     width: 26px;
 }
+
 .testimonial-carousel .owl-controls {
     top: 0;
     right: 0;
@@ -43,18 +66,26 @@
     width: 100px;
     padding-bottom: 10px;
 }
+
 .testimonial-carousel .owl-nav div:hover {
-    background: #4a90e2 none repeat scroll 0 0;
+    background: #ff0000 none repeat scroll 0 0;
     color: #ffffff;
 }
 
+
 /*----------------------------------------*/
+
+
 /*  Chart
 /*----------------------------------------*/
-.chart{
+
+.chart {
     width: 100px;
     height: 100px
 }
-.percent{
-    line-height:100px
-};
+
+.percent {
+    line-height: 100px
+}
+
+;

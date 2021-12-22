@@ -275,6 +275,28 @@ class ReservationRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * @return Reservation[] Returns an array of Reservation objects
+     * la date de début ou la date de retour est inclus dans l'intervalle de recheche
+     */
+    public function findByOneORTwoDatesIncludedBetween($dateDebut, $dateFin)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere(' r.code_reservation != :code ')
+            ->andWhere('  :dateDebut < r.date_debut AND r.date_debut < :dateFin')
+            ->orWhere('  :dateDebut < r.date_fin AND r.date_fin < :dateFin')
+            ->orWhere('  :dateDebut < r.date_debut AND r.date_fin < :dateFin')
+            ->setParameter('code', 'stopSale')
+            ->setParameter('dateDebut', $dateDebut)
+            ->setParameter('dateFin', $dateFin)
+            ->setParameter('code', 'stopSale')
+            ->andWhere('r.canceled = FALSE AND r.archived = FALSE AND r.reported = FALSE')
+            // ->setParameter('date', $this->dateHelper->dateNow())
+            ->orderBy('r.date_reservation', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
     /**
      * @return Reservation[] Returns an array of Reservation objects
      */

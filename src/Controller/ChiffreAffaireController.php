@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\ReservationRepository;
 use App\Repository\VehiculeRepository;
+use App\Service\DateHelper;
 use App\Service\ReservationHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,11 +19,13 @@ class ChiffreAffaireController extends AbstractController
     private $vehiculeRepo;
     private $reservationRepo;
     private $reservationHelper;
-    public function __construct(ReservationRepository $reservationRepo, ReservationHelper $reservationHelper, VehiculeRepository $vehiculeRepo)
+    private $dateHelper;
+    public function __construct(DateHelper $dateHelper, ReservationRepository $reservationRepo, ReservationHelper $reservationHelper, VehiculeRepository $vehiculeRepo)
     {
         $this->vehiculeRepo = $vehiculeRepo;
         $this->reservationRepo = $reservationRepo;
         $this->reservationHelper = $reservationHelper;
+        $this->dateHelper = $dateHelper;
     }
     /**
      * @Route("backoffice/chiffre-affaire", name="chiffre_affaire")
@@ -48,20 +51,54 @@ class ChiffreAffaireController extends AbstractController
         $dateDebut = new \DateTime($dateDebut);
         $dateFin = new \DateTime($dateFin);
 
-        dump($dateDebut, $dateFin);
         //on va trouver tous les véhicules impliqués dans les réservations et 
         //essayer d'avoir tous les statistiques les concernant
-        $vehicules =  $this->reservationHelper->getVehiculesInvolved($this->reservationRepo->findReservationsSansStopSalesBetweenDates($dateDebut, $dateFin));
+
+        $vehicules =  $this->reservationHelper->getVehiculesInvolved($this->reservationRepo->findByOneORTwoDatesIncludedBetween($dateDebut, $dateFin));
 
         $data = [];
-        foreach ($vehicules as $key => $vehicule) {
+        $test = [];
 
-            $data[$key]['vehicule'] = $vehicule->getMarque() . " " . $vehicule->getModele() . " " . $vehicule->getImmatriculation();
-            $data[$key]['web'] = $this->getWEBReservations($vehicule->getReservations());
-            $data[$key]['ca'] = $this->getChiffreAffaire($vehicule->getReservations());
-            $data[$key]['cpt'] = $this->getCPTReservations($vehicule->getReservations());
+        foreach ($vehicules as $vehicule) {
+            $somme_CPT = 0;
+            $somme_WEB = 0;
+            foreach ($this->reservationRepo->findByOneORTwoDatesIncludedBetween($dateDebut, $dateFin) as $res) {
+                if ($res->getVehicule() == $vehicule) {
+                    //categoriser les réservations selon nature (CPT ou WEB)
+                    if ($res->getModeReservation()->getLibelle() == 'WEB') {
+                        //caculer durée d'une réservation 
+                        if ($dateDebut < $res->getDateDebut() && $res->getDateDebut() < $dateFin && $res->getDateFin() > $dateFin) {
+                            $somme_WEB = $somme_WEB +  ($this->dateHelper->calculDuree($res->getDateDebut(), $dateFin) * ($res->getPrix() / $this->dateHelper->calculDuree($res->getDateDebut(), $res->getDateFin())));
+                        }
+                        if ($dateDebut < $res->getDateFin() &&  $res->getDateFin() < $dateFin && $res->getDateDebut() < $dateDebut) {
+                            $somme_WEB = $somme_WEB +  ($this->dateHelper->calculDuree($dateDebut, $res->getDateFin()) * ($res->getPrix() / $this->dateHelper->calculDuree($res->getDateDebut(), $res->getDateFin())));
+                        }
+                        if ($dateDebut < $res->getDateDebut() && $res->getDateFin() < $dateFin) {
+                            $somme_WEB = $somme_WEB + $res->getPrix();
+                        }
+                    } else {
+                        if ($dateDebut < $res->getDateDebut() && $res->getDateDebut() < $dateFin && $res->getDateFin() > $dateFin) {
+                            $somme_CPT = $somme_CPT +  ($this->dateHelper->calculDuree($res->getDateDebut(), $dateFin) * ($res->getPrix() / $this->dateHelper->calculDuree($res->getDateDebut(), $res->getDateFin())));
+                        }
+                        if ($dateDebut < $res->getDateFin() &&  $res->getDateFin() < $dateFin && $res->getDateDebut() < $dateDebut) {
+                            $somme_CPT = $somme_CPT +  ($this->dateHelper->calculDuree($dateDebut, $res->getDateFin()) * ($res->getPrix() / $this->dateHelper->calculDuree($res->getDateDebut(), $res->getDateFin())));
+                        }
+                        if ($dateDebut < $res->getDateDebut() && $res->getDateFin() < $dateFin) {
+                            $somme_CPT = $somme_CPT + $res->getPrix();
+                        }
+                    }
+                }
+            }
+
+            $data['vehicule'] = $vehicule->getMarque() . " " . $vehicule->getModele() . " " . $vehicule->getImmatriculation();
+            $data['web'] = $somme_WEB;
+            $data['ca'] = $somme_WEB + $somme_CPT;
+            $data['cpt'] = $somme_CPT;
+            array_push($test, $data);
         }
-        return new JsonResponse($data);
+
+
+        return new JsonResponse($test);
     }
 
     /**

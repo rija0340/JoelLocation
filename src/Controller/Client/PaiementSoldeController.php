@@ -172,6 +172,7 @@ class PaiementSoldeController extends AbstractController
         $paiement->setMotif("Réservation");
         $paiement->setCreatedAt($this->dateHelper->dateNow());
         $paiement->setModePaiement($this->modePaiementRepo->findOneBy(['libelle' => 'CARTE BANCAIRE']));
+        $paiement->setCreatedAt($this->dateHelper->dateNow());
         $this->em->persist($paiement);
         $this->em->flush();
         //envoi de mail client
@@ -179,7 +180,7 @@ class PaiementSoldeController extends AbstractController
         $this->mail->send($reservation->getClient()->getMail(), $reservation->getClient()->getNom(), "Confirmation payement de solde", $contentMail);
 
 
-        // ajouer le paiement dans l'entité appelPaiement correspondant
+        // ajouter le paiement dans l'entité appelPaiement correspondant
         $appel = $this->appelPaiementRepo->findOneBy(['reservation' => $reservation]);
         $appel->setDatePaiement($this->dateHelper->dateNow());
         $appel->setPayed(true);

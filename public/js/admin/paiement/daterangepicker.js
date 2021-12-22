@@ -50,6 +50,13 @@ $(function() { // voir configuration daterangepicker
 
     cb(start, end);
 
+    //on load du fenetre, initialisation
+
+    window.onload = function() {
+
+        calculChiffreAffaire(start._d.format('d-m-Y'), end._d.format('d-m-Y'));
+    };
+
     // fonction après evenement click bouton apply
     $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
         var dateDebut = picker.startDate.format('DD-MM-YYYY');

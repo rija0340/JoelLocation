@@ -11,6 +11,7 @@
 	<link href="{{asset('admin/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css')}}" rel="stylesheet">
 	<link href="{{asset('admin/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css')}}" rel="stylesheet">
 	<link href="{{asset('admin/vendors/datatables.net/css/datatables.css')}}" rel="stylesheet">
+	<link href="{{asset('css/client/datatables/pagination_style.css')}}" rel="stylesheet">
 {% endblock %}
 {% block body %}
 	<div class="x_panel">
@@ -119,12 +120,14 @@
 									</a>
 								</div>
 								<div class="col-auto m-0 p-0">
-									<form method="post" action="{{ path('validation_step2') }}">
-										<input type="hidden" name="reservID" value="{{reserv.id}}">
-										<button class="btn btn-link text-danger m-0 p-0" style=" -webkit-appearance: none" type="submit" id="validerDevis">
-											<i class="fa fa-check" style="font-size: 1.5em !important;"></i>
-										</button>
-									</form>
+									{% if date(reserv.dateDepart) > date("now")  %}
+										<form method="post" action="{{ path('validation_step2') }}">
+											<input type="hidden" name="reservID" value="{{reserv.id}}">
+											<button class="btn btn-link text-danger m-0 p-0" style=" -webkit-appearance: none" type="submit" id="validerDevis">
+												<i class="fa fa-check" style="font-size: 1.5em !important;"></i>
+											</button>
+										</form>
+									{% endif %}
 								</div>
 							</div>
 						</td>

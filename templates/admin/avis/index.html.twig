@@ -86,8 +86,8 @@
 									<td>{{ avis.commentaire }}</td>
 									<td>{{ avis.date ? avis.date|date('d/m/Y H:i') : '' }}</td>
 									<td>
-										<a href="{{ path('avis_show', {'id': avis.id}) }}">
-											<i class="fa fa-info-circle" aria-hidden="true" style="width : 40px"></i>
+										<a href="{{ path('avis_show', {'id': avis.id}) }}" class="text-danger">
+											<i class="fa fa-info-circle" aria-hidden="true" style="font-size: 2em !important;"></i>
 										</a>
 									</td>
 								</tr>

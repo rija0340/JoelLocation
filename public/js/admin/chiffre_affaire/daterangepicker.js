@@ -89,7 +89,6 @@ $(function() { // voir configuration daterangepicker
 
                 var tbody = document.getElementById('tbody');
                 var table = document.getElementById('table');
-                console.log(table);
                 //enlever les enfants de tbody s'il y en a
                 if (tbody.hasChildNodes) {
                     table.removeChild(table.lastElementChild);
@@ -99,7 +98,6 @@ $(function() { // voir configuration daterangepicker
                 }
                 if (data.length > 0) {
                     for (let i = 0; i < data.length; i++) {
-                        console.log(data[i].vehicule);
                         var tr = document.createElement('tr');
                         var line =
                             `
