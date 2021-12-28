@@ -304,35 +304,36 @@
 							Vol arrivée :
 						</span>
 						<br>
-						{{reservation.client.infosVolResa.numVolRetour}}
+						{{reservation.client.infosVolResa ? reservation.client.infosVolResa.numVolRetour : ""}}
 					</div>
 					<div class="col-md-6">
 						<strong class="label_periode">Vol retour :</strong>
 						<br>
-						{{reservation.client.infosVolResa.numVolAller}}
+						{{reservation.client.infosVolResa ? reservation.client.infosVolResa.numVolAller : ""}}
 
 					</div>
 					<div class="col-md-6">
 						<span class="label_periode">Nombre de personne :</span>
 						<br>
-						{% if reservation.client.infosResa.nbrAdultes == null  %}
-							Adulte(s): 0
-						{% else %}
+						{% if reservation.client.infosResa %}
 							Adulte(s):
-							{{reservation.client.infosResa.nbrAdultes}},
+							{{reservation.client.infosResa.nbrAdultes}}
+						{% else %}
+							Adulte(s):--
 						{% endif %}
 
-						{% if reservation.client.infosResa.nbrAdultes == null  %}
-							Enfant(s): 0
-						{% else %}
+						{% if reservation.client.infosResa  %}
 							Enfant(s):
 							{{reservation.client.infosResa.nbrEnfants}},
-						{% endif %}
-						{% if reservation.client.infosResa.nbrAdultes == null  %}
-							Bébé(s): 0,
 						{% else %}
+							Enfant(s): --
+
+						{% endif %}
+						{% if reservation.client.infosResa  %}
 							Bébé(s):
 							{{reservation.client.infosResa.nbrBebes}}
+						{% else %}
+							Bébé(s): 0,
 						{% endif %}
 					</div>
 					<div class="col-md-6">

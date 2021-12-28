@@ -80,6 +80,9 @@
 			.p-2 {
 				padding: 2px !important;
 			}
+			.p-5 {
+				padding: 5px !important;
+			}
 			.m-2 {
 				margin: 2px !important;
 			}
@@ -171,7 +174,7 @@
 				<tbody>
 					<tr class="bg-pink">
 						{% set taxe = (devis.prix * 8.5) / 100 %}
-						<td>
+						<td class="p-5">
 							{{devis.vehicule.marque}}
 							{{devis.vehicule.modele}}
 							<br>
@@ -187,10 +190,10 @@
 							{{devis.dateRetour|date('d/m/Y')}}. Lieu :
 							{{devis.agenceRetour}}.
 						</td>
-						<td class="text-right">{{devis.duree}}j</td>
-						<td class="text-right">{{devis.prix / devis.duree}}</td>
-						<td class="text-right">{{devis.prix }}</td>
-						<td class="text-right">{{devis.prix + taxe }}</td>
+						<td class="text-right p-5">{{devis.duree}}j</td>
+						<td class="text-right p-5">{{devis.prix / devis.duree}}</td>
+						<td class="text-right p-5">{{devis.prix }}</td>
+						<td class="text-right p-5">{{devis.prix + taxe }}</td>
 					</tr>
 				</tbody>
 			</table>
@@ -219,16 +222,16 @@
 		<div class="table1 ">
 			<table style="width : 100%">
 				<tr class="bg-pink">
-					<td>Montant HT</td>
-					<td class="text-right">{{devis.prix }}€</td>
+					<td class="p-5">Montant HT</td>
+					<td class="text-right p-5">{{devis.prix }}€</td>
 				</tr>
 				<tr>
-					<td>Total TVA 8.5 %</td>
-					<td class="text-right">{{ taxe }}€</td>
+					<td class="p-5">Total TVA 8.5 %</td>
+					<td class="text-right p-5">{{ taxe }}€</td>
 				</tr>
 				<tr class="bg-danger text-white">
-					<td>Total TTC</td>
-					<td class="text-right">{{devis.prix + taxe}}</td>
+					<td class="p-5">Total TTC</td>
+					<td class="text-right p-5">{{devis.prix + taxe}}</td>
 				</tr>
 			</table>
 		</div>

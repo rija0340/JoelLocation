@@ -57,7 +57,7 @@ class ChiffreAffaireController extends AbstractController
         $vehicules =  $this->reservationHelper->getVehiculesInvolved($this->reservationRepo->findByOneORTwoDatesIncludedBetween($dateDebut, $dateFin));
 
         $data = [];
-        $test = [];
+        $data2 = [];
 
         foreach ($vehicules as $vehicule) {
             $somme_CPT = 0;
@@ -91,14 +91,14 @@ class ChiffreAffaireController extends AbstractController
             }
 
             $data['vehicule'] = $vehicule->getMarque() . " " . $vehicule->getModele() . " " . $vehicule->getImmatriculation();
-            $data['web'] = $somme_WEB;
-            $data['ca'] = $somme_WEB + $somme_CPT;
-            $data['cpt'] = $somme_CPT;
-            array_push($test, $data);
+            $data['web'] = number_format($somme_WEB, 2, ',', ' ');
+            $data['ca'] = number_format($somme_WEB + $somme_CPT, 2, ',', ' ');
+            $data['cpt'] = number_format($somme_CPT, 2, ',', ' ');
+            array_push($data2, $data);
         }
 
 
-        return new JsonResponse($test);
+        return new JsonResponse($data2);
     }
 
     /**

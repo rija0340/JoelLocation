@@ -440,7 +440,7 @@ class DevisController extends AbstractController
 
             $devis->setPrix($devis->getTarifVehicule() + $devis->getPrixGaranties() + $devis->getPrixOptions());
             $this->em->flush();
-            return $this->redirectToRoute('reservation_show', ['id' => $devis->getId()]);
+            return $this->redirectToRoute('devis_show', ['id' => $devis->getId()]);
         }
         return $this->render('admin/devis/options_garanties/edit.html.twig', [
             'form' => $form->createView(),

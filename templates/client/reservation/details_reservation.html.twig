@@ -156,14 +156,14 @@
 							</strong><br>
 							<span class="font-italic">Adulte(s) :
 							</span>
-							{{reservation.client.infosResa.nbrAdultes}}
+							{{reservation.client.infosResa ? reservation.client.infosResa.nbrAdultes : "non renseigné" }}
 							<br>
 							<span class="font-italic">Enfant(s) :
 							</span>
-							{{reservation.client.infosResa.nbrEnfants}}
+							{{reservation.client.infosResa ? reservation.client.infosResa.nbrEnfants : "non renseigné"}}
 							<br>
 							<span class="font-italic">Bébé(s) :
-								{{reservation.client.infosResa.nbrBebes}}
+								{{ reservation.client.infosResa ? reservation.client.infosResa.nbrBebes : "non renseigné"}}
 							</span>
 
 						</div>

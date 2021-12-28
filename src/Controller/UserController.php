@@ -254,7 +254,7 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setRoles(['ROLE_PERSONNEL']);
+            $user->setRoles([$request->request->get('user')['fonction']]);
             $user->setPassword($this->passwordEncoder->encodePassword(
                 $user,
                 $user->getPassword()
