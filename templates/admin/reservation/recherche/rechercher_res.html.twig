@@ -216,7 +216,21 @@
 					{% endfor %}
 				</tbody>
 			</table>
+		{% elseif vehiculeRechercheRIM != null and dateRechercheRIM != null  %}
+			<div class="text-center">
+				<i class="fa fa-warning">
+					Aucun résulat trouvé pour
+				</i>
 
+				<br>
+				date :
+				{{dateRechercheRIM|date('d-m-Y')}}
+				<br>
+				véhicule :
+				{{vehiculeRechercheRIM ? vehiculeRechercheRIM.marque : ""}}
+				{{vehiculeRechercheRIM ? vehiculeRechercheRIM.modele : ""}}
+				{{vehiculeRechercheRIM ? vehiculeRechercheRIM.immatriculation : ""}}
+			</div>
 		{% endif %}
 	</div>
 	<div class="x_panel">

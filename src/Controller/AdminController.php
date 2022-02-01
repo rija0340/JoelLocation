@@ -53,8 +53,21 @@ class AdminController extends AbstractController
   private $devisRepo;
   private $avisRepo;
 
-  public function __construct(AvisRepository $avisRepo, DevisRepository $devisRepo, EntityManagerInterface $em, MarqueRepository $marqueRepo, ModeleRepository $modeleRepo, TarifsHelper $tarifsHelper, DateHelper $dateHelper, TarifsRepository $tarifsRepo, ReservationRepository $reservationRepo,  UserRepository $userRepo, VehiculeRepository $vehiculeRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
-  {
+  public function __construct(
+    AvisRepository $avisRepo,
+    DevisRepository $devisRepo,
+    EntityManagerInterface $em,
+    MarqueRepository $marqueRepo,
+    ModeleRepository $modeleRepo,
+    TarifsHelper $tarifsHelper,
+    DateHelper $dateHelper,
+    TarifsRepository $tarifsRepo,
+    ReservationRepository $reservationRepo,
+    UserRepository $userRepo,
+    VehiculeRepository $vehiculeRepo,
+    OptionsRepository $optionsRepo,
+    GarantieRepository $garantiesRepo
+  ) {
 
     $this->reservationRepo = $reservationRepo;
     $this->vehiculeRepo = $vehiculeRepo;
@@ -112,7 +125,7 @@ class AdminController extends AbstractController
     $parModele = [];
     foreach ($modelesVehicules as $modele) {
       $reservationsParModele = [];
-      // mettre dans la table $reservationsParModele toutes les réservations concerné
+      // mettre dans la table $reservationsParModele toutes les réservations concernées
       foreach ($allReservations as $reservation) {
         if ($reservation->getVehicule()->getModele() == $modele) {
           array_push($reservationsParModele, $reservation);
@@ -125,10 +138,17 @@ class AdminController extends AbstractController
       // décembre 2021 => 4 réservations
       //.... 
       //mois courant et les 5 prochains à venir
+      $dateNow = new \DateTime('now');
+      $currentMonth = $dateNow->format('m');
+      $currentYear = $dateNow->format('Y');
+
+      //pour current day , on a choisi le 15 parceque fevrier n'a que 29 et les autres n'ont que 30 jours
+      $currentDate =   new \DateTime($currentYear . "-" . $currentMonth  . "-" . "15");
+
       $reservationParMois = [];
       for ($i = 0; $i < 6; $i++) {
         $somme = 0;
-        $currentDate =   new \DateTime("now " . "+" . $i . "month");
+        //compter les réservations correspondant à chaque mois (mois courant et les 5 mois à venir)
         foreach ($reservationsParModele as $reservation) {
           if ($reservation->getDateDebut()->format('m') == $currentDate->format('m') && $reservation->getDateDebut()->format('Y') == $currentDate->format('Y')) {
             $somme = $somme + 1;
@@ -136,6 +156,7 @@ class AdminController extends AbstractController
         }
         //mettre dans un tableau key valeur , mois => nombre reservations, pour un modele
         $reservationParMois[$this->dateHelper->getMonthFullName($currentDate) . " " . $currentDate->format('Y')] = $somme;
+        $currentDate = $currentDate->modify("next month");
       }
 
       //inserer dans un table key valeur , modele=> tableau(contenant mois-annee => nombre reservations)

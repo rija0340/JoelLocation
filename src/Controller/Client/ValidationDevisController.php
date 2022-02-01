@@ -114,9 +114,6 @@ class ValidationDevisController extends AbstractController
         if (!$devis || $devis->getClient() != $this->getUser()) {
             return $this->redirectToRoute('espaceClient_index');
         }
-        // dd($devis->getGaranties());
-        // for ($i = 0; $i < count($garanties); $i++) {
-        // }
 
         $client = $this->getUser();
         if ($client == null) {
@@ -126,7 +123,7 @@ class ValidationDevisController extends AbstractController
         $devis = $this->devisRepo->find($devisID);
 
         $formClient = $this->createForm(ClientInfoType::class, $client);
-        // dd($formClient->isSubmitted());
+
         $formClient->handleRequest($request);
 
         if ($formClient->isSubmitted() && $formClient->isValid()) {
@@ -136,8 +133,7 @@ class ValidationDevisController extends AbstractController
             $entityManager->flush();
             $this->validationSession->addModePaiment($request->request->get('modePaiement'));
 
-            // return $this->redirectToRoute('step4paiement', ['devisID' => $devisID]);
-            //tester stripe
+
             $refDevis = $devis->getNumero();
             //redirection vers un autre controller
             return $this->redirectToRoute('paiementStripe', ['refDevis' => $refDevis]);

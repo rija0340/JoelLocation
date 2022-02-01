@@ -19,14 +19,14 @@
 					<a href="{{ path('nosvehicules') }}">Nos véhicules</a>
 				</li>
 				{# <li class="{% if app.request.attributes.get('_route') starts with 'app_login' %}current-menu-item{% endif %}">
-													{% if is_granted("ROLE_CLIENT") %}
-														<a href="{{ path('espaceClient_index') }}">Mon compte</a>
-													{% elseif is_granted("ROLE_PERSONNEL") %}
-														<a href="{{ path('admin_index') }}">Mon compte</a>
-													{% else %}
-														<a href="{{ path('app_login') }}">Mon compte</a>
-													{% endif %}
-												</li> #}
+																													{% if is_granted("ROLE_CLIENT") %}
+																														<a href="{{ path('espaceClient_index') }}">Mon compte</a>
+																													{% elseif is_granted("ROLE_PERSONNEL") %}
+																														<a href="{{ path('admin_index') }}">Mon compte</a>
+																													{% else %}
+																														<a href="{{ path('app_login') }}">Mon compte</a>
+																													{% endif %}
+																												</li> #}
 				<li class="{% if app.request.attributes.get('_route') starts with 'formulaire-contact' %}current-menu-item{% endif %}">
 					<a href="{{ path('formulaire-contact') }}">Contact</a>
 				</li>
@@ -35,7 +35,7 @@
 				</li>
 				{% if is_granted("ROLE_CLIENT") or is_granted("ROLE_PERSONNEL") %}
 					<li class="current-menu-item has-child profil_mobile">
-						<a href="index.html">
+						<a href="">
 							<img src="/images/blank_profile.png" alt="DGSR Logo" class="brand-image img-circle elevation-3" style="opacity: .8; height:30px; width:auto;">
 						</a>
 						<ul class="sub-menu">
@@ -65,7 +65,7 @@
 			<nav id="menu2">
 				<ul>
 					<li class="current-menu-item has-child">
-						<a href="index.html">
+						<a href="">
 							<img src="/images/blank_profile.png" alt="DGSR Logo" class="brand-image img-circle elevation-3" style="opacity: .8; height:30px; width:auto;">
 						</a>
 						<ul class="sub-menu">

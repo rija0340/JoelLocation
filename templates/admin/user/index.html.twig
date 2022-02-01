@@ -41,6 +41,7 @@
 					<th>Id</th>
 					<th>Nom</th>
 					<th>Prénom</th>
+					<th>Email</th>
 					<th>Date d'inscription</th>
 					<th>Réservations</th>
 					<th>actions</th>
@@ -57,7 +58,7 @@
 						<td>
 							{{ user.prenom }}
 						</td>
-
+						<td>{{user.mail}}</td>
 						<td>
 							{{ user.dateInscription ? user.dateInscription|date('d-m-Y H:i') : '' }}
 						</td>

@@ -19,6 +19,25 @@ class AppelPaiementRepository extends ServiceEntityRepository
         parent::__construct($registry, AppelPaiement::class);
     }
 
+
+
+    // /**
+    //  * @return AppelPaiement[] Returns an array of AppelPaiement objects
+    //  */
+    /*
+    public function findByExampleField($value)
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.exampleField = :val')
+            ->setParameter('val', $value)
+            ->orderBy('a.id', 'ASC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+    */
+
     // /**
     //  * @return AppelPaiement[] Returns an array of AppelPaiement objects
     //  */

@@ -105,12 +105,10 @@ class ClientController extends AbstractController
         $reservation = new Reservation();
         $mode_reservation = $this->getDoctrine()->getRepository(ModeReservation::class)->findOneBy(['id' => 3]);
         $etat_reservation = $this->getDoctrine()->getRepository(EtatReservation::class)->findOneBy(['id' => 1]);
-        // $formClient = $this->createForm(ClientType::class, $client);
-        // dd($formClient);
         $formClientCompte = $this->createForm(ClientCompteType::class, $client);
-        // $form->handleRequest($request);
+
+        //form compte du client dans information client
         $formClientCompte->handleRequest($request);
-        // formulaire de changement de mot de passe 
         if ($formClientCompte->isSubmitted() && $formClientCompte->isValid()) {
             //traitement nouveau mot de passe 
             $old_pwd = $formClientCompte->get('old_password')->getData();
@@ -122,8 +120,7 @@ class ClientController extends AbstractController
                 $client->setPassword($password);
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->flush();
-                //redirection vers logout pour entrer nouveau mot de passe 
-                $this->flashy->success("Votre mot de passe a été modifié avec succés");
+                $this->flashy->success("Votre mot de passe a été modifié avec succès");
 
                 return $this->redirectToRoute('espaceClient_index');
             } else {
@@ -137,8 +134,6 @@ class ClientController extends AbstractController
             'client' => $client->getUsername(),
             'id' => $client->getId(),
             'client' => $client,
-            // 'form' => $form->createView(),
-            // 'formClient' => $formClient->createView(),
             'formClientCompte' => $formClientCompte->createView(),
 
         ]);

@@ -120,12 +120,17 @@ class DateHelper
     {
 
         $duree = date_diff($dateDepart, $dateRetour);
-        $d = $duree->days;
-        if ($d == 0) {
-            $d = 1;
+        $heures = ($duree->d * 24) + $duree->h;
+
+        $nombreJours = $heures / 24;
+        if (is_float($nombreJours)) {
+            $entier = floor($nombreJours);
+            if (($nombreJours - $entier) < 1) {
+                $nombreJours = $entier + 1;
+            }
         }
 
-        return $d;
+        return $nombreJours;
     }
 
     function dateNow()

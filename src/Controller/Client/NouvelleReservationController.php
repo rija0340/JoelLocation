@@ -65,9 +65,10 @@ class NouvelleReservationController extends AbstractController
         $this->reservationSession = $reservationSession;
         $this->mailjet = $mailjet;
     }
-
+    //step1 choix des paramètres de la réservation
     /**
      * @Route("/espaceclient/nouvelle-reservation/etape1", name="client_step1", methods={"GET","POST"})
+     * 
      */
     public function step1(Request $request, SessionInterface $session): Response
     {
@@ -116,7 +117,7 @@ class NouvelleReservationController extends AbstractController
         $dateRetour = $this->reservationSession->getDateRetour();
 
         //un tableau contenant les véhicules utilisées dans les reservations se déroulant entre 
-        //$dateDepart et $dateRetour
+        //$dateDepart et $dateRetour choisis dans step1 de la réservation
         $vehiculesReserves  = [];
         $reservations = $this->reservationRepo->findReservationIncludeDates($dateDepart, $dateRetour);
         $vehicules = $this->vehiculeRepo->findAll();
@@ -124,13 +125,14 @@ class NouvelleReservationController extends AbstractController
         //vehicule disponible en fonction des réservés
         $vehiculesDisponible = $this->reservationHelper->getVehiculesDisponible($reservations);
 
-        //ajout id véhicule dans session, erreur si on stock directement 
-        //un objet vehicule dans session et ensuite on enregistre dans base de donnée
+        //ajout id véhicule dans session, erreur si on stock directement l'objet véhicule dans session
+        //un objet vehicule dans session et ensuite on enregistre dans base de données
         if ($request->request->get('vehicule') != null) {
 
             $tarif = $request->request->get('tarif');
             $id_vehicule = $request->request->get('vehicule');
 
+            //le tarif peut être null si n'est pas encore saisi par l'admin
             if ($tarif != null) {
                 $this->reservationSession->addTarifVehicule($tarif);
             }
@@ -145,6 +147,7 @@ class NouvelleReservationController extends AbstractController
         $dateRetour = $this->reservationSession->getDateRetour();
 
         $vehicules = $vehiculesDisponible;
+        //data contient les tarifs des vehicules disponibles
         $data = [];
         foreach ($vehicules as $key => $veh) {
             $tarif = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $veh);
@@ -152,7 +155,6 @@ class NouvelleReservationController extends AbstractController
             $data[$key]['tarif'] = $tarif;
         }
 
-        // dd($session->get('step1', []));
         //utilisation de paginator pour liste véhicule disponible
         //pagination
         $vehiculesDisponible = $paginator->paginate(
@@ -219,6 +221,7 @@ class NouvelleReservationController extends AbstractController
     public function step4(Request $request)
     {
 
+        //recupération des données venant de sessions pour être affichées dans la page step4
         $dateDepart = $this->reservationSession->getDateDepart();
         $dateRetour = $this->reservationSession->getDateRetour();
         $vehicule =  $this->vehiculeRepo->find($this->reservationSession->getVehicule());
@@ -295,11 +298,9 @@ class NouvelleReservationController extends AbstractController
         $devis->setLieuSejour($this->reservationSession->getLieuSejour());
         $devis->setClient($this->reservationSession->getClient());
         $devis->setDateCreation($this->dateHelper->dateNow());
-        if (date("H", $this->reservationSession->getDateRetour()->getTimestamp()) == 0) {
-            $devis->setDuree((1 + $this->dateHelper->calculDuree($this->reservationSession->getDateDepart(), $this->reservationSession->getDateRetour())));
-        } else {
-            $devis->setDuree($this->dateHelper->calculDuree($this->reservationSession->getDateDepart(), $this->reservationSession->getDateRetour()));
-        }
+        //si l'heure de la date est égal à zero 
+        $devis->setDuree($this->dateHelper->calculDuree($this->reservationSession->getDateDepart(), $this->reservationSession->getDateRetour()));
+
         $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($this->reservationSession->getDateDepart(), $this->reservationSession->getDateRetour(), $vehicule);
         $devis->setTarifVehicule($tarifVehicule);
         $prixOptions = $this->tarifsHelper->sommeTarifsOptions($optionsObjects);
@@ -328,16 +329,43 @@ class NouvelleReservationController extends AbstractController
         }
         $devis->setNumeroDevis($currentID);
 
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($devis);
-        $entityManager->flush();
+        //avant de sauve le devis , tester s'il existe déjà
+        //ceci est nécessaire au cas ou il y a un problème de connexion et que l'email de 
+        //confirmation ne peut être envoyer, au cas ou le client rafraichi la page, 
+        //le devis pourait être enregistré deux fois
+        $allDevis = $this->devisRepo->findAll();
+        $devisExiste = false;
+        foreach ($allDevis as $dev) {
+            if (
+                $dev->getClient() == $devis->getClient() &&
+                $dev->getDateDepart() == $devis->getDateDepart()
+                && $dev->getDateRetour() == $devis->getDateRetour()
+                && $dev->getVehicule() == $devis->getVehicule()
+            ) {
+                $devisExiste = true;
+            }
+        }
+
+        if ($devisExiste == false) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($devis);
+            $entityManager->flush();
+        } else {
+            $this->flashy->error("Le devis existe déjà");
+            return $this->redirectToRoute('client_reservations');
+        }
 
         $this->flashy->success('Le devis a été enregistré avec succés');
         //effacher session reservation
 
-
+        $contenu = "Bonjour, votre devis numéro " . $devis->getNumero() . " a bien été enregistré, veuillez vous rendre dans votre espace client pour valider le devis";
         //to, client_nom, objet, message du client
-        $this->mailjet->send("rija0340@gmail.com", "Rija", "devis enregistré", "ceci est un test");
+        $this->mailjet->send(
+            $dev->getClient()->getMail(),
+            $dev->getClient()->getNom(),
+            "Devis",
+            $contenu
+        );
 
         return $this->redirectToRoute('client_reservations');
     }

@@ -3,7 +3,7 @@
 {% block title %}Mot de passe oublié
 {% endblock %}
 {% block stylesheets %}
-	<link rel="stylesheet" href="css/material/material-kit.css?v=2.0.7">
+	{# <link rel="stylesheet" href="css/material/material-kit.css?v=2.0.7"> #}
 	<link rel="stylesheet" href="css/login.css">
 {% endblock %}
 
@@ -22,11 +22,14 @@
 						<label for="inputUsername" class="bmd-label-floating">Votre email</label>
 						<input type="email" name="email" id="inputEmail" placeholder="Votre adresse mail" class="form-control">
 					</div>
-					<button class="btn btn-block btn-lg" type="submit">
-						Valider
-					</button>
+					<div class="text-center">
+						<button class="btn btn-danger" type="submit">
+							<i class="fa fa-check">Valider</i>
+						</button>
+					</div>
 					<p class="text-center">
-						se connecter</p>
+						<a href="{{path('app_login')}}" class="btn btn-link">se connecter</a>
+					</p>
 				</form>
 			</br>
 

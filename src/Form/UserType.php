@@ -19,7 +19,8 @@ class UserType extends AbstractType
         $roles = [
             'Employé' => 'ROLE_PERSONNEL',
             'conducteur' => 'ROLE_CONDUCTEUR',
-            'Administrateur' => 'ROLE_ADMIN'
+            'Administrateur' => 'ROLE_ADMIN',
+            'Super administrateur' => 'ROLE_SUPER_ADMIN'
         ];
         $builder
             ->add('fonction', ChoiceType::class, [

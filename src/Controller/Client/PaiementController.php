@@ -122,7 +122,6 @@ class PaiementController extends AbstractController
         //enregistrer paiement dans table paiement
         $paiement = new Paiement;
 
-
         //sommepaiement en fonction de mode paiement choisis par le client
         $modePaiement = $this->validationSession->getModePaiment();
         if ($modePaiement == 25) {
@@ -146,11 +145,10 @@ class PaiementController extends AbstractController
         $this->em->persist($paiement);
         $this->em->flush();
 
-
         //recupération entity reservation concerné
         $reservation = $this->reservRepo->findOneBy(['stripeSessionId' => $stripeSessionId]);
         //envoi de mail client
-        $contentMail = 'Votre réservation numero ' . $reservation->getReference() . 'a bien été payé';
+        $contentMail = 'Bonjour, votre réservation numéro ' . $reservation->getReference() . 'a bien été payé';
         $this->mail->send($reservation->getClient()->getMail(), $reservation->getClient()->getNom(), "Confirmation payement", $contentMail);
 
         //ajouter dans appel à paiement si somme paiement inférieur à due
@@ -193,7 +191,7 @@ class PaiementController extends AbstractController
         if ($modePaiement == 100) {
             $sommePaiement = $devis->getPrix();
         }
-
+        //key stripe à changer si changement de compte striê
         Stripe::setApiKey('sk_test_51JiGijGsAu4Sp9QQtyfjOoOQMb6kfGjE1z50X5vrW6nS7wLtK5y2HmodT3ByrI7tQl9dsvP69fkN4vVfH5676nDo00VgFOzXct');
 
         $YOUR_DOMAIN = 'http://localhost:8000';

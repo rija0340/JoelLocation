@@ -46,6 +46,9 @@
 						<td>{{ reserv.prix }}
 							€</td>
 						<td>
+							{% if reserv.prix > reserv.sommePaiements %}
+								<i class="fa fa-warning">Solde</i>
+							{% endif %}
 							{# dropdown #}
 							<div class="btn-group p-0" role="group">
 								<button id="btnGroupDrop1" class="btn btn-link-danger" type="button" class="btn btn-link p-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -116,6 +119,7 @@
 							<div class="row">
 								<div class="col-auto mr-4 p-0">
 									<a href="{{path('devis_pdf', {'id': reserv.id})}}" class="text-dark">
+										Pdf
 										<i class="fa fa-arrow-circle-o-down" style="font-size: 1.5em !important;"></i>
 									</a>
 									{# <a class="telechargerDevis" id="telechargerDevis"><i class="fa fa-arrow-circle-o-down" style="font-size: 1.5em !important;"></i></a> #}
@@ -171,6 +175,9 @@
 						<td>{{ reserv.prix }}
 							€</td>
 						<td>
+							{% if reserv.prix > reserv.sommePaiements %}
+								<i class="fa fa-warning">Solde</i>
+							{% endif %}
 							{# dropdown #}
 							<div class="btn-group p-0" role="group">
 								<button id="btnGroupDrop1" class="btn btn-link-danger" type="button" class="btn btn-link p-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

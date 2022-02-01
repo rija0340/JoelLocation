@@ -397,11 +397,8 @@ class VenteComptoirController extends AbstractController
         $devis->setLieuSejour($this->reservationSession->getLieuSejour());
         $devis->setClient($this->reservationSession->getClient());
         $devis->setDateCreation($this->dateHelper->dateNow());
-        if (date("H", $this->reservationSession->getDateRetour()->getTimestamp()) == 0) {
-            $devis->setDuree(ceil(1 + (($this->reservationSession->getDateRetour()->getTimestamp() - $this->reservationSession->getDateDepart()->getTimestamp()) / 60 / 60 / 24)));
-        } else {
-            $devis->setDuree(ceil((($this->reservationSession->getDateRetour()->getTimestamp() - $this->reservationSession->getDateDepart()->getTimestamp()) / 60 / 60 / 24)));
-        }
+
+        $devis->setDuree($this->dateHelper->calculDuree($this->reservationSession->getDateDepart(), $this->reservationSession->getDateRetour()));
 
         // si l'admin a entrée un autre tarif dans étape 2, alors on considère ce tarif
         if ($this->reservationSession->getTarifVehicule()) {

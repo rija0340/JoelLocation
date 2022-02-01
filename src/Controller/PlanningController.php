@@ -75,7 +75,6 @@ class PlanningController extends AbstractController
         $data1 = array();
         $datas = array();
         $data2 = [];
-        $resArray = [];
         //liste des véhicules pour être affiché sur le planning (colonne à gauche)
         foreach ($vehiculesInvolved as $key => $vehicule) {
             $i = 0;
@@ -86,15 +85,14 @@ class PlanningController extends AbstractController
             $data1[$key]['id'] = $vehicule->getId();
             $data1[$key]['text'] = $vehicule->getMarque() . " " . $vehicule->getModele() . " " . $vehicule->getImmatriculation();
             $data1[$key]['marque_modele'] = $vehicule->getMarque() . " " . $vehicule->getModele();
-            // $data1[$key]['start_date'] =  $reservationsV[0]->getDateFin()->format('d-m-Y H:i');
-            // $data1[$key]['type'] =  "project";
+
             $data1[$key]['render'] =  "split";
             $data1[$key]['parent'] =  0;
-            // $data1[$key]['end_date'] =   $reservationsV[$i - 1]->getDateFin()->format('d-m-Y H:i');
         }
 
 
         $c = 0;
+        //liste des réservations qui vont être affichées dans la colonne de droite
         foreach ($reservations as $key => $reservation) {
             $datas[$key]['id'] =  uniqid();
             $datas[$key]['id_r'] =  $reservation->getId();
@@ -191,28 +189,6 @@ class PlanningController extends AbstractController
         return $this->render('admin/planning/planJour.html.twig');
     }
 
-    // /**
-    //  * @Route("/planningJournalierData", name="planningJournalierData", methods={"GET","POST"})
-    //  */
-    // public function planningJournalierData(Request $request, ReservationRepository $reservationRepo)
-    // {
-    //     $date = $request->query->get('date');
-
-    //     //creation d'une date valide en php à partir d'une date de javascript.
-    //     $date1 = \DateTime::createFromFormat('D M d Y H:i:s e+', $date);
-    //     $reservations = $reservationRepo->findPlanningJournaliers($date1);
-
-    //     $datas = array();
-    //     foreach ($reservations as $key => $reservation) {
-
-    //         $datas[$key]['identification'] = $reservation->getVehicule()->getMarque() . ' ' . $reservation->getVehicule()->getModele() . ' ' . $reservation->getVehicule()->getImmatriculation();
-    //         $datas[$key]['client'] = $reservation->getClient()->getNom() . ' ' . $reservation->getClient()->getPrenom();
-    //         $datas[$key]['start_date_formated'] = $reservation->getDateDebut()->format('d/m/Y - H\Hi');
-    //         $datas[$key]['end_date_formated'] = $reservation->getDateFin()->format('d/m/Y - H\Hi');
-    //     }
-
-    //     return new JsonResponse($datas);
-    // }
 
     /**
      * @Route("/planningJournalierData", name="planningJournalierData", methods={"GET","POST"})
@@ -264,7 +240,6 @@ class PlanningController extends AbstractController
         $listPastReservations = $this->reservationHelper->getPastReservations($vehiculesDisponible, $date);
         // tableau contenant listes des reservations futur des véhicules dispobibles 
         $listNextReservations = $this->reservationHelper->getNextReservations($vehiculesDisponible, $date);
-
 
         return $this->render('admin/planning/vehicule_dispo.html.twig', [
             'vehiculesDisponible' => $vehiculesDisponible,

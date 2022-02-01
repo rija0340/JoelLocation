@@ -24,20 +24,20 @@
 				<a class="nav-link" tabindex="-1" class="text-dark" href="{{path('client_mesConducteurs')}}">
 					Mes conducteurs</a>
 			</li>
-			<li class="nav-item dropdown pt-2 ml-3">
-				<a class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
-					{% if app.user %}
-						{{ app.user.getNom() }}
-					{% endif %}
+			{% if app.user %}
+				<li class="nav-item dropdown pt-2 ml-3">
+					<a class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
+						{{app.user.getNom}}
 
-				</a>
-				<div class="dropdown-menu dropdown-usermenu pull-left" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="{{path('app_logout')}}">
+					</a>
+					<div class="dropdown-menu dropdown-usermenu pull-left" aria-labelledby="navbarDropdown">
+						<a class="dropdown-item" href="{{path('app_logout')}}">
 
-						<i class="fa fa-sign-out pull-right"></i>
-						Deconnexion</a>
-				</div>
-			</li>
+							<i class="fa fa-sign-out pull-right"></i>
+							Deconnexion</a>
+					</div>
+				</li>
+			{% endif %}
 
 		</ul>
 	</div>

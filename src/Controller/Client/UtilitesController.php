@@ -17,20 +17,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class UtilitesController extends AbstractController
 {
 
-
     private $optionsRepo;
     private $garantieRepo;
-
 
     public function __construct(
         OptionsRepository $optionsRepo,
         GarantieRepository $garantieRepo
-
     ) {
         $this->optionsRepo = $optionsRepo;
         $this->garantieRepo = $garantieRepo;
     }
-
 
     /**
      * @Route("/espaceclient/detailsVehicule", name="client_detailsVehicule", methods={"GET"})

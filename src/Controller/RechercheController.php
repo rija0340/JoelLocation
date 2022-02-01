@@ -12,6 +12,7 @@ use App\Repository\OptionsRepository;
 use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
 use App\Repository\ReservationRepository;
+use DateTime;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -49,22 +50,17 @@ class RechercheController extends AbstractController
     public function rechercheSimple(Request $request, UserRepository $userRepository, ReservationRepository $reservationRepository): Response
     {
         $recherche = $request->query->get('recherche');
-        // dd($request);
-        // die();
+
         $reservation[] = new Reservation();
 
         if ($recherche != null) {
-            // $client_id = (int)$recherche;
+
             $client_nom = $recherche;
-            // $client = new User();
+
             $reservation[] = new Reservation();
-            //if($client_id){
-            // $client = $userRepository->findOneBy(["id" => $client_id]);
+
             $client = $userRepository->findOneBy(["nom" => $client_nom]);
-            //}
-            // if ($client == null) {
-            //     $client = $userRepository->findOneBy(["nom" => $recherche]);
-            // }
+
             if ($client != null) {
                 $reservation = $reservationRepository->findBy(["client" => $client]);
             } else {
@@ -74,9 +70,9 @@ class RechercheController extends AbstractController
 
             foreach ($reservation as $key => $res) {
                 if ($res->getDateFin() < new \Datetime('now')) {
-                    $datas[$key]['status'] = 0; //terminé
+                    $datas[$key]['status'] = 0; // reservaton terminée
                 } else {
-                    $datas[$key]['status'] = 1; //en cours
+                    $datas[$key]['status'] = 1; //réservation en cours
                 }
                 $datas[$key]['id'] = $res->getId();
                 $datas[$key]['prix'] = $res->getPrix();
@@ -90,9 +86,6 @@ class RechercheController extends AbstractController
                 $datas[$key]['vehicule'] = $res->getVehicule()->getMarque()->getLibelle() . " " . $res->getVehicule()->getModele() . " " . $res->getVehicule()->getImmatriculation();
             }
 
-            // dd($datas);
-            // die();
-
             return new JsonResponse($datas);
         }
         return $this->redirectToRoute('reservation_index');
@@ -104,18 +97,12 @@ class RechercheController extends AbstractController
     public function rechercheImmatriculation(Request $request): Response
     {
 
-        // dump($request);
-        // die();
-
         $idVehicule = $request->query->get('idVehicule');
         $date = $request->query->get('date');
 
         if ($idVehicule != null && $date != null) {
             $date = new \DateTime($date);
             $vehicule = $this->vehiculeRepo->find($idVehicule);
-
-            // dump($date, $vehicule);
-            // die();
 
             $reservations = new Reservation();
             $reservations = $this->reservationRepo->findRechercheIM($vehicule, $date);
@@ -144,12 +131,14 @@ class RechercheController extends AbstractController
         }
         return $this->redirectToRoute('reservation_index');
     }
-
+    //traitement pour recherche simple, recherche par immatriculation et recherche avancée
     /**
      * @Route("/rechercher_res", name="rechercher_res", methods ={"GET","POST"})
      */
     public function rechercher_res(Request $request): Response
     {
+
+
         $vehicules = $this->vehiculeRepo->findAll();
         $formRA = $this->createForm(RechercheAVType::class);
 
@@ -166,10 +155,17 @@ class RechercheController extends AbstractController
         }
 
         //traitement pour recherche Immatriculation
+        $dateRechercheRIM = null;
+        $vehiculeRechercheRIM = null;
         if ($request->request->get("inputVehicule_RIM") && $request->request->get("inputDate_RIM")) {
             $resultatRIM = $this->getRechercheImmatriculation($request->request->get("inputVehicule_RIM"), $request->request->get("inputDate_RIM"));
+            $dateRechercheRIM =  new DateTime($request->request->get("inputDate_RIM"));
+            $vehiculeRechercheRIM = $this->vehiculeRepo->find($request->request->get("inputVehicule_RIM"));
         }
 
+        // dd($resultatRIM);
+
+        //traitement pour recherche avancé
         if ($formRA->isSubmitted() && $formRA->isValid()) {
 
             $recherche_av = $request->request->get('recherche_av');
@@ -192,12 +188,12 @@ class RechercheController extends AbstractController
                     break;
             }
 
-            //compte nombre de jours total resevation
+            //compte nombre de jours total reservation
             $dureeTotal = 0;
             foreach ($reservations as $reserv) {
                 $dureeTotal = $reserv->getDuree() + $dureeTotal;
             }
-            //cacul chiffre d'affaire
+            //calcul chiffre d'affaire
             $chiffreAffaire = 0;
             foreach ($reservations as $reserv) {
                 $chiffreAffaire = $reserv->getPrix() + $chiffreAffaire;
@@ -217,6 +213,8 @@ class RechercheController extends AbstractController
             'formRA' => $formRA->createView(),
             'resultatRS' => $resultatRS,
             'resultatRIM' => $resultatRIM,
+            'dateRechercheRIM' => $dateRechercheRIM,
+            'vehiculeRechercheRIM' => $vehiculeRechercheRIM,
             'dateNow' => $dateNow
 
         ]);

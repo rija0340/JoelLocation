@@ -50,16 +50,19 @@ class AppelPaiementController extends AbstractController
     public function index(): Response
     {
         $reservations = $this->reservationRepo->findAppelPaiement();
-        //creer un entité appel paiement pour chaque reservation
+        //on met dans un tableau toutes les entities appelapaiement(chacun relié à une réservation)
         $appelPaiements1 = $this->appelPaiementRepo->findAll();
 
+        //on met toutes les réservations reliés aux entités appels à paiement dans un tableau
         $reservationsInvolved = [];
         foreach ($appelPaiements1 as $appel) {
             array_push($reservationsInvolved, $appel->getReservation());
         }
 
+        //comparer toutes les reservations existantes à celles qui sont déjà 
         foreach ($reservations as $reservation) {
-
+            //si une réservation n'est pas encore dans l'encore la table appel alors qu'elle devra y être
+            //on construit une nouvelle entité et on l'y insère 
             if (!in_array($reservation, $reservationsInvolved)) {
 
                 $appelPaiement = new AppelPaiement();
@@ -91,7 +94,7 @@ class AppelPaiementController extends AbstractController
         $reference_reservation = $appelPaiement->getReservation()->getReference();
         $montant = $appelPaiement->getMontant();
         $subject = "Appel à paiement";
-        $message = "Bonjour " . $nom_client . ", nous vous envoyons cet email pour vous rappeler que vous n'avez pas encore regularisé le paiement de votre réservation N° " . $reference_reservation . ". Ceci est un montant de " . $montant . " €";
+        $message = "Bonjour " . $nom_client . ", nous vous envoyons cet email pour vous rappeler que vous n'avez pas encore regularisé le paiement de votre réservation N° " . $reference_reservation . ". Ceci est un montant de " . $montant . " €. Veuillez vous connecter dans votre espace client pour pouvoir payer votre dûe";
 
         $this->mailjet->send($email_to, $nom_client, $subject, $message);
         $this->flashy->success("Votre mail a été envoyé");

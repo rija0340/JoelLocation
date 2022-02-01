@@ -19,7 +19,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * @Route("/user")
+ * @Route("backoffice/utilisateurs")
  */
 class UserController extends AbstractController
 {
@@ -225,7 +225,7 @@ class UserController extends AbstractController
 
 
     /**
-     * @Route("/employe", name="employe_index", methods={"GET"})
+     * @Route("/employes", name="employe_index", methods={"GET"})
      */
     public function indexEmploye(UserRepository $userRepository, Request $request): Response
     {
@@ -233,7 +233,7 @@ class UserController extends AbstractController
         $users = $userRepository->findAll();
         foreach ($users as $user) {
 
-            if (in_array('ROLE_PERSONNEL', $user->getRoles()) || in_array('ROLE_SUPER_ADMIN', $user->getRoles())) {
+            if (in_array('ROLE_PERSONNEL', $user->getRoles()) || in_array('ROLE_ADMIN', $user->getRoles()) || in_array('ROLE_SUPER_ADMIN', $user->getRoles())) {
                 array_push($personnels, $user);
             }
         }
@@ -254,6 +254,8 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            dd($request);
             $user->setRoles([$request->request->get('user')['fonction']]);
             $user->setPassword($this->passwordEncoder->encodePassword(
                 $user,

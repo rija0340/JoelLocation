@@ -42,7 +42,7 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/admin, roles: [ROLE_ADMIN, ROLE_SUPER_ADMIN, ROLE_PERSONNEL] }
         - { path: ^/connexion$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         # - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/client, roles: ROLE_CLIENT }
@@ -60,7 +60,7 @@ security:
         - { path: ^/mode, roles: ROLE_ADMIN }        
         - { path: ^/mode/paiement, roles: ROLE_ADMIN }
         - { path: ^/mode/reservation, roles: ROLE_ADMIN }
-        - { path: ^/backoffice, roles: ROLE_ADMIN }
+        - { path: ^/backoffice, roles: [ROLE_ADMIN, ROLE_SUPER_ADMIN, ROLE_PERSONNEL] }
         - { path: ^/marque, roles: ROLE_ADMIN }
         - { path: ^/etat, roles: ROLE_ADMIN }
         - { path: ^/etat/reservation, roles: ROLE_ADMIN }        

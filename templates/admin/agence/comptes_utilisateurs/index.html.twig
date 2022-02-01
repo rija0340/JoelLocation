@@ -1,6 +1,6 @@
 {% extends 'base2.html.twig' %}
 
-{% block title %}Paramètres agence
+{% block title %}Comptes utilisateurs
 {% endblock %}
 
 
@@ -30,11 +30,14 @@
 						Liste des comptes utilisateurs
 					</h2>
 				</div>
-				<div class="col-auto ml-auto">
-					<a href="{{ path('employe_new') }}" class="btn btn-danger">
-						<i class="fa fa-plus" aria-hidden="true"></i>
-						Ajouter</a>
-				</div>
+
+				{% if is_granted("ROLE_ADMIN") or is_granted("ROLE_SUPER_ADMIN")  %}
+					<div class="col-auto ml-auto">
+						<a href="{{ path('employe_new') }}" class="btn btn-danger">
+							<i class="fa fa-plus" aria-hidden="true"></i>
+							Ajouter</a>
+					</div>
+				{% endif %}
 			</div>
 			<div class="clearfix"></div>
 		</div>
@@ -46,7 +49,7 @@
 						<th>Id</th>
 						<th>Nom</th>
 						<th>Prénom</th>
-						<th>Username</th>
+						<th>Email</th>
 						<th class="text-nowrap">Date d'inscription</th>
 						<th>Rôle</th>
 						<th>Fonction</th>
@@ -65,7 +68,7 @@
 								{{ user.prenom }}
 							</td>
 							<td>
-								{{ user.username }}
+								{{ user.mail }}
 							</td>
 							<td>
 								{{ user.dateInscription ? user.dateInscription|date('Y-m-d') : '' }}
@@ -99,7 +102,7 @@
 											<i class="fa fa-list"></i>
 										</a>
 									</div>
-									{% if is_granted("ROLE_ADMIN") %}
+									{% if is_granted("ROLE_ADMIN") or is_granted("ROLE_SUPER_ADMIN") %}
 										<div class="col-auto p-0 m-0">
 											<div class="d-flex">
 												<div class="align-items-center">

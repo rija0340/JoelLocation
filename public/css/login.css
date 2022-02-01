@@ -1,6 +1,6 @@
 .form-control:focus {
     border-color: #af0000;
-    box-shadow: 0 0 0 0.2rem rgba(139, 0, 0, 0.25);
+    /* box-shadow: 0 0 0 0.2rem rgba(139, 0, 0, 0.25); */
   }
   .form-control,
 .is-focused .form-control {
@@ -19,8 +19,6 @@
 
 
 }
-
-
 
 
 /* larges devices */
