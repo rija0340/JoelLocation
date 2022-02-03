@@ -584,28 +584,18 @@ class VenteComptoirController extends AbstractController
         } else {
             $currentID = $lastID[0]->getId() + 1;
         }
+        //reference réservation CPT ou WEB + année en cours + mois + 0000+ id;
         $reservation->setRefRes($reservation->getModeReservation()->getLibelle(), $currentID);
 
         $this->em->persist($reservation);
         $this->em->flush();
 
-        //enregistrement montant et reservation dans table paiement 
-        // $paiement  = new Paiement();
-        // $paiement->setClient($client);
-        // $paiement->setDatePaiement($this->dateHelper->dateNow());
-        // $paiement->setMontant($montantPaiement);
-        // $paiement->setReservation($reservation);
-        // $paiement->setModePaiement($this->modePaiementRepo->findOneBy(['libelle' => 'ESPECE']));
-        // $paiement->setMotif("Réservation");
-        // $this->em->persist($paiement);
         // $this->em->flush();
         //on vide la session après reservation et paiement
         $this->reservationSession->removeReservation();
-        // dump($reservation);
-        // die();
+
         $this->flashy->success("Réservation effectuée avec succès");
         return $this->redirectToRoute('reservation_index');
-        // return new JsonResponse($reservation->getReference());
     }
 
     //return an array of objects of options

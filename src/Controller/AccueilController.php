@@ -136,10 +136,18 @@ class AccueilController extends AbstractController
      */
     public function noVehicules(): Response
     {
-        $vehicules = $this->getDoctrine()->getRepository(Vehicule::class)->findBy([], ["id" => "DESC"]);
+        $vehicules = $this->vehiculeRepo->findAll();
+        $i = 0;
+        foreach ($vehicules as $vehicule) {
+            if ($i < 3) {
+                // exit;
+                $troisvehicules[$i] = $vehicule;
+                $i++;
+            }
+        }
         return $this->render('accueil/nosvehicule.html.twig', [
             'controller_name' => 'AccueilController',
-            'vehicules' => $vehicules,
+            'vehicules' => $troisvehicules,
         ]);
     }
 

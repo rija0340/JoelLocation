@@ -46,9 +46,7 @@
 						<td>{{ reserv.prix }}
 							€</td>
 						<td>
-							{% if reserv.prix > reserv.sommePaiements %}
-								<i class="fa fa-warning">Solde</i>
-							{% endif %}
+
 							{# dropdown #}
 							<div class="btn-group p-0" role="group">
 								<button id="btnGroupDrop1" class="btn btn-link-danger" type="button" class="btn btn-link p-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -76,7 +74,9 @@
 								</div>
 							</div>
 							{# fin dropdown #}
-
+							{% if reserv.prix > reserv.sommePaiements %}
+								<i class="fa fa-warning">Solde</i>
+							{% endif %}
 						</td>
 					</tr>
 				{% endfor %}
@@ -175,9 +175,7 @@
 						<td>{{ reserv.prix }}
 							€</td>
 						<td>
-							{% if reserv.prix > reserv.sommePaiements %}
-								<i class="fa fa-warning">Solde</i>
-							{% endif %}
+
 							{# dropdown #}
 							<div class="btn-group p-0" role="group">
 								<button id="btnGroupDrop1" class="btn btn-link-danger" type="button" class="btn btn-link p-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -205,6 +203,9 @@
 								</div>
 							</div>
 							{# fin dropdown #}
+							{% if reserv.prix > reserv.sommePaiements %}
+								<i class="fa fa-warning">Solde</i>
+							{% endif %}
 						</td>
 					</tr>
 				{% endfor %}

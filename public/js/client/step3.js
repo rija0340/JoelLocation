@@ -14,7 +14,7 @@ addEventListener();
 disableBtnEnregistrer();
 
 function getElements() {
-    checkboxesOptionsElements = document.querySelectorAll("input[name = 'checkboxOptions[]']");
+    // checkboxesOptionsElements = document.querySelectorAll("input[name = 'checkboxOptions[]']");
     checkboxesGarantiesElements = document.querySelectorAll("input[name = 'checkboxGaranties[]']");
     btnEnregistrer1 = document.getElementById('btnEnregistrer1');
     btnEnregistrer2 = document.getElementById('btnEnregistrer2');
@@ -22,34 +22,34 @@ function getElements() {
 }
 
 function addEventListener() {
-    for (let i = 0; i < checkboxesOptionsElements.length; i++) {
-        checkboxesOptionsElements[i].addEventListener('click', checkCheckedOptions, false);
-    }
+    // for (let i = 0; i < checkboxesOptionsElements.length; i++) {
+    //     checkboxesOptionsElements[i].addEventListener('click', checkCheckedOptions, false);
+    // }
     for (let i = 0; i < checkboxesGarantiesElements.length; i++) {
         checkboxesGarantiesElements[i].addEventListener('click', checkCheckedGaranties, false);
     }
 }
 
-function checkCheckedOptions() {
+// function checkCheckedOptions() {
 
-    for (let i = 0; i < checkboxesOptionsElements.length; i++) {
-        if (checkboxesOptionsElements[i].checked) {
-            compteur1 = compteur1 + 1;
-        }
-    }
-    if (compteur1 > 0) {
-        checkedOptions = true;
-        compteur1 = 0;
-    } else {
-        checkedOptions = false;
-    }
-
-    if (checkedOptions && checkedGaranties) {
-        enableBtnEnregistrer();
-    } else {
-        disableBtnEnregistrer();
-    }
-}
+//     for (let i = 0; i < checkboxesOptionsElements.length; i++) {
+//         if (checkboxesOptionsElements[i].checked) {
+//             compteur1 = compteur1 + 1;
+//         }
+//     }
+//     if (compteur1 > 0) {
+//         checkedOptions = true;
+//         compteur1 = 0;
+//     } else {
+//         checkedOptions = false;
+//     }
+//     //verifier si au moins une garantie est selectionnée
+//     if (checkedGaranties) {
+//         enableBtnEnregistrer();
+//     } else {
+//         disableBtnEnregistrer();
+//     }
+// }
 
 function checkCheckedGaranties() {
     for (let i = 0; i < checkboxesGarantiesElements.length; i++) {
@@ -63,7 +63,9 @@ function checkCheckedGaranties() {
     } else {
         checkedGaranties = false;
     }
-    if (checkedOptions && checkedGaranties) {
+    //verifier si au moins une garantie est selectionnée
+
+    if (checkedGaranties) {
         enableBtnEnregistrer();
     } else {
         disableBtnEnregistrer();
