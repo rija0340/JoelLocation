@@ -1,47 +1,49 @@
-var content;
-var radioElements;
+$(document).ready(function () {
+
+    var content;
+    var radioElements;
 
 
-getElements();
-addEventListener();
+    getElements();
+    addEventListener();
 
-function getElements() {
-    // content = document.getElementById('input_tarif');
-    radioElements = document.querySelectorAll("input[type='radio']");
-    console.log(radioElements);
-}
-
-function addEventListener() {
-    for (let i = 0; i < radioElements.length; i++) {
-        radioElements[i].addEventListener('click', addInput, false);
+    function getElements() {
+        // content = document.getElementById('input_tarif');
+        radioElements = document.querySelectorAll("input[type='radio']");
     }
-}
 
-
-function addInput() {
-    inputTarifElements = [];
-    var inputTarifElements = document.querySelectorAll("div[class='tarifVehicule']");
-    if (inputTarifElements != 0) {
-        for (let i = 0; i < inputTarifElements.length; i++) {
-            inputTarifElements[i].remove();
+    function addEventListener() {
+        for (let i = 0; i < radioElements.length; i++) {
+            radioElements[i].addEventListener('click', addInput, false);
         }
     }
 
-    var div = document.createElement('div');
-    div.classList.add('tarifVehicule');
-    var label = document.createElement('label');
-    label.innerText = "Autre tarif : ";
-    var input = document.createElement('input');
-    input.type = 'text';
-    input.name = 'tarifVehicule';
-    input.classList.add("form-control");
-    input.classList.add("inputTarif");
 
-    div.appendChild(label);
-    div.appendChild(input);
+    function addInput() {
+        inputTarifElements = [];
+        var inputTarifElements = document.querySelectorAll("div[class='tarifVehicule']");
+        if (inputTarifElements != 0) {
+            for (let i = 0; i < inputTarifElements.length; i++) {
+                inputTarifElements[i].remove();
+            }
+        }
 
-    this.parentElement.insertBefore(div, this.parentElement.lastElementChild);
-    // this.parentElement.lastElementChild.appendChild(input);
+        var div = document.createElement('div');
+        div.classList.add('tarifVehicule');
+        var label = document.createElement('label');
+        label.innerText = "Autre tarif : ";
+        var input = document.createElement('input');
+        input.type = 'text';
+        input.name = 'tarifVehicule';
+        input.classList.add("form-control");
+        input.classList.add("inputTarif");
+
+        div.appendChild(label);
+        div.appendChild(input);
+
+        this.parentElement.insertBefore(div, this.parentElement.lastElementChild);
+        // this.parentElement.lastElementChild.appendChild(input);
 
 
-}
+    }
+});

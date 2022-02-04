@@ -485,7 +485,7 @@ class DevisController extends AbstractController
         $nom = $devis->getClient()->getNom();
 
         $url   = $this->generateUrl('devis_pdf', ['id' => $devis->getId()]);
-        $url = "http://localhost:8000" . $url;
+        $url = "https://joellocation.com" . $url;
 
         $content = "Bonjour, " . '<br>' . "Vous pouvez télécharger votre devis N°" . $devis->getNumero() . "en cliquant sur ce <a href='" . $url . "'>lien</a>.";
 
