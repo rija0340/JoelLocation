@@ -172,7 +172,7 @@ class PdfController extends AbstractController
         $dompdf->render();
 
         // Output the generated PDF to Browser (force download)
-        $dompdf->stream("contrat_" . $reservation->getReference() . ".pdf", [
+        $dompdf->stream("facture_" . $reservation->getReference() . ".pdf", [
             "Attachment" => true,
         ]);
     }

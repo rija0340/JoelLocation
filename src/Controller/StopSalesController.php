@@ -61,6 +61,7 @@ class StopSalesController extends AbstractController
         $reservation = new Reservation();
 
         $listeStopSales =  $reservationRepository->findStopSales();
+
         $super_admin = $this->getUser();
 
         $formStopSales = $this->createForm(StopSalesType::class, $reservation);
@@ -74,6 +75,7 @@ class StopSalesController extends AbstractController
             $reservation->setVehicule($vehicule);
             $reservation->setCodeReservation('stopSale');
             $reservation->setAgenceDepart('garage');
+            $reservation->setArchived(false);
             $reservation->setClient($super_admin);
             $reservation->setDateReservation($this->dateHelper->dateNow());
             $entityManager->persist($reservation);

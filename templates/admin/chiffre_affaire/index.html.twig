@@ -5,86 +5,89 @@
 
 
 {% block stylesheets %}
-	<!-- bootstrap-wysiwyg -->
-	<link
-	href="../../admin/vendors/google-code-prettify/bin/prettify.min.css" rel="stylesheet">
-	<!-- Select2 -->
-	<link
-	href="../../admin/vendors/select2/dist/css/select2.min.css" rel="stylesheet">
-	<!-- Switchery -->
-	<link
-	href="../../admin/vendors/switchery/dist/switchery.min.css" rel="stylesheet">
-	<!-- starrr -->
-	<link
-	href="../../admin/vendors/starrr/dist/starrr.css" rel="stylesheet">
-	<!-- bootstrap-daterangepicker -->
-	<link href="../../admin/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+    <!-- bootstrap-wysiwyg -->
+    <link
+            href="../../admin/vendors/google-code-prettify/bin/prettify.min.css" rel="stylesheet">
+    <!-- Select2 -->
+    <link
+            href="../../admin/vendors/select2/dist/css/select2.min.css" rel="stylesheet">
+    <!-- Switchery -->
+    <link
+            href="../../admin/vendors/switchery/dist/switchery.min.css" rel="stylesheet">
+    <!-- starrr -->
+    <link
+            href="../../admin/vendors/starrr/dist/starrr.css" rel="stylesheet">
+    <!-- bootstrap-daterangepicker -->
+    <link href="../../admin/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
 
-	<link
-	href="../../admin/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
-	<!-- bootstrap-datetimepicker -->
-	<link
-	href="../../admin/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
-	<!-- Ion.RangeSlider -->
-	<link href="../../admin/vendors/normalize-css/normalize.css" rel="stylesheet">
-	<link href="../../admin/vendors/ion.rangeSlider/css/ion.rangeSlider.css" rel="stylesheet">
-	<link href="../../admin/vendors/ion.rangeSlider/css/ion.rangeSlider.skinFlat.css" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
-	<link href="../../css/admin/daterangepicker/custom_style.css" rel="stylesheet">
+    <link
+            href="../../admin/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+    <!-- bootstrap-datetimepicker -->
+    <link
+            href="../../admin/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
+    <!-- Ion.RangeSlider -->
+    <link href="../../admin/vendors/normalize-css/normalize.css" rel="stylesheet">
+    <link href="../../admin/vendors/ion.rangeSlider/css/ion.rangeSlider.css" rel="stylesheet">
+    <link href="../../admin/vendors/ion.rangeSlider/css/ion.rangeSlider.skinFlat.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
+    <link href="../../css/admin/daterangepicker/custom_style.css" rel="stylesheet">
 
 {% endblock %}
 
 {% block current_page %}
-	<h2>
-		<i class="fa fa-euro"></i>Chiffre d'affaire</h2>
+    <h2>
+        <i class="fa fa-euro"></i>Chiffre d'affaire</h2>
 {% endblock %}
 
 {% block content %}
-	<div class="x_panel">
-		<div class="text-center ">
-			<h2 style=" font-weight: 900 !important;">CHIFFRE D'AFFAIRE</h2>
-			<h2 class="text-uppercase text-danger font-weight-bold">
-				<span id="datesRange"></span>
-			</h2>
-		</div>
-		<div class="x_content">
-			<div class="row mb-4">
-				<div class="col-auto">
-					<label for="" class="font-weight-bold">Période :</label>
-					<div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
-						<i class="fa fa-calendar"></i>&nbsp;
-						<span></span>
-						<i class="fa fa-caret-down"></i>
-					</div>
-				</div>
-			</div>
-			<table id="table" class="table table-bordered simpletable ">
-				<thead class="text-center">
-					<tr>
-						<th>FAMILLE</th>
-						<th>CA</th>
-						<th>WEB</th>
-						<th>CPT</th>
-						<th>RESAS</th>
-						<th>PRIX/J</th>
-						<th>STOP SALE</th>
-					</tr>
-				</thead>
-				<tbody id='tbody'></tbody>
-			</table>
+    <div class="x_panel">
+        <div class="text-center ">
+            <h2 style=" font-weight: 900 !important;">CHIFFRE D'AFFAIRE</h2>
+            <h2 class="text-uppercase text-danger font-weight-bold">
+                <span id="datesRange"></span>
+            </h2>
+        </div>
+        <div class="x_content">
+            <div class="row mb-4">
+                <div class="col-auto">
+                    <label for="" class="font-weight-bold">Période :</label>
+                    <div id="reportrange"
+                         style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                        <i class="fa fa-calendar"></i>&nbsp;
+                        <span></span>
+                        <i class="fa fa-caret-down"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="overflow-auto">
+                <table id="table" class="table table-bordered simpletable ">
+                    <thead class="text-center">
+                    <tr>
+                        <th>FAMILLE</th>
+                        <th>CA</th>
+                        <th>WEB</th>
+                        <th>CPT</th>
+                        <th>RESAS</th>
+                        <th>PRIX/J</th>
+                        <th>STOP SALE</th>
+                    </tr>
+                    </thead>
+                    <tbody id='tbody'></tbody>
+                </table>
+            </div>
 
-		</div>
-	</div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascripts %}
 
-	<script src="../../admin/vendors/moment/moment.js"></script>
-	{# manova anle langue ho francais amle moment izay ampiasain'ny date picker #}
-	<script src="../../plugins/moment/locale/fr.js"></script>
-	<script type="text/javascript" src="../../admin\vendors\bootstrap-daterangepicker\daterangepicker.js"></script>
-	<script src="../../plugins/daterangepicker/daterangepicker.js"></script>
-	{# // <script src="../../js/admin/bootstrap-datepicker.fr.min.js"></script> #}
-	<script src="{{asset('js/admin/chiffre_affaire/daterangepicker.js')}}"></script>
+    <script src="../../admin/vendors/moment/moment.js"></script>
+    {# manova anle langue ho francais amle moment izay ampiasain'ny date picker #}
+    <script src="../../plugins/moment/locale/fr.js"></script>
+    <script type="text/javascript" src="../../admin\vendors\bootstrap-daterangepicker\daterangepicker.js"></script>
+    <script src="../../plugins/daterangepicker/daterangepicker.js"></script>
+    {# // <script src="../../js/admin/bootstrap-datepicker.fr.min.js"></script> #}
+    <script src="{{ asset('js/admin/chiffre_affaire/daterangepicker.js') }}"></script>
 
-{% endblock  %}
+{% endblock %}

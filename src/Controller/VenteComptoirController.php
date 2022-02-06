@@ -85,7 +85,8 @@ class VenteComptoirController extends AbstractController
         ReservationSession $reservationSession,
         Mailjet $mail,
         ReservationHelper $reservationHelper
-    ) {
+    )
+    {
 
         $this->reservationSession = $reservationSession;
         $this->flashy = $flashy;
@@ -221,7 +222,7 @@ class VenteComptoirController extends AbstractController
         $garanties = $this->garantiesRepo->findAll();
 
         // recuperation donnée from formulaire options et garanties
-        if ($request->request->get('checkboxGaranties') != null) {
+        if ($request->request->get('radio-conducteur') != null) {
 
             //$optionsData et garantiesData sont des tableaux 
             //(mettre un "[]" apres les noms des input type checkbox dans templates pour obtenir tous les  checkbox cochés)
@@ -230,13 +231,18 @@ class VenteComptoirController extends AbstractController
             if ($request->get('checkboxOptions') != null) {
                 $optionsData = $request->request->get('checkboxOptions');
             }
-            $garantiesData = $request->request->get('checkboxGaranties');
+
+            if ($request->get('checkboxGaranties') != null) {
+                $garantiesData = $request->request->get('checkboxGaranties');
+            }
 
             //ajout options et garanties (tableau d'objets) dans session 
             if ($request->get('checkboxOptions') != null) {
                 $this->reservationSession->addOptions($optionsData);
             }
-            $this->reservationSession->addGaranties($garantiesData);
+            if ($request->get('checkboxGaranties') != null) {
+                $this->reservationSession->addGaranties($garantiesData);
+            }
             $this->reservationSession->addConducteur($conducteur);
 
             return $this->redirectToRoute('step4');
@@ -245,7 +251,7 @@ class VenteComptoirController extends AbstractController
 
         $dateDepart = $this->reservationSession->getDateDepart();
         $dateRetour = $this->reservationSession->getDateRetour();
-        $vehicule =  $this->vehiculeRepo->find($this->reservationSession->getVehicule());
+        $vehicule = $this->vehiculeRepo->find($this->reservationSession->getVehicule());
 
         //si l'admin a entrée un autre tarif dans étape 2, alors on considère ce tarif
         if ($this->reservationSession->getTarifVehicule()) {
@@ -319,7 +325,7 @@ class VenteComptoirController extends AbstractController
 
         $dateDepart = $this->reservationSession->getDateDepart();
         $dateRetour = $this->reservationSession->getDateRetour();
-        $vehicule =  $this->vehiculeRepo->find($this->reservationSession->getVehicule());
+        $vehicule = $this->vehiculeRepo->find($this->reservationSession->getVehicule());
 
         //si l'admin a entrée un autre tarif dans étape 2, alors on considère ce tarif
         if ($this->reservationSession->getTarifVehicule()) {
@@ -347,6 +353,7 @@ class VenteComptoirController extends AbstractController
     }
 
     //enregistrement de devis dans base de données sans envoi mail au client
+
     /**
      * @Route("/vente-comptoir/enregistrer-devis", name="save_only_devis", methods={"GET","POST"})
      */
@@ -359,6 +366,7 @@ class VenteComptoirController extends AbstractController
     }
 
     //enregistrement de devis dans base de données sans envoi mail au client
+
     /**
      * @Route("/vente-comptoir/enregistrer-devis-envoi-mail", name="save_devis_send_mail", methods={"GET","POST"})
      */
@@ -368,7 +376,7 @@ class VenteComptoirController extends AbstractController
 
         //url de téléchargement du devis
         $devis = $this->devisRepo->findOneBy(['numero' => $numDevis]);
-        $url   = $this->generateUrl('devis_pdf', ['id' => $devis->getId()]);
+        $url = $this->generateUrl('devis_pdf', ['id' => $devis->getId()]);
         $url = "https://joellocation.com" . $url;
 
         $Mailcontent = "Un devis a été enregistré, vous pouver télécharger le pdf en cliquant <a href='" . $url . "'>ici</a>. Veuillez vous connecter pour le valider";
@@ -434,8 +442,10 @@ class VenteComptoirController extends AbstractController
                 $devis->addOption($option);
             }
         }
-        foreach ($this->garantiesObjectsFromSession() as $garantie) {
-            $devis->addGaranty($garantie);
+        if ($this->garantiesObjectsFromSession() != null) {
+            foreach ($this->garantiesObjectsFromSession() as $garantie) {
+                $devis->addGaranty($garantie);
+            }
         }
         // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
         $lastID = $this->devisRepo->findBy(array(), array('id' => 'DESC'), 1);
@@ -621,9 +631,8 @@ class VenteComptoirController extends AbstractController
         //on met dans un tableau les objets corresponans aux options cochés
         $optionsObjects = [];
         if ($this->reservationSession->getOptions() != null) {
-            # code...
             foreach ($this->reservationSession->getOptions() as $opt) {
-                array_push($optionsObjects,  $this->optionsRepo->find($opt));
+                array_push($optionsObjects, $this->optionsRepo->find($opt));
             }
             return $optionsObjects;
         } else {
@@ -636,10 +645,15 @@ class VenteComptoirController extends AbstractController
     {
         //on met dans un tableau les objets corresponans aux garanties cochés
         $garantiesObjects = [];
-        foreach ($this->reservationSession->getGaranties() as $gar) {
-            array_push($garantiesObjects,  $this->garantiesRepo->find($gar));
-        }
+        if ($this->reservationSession->getGaranties() != null) {
+            foreach ($this->reservationSession->getGaranties() as $gar) {
+                array_push($garantiesObjects, $this->garantiesRepo->find($gar));
+            }
         return $garantiesObjects;
+
+        } else {
+            return null;
+        }
     }
 
     /**

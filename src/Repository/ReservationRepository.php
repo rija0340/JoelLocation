@@ -72,8 +72,10 @@ class ReservationRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('r')
             ->andWhere('r.code_reservation = :code')
-            ->andWhere('r.canceled = FALSE AND r.archived = FALSE')
+            ->orWhere('r.code_reservation = :code2')
+            ->andWhere("r.canceled = FALSE OR r.canceled = 'NULL' AND r.archived = FALSE OR r.archived = 'NULL'")
             ->setParameter('code', 'devisTransformé')
+            ->setParameter('code2', 'stopSale')
             ->orderBy('r.date_debut', 'ASC')
             ->getQuery()
             ->getResult();
@@ -103,7 +105,7 @@ class ReservationRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('r')
             ->where('r.code_reservation = :code')
-            ->andWhere('r.canceled = FALSE AND r.archived = FALSE AND r.reported = TRUE')
+            ->andWhere("r.canceled = FALSE OR r.canceled = 'NULL' AND r.archived = FALSE OR r.archived = 'NULL' AND r.reported = TRUE")
             ->setParameter('code', 'devisTransformé')
             ->orderBy('r.id', 'DESC')
             ->getQuery()
@@ -119,7 +121,8 @@ class ReservationRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('r')
             ->where('r.client = :client AND r.date_fin < :date')
             ->andWhere('r.code_reservation = :code')
-            ->andWhere('r.canceled = FALSE AND r.archived = FALSE')
+            ->andWhere("r.canceled = FALSE OR r.canceled = 'NULL' AND r.archived = FALSE OR r.archived = 'NULL'")
+
             ->setParameter('client', $client)
             ->setParameter('date', $date)
             ->setParameter('code', 'devisTransformé')
@@ -136,7 +139,8 @@ class ReservationRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('r')
             ->andWhere('r.date_fin < :date')
             ->andWhere('r.code_reservation = :code')
-            ->andWhere('r.canceled = FALSE AND r.archived = FALSE')
+            ->andWhere("r.canceled = FALSE OR r.canceled = 'NULL' AND r.archived = FALSE OR r.archived = 'NULL'")
+
             ->setParameter('date', $this->dateHelper->dateNow())
             ->setParameter('code', 'devisTransformé')
             ->orderBy('r.date_fin', 'DESC')
@@ -152,7 +156,8 @@ class ReservationRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('r')
             ->andWhere('r.client = :client AND r.date_fin > :date AND r.date_debut < :date')
             ->andWhere('r.code_reservation = :code')
-            ->andWhere('r.canceled = FALSE AND r.archived = FALSE')
+            ->andWhere("r.canceled = FALSE OR r.canceled = 'NULL' AND r.archived = FALSE OR r.archived = 'NULL'")
+
             ->setParameter('client', $client)
             ->setParameter('date', $date)
             ->setParameter('code', 'devisTransformé')
@@ -169,7 +174,8 @@ class ReservationRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('r')
             ->andWhere('r.client = :client AND r.date_debut > :date')
             ->andWhere('r.code_reservation = :code')
-            ->andWhere('r.canceled = FALSE AND r.archived = FALSE')
+            ->andWhere("r.canceled = FALSE OR r.canceled = 'NULL' AND r.archived = FALSE OR r.archived = 'NULL'")
+
             ->setParameter('client', $client)
             ->setParameter('date', $date)
             ->setParameter('code', 'devisTransformé')
@@ -187,7 +193,8 @@ class ReservationRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('r')
             ->andWhere('r.client = :client AND r.date_debut > :date')
             ->andWhere('r.code_reservation = :code')
-            ->andWhere('r.canceled = FALSE AND r.archived = FALSE')
+            ->andWhere("r.canceled = FALSE OR r.canceled = 'NULL' AND r.archived = FALSE OR r.archived = 'NULL'")
+
             ->setParameter('date', $this->dateHelper->dateNow())
             ->setParameter('code', 'devisTransformé')
             ->setParameter('client', $client)
@@ -205,7 +212,8 @@ class ReservationRepository extends ServiceEntityRepository
             ->where(' r.date_fin >= :date')
             ->andWhere('r.date_debut <= :date')
             ->andWhere('r.code_reservation = :code')
-            ->andWhere('r.canceled = FALSE AND r.archived = FALSE')
+            ->andWhere("r.canceled = FALSE OR r.canceled = 'NULL' AND r.archived = FALSE OR r.archived = 'NULL'")
+
             ->setParameter('code', 'devisTransformé')
             ->setParameter('date', $date)
             ->getQuery()
@@ -221,7 +229,8 @@ class ReservationRepository extends ServiceEntityRepository
             ->where(' r.date_fin < :date')
             ->orWhere('r.date_debut > :date')
             ->andWhere('r.code_reservation = :code')
-            ->andWhere('r.canceled = FALSE AND r.archived = FALSE')
+            ->andWhere("r.canceled = FALSE OR r.canceled = 'NULL' AND r.archived = FALSE OR r.archived = 'NULL'")
+
             ->setParameter('code', 'devisTransformé')
             ->setParameter('date', $date)
             ->getQuery()
@@ -235,7 +244,7 @@ class ReservationRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('r')
             ->andWhere(' r.code_reservation = :code')
-            ->andWhere('r.canceled = FALSE AND r.archived = FALSE')
+            ->andWhere("r.canceled = FALSE OR r.canceled = 'NULL' AND r.archived = FALSE OR r.archived = 'NULL'")
             ->setParameter('code', 'stopSale')
             ->getQuery()
             ->getResult();
@@ -250,7 +259,7 @@ class ReservationRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('r')
             ->andWhere(' r.code_reservation != :code ')
             ->setParameter('code', 'stopSale')
-            ->andWhere('r.canceled = FALSE AND r.archived = FALSE AND r.reported = FALSE')
+            ->andWhere("r.canceled = FALSE OR r.canceled = 'NULL' AND r.archived = FALSE AND r.reported = FALSE OR r.archived = 'NULL'")
             // ->setParameter('date', $this->dateHelper->dateNow())
             ->orderBy('r.date_reservation', 'DESC')
             ->getQuery()
@@ -269,7 +278,7 @@ class ReservationRepository extends ServiceEntityRepository
             ->setParameter('dateDebut', $dateDebut)
             ->setParameter('dateFin', $dateFin)
             ->setParameter('code', 'stopSale')
-            ->andWhere('r.canceled = FALSE AND r.archived = FALSE AND r.reported = FALSE')
+            ->andWhere("r.canceled = FALSE OR r.canceled = 'NULL' AND r.archived = FALSE AND r.reported = FALSE OR r.reported = 'NULL'")
             // ->setParameter('date', $this->dateHelper->dateNow())
             ->orderBy('r.date_reservation', 'DESC')
             ->getQuery()
@@ -291,7 +300,7 @@ class ReservationRepository extends ServiceEntityRepository
             ->setParameter('dateDebut', $dateDebut)
             ->setParameter('dateFin', $dateFin)
             ->setParameter('code', 'stopSale')
-            ->andWhere('r.canceled = FALSE AND r.archived = FALSE AND r.reported = FALSE')
+            ->andWhere("r.canceled = FALSE OR  r.canceled = 'NULL'  AND r.archived = FALSE AND r.reported = FALSE OR r.reported = 'NULL'")
             // ->setParameter('date', $this->dateHelper->dateNow())
             ->orderBy('r.date_reservation', 'DESC')
             ->getQuery()
@@ -303,11 +312,16 @@ class ReservationRepository extends ServiceEntityRepository
     public function findReservationIncludeDates($dateDebut, $dateFin)
     {
         return $this->createQueryBuilder('r')
-            ->where(' r.date_debut < :dateDebut AND r.date_fin > :dateDebut AND r.date_debut < :dateFin AND  r.date_fin < :dateFin ')
-            ->orWhere(' r.date_debut > :dateDebut AND r.date_fin > :dateDebut AND r.date_debut < :dateFin AND  r.date_fin < :dateFin ')
-            ->orWhere(' r.date_debut > :dateDebut AND r.date_fin < :dateDebut AND r.date_debut > :dateFin AND  r.date_fin < :dateFin ')
-            ->orWhere(' r.date_debut < :dateDebut AND r.date_fin > :dateDebut AND r.date_debut < :dateFin AND  r.date_fin > :dateFin ')
-            ->andWhere('r.canceled = FALSE AND r.archived = FALSE')
+            // ->where(' r.date_debut < :dateDebut AND r.date_fin > :dateDebut AND r.date_debut < :dateFin AND  r.date_fin < :dateFin ')
+            // ->orWhere(' r.date_debut > :dateDebut AND r.date_fin > :dateDebut AND r.date_debut < :dateFin AND  r.date_fin < :dateFin ')
+            // ->orWhere(' r.date_debut > :dateDebut AND r.date_fin < :dateDebut AND r.date_debut > :dateFin AND  r.date_fin < :dateFin ')
+            // ->orWhere(' r.date_debut < :dateDebut AND r.date_fin > :dateDebut AND r.date_debut < :dateFin AND  r.date_fin > :dateFin ')
+            ->where("r.date_debut > :dateDebut AND r.date_debut < :dateFin AND r.date_fin > :dateFin AND r.date_fin > :dateDebut")
+            ->orWhere("r.date_debut < :dateDebut AND r.date_debut < :dateFin AND r.date_fin > :dateDebut AND r.date_fin > :dateFin")
+            ->orWhere("r.date_debut < :dateDebut AND r.date_debut < :dateFin AND r.date_fin > :dateDebut AND r.date_fin < :dateFin ")
+            ->orWhere("r.date_debut > :dateDebut AND r.date_debut < :dateFin AND r.date_fin > :dateDebut AND r.date_fin < :dateFin ")
+            ->andWhere("r.canceled = FALSE OR  r.canceled = 'NULL'  AND r.archived = FALSE AND r.reported = FALSE OR r.reported = 'NULL'")
+
             // ->andWhere(' r.date_fin > :dateFin AND r.date_debut < :dateFin')
             ->setParameter('dateDebut', $dateDebut)
             ->setParameter('dateFin', $dateFin)
@@ -325,7 +339,8 @@ class ReservationRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('r')
             ->where('   :dateFin < r.date_debut  AND :dateDebut < r.date_debut ')
             ->orWhere('r.date_fin < :dateDebut AND r.date_debut < :dateDebut ')
-            ->andWhere('r.canceled = FALSE AND r.archived = FALSE')
+            ->andWhere("r.canceled = FALSE OR  r.canceled = 'NULL'  AND r.archived = FALSE AND r.reported = FALSE OR r.reported = 'NULL'")
+
             ->setParameter('dateDebut', $dateDebut)
             ->setParameter('dateFin', $dateFin)
             ->getQuery()
@@ -343,7 +358,8 @@ class ReservationRepository extends ServiceEntityRepository
             ->andWhere(' r.vehicule = :vehicule')
             ->andWhere('r.date_fin < :date')
             ->andWhere(' r.code_reservation != :code')
-            ->andWhere('r.canceled = FALSE AND r.archived = FALSE')
+            ->andWhere("r.canceled = FALSE OR  r.canceled = 'NULL'  AND r.archived = FALSE AND r.reported = FALSE OR r.reported = 'NULL'")
+
             ->setParameter('vehicule', $vehicule)
             ->setParameter('code', 'stopSale')
             ->setParameter('date', $date)
@@ -359,7 +375,8 @@ class ReservationRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('r')
             ->andWhere(' r.vehicule = :vehicule')
-            ->andWhere('r.canceled = FALSE AND r.archived = FALSE')
+            ->andWhere("r.canceled = FALSE OR  r.canceled = 'NULL'  AND r.archived = FALSE AND r.reported = FALSE OR r.reported = 'NULL'")
+
             ->setParameter('vehicule', $vehicule)
             ->getQuery()
             ->getResult();
@@ -375,7 +392,8 @@ class ReservationRepository extends ServiceEntityRepository
             ->andWhere(' r.vehicule = :vehicule')
             ->andWhere('r.date_debut > :date')
             ->andWhere(' r.code_reservation != :code')
-            ->andWhere('r.canceled = FALSE AND r.archived = FALSE')
+            ->andWhere("r.canceled = FALSE OR  r.canceled = 'NULL'  AND r.archived = FALSE AND r.reported = FALSE OR r.reported = 'NULL'")
+
             ->setParameter('vehicule', $vehicule)
             ->setParameter('code', 'stopSale')
             ->setParameter('date', $date)
@@ -406,7 +424,8 @@ class ReservationRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('r')
             ->where("DATE_FORMAT(r.date_debut,'%Y-%m-%d') = :date AND r.code_reservation != :code ")
             ->orWhere("DATE_FORMAT(r.date_fin,'%Y-%m-%d') = :date AND r.code_reservation != :code")
-            ->andWhere('r.canceled = FALSE AND r.archived = FALSE')
+            ->andWhere("r.canceled = FALSE OR  r.canceled = 'NULL'  AND r.archived = FALSE AND r.reported = FALSE OR r.reported = 'NULL'")
+
             ->setParameter('date', $date)
             ->setParameter('code', 'stopSale')
             ->getQuery()
@@ -439,7 +458,8 @@ class ReservationRepository extends ServiceEntityRepository
         if ($vehicule == null && $typeTarif == null) {
             return $this->createQueryBuilder('r')
                 ->where(' :debutPeriode < r.date_debut AND r.date_debut < :finPeriode AND r.client != :client')
-                ->andWhere('r.canceled = FALSE AND r.archived = FALSE')
+                ->andWhere("r.canceled = FALSE OR  r.canceled = 'NULL'  AND r.archived = FALSE AND r.reported = FALSE OR r.reported = 'NULL'")
+
                 ->setParameter('debutPeriode', $debutPeriode)
                 ->setParameter('finPeriode', $finPeriode)
                 ->setParameter('client', $superAdmin)
@@ -449,7 +469,8 @@ class ReservationRepository extends ServiceEntityRepository
             if ($vehicule != null && $typeTarif == null) {
                 return $this->createQueryBuilder('r')
                     ->where(' :debutPeriode < r.date_debut AND r.date_debut < :finPeriode AND r.vehicule = :vehicule AND r.client != :client')
-                    ->andWhere('r.canceled = FALSE AND r.archived = FALSE')
+                    ->andWhere("r.canceled = FALSE OR  r.canceled = 'NULL'  AND r.archived = FALSE AND r.reported = FALSE OR r.reported = 'NULL'")
+
                     ->setParameter('debutPeriode', $debutPeriode)
                     ->setParameter('finPeriode', $finPeriode)
                     ->setParameter('vehicule', $vehicule)
@@ -460,7 +481,8 @@ class ReservationRepository extends ServiceEntityRepository
             if ($vehicule == null && $typeTarif != null) {
                 return $this->createQueryBuilder('r')
                     ->where(' :debutPeriode < r.date_debut AND r.date_debut < :finPeriode AND r.reference LIKE :typeTarif AND r.client != :client')
-                    ->andWhere('r.canceled = FALSE AND r.archived = FALSE')
+                    ->andWhere("r.canceled = FALSE OR  r.canceled = 'NULL'  AND r.archived = FALSE AND r.reported = FALSE OR r.reported = 'NULL'")
+
                     ->setParameter('debutPeriode', $debutPeriode)
                     ->setParameter('finPeriode', $finPeriode)
                     ->setParameter('typeTarif', $typeTarif)
@@ -471,7 +493,8 @@ class ReservationRepository extends ServiceEntityRepository
             if ($vehicule != null && $typeTarif != null) {
                 return $this->createQueryBuilder('r')
                     ->where(' :debutPeriode < r.date_debut AND r.date_debut < :finPeriode AND r.reference LIKE :typeTarif AND r.vehicule = :vehicule AND r.client != :client')
-                    ->andWhere('r.canceled = FALSE AND r.archived = FALSE')
+                    ->andWhere("r.canceled = FALSE OR  r.canceled = 'NULL'  AND r.archived = FALSE AND r.reported = FALSE OR r.reported = 'NULL'")
+
                     ->setParameter('debutPeriode', $debutPeriode)
                     ->setParameter('finPeriode', $finPeriode)
                     ->setParameter('typeTarif', $typeTarif)

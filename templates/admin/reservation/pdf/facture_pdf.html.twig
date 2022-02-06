@@ -1,271 +1,318 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<title>Facture</title>
-		<!-- Bootstrap -->
-		<link
-		href="{{ asset( 'admin/vendors/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet">
-		<!-- Font Awesome -->
-		<link href="{{ asset( 'admin/vendors/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet">
-		<style>
-			.table-bordered th,
-			.table-bordered td {
-				border: 1px solid #dee2e6 !important;
-			}
-			.logo {
+<head>
+    <meta charset="UTF-8">
+    <title>Facture</title>
+    <!-- Bootstrap -->
+    <link
+            href="{{ asset( 'admin/vendors/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="{{ asset( 'admin/vendors/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
+    <style>
 
-				display: inline-block;
-				vertical-align: top;
-				/* width: 350px; */
+        * {
+            padding: 0;
+            margin: 0;
+        }
 
-			}
-			.adresse {
-				display: inline-block;
-				vertical-align: top;
-				padding-left: 300px;
+        #body {
+            margin: 40px;
+        }
+        #footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 10px;
+        }
 
-			}
+        /*table recapitulatif*/
+        #recap_table tr td{
+            padding: 3px;
+        }
 
-			.details_facture {
+        #montant tr td{
+            padding: 3px;
+        }
 
-				display: inline-block;
-				vertical-align: top;
-				padding-top: 50px;
-				/* width: 350px; */
+        .table-bordered th,
+        .table-bordered td {
+            border: 1px solid #dee2e6 !important;
+        }
 
-			}
-			.details_client {
-				display: inline-block;
-				vertical-align: top;
-				padding-left: 250px;
-				padding-top: 50px;
-			}
+        .logo {
 
-			.conditions_reglement {
+            display: inline-block;
+            vertical-align: top;
+            /* width: 350px; */
 
-				display: inline-block;
-				vertical-align: top;
-				padding-top: 50px;
+        }
 
-			}
-			.table1 {
-				display: inline-block;
-				vertical-align: top;
-				width: 260px;
+        .adresse {
+            display: inline-block;
+            vertical-align: top;
+            padding-left: 300px;
 
-			}
+        }
 
-			.table-border {
+        .details_facture {
 
-				border-collapse: collapse;
-				border: 1px solid black;
-			}
-			.table-border td {
+            display: inline-block;
+            vertical-align: top;
+            padding-top: 50px;
+            /* width: 350px; */
 
-				border-collapse: collapse;
-				border: 1px solid black;
-			}
+        }
 
-			.text-white {
-				color: #fff !important;
-			}
-			.bg-danger {
-				background-color: red !important;
-			}
-			.bg-pink {
-				background-color: #faf2f0 !important;
+        .details_client {
+            display: inline-block;
+            vertical-align: top;
+            padding-left: 250px;
+            padding-top: 50px;
+        }
 
-			}
-			.p-0 {
-				padding: 0 !important;
-			}
-			.m-0 {
-				margin: 0 !important;
-			}
-			.p-2 {
-				padding: 2px !important;
-			}
-			.m-2 {
-				margin: 2px !important;
-			}
-			.text-center {
-				text-align: center !important;
-			}
-			.text-right {
-				text-align: right !important;
-			}
+        .conditions_reglement {
 
-			.fs-10 {
-				font-size: 10px;
-			}
-			.fs-12 {
-				font-size: 12px;
-			}
-			.text-uppercase {
-				text-transform: uppercase !important;
-			}
-			#footer {
-				margin-top: 250px;
-			}
+            display: inline-block;
+            vertical-align: top;
+            padding-top: 50px;
 
-			#note {
-				margin-top: 50px;
-			}
-		</style>
-	</head>
-	<body>
-		{# logo et adresse  #}
-		<div class="logo"><img src="{{ logo }}" alt="logo" width="150px" height="80px" type="images/png"></div>
-		<div class="adresse">
-			94 Chemin de la hache<br>
-			97160 le moul
-			<br>
-			Tél: 0690737674 / 0767321447<br>
-			Email: joel@joellocation.com<br>
-			SIRET : 87868990000016<br>
-		</div>
-		<br>
-		<div class="details_facture">
-			<strong>Facture N° FA00029</strong><br>
-			Date de création :  13-06-2021
-			<br>
-			Date d'échéance :   30-06-2021
-			<br>
-			Devis associé:
-			{{reservation.numDevis}}
-		</div>
-		<div class="details_client">
+        }
 
-			<strong>{{reservation.client.nom}}
-				{{reservation.client.prenom}}</strong>
-			<br>
-			{{reservation.client.adresse}}
-			<br>
-			{{reservation.client.complementAdresse}}
-			<br>
-			{{reservation.client.ville}}
+        .table1 {
+            display: inline-block;
+            vertical-align: top;
+            width: 275px;
 
-		</div>
-		<p class="">
-			<strong>Objet</strong>
-			Location
-			{{reservation.vehicule.marque}}
-			{{reservation.vehicule.modele}}
-			du
-			{{reservation.dateDebut|date('d/m/Y H:i')}}
-			au
-			{{reservation.dateFin|date('d/m/Y H:i')}}. KM illimités</p>
-		{# table gauche droite, info client et conducteurs #}
-		<div class="">
-			<table class=" p-0 " style="width : 100%;">
-				<thead class="bg-danger text-white">
-					<tr>
-						<th>Désignation</th>
-						<th>Qté</th>
-						<th>Prix U.</th>
-						<th>Prix HT</th>
-						<th>TTC</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr class="bg-pink">
-						{% set taxe = (reservation.prix * 8.5) / 100 %}
-						<td>
-							{{reservation.vehicule.marque}}
-							{{reservation.vehicule.modele}}
-							<br>
-							Location de véhicule pour
-							{{reservation.duree}}
-							jours.
-							<br>
-							Retrait le
-							{{reservation.dateDebut|date('d/m/Y')}}. Lieu :
-							{{reservation.agenceDepart}}.
-							<br>
-							Retour le
-							{{reservation.dateFin|date('d/m/Y')}}. Lieu :
-							{{reservation.agenceRetour}}.
-						</td>
-						<td class="text-right">{{reservation.duree}}j</td>
-						<td class="text-right">{{reservation.prix / reservation.duree}}</td>
-						<td class="text-right">{{reservation.prix }}</td>
-						<td class="text-right">{{reservation.prix + taxe }}</td>
-					</tr>
-				</tbody>
-			</table>
+        }
 
-		</div>
+        .table-border {
+
+            border-collapse: collapse;
+            border: 1px solid black;
+        }
+
+        .table-border td {
+
+            border-collapse: collapse;
+            border: 1px solid black;
+        }
+
+        .text-white {
+            color: #fff !important;
+        }
+
+        .bg-danger {
+            background-color: red !important;
+        }
+
+        .bg-pink {
+            background-color: #faf2f0 !important;
+
+        }
+
+        .p-0 {
+            padding: 0 !important;
+        }
+
+        .m-0 {
+            margin: 0 !important;
+        }
+
+        .p-2 {
+            padding: 2px !important;
+        }
+
+        .m-2 {
+            margin: 2px !important;
+        }
+
+        .text-center {
+            text-align: center !important;
+        }
+
+        .text-right {
+            text-align: right !important;
+        }
+
+        .fs-10 {
+            font-size: 10px;
+        }
+
+        .fs-12 {
+            font-size: 12px;
+        }
+
+        .text-uppercase {
+            text-transform: uppercase !important;
+        }
 
 
-		{# logo et adresse  #}
-		<div class="conditions_reglement">
-			<strong>
-				Conditions de règlement
-			</strong><br>
-			Aucun escompte n'est consenti pour règlement anticipe.
-			<br>
-			Tout incident de paiement est passible d'intérêt de retard.<br>
-			Le montant des pénalités résulte de l'application
-			<br>
-			aux sommes restant dues d'un taux d'intérêt légal en
-			<br>
-			vigueur au moment de l'incident. L'indemnité forfaitaire pour frais
-			<br>de recouvrement due au créancier en cas de retard
-			<br>de paiement est de 80EUR.
-		</div>
-		<div class="table1">
-			<table style="width : 100%;">
-				<tr class="bg-pink">
-					<td>Montant HT</td>
-					<td class="text-right">{{reservation.prix }}€</td>
-				</tr>
-				<tr>
-					<td>Total TVA 8.5 %</td>
-					<td class="text-right">{{ taxe }}€</td>
-				</tr>
-				<tr class="bg-danger text-white">
-					<td>Total TTC</td>
-					<td class="text-right">{{reservation.prix + taxe}}</td>
-				</tr>
-				<tr class="bg-pink">
-					{% for paiement in reservation.paiements %}
-						<td>Paiement par
-							{{paiement.modePaiement.libelle}}
-							<br>
-							le
-							{{paiement.datePaiement|date('d/m/Y')}}</td>
-						<td class="text-right">
-							{{paiement.montant}}
-							€</td>
-					{% endfor %}
-				</tr>
-				<tr class="bg-danger text-white">
-					<td>Reste à payer</td>
-					<td class="text-right">
-						{{reservation.prix - reservation.sommePaiements}}
-						€</td>
-				</tr>
-			</table>
-		</div>
-		<div id="note">
-			<strong>
-				Note
-			</strong>
-			<br>
-			Merci pour votre aimable règlement.
-			<br>
-			Au plaisir de vous revoir à nouveau.
-		</div>
-		<br>
-		<div class="bg-danger text-white text-center fs-12" id="footer" style="position : absolute; width : 800px; margin-left : -50px; height : 60px; bottom : -50px;">
-			<div style="">
-				SIRET : 87868990000016 APE: 7711a
-				<br>
-				N°TVA FR40878689900
-				<br>
-				www.joellocation.com
-			</div>
-		</div>
-	</body>
+
+        #note {
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+<section id="body">
+
+{# logo et adresse #}
+<div class="logo"><img src="{{ logo }}" alt="logo" width="150px" height="80px" type="images/png"></div>
+<div class="adresse">
+    94 Chemin de la hache<br>
+    97160 le moul
+    <br>
+    Tél: 0690737674 / 0767321447<br>
+    Email: joel@joellocation.com<br>
+    SIRET : 87868990000016<br>
+</div>
+<br>
+<div class="details_facture">
+    <strong>Facture N° FA00029</strong><br>
+    Date de création : 13-06-2021
+    <br>
+    Date d'échéance : 30-06-2021
+    <br>
+    Devis associé:
+    {{ reservation.numDevis }}
+</div>
+<div class="details_client">
+
+    <strong>{{ reservation.client.nom }}
+        {{ reservation.client.prenom }}</strong>
+    <br>
+    {{ reservation.client.adresse }}
+    <br>
+    {{ reservation.client.complementAdresse }}
+    <br>
+    {{ reservation.client.ville }}
+
+</div>
+<div style="margin-top: 20px; margin-bottom: 10px" class="">
+    <strong>Objet : </strong>
+    Location
+    {{ reservation.vehicule.marque }}
+    {{ reservation.vehicule.modele }}
+    du
+    {{ reservation.dateDebut|date('d/m/Y H:i') }}
+    au
+    {{ reservation.dateFin|date('d/m/Y H:i') }}. KM illimités</div>
+{# table gauche droite, info client et conducteurs #}
+<div class="">
+    <table id="recap_table" class=" p-0 " style="width : 100%;">
+        <thead class="bg-danger text-white">
+        <tr>
+            <th>Désignation</th>
+            <th>Qté</th>
+            <th>Prix U.</th>
+            <th>Prix HT</th>
+            <th>TTC</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="bg-pink">
+            {% set taxe = (reservation.prix * 8.5) / 100 %}
+            <td>
+                {{ reservation.vehicule.marque }}
+                {{ reservation.vehicule.modele }}
+                <br>
+                Location de véhicule pour
+                {{ reservation.duree }}
+                jours.
+                <br>
+                Retrait le
+                {{ reservation.dateDebut|date('d/m/Y') }}. Lieu :
+                {{ reservation.agenceDepart }}.
+                <br>
+                Retour le
+                {{ reservation.dateFin|date('d/m/Y') }}. Lieu :
+                {{ reservation.agenceRetour }}.
+            </td>
+            <td class="text-right">{{ reservation.duree }}j</td>
+            <td class="text-right">{{ reservation.prix / reservation.duree }}</td>
+            <td class="text-right">{{ reservation.prix }}</td>
+            <td class="text-right">{{ reservation.prix + taxe }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+
+{# logo et adresse #}
+<div class="conditions_reglement">
+    <strong>
+        Conditions de règlement
+    </strong><br>
+    Aucun escompte n'est consenti pour règlement anticipe.
+    <br>
+    Tout incident de paiement est passible d'intérêt de retard.<br>
+    Le montant des pénalités résulte de l'application
+    <br>
+    aux sommes restant dues d'un taux d'intérêt légal en
+    <br>
+    vigueur au moment de l'incident. L'indemnité forfaitaire pour frais
+    <br>de recouvrement due au créancier en cas de retard
+    <br>de paiement est de 80EUR.
+</div>
+<div class="table1">
+    <table id="montant" style="width : 100%;">
+        <tr class="bg-pink">
+            <td>Montant HT</td>
+            <td class="text-right">{{ reservation.prix||number_format(2, '.') }}€</td>
+        </tr>
+        <tr>
+            <td>Total TVA 8.5 %</td>
+            <td class="text-right">{{ taxe }}€</td>
+        </tr>
+        <tr class="bg-danger text-white">
+            <td>Total TTC</td>
+            <td class="text-right">{{ (reservation.prix + taxe)|number_format(2, '.') }}</td>
+        </tr>
+        <tr class="bg-pink">
+            {% for paiement in reservation.paiements %}
+                <td>Paiement par
+                    {{ paiement.modePaiement.libelle }}
+                    <br>
+                    le
+                    {{ paiement.datePaiement|date('d/m/Y') }}</td>
+                <td class="text-right">
+                    {{ paiement.montant|number_format(2, '.') }}
+                    €
+                </td>
+            {% endfor %}
+        </tr>
+        <tr class="bg-danger text-white">
+            <td>Reste à payer</td>
+            <td class="text-right">
+                {{ reservation.prix - reservation.sommePaiements }}
+                €
+            </td>
+        </tr>
+    </table>
+</div>
+<div id="note">
+    <strong>
+        Note
+    </strong>
+    <br>
+    Merci pour votre aimable règlement.
+    <br>
+    Au plaisir de vous revoir à nouveau.
+</div>
+<br>
+</section>
+
+<section id="footer" class="bg-danger">
+    <div class=" text-white text-center fs-12" >
+        <div style="">
+            SIRET : 87868990000016 APE: 7711A
+            <br>
+            N°TVA FR40878689900
+            <br>
+            www.joellocation.com
+        </div>
+    </div>
+</section>
+</body>
 </html>

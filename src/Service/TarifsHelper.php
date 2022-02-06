@@ -95,12 +95,15 @@ class TarifsHelper
 
     function sommeTarifsGaranties($garanties)
     {
-        $prix = 0;
-        foreach ($garanties as  $garantie) {
-
-            $prix = $prix  + $garantie->getPrix();
+        if ($garanties != null) {
+            $prix = 0;
+            foreach ($garanties as $garantie) {
+                $prix = $prix + $garantie->getPrix();
+            }
+            return $prix;
+        }else{
+            return 0;
         }
-        return $prix;
     }
 
     function CinquantePourcent($tarif)

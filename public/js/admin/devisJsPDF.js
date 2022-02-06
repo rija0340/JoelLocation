@@ -87,7 +87,7 @@ function devis(devis) {
     doc.text("Note", 10, 200);
     doc.setFontSize(10);
     doc.setFontType("normal");
-    doc.text("Caution: 700€ (carte bancaire non débitée)", 10, 205);
+    doc.text("Caution: 800€ (carte bancaire non débitée)", 10, 205);
     doc.text("Assurance responsabilité civile + accident causé au tiers inclus. ", 10, 210);
     doc.text("Deuxième conducteur gratuit.", 10, 215);
     doc.text("Âge minimum pour le conducteur: 21 ans et 2 ans de permis.", 10, 220);

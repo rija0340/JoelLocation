@@ -52,7 +52,8 @@ class NouvelleReservationController extends AbstractController
         ReservationSession $reservationSession,
         Mailjet $mailjet
 
-    ) {
+    )
+    {
         $this->reservationRepo = $reservationRepo;
         $this->devisRepo = $devisRepo;
         $this->garantiesRepo = $garantiesRepo;
@@ -66,9 +67,10 @@ class NouvelleReservationController extends AbstractController
         $this->mailjet = $mailjet;
     }
     //step1 choix des paramètres de la réservation
+
     /**
      * @Route("/espaceclient/nouvelle-reservation/etape1", name="client_step1", methods={"GET","POST"})
-     * 
+     *
      */
     public function step1(Request $request, SessionInterface $session): Response
     {
@@ -112,13 +114,12 @@ class NouvelleReservationController extends AbstractController
      */
     public function step2(Request $request, PaginatorInterface $paginator): Response
     {
-
         $dateDepart = $this->reservationSession->getDateDepart();
         $dateRetour = $this->reservationSession->getDateRetour();
 
-        //un tableau contenant les véhicules utilisées dans les reservations se déroulant entre 
+        //un tableau contenant les véhicules utilisées dans les reservations se déroulant entre
         //$dateDepart et $dateRetour choisis dans step1 de la réservation
-        $vehiculesReserves  = [];
+        $vehiculesReserves = [];
         $reservations = $this->reservationRepo->findReservationIncludeDates($dateDepart, $dateRetour);
         $vehicules = $this->vehiculeRepo->findAll();
 
@@ -174,22 +175,33 @@ class NouvelleReservationController extends AbstractController
      */
     public function step3(Request $request)
     {
+//        dd($this->reservationSession->getVehicule());
         //recupérer liste options et  garanties dans base de données
         $options = $this->optionsRepo->findAll();
         $garanties = $this->garantiesRepo->findAll();
 
         // recuperation donnée from formulaire options et garanties
-        if ($request->request->get('checkboxOptions') != null) {
+        if ($request->request->get('radio-conducteur') != null) {
 
             //$optionsData et garantiesData sont des tableaux 
             //(mettre un "[]" apres les noms des input type checkbox dans templates pour obtenir tous les  checkbox cochés)
             $conducteur = $request->request->get('radio-conducteur');
-            $optionsData = $request->request->get('checkboxOptions');
-            $garantiesData = $request->request->get('checkboxGaranties');
+            //options peut être null
+            if ($request->get('checkboxOptions') != null) {
+                $optionsData = $request->request->get('checkboxOptions');
+            }
+
+            if ($request->get('checkboxGaranties') != null) {
+                $garantiesData = $request->request->get('checkboxGaranties');
+            }
 
             //ajout options et garanties (tableau d'objets) dans session 
-            $this->reservationSession->addOptions($optionsData);
-            $this->reservationSession->addGaranties($garantiesData);
+            if ($request->get('checkboxOptions') != null) {
+                $this->reservationSession->addOptions($optionsData);
+            }
+            if ($request->get('checkboxGaranties') != null) {
+                $this->reservationSession->addGaranties($garantiesData);
+            }
             //ajout conducteur dans session
             $this->reservationSession->addConducteur($conducteur);
 
@@ -198,7 +210,7 @@ class NouvelleReservationController extends AbstractController
 
         $dateDepart = $this->reservationSession->getDateDepart();
         $dateRetour = $this->reservationSession->getDateRetour();
-        $vehicule =  $this->vehiculeRepo->find($this->reservationSession->getVehicule());
+        $vehicule = $this->vehiculeRepo->find($this->reservationSession->getVehicule());
 
         return $this->render('client/nouvelleReservation/step3.html.twig', [
 
@@ -224,21 +236,25 @@ class NouvelleReservationController extends AbstractController
         //recupération des données venant de sessions pour être affichées dans la page step4
         $dateDepart = $this->reservationSession->getDateDepart();
         $dateRetour = $this->reservationSession->getDateRetour();
-        $vehicule =  $this->vehiculeRepo->find($this->reservationSession->getVehicule());
+        $vehicule = $this->vehiculeRepo->find($this->reservationSession->getVehicule());
         $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
         $optionsData = $this->reservationSession->getOptions();
         $garantiesData = $this->reservationSession->getGaranties();
 
-        //on met dans un tableau les objets corresponans aux options cochés
+        //on met dans un tableau les objets correspondants aux options cochés
         $optionsObjects = [];
-        foreach ($optionsData as $opt) {
-            array_push($optionsObjects,  $this->optionsRepo->find($opt));
+        if ($optionsData != null) {
+            foreach ($optionsData as $opt) {
+                array_push($optionsObjects, $this->optionsRepo->find($opt));
+            }
         }
 
-        //on met dans un tableau les objets corresponans aux garanties cochés
+        //on met dans un tableau les objets correspondants aux garanties cochés
         $garantiesObjects = [];
-        foreach ($garantiesData as $gar) {
-            array_push($garantiesObjects,  $this->garantiesRepo->find($gar));
+        if ($garantiesData != null) {
+            foreach ($garantiesData as $gar) {
+                array_push($garantiesObjects, $this->garantiesRepo->find($gar));
+            }
         }
 
         return $this->render('client/nouvelleReservation/step4.html.twig', [
@@ -271,13 +287,13 @@ class NouvelleReservationController extends AbstractController
         //on met dans un tableau les objets corresponans aux options cochés
         $optionsObjects = [];
         foreach ($optionsData as $opt) {
-            array_push($optionsObjects,  $this->optionsRepo->find($opt));
+            array_push($optionsObjects, $this->optionsRepo->find($opt));
         }
 
         //on met dans un tableau les objets corresponans aux garanties cochés
         $garantiesObjects = [];
         foreach ($garantiesData as $gar) {
-            array_push($garantiesObjects,  $this->garantiesRepo->find($gar));
+            array_push($garantiesObjects, $this->garantiesRepo->find($gar));
         }
 
         //ajout client dans session

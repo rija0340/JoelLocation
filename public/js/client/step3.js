@@ -84,34 +84,34 @@
 
 // }
 
+//le client doit choisir au mmoins une garantie
+// $(document).ready(function () {
+//
+//     //get elements
+//     $btnSave1 = $("#btnEnregistrer1");
+//     $btnSave2 = $("#btnEnregistrer2");
+//     $form = $("#options_garanties");
+//     var oneChecked = false;
+//
+//     $("#btnEnregistrer1, #btnEnregistrer2").click(function (e) {
+//         $("input[name = 'checkboxGaranties[]").each(function () {
+//             if ($(this).is(':checked')) {
+//                 oneChecked = true;
+//             }
+//         });
+//         //si au moins 1 garantie est selectionné, submit the form
+//         if (!oneChecked) {
+//             e.preventDefault();
+//             $.alert({
+//                 title: 'Erreur',
+//                 icon: 'fa fa-warning',
+//                 type: 'red',
+//                 content: '<p>Veuillez choisir au moins une garantie</p>',
+//             });
+//         } else {
+//
+//         }
+//     });
 
-$(document).ready(function () {
 
-    //get elements
-    $btnSave1 = $("#btnEnregistrer1");
-    $btnSave2 = $("#btnEnregistrer2");
-    $form = $("#options_garanties");
-    var oneChecked = false;
-
-    $("#btnEnregistrer1, #btnEnregistrer2").click(function (e) {
-        $("input[name = 'checkboxGaranties[]").each(function () {
-            if ($(this).is(':checked')) {
-                oneChecked = true;
-            }
-        });
-        //si au moins 1 garantie est selectionné, submit the form
-        if (!oneChecked) {
-            e.preventDefault();
-            $.alert({
-                title: 'Erreur',
-                icon: 'fa fa-warning',
-                type: 'red',
-                content: '<p>Veuillez choisir au moins une garantie</p>',
-            });
-        } else {
-
-        }
-    });
-
-
-});
+// });

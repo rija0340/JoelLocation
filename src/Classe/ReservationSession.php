@@ -168,7 +168,7 @@ class ReservationSession
     }
     public  function getGaranties()
     {
-        if ($this->getReservation() != null) {
+        if ($this->getReservation() != null && array_key_exists('options', $this->session->get('reservation'))) {
             return $this->session->get('reservation')['garanties'];
         } else {
             return null;
