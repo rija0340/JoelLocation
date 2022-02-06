@@ -59,6 +59,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * @Route("/backoffice/reservation")
@@ -373,7 +374,7 @@ class ReservationController extends AbstractController
     /**
      * @Route("/envoi-identification-connexion/{id}", name="reservation_ident_connex", methods={"GET","POST"},requirements={"id":"\d+"})
      */
-    public function envoyerIdentConnex(Request $request, Reservation $reservation, UserPasswordHasherInterface $userPasswordHasher): Response
+    public function envoyerIdentConnex(Request $request, Reservation $reservation, UserPasswordEncoderInterface $passwordEncoder): Response
     {
 
 
@@ -382,7 +383,7 @@ class ReservationController extends AbstractController
         $mdp = uniqid();
         $content = "Bonjour, " . '<br>' .  "voici vos identifications de connexion." . '<br>' . " Mot de passe: " . $mdp . '<br>' . "Email : votre email";
 
-        $reservation->getClient()->setPassword($userPasswordHasher->hashPassword(
+        $reservation->getClient()->setPassword($passwordEncoder->encodePassword(
             $reservation->getClient(),
             $mdp
         ));

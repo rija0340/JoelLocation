@@ -18,7 +18,6 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /**
  * @Route("backoffice/utilisateurs")
@@ -27,11 +26,13 @@ class UserController extends AbstractController
 {
     private $dateHelper;
     private $flashy;
+    private $passwordEncoder;
 
-    public function __construct(FlashyNotifier $flashy, DateHelper $dateHelper)
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder, FlashyNotifier $flashy, DateHelper $dateHelper)
     {
         $this->dateHelper = $dateHelper;
         $this->flashy = $flashy;
+        $this->passwordEncoder = $passwordEncoder;
     }
 
     /**
@@ -82,7 +83,7 @@ class UserController extends AbstractController
     /**
      * @Route("/client/new", name="client_new", methods={"GET","POST"})
      */
-    public function newClient(Request $request, UserPasswordHasherInterface $passwordEncoder): Response
+    public function newClient(Request $request): Response
     {
         $user = new User();
         $form = $this->createForm(UserClientType::class, $user);
@@ -90,7 +91,7 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setRoles(['ROLE_CLIENT']);
-            $user->setPassword($passwordEncoder->hashPassword(
+            $user->setPassword($this->passwordEncoder->encodePassword(
                 $user,
                 $user->getPassword()
             ));
@@ -113,7 +114,7 @@ class UserController extends AbstractController
     /**
      * @Route("/newVenteComptoir", name="newClientVenteComptoir", methods={"GET","POST"})
      */
-    public function newClientVenteComptoir(Request $request, UserRepository $userRepository, UserPasswordHasherInterface $passwordEncoder): Response
+    public function newClientVenteComptoir(Request $request, UserRepository $userRepository): Response
     {
         $nom = $request->query->get('nom');
         $prenom = $request->query->get('prenom');
@@ -130,7 +131,7 @@ class UserController extends AbstractController
             $user->setTelephone($telephone);
             $user->setMail($email);
             $user->setRoles(['ROLE_CLIENT']);
-            $user->setPassword($passwordEncoder->hashPassword(
+            $user->setPassword($this->passwordEncoder->encodePassword(
                 $user,
                 $nom . $telephone
             ));
@@ -173,7 +174,7 @@ class UserController extends AbstractController
     /**
      * @Route("/client/modifier/{id}", name="client_edit", methods={"GET","POST"})
      */
-    public function editClient(Request $request, User $user, UserPasswordHasherInterface $passwordEncoder): Response
+    public function editClient(Request $request, User $user): Response
     {
         $form = $this->createForm(ClientEditType::class, $user);
         $form->handleRequest($request);
@@ -192,7 +193,7 @@ class UserController extends AbstractController
             if ($user->getPassword() == '') {
                 $user->setPassword($user->getRecupass());
             } else {
-                $user->setPassword($passwordEncoder->hashPassword(
+                $user->setPassword($this->passwordEncoder->encodePassword(
                     $user,
                     $user->getPassword()
                 ));
@@ -256,7 +257,7 @@ class UserController extends AbstractController
     /**
      * @Route("/employe/new", name="employe_new", methods={"GET","POST"})
      */
-    public function newEmploye(Request $request, UserPasswordHasherInterface $passwordEncoder): Response
+    public function newEmploye(Request $request): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -265,7 +266,7 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $user->setRoles([$request->request->get('user')['fonction']]);
-            $user->setPassword($passwordEncoder->hashPassword(
+            $user->setPassword($this->passwordEncoder->encodePassword(
                 $user,
                 $user->getPassword()
             ));
@@ -318,7 +319,7 @@ class UserController extends AbstractController
             if ($user->getPassword() == '') {
                 $user->setPassword($user->getRecupass());
             } else {
-                $user->setPassword($this->passwordEncoder->hashPassword(
+                $user->setPassword($this->passwordEncoder->encodePassword(
                     $user,
                     $user->getPassword()
                 ));
