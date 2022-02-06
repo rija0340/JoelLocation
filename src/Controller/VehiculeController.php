@@ -9,6 +9,7 @@ use App\Repository\ModeleRepository;
 use App\Repository\VehiculeRepository;
 use App\Repository\ReservationRepository;
 use Knp\Component\Pager\PaginatorInterface;
+use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -23,11 +24,13 @@ class VehiculeController extends AbstractController
 {
     private $slugger;
     private $modeleRepo;
+    private $flashy;
 
-    public function __construct(SluggerInterface $slugger, ModeleRepository $modeleRepo)
+    public function __construct(FlashyNotifier $flashy, SluggerInterface $slugger, ModeleRepository $modeleRepo)
     {
         $this->slugger = $slugger;
         $this->modeleRepo = $modeleRepo;
+        $this->flashy = $flashy;
     }
 
     /**
@@ -115,13 +118,20 @@ class VehiculeController extends AbstractController
      */
     public function delete(Request $request, Vehicule $vehicule): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $vehicule->getId(), $request->request->get('_token'))) {
+        if (count($vehicule->getReservations()) == 0 && count($vehicule->getDevis()) == 0) {
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($vehicule);
-            $entityManager->flush();
+            if ($this->isCsrfTokenValid('delete' . $vehicule->getId(), $request->request->get('_token'))) {
+
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->remove($vehicule);
+                $entityManager->flush();
+            }
+            $this->flashy->success("Le véhicule a été supprimé avec succès");
+            return $this->redirectToRoute('vehicule_index');
+        } else {
+            $this->flashy->error('Vous ne pouvez pas supprimer ce véhicule car il est utilisé ailleur');
+            return $this->redirectToRoute('vehicule_index');
         }
-        return $this->redirectToRoute('vehicule_index');
     }
 
     /**

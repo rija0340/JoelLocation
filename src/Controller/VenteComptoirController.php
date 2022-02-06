@@ -567,8 +567,10 @@ class VenteComptoirController extends AbstractController
         //mode reservation
         $reservation->setModeReservation($this->modeReservationRepo->findOneBy(['libelle' => 'CPT']));
         //boucle pour ajout options 
-        foreach ($this->optionsObjectsFromSession() as $option) {
-            $reservation->addOption($option);
+        if ($this->optionsObjectsFromSession() != null) {
+            foreach ($this->optionsObjectsFromSession() as $option) {
+                $reservation->addOption($option);
+            }
         }
 
         //boucle pour ajout garantie 
