@@ -92,7 +92,8 @@ class VehiculeController extends AbstractController
     {
         // dump($request);
         // die();
-        $form = $this->createForm(VehiculeEditType::class, $vehicule);
+        /* $form = $this->createForm(VehiculeEditType::class, $vehicule); */
+        $form = $this->createForm(VehiculeType::class, $vehicule);
         $form->handleRequest($request);
 
 
