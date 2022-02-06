@@ -16,20 +16,22 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /**
  * @Route("backoffice/utilisateurs")
  */
 class UserController extends AbstractController
 {
-    private $passwordEncoder;
     private $dateHelper;
+    private $flashy;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder, DateHelper $dateHelper)
+    public function __construct(FlashyNotifier $flashy, DateHelper $dateHelper)
     {
-        $this->passwordEncoder = $passwordEncoder;
         $this->dateHelper = $dateHelper;
+        $this->flashy = $flashy;
     }
 
     /**
@@ -80,7 +82,7 @@ class UserController extends AbstractController
     /**
      * @Route("/client/new", name="client_new", methods={"GET","POST"})
      */
-    public function newClient(Request $request): Response
+    public function newClient(Request $request, UserPasswordHasherInterface $passwordEncoder): Response
     {
         $user = new User();
         $form = $this->createForm(UserClientType::class, $user);
@@ -88,7 +90,7 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setRoles(['ROLE_CLIENT']);
-            $user->setPassword($this->passwordEncoder->encodePassword(
+            $user->setPassword($passwordEncoder->hashPassword(
                 $user,
                 $user->getPassword()
             ));
@@ -111,7 +113,7 @@ class UserController extends AbstractController
     /**
      * @Route("/newVenteComptoir", name="newClientVenteComptoir", methods={"GET","POST"})
      */
-    public function newClientVenteComptoir(Request $request, UserRepository $userRepository): Response
+    public function newClientVenteComptoir(Request $request, UserRepository $userRepository, UserPasswordHasherInterface $passwordEncoder): Response
     {
         $nom = $request->query->get('nom');
         $prenom = $request->query->get('prenom');
@@ -128,7 +130,7 @@ class UserController extends AbstractController
             $user->setTelephone($telephone);
             $user->setMail($email);
             $user->setRoles(['ROLE_CLIENT']);
-            $user->setPassword($this->passwordEncoder->encodePassword(
+            $user->setPassword($passwordEncoder->hashPassword(
                 $user,
                 $nom . $telephone
             ));
@@ -171,7 +173,7 @@ class UserController extends AbstractController
     /**
      * @Route("/client/modifier/{id}", name="client_edit", methods={"GET","POST"})
      */
-    public function editClient(Request $request, User $user): Response
+    public function editClient(Request $request, User $user, UserPasswordHasherInterface $passwordEncoder): Response
     {
         $form = $this->createForm(ClientEditType::class, $user);
         $form->handleRequest($request);
@@ -190,7 +192,7 @@ class UserController extends AbstractController
             if ($user->getPassword() == '') {
                 $user->setPassword($user->getRecupass());
             } else {
-                $user->setPassword($this->passwordEncoder->encodePassword(
+                $user->setPassword($passwordEncoder->hashPassword(
                     $user,
                     $user->getPassword()
                 ));
@@ -214,13 +216,20 @@ class UserController extends AbstractController
      */
     public function clientDelete(Request $request, User $user): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($user);
-            $entityManager->flush();
-        }
 
-        return $this->redirectToRoute('client_index');
+        if (count($user->getReservations()) == 0 && count($user->getDevis()) == 0) {
+
+            if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->remove($user);
+                $entityManager->flush();
+            }
+            $this->flashy->success("Le client st supprimé avec succès");
+            return $this->redirectToRoute('client_index');
+        } else {
+            $this->flashy->error("Le client ne peut pas être supprimé car relié à des réservations ou devis");
+            return $this->redirectToRoute('client_index');
+        }
     }
 
 
@@ -247,7 +256,7 @@ class UserController extends AbstractController
     /**
      * @Route("/employe/new", name="employe_new", methods={"GET","POST"})
      */
-    public function newEmploye(Request $request): Response
+    public function newEmploye(Request $request, UserPasswordHasherInterface $passwordEncoder): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -255,9 +264,8 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            dd($request);
             $user->setRoles([$request->request->get('user')['fonction']]);
-            $user->setPassword($this->passwordEncoder->encodePassword(
+            $user->setPassword($passwordEncoder->hashPassword(
                 $user,
                 $user->getPassword()
             ));
@@ -310,7 +318,7 @@ class UserController extends AbstractController
             if ($user->getPassword() == '') {
                 $user->setPassword($user->getRecupass());
             } else {
-                $user->setPassword($this->passwordEncoder->encodePassword(
+                $user->setPassword($this->passwordEncoder->hashPassword(
                     $user,
                     $user->getPassword()
                 ));

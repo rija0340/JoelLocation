@@ -58,7 +58,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /**
  * @Route("/backoffice/reservation")
@@ -83,8 +83,25 @@ class ReservationController extends AbstractController
     private $flashy;
     private $modePaiementRepo;
 
-    public function __construct(ModePaiementRepository $modePaiementRepo, ConducteurRepository $conducteurRepo, RouterInterface $router, FlashyNotifier $flashy, Mailjet $mail, EntityManagerInterface $em, MarqueRepository $marqueRepo, ModeleRepository $modeleRepo, TarifsHelper $tarifsHelper, DateHelper $dateHelper, TarifsRepository $tarifsRepo, ReservationRepository $reservationRepo,  UserRepository $userRepo, VehiculeRepository $vehiculeRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
-    {
+    public function __construct(
+        ModePaiementRepository $modePaiementRepo,
+        ConducteurRepository $conducteurRepo,
+        RouterInterface $router,
+        FlashyNotifier $flashy,
+        Mailjet $mail,
+        EntityManagerInterface $em,
+        MarqueRepository $marqueRepo,
+        ModeleRepository $modeleRepo,
+        TarifsHelper $tarifsHelper,
+        DateHelper $dateHelper,
+        TarifsRepository $tarifsRepo,
+        ReservationRepository $reservationRepo,
+        UserRepository $userRepo,
+        VehiculeRepository $vehiculeRepo,
+        OptionsRepository $optionsRepo,
+        GarantieRepository $garantiesRepo
+
+    ) {
 
         $this->reservationRepo = $reservationRepo;
         $this->vehiculeRepo = $vehiculeRepo;
@@ -113,11 +130,11 @@ class ReservationController extends AbstractController
         // liste des reservations dont les dates de début sont supérieurs à la date now
         $reservations = $reservationRepository->findNouvelleReservations();
 
-        $pagination = $paginator->paginate(
-            $reservations, /* query NOT result */
-            $request->query->getInt('page', 1)/*page number*/,
-            50/*limit per page*/
-        );
+        // $pagination = $paginator->paginate(
+        //     $reservations, /* query NOT result */
+        //     $request->query->getInt('page', 1)/*page number*/,
+        //     50/*limit per page*/
+        // );
         return $this->render('admin/reservation/crud/index.html.twig', [
             'reservations' => $reservations,
         ]);
@@ -356,7 +373,7 @@ class ReservationController extends AbstractController
     /**
      * @Route("/envoi-identification-connexion/{id}", name="reservation_ident_connex", methods={"GET","POST"},requirements={"id":"\d+"})
      */
-    public function envoyerIdentConnex(Request $request, Reservation $reservation): Response
+    public function envoyerIdentConnex(Request $request, Reservation $reservation, UserPasswordHasherInterface $userPasswordHasher): Response
     {
 
 
@@ -365,10 +382,11 @@ class ReservationController extends AbstractController
         $mdp = uniqid();
         $content = "Bonjour, " . '<br>' .  "voici vos identifications de connexion." . '<br>' . " Mot de passe: " . $mdp . '<br>' . "Email : votre email";
 
-        $reservation->getClient()->setPassword($this->passwordEncoder->encodePassword(
+        $reservation->getClient()->setPassword($userPasswordHasher->hashPassword(
             $reservation->getClient(),
             $mdp
         ));
+
         $this->em->flush();
         $this->mail->send($mail, $nom, "Identifiants de connexion", $content);
 
