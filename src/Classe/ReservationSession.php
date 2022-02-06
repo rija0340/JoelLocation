@@ -176,7 +176,8 @@ class ReservationSession
     }
     public  function getOptions()
     {
-        if ($this->getReservation() != null) {
+        //choix de options est optionnel
+        if ($this->getReservation() != null && array_key_exists('options', $this->session->get('reservation'))) {
             return $this->session->get('reservation')['options'];
         } else {
             return null;

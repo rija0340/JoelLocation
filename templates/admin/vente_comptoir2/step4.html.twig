@@ -118,21 +118,24 @@
 						</li>
 					</ul>
 				</div>
-				<div class="options">
-					<h3 class="heading">Options</h3>
+				{% if options != null and conducteur != "false" %}
+					<div class="options">
+						<h3 class="heading">Options</h3>
 
-					<ul>
-						{% if conducteur == "true" %}
-							<li>Conducteur</li>
-						{% endif %}
-						{% for option in options %}
-							<li>{{option.appelation}}
-								:
-								{{option.prix}}
-								€</li>
-						{% endfor %}
-					</ul>
-				</div>
+						<ul>
+							{% if conducteur == "true" %}
+								<li>Conducteur</li>
+							{% endif %}
+							{% for option in options %}
+								<li>{{option.appelation}}
+									:
+									{{option.prix}}
+									€</li>
+							{% endfor %}
+						</ul>
+
+					</div>
+				{% endif %}
 				<div class="garanties">
 					<h3 class="heading">Garanties</h3>
 					<ul>

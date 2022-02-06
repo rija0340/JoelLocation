@@ -221,16 +221,21 @@ class VenteComptoirController extends AbstractController
         $garanties = $this->garantiesRepo->findAll();
 
         // recuperation donnée from formulaire options et garanties
-        if ($request->request->get('checkboxOptions') != null) {
+        if ($request->request->get('checkboxGaranties') != null) {
 
             //$optionsData et garantiesData sont des tableaux 
             //(mettre un "[]" apres les noms des input type checkbox dans templates pour obtenir tous les  checkbox cochés)
             $conducteur = $request->request->get('radio-conducteur');
-            $optionsData = $request->request->get('checkboxOptions');
+            //options peut être null
+            if ($request->get('checkboxOptions') != null) {
+                $optionsData = $request->request->get('checkboxOptions');
+            }
             $garantiesData = $request->request->get('checkboxGaranties');
 
             //ajout options et garanties (tableau d'objets) dans session 
-            $this->reservationSession->addOptions($optionsData);
+            if ($request->get('checkboxOptions') != null) {
+                $this->reservationSession->addOptions($optionsData);
+            }
             $this->reservationSession->addGaranties($garantiesData);
             $this->reservationSession->addConducteur($conducteur);
 
@@ -269,7 +274,8 @@ class VenteComptoirController extends AbstractController
      */
     public function step4(Request $request): Response
     {
-        // securité pour empecher de sauter directement
+
+        // securité pour empecher de sauter directement d'une étape à d'autre
         if ($this->reservationSession->getReservation() == null) {
             return $this->redirectToRoute('step1');
         }
@@ -598,15 +604,20 @@ class VenteComptoirController extends AbstractController
         return $this->redirectToRoute('reservation_index');
     }
 
-    //return an array of objects of options
+    //return an array of objects of options or null
     public function optionsObjectsFromSession()
     {
         //on met dans un tableau les objets corresponans aux options cochés
         $optionsObjects = [];
-        foreach ($this->reservationSession->getOptions() as $opt) {
-            array_push($optionsObjects,  $this->optionsRepo->find($opt));
+        if ($this->reservationSession->getOptions() != null) {
+            # code...
+            foreach ($this->reservationSession->getOptions() as $opt) {
+                array_push($optionsObjects,  $this->optionsRepo->find($opt));
+            }
+            return $optionsObjects;
+        } else {
+            return null;
         }
-        return $optionsObjects;
     }
 
     //return an array of objects of garanties
