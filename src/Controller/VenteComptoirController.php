@@ -365,7 +365,13 @@ class VenteComptoirController extends AbstractController
     public function saveDevisSendMail(Request $request): Response
     {
         $numDevis = $this->saveDevis($request);
-        $Mailcontent = 'Un devis a été enregistré, veuillez vous connecter pour le consulter et le valider';
+
+        //url de téléchargement du devis
+        $devis = $this->devisRepo->findOneBy(['numero' => $numDevis]);
+        $url   = $this->generateUrl('devis_pdf', ['id' => $devis->getId()]);
+        $url = "https://joellocation.com" . $url;
+
+        $Mailcontent = "Un devis a été enregistré, vous pouver télécharger le pdf en cliquant <a href='" . $url . "'>ici</a>. Veuillez vous connecter pour le valider";
         $this->mail->send($this->reservationSession->getClient()->getMail(), $this->reservationSession->getClient()->getNom(), 'Devis', $Mailcontent);
 
         $this->flashy->success('Le devis a été enregistré avec succés et un mail a été envoyé au client');
@@ -422,8 +428,11 @@ class VenteComptoirController extends AbstractController
         $devis->setTransformed(false);
 
         //options et garanties sont des tableaux d'objet dans session
-        foreach ($this->optionsObjectsFromSession() as $option) {
-            $devis->addOption($option);
+        // checker si options n'est pas null
+        if ($this->optionsObjectsFromSession() != null) {
+            foreach ($this->optionsObjectsFromSession() as $option) {
+                $devis->addOption($option);
+            }
         }
         foreach ($this->garantiesObjectsFromSession() as $garantie) {
             $devis->addGaranty($garantie);

@@ -80,12 +80,16 @@ class TarifsHelper
 
     function sommeTarifsOptions($options)
     {
-        $prix = 0;
-        foreach ($options as  $option) {
+        if ($options != null) {
+            $prix = 0;
+            foreach ($options as  $option) {
 
-            $prix = $prix  + $option->getPrix();
+                $prix = $prix  + $option->getPrix();
+            }
+            return $prix;
+        } else {
+            return 0;
         }
-        return $prix;
     }
 
 
