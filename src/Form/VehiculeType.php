@@ -24,7 +24,7 @@ class VehiculeType extends AbstractType
     {
 
         $builder
-            ->add('immatriculation')
+            ->add('immatriculation', TextType::class)
             ->add('date_mise_service', DateType::class, [
                 'widget' => 'single_text',
             ])

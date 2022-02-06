@@ -9,6 +9,7 @@ use App\Entity\User;
 use App\Entity\Devis;
 use App\Form\UserType;
 use App\Form\UserEditType;
+use App\Form\UserClientType;
 use App\Form\DevisType;
 use App\Form\LoginType;
 use App\Entity\Paiement;
@@ -239,6 +240,7 @@ class ClientController extends AbstractController
     public function editInfoClient(Request $request, User $user): Response
     {
         $form = $this->createForm(ClientEditType::class, $user);
+        /* $form = $this->createForm(ClientType::class, $user); */
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
