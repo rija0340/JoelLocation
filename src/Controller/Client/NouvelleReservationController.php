@@ -286,14 +286,18 @@ class NouvelleReservationController extends AbstractController
 
         //on met dans un tableau les objets corresponans aux options cochés
         $optionsObjects = [];
-        foreach ($optionsData as $opt) {
-            array_push($optionsObjects, $this->optionsRepo->find($opt));
+        if ($optionsData != null) {
+            foreach ($optionsData as $opt) {
+                array_push($optionsObjects, $this->optionsRepo->find($opt));
+            }
         }
 
         //on met dans un tableau les objets corresponans aux garanties cochés
         $garantiesObjects = [];
-        foreach ($garantiesData as $gar) {
-            array_push($garantiesObjects, $this->garantiesRepo->find($gar));
+        if ($garantiesData != null) {
+            foreach ($garantiesData as $gar) {
+                array_push($garantiesObjects, $this->garantiesRepo->find($gar));
+            }
         }
 
         //ajout client dans session
