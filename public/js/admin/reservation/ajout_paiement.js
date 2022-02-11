@@ -7,7 +7,6 @@ addEventListener();
 function getElements() {
     btnAjouterPaiement = document.getElementById('btnAjouterPaiement');
     formAjoutPaiement = document.getElementById('formAjoutPaiement');
-    console.log
 }
 
 function addEventListener() {
@@ -39,6 +38,8 @@ function addFormPaiement() {
     btnSubmit.classList.add("btn");
     btnSubmit.classList.add("btn-danger");
     btnSubmit.innerText = "Valider"
+
+
 
     divModePaiement.appendChild(label);
     divMontant.appendChild(input);

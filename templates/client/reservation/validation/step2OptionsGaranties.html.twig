@@ -6,228 +6,314 @@
 {% block stylesheets %}
 	<link href="{{ asset( 'css/client/validationDevis.css')}}" rel="stylesheet">
 	<link href="{{asset('css/client/step2OptionsGaranties.css')}}" rel="stylesheet">
+	<link href="{{asset('css/admin/vente_comptoir.css')}}" rel="stylesheet">
+
 
 {% endblock %}
 {% block nav %}{% endblock %}
 {% block body %}
+	<input type="hidden" id="options_garanties_data" data-selected-options="{{dataOptions|json_encode()}}" data-selected-garanties="{{dataGaranties|json_encode()}}" data-options="{{allOptions|json_encode()}}" data-garanties="{{allGaranties|json_encode()}}">
 
-	<div class="row">
-		<div class="col-md-3">
-			<div class="votreVehicule">
-				<h5 class="text-uppercase">
-					Votre véhicule
-				</h5>
-			</div>
-			<div class="card p-2 btn-block card mdl-shadow--2dp">
-				<div class="vehicule border-bottom pb-2">
-					<div class="marque_modele">{{devis.vehicule.marque}}
-						{{devis.vehicule.modele}}</div>
-					<img src="/uploads/vehicules/{{ devis.vehicule.image }}" alt="{{ devis.vehicule.image }}" class="img-circle  " style="width : 100%;">
+	<form action="{{path('validation_step2',{'id':devis.id})}}" method="post">
+		<input type="hidden" name="editedOptionsGaranties" value="true">
+		<div class="row">
+			<div class="col-md-3">
+				<div class="votreVehicule">
+					<h5 class="text-uppercase">
+						Votre véhicule
+					</h5>
 				</div>
-				<div>
-					<div class="divDepart border-bottom">
-						<h5 class="heading">Agence départ
-						</h5>
-						<p>
-							<i class="fa fa-map-marker"></i>
-							<span id="agence_depart">{{devis.agenceDepart}}</span><br>
-							<span id="date_depart">{{devis.dateDepart | date('d-m-Y H:i')}}</span>
-							<span id="heure_depart"></span>
-						</p>
+				<div class="card p-2 btn-block card mdl-shadow--2dp">
+					<div class="vehicule border-bottom pb-2">
+						<div class="marque_modele">{{devis.vehicule.marque}}
+							{{devis.vehicule.modele}}</div>
+						<img src="/uploads/vehicules/{{ devis.vehicule.image }}" alt="{{ devis.vehicule.image }}" class="img-circle  " style="width : 100%;">
 					</div>
-					<div class="divRetour border-bottom">
-						<h5 class="heading">Agence retour
-						</h5>
-						<p>
-							<i class="fa fa-map-marker"></i>
-							<span id="agence_retour">{{devis.agenceRetour}}</span><br>
-							<span id="date_retour">{{devis.dateRetour| date('d-m-Y H:i')}}</span>
-							<span id="heure_retour"></span>
-						</p>
-					</div>
-					<div class="divPrestation border-bottom">
-						<h5 class="heading">Prestations incluses</h5>
-						<ul class="pl-2 ">
-							<li>
-								<i class="fa fa-check"></i>
-								Kilométrage Illimité
-							</li>
-							<li>
-								<i class="fa fa-check"></i>
-								Assurance accidents causés aux tiers
-							</li>
-							<li>
-								<i class="fa fa-check"></i>
-								Assurance responsabilité civile
-							</li>
-							<li>
-								<i class="fa fa-check"></i>
-								Assurance collision (CDW)
-							</li>
-							<li>
-								<i class="fa fa-check"></i>
-								TVA 8.5 %
-							</li>
-						</ul>
-					</div>
-					<div class="divTarifVehicule border-bottom">
-						<h5>Prix de base de location</h5>
-						{{tarifVehicule}}
-						eur
-						<br>
-						soit
-						{{ (tarifVehicule / duree)|number_format(2,'.')}}
-						eur / jour
-
-					</div>
-					<div class="divOptions border-bottom">
-						<h5 class="heading">Option(s)
-						</h5>
-						<ul class="pl-2 ">
-							{% if devis.conducteur %}
+					<div>
+						<div class="divDepart border-bottom">
+							<h5 class="heading">Agence départ
+							</h5>
+							<p>
+								<i class="fa fa-map-marker"></i>
+								<span id="agence_depart">{{devis.agenceDepart}}</span><br>
+								<span id="date_depart">{{devis.dateDepart | date('d-m-Y H:i')}}</span>
+								<span id="heure_depart"></span>
+							</p>
+						</div>
+						<div class="divRetour border-bottom">
+							<h5 class="heading">Agence retour
+							</h5>
+							<p>
+								<i class="fa fa-map-marker"></i>
+								<span id="agence_retour">{{devis.agenceRetour}}</span><br>
+								<span id="date_retour">{{devis.dateRetour| date('d-m-Y H:i')}}</span>
+								<span id="heure_retour"></span>
+							</p>
+						</div>
+						<div class="divPrestation border-bottom">
+							<h5 class="heading">Prestations incluses</h5>
+							<ul class="pl-2 ">
 								<li>
 									<i class="fa fa-check"></i>
-									Conducteur</li>
-							{% endif %}
-							{% for option in devis.options %}
+									Kilométrage Illimité
+								</li>
 								<li>
-									<div class="d-flex">
-										<div>
-											<i class="fa fa-check"></i>
-											{{option.appelation}}
+									<i class="fa fa-check"></i>
+									Assurance accidents causés aux tiers
+								</li>
+								<li>
+									<i class="fa fa-check"></i>
+									Assurance responsabilité civile
+								</li>
+								<li>
+									<i class="fa fa-check"></i>
+									Assurance collision (CDW)
+								</li>
+								<li>
+									<i class="fa fa-check"></i>
+									TVA 8.5 %
+								</li>
+							</ul>
+						</div>
+						<div class="divTarifVehicule border-bottom">
+							<h5>Prix de base de location</h5>
+							{{tarifVehicule}}
+							eur
+							<br>
+							soit
+							{{ (tarifVehicule / duree)|number_format(2,'.')}}
+							eur / jour
+
+						</div>
+						<div class="divOptions border-bottom">
+							<h5 class="heading">Option(s)
+							</h5>
+							<ul class="pl-2 ">
+								{% if devis.conducteur %}
+									<li>
+										<i class="fa fa-check"></i>
+										Conducteur</li>
+								{% endif %}
+								{% for option in devis.options %}
+									<li>
+										<div class="d-flex">
+											<div>
+												<i class="fa fa-check"></i>
+												{{option.appelation}}
+											</div>
+											<div class="ml-auto">
+												{{option.prix}}€
+											</div>
 										</div>
-										<div class="ml-auto">
-											{{option.prix}}€
+
+									</li>
+								{% endfor %}
+							</ul>
+						</div>
+						<div class="divGaranties">
+							<h5 class="heading">Garantie(s)
+							</h5>
+							<ul class="pl-2 ">
+								{% for garantie in devis.garanties %}
+									<li>
+										<div class="d-flex">
+											<div>
+												<i class="fa fa-check"></i>
+												{{garantie.appelation}}
+											</div>
+											<div class="ml-auto">
+												{{garantie.prix}}€
+
+											</div>
+										</div>
+									</li>
+								{% endfor %}
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="divTarifTotal text-center">
+					<h5 class="heading">Prix total pour
+						{{(devis.duree)}}
+						jour(s)
+					</h5>
+					<span class="tarifTotal">{{devis.prix}}€</span><br>
+					<span class="tarifJournalier">Soit
+						{{(devis.prix / devis.duree)|number_format(2,'.') }}€ / jour</span>
+				</div>
+			</div>
+			<div class="col-md-9">
+				<div class="x_panel">
+					<div class="x_title">
+						<h3>
+							<i class="fa fa-chevron-right"></i>
+							Vos options
+						</h3>
+					</div>
+
+					<div class="row">
+						<div class="col-md-6">
+							<div class="row">
+								<div class="col-md-4">
+									<div class="alert alert-secondary h-100">
+										<img src="" alt="" style="width:100%;" id="vehicule_photo">
+
+									</div>
+								</div>
+								<div class="col-md-8">
+									<div class="x_title">
+										<h5>
+											Conducteur additionnel
+										</h5>
+
+									</div>
+									<p>
+										A Joel Location, nous savons que les longs trajets peuvent être fatigants, surtout après un bon bain de mer. C’est pour cela, que nous vous proposons l’ajout d’un deuxième conducteur gratuitement. De plus, les assurances responsabilités civiles et accidents causés aux tiers sont inclus dans votre forfait "location de voiture".
+									</p>
+
+									<div class="row">
+										<div class="col-auto">
+											<label class="label-conducteur">Oui
+												<input type="radio" checked name="radio-conducteur" value="true">
+												<span class="checkmark-conducteur"></span>
+											</label>
+										</div>
+										<div class="col-auto">
+											<label class="label-conducteur">Non
+												<input type="radio" name="radio-conducteur" value="false">
+												<span class="checkmark-conducteur"></span>
+											</label>
 										</div>
 									</div>
 
-								</li>
-							{% endfor %}
-						</ul>
-					</div>
-					<div class="divGaranties">
-						<h5 class="heading">Garantie(s)
-						</h5>
-						<ul class="pl-2 ">
-							{% for garantie in devis.garanties %}
-								<li>
-									<div class="d-flex">
-										<div>
-											<i class="fa fa-check"></i>
-											{{garantie.appelation}}
-										</div>
-										<div class="ml-auto">
-											{{garantie.prix}}€
-
-										</div>
-									</div>
-								</li>
-							{% endfor %}
-						</ul>
-					</div>
-				</div>
-			</div>
-			<div class="divTarifTotal text-center">
-				<h5 class="heading">Prix total pour
-					{{(devis.duree)}}
-					jour(s)
-				</h5>
-				<span class="tarifTotal">{{devis.prix}}€</span><br>
-				<span class="tarifJournalier">Soit
-					{{(devis.prix / devis.duree)|number_format(2,'.') }}€ / jour</span>
-			</div>
-		</div>
-		<div class="col-md-9 ">
-			{% form_theme form 'form_div_layout.html.twig'  %}
-			{{ form_start(form) }}
-			<div class="card mdl-shadow--2dp divGaranties">
-				<input type="hidden" value={{devisID}} name="devisID">
-				<div class="text-center mt-4 mb-4">
-					<h2>VOS GARANTIES</h2>
-				</div>
-
-				{% for garantie in form.garanties %}
-					<div class="card p-3 mt-1">
-						<div class="row">
-							<div class="col-md-1">
-								<label class="label-container ">
-									{{ form_widget(garantie) }}
-									<span class="checkmark "></span>
-								</label>
+									{# fin incrementer #}
+								</div>
 							</div>
-							<div class="col-md-11">
-								<h5>
-									{{garantie.vars.label}}
+						</div>
+						<div class="col-md-6">
+							<div class="row">
+								<div class="col-md-4">
+									<div class="alert alert-secondary btn-block h-100">
+										<img src="" alt="" style="width:100%;" id="vehicule_photo">
+									</div>
+								</div>
+								<div class="col-md-8">
+									<div class="x_title">
+										<h5>
+											Siège bébé / enfant
+										</h5>
+									</div>
+									<p>Nous mettons à votre disposition des sièges bébé et nourrissons, homologués NF, pour seulement 30 euros TTC. Les rehausseurs pour les enfants de + de 15kg sont totalement gratuits !</p>
+									{# test radio #}
+									{% for option in options  %}
+										{% if option.type == "siège" %}
+											<label class="label-container">
+												{{option.appelation}}
+												{% if option.prix != 0  %}
+													:
+													{{option.prix}}€
+												{% endif %}
+												<input type="checkbox" name="checkboxOptions[]" value="{{option.id}}">
+												<span class="checkmark"></span>
+											</label>
 
-									{% for gar in garanties %}
-										{% if gar.id == garantie.vars.value %}
-											:
-											{{gar.prix}}
-											€
 										{% endif %}
 									{% endfor %}
-								</h5>
-								{% for gar in garanties %}
-									{% if gar.id == garantie.vars.value %}
-										<p class="text-justify">
-											{{gar.description  }}
-										</p>
-									{% endif %}
-								{% endfor %}
+									{# fin incrementer #}
+								</div>
 							</div>
 						</div>
-					</div>
-				{% endfor %}
-			</div>
-			<div class="card mdl-shadow--2dp divOptions">
-				<div class="text-center mt-4 mb-4">
-					<h2>VOS OPTIONS</h2>
-				</div>
-				<div class="p-3">
-					<div class="x_title">
-						<h4>
-							Siège bébé / enfant
-						</h4>
-					</div>
-					<p>Nous mettons à votre disposition des sièges bébé et nourrissons, homologués NF, pour seulement 30 euros TTC. Les rehausseurs pour les enfants de + de 15kg sont totalement gratuits !</p>
-				</div>
-				<div class="">
-					{% for option in form.options %}
-						<div class="card p-3 mt-1">
-							<div class="row">
-								<div class="col-md-1">
-									<label class="label-container ">
-										{{ form_widget(option) }}
-										<span class="checkmark "></span>
-									</label>
-								</div>
-								<div class="col-md-11">
-									<h5>
-										{{option.vars.label}}
 
-										{% for opt in options %}
-											{% if opt.id == option.vars.value %}
-												:
-												{{opt.prix}}
+						{% for option in options  %}
+							{% if option.type != "siège" %}
+								{# refueling #}
+								<div class="col-md-6 p-2">
+									<div class="row">
+										<div class="col-md-4">
+											<div class="alert alert-secondary h-100">
+												<img src="" alt="" style="width:100%;">
+											</div>
+										</div>
+										<div class="col-md-8">
+											<div class="x_title">
+												<h5>
+													{{option.appelation}}
+												</h5>
+											</div>
+											<p>
+												{{option.description}}
+											</p>
+											<div class="col-auto">
+												<label class="label-container">{{option.appelation}}
+													:
+													{{option.prix}}
+													€
+													<input type="checkbox" name="checkboxOptions[]" value="{{option.id}}">
+													<span class="checkmark"></span>
+												</label>
+											</div>
+										</div>
+									</div>
+								</div>
+
+							{% endif %}
+						{% endfor %}
+
+					</div>
+				</div>
+
+				<div class="x_panel">
+					<div class="x_title">
+						<h3>
+							<i class="fa fa-chevron-right"></i>
+
+							Vos garanties</h3>
+					</div>
+					<div class="row">
+						{% for garantie in garanties %}
+							<div class="col-md-6">
+								<div class="row">
+									<div class="col-md-4">
+										<div class="alert alert-secondary h-100">
+											<img src="" alt="" style="width:100%;" id="vehicule_photo">
+
+										</div>
+									</div>
+									<div class="col-md-8">
+										<div class="x_title">
+											<h5>
+												{{garantie.appelation}}
+											</h5>
+										</div>
+										<p>
+											{{garantie.description}}
+										</p>
+										<div
+											class="row">
+											{# <div class="col-auto p-0"><label class="label-container">90€<input type="checkbox" checked="checked"><span class="checkmark"></span></label></div> #}
+
+											<label class="label-container">{{garantie.prix}}
 												€
-											{% endif %}
-										{% endfor %}
-									</h5>
+												<input type="checkbox" name="checkboxGaranties[]" value="{{garantie.id}}">
+												<span class="checkmark"></span>
+											</label>
+										</div>
+									</div>
 								</div>
 							</div>
-						</div>
-					{% endfor %}
+						{% endfor %}
+					</div>
 				</div>
-				<div class="text-center mt-3 mb-3">
-					<button class="btn btn-danger ">
-						<i class="fa fa-book" aria-hidden="true"></i>
-						{{ button_label|default('Enregistrer') }}</button>
+				<div class="text-center">
+					<a href="{{path('devis_show', {'id': devis.id })}}" class="btn btn-dark">Annuler</a>
+					<button type="submit" class="btn btn-danger">Enregistrer</button>
 				</div>
 			</div>
-			{{ form_end(form) }}
 		</div>
-	</div>
+	</form>
 {% endblock %}
 {% block javascripts %}
-	<script src="{{ asset('js/client/reservation/validation_devis/step2OptionsGaranties.js')}}"></script>
+	{# // <script src="{{ asset('js/client/reservation/validation_devis/step2OptionsGaranties.js')}}"></script> #}
+	<script src="{{asset('js/admin/options_garanties/edit.js')}}"></script>
+
 {% endblock %}

@@ -35,6 +35,8 @@ use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\PasswordHasherEncoder;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Serializer\SerializerInterface;
+
 
 class DevisController extends AbstractController
 {
@@ -428,7 +430,7 @@ class DevisController extends AbstractController
     /**
      *  @Route("devis/modifier-options-garanties/{id}", name="devis_optionsGaranties_edit", methods={"GET","POST"},requirements={"id":"\d+"})
      */
-    public function editOptionsGaranties(Request $request, Devis $devis): Response
+    public function editOptionsGaranties(Request $request, Devis $devis, SerializerInterface $serializerInterface): Response
     {
 
         $form = $this->createForm(OptionsGarantiesType::class, $devis);
@@ -436,21 +438,107 @@ class DevisController extends AbstractController
         $options = $this->optionsRepo->findAll();
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        //serializer options et garanties de devis
+        $dataOptions = [];
+        foreach ($devis->getOptions() as $key => $option) {
+            $dataOptions[$key]['id'] =  $option->getId();
+            $dataOptions[$key]['appelation'] = $option->getAppelation();
+            $dataOptions[$key]['description'] = $option->getDescription();
+            $dataOptions[$key]['type'] = $option->getType();
+            $dataOptions[$key]['prix'] = $option->getPrix();
+        }
 
-            $devis->setPrix($devis->getTarifVehicule() + $devis->getPrixGaranties() + $devis->getPrixOptions());
+        $dataGaranties = [];
+        foreach ($devis->getGaranties() as $key => $garantie) {
+            $dataGaranties[$key]['id'] =  $garantie->getId();
+            $dataGaranties[$key]['appelation'] = $garantie->getAppelation();
+            $dataGaranties[$key]['description'] = $garantie->getDescription();
+            $dataGaranties[$key]['prix'] = $garantie->getPrix();
+        }
+
+        $allOptions = [];
+        foreach ($this->optionsRepo->findAll() as $key => $option) {
+            $allOptions[$key]['id'] =  $option->getId();
+            $allOptions[$key]['appelation'] = $option->getAppelation();
+            $allOptions[$key]['description'] = $option->getDescription();
+            $allOptions[$key]['prix'] = $option->getPrix();
+            $allOptions[$key]['type'] = $option->getType();
+        }
+
+
+        $allGaranties = [];
+        foreach ($this->garantiesRepo->findAll() as $key => $garantie) {
+            $allGaranties[$key]['id'] =  $garantie->getId();
+            $allGaranties[$key]['appelation'] = $garantie->getAppelation();
+            $allGaranties[$key]['description'] = $garantie->getDescription();
+            $allGaranties[$key]['prix'] = $garantie->getPrix();
+        }
+
+        if ($request->get('editedOptionsGaranties') == "true") {
+
+            $checkboxOptions = $request->get("checkboxOptions");
+            $checkboxGaranties = $request->get("checkboxGaranties");
+
+            if ($checkboxOptions != []) {
+                // tous enlever et puis entrer tous les options
+                foreach ($devis->getOptions() as $option) {
+                    $devis->removeOption($option);
+                }
+                for ($i = 0; $i < count($checkboxOptions); $i++) {
+                    $devis->addOption($this->optionsRepo->find($checkboxOptions[$i]));
+                }
+                $this->em->flush();
+            } else {
+                // si il y a des options, les enlever
+                if (count($devis->getOptions()) > 0) {
+                    foreach ($devis->getOptions() as $option) {
+                        $devis->removeOption($option);
+                    }
+                }
+                $this->em->flush();
+            }
+
+            if ($checkboxGaranties != []) {
+                // tous enlever et puis entrer tous les garanties
+                foreach ($devis->getGaranties() as $garantie) {
+                    $devis->removeGaranty($garantie);
+                }
+                for ($i = 0; $i < count($checkboxGaranties); $i++) {
+                    $devis->addGaranty($this->garantiesRepo->find($checkboxGaranties[$i]));
+                }
+                $this->em->flush();
+            } else {
+                // si il y a des garanties, les enlever
+                if (count($devis->getGaranties()) > 0) {
+                    foreach ($devis->getGaranties() as $garantie) {
+                        $devis->removeGaranty($garantie);
+                    }
+                }
+                $this->em->flush();
+            }
+            $devis->setPrixGaranties($this->tarifsHelper->sommeTarifsGaranties($devis->getGaranties()));
+            $devis->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($devis->getOptions()));
+            $devis->setPrix($devis->getTarifVehicule() + $devis->getPrixOptions() + $devis->getPrixGaranties());
+
             $this->em->flush();
             return $this->redirectToRoute('devis_show', ['id' => $devis->getId()]);
         }
+
         return $this->render('admin/devis/options_garanties/edit.html.twig', [
             'form' => $form->createView(),
             'devis' => $devis,
             'garanties' => $garanties,
             'options' => $options,
-            'routeReferer' => 'reservation_show'
+            'routeReferer' => 'reservation_show',
+            'dataOptions' => $dataOptions,
+            'dataGaranties' => $dataGaranties,
+            'allOptions' => $allOptions,
+            'allGaranties' => $allGaranties,
 
         ]);
     }
+
+
 
 
     /**

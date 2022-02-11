@@ -52,8 +52,7 @@ class NouvelleReservationController extends AbstractController
         ReservationSession $reservationSession,
         Mailjet $mailjet
 
-    )
-    {
+    ) {
         $this->reservationRepo = $reservationRepo;
         $this->devisRepo = $devisRepo;
         $this->garantiesRepo = $garantiesRepo;
@@ -175,14 +174,13 @@ class NouvelleReservationController extends AbstractController
      */
     public function step3(Request $request)
     {
-//        dd($this->reservationSession->getVehicule());
+        //        dd($this->reservationSession->getVehicule());
         //recupérer liste options et  garanties dans base de données
         $options = $this->optionsRepo->findAll();
         $garanties = $this->garantiesRepo->findAll();
 
         // recuperation donnée from formulaire options et garanties
         if ($request->request->get('radio-conducteur') != null) {
-
             //$optionsData et garantiesData sont des tableaux 
             //(mettre un "[]" apres les noms des input type checkbox dans templates pour obtenir tous les  checkbox cochés)
             $conducteur = $request->request->get('radio-conducteur');

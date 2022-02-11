@@ -10,6 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
 
 // DON'T forget the following use statement!!!
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\SerializerInterface;
+
 
 /**
  * @ORM\Entity(repositoryClass=DevisRepository::class)
@@ -17,6 +19,9 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class Devis
 {
+
+
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -125,11 +130,14 @@ class Devis
      */
     private $downloadId;
 
+    // public $serializedOptions;
+    // public $serializer;
 
-    public function __construct()
+    public function __construct(SerializerInterface $serializer)
     {
         $this->options = new ArrayCollection();
         $this->garanties = new ArrayCollection();
+        // $this->serializer = $serializer;
     }
 
     public function getId(): ?int
@@ -420,4 +428,10 @@ class Devis
 
         return $this;
     }
+
+    // public function serializeOptons()
+    // {
+    //     $this->serializer->serialize($this->options, 'json');
+    //     return $this->serializedOptions;
+    // }
 }

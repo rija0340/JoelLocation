@@ -2,6 +2,7 @@
 
 namespace App\Controller\Client;
 
+use App\Entity\Devis;
 use App\Service\DateHelper;
 use App\Form\ClientInfoType;
 use App\Service\TarifsHelper;
@@ -16,6 +17,7 @@ use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Classe\ValidationReservationClientSession;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ValidationDevisController extends AbstractController
@@ -30,6 +32,7 @@ class ValidationDevisController extends AbstractController
     private $tarifsHelper;
     private $vehiculeRepo;
     private $validationSession;
+    private $em;
 
     public function __construct(
         ReservationRepository $reservationRepo,
@@ -40,7 +43,9 @@ class ValidationDevisController extends AbstractController
         TarifsHelper $tarifsHelper,
         VehiculeRepository $vehiculeRepo,
         FlashyNotifier $flashy,
-        ValidationReservationClientSession $validationSession
+        ValidationReservationClientSession $validationSession,
+        EntityManagerInterface $em
+
 
     ) {
         $this->reservationRepo = $reservationRepo;
@@ -52,22 +57,23 @@ class ValidationDevisController extends AbstractController
         $this->vehiculeRepo = $vehiculeRepo;
         $this->flashy = $flashy;
         $this->validationSession = $validationSession;
+        $this->em = $em;
     }
 
     /**
-     * @Route("/espaceclient/validation/options-garanties", name="validation_step2", methods={"GET","POST"})
+     * @Route("/espaceclient/validation/options-garanties/{id}", name="validation_step2", methods={"GET","POST"})
      */
-    public function step2OptionsGaranties(Request $request): Response
+    public function step2OptionsGaranties(Request $request, Devis $devis): Response
     {
 
-        $devisID = $request->request->get('reservID');
+        // $devisID = $request->request->get('reservID');
 
-        if ($devisID == null) {
-            $devisID = $request->request->get('devisID');
-        }
+        // if ($devisID == null) {
+        //     $devisID = $request->request->get('devisID');
+        // }
 
-        $devis = $this->devisRepo->find($devisID);
-        if (!$devis || $devis->getClient() != $this->getUser()) {
+        // $devis = $this->devisRepo->find($devisID);
+        if ($devis->getClient() != $this->getUser()) {
             $this->flashy->error("Le devis n'existe pas");
             return $this->redirectToRoute('espaceClient_index');
         }
@@ -78,15 +84,101 @@ class ValidationDevisController extends AbstractController
         $form = $this->createForm(ValidationOptionsGarantiesType::class, $devis);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            $devis->setPrix($this->tarifsHelper->sommeTarifsGaranties($devis->getGaranties()) + $this->tarifsHelper->sommeTarifsOptions($devis->getOptions()) + $devis->getTarifVehicule());
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($devis);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('validation_step3', ['devisID' => $devisID]);
+        //serializer options et garanties de devis
+        $dataOptions = [];
+        foreach ($devis->getOptions() as $key => $option) {
+            $dataOptions[$key]['id'] =  $option->getId();
+            $dataOptions[$key]['appelation'] = $option->getAppelation();
+            $dataOptions[$key]['description'] = $option->getDescription();
+            $dataOptions[$key]['type'] = $option->getType();
+            $dataOptions[$key]['prix'] = $option->getPrix();
         }
+
+        $dataGaranties = [];
+        foreach ($devis->getGaranties() as $key => $garantie) {
+            $dataGaranties[$key]['id'] =  $garantie->getId();
+            $dataGaranties[$key]['appelation'] = $garantie->getAppelation();
+            $dataGaranties[$key]['description'] = $garantie->getDescription();
+            $dataGaranties[$key]['prix'] = $garantie->getPrix();
+        }
+
+        $allOptions = [];
+        foreach ($this->optionsRepo->findAll() as $key => $option) {
+            $allOptions[$key]['id'] =  $option->getId();
+            $allOptions[$key]['appelation'] = $option->getAppelation();
+            $allOptions[$key]['description'] = $option->getDescription();
+            $allOptions[$key]['prix'] = $option->getPrix();
+            $allOptions[$key]['type'] = $option->getType();
+        }
+
+
+        $allGaranties = [];
+        foreach ($this->garantiesRepo->findAll() as $key => $garantie) {
+            $allGaranties[$key]['id'] =  $garantie->getId();
+            $allGaranties[$key]['appelation'] = $garantie->getAppelation();
+            $allGaranties[$key]['description'] = $garantie->getDescription();
+            $allGaranties[$key]['prix'] = $garantie->getPrix();
+        }
+
+        if ($request->get('editedOptionsGaranties') == "true") {
+
+            $checkboxOptions = $request->get("checkboxOptions");
+            $checkboxGaranties = $request->get("checkboxGaranties");
+
+            if ($checkboxOptions != []) {
+                // tous enlever et puis entrer tous les options
+                foreach ($devis->getOptions() as $option) {
+                    $devis->removeOption($option);
+                }
+                for ($i = 0; $i < count($checkboxOptions); $i++) {
+                    $devis->addOption($this->optionsRepo->find($checkboxOptions[$i]));
+                }
+                $this->em->flush();
+            } else {
+                // si il y a des options, les enlever
+                if (count($devis->getOptions()) > 0) {
+                    foreach ($devis->getOptions() as $option) {
+                        $devis->removeOption($option);
+                    }
+                }
+                $this->em->flush();
+            }
+
+            if ($checkboxGaranties != []) {
+                // tous enlever et puis entrer tous les garanties
+                foreach ($devis->getGaranties() as $garantie) {
+                    $devis->removeGaranty($garantie);
+                }
+                for ($i = 0; $i < count($checkboxGaranties); $i++) {
+                    $devis->addGaranty($this->garantiesRepo->find($checkboxGaranties[$i]));
+                }
+                $this->em->flush();
+            } else {
+                // si il y a des garanties, les enlever
+                if (count($devis->getGaranties()) > 0) {
+                    foreach ($devis->getGaranties() as $garantie) {
+                        $devis->removeGaranty($garantie);
+                    }
+                }
+                $this->em->flush();
+            }
+            $devis->setPrixGaranties($this->tarifsHelper->sommeTarifsGaranties($devis->getGaranties()));
+            $devis->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($devis->getOptions()));
+            $devis->setPrix($devis->getTarifVehicule() + $devis->getPrixOptions() + $devis->getPrixGaranties());
+
+            $this->em->flush();
+            return $this->redirectToRoute('validation_step3', ['id' => $devis->getId()]);
+        }
+
+        // if ($form->isSubmitted() && $form->isValid()) {
+
+        //     $devis->setPrix($this->tarifsHelper->sommeTarifsGaranties($devis->getGaranties()) + $this->tarifsHelper->sommeTarifsOptions($devis->getOptions()) + $devis->getTarifVehicule());
+        //     $entityManager = $this->getDoctrine()->getManager();
+        //     $entityManager->persist($devis);
+        //     $entityManager->flush();
+
+        //     return $this->redirectToRoute('validation_step3', ['devisID' => $devisID]);
+        // }
 
         $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($devis->getDateDepart(), $devis->getDateRetour(), $devis->getVehicule());
         $duree = $this->dateHelper->calculDuree($devis->getDateDepart(), $devis->getDateRetour());
@@ -99,19 +191,21 @@ class ValidationDevisController extends AbstractController
             'options' => $options,
             'devis' => $devis,
             'form' => $form->createView(),
-            'devisID' => $devisID
+            'dataOptions' => $dataOptions,
+            'dataGaranties' => $dataGaranties,
+            'allOptions' => $allOptions,
+            'allGaranties' => $allGaranties,
         ]);
     }
 
 
     /**
-     * @Route("/espaceclient/validation/infos-client/{devisID}", name="validation_step3", methods={"GET","POST"})
+     * @Route("/espaceclient/validation/infos-client/{id}", name="validation_step3", methods={"GET","POST"})
      */
-    public function step3infosClient(Request $request, $devisID): Response
+    public function step3infosClient(Request $request, Devis $devis): Response
     {
         $garanties = $request->query->get('garanties');
-        $devis = $this->devisRepo->find($devisID);
-        if (!$devis || $devis->getClient() != $this->getUser()) {
+        if ($devis->getClient() != $this->getUser()) {
             return $this->redirectToRoute('espaceClient_index');
         }
 
@@ -120,7 +214,6 @@ class ValidationDevisController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
         $listeDevis = $this->devisRepo->findBy(['client' => $client]);
-        $devis = $this->devisRepo->find($devisID);
 
         $formClient = $this->createForm(ClientInfoType::class, $client);
 

@@ -52,7 +52,7 @@
 {% block body %}
 
 	<div class="text-center mb-3">
-	<a href="{{path('client_step2')}}" class="btn btn-dark">Revenir à l'étape précédente</a>
+		<a href="{{path('client_step2')}}" class="btn btn-dark">Revenir à l'étape précédente</a>
 		<button type='submit' class="btn btn-danger btnEnregistrer" form="options_garanties" id="btnEnregistrer1">
 			Enregistrer
 		</button>
@@ -207,21 +207,63 @@
 									<p class="text-justify">Nous mettons à votre disposition des sièges bébé et nourrissons, homologués NF, pour seulement 30 euros TTC. Les rehausseurs pour les enfants de + de 15kg sont totalement gratuits !</p>
 									{# test radio #}
 									{% for option in options %}
+										{% if option.type == "siège" %}
 
-										<label class="label-container">
-											{{option.appelation}}
-											{% if option.prix != 0  %}
-												:
-												{{option.prix}}€
-											{% endif %}
-											<input type="checkbox" name="checkboxOptions[]" value="{{option.id}}">
-											<span class="checkmark"></span>
-										</label>
+											<label class="label-container">
+												{{option.appelation}}
+												{% if option.prix != 0  %}
+													:
+													{{option.prix}}€
+												{% endif %}
+												<input type="checkbox" name="checkboxOptions[]" value="{{option.id}}">
+												<span class="checkmark"></span>
+											</label>
+
+										{% endif %}
 									{% endfor %}
 									{# fin incrementer #}
 								</div>
 							</div>
 						</div>
+
+						{# nouvelles options #}
+						{% for option in options  %}
+							{% if option.type != "siège" %}
+								{# refueling #}
+								<div class="col-md-6 p-2">
+									<div class="row">
+										<div class="col-md-4">
+											<div class="alert alert-secondary h-100">
+												<img src="" alt="" style="width:100%;">
+											</div>
+										</div>
+										<div class="col-md-8">
+											<div class="x_title">
+												<h5>
+													{{option.appelation}}
+												</h5>
+											</div>
+											<p>
+												{{option.description}}
+											</p>
+											<div class="col-auto">
+												<label class="label-container">{{option.appelation}}
+													:
+													{{option.prix}}
+													€
+													<input type="checkbox" name="checkboxOptions[]" value="{{option.id}}">
+													<span class="checkmark"></span>
+												</label>
+											</div>
+										</div>
+									</div>
+								</div>
+
+							{% endif %}
+						{% endfor %}
+
+						{# fin nouvelles options #}
+
 					</div>
 				</div>
 
@@ -270,7 +312,7 @@
 		</div>
 	</form>
 	<div class="text-center mt-3">
-	<a href="{{path('client_step2')}}" class="btn btn-dark">Revenir à l'étape précédente</a>
+		<a href="{{path('client_step2')}}" class="btn btn-dark">Revenir à l'étape précédente</a>
 		<button type='submit' class="btn btn-danger" form="options_garanties" id="btnEnregistrer2">
 			Enregistrer
 		</button>
@@ -279,5 +321,5 @@
 {% endblock %}
 {% block javascripts %}
 
-	<script src="{{asset('js/client/step3.js')}}" ></script>
+	<script src="{{asset('js/client/step3.js')}}"></script>
 {% endblock  %}

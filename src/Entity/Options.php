@@ -40,6 +40,16 @@ class Options
      */
     private $reservations;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $type;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $description;
+
 
 
     public function __construct()
@@ -140,6 +150,30 @@ class Options
         if ($this->reservations->removeElement($reservation)) {
             $reservation->removeOption($this);
         }
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }

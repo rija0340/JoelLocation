@@ -85,8 +85,7 @@ class VenteComptoirController extends AbstractController
         ReservationSession $reservationSession,
         Mailjet $mail,
         ReservationHelper $reservationHelper
-    )
-    {
+    ) {
 
         $this->reservationSession = $reservationSession;
         $this->flashy = $flashy;
@@ -240,6 +239,7 @@ class VenteComptoirController extends AbstractController
             if ($request->get('checkboxOptions') != null) {
                 $this->reservationSession->addOptions($optionsData);
             }
+
             if ($request->get('checkboxGaranties') != null) {
                 $this->reservationSession->addGaranties($garantiesData);
             }
@@ -280,6 +280,7 @@ class VenteComptoirController extends AbstractController
      */
     public function step4(Request $request): Response
     {
+
 
         // securité pour empecher de sauter directement d'une étape à d'autre
         if ($this->reservationSession->getReservation() == null) {
@@ -649,8 +650,7 @@ class VenteComptoirController extends AbstractController
             foreach ($this->reservationSession->getGaranties() as $gar) {
                 array_push($garantiesObjects, $this->garantiesRepo->find($gar));
             }
-        return $garantiesObjects;
-
+            return $garantiesObjects;
         } else {
             return null;
         }

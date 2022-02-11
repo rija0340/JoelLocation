@@ -88,7 +88,6 @@ class ReservationSession
 
     public function addClient($client)
     {
-
         $data = $this->session->get('reservation', []);
         $data['client'] = $client;
         $this->session->set('reservation', $data);
@@ -96,7 +95,6 @@ class ReservationSession
 
     public function addConducteur($conducteur)
     {
-
         $data = $this->session->get('reservation', []);
         $data['conducteur'] = $conducteur;
         $this->session->set('reservation', $data);
@@ -168,7 +166,7 @@ class ReservationSession
     }
     public  function getGaranties()
     {
-        if ($this->getReservation() != null && array_key_exists('options', $this->session->get('reservation'))) {
+        if ($this->getReservation() != null && array_key_exists('garanties', $this->session->get('reservation'))) {
             return $this->session->get('reservation')['garanties'];
         } else {
             return null;

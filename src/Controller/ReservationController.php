@@ -353,6 +353,42 @@ class ReservationController extends AbstractController
         $options = $this->optionsRepo->findAll();
         $form->handleRequest($request);
 
+        //serializer options et garanties de devis
+        $dataOptions = [];
+        foreach ($reservation->getOptions() as $key => $option) {
+            $dataOptions[$key]['id'] =  $option->getId();
+            $dataOptions[$key]['appelation'] = $option->getAppelation();
+            $dataOptions[$key]['description'] = $option->getDescription();
+            $dataOptions[$key]['type'] = $option->getType();
+            $dataOptions[$key]['prix'] = $option->getPrix();
+        }
+
+        $dataGaranties = [];
+        foreach ($reservation->getGaranties() as $key => $garantie) {
+            $dataGaranties[$key]['id'] =  $garantie->getId();
+            $dataGaranties[$key]['appelation'] = $garantie->getAppelation();
+            $dataGaranties[$key]['description'] = $garantie->getDescription();
+            $dataGaranties[$key]['prix'] = $garantie->getPrix();
+        }
+
+        $allOptions = [];
+        foreach ($this->optionsRepo->findAll() as $key => $option) {
+            $allOptions[$key]['id'] =  $option->getId();
+            $allOptions[$key]['appelation'] = $option->getAppelation();
+            $allOptions[$key]['description'] = $option->getDescription();
+            $allOptions[$key]['prix'] = $option->getPrix();
+            $allOptions[$key]['type'] = $option->getType();
+        }
+
+
+        $allGaranties = [];
+        foreach ($this->garantiesRepo->findAll() as $key => $garantie) {
+            $allGaranties[$key]['id'] =  $garantie->getId();
+            $allGaranties[$key]['appelation'] = $garantie->getAppelation();
+            $allGaranties[$key]['description'] = $garantie->getDescription();
+            $allGaranties[$key]['prix'] = $garantie->getPrix();
+        }
+
         if ($form->isSubmitted() && $form->isValid()) {
             $reservation->setPrixGaranties($reservation->getSommeGaranties());
             $reservation->setPrixOptions($reservation->getSommeOptions());
@@ -360,12 +396,68 @@ class ReservationController extends AbstractController
             $this->em->flush();
             return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
         }
+
+        if ($request->get('editedOptionsGaranties') == "true") {
+
+            $checkboxOptions = $request->get("checkboxOptions");
+            $checkboxGaranties = $request->get("checkboxGaranties");
+
+            if ($checkboxOptions != []) {
+                // tous enlever et puis entrer tous les options
+                foreach ($reservation->getOptions() as $option) {
+                    $reservation->removeOption($option);
+                }
+                for ($i = 0; $i < count($checkboxOptions); $i++) {
+                    $reservation->addOption($this->optionsRepo->find($checkboxOptions[$i]));
+                }
+                $this->em->flush();
+            } else {
+                // si il y a des options, les enlever
+                if (count($reservation->getOptions()) > 0) {
+                    foreach ($reservation->getOptions() as $option) {
+                        $reservation->removeOption($option);
+                    }
+                }
+                $this->em->flush();
+            }
+
+            if ($checkboxGaranties != []) {
+                // tous enlever et puis entrer tous les garanties
+                foreach ($reservation->getGaranties() as $garantie) {
+                    $reservation->removeGaranty($garantie);
+                }
+                for ($i = 0; $i < count($checkboxGaranties); $i++) {
+                    $reservation->addGaranty($this->garantiesRepo->find($checkboxGaranties[$i]));
+                }
+                $this->em->flush();
+            } else {
+                // si il y a des garanties, les enlever
+                if (count($reservation->getGaranties()) > 0) {
+                    foreach ($reservation->getGaranties() as $garantie) {
+                        $reservation->removeGaranty($garantie);
+                    }
+                }
+                $this->em->flush();
+            }
+
+            $reservation->setPrixGaranties($this->tarifsHelper->sommeTarifsGaranties($reservation->getGaranties()));
+            $reservation->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($reservation->getOptions()));
+            $reservation->setPrix($reservation->getTarifVehicule() + $reservation->getPrixOptions() + $reservation->getPrixGaranties());
+
+            $this->em->flush();
+            return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
+        }
+
         return $this->render('admin/reservation/crud/options_garanties/edit.html.twig', [
             'form' => $form->createView(),
             'reservation' => $reservation,
             'garanties' => $garanties,
             'options' => $options,
-            'routeReferer' => 'reservation_show'
+            'routeReferer' => 'reservation_show',
+            'dataOptions' => $dataOptions,
+            'dataGaranties' => $dataGaranties,
+            'allOptions' => $allOptions,
+            'allGaranties' => $allGaranties,
 
         ]);
     }
