@@ -32,7 +32,7 @@ function getData(data) {
 }
 
 
-window.onload = function() {
+window.onload = function () {
     ganttInit();
     retrieveDataAjax();
 };
@@ -43,7 +43,7 @@ function retrieveDataAjax() {
         type: 'GET',
         url: '/planningGeneralData',
         timeout: 3000,
-        success: function(data) {
+        success: function (data) {
             getData(data);
             createCheckboxes(getUniqueListVehicules(data));
 
@@ -52,7 +52,7 @@ function retrieveDataAjax() {
             // ganttLoadData(thedata);
 
         },
-        error: function() {
+        error: function () {
             alert('La requête n\'a pas abouti');
         }
     });
@@ -68,6 +68,10 @@ function ganttInit(startDateScale, endDateScale) {
         resize: false,
 
     }];
+
+    //hide task unscheduled
+    gantt.config.show_unscheduled = false;
+
     //affichage scale (organisation date, mois, jours, année)
     gantt.config.scales = [{
         unit: "day",
@@ -75,7 +79,7 @@ function ganttInit(startDateScale, endDateScale) {
         format: "%d %M"
     }];
     // test sur les bares de taches 
-    gantt.templates.task_text = function(start, end, task) {
+    gantt.templates.task_text = function (start, end, task) {
         if (task.client != undefined) {
 
             return task.client + " " + task.start_date_formated + " - " + task.end_date_formated;
@@ -95,12 +99,12 @@ function ganttInit(startDateScale, endDateScale) {
 
     }
     //highlight weekend
-    gantt.templates.scale_cell_class = function(date) {
+    gantt.templates.scale_cell_class = function (date) {
         if (date.getDay() == 0 || date.getDay() == 6) {
             return "weekend";
         }
     };
-    gantt.templates.timeline_cell_class = function(item, date) {
+    gantt.templates.timeline_cell_class = function (item, date) {
         if (date.getDay() == 0 || date.getDay() == 6) {
             return "weekend"
         }
@@ -122,7 +126,7 @@ function ganttInit(startDateScale, endDateScale) {
     gantt.init("gantt_here");
 
     //redirection vers des urls selon l'etat de la réservation 
-    gantt.attachEvent("onTaskDblClick", function(id, e) {
+    gantt.attachEvent("onTaskDblClick", function (id, e) {
         var taskID = gantt.getTask(id).id_r;
         var etat = gantt.getTask(id).etat;
         if (etat == 'encours') {
@@ -206,7 +210,7 @@ function ganttLoadData(data, startDatePeriode, endDatePeriode) {
 
 // datedebutplanning = document.getElementById('datedebutplanning');
 
-datedebutplanning.onchange = function() {
+datedebutplanning.onchange = function () {
     dateValue = this.value;
     ganttInit(dateValue, startDatePlus2Mouths(dateValue));
     ganttLoadData(thedata, dateValue, startDatePlus2Mouths(dateValue));

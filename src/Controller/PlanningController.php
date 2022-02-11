@@ -62,6 +62,7 @@ class PlanningController extends AbstractController
         $vehicules = $vehiculeRepo->findAll();
 
         //mettre toutes les véhicules reservées dans un tableau
+        //à utiliser si on veut seulement afficher les véhicules ayant des réservations
         $vehiculesInvolved = [];
         foreach ($reservations as $res) {
             array_push($vehiculesInvolved, $res->getVehicule());
@@ -71,12 +72,14 @@ class PlanningController extends AbstractController
         $vehiculesInvolved = array_unique($vehiculesInvolved);
 
         //recuperation date debut et fin de l'ensemble des reservations liées à une voiture
+        //afficher tous les véhicules
+        $allVehicules = $this->vehiculeRepo->findAll();
 
         $data1 = array();
         $datas = array();
         $data2 = [];
         //liste des véhicules pour être affiché sur le planning (colonne à gauche)
-        foreach ($vehiculesInvolved as $key => $vehicule) {
+        foreach ($allVehicules as $key => $vehicule) {
             $i = 0;
             $reservationsV = $reservationRepo->findLastReservationsV($vehicule);
             foreach ($reservationsV as $res) {
@@ -85,7 +88,10 @@ class PlanningController extends AbstractController
             $data1[$key]['id'] = $vehicule->getId();
             $data1[$key]['text'] = $vehicule->getMarque() . " " . $vehicule->getModele() . " " . $vehicule->getImmatriculation();
             $data1[$key]['marque_modele'] = $vehicule->getMarque() . " " . $vehicule->getModele();
-
+            //afficher tous les véhicules
+            if (count($vehicule->getReservations()) == 0) {
+                $data1[$key]['unscheduled'] = true;
+            }
             $data1[$key]['render'] =  "split";
             $data1[$key]['parent'] =  0;
         }
