@@ -133,7 +133,7 @@ class Devis
     // public $serializedOptions;
     // public $serializer;
 
-    public function __construct(SerializerInterface $serializer)
+    public function __construct()
     {
         $this->options = new ArrayCollection();
         $this->garanties = new ArrayCollection();

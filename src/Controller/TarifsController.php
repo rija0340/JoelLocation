@@ -163,7 +163,7 @@ class TarifsController extends AbstractController
 
 
     /**
-     * @Route("/tarif/{id}", name="tarif_show", methods={"GET"})
+     * @Route("/tarif/{id}", name="tarif_show", methods={"GET"}, requirements={"id":"\d+"})
      */
     public function show(Tarifs $tarif): Response
     {
@@ -173,7 +173,7 @@ class TarifsController extends AbstractController
     }
 
     /**
-     * @Route("/tarif/{id}/edit", name="tarif_edit", methods={"GET","POST"})
+     * @Route("/tarif/{id}/edit", name="tarif_edit", methods={"GET","POST"},requirements={"id":"\d+"})
      */
     public function edit(Request $request, Tarifs $tarif): Response
     {
@@ -193,7 +193,7 @@ class TarifsController extends AbstractController
     }
 
     /**
-     * @Route("/tarif/{id}", name="tarif_delete", methods={"DELETE"})
+     * @Route("/tarif/{id}", name="tarif_delete", methods={"DELETE"}, requirements={"id":"\d+"})
      */
     public function delete(Request $request, Tarifs $tarif): Response
     {
