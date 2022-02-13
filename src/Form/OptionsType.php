@@ -15,8 +15,7 @@ class OptionsType extends AbstractType
     {
         $builder
             ->add('appelation', TextType::class)
-            ->add('prix', NumbreType::class)
-        ;
+            ->add('prix', NumberType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)
