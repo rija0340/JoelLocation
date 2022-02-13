@@ -16,6 +16,7 @@ class OptionsType extends AbstractType
         $builder
             ->add('appelation', TextType::class)
             ->add('type', TextType::class)
+            ->add('description', TextType::class)
             ->add('prix', NumberType::class);
     }
 
