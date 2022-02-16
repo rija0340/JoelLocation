@@ -113,13 +113,16 @@
 
 $(document).ready(function () {
 
-    selectedOptions = $("#options_garanties_data").data('selected-options');
-    selectedGaranties = $("#options_garanties_data").data('selected-garanties');
+    defaultSelectedOptions = $("#options_garanties_data").data('selected-options');
+    defaultSelectedGaranties = $("#options_garanties_data").data('selected-garanties');
     garanties = $("#options_garanties_data").data('garanties');
     options = $("#options_garanties_data").data('options');
 
+
     var optionsPrix = 0;
     var garantiesPrix = 0;
+    var checkedOptions = [];
+    var checkedGaranties = [];
 
     setDefaultGaranties();
     setDefaultOptions();
@@ -128,12 +131,17 @@ $(document).ready(function () {
 
     //check les checkes options
     function setDefaultOptions() {
+        for (let i = 0; i < defaultSelectedOptions.length; i++) {
+            li = document.createElement('li');
+            li.innerHTML = defaultSelectedOptions[i].appelation;
+            $("#optionsSubscribed").append(li);
 
+        }
         $("input[name='checkboxOptions[]']").each(function () {
 
-            for (let i = 0; i < selectedOptions.length; i++) {
+            for (let i = 0; i < defaultSelectedOptions.length; i++) {
 
-                if ($(this).val() == selectedOptions[i].id) {
+                if ($(this).val() == defaultSelectedOptions[i].id) {
 
                     $(this).attr('checked', 'checked');
                 }
@@ -144,11 +152,18 @@ $(document).ready(function () {
     //check les checkes garanties
 
     function setDefaultGaranties() {
+        for (let i = 0; i < defaultSelectedGaranties.length; i++) {
+            li = document.createElement('li');
+            li.innerHTML = defaultSelectedGaranties[i].appelation;
+            console.log(li);
+            $("#garantiesSubscribed").append(li);
+
+        }
         $("input[name='checkboxGaranties[]']").each(function () {
 
-            for (let i = 0; i < selectedGaranties.length; i++) {
+            for (let i = 0; i < defaultSelectedGaranties.length; i++) {
 
-                if ($(this).val() == selectedGaranties[i].id) {
+                if ($(this).val() == defaultSelectedGaranties[i].id) {
 
                     $(this).attr('checked', 'checked');
 
@@ -162,7 +177,6 @@ $(document).ready(function () {
         optionsPrix = 0;
 
         $("input[name='checkboxOptions[]']").each(function () {
-
             if ($(this).is(':checked')) {
                 for (let i = 0; i < options.length; i++) {
                     if ($(this).val() == options[i].id) {
@@ -179,15 +193,14 @@ $(document).ready(function () {
     function calculSommeGaranties() {
         garantiesPrix = 0;
         $("input[name='checkboxGaranties[]']").each(function () {
-
             if ($(this).is(':checked')) {
                 for (let i = 0; i < garanties.length; i++) {
                     if ($(this).val() == garanties[i].id) {
                         garantiesPrix = garantiesPrix + garanties[i].prix;
+                        checkedGaranties.push(garanties[i]);
                     }
                 }
             }
-
         });
         $("#prixGaranties").html(garantiesPrix + " €");
     }
@@ -195,6 +208,8 @@ $(document).ready(function () {
     $("input[name='checkboxGaranties[]']").each(function () {
         $(this).change(function () {
             calculSommeGaranties();
+            clearGaranties();
+            setSelectedGaranties();
         });
     });
 
@@ -202,8 +217,62 @@ $(document).ready(function () {
     $("input[name='checkboxOptions[]']").each(function () {
         $(this).change(function () {
             calculSommeOptions();
+            clearOptions();
+            setSelectedOptions();
+            // console.log("anaty change");
         });
     });
 
 
+    function setSelectedOptions() {
+
+        $("input[name='checkboxOptions[]']").each(function () {
+            if ($(this).is(':checked')) {
+                console.log($(this));
+                for (let i = 0; i < options.length; i++) {
+                    if ($(this).val() == options[i].id) {
+                        li = document.createElement('li');
+                        li.innerHTML = options[i].appelation;
+                        // ul = $("#optionsSubscribed");
+                        $("#optionsSubscribed").append(li);
+                    }
+                }
+            }
+        });
+    }
+
+
+    function setSelectedGaranties() {
+
+        $("input[name='checkboxGaranties[]']").each(function () {
+            if ($(this).is(':checked')) {
+                for (let i = 0; i < garanties.length; i++) {
+                    if ($(this).val() == garanties[i].id) {
+                        li = document.createElement('li');
+                        li.innerHTML = garanties[i].appelation;
+                        // ul = $("#optionsSubscribed");
+                        $("#garantiesSubscribed").append(li);
+                    }
+                }
+            }
+        });
+    }
+
+    function clearOptions() {
+        var optionsChildren = $("#optionsSubscribed").children();
+        if (optionsChildren.length > 0) {
+            for (let i = 0 ; i < optionsChildren.length ; i++) {
+                optionsChildren[i].remove();
+            }
+        }
+    }
+
+    function clearGaranties() {
+        var garantiesChildren = $("#garantiesSubscribed").children();
+        if (garantiesChildren.length > 0) {
+            for (let i = 0 ; i < garantiesChildren.length ; i++) {
+                garantiesChildren[i].remove();
+            }
+        }
+    }
 });

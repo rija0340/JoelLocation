@@ -500,12 +500,19 @@
 				{% endif %}
 				<div id="formAjoutPaiement" class="hide">
 					{{form_start(formAjoutPaiement)}}
-					{{form_label(formAjoutPaiement.montant)}}
 					<div class="row">
-						<div class="col-3">
+						<div class="col-md-3">
+							<label for="">Mode paiement :
+							</label>
+							{{form_widget(formAjoutPaiement.modePaiement)}}
+						</div>
+						<div class="col-md-3">
+							<label for="">Montant :
+							</label>
 							{{form_widget(formAjoutPaiement.montant)}}
 						</div>
 						<div class="col-2">
+							<label for="" class="text-white">d</label><br>
 							<button type="submit" class="btn btn-danger">Enregistrer</button>
 						</div>
 					</div>

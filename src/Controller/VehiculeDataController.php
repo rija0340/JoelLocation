@@ -55,6 +55,7 @@ class VehiculeDataController extends AbstractController
         $dateDepart = $request->query->get('dateDepart');
         $dateRetour = $request->query->get('dateRetour');
 
+
         $dateDebut = new \DateTime($dateDepart);
         $dateFin = new \DateTime($dateRetour);
 

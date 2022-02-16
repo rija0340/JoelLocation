@@ -19,9 +19,24 @@ class ReservationStep1Type extends AbstractType
         $builder
             ->add('agenceDepart', ChoiceType::class, [
                 'choices'  => [
-                    'AEROPORT DE POINT-A-PITRE' => 'AEROPORT DE POINT-A-PITRE',
-                    'AGENCE DU MOULE' => 'AGENCE DU MOULE',
-                    'GARE MARITIME DE BERGERVIN' => 'GARE MARITIME DE BERGERVIN',
+                    'Aéroport de Point-à-pitre' => 'Aéroport de Point-à-pitre',
+                    'Agence du Moule' => 'Agence du Moule',
+                    'Gare Maritime de Bergervin' => 'Gare Maritime de Bergervin',
+                    'Gare maritime de Saint-François' => 'Gare maritime de Saint-François',
+                    'Point de livraison : ' =>
+                    [
+                        'Abymes' => 'Abymes',
+                        'Anse-bertrand' => 'Anse-bertrand',
+                        'Gosier' => 'Gosier',
+                        'Moule' => 'Moule',
+                        "Morne-à-l'Eau" => "Morne-à-l'Eau",
+                        "Petit-canal" => "Petit-canal",
+                        "Pointe-à-pitre" => "Pointe-à-pitre",
+                        "Port-louis" => "Port-louis",
+                        "Sainte-anne" => "Sainte-anne",
+                        "Saint-François" => "Saint-François",
+
+                    ]
                 ],
                 'required' => true
             ])
@@ -39,9 +54,23 @@ class ReservationStep1Type extends AbstractType
             ])
             ->add('agenceRetour', ChoiceType::class, [
                 'choices'  => [
-                    'AEROPORT DE POINT-A-PITRE' => 'AEROPORT DE POINT-A-PITRE',
-                    'AGENCE DU MOULE' => 'AGENCE DU MOULE',
-                    'GARE MARITIME DE BERGERVIN' => 'GARE MARITIME DE BERGERVIN',
+                    'Aéroport de Point-à-pitre' => 'Aéroport de Point-à-pitre',
+                    'Agence du Moule' => 'Agence du Moule',
+                    'Gare Maritime de Bergervin' => 'Gare Maritime de Bergervin',
+                    'Gare maritime de Saint-François' => 'Gare maritime de Saint-François',
+                    'Point de livraison : ' =>
+                    [
+                        'Abymes' => 'Abymes',
+                        'Anse-bertrand' => 'Anse-bertrand',
+                        'Gosier' => 'Gosier',
+                        'Moule' => 'Moule',
+                        "Morne-à-l'Eau" => "Morne-à-l'Eau",
+                        "Petit-canal" => "Petit-canal",
+                        "Pointe-à-pitre" => "Pointe-à-pitre",
+                        "Port-louis" => "Port-louis",
+                        "Sainte-anne" => "Sainte-anne",
+                        "Saint-François" => "Saint-François",
+                    ]
                 ],
                 'required' => true
             ])

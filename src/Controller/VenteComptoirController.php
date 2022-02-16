@@ -585,8 +585,10 @@ class VenteComptoirController extends AbstractController
         }
 
         //boucle pour ajout garantie 
-        foreach ($this->garantiesObjectsFromSession() as $garantie) {
-            $reservation->addGaranty($garantie);
+        if ($this->garantiesObjectsFromSession() != null) {
+            foreach ($this->garantiesObjectsFromSession() as $garantie) {
+                $reservation->addGaranty($garantie);
+            }
         }
 
         //si l'admin a entrée un autre tarif dans étape 2, alors on considère ce tarif

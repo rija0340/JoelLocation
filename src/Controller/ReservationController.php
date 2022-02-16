@@ -222,7 +222,7 @@ class ReservationController extends AbstractController
                 $paiement->setDatePaiement($this->dateHelper->dateNow());
                 $paiement->setMontant($formAjoutPaiement->getData()['montant']);
                 $paiement->setReservation($reservation);
-                $paiement->setModePaiement($this->modePaiementRepo->findOneBy(['libelle' => 'ESPECE']));
+                $paiement->setModePaiement($this->modePaiementRepo->find($formAjoutPaiement->getData()['modePaiement']));
                 $paiement->setMotif("Réservation");
                 $paiement->setCreatedAt($this->dateHelper->dateNow());
                 $this->em->persist($paiement);

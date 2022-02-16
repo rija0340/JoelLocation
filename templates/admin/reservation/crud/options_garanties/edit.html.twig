@@ -10,6 +10,15 @@
 
 
 {% endblock %}
+{% block current_page %}
+	<div class="text-info">
+		<i class="fa fa-folder-open"></i>
+		Modification options et garanties -
+		<br>
+		réservation n°
+		<span>{{reservation.reference}}</span>
+	</div>
+{% endblock %}
 {% block content %}
 
 	<input type="hidden" id="options_garanties_data" data-selected-options="{{dataOptions|json_encode()}}" data-selected-garanties="{{dataGaranties|json_encode()}}" data-options="{{allOptions|json_encode()}}" data-garanties="{{allGaranties|json_encode()}}">
@@ -27,7 +36,7 @@
 						</h2>
 						<div class="clearfix"></div>
 					</div>
-					<div class="options">
+					<div class="options" id='optionsSubscribed'>
 
 						<ul>
 							{% for option in reservation.options %}
@@ -53,7 +62,7 @@
 						</h2>
 						<div class="clearfix"></div>
 					</div>
-					<div class="garanties">
+					<div class="garanties" id="garantiesSubscribed">
 						<ul>
 							{% for garantie in reservation.garanties %}
 								<li>{{garantie.appelation}}
@@ -176,7 +185,8 @@
 												</h5>
 											</div>
 											<p>
-												{{option.description}}
+												{{option.description|raw }}
+
 											</p>
 											<div class="col-auto">
 												<label class="label-container">{{option.appelation}}

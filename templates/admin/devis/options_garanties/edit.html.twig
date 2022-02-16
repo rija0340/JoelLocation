@@ -8,6 +8,15 @@
 	<link href="{{asset('css/admin/options_garanties/edit.css')}}" rel="stylesheet">
 	<link href="{{asset('css/admin/vente_comptoir.css')}}" rel="stylesheet">
 {% endblock %}
+{% block current_page %}
+	<div class="text-info">
+		<i class="fa fa-folder-open"></i>
+		Modification options et garanties -
+		<br>
+		devis n°
+		<span>{{devis.numero}}</span>
+	</div>
+{% endblock %}
 {% block content %}
 
 	<input type="hidden" id="options_garanties_data" data-selected-options="{{dataOptions|json_encode()}}" data-selected-garanties="{{dataGaranties|json_encode()}}" data-options="{{allOptions|json_encode()}}" data-garanties="{{allGaranties|json_encode()}}">
@@ -24,15 +33,10 @@
 						</h2>
 						<div class="clearfix"></div>
 					</div>
-					<div class="options">
+					<div class="options" id="optionsList">
 
-						<ul>
-							{% for option in devis.options %}
-								<li>{{option.appelation}}
-									:
-									{{option.prix}}€</li>
-							{% endfor %}
-						</ul>
+						<ul id="optionsSubscribed"></ul>
+
 					</div>
 					<div class="sommeOptions">
 						<div class="x_title">
@@ -50,15 +54,8 @@
 						</h2>
 						<div class="clearfix"></div>
 					</div>
-					<div class="garanties">
-						<ul>
-							{% for garantie in devis.garanties %}
-								<li>{{garantie.appelation}}
-									:
-									{{garantie.prix}}€</li>
-							{% endfor %}
-						</ul>
-
+					<div class="garanties" id="garantiesList">
+						<ul id="garantiesSubscribed"></ul>
 					</div>
 					<div class="sommeGaranties">
 						<div class="x_title">
@@ -173,7 +170,7 @@
 												</h5>
 											</div>
 											<p>
-												{{option.description}}
+												{{option.description|raw }}
 											</p>
 											<div class="col-auto">
 												<label class="label-container">{{option.appelation}}
@@ -187,7 +184,6 @@
 										</div>
 									</div>
 								</div>
-
 							{% endif %}
 						{% endfor %}
 

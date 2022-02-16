@@ -7,7 +7,6 @@ $(document).ready(function () {
 
     function getElements() {
         btnEnregistrer = document.querySelector("button[id='enregistrer']");
-        console.log(btnEnregistrer);
     }
 
     function addEventListener() {
@@ -15,7 +14,6 @@ $(document).ready(function () {
     }
 
     function test(e) {
-        console.log('test');
         // e.preventDefault();
     }
 
@@ -86,14 +84,12 @@ function getVehicules() {
     }
 
     function getDatesValues() {
-        console.log(document.getElementById("reservation_date_debut").value);
-        console.log(document.getElementById("reservation_date_fin").value);
         retrieveDataAjax();
     }
 
     function getDateDebutValue() {
         dateDebutValue = this.value;
-        console.log('ity ilay date ' + dateDebutValue);
+
 
         if (dateFinValue != null) {
 
@@ -153,13 +149,11 @@ function getVehicules() {
             },
             Type: "json",
             success: function (data) {
-                console.log(data);
                 populateSelectElem(data);
                 dataForSelect(data);
             },
             error: function (erreur) {
                 // alert('La requête n\'a pas abouti' + erreur);
-                console.log(erreur.responseText);
             }
         });
     }
@@ -168,13 +162,11 @@ function getVehicules() {
     function populateSelectElem(options) {
 
         var select = document.getElementById('selectVehicule');
-        console.log(select);
         $("#selectVehicule").empty(); //remove old options jquery
 
         for (var i = 0; i < options.length; i++) {
 
             var opt = options[i];
-            console.log('ity ny opt ' + opt.marque);
             var el = document.createElement("option");
             el.text = opt.marque + ' ' + opt.modele + ' ' + opt.immatriculation;
             el.value = opt.id;
@@ -196,7 +188,6 @@ function getVehicules() {
             });
 
         }
-        console.log(data2);
         return data2;
     }
 

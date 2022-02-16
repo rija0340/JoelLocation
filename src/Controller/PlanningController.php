@@ -140,13 +140,13 @@ class PlanningController extends AbstractController
             //definition couleur tâche en fonction point de départ et point de retour
             if ($reservation->getAgenceDepart() == "garage") {
                 $datas[$key]['color'] =  "#000000";
-            } else if ($reservation->getAgenceDepart() == "AEROPORT DE POINT-A-PITRE") {
+            } else if (explode(" ", $reservation->getAgenceDepart(),)[0] == "Aéroport") {
                 $datas[$key]['color'] =  "#A9A9A9";
-            } else if ($reservation->getAgenceDepart() == "GARE MARITIME DE BERGERVIN") {
+            } else if (explode(" ", $reservation->getAgenceDepart(),)[0] == "Gare") {
                 $datas[$key]['color'] =  "#FFC0CB";
-            } else if ($reservation->getAgenceDepart() == "AGENCE DU MOULE") {
+            } else if (explode(" ", $reservation->getAgenceDepart(),)[0] == "Agence") {
                 $datas[$key]['color'] =  "#ff0000";
-            } else if ($reservation->getAgenceDepart() == "pointLivraison") {
+            } else {
                 $datas[$key]['color'] =  "#0d00ff";
             }
         }
