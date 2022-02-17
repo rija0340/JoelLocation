@@ -59,16 +59,19 @@ class VehiculeDataController extends AbstractController
         $dateDebut = new \DateTime($dateDepart);
         $dateFin = new \DateTime($dateRetour);
 
+
         $datas = array();
         $data = array();
         $listeUnique = [];
         $listeVehiculesDispo = array();
         $reservations = $this->reservationRepo->findReservationIncludeDates($dateDebut, $dateFin);
         $listeVehiculesDispo = $this->reservationHelper->getVehiculesDisponible($reservations);
+
         foreach ($listeVehiculesDispo as $key => $vehicule) {
             $data[$key]['marque'] = $vehicule->getMarque()->getLibelle();
             $data[$key]['modele'] = $vehicule->getModele()->getLibelle();
         }
+
 
         $listeUnique = array_unique($data, SORT_REGULAR);
         // dump($listeUnique);

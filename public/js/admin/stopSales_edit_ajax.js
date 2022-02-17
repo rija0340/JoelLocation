@@ -53,8 +53,6 @@ function addEventListener() {
 
 
 function getDatesValues() {
-    console.log(document.getElementById("stop_sales_date_debut").value);
-    console.log(document.getElementById("stop_sales_date_fin").value);
     retrieveDataAjax();
 }
 
@@ -62,7 +60,6 @@ function getDatesValues() {
 function getDateDebutValue() {
 
     dateDebutValue = this.value;
-    console.log('ity ilay date ' + dateDebutValue);
 
     if (dateFinValue != null) {
 
@@ -126,6 +123,7 @@ function setParamDateDebutForAjax() {
     dateFinYear = date2.getFullYear();
     dateFinHours = date2.getHours();
     dateFinMinutes = date2.getMinutes();
+
 }
 
 
@@ -134,14 +132,13 @@ function retrieveDataAjax() {
         type: 'GET',
         url: '/reservation/vehiculeDispoFonctionDates',
         data: {
-            "dateDebutday": dateDebutDay, "dateDebutmonth": dateDebutMonth, "dateDebutyear": dateDebutYear, "dateDebuthours": dateDebutHours, "dateDebutminutes": dateDebutMinutes,
+            // "dateDebutday": dateDebutDay, "dateDebutmonth": dateDebutMonth, "dateDebutyear": dateDebutYear, "dateDebuthours": dateDebutHours, "dateDebutminutes": dateDebutMinutes,
 
-            "dateFinday": dateFinDay, "dateFinmonth": dateFinMonth, "dateFinyear": dateFinYear, "dateFinhours": dateFinHours, "dateFinminutes": dateFinMinutes
-
+            // "dateFinday": dateFinDay, "dateFinmonth": dateFinMonth, "dateFinyear": dateFinYear, "dateFinhours": dateFinHours, "dateFinminutes": dateFinMinutes
+            "dateDepart": dateDebutValue, "dateRetour": dateFinValue
         },
         Type: "json",
         success: function (data) {
-            console.log(data);
 
             populateSelectElem(data);
             dataForSelect(data)
@@ -162,7 +159,6 @@ function populateSelectElem(options) {
     for (var i = 0; i < options.length; i++) {
 
         var opt = options[i];
-        console.log('ity ny opt ' + opt.marque);
         var option = document.createElement("option");
         option.text = opt.marque + ' ' + opt.modele + ' ' + opt.immatriculation;
         option.value = opt.id;
@@ -187,7 +183,6 @@ function dataForSelect(data) {
         });
 
     }
-    console.log(data2);
     return data2;
 }
 

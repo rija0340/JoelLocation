@@ -53,7 +53,6 @@
 			<div class="clearfix"></div>
 		</div>
 
-
 		{{ include('admin/stop_sales_vehicules/_form.html.twig', {'button_label': 'Modifier'}) }}
 
 		<a href="{{ path('stop_sales') }}" class="btn btn-dark">
@@ -61,7 +60,6 @@
 			retour</a>
 	</div>
 {% endblock %}
-{% block javascripts %}
-	<!-- jQuery -->
-	<script src="../../js/admin/stopSales_edit_ajax.js"></script>
+{% block javascripts %}<!-- jQuery -->
+	{# // <script src="../../js/admin/stopSales_edit_ajax.js"></script> #}
 {% endblock %}

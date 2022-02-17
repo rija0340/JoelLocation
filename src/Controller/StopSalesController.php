@@ -126,6 +126,8 @@ class StopSalesController extends AbstractController
         $formStopSales = $this->createForm(StopSalesType::class, $reservation);
         $formStopSales->handleRequest($request);
 
+        // dd($reservation);
+
         if ($formStopSales->isSubmitted() && $formStopSales->isValid()) {
             $vehicule = $this->vehiculeRepo->find($request->request->get('select'));
             $reservation->setVehicule($vehicule);
@@ -136,6 +138,7 @@ class StopSalesController extends AbstractController
         return $this->render('admin/stop_sales_vehicules/edit.html.twig', [
             'listeStopSales' => $listeStopSales,
             'formStopSales' => $formStopSales->createView(),
+            'vehicule' => $reservation->getVehicule()
         ]);
     }
 
