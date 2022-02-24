@@ -19,7 +19,7 @@
 				</h5>
 			</div>
 			<div class="col-md-6 text-right">
-				<a href="{{path('client_reservations')}}" class="btn btn-dark">
+				<a href="{{path('client_reservations')}}" class="btn btn-dark" title="Liste réservations">
 					<i class="fa fa-reply"></i>
 					Mes réservations</a>
 			</div>
@@ -76,11 +76,26 @@
 					{% endif %}
 
 					<div class="x_content">
+
+						{% set somme = 0  %}
+						{% for conducteur in reservation.conducteursClient %}
+							{% if conducteur.isPrincipal %}
+								{% set somme = somme + 1  %}
+							{% endif %}
+						{% endfor %}
+
 						{% for conducteur in reservation.conducteursClient %}
 							<div class="mb-3 border-blue">
 								<div class="row ">
 									<div class="col-md-4">{{conducteur.nom}}
-										{{conducteur.prenom}}</div>
+										{{conducteur.prenom}}
+										<br>
+										{% if conducteur.isPrincipal %}
+											<span class="badge badge-danger">
+												conducteur principal
+											</span>
+										{% endif %}
+									</div>
 									<div class="col-md-4">
 										<strong>Numéro de permis :
 										</strong>
@@ -97,13 +112,21 @@
 									<div class="col-md-1"></div>
 									<div class="col-md-3">
 										<div class="row">
+											{% if somme == 0  %}
+												<div class="col-md-4 col-sm-4 col-xs-4 text-right">
+													<a href="{{path('make_conducteur_principal', {'id': conducteur.id, 'id_resa': reservation.id})}}" class="btn btn-success" title="Rendre principal">
+														<i class="fa fa-check"></i>
+													</a>
+												</div>
+											{% elseif conducteur.isPrincipal %}
+												<div class="col-md-4 col-sm-4 col-xs-4 text-right">
+													<a href="{{path('remove_conducteur_principal', {'id': conducteur.id, 'id_resa': reservation.id})}}" class="btn btn-dark" title="Rendre non principal">
+														<i class="fa fa-edit"></i>
+													</a>
+												</div>
+											{% endif %}
 											<div class="col-md-4 col-sm-4 col-xs-4 text-right">
-												<a href="{{path('make_conducteur_principal', {'id': conducteur.id})}}" class="btn btn-success">
-													<i class="fa fa-check"></i>
-												</a>
-											</div>
-											<div class="col-md-4 col-sm-4 col-xs-4 text-right">
-												<a href="{{path('conducteur_edit', {'id': conducteur.id})}}" class="btn btn-warning">
+												<a href="{{path('conducteur_edit', {'id': conducteur.id})}}" class="btn btn-warning" title="Modifier">
 													<i class="fa fa-reply"></i>
 												</a>
 											</div>
@@ -113,7 +136,7 @@
 													<input type="hidden" name="reservation" value="{{reservation.id}}">
 
 													<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ conducteur.id) }}">
-													<button class="btn btn-danger">
+													<button class="btn btn-danger" title="Supprimer">
 														<i class="fa fa-close (alias)" aria-hidden="true"></i>
 													</button>
 												</form>
@@ -310,6 +333,17 @@
 						</div>
 					</div>
 				</div>
+			</div>
+			<div class="text-center">
+				{% if reservation.prix > reservation.sommePaiements %}
+					<form action="{{ path('paiement_sold') }}" method="POST">
+						<input type="hidden" name="montantSolde" value="{{ reservation.prix - reservation.sommePaiements }}">
+						<input type="hidden" name="reservation" value="{{ reservation.id }}">
+						<button class="btn btn-danger">Payer solde
+							{{ reservation.prix - reservation.sommePaiements }}€
+						</button>
+					</form>
+				{% endif %}
 			</div>
 		</div>
 	</div>

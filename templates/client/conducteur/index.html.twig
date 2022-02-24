@@ -4,55 +4,54 @@
 {% endblock %}
 {% block stylesheets %}{% endblock %}
 {% block body %}
-    <div class="x_panel">
-        <h4 class="mb-0 pb-0">Mes conducteurs</h4>
-        <div class="clearfix"></div>
-        <div class="x_title"></div>
-        <div class="d-flex">
-            <div class="ml-auto">
-                <a class="btn btn-danger" href="{{ path('client_newConducteur') }}">
-                    <i class="fa fa-plus"></i>
-                    Ajouter</a>
-            </div>
-        </div>
-        <div class="overflow-auto">
-            <table class="table  text-center">
-                <thead class="bg-dark text-white text-uppercase">
-                <tr>
-                    <th>nom</th>
-                    <th>prénom</th>
-                    <th>permis</th>
-                    <th>action</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for conducteur in conducteurs %}
-                    <tr>
-                        <td>{{ conducteur.nom }}</td>
-                        <td>{{ conducteur.prenom }}</td>
-                        <td>
-                            Numéro de permis:
-                            {{ conducteur.numeroPermis }}
-                            <br>
-                            Date de délivrance :
-                            {{ conducteur.dateDelivrance|date('d/m/Y') }}
-                            <br>
-                            Villde de délivrance :
-                            {{ conducteur.villeDelivrance }}
-                        </td>
-                        <td>
-                            <a class="btn btn-danger" href="{{ path('conducteur_edit', {'id': conducteur.id}) }}"
-                               id="editConducteur">
-                                <i class="fa fa-edit (alias)"></i>
-                            </a>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
+	<div class="x_panel">
+		<h4 class="mb-0 pb-0">Mes conducteurs</h4>
+		<div class="clearfix"></div>
+		<div class="x_title"></div>
+		<div class="d-flex">
+			<div class="ml-auto">
+				<a class="btn btn-danger" href="{{ path('client_newConducteur') }}">
+					<i class="fa fa-plus"></i>
+					Ajouter</a>
+			</div>
+		</div>
+		<div class="overflow-auto">
+			<table class="table  text-center">
+				<thead class="bg-dark text-white text-uppercase">
+					<tr>
+						<th>nom</th>
+						<th>prénom</th>
+						<th>permis</th>
+						<th>action</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for conducteur in conducteurs %}
+						<tr>
+							<td>{{ conducteur.nom }}</td>
+							<td>{{ conducteur.prenom }}</td>
+							<td>
+								Numéro de permis:
+								{{ conducteur.numeroPermis }}
+								<br>
+								Date de délivrance :
+								{{ conducteur.dateDelivrance|date('d/m/Y') }}
+								<br>
+								Villde de délivrance :
+								{{ conducteur.villeDelivrance }}
+							</td>
+							<td>
+								<a class="btn btn-danger" href="{{ path('conducteur_edit', {'id': conducteur.id}) }}" title="Modifier">
+									<i class="fa fa-edit (alias)"></i>
+								</a>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
 {% endblock %}
 {% block javascripts %}
-    <script src="{{ asset('js/client/pop-up/conducteur.js') }}"></script>
+	<script src="{{ asset('js/client/pop-up/conducteur.js') }}"></script>
 {% endblock %}

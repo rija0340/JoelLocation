@@ -122,24 +122,14 @@
 							<td class=" d-flex justify-content-center ">
 								<div class="row">
 									<div class="col-auto mr-4 p-0">
-										<a href="{{path('devis_pdf', {'id': reserv.id})}}" class="text-dark">
-											Pdf
+										<a href="{{path('devis_pdf', {'id': reserv.id})}}" class="text-dark" title="Télécharger pdf">
 											<i class="fa fa-arrow-circle-o-down" style="font-size: 1.5em !important;"></i>
 										</a>
 										{# <a class="telechargerDevis" id="telechargerDevis"><i class="fa fa-arrow-circle-o-down" style="font-size: 1.5em !important;"></i></a> #}
 									</div>
-									<div
-										class="col-auto m-0 p-0">
-										{# {% if date(reserv.dateDepart) > date("now")  %}
-																																																																																																																																			<form method="post" action="{{ path('validation_step2') }}">
-																																																																																																																																				<input type="hidden" name="reservID" value="{{reserv.id}}">
-																																																																																																																																				<button class="btn btn-link text-danger m-0 p-0" style=" -webkit-appearance: none" type="submit" id="validerDevis">
-																																																																																																																																					<i class="fa fa-check" style="font-size: 1.5em !important;"></i>
-																																																																																																																																				</button>
-																																																																																																																																			</form>
-																																																																																																																																		{% endif %} #}
+									<div class="col-auto m-0 p-0">
 										{% if date(reserv.dateDepart) > date("now")  %}
-											<a class="btn btn-link text-danger m-0 p-0" style=" -webkit-appearance: none" href="{{path('validation_step2', {'id':reserv.id})}}" id="validerDevis">
+											<a class="btn btn-link text-danger m-0 p-0" style=" -webkit-appearance: none" href="{{path('validation_step2', {'id':reserv.id})}}" id="validerDevis" title="Valider">
 												<i class="fa fa-check" style="font-size: 1.5em !important;"></i>
 											</a>
 										{% endif %}
@@ -286,7 +276,7 @@
 										{% if reserv.avis == null %}
 											<div class="dropdown-item">
 												<a href="{{ path('add_avis', {'id': reserv.id}) }}" class="btn btn-link-dark">Ajouter
-																																																																																																																																																																																																																																																																																																																					                                                avis</a>
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																														                                                avis</a>
 											</div>
 										{% endif %}
 										<div class="dropdown-item">

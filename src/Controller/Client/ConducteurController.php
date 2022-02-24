@@ -76,6 +76,7 @@ class ConducteurController extends AbstractController
         if ($formConducteur->isSubmitted() && $formConducteur->isValid()) {
 
             $conducteur->setClient($client);
+            $conducteur->setIsPrincipal(false); //le conducteur n'est pas principal par défaut
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($conducteur);
             $entityManager->flush();

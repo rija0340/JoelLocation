@@ -69,6 +69,11 @@ class Conducteur
      */
     private $client;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isPrincipal;
+
 
     public function getId(): ?int
     {
@@ -192,6 +197,18 @@ class Conducteur
     public function setClient(?User $client): self
     {
         $this->client = $client;
+
+        return $this;
+    }
+
+    public function getIsPrincipal(): ?bool
+    {
+        return $this->isPrincipal;
+    }
+
+    public function setIsPrincipal(bool $isPrincipal): self
+    {
+        $this->isPrincipal = $isPrincipal;
 
         return $this;
     }

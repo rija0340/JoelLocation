@@ -17,14 +17,15 @@ use App\Repository\DevisRepository;
 use App\Repository\OptionsRepository;
 use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
+use App\Repository\ConducteurRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ReservationRepository;
 use Symfony\Component\HttpFoundation\Request;
 use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Classe\ValidationReservationClientSession;
-use App\Repository\ConducteurRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ReservationController extends AbstractController
@@ -130,6 +131,7 @@ class ReservationController extends AbstractController
 
             $conducteur = $this->conducteurRepo->find($request->request->get('conducteur'));
             $reservation->addConducteursClient($conducteur);
+            $conducteur->setIsPrincipal(false);
             $this->em->flush();
             $this->flashy->success("Le conducteur a été ajouté avec succès");
 
@@ -138,13 +140,32 @@ class ReservationController extends AbstractController
         return $this->redirectToRoute('client_reservation_show', ['id' => $reservation->getId()]);
     }
     /** 
-     *  @Route("espaceclient/conducteur-principal/{id}", name="make_conducteur_principal", methods={"GET","POST"},requirements={"id":"\d+"})
+     *  @Route("espaceclient/conducteur-principal/{id}/{id_resa}", name="make_conducteur_principal", methods={"GET","POST"},requirements={"id":"\d+"})
+     *  @Entity("reservation", expr="repository.find(id_resa)")
      */
-    public function makeConducteurPrincipal(Request $request, Reservation $reservation)
+
+    public function makeConducteurPrincipal(Request $request, Conducteur $conducteur, Reservation $reservation)
     {
-        return $this->redirectToRoute('client_reservation_show', ['id ' => $reservation->getId()]);
+
+        $conducteur->setIsPrincipal(true);
+        $this->em->flush();
+
+        return $this->redirectToRoute('client_reservation_show', ['id' => $reservation->getId()]);
     }
 
+    /** 
+     *  @Route("espaceclient/supprimer-conducteur-principal/{id}/{id_resa}", name="remove_conducteur_principal", methods={"GET","POST"},requirements={"id":"\d+"})
+     *  @Entity("reservation", expr="repository.find(id_resa)")
+     */
+
+    public function removeConducteurPrincipal(Request $request, Conducteur $conducteur, Reservation $reservation)
+    {
+
+        $conducteur->setIsPrincipal(false);
+        $this->em->flush();
+
+        return $this->redirectToRoute('client_reservation_show', ['id' => $reservation->getId()]);
+    }
 
     /**
      * @Route("espaceclient/supprimer-conducteur/{id}", name="client_conducteur_delete", methods={"DELETE"},requirements={"id":"\d+"})
