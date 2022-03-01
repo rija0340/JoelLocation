@@ -27,8 +27,8 @@ class Reservation
         $this->paiements = new ArrayCollection();
         $this->options = new ArrayCollection();
         $this->garanties = new ArrayCollection();
-        $this->conducteursClient = new ArrayCollection();
         $this->setReportedFalseValue();
+        $this->conducteursClient = new ArrayCollection();
     }
 
     /**
@@ -194,10 +194,7 @@ class Reservation
      */
     private $canceled;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Conducteur::class, mappedBy="reservation")
-     */
-    private $conducteursClient;
+
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
@@ -208,6 +205,11 @@ class Reservation
      * @ORM\Column(type="boolean")
      */
     private $reported;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Conducteur::class, inversedBy="reservations")
+     */
+    private $conducteursClient;
 
 
     public function getId(): ?int
@@ -671,35 +673,6 @@ class Reservation
         return $this;
     }
 
-    /**
-     * @return Collection|Conducteur[]
-     */
-    public function getConducteursClient(): Collection
-    {
-        return $this->conducteursClient;
-    }
-
-    public function addConducteursClient(Conducteur $conducteursClient): self
-    {
-        if (!$this->conducteursClient->contains($conducteursClient)) {
-            $this->conducteursClient[] = $conducteursClient;
-            $conducteursClient->setReservation($this);
-        }
-
-        return $this;
-    }
-
-    public function removeConducteursClient(Conducteur $conducteursClient): self
-    {
-        if ($this->conducteursClient->removeElement($conducteursClient)) {
-            // set the owning side to null (unless already changed)
-            if ($conducteursClient->getReservation() === $this) {
-                $conducteursClient->setReservation(null);
-            }
-        }
-
-        return $this;
-    }
 
     public function getConducteur(): ?bool
     {
@@ -728,5 +701,29 @@ class Reservation
     public function setReportedFalseValue()
     {
         $this->setReported(false);
+    }
+
+    /**
+     * @return Collection|Conducteur[]
+     */
+    public function getConducteursClient(): Collection
+    {
+        return $this->conducteursClient;
+    }
+
+    public function addConducteursClient(Conducteur $conducteursClient): self
+    {
+        if (!$this->conducteursClient->contains($conducteursClient)) {
+            $this->conducteursClient[] = $conducteursClient;
+        }
+
+        return $this;
+    }
+
+    public function removeConducteursClient(Conducteur $conducteursClient): self
+    {
+        $this->conducteursClient->removeElement($conducteursClient);
+
+        return $this;
     }
 }

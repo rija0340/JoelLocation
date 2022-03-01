@@ -1,0 +1,29 @@
+{% if avalaibleDrivers|length > 0 %}
+    <form action="{{ path('client_add_conducteur', {'id': reservation.id}) }}" method="POST">
+        <div class="modal-body">
+            <label>Sélectionner un conducteur à ajouter à la réservation :</label>
+            <select id="monselect" class="form-control" name="conducteur">
+                {% for conducteur in avalaibleDrivers %}
+                    <option value="{{ conducteur.id }}">{{ conducteur.nom }}
+                        {{ conducteur.prenom }}</option>
+                {% endfor %}
+            </select>
+            Le conducteur recherché n'est pas dans la liste ci-desssus?
+            <a href="{{ path('client_newConducteur') }}">Cliquez-ici</a>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-dark" data-dismiss="modal">
+                <i class="fa fa-close"></i>
+                Annuler
+            </button>
+            <button class="btn btn-danger" type="submit">
+                <i class="fa fa-save"></i>
+                Valider
+            </button>
+        </div>
+    </form>
+{% else %}
+    <div class="p-3 text-center">
+        <a href="{{ path('client_newConducteur') }}">Créer un nouveau conducteur</a>
+    </div>
+{% endif %}

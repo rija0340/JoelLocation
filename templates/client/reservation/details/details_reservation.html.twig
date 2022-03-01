@@ -69,8 +69,11 @@
 					<div class="x_title">
 						<h4 class="text-uppercase">Conducteur(s)</h4>
 					</div>
+
+					{# {{dump(reservation)}} #}
+
 					{% if reservation.conducteursClient|length < 2 %}
-						<button type="button" class="btn btn-danger " data-toggle="modal" data-target=".modalKM">
+						<button type="button" class="btn btn-danger " data-toggle="modal" data-target="#modalConducteur">
 							<i class="fa  fa-plus"></i>
 							Ajouter</button>
 					{% endif %}
@@ -131,7 +134,7 @@
 												</a>
 											</div>
 											<div class="col-md-4 col-sm-4 col-xs-4">
-												<form method="post" action="{{ path('client_conducteur_delete', {'id': conducteur.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer ce conducteur ?');">
+												<form method="post" action="{{ path('client_conducteur_remove_reservation', {'id': conducteur.id, 'id_resa' : reservation.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer ce conducteur ?');">
 													<input type="hidden" name="_method" value="DELETE">
 													<input type="hidden" name="reservation" value="{{reservation.id}}">
 

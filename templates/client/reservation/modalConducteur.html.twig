@@ -1,4 +1,4 @@
-<div class="modal fade modalKM" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="modalConducteur" tabindex="-1" role="dialog" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -9,28 +9,9 @@
 					<span aria-hidden="true">×</span>
 				</button>
 			</div>
-			<form action="{{path('client_add_conducteur', {'id': reservation.id})}}" method="POST">
-				<div class="modal-body">
-					<label>Sélectionner un conducteur à ajouter à la réservation :</label>
-					<select id="monselect" class="form-control" name="conducteur">
-						{% for conducteur in conducteurs %}
-							<option value="{{conducteur.id}}">{{conducteur.nom}}
-								{{conducteur.prenom}}</option>
-						{% endfor %}
-					</select>
-					Le conducteur recherché n'est pas dans la liste ci-desssus?
-					<a href="{{path('client_newConducteur')}}">Cliquez-ici</a>
-				</div>
-				<div class="modal-footer">
-					<button class="btn btn-dark" data-dismiss="modal">
-						<i class="fa fa-close"></i>
-						Annuler</button>
-					<button class="btn btn-danger" type="submit">
-						<i class="fa fa-save"></i>
-						Valider
-					</button>
-				</div>
-			</form>
+			{{ render(controller('App\\Controller\\Client\\ReservationController::listeConducteurs',{'id' : reservation.id})) }}
+
+
 		</div>
 	</div>
 </div>

@@ -79,6 +79,10 @@
 				<i class="fa fa-newspaper-o"></i>
 				Générer le contrat</a>
 
+			<a href="{{path('envoyer_contrat', {'id': reservation.id})}}" type="button" id="" class="btn btn-outline-success text-uppercase p-1">
+				<i class="fa fa-newspaper-o"></i>
+				Envoyer le contrat</a>
+
 			{# <button type="button" class="btn btn-outline-info text-uppercase p-1" id="genererFacturePDF"><i class="fa fa-send (alias)"></i>générer facture</button> #}
 
 			<a href="{{path('facture_pdf', {'id': reservation.id})}}" type="button" class="btn btn-outline-info text-uppercase p-1">

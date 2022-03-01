@@ -112,4 +112,19 @@ class ConducteurController extends AbstractController
             'formConducteur' => $formConducteur->createView()
         ]);
     }
+
+    /**
+     * @Route("/espaceclient/conducteur/supprimer/{id}", name="conducteur_delete", methods={"DELETE"})
+     */
+
+    public function deleteConducteur(Request $request, Conducteur $conducteur): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $conducteur->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($conducteur);
+            $entityManager->flush();
+            $this->flashy->success('le conducteur a été supprimé');
+            return $this->redirectToRoute('client_mesConducteurs');
+        }
+    }
 }

@@ -80,7 +80,7 @@ class ReservationController extends AbstractController
     private $tarifsHelper;
     private $marqueRepo;
     private $em;
-    private $mail;
+    private $mailjet;
     private $flashy;
     private $modePaiementRepo;
 
@@ -89,7 +89,7 @@ class ReservationController extends AbstractController
         ConducteurRepository $conducteurRepo,
         RouterInterface $router,
         FlashyNotifier $flashy,
-        Mailjet $mail,
+        Mailjet $mailjet,
         EntityManagerInterface $em,
         MarqueRepository $marqueRepo,
         ModeleRepository $modeleRepo,
@@ -115,7 +115,7 @@ class ReservationController extends AbstractController
         $this->modeleRepo = $modeleRepo;
         $this->marqueRepo = $marqueRepo;
         $this->em = $em;
-        $this->mail = $mail;
+        $this->mailjet = $mailjet;
         $this->flashy = $flashy;
         $this->router = $router;
         $this->conducteurRepo = $conducteurRepo;
@@ -674,6 +674,26 @@ class ReservationController extends AbstractController
         return $this->render('admin/reservation/non_solde/reserv_non_solde.html.twig', [
             'reservations' => $reservations
         ]);
+    }
+
+    /**
+     * @Route("/envoyer-contrat-pdf/{id}", name="envoyer_contrat", methods={"GET","POST"},requirements={"id":"\d+"})
+     */
+    public function envoyerContrat(Request $request, Reservation $reservation): Response
+    {
+
+        $mail = $reservation->getClient()->getMail();
+        $nom = $reservation->getClient()->getNom();
+
+        $url   = $this->generateUrl('contrat_pdf', ['id' => $reservation->getId()]);
+        $url = "https://joellocation.com" . $url;
+
+        $content = "Bonjour, " . '<br>' . "Vous pouvez télécharger le contrant concernant la réservatiion N°" . $reservation->getReference() . "en cliquant sur ce <a href='" . $url . "'>lien</a>.";
+
+        $this->mailjet->send($mail, $nom, "devis", $content);
+
+        $this->flashy->success("L'url de téléchargement du téléchargement N°" . $reservation->getReference() . " a été envoyé");
+        return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
     }
 
     //return referer->route avant la rédirection (source)

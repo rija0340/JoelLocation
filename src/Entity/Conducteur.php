@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ConducteurRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -58,11 +60,7 @@ class Conducteur
      */
     private $prenom;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Reservation::class, inversedBy="conducteursClient")
-     * @ORM\JoinColumn( nullable=true)
-     */
-    private $reservation;
+
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="conducteurs")
@@ -73,6 +71,16 @@ class Conducteur
      * @ORM\Column(type="boolean")
      */
     private $isPrincipal;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Reservation::class, mappedBy="conducteursClient")
+     */
+    private $reservations;
+
+    public function __construct()
+    {
+        $this->reservations = new ArrayCollection();
+    }
 
 
     public function getId(): ?int
@@ -177,17 +185,6 @@ class Conducteur
         return $this;
     }
 
-    public function getReservation(): ?Reservation
-    {
-        return $this->reservation;
-    }
-
-    public function setReservation(?Reservation $reservation): self
-    {
-        $this->reservation = $reservation;
-
-        return $this;
-    }
 
     public function getClient(): ?User
     {
@@ -209,6 +206,33 @@ class Conducteur
     public function setIsPrincipal(bool $isPrincipal): self
     {
         $this->isPrincipal = $isPrincipal;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Reservation[]
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): self
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations[] = $reservation;
+            $reservation->addConducteursClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): self
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            $reservation->removeConducteursClient($this);
+        }
 
         return $this;
     }

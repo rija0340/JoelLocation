@@ -44,6 +44,13 @@
 								<a class="btn btn-danger" href="{{ path('conducteur_edit', {'id': conducteur.id}) }}" title="Modifier">
 									<i class="fa fa-edit (alias)"></i>
 								</a>
+								<form method="post" action="{{ path('conducteur_delete', {'id': conducteur.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer ce conducteur ?');">
+									<input type="hidden" name="_method" value="DELETE">
+									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ conducteur.id) }}">
+									<button class="btn btn-danger" title="Supprimer">
+										<i class="fa fa-close (alias)" aria-hidden="true"></i>
+									</button>
+								</form>
 							</td>
 						</tr>
 					{% endfor %}

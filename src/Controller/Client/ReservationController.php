@@ -111,8 +111,8 @@ class ReservationController extends AbstractController
      */
     public function detailsReservation(Reservation $reservation, Request $request): Response
     {
-        $conducteurs =  $this->conducteurRepo->findBy(['client' => $this->getUser(), 'reservation' => null]);
-        return $this->render('client/reservation/details_reservation.html.twig', [
+        $conducteurs =  $this->conducteurRepo->findBy(['client' => $this->getUser()]);
+        return $this->render('client/reservation/details/details_reservation.html.twig', [
             'reservation' => $reservation,
             'conducteurs' => $conducteurs
         ]);
@@ -167,20 +167,63 @@ class ReservationController extends AbstractController
         return $this->redirectToRoute('client_reservation_show', ['id' => $reservation->getId()]);
     }
 
+
     /**
-     * @Route("espaceclient/supprimer-conducteur/{id}", name="client_conducteur_delete", methods={"DELETE"},requirements={"id":"\d+"})
+     * @Route("espaceclient/supprimer-conducteur-reservation/{id}/{id_resa}", name="client_conducteur_remove_reservation", methods={"DELETE"},requirements={"id":"\d+"})
+     * @Entity("reservation", expr="repository.find(id_resa)")
      */
-    public function deleteConducteur(Request $request, Conducteur $conducteur): Response
+
+    public function removeConducteurFromResa(Request $request, Conducteur $conducteur, Reservation $reservation): Response
     {
         $id = $this->reservationRepo->find($request->request->get('reservation'));
         $reservation = $this->reservationRepo->find($id);
         if ($this->isCsrfTokenValid('delete' . $conducteur->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($conducteur);
+            $reservation->removeConducteursClient($conducteur);
             $entityManager->flush();
-            $this->flashy->success('le conducteur a été supprimé');
-            return $this->redirectToRoute('client_reservations');
+            $this->flashy->success('le conducteur a été supprimé de la réservation');
+            return $this->redirectToRoute('client_reservation_show', ['id' => $reservation->getId()]);
         }
+    }
+
+
+
+    /**
+     * @Route("espaceclient/liste-conducteurs/{id}", name="liste_conducteurs", methods={"GET","POST"},requirements={"id":"\d+"})
+     */
+    public function listeConducteurs(Request $request, Reservation $reservation): Response
+    {
+
+
+        $client = $this->getUser();
+
+        $allDrivers = $client->getConducteurs();
+        $AddedDrivers = $reservation->getConducteursClient();
+
+        $idAddedDrivers = [];
+        $avalaibleDrivers = [];
+
+        if (count($AddedDrivers) != 0) {
+
+            foreach ($AddedDrivers as $driver) {
+                array_push($idAddedDrivers, $driver->getId());
+            }
+
+            //check if the driver is already included in this reservation
+            foreach ($allDrivers as $driver) {
+                if(!in_array( $driver->getId(),  $idAddedDrivers)){
+                    array_push($avalaibleDrivers, $driver);
+                }
+            }
+
+        }else{
+            $avalaibleDrivers = $allDrivers;
+        }
+
+        return $this->render('client/reservation/details/form_add_conducteur.html.twig', [
+            'reservation' => $reservation,
+            'avalaibleDrivers'=>$avalaibleDrivers
+        ]);
     }
 
     //return route en fonction date (comparaison avec dateNow pour savoir statut réservation)
