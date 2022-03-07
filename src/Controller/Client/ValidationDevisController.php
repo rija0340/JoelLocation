@@ -47,7 +47,8 @@ class ValidationDevisController extends AbstractController
         EntityManagerInterface $em
 
 
-    ) {
+    )
+    {
         $this->reservationRepo = $reservationRepo;
         $this->devisRepo = $devisRepo;
         $this->garantiesRepo = $garantiesRepo;
@@ -87,7 +88,7 @@ class ValidationDevisController extends AbstractController
         //serializer options et garanties de devis
         $dataOptions = [];
         foreach ($devis->getOptions() as $key => $option) {
-            $dataOptions[$key]['id'] =  $option->getId();
+            $dataOptions[$key]['id'] = $option->getId();
             $dataOptions[$key]['appelation'] = $option->getAppelation();
             $dataOptions[$key]['description'] = $option->getDescription();
             $dataOptions[$key]['type'] = $option->getType();
@@ -96,7 +97,7 @@ class ValidationDevisController extends AbstractController
 
         $dataGaranties = [];
         foreach ($devis->getGaranties() as $key => $garantie) {
-            $dataGaranties[$key]['id'] =  $garantie->getId();
+            $dataGaranties[$key]['id'] = $garantie->getId();
             $dataGaranties[$key]['appelation'] = $garantie->getAppelation();
             $dataGaranties[$key]['description'] = $garantie->getDescription();
             $dataGaranties[$key]['prix'] = $garantie->getPrix();
@@ -104,7 +105,7 @@ class ValidationDevisController extends AbstractController
 
         $allOptions = [];
         foreach ($this->optionsRepo->findAll() as $key => $option) {
-            $allOptions[$key]['id'] =  $option->getId();
+            $allOptions[$key]['id'] = $option->getId();
             $allOptions[$key]['appelation'] = $option->getAppelation();
             $allOptions[$key]['description'] = $option->getDescription();
             $allOptions[$key]['prix'] = $option->getPrix();
@@ -114,7 +115,7 @@ class ValidationDevisController extends AbstractController
 
         $allGaranties = [];
         foreach ($this->garantiesRepo->findAll() as $key => $garantie) {
-            $allGaranties[$key]['id'] =  $garantie->getId();
+            $allGaranties[$key]['id'] = $garantie->getId();
             $allGaranties[$key]['appelation'] = $garantie->getAppelation();
             $allGaranties[$key]['description'] = $garantie->getDescription();
             $allGaranties[$key]['prix'] = $garantie->getPrix();
@@ -224,12 +225,19 @@ class ValidationDevisController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($client);
             $entityManager->flush();
-            $this->validationSession->addModePaiment($request->request->get('modePaiement'));
-
+//            $this->validationSession->addModePaiment();
+            $devis->setPayementPercentage(intval($request->get('modePaiement')));
+            $this->em->flush();
 
             $refDevis = $devis->getNumero();
-            //redirection vers un autre controller
-            return $this->redirectToRoute('paiementStripe', ['refDevis' => $refDevis]);
+
+            //si la reservation n'existe pas encore en passe au paiement
+            if (count($this->reservationRepo->findBy(['numDevis' => $devis->getId()])) == 0) {
+                //redirection vers un autre controller pour le paiement
+                return $this->redirectToRoute('paiementStripe', ['refDevis' => $refDevis]);
+            } else {
+                return $this->redirectToRoute('validation_step3', ['id' => $devis->getId()]);
+            }
         }
 
         $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($devis->getDateDepart(), $devis->getDateRetour(), $devis->getVehicule());

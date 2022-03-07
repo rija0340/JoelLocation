@@ -688,11 +688,11 @@ class ReservationController extends AbstractController
         $url   = $this->generateUrl('contrat_pdf', ['id' => $reservation->getId()]);
         $url = "https://joellocation.com" . $url;
 
-        $content = "Bonjour, " . '<br>' . "Vous pouvez télécharger le contrant concernant la réservatiion N°" . $reservation->getReference() . "en cliquant sur ce <a href='" . $url . "'>lien</a>.";
+        $content = "Bonjour, " . '<br>' . "Vous pouvez télécharger le contrat concernant la réservation N°" . $reservation->getReference() . "en cliquant sur ce <a href='" . $url . "'>lien</a>.";
 
         $this->mailjet->send($mail, $nom, "devis", $content);
 
-        $this->flashy->success("L'url de téléchargement du téléchargement N°" . $reservation->getReference() . " a été envoyé");
+        $this->flashy->success("L'url de téléchargement de la réservation N°" . $reservation->getReference() . " a été envoyé");
         return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
     }
 

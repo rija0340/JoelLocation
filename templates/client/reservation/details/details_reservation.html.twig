@@ -335,19 +335,20 @@
 							<div class="col-md-6 text-right">{{reservation.prix - reservation.sommePaiements}}€</div>
 						</div>
 					</div>
+					<div class="text-right">
+						{% if reservation.prix > reservation.sommePaiements %}
+							<form action="{{ path('paiement_sold') }}" method="POST">
+								<input type="hidden" name="montantSolde" value="{{ reservation.prix - reservation.sommePaiements }}">
+								<input type="hidden" name="reservation" value="{{ reservation.id }}">
+								<button class="btn btn-danger">Payer solde
+									{{ reservation.prix - reservation.sommePaiements }}€
+								</button>
+							</form>
+						{% endif %}
+					</div>
 				</div>
 			</div>
-			<div class="text-center">
-				{% if reservation.prix > reservation.sommePaiements %}
-					<form action="{{ path('paiement_sold') }}" method="POST">
-						<input type="hidden" name="montantSolde" value="{{ reservation.prix - reservation.sommePaiements }}">
-						<input type="hidden" name="reservation" value="{{ reservation.id }}">
-						<button class="btn btn-danger">Payer solde
-							{{ reservation.prix - reservation.sommePaiements }}€
-						</button>
-					</form>
-				{% endif %}
-			</div>
+
 		</div>
 	</div>
 

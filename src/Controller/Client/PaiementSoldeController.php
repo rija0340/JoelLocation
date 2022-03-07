@@ -34,7 +34,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class PaiementSoldeController extends AbstractController
 {
-    private  $devisController;
+    private $devisController;
     private $reservRepo;
     private $reservController;
     private $garantiesRepo;
@@ -68,7 +68,8 @@ class PaiementSoldeController extends AbstractController
         Mailjet $mail,
         AppelPaiementRepository $appelPaiementRepo
 
-    ) {
+    )
+    {
         $this->devisController = $devisController;
         $this->reservRepo = $reservRepo;
         $this->reservController = $reservController;
@@ -87,13 +88,14 @@ class PaiementSoldeController extends AbstractController
     }
 
     //paiement sold du client (link dans espace client)
+
     /**
      * @Route("/espaceclient/paiement-stripe-solde/", name="paiement_sold", methods={"GET","POST"})
      */
     public function paiementStripeSolde(Request $request)
     {
 
-        $id =  $request->request->get('reservation');
+        $id = $request->request->get('reservation');
         $sommePaiement = $request->request->get('montantSolde');
 
         $reservation = $this->reservRepo->find($id);
@@ -157,7 +159,7 @@ class PaiementSoldeController extends AbstractController
         }
 
         $sommePaiement = $reservation->getPrix() - $reservation->getSommePaiements();
-        if ($reservation->getPrix() ==  $reservation->getSommePaiements()) {
+        if ($reservation->getPrix() == $reservation->getSommePaiements()) {
             $sommePaiement = $reservation->getSommePaiements();
         }
 
@@ -171,7 +173,7 @@ class PaiementSoldeController extends AbstractController
         $paiement->setClient($this->reservRepo->findOneBy(['stripeSessionId' => $stripeSessionId])->getClient());
         $paiement->setMotif("Réservation");
         $paiement->setCreatedAt($this->dateHelper->dateNow());
-        $paiement->setModePaiement($this->modePaiementRepo->findOneBy(['libelle' => 'CARTE BANCAIRE']));
+        $paiement->setModePaiement($this->modePaiementRepo->findOneBy(['libelle' => 'Virement']));
         $paiement->setCreatedAt($this->dateHelper->dateNow());
         $this->em->persist($paiement);
         $this->em->flush();
@@ -182,10 +184,12 @@ class PaiementSoldeController extends AbstractController
 
         // ajouter le paiement dans l'entité appelPaiement correspondant
         $appel = $this->appelPaiementRepo->findOneBy(['reservation' => $reservation]);
-        $appel->setDatePaiement($this->dateHelper->dateNow());
-        $appel->setPayed(true);
-        $appel->setType('CARTE BANCAIRE');
-        $this->em->flush();
+        if ($appel) {
+            $appel->setDatePaiement($this->dateHelper->dateNow());
+            $appel->setPayed(true);
+            $appel->setType('CARTE BANCAIRE');
+            $this->em->flush();
+        }
 
         //vider session validation paiement 
         $this->validationSession->removeValidationSession();

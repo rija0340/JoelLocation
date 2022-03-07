@@ -130,6 +130,11 @@ class Devis
      */
     private $downloadId;
 
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $payement_percentage;
+
     // public $serializedOptions;
     // public $serializer;
 
@@ -434,4 +439,16 @@ class Devis
     //     $this->serializer->serialize($this->options, 'json');
     //     return $this->serializedOptions;
     // }
+
+    public function getPayementPercentage(): ?float
+    {
+        return $this->payement_percentage;
+    }
+
+    public function setPayementPercentage(?float $payement_percentage): self
+    {
+        $this->payement_percentage = $payement_percentage;
+
+        return $this;
+    }
 }

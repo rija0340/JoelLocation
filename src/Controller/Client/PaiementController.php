@@ -31,6 +31,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use function Composer\Autoload\includeFile;
 
 class PaiementController extends AbstractController
 {
@@ -116,14 +117,15 @@ class PaiementController extends AbstractController
             $devis->setTransformed(true);
             $this->em->flush();
         }
-        //enregistrement devis comme une réservation 
+
+        //enregistrement devis comme une réservation
         $this->reserverDevis($devis, $stripeSessionId);
 
         //enregistrer paiement dans table paiement
         $paiement = new Paiement;
 
         //sommepaiement en fonction de mode paiement choisis par le client
-        $modePaiement = $this->validationSession->getModePaiment();
+        $modePaiement = $devis->getPayementPercentage();
         if ($modePaiement == 25) {
             $sommePaiement = $this->tarifsHelper->VingtCinqPourcent($devis->getPrix());
         }
@@ -140,7 +142,7 @@ class PaiementController extends AbstractController
         $paiement->setClient($this->reservRepo->findOneBy(['stripeSessionId' => $stripeSessionId])->getClient());
         $paiement->setMotif("Réservation");
         $paiement->setDatePaiement($this->dateHelper->dateNow());
-        $paiement->setModePaiement($this->modePaiementRepo->findOneBy(['libelle' => 'CARTE BANCAIRE']));
+        $paiement->setModePaiement($this->modePaiementRepo->findOneBy(['libelle' => 'Virement']));
         $paiement->setCreatedAt($this->dateHelper->dateNow());
         $this->em->persist($paiement);
         $this->em->flush();
@@ -164,6 +166,7 @@ class PaiementController extends AbstractController
         return $this->render('client/paiement/success.html.twig', [
             "reservation" => $reservation,
         ]);
+
     }
     //test de paiement par stripe (page de paiement hebergé sur site stripe)
     /**
@@ -179,7 +182,7 @@ class PaiementController extends AbstractController
             return $this->redirectToRoute('espaceClient_index');
         }
 
-        $modePaiement = $this->validationSession->getModePaiment();
+        $modePaiement = $devis->getPayementPercentage();
 
         //sommepaiement en fonction de mode paiement choisis par le client
         if ($modePaiement == 25) {

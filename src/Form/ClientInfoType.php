@@ -25,7 +25,7 @@ class ClientInfoType extends AbstractType
             ->add('mail', EmailType::class,  [
                 'required' => true
             ])
-            ->add('telephone', TelType::class,  [
+            ->add('portable', TelType::class,  [
                 'required' => true
             ]);
     }

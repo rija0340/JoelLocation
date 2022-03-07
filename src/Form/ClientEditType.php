@@ -31,11 +31,11 @@ class ClientEditType extends AbstractType
                 'invalid_message' => 'Cette adresse mail est déjà utilisée'
             ])
             ->add('telephone', TelType::class, [
-                'required' => true,
-                'constraints' => [new Length(['min' => 10])],
+                'required' => false,
+                'empty_data'=>''
             ])
             ->add('portable', TelType::class, [
-                'required' => false,
+                'required' => true,
                 'constraints' => [new Length(['min' => 10])],
             ])
             ->add('dateNaissance', DateType::class, [
@@ -48,7 +48,9 @@ class ClientEditType extends AbstractType
                 'required' => false
             ])
             ->add('lieuNaissance', TextType::class)
-            ->add('complementAdresse', TextType::class)
+            ->add('complementAdresse', TextType::class, [
+                'required' => false
+            ])
             ->add('ville', TextType::class)
             ->add('codePostal', NumberType::class)
             ->add('villeDelivrancePermis', TextType::class);
