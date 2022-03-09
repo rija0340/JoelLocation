@@ -42,6 +42,8 @@ class UserEditType extends AbstractType
                 'widget' => 'single_text',
                 'required' => false
             ])
+            ->add('complementAdresse', TextType::class)
+            ->add('ville', TextType::class)
             ->add('lieuNaissance', TextType::class)
             ->add('numeroPermis', TextType::class)
             ->add('datePermis', DateType::class, [

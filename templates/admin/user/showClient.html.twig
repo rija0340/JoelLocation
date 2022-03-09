@@ -28,23 +28,24 @@
 			<div class="row form-group">
 				<div class="form-group col-md-4">
 					<label for="">Nom :</label>
-					<input class="form-control-plaintext" type="text" placeholder={{ user.nom }} readonly>
+					<input class="form-control-plaintext" type="text" placeholder="{{ user.nom }}" readonly>
 
 				</div>
 				<div class="form-group col-md-4">
 					<label for="">Prénom :</label>
-					<input class="form-control-plaintext" type="text" placeholder={{ user.prenom }} readonly>
+					<input class="form-control-plaintext" type="text" placeholder="{{ user.prenom }}" readonly>
 
 
 				</div>
 				<div class="form-group col-md-4">
 					<label for="">Username :</label>
-					<input class="form-control-plaintext" type="text" placeholder={{ user.username }} readonly>
+					<input class="form-control-plaintext" type="text" placeholder="{{ user.username }}" readonly>
 				</div>
 
 				<div class="form-group col-md-4">
 					<label for="">Rôle :</label>
-					<input class="form-control-plaintext" type="text" placeholder={{ user.roles ? user.roles|json_encode }} readonly>
+{#					<input class="form-control-plaintext" type="text" placeholder={{ user.roles ? user.roles|json_encode }} readonly>#}
+					<input class="form-control-plaintext" type="text" placeholder="Client" readonly>
 				</div>
 
 				<div class="form-group col-md-4">
