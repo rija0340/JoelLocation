@@ -137,6 +137,18 @@ class DateHelper
     {
         return new DateTime('NOW', new DateTimeZone('+0300'));
     }
+    function frenchDate($date){
+
+        $d = $date->format('d');
+        $m = $this->getMonthFullName($date);
+        $Y = $date->format('Y');
+
+        return $d ." ". $m ." ". $Y;
+    }
+    function frenchHour($date){
+
+        return $date->format('H:i');
+    }
 
     //parametre objet date
     function newDate($date)

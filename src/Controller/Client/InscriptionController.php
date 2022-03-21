@@ -67,8 +67,13 @@ class InscriptionController extends AbstractController
             $entityManager->flush();
 
             $url = $this->generateUrl('app_login');
+
+            $objet = "Confirmation d'inscription";
+            $password = "";
+
+
             //envoi de mmail de confirmation de creation de compte au client 
-            $this->mail->send($user->getmail(), $user->getNom(), 'Confirmation de création de compte', "Bonjour " . $user->getNom() . " Votre compte a été créé. Veuillez  <a href='" . $url . "'>vous connecter</a> pour acceder à votre espace client");
+            $this->mail->confirmationInscription($user->getNom(),$user->getMail(),$objet, $password);
 
             return $this->redirectToRoute('app_login');
         }

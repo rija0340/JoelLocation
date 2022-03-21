@@ -574,10 +574,21 @@ class DevisController extends AbstractController
 
         $url   = $this->generateUrl('devis_pdf', ['id' => $devis->getId()]);
         $url = "https://joellocation.com" . $url;
+        $linkDevis = "<a href='" . $url . "'>lien</a>";
 
-        $content = "Bonjour, " . '<br>' . "Vous pouvez télécharger votre devis N°" . $devis->getNumero() . "en cliquant sur ce <a href='" . $url . "'>lien</a>.";
+//        $content = "Bonjour, " . '<br>' . "Vous pouvez télécharger votre devis N°" . $devis->getNumero() . "en cliquant sur ce <a href='" . $url . "'>lien</a>.";
 
-        $this->mailjet->send($mail, $nom, "devis", $content);
+        $this->mailjet->envoiDevis(
+            $devis->getClient()->getPrenom().' '.$devis->getClient()->getNom(),
+            $devis->getClient()->getMail(),
+            "Téléchargement de devis",
+            $this->dateHelper->frenchDate($devis->getDateCreation()),
+            $devis->getNumero(),
+            $devis->getVehicule()->getMarque() ." ".$devis->getVehicule()->getModele(),
+            $this->dateHelper->frenchDate($devis->getDateDepart())." ".$this->dateHelper->frenchHour($devis->getDateDepart()),
+            $this->dateHelper->frenchDate($devis->getDateRetour())." ".$this->dateHelper->frenchHour($devis->getDateRetour()),
+            $linkDevis
+        );
 
         $this->flashy->success("L'url de téléchargement du devis N°" . $devis->getNumero() . " a été envoyé");
         return $this->redirectToRoute('devis_show', ['id' => $devis->getId()]);
