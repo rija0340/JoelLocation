@@ -155,7 +155,6 @@ $(document).ready(function () {
         for (let i = 0; i < defaultSelectedGaranties.length; i++) {
             li = document.createElement('li');
             li.innerHTML = defaultSelectedGaranties[i].appelation;
-            console.log(li);
             $("#garantiesSubscribed").append(li);
 
         }

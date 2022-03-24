@@ -5,6 +5,7 @@ namespace App\Controller\Client;
 use App\Entity\Devis;
 use App\Service\DateHelper;
 use App\Form\ClientInfoType;
+use App\Service\ReservationHelper;
 use App\Service\TarifsHelper;
 use App\Repository\DevisRepository;
 use App\Repository\OptionsRepository;
@@ -33,6 +34,7 @@ class ValidationDevisController extends AbstractController
     private $vehiculeRepo;
     private $validationSession;
     private $em;
+    private $reservationHelper;
 
     public function __construct(
         ReservationRepository $reservationRepo,
@@ -44,7 +46,8 @@ class ValidationDevisController extends AbstractController
         VehiculeRepository $vehiculeRepo,
         FlashyNotifier $flashy,
         ValidationReservationClientSession $validationSession,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        ReservationHelper $reservationHelper
 
 
     )
@@ -59,6 +62,7 @@ class ValidationDevisController extends AbstractController
         $this->flashy = $flashy;
         $this->validationSession = $validationSession;
         $this->em = $em;
+        $this->reservationHelper = $reservationHelper;
     }
 
     /**
@@ -66,6 +70,21 @@ class ValidationDevisController extends AbstractController
      */
     public function step2OptionsGaranties(Request $request, Devis $devis): Response
     {
+
+        //un tableau contenant les véhicules utilisées dans les reservations se déroulant entre
+        //$dateDepart et $dateRetour
+        $reservations = $this->reservationRepo->findReservationIncludeDates($devis->getDateDepart(), $devis->getDateRetour());
+
+        $vehiculeIsNotAvailable = $this->reservationHelper->vehiculeIsInvolved($reservations, $devis->getVehicule());
+
+        if ($vehiculeIsNotAvailable) {
+            $vehiculesAvailable = $this->reservationHelper->getVehiculesDisponible($reservations);
+
+        } else {
+            $vehiculesAvailable = null;
+
+        }
+
 
         // $devisID = $request->request->get('reservID');
 
@@ -196,6 +215,8 @@ class ValidationDevisController extends AbstractController
             'dataGaranties' => $dataGaranties,
             'allOptions' => $allOptions,
             'allGaranties' => $allGaranties,
+            'vehiculeIsNotAvailable' =>$vehiculeIsNotAvailable,
+            'vehiculesAvailable'=>$vehiculesAvailable
         ]);
     }
 

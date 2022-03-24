@@ -5,7 +5,6 @@ addEventListener();
 
 function getElements() {
     btnToStep3InfosClientElem = document.getElementById('btnToStep3InfosClient');
-    console.log(btnToStep3InfosClientElem);
 }
 
 function addEventListener() {
@@ -38,5 +37,7 @@ function redirectController(e) {
             console.log(erreur.responseText);
         }
     });
+
+
 
 }

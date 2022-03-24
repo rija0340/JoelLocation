@@ -53,6 +53,24 @@ class ReservationHelper
         return $vehiculesDisponible;
     }
 
+    public function vehiculeIsInvolved($reservations, $vehicule){
+        $vehiculesInvolved = [];
+        foreach ($reservations as $res) {
+            array_push($vehiculesInvolved, $res->getVehicule());
+        }
+        $vehiculesInvolved = array_unique($vehiculesInvolved);
+
+        $result = false;
+        foreach ($vehiculesInvolved as $veh) {
+            if (in_array($vehicule, $vehiculesInvolved)) {
+                $result =  true;
+            } else {
+                $result = false;
+            }
+        }
+        return $result;
+    }
+
     /**
      * @return array of associatives array
      */
