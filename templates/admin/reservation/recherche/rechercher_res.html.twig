@@ -3,297 +3,291 @@
 {% block title %}Rechercher une résa
 {% endblock %}
 {% block current_page %}
-    <h2>
-        <i class="fa fa-search"></i>
-        Rechercher une réservation
-    </h2>
+	<h2>
+		<i class="fa fa-search"></i>
+		Rechercher une réservation
+	</h2>
 
 {% endblock %}
 
 {% block stylesheets %}{% endblock %}
 
 {% block content %}
-    <div class="x_panel">
-        <div class="x_title">
-            <h2>
-                <i class="fa fa-search"></i>
-                Recherche simple
-            </h2>
+	<div class="x_panel">
+		<div class="x_title">
+			<h2>
+				<i class="fa fa-search"></i>
+				Recherche simple
+			</h2>
 
-            <div class="clearfix"></div>
-        </div>
-        <div class="x_content">
-            <p>
-                Chercher une réservation en saisissant sa référence
-            </p>
-            <form action="{{ path('rechercher_res') }}" id="formRS" method="POST">
-                <div class="row">
-                    <div class="col-md-8">
-                        <input type="text" id="rechercheSimple" name="inputRechercheSimple" required="required"
-                               class="form-control col-md-12 " placeholder="Saisir une référence ou le nom d'un client">
-                    </div>
-                    <div class="col-md-4">
-                        <button type="submit" class="btn btn-danger">
-                            <i class="fa fa-search"></i>
-                            Chercher
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-        {% if resultatRS %}
-            <table class="overflow-auto">
-                <table class="table">
-                    <thead class="thead-dark">
-                    <tr>
-                        <th scope="col" class="text-uppercase">paiement</th>
-                        <th scope="col" class="text-uppercase text-nowrap">date création</th>
-                        <th scope="col" class="text-uppercase">client</th>
-                        <th scope="col" class="text-uppercase">réservation / véhicule</th>
-                        <th scope="col" class="text-uppercase">dates / durée</th>
-                        <th scope="col" class="text-uppercase">prix</th>
-                        <th scope="col" class="text-uppercase">action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for res in resultatRS %}
-                        <tr>
-                            <td>
-                                {% if res.sommePaiements == res.prix %}
-                                    <span class="badge badge-success">FULL</span>
-                                {% else %}
-                                    <span class="badge badge-warning">ACOMPTE</span>
+			<div class="clearfix"></div>
+		</div>
+		<div class="x_content">
+			<p>
+				Chercher une réservation en saisissant sa référence
+			</p>
+			<form action="{{ path('rechercher_res') }}" id="formRS" method="POST">
+				<div class="row">
+					<div class="col-md-8">
+						<input type="text" id="rechercheSimple" name="inputRechercheSimple" required="required" class="form-control col-md-12 " placeholder="Saisir une référence ou le nom d'un client">
+					</div>
+					<div class="col-md-4">
+						<button type="submit" class="btn btn-danger">
+							<i class="fa fa-search"></i>
+							Chercher
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		{% if resultatRS %}
+			<table class="overflow-auto">
+				<table class="table">
+					<thead class="thead-dark">
+						<tr>
+							<th scope="col" class="text-uppercase">paiement</th>
+							<th scope="col" class="text-uppercase text-nowrap">date création</th>
+							<th scope="col" class="text-uppercase">client</th>
+							<th scope="col" class="text-uppercase">réservation / véhicule</th>
+							<th scope="col" class="text-uppercase">dates / durée</th>
+							<th scope="col" class="text-uppercase">prix</th>
+							<th scope="col" class="text-uppercase">action</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for res in resultatRS %}
+							<tr>
+								<td>
+									{% if res.sommePaiements == res.prix %}
+										<span class="badge badge-success">FULL</span>
+									{% else %}
+										<span class="badge badge-warning">ACOMPTE</span>
 
-                                {% endif %}
-                            </td>
-                            <td>{{ res.dateReservation|date('d/m/Y H:i') }}</td>
-                            <td>{{ res.client.nom }}</td>
-                            <td>{{ res.vehicule.marque }}
-                                {{ res.vehicule.modele }}
-                                {{ res.vehicule.immatriculation }}</td>
-                            <td>
-                                {{ res.dateDebut|date('d/m/Y H:i') }}/
-                                {{ res.duree }}
-                                jours
-                            </td>
-                            <td>{{ res.prix }}€</td>
-                            <td>
-                                {# contrat en cours #}
-                                {% if (res.dateDebut < dateNow) and  (dateNow < res.dateFin) %}
-                                    <a class="btn btn-dark text-white"
-                                       href="{{ path('reservation_show', {'id' : res.id }) }}">
-                                        <i class="fa fa-info bg-dark"></i>
-                                    </a>
-                                    {# contrat terminé #}
-                                {% elseif res.dateDebut < dateNow and  dateNow > res.dateFin %}
-                                    <a class="btn btn-dark text-white"
-                                       href="{{ path('reservation_show', {'id' : res.id }) }}">
-                                        <i class="fa fa-info bg-dark"></i>
-                                    </a>
-                                    {# reservation à venir #}
-                                {% elseif res.dateDebut > dateNow and  dateNow < res.dateFin %}
-                                    <a class="btn btn-dark text-white"
-                                       href="{{ path('reservation_show', {'id' : res.id }) }}">
-                                        <i class="fa  fa-info bg-dark"></i>
-                                    </a>
-                                {% endif %}
+									{% endif %}
+								</td>
+								<td>{{ res.dateReservation|date('d/m/Y H:i') }}</td>
+								<td>{{ res.client.nom }}</td>
+								<td>{{ res.vehicule.marque }}
+									{{ res.vehicule.modele }}
+									{{ res.vehicule.immatriculation }}</td>
+								<td>
+									{{ res.dateDebut|date('d/m/Y H:i') }}/
+									{{ res.duree }}
+									jours
+								</td>
+								<td>{{ res.prix }}€</td>
+								<td>
+									{# contrat en cours #}
+									{% if (res.dateDebut < dateNow) and  (dateNow < res.dateFin) %}
+										<a class="btn btn-dark text-white" href="{{ path('reservation_show', {'id' : res.id }) }}">
+											<i class="fa fa-info bg-dark"></i>
+										</a>
+										{# contrat terminé #}
+									{% elseif res.dateDebut < dateNow and  dateNow > res.dateFin %}
+										<a class="btn btn-dark text-white" href="{{ path('reservation_show', {'id' : res.id }) }}">
+											<i class="fa fa-info bg-dark"></i>
+										</a>
+										{# reservation à venir #}
+									{% elseif res.dateDebut > dateNow and  dateNow < res.dateFin %}
+										<a class="btn btn-dark text-white" href="{{ path('reservation_show', {'id' : res.id }) }}">
+											<i class="fa  fa-info bg-dark"></i>
+										</a>
+									{% endif %}
 
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </table>
-        {% endif %}
-        {# tableau pour résultat ajax #}
-        <div class=" hide" id="resultRechSimple">
-            <div class="overflow-auto">
-                <table class="table">
-                    <thead class="thead-dark">
-                    <tr>
-                        <th scope="col" class="text-uppercase">paiement</th>
-                        <th scope="col" class="text-uppercase text-nowrap">date création</th>
-                        <th scope="col" class="text-uppercase">client</th>
-                        <th scope="col" class="text-uppercase">réservation / véhicule</th>
-                        <th scope="col" class="text-uppercase">dates / durée</th>
-                        <th scope="col" class="text-uppercase">prix</th>
-                        <th scope="col" class="text-uppercase">action</th>
-                    </tr>
-                    </thead>
-                    <tbody id="tbodyRechSimple"></tbody>
-                </table>
-            </div>
-        </div>
-        <div class="hide" id="RS_aucun">
-            <i class="fa fa-warning">Aucun résultat trouvé</i>
-        </div>
-        {# fin resulat #}
-    </div>
-    <div class="x_panel">
-        <div class="x_title">
-            <h2>
-                <i class="fa fa-car"></i>Recherche par immatriculation</h2>
-            <div class="clearfix"></div>
-        </div>
-        <div class="x_content">
-            <p>Chercher une réservation en sélectionnant une immatriculation et une date</p>
-            <form action="{{ path("rechercher_res") }}" method="post">
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</table>
+		{% endif %}
+		{# tableau pour résultat ajax #}
+		<div class=" hide" id="resultRechSimple">
+			<div class="overflow-auto">
+				<table class="table">
+					<thead class="thead-dark">
+						<tr>
+							<th scope="col" class="text-uppercase">paiement</th>
+							<th scope="col" class="text-uppercase text-nowrap">date création</th>
+							<th scope="col" class="text-uppercase">client</th>
+							<th scope="col" class="text-uppercase">réservation / véhicule</th>
+							<th scope="col" class="text-uppercase">dates / durée</th>
+							<th scope="col" class="text-uppercase">prix</th>
+							<th scope="col" class="text-uppercase">action</th>
+						</tr>
+					</thead>
+					<tbody id="tbodyRechSimple"></tbody>
+				</table>
+			</div>
+		</div>
+		<div class="hide" id="RS_aucun">
+			<i class="fa fa-warning">Aucun résultat trouvé</i>
+		</div>
+		{# fin resulat #}
+	</div>
+	<div class="x_panel">
+		<div class="x_title">
+			<h2>
+				<i class="fa fa-car"></i>Recherche par immatriculation</h2>
+			<div class="clearfix"></div>
+		</div>
+		<div class="x_content">
+			<p>Chercher une réservation en sélectionnant une immatriculation et une date</p>
+			<form action="{{ path("rechercher_res") }}" method="post">
 
-                <div class="row">
-                    <div
-                            class="form-group col-md-4">
-                        {# <label for="">Date départ :</label> #}
-                        <div class="form-group ">
-                            <div class="">
-                                <select class="form-control" name="inputVehicule_RIM" id="RIM_selectVehicule"
-                                        required="required">
-                                    <option disabled selected value="">Sélectionnez une immatriculation</option>
-                                    {% for vehicule in vehicules %}
-                                        <option value={{ vehicule.id }}>{{ vehicule }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="item form-group">
-                            <div class=" ">
-                                <input id="RIM_date" type="date" class="form-control" required="required"
-                                       name="inputDate_RIM">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-auto">
-                        <button class="btn btn-danger" type="subtmit" id="RIM_btnChercher">
-                            <i class="fa fa-search"></i>
-                            Chercher
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-        {% if resultatRIM %}
-            <div class="overflow-auto">
-                <table class="table">
-                    <thead class="thead-dark">
-                    <tr>
-                        <th scope="col" class="text-uppercase">paiement</th>
-                        <th scope="col" class="text-uppercase text-nowrap">date création</th>
-                        <th scope="col" class="text-uppercase">client</th>
-                        <th scope="col" class="text-uppercase">réservation / véhicule</th>
-                        <th scope="col" class="text-uppercase">dates / durée</th>
-                        <th scope="col" class="text-uppercase">prix</th>
-                        <th scope="col" class="text-uppercase">action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for res in resultatRIM %}
-                        <tr>
-                            <td>
+				<div class="row">
+					<div
+						class="form-group col-md-4">
+						{# <label for="">Date départ :</label> #}
+						<div class="form-group ">
+							<div class="">
+								<select class="form-control" name="inputVehicule_RIM" id="RIM_selectVehicule" required="required">
+									<option disabled selected value="">Sélectionnez une immatriculation</option>
+									{% for vehicule in vehicules %}
+										<option value={{ vehicule.id }}>{{ vehicule }}</option>
+									{% endfor %}
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="item form-group">
+							<div class=" ">
+								<input id="RIM_date" type="date" class="form-control" required="required" name="inputDate_RIM">
+							</div>
+						</div>
+					</div>
+					<div class="col-auto">
+						<button class="btn btn-danger" type="subtmit" id="RIM_btnChercher">
+							<i class="fa fa-search"></i>
+							Chercher
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		{% if resultatRIM %}
+			<div class="">
+				<table class="table">
+					<thead class="thead-dark">
+						<tr>
+							<th scope="col" class="text-uppercase">paiement</th>
+							<th scope="col" class="text-uppercase text-nowrap">date création</th>
+							<th scope="col" class="text-uppercase">client</th>
+							<th scope="col" class="text-uppercase">réservation / véhicule</th>
+							<th scope="col" class="text-uppercase">dates / durée</th>
+							<th scope="col" class="text-uppercase">prix</th>
+							<th scope="col" class="text-uppercase">action</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for res in resultatRIM %}
+							<tr>
+								<td>
 
-                                {% if res.sommePaiements == res.prix %}
-                                    <span class="badge badge-success">FULL</span>
-                                {% else %}
-                                    <span class="badge badge-warning">ACOMPTE</span>
+									{% if res.sommePaiements == res.prix %}
+										<span class="badge badge-success">FULL</span>
+									{% else %}
+										<span class="badge badge-warning">ACOMPTE</span>
 
-                                {% endif %}
-                            </td>
-                            <td>{{ res.dateReservation|date('d/m/Y H:i') }}</td>
-                            <td>{{ res.client.nom }}</td>
-                            <td>{{ res.vehicule.marque }}
-                                {{ res.vehicule.modele }}
-                                {{ res.vehicule.immatriculation }}</td>
-                            <td>
-                                {{ res.dateDebut|date('d/m/Y H:i') }}/
-                                {{ res.duree }}
-                                jours
-                            </td>
-                            <td>{{ res.prix }}€</td>
-                            <td>
-                                {# contrat en cours #}
-                                {% if (res.dateDebut < dateNow) and  (dateNow < res.dateFin) %}
-                                    <a class="btn btn-dark" href="{{ path('reservation_show', {'id' : res.id }) }}">
-                                        <i class="fa fa-info"></i>
-                                    </a>
-                                    {# contrat terminé #}
-                                {% elseif res.dateDebut < dateNow and  dateNow > res.dateFin %}
-                                    <a class="btn btn-dark" href="{{ path('reservation_show', {'id' : res.id }) }}">
-                                        <i class="fa fa-info"></i>
-                                    </a>
-                                    {# reservation à venir #}
-                                {% elseif res.dateDebut > dateNow and  dateNow < res.dateFin %}
-                                    <a class="btn btn-dark" href="{{ path('reservation_show', {'id' : res.id }) }}">
-                                        <i class="fa  fa-info"></i>
-                                    </a>
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+									{% endif %}
+								</td>
+								<td>{{ res.dateReservation|date('d/m/Y H:i') }}</td>
+								<td>{{ res.client.nom }}</td>
+								<td>{{ res.vehicule.marque }}
+									{{ res.vehicule.modele }}
+									{{ res.vehicule.immatriculation }}</td>
+								<td>
+									{{ res.dateDebut|date('d/m/Y H:i') }}/
+									{{ res.duree }}
+									jours
+								</td>
+								<td>{{ res.prix }}€</td>
+								<td>
+									{# contrat en cours #}
+									{% if (res.dateDebut < dateNow) and  (dateNow < res.dateFin) %}
+										<a class="btn btn-dark" href="{{ path('reservation_show', {'id' : res.id }) }}">
+											<i class="fa fa-info"></i>
+										</a>
+										{# contrat terminé #}
+									{% elseif res.dateDebut < dateNow and  dateNow > res.dateFin %}
+										<a class="btn btn-dark" href="{{ path('reservation_show', {'id' : res.id }) }}">
+											<i class="fa fa-info"></i>
+										</a>
+										{# reservation à venir #}
+									{% elseif res.dateDebut > dateNow and  dateNow < res.dateFin %}
+										<a class="btn btn-dark" href="{{ path('reservation_show', {'id' : res.id }) }}">
+											<i class="fa  fa-info"></i>
+										</a>
+									{% endif %}
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
 
-        {% elseif vehiculeRechercheRIM != null and dateRechercheRIM != null %}
-            <div class="text-center">
-                <i class="fa fa-warning">
-                    Aucun résulat trouvé pour
-                </i>
+		{% elseif vehiculeRechercheRIM != null and dateRechercheRIM != null %}
+			<div class="text-center">
+				<i class="fa fa-warning">
+					Aucun résulat trouvé pour
+				</i>
 
-                <br>
-                date :
-                {{ dateRechercheRIM|date('d-m-Y') }}
-                <br>
-                véhicule :
-                {{ vehiculeRechercheRIM ? vehiculeRechercheRIM.marque : "" }}
-                {{ vehiculeRechercheRIM ? vehiculeRechercheRIM.modele : "" }}
-                {{ vehiculeRechercheRIM ? vehiculeRechercheRIM.immatriculation : "" }}
-            </div>
-        {% endif %}
-    </div>
-    <div class="x_panel">
-        <div class="x_title">
-            <h2>
-                <i class="fa fa-search-plus"></i>Recherche avancée</h2>
-            <div class="clearfix"></div>
-        </div>
-        <div class="x_content">
-            {{ form_start(formRA) }}
-            <div class="row">
-                <div class="form-group col-md-4">
-                    <label for="">Type date :</label>
-                    {{ form_widget(formRA.typeDate) }}
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="">Date début période :</label>
-                    {{ form_widget(formRA.debutPeriode) }}
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="">Date fin période :</label>
-                    {{ form_widget(formRA.finPeriode) }}
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="">Catégorie :</label>
-                    {{ form_widget(formRA.categorie) }}
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="">Type tarif :</label>
-                    {{ form_widget(formRA.typeTarif) }}
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="">Code promo :</label>
-                    {{ form_widget(formRA.codePromo) }}
-                </div>
-            </div>
-            <div class="item form-group">
-                <div class="col-md-6 col-sm-6 offset-md-5">
-                    <button class="btn btn-danger">
-                        <i class="fa fa-search" aria-hidden="true"></i>
-                        {{ button_label|default('Rechercher') }}</button>
-                </div>
-            </div>
-            {{ form_end(formRA) }}
-            {# fin test #}
-        </div>
-    </div>
+				<br>
+				date :
+				{{ dateRechercheRIM|date('d-m-Y') }}
+				<br>
+				véhicule :
+				{{ vehiculeRechercheRIM ? vehiculeRechercheRIM.marque : "" }}
+				{{ vehiculeRechercheRIM ? vehiculeRechercheRIM.modele : "" }}
+				{{ vehiculeRechercheRIM ? vehiculeRechercheRIM.immatriculation : "" }}
+			</div>
+		{% endif %}
+	</div>
+	<div class="x_panel">
+		<div class="x_title">
+			<h2>
+				<i class="fa fa-search-plus"></i>Recherche avancée</h2>
+			<div class="clearfix"></div>
+		</div>
+		<div class="x_content">
+			{{ form_start(formRA) }}
+			<div class="row">
+				<div class="form-group col-md-4">
+					<label for="">Type date :</label>
+					{{ form_widget(formRA.typeDate) }}
+				</div>
+				<div class="form-group col-md-4">
+					<label for="">Date début période :</label>
+					{{ form_widget(formRA.debutPeriode) }}
+				</div>
+				<div class="form-group col-md-4">
+					<label for="">Date fin période :</label>
+					{{ form_widget(formRA.finPeriode) }}
+				</div>
+				<div class="form-group col-md-4">
+					<label for="">Catégorie :</label>
+					{{ form_widget(formRA.categorie) }}
+				</div>
+				<div class="form-group col-md-4">
+					<label for="">Type tarif :</label>
+					{{ form_widget(formRA.typeTarif) }}
+				</div>
+				<div class="form-group col-md-4">
+					<label for="">Code promo :</label>
+					{{ form_widget(formRA.codePromo) }}
+				</div>
+			</div>
+			<div class="item form-group">
+				<div class="col-md-6 col-sm-6 offset-md-5">
+					<button class="btn btn-danger">
+						<i class="fa fa-search" aria-hidden="true"></i>
+						{{ button_label|default('Rechercher') }}</button>
+				</div>
+			</div>
+			{{ form_end(formRA) }}
+			{# fin test #}
+		</div>
+	</div>
 {% endblock %}
 {% block javascripts %}{# // <script src="../../js/admin/recherche_res.js"></script> #}{% endblock %}
