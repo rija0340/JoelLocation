@@ -53,7 +53,8 @@ class ReservationHelper
         return $vehiculesDisponible;
     }
 
-    public function vehiculeIsInvolved($reservations, $vehicule){
+    public function vehiculeIsInvolved($reservations, $vehicule)
+    {
         $vehiculesInvolved = [];
         foreach ($reservations as $res) {
             array_push($vehiculesInvolved, $res->getVehicule());

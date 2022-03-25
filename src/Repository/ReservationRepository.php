@@ -223,6 +223,23 @@ class ReservationRepository extends ServiceEntityRepository
     /**
      * @return Reservation[] Returns an array of Reservation objects
      */
+    public function findReservationAndStopSalesIncludeDate($date)
+    {
+        return $this->createQueryBuilder('r')
+            ->where(' r.date_fin >= :date')
+            ->andWhere('r.date_debut <= :date')
+            ->andWhere('r.code_reservation = :code OR r.code_reservation = :stopsale')
+            ->andWhere("r.canceled = FALSE OR r.canceled = 'NULL' AND r.archived = FALSE OR r.archived = 'NULL'")
+
+            ->setParameter('code', 'devisTransformé')
+            ->setParameter('stopsale', 'stopSale')
+            ->setParameter('date', $date)
+            ->getQuery()
+            ->getResult();
+    }
+    /**
+     * @return Reservation[] Returns an array of Reservation objects
+     */
     public function findReservationExcludeDate($date)
     {
         return $this->createQueryBuilder('r')

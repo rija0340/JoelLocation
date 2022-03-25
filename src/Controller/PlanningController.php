@@ -226,13 +226,13 @@ class PlanningController extends AbstractController
     {
         //valeur par défaut de date
         $defaultDate = $this->dateHelper->dateNow();
-        $reservations = $this->reservationRepo->findReservationIncludeDate($this->dateHelper->dateNow());
+        $reservations = $this->reservationRepo->findReservationAndStopSalesIncludeDate($this->dateHelper->dateNow());
 
         //lorsque la date est changée par l'utilisateur, on modifie la date de recherche 
         $dateInput = $request->request->get('inputDate');
         if ($dateInput) {
             $dateInput = new DateTime($request->request->get('inputDate'));
-            $reservations = $this->reservationRepo->findReservationIncludeDate($dateInput);
+            $reservations = $this->reservationRepo->findReservationAndStopSalesIncludeDate($dateInput);
             $dateInput = new DateTime($request->request->get('inputDate'));
             $date = $dateInput;
         } else {
