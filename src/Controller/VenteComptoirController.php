@@ -392,6 +392,7 @@ class VenteComptoirController extends AbstractController
             $devis->getVehicule()->getMarque() ." ".$devis->getVehicule()->getModele(),
             $this->dateHelper->frenchDate($devis->getDateDepart())." ".$this->dateHelper->frenchHour($devis->getDateDepart()),
             $this->dateHelper->frenchDate($devis->getDateRetour())." ".$this->dateHelper->frenchHour($devis->getDateRetour())
+//            $this->dateHelper->frenchDate($devis->getDateRetour()->modify('+3 days'))
         );
 
         $this->flashy->success('Le devis a été enregistré avec succés et un mail a été envoyé au client');

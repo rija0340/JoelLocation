@@ -79,10 +79,11 @@ class DevisController extends AbstractController
      */
     public function index(): Response
     {
-        $devis = $this->devisRepo->findBy([], ["id" => "DESC"]);
+        $devis = $this->devisRepo->findBy([], ["id" => "ASC"]);
 
         return $this->render('admin/devis/index.html.twig', [
-            'devis' => $devis
+            'devis' => $devis,
+
         ]);
     }
 

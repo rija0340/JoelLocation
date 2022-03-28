@@ -107,7 +107,7 @@ class Mailjet
                 [
                     'From' => [
                         'Email' => "contact.joellocation@gmail.com",
-                        'Name' => "JoelLocation"
+                        'Name' => "JOEL LOCATION"
                     ],
                     'To' => [
                         [
@@ -138,7 +138,7 @@ class Mailjet
                 [
                     'From' => [
                         'Email' => "contact.joellocation@gmail.com",
-                        'Name' => "JoelLocation"
+                        'Name' => "JOEL LOCATION"
                     ],
                     'To' => [
                         [
@@ -172,7 +172,7 @@ class Mailjet
                 [
                     'From' => [
                         'Email' => "contact.joellocation@gmail.com",
-                        'Name' => "JoelLocation"
+                        'Name' => "JOEL LOCATION"
                     ],
                     'To' => [
                         [
@@ -190,6 +190,7 @@ class Mailjet
                         'vehicule'=> $vehicule,
                         'dateHeureDepart'=> $dateHeureDepart,
                         'dateHeureRetour'=> $dateHeureRetour
+//                        'dateValiditeDevis'=> $dateValiditeDevis
                     ]
                 ]
             ]
@@ -206,7 +207,7 @@ class Mailjet
                 [
                     'From' => [
                         'Email' => "contact.joellocation@gmail.com",
-                        'Name' => "JoelLocation"
+                        'Name' => "JOEL LOCATION"
                     ],
                     'To' => [
                         [
