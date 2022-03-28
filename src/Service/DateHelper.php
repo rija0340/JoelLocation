@@ -120,7 +120,7 @@ class DateHelper
     {
 
         $duree = date_diff($dateDepart, $dateRetour);
-        $heures = ($duree->d * 24) + $duree->h;
+        $heures = ($duree->days * 24) + $duree->h;
 
         $nombreJours = $heures / 24;
         if (is_float($nombreJours)) {

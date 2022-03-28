@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
 // use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -92,25 +93,22 @@ class PlanningController extends AbstractController
             if (count($vehicule->getReservations()) == 0) {
                 $data1[$key]['unscheduled'] = true;
             }
-            $data1[$key]['render'] =  "split";
-            $data1[$key]['parent'] =  0;
+            $data1[$key]['render'] = "split";
+            $data1[$key]['parent'] = 0;
         }
 
 
         $c = 0;
         //liste des réservations qui vont être affichées dans la colonne de droite
         foreach ($reservations as $key => $reservation) {
-            $datas[$key]['id'] =  uniqid();
-            $datas[$key]['id_r'] =  $reservation->getId();
-            $datas[$key]['client'] = $reservation->getClient()->getNom() . " " .  $reservation->getClient()->getPrenom();
+            $datas[$key]['id'] = uniqid();
+            $datas[$key]['id_r'] = $reservation->getId();
+            $datas[$key]['client'] = $reservation->getClient()->getNom() . " " . $reservation->getClient()->getPrenom();
             $datas[$key]['start_date'] = $reservation->getDateDebut()->format('d-m-Y H:i');
             $datas[$key]['start_date_formated'] = $reservation->getDateDebut()->format('d-m-Y H:i');
 
-            if (date("H", $reservation->getDateFin()->getTimestamp()) == 0) {
-                $datas[$key]['duration'] = $this->dateHelper->calculDuree(1 + $reservation->getDateDebut(), $reservation->getDateFin());
-            } else {
-                $datas[$key]['duration'] = $this->dateHelper->calculDuree($reservation->getDateDebut(), $reservation->getDateFin());
-            }
+//            $datas[$key]['duration'] = $this->dateHelper->calculDuree($reservation->getDateDebut(), $reservation->getDateFin());
+            $datas[$key]['duration'] = $reservation->getDuree() ;
             $datas[$key]['end_date_formated'] = $reservation->getDateFin()->format('d-m-Y H:i');
             $datas[$key]['parent'] = $reservation->getVehicule()->getId();
             $datas[$key]['agenceDepart'] = $reservation->getAgenceDepart();
@@ -139,15 +137,15 @@ class PlanningController extends AbstractController
             }
             //definition couleur tâche en fonction point de départ et point de retour
             if ($reservation->getAgenceDepart() == "garage") {
-                $datas[$key]['color'] =  "#000000";
-            } else if (explode(" ", $reservation->getAgenceDepart(),)[0] == "Aéroport") {
-                $datas[$key]['color'] =  "#A9A9A9";
-            } else if (explode(" ", $reservation->getAgenceDepart(),)[0] == "Gare") {
-                $datas[$key]['color'] =  "#FFC0CB";
-            } else if (explode(" ", $reservation->getAgenceDepart(),)[0] == "Agence") {
-                $datas[$key]['color'] =  "#ff0000";
+                $datas[$key]['color'] = "#000000";
+            } else if (explode(" ", $reservation->getAgenceDepart())[0] == "Aéroport") {
+                $datas[$key]['color'] = "#A9A9A9";
+            } else if (explode(" ", $reservation->getAgenceDepart())[0] == "Gare") {
+                $datas[$key]['color'] = "#FFC0CB";
+            } else if (explode(" ", $reservation->getAgenceDepart())[0] == "Agence") {
+                $datas[$key]['color'] = "#ff0000";
             } else {
-                $datas[$key]['color'] =  "#0d00ff";
+                $datas[$key]['color'] = "#0d00ff";
             }
         }
 

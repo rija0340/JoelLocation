@@ -281,6 +281,15 @@ class ReservationController extends AbstractController
             return $this->redirectToRoute('reservation_cancel_index');
         }
 
+
+
+//        $depart = $reservation->getDateDebut();
+//        $retour = $reservation->getDateFin();
+//
+//        $d = $this->dateHelper->calculDuree($depart, $retour);
+//        dd($depart, $retour, $d);
+
+
         return $this->render('admin/reservation/crud/show.html.twig', [
             'reservation' => $reservation,
             'formKM' => $formKM->createView(),

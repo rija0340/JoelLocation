@@ -87,10 +87,10 @@
 
 				<h3 class="heading">Prix de base de location</h3>
 				<div class="prix_location">
-					<span id="prixTotal">{{ tarifVehicule }}</span>
+					<span id="prixTotal">{{ tarifVehicule|number_format(2,'.') }}</span>
 					EUR<br>
 					soit
-					<span id="prixJournalier">{{ tarifVehicule / duree}}</span>
+					<span id="prixJournalier">{{ (tarifVehicule / duree) |number_format(2,'.')}}</span>
 					euro/jour
 				</div>
 				<div class="prestation">
