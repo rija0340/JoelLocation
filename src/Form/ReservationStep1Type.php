@@ -35,7 +35,6 @@ class ReservationStep1Type extends AbstractType
                         "Port-louis" => "Port-louis",
                         "Sainte-anne" => "Sainte-anne",
                         "Saint-François" => "Saint-François",
-
                     ]
                 ],
                 'required' => true

@@ -34,6 +34,9 @@ $(document).ready(function () {
 
 
     window.onload = function () {
+        $('body').loadingModal({
+            text: 'Chargement...'
+        });
         retrieveDataAjax();
 
 //afindra anatin'ny retrive data ilay fonction git init mba aazona ale maximum amle date task
@@ -75,7 +78,7 @@ $(document).ready(function () {
                 document.querySelector('div .selectAll').firstElementChild.click();
                 // checkAllClickCallback();
                 // ganttLoadData(thedata);
-
+                $('body').loadingModal('destroy');
 
             },
             error: function () {

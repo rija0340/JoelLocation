@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Knp\Component\Pager\PaginatorInterface;
 
 /**
- * @Route("/marque")
+ * @Route("backoffice/marque")
  */
 class MarqueController extends AbstractController
 {

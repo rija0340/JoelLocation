@@ -49,6 +49,7 @@
 
 {% block content %}
 
+
 	{{ form_start(form) }}
 	<div class="x_panel">
 		<div class="x_title">
@@ -116,14 +117,13 @@
 		</div>
 
 	</div>
-	<div class="">
+	<div class="text-center">
 		<button class="btn btn-danger" id="enregistrer">
 			<i class="fa fa-book" aria-hidden="true"></i>
 			{{ button_label|default('Enregistrer') }}
 		</button>
 	</div>
 	{{ form_end(form) }}
-
 
 {% endblock %}
 {% block javascripts %}

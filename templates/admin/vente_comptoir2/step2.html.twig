@@ -57,6 +57,10 @@
 {% endblock %}
 
 {% block content %}
+
+	{{ dump(session) }}
+
+
 	<div class="d-flex justify-content-center mt-2">
 		<a href="{{path('step1')}}" class="btn btn-dark">
 			Revenir à l'étape précédente
