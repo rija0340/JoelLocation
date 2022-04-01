@@ -197,9 +197,25 @@ class User implements UserInterface
         return $this;
     }
 
+
     /**
      * A visual identifier that represents this user.
      *
+     * @see UserInterface
+     */
+    public function getMail(): ?string
+    {
+        return $this->mail;
+    }
+    
+    public function setMail(string $mail): self
+    {
+        $this->mail = $mail;
+
+        return $this;
+    }
+
+    /**
      * @see UserInterface
      */
     public function getUsername(): string
@@ -301,7 +317,7 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getMail(): ?string
+    /* public function getMail(): ?string
     {
         return $this->mail;
     }
@@ -311,7 +327,7 @@ class User implements UserInterface
         $this->mail = $mail;
 
         return $this;
-    }
+    } */
 
     public function getTelephone(): ?string
     {
