@@ -11,8 +11,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @UniqueEntity("mail")
- * 
  */
 class User implements UserInterface
 {
@@ -55,7 +53,7 @@ class User implements UserInterface
     private $adresse;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $mail;
 
@@ -95,7 +93,7 @@ class User implements UserInterface
     private $utilisateur;
 
     /**
-     * @ORM\OneToMany(targetEntity=Paiement::class, mappedBy="utilisateur")
+     * @ORM\OneToMany(targetEntity=Paiement::class, mappedBy="client")
      */
     private $paiements;
 

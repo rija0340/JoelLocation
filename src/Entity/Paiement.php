@@ -39,10 +39,10 @@ class Paiement
      */
     private $mode_paiement;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="paiements")
-     */
-    private $utilisateur;
+    // /**
+    // * @ORM\ManyToOne(targetEntity=User::class, inversedBy="paiements")
+    //  */
+    // private $utilisateur;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="paiements")

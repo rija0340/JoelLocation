@@ -88,10 +88,10 @@ class Reservation
      */
     private $code_reservation;
 
-    // /**
-    //  * @ORM\ManyToOne(targetEntity=User::class, inversedBy="utilisateur")
-    //  */
-    // private $utilisateur;
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="utilisateur")
+     */
+    private $utilisateur;
 
     /**
      * @ORM\ManyToOne(targetEntity=ModeReservation::class, inversedBy="reservations")
@@ -313,17 +313,17 @@ class Reservation
         return $this;
     }
 
-    // public function getUtilisateur(): ?User
-    // {
-    //     return $this->utilisateur;
-    // }
+    public function getUtilisateur(): ?User
+    {
+        return $this->utilisateur;
+    }
 
-    // public function setUtilisateur(?User $utilisateur): self
-    // {
-    //     $this->utilisateur = $utilisateur;
+    public function setUtilisateur(?User $utilisateur): self
+    {
+        $this->utilisateur = $utilisateur;
 
-    //     return $this;
-    // }
+        return $this;
+    }
 
     public function getModeReservation(): ?ModeReservation
     {

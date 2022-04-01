@@ -6,6 +6,7 @@ use App\Classe\Mailjet;
 use App\Entity\User;
 use App\Service\DateHelper;
 use App\Form\ClientRegisterType;
+use App\Form\UserType;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use MercurySeries\FlashyBundle\FlashyNotifier;
@@ -40,6 +41,7 @@ class InscriptionController extends AbstractController
         $this->encoder = $encoder;
         $this->mail = $mail;
     }
+    
     /**
      * @Route("/inscription", name="inscription", methods={"GET","POST"})
      */
