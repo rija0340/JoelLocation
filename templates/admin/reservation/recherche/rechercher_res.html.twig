@@ -26,7 +26,7 @@
 			<p>
 				Chercher une réservation en saisissant sa référence
 			</p>
-			<form action="{{ path('rechercher_res') }}" id="formRS" method="POST">
+			<form action="{{ path('rechercher_res') }}" id="formRS" method="GET">
 				<div class="row">
 					<div class="col-md-8">
 						<input type="text" id="rechercheSimple" name="inputRechercheSimple" required="required" class="form-control col-md-12 " placeholder="Saisir une référence ou le nom d'un client">
@@ -39,68 +39,78 @@
 					</div>
 				</div>
 			</form>
-		</div>
-		{% if resultatRS %}
-			<table class="overflow-auto">
-				<table class="table">
-					<thead class="thead-dark">
-						<tr>
-							<th scope="col" class="text-uppercase">paiement</th>
-							<th scope="col" class="text-uppercase text-nowrap">date création</th>
-							<th scope="col" class="text-uppercase">client</th>
-							<th scope="col" class="text-uppercase">réservation / véhicule</th>
-							<th scope="col" class="text-uppercase">dates / durée</th>
-							<th scope="col" class="text-uppercase">prix</th>
-							<th scope="col" class="text-uppercase">action</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for res in resultatRS %}
+
+
+			{% if resultatRS and RSkeyword %}
+				<table class="overflow-auto mt-4">
+					<table class="table">
+						<thead class="thead-dark">
 							<tr>
-								<td>
-									{% if res.sommePaiements == res.prix %}
-										<span class="badge badge-success">FULL</span>
-									{% else %}
-										<span class="badge badge-warning">ACOMPTE</span>
-
-									{% endif %}
-								</td>
-								<td>{{ res.dateReservation|date('d/m/Y H:i') }}</td>
-								<td>{{ res.client.nom }}</td>
-								<td>{{ res.vehicule.marque }}
-									{{ res.vehicule.modele }}
-									{{ res.vehicule.immatriculation }}</td>
-								<td>
-									{{ res.dateDebut|date('d/m/Y H:i') }}/
-									{{ res.duree }}
-									jours
-								</td>
-								<td>{{ res.prix }}€</td>
-								<td>
-									{# contrat en cours #}
-									{% if (res.dateDebut < dateNow) and  (dateNow < res.dateFin) %}
-										<a class="btn btn-dark text-white" href="{{ path('reservation_show', {'id' : res.id }) }}">
-											<i class="fa fa-info bg-dark"></i>
-										</a>
-										{# contrat terminé #}
-									{% elseif res.dateDebut < dateNow and  dateNow > res.dateFin %}
-										<a class="btn btn-dark text-white" href="{{ path('reservation_show', {'id' : res.id }) }}">
-											<i class="fa fa-info bg-dark"></i>
-										</a>
-										{# reservation à venir #}
-									{% elseif res.dateDebut > dateNow and  dateNow < res.dateFin %}
-										<a class="btn btn-dark text-white" href="{{ path('reservation_show', {'id' : res.id }) }}">
-											<i class="fa  fa-info bg-dark"></i>
-										</a>
-									{% endif %}
-
-								</td>
+								<th scope="col" class="text-uppercase">paiement</th>
+								<th scope="col" class="text-uppercase text-nowrap">date création</th>
+								<th scope="col" class="text-uppercase">client</th>
+								<th scope="col" class="text-uppercase">réservation / véhicule</th>
+								<th scope="col" class="text-uppercase">dates / durée</th>
+								<th scope="col" class="text-uppercase">prix</th>
+								<th scope="col" class="text-uppercase">action</th>
 							</tr>
-						{% endfor %}
-					</tbody>
+						</thead>
+						<tbody>
+							{% for res in resultatRS %}
+								<tr>
+									<td>
+										{% if res.sommePaiements == res.prix %}
+											<span class="badge badge-success">FULL</span>
+										{% else %}
+											<span class="badge badge-warning">ACOMPTE</span>
+
+										{% endif %}
+									</td>
+									<td>{{ res.dateReservation|date('d/m/Y H:i') }}</td>
+									<td>{{ res.client.nom }}</td>
+									<td>{{ res.vehicule.marque }}
+										{{ res.vehicule.modele }}
+										{{ res.vehicule.immatriculation }}</td>
+									<td>
+										{{ res.dateDebut|date('d/m/Y H:i') }}/
+										{{ res.duree }}
+										jours
+									</td>
+									<td>{{ res.prix }}€</td>
+									<td>
+										{# contrat en cours #}
+										{% if (res.dateDebut < dateNow) and  (dateNow < res.dateFin) %}
+											<a class="btn btn-dark text-white" href="{{ path('reservation_show', {'id' : res.id }) }}">
+												<i class="fa fa-info bg-dark"></i>
+											</a>
+											{# contrat terminé #}
+										{% elseif res.dateDebut < dateNow and  dateNow > res.dateFin %}
+											<a class="btn btn-dark text-white" href="{{ path('reservation_show', {'id' : res.id }) }}">
+												<i class="fa fa-info bg-dark"></i>
+											</a>
+											{# reservation à venir #}
+										{% elseif res.dateDebut > dateNow and  dateNow < res.dateFin %}
+											<a class="btn btn-dark text-white" href="{{ path('reservation_show', {'id' : res.id }) }}">
+												<i class="fa  fa-info bg-dark"></i>
+											</a>
+										{% endif %}
+
+									</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
 				</table>
-			</table>
-		{% endif %}
+
+			{% elseif resultatRS|length == 0 and RSkeyword == true %}
+				<div class="text-center mt-4">
+					<i class="fa fa-warning mr-2"></i>Aucun résultat trouvé
+				</div>
+				{# {% endif %} #}
+				{# {{dump(resultatRS)}} #}
+			{% endif %}
+		</div>
+
 		{# tableau pour résultat ajax #}
 		<div class=" hide" id="resultRechSimple">
 			<div class="overflow-auto">

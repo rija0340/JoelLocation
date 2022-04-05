@@ -79,9 +79,9 @@ class ResetPasswordController extends AbstractController
 
                     'token' => $resetpassword->getToken()
                 ]);
-
+                $url = "https://joellocation.com" . $url;
                 $content = "Bonjour " . $user->getNom() . "<br/> Vous avez demandé à réinitialiser votre mot de passe sur le site Joel Location";
-                $content .= "Merci de bien vouloir cliquer sur le lien suivant pour <a href='" . $url . "'>mettre à jour votre mot de passe.</a>";
+                $content .= "Merci de bien vouloir cliquer sur le lien suivant pour <a href='" . $url . "'> mettre à jour votre mot de passe.</a>";
 
                 $mail = new Mailjet();
                 $mail->send($user->getMail(), $user->getNom() . " " . $user->getPrenom(), "Réinitialiser votre mot de passe", $content);
