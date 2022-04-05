@@ -62,6 +62,7 @@
         "symfony/stopwatch": "^5.3",
         "symfony/var-dumper": "^5.3",
         "symfony/web-profiler-bundle": "^5.3"
+
     },
     "config": {
         "optimize-autoloader": true,

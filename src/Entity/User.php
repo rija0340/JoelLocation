@@ -11,8 +11,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @UniqueEntity("mail")
- * 
  */
 class User implements UserInterface
 {
@@ -55,7 +53,7 @@ class User implements UserInterface
     private $adresse;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $mail;
 
@@ -95,7 +93,7 @@ class User implements UserInterface
     private $utilisateur;
 
     /**
-     * @ORM\OneToMany(targetEntity=Paiement::class, mappedBy="utilisateur")
+     * @ORM\OneToMany(targetEntity=Paiement::class, mappedBy="client")
      */
     private $paiements;
 
@@ -199,9 +197,25 @@ class User implements UserInterface
         return $this;
     }
 
+
     /**
      * A visual identifier that represents this user.
      *
+     * @see UserInterface
+     */
+    public function getMail(): ?string
+    {
+        return $this->mail;
+    }
+    
+    public function setMail(string $mail): self
+    {
+        $this->mail = $mail;
+
+        return $this;
+    }
+
+    /**
      * @see UserInterface
      */
     public function getUsername(): string
@@ -303,7 +317,7 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getMail(): ?string
+    /* public function getMail(): ?string
     {
         return $this->mail;
     }
@@ -313,7 +327,7 @@ class User implements UserInterface
         $this->mail = $mail;
 
         return $this;
-    }
+    } */
 
     public function getTelephone(): ?string
     {
