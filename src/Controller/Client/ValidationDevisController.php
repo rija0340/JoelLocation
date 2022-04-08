@@ -85,7 +85,6 @@ class ValidationDevisController extends AbstractController
 
         }
 
-
         // $devisID = $request->request->get('reservID');
 
         // if ($devisID == null) {
@@ -141,9 +140,20 @@ class ValidationDevisController extends AbstractController
         }
 
         if ($request->get('editedOptionsGaranties') == "true") {
-
+            $conducteurAdditionnel = $request->get('radio-conducteur');
             $checkboxOptions = $request->get("checkboxOptions");
             $checkboxGaranties = $request->get("checkboxGaranties");
+
+            //dd($conducteurAdditionnel);
+            //ajout de boolean conducteur additionnel dans base de données
+            if ($conducteurAdditionnel == 'false') {
+                $conducteurAdditionnel = false;
+            } else {
+                $conducteurAdditionnel = true;
+            }
+            if ($devis->getConducteur() != $conducteurAdditionnel){
+                $devis->setConducteur($conducteurAdditionnel);
+            }
 
             if ($checkboxOptions != []) {
                 // tous enlever et puis entrer tous les options
@@ -215,8 +225,8 @@ class ValidationDevisController extends AbstractController
             'dataGaranties' => $dataGaranties,
             'allOptions' => $allOptions,
             'allGaranties' => $allGaranties,
-            'vehiculeIsNotAvailable' =>$vehiculeIsNotAvailable,
-            'vehiculesAvailable'=>$vehiculesAvailable
+            'vehiculeIsNotAvailable' => $vehiculeIsNotAvailable,
+            'vehiculesAvailable' => $vehiculesAvailable
         ]);
     }
 

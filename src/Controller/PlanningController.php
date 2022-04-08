@@ -42,7 +42,7 @@ class PlanningController extends AbstractController
     }
 
     /**
-     * @Route("/planning-general", name="planGen", methods={"GET","POST"})
+     * @Route("/backoffice/planning-general", name="planGen", methods={"GET","POST"})
      */
     public function planGen(): Response
     {
@@ -164,7 +164,7 @@ class PlanningController extends AbstractController
 
 
     /**
-     * @Route("/planning-journalier", name="planJour",methods={"GET","POST"})
+     * @Route("/backoffice/planning-journalier", name="planJour",methods={"GET","POST"})
      */
     public function planJour(Request $request): Response
     {
@@ -218,7 +218,7 @@ class PlanningController extends AbstractController
     }
 
     /**
-     * @Route("/vehicules-disponibles", name="vehiculeDispo", methods={"GET","POST"})
+     * @Route("/backoffice/vehicules-disponibles", name="vehiculeDispo", methods={"GET","POST"})
      */
     public function vehiculeDispo(Request $request): Response
     {

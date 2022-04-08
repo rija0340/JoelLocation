@@ -250,7 +250,7 @@ class ClientController extends AbstractController
             // ));
             $this->getDoctrine()->getManager()->flush();
             $this->flashy->success('Votre modification a été enregistré');
-            return $this->redirectToRoute('app_logout');
+            return $this->redirectToRoute('espaceClient_index');
         }
 
         return $this->render('client/information/edit.html.twig', [

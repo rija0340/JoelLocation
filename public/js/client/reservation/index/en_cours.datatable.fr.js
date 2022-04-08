@@ -3,7 +3,7 @@
 $(document).ready(function () {
     $("#datatable_en_cours").dataTable().fnDestroy();
     $('#datatable_en_cours').dataTable({
-
+        "order": [[ 0, "desc" ]],
         "language": {
             "emptyTable": "Aucune donnée disponible dans le tableau",
             "lengthMenu": "Afficher _MENU_ éléments",

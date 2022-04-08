@@ -230,10 +230,12 @@ class AccueilController extends AbstractController
 
                     if (substr($email, 0, 7) == "noreply" || substr($email, 0, 7) == "no-repl") {
                         $status = false;
-                        $this->flashy->success("Votre email a bien été envoyé");
                     } else {
                         // envoyer le mail
-                        $status = $this->mailjet->sendToMe($nom, $email, $telephone, $adresse, $objet, $message);
+                        // $status = $this->mailjet->sendToMe($nom, $email, $telephone, $adresse, $objet, $message);
+                        // $this->mailjet->sendToMe($nom, $email, $telephone, $adresse, $objet, $message);
+                        $this->mailjet->sendToContacJoelLocation($nom, $email, $telephone, $adresse, $objet, $message);
+                        $this->flashy->success("Votre email a bien été envoyé");
                     }
                 } else {
                     $status = false;

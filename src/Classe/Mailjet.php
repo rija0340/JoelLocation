@@ -17,18 +17,18 @@ class Mailjet
     // private $templateID  = 3190943;
 
     // key pour compte contact.joellocation@gmail.com
-//    private $api_key = 'affab7bbb2f993c330acfdd8deac52b7';
-//    private $api_key_secret =  '78d2b360a2025239389a1f9032c0e5d8';
+    //    private $api_key = 'affab7bbb2f993c330acfdd8deac52b7';
+    //    private $api_key_secret =  '78d2b360a2025239389a1f9032c0e5d8';
 
     //new api key march 2022
     private $api_key = 'affab7bbb2f993c330acfdd8deac52b7';
-    private $api_key_secret =  '78d2b360a2025239389a1f9032c0e5d8';
+    private $api_key_secret = '78d2b360a2025239389a1f9032c0e5d8';
     private $email_from = "contact.joellocation@gmail.com";
 
-    private $templateID  = 3331640;
+    private $templateID = 3331640;
 
-//    private $confirmationInscriptionTemplate = 3747205;
-//    private $confirmationReservationTemplate = 3747323;
+    //    private $confirmationInscriptionTemplate = 3747205;
+    //    private $confirmationReservationTemplate = 3747323;
 
     public function send($to_email, $to_name, $subject, $message)
     {
@@ -80,7 +80,8 @@ class Mailjet
                             'Name' => "JOEL LOCATION"
                         ]
                     ],
-                    'TemplateID' => 3357170, //template codé en html dans mailjet
+                    //                    'TemplateID' => 3357170, //template codé en html dans mailjet
+                    'TemplateID' => 3856453, //template codé en html dans mailjet
                     'TemplateLanguage' => true,
                     'Subject' => $objet,
                     'Variables' => [
@@ -130,7 +131,7 @@ class Mailjet
         return $response->success();
     }
 
-    public function confirmationReservation($nom,$email,$objet, $dateResa, $refResa,$vehicule, $dateHeureDepart, $dateHeureRetour)
+    public function confirmationReservation($nom, $email, $objet, $dateResa, $refResa, $vehicule, $dateHeureDepart, $dateHeureRetour)
     {
         $mj = new Client($this->api_key, $this->api_key_secret, true, ['version' => 'v3.1']);
         $body = [
@@ -150,12 +151,12 @@ class Mailjet
                     'TemplateLanguage' => true,
                     'Subject' => $objet,
                     'Variables' => [
-                        'nom'=> $nom,
-                        'dateResa'=> $dateResa,
-                        'refResa'=> $refResa,
-                        'vehicule'=> $vehicule,
-                        'dateHeureDepart'=> $dateHeureDepart,
-                        'dateHeureRetour'=> $dateHeureRetour
+                        'nom' => $nom,
+                        'dateResa' => $dateResa,
+                        'refResa' => $refResa,
+                        'vehicule' => $vehicule,
+                        'dateHeureDepart' => $dateHeureDepart,
+                        'dateHeureRetour' => $dateHeureRetour
                     ]
                 ]
             ]
@@ -164,7 +165,7 @@ class Mailjet
         return $response->success();
     }
 
-    public function confirmationDevis($nom,$email,$objet, $dateResa, $refResa,$vehicule, $dateHeureDepart, $dateHeureRetour)
+    public function confirmationDevis($nom, $email, $objet, $dateResa, $refResa, $vehicule, $dateHeureDepart, $dateHeureRetour, $linkDevis)
     {
         $mj = new Client($this->api_key, $this->api_key_secret, true, ['version' => 'v3.1']);
         $body = [
@@ -184,13 +185,14 @@ class Mailjet
                     'TemplateLanguage' => true,
                     'Subject' => $objet,
                     'Variables' => [
-                        'nom'=> $nom,
-                        'dateResa'=> $dateResa,
-                        'refResa'=> $refResa,
-                        'vehicule'=> $vehicule,
-                        'dateHeureDepart'=> $dateHeureDepart,
-                        'dateHeureRetour'=> $dateHeureRetour
-//                        'dateValiditeDevis'=> $dateValiditeDevis
+                        'nom' => $nom,
+                        'dateResa' => $dateResa,
+                        'refResa' => $refResa,
+                        'vehicule' => $vehicule,
+                        'dateHeureDepart' => $dateHeureDepart,
+                        'dateHeureRetour' => $dateHeureRetour,
+                        'linkDevis' => $linkDevis,
+                        //                        'dateValiditeDevis'=> $dateValiditeDevis
                     ]
                 ]
             ]
@@ -199,7 +201,7 @@ class Mailjet
         return $response->success();
     }
 
-    public function envoiDevis($nom,$email,$objet, $dateResa, $refResa,$vehicule, $dateHeureDepart, $dateHeureRetour, $linkDevis)
+    public function envoiDevis($nom, $email, $objet, $dateResa, $refResa, $vehicule, $dateHeureDepart, $dateHeureRetour, $linkDevis)
     {
         $mj = new Client($this->api_key, $this->api_key_secret, true, ['version' => 'v3.1']);
         $body = [
@@ -219,13 +221,13 @@ class Mailjet
                     'TemplateLanguage' => true,
                     'Subject' => $objet,
                     'Variables' => [
-                        'nom'=> $nom,
-                        'dateResa'=> $dateResa,
-                        'refResa'=> $refResa,
-                        'vehicule'=> $vehicule,
-                        'dateHeureDepart'=> $dateHeureDepart,
-                        'dateHeureRetour'=> $dateHeureRetour,
-                        'linkDevis'=> $linkDevis
+                        'nom' => $nom,
+                        'dateResa' => $dateResa,
+                        'refResa' => $refResa,
+                        'vehicule' => $vehicule,
+                        'dateHeureDepart' => $dateHeureDepart,
+                        'dateHeureRetour' => $dateHeureRetour,
+                        'linkDevis' => $linkDevis
                     ]
                 ]
             ]
@@ -235,11 +237,47 @@ class Mailjet
     }
 
 
-//Vous : {{var:nom:""}}
-//Réservation du : {{var:dateResa:""}}
-//Code de référence : {{var:refResa:""}}
-//Votre location :
-//Catégorie du véhicule : ou similaire
-//Départ : {{var:dateHeureDepart:""}}
-//Retour : {{var:dateHeureRetour:""}}
+    public function sendToContacJoelLocation($nom, $email, $telephone, $adresse, $objet, $message)
+    {
+        $mj = new Client($this->api_key, $this->api_key_secret, true, ['version' => 'v3.1']);
+        $body = [
+            'Messages' => [
+                [
+                    'From' => [
+                        'Email' => "contact.joellocation@gmail.com",
+                        'Name' => "JOEL LOCATION"
+                    ],
+                    'To' => [
+                        [
+                            'Email' => "contact.joellocation@gmail.com",
+                            'Name' => $nom
+                        ]
+                    ],
+                    'TemplateID' => 3856453, //template codé en html dans mailjet
+                    'TemplateLanguage' => true,
+                    'Subject' => $objet,
+                    'Variables' => [
+                        'nom' => $nom,
+                        'email' => $email,
+                        'telephone' => $telephone,
+                        'adresse' => $adresse,
+                        'adresse' => $adresse,
+                        'objet' => $objet,
+                        'message' => $message,
+
+                    ]
+                ]
+            ]
+        ];
+        $response = $mj->post(Resources::$Email, ['body' => $body]);
+        return $response->success();
+    }
+
+    //Vous : {{var:nom:""}}
+    //Réservation du : {{var:dateResa:""}}
+    //Code de référence : {{var:refResa:""}}
+    //Votre location :
+    //Catégorie du véhicule : ou similaire
+    //Départ : {{var:dateHeureDepart:""}}
+    //Retour : {{var:dateHeureRetour:""}}
 }

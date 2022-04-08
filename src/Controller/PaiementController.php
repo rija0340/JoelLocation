@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
- * @Route("/paiement")
+ * @Route("/backoffice/paiement")
  */
 class PaiementController extends AbstractController
 {

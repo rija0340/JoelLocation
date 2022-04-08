@@ -3,9 +3,9 @@
 {% block title %}Reservation index
 {% endblock %}
 {% block stylesheets %}
-	<link rel="stylesheet" href="Gantt/dhtmlxgantt.css?v=7.1.2">
+	<link rel="stylesheet" href=" {{ asset('Gantt/dhtmlxgantt.css?v=7.1.2')}} ">
 
-	<link href="../../css/admin/planGen.css" rel="stylesheet">
+	<link href="{{ asset('css/admin/planGen.css') }}" rel="stylesheet">
 	<link href="{{ asset('css/loading-body/jquery.loadingModal.min.css') }}"rel="stylesheet">
 
 
@@ -108,7 +108,7 @@
 	</div>
 {% endblock %}
 {% block javascripts %}
-	<script src="Gantt/dhtmlxgantt.js?v=7.1.2"></script>
+	<script src="{{ asset('Gantt/dhtmlxgantt.js?v=7.1.2') }}"></script>
 	<script src="{{ asset('js/loading-body/jquery.loadingModal.min.js') }}"></script>
 	<script src="{{asset('js/admin/planningGen_ajax.js')}}"></script>
 {% endblock %}

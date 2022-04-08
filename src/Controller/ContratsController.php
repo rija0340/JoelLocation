@@ -46,7 +46,7 @@ class ContratsController extends AbstractController
     }
 
     /**
-     * @Route("/reservation/contrats_en_cours", name="contrats_en_cours_index", methods={"GET"})
+     * @Route("/backoffice/reservation/contrats_en_cours", name="contrats_en_cours_index", methods={"GET"})
      */
     public function enCours(ReservationRepository $reservationRepository, Request $request, PaginatorInterface $paginator): Response
     {
@@ -61,7 +61,7 @@ class ContratsController extends AbstractController
 
 
     /**
-     * @Route("/reservation/contrats_termines", name="contrats_termines_index", methods={"GET"})
+     * @Route("/backoffice/reservation/contrats_termines", name="contrats_termines_index", methods={"GET"})
      */
     public function termine(ReservationRepository $reservationRepository, Request $request, PaginatorInterface $paginator): Response
     {
