@@ -261,7 +261,6 @@ class Mailjet
                         'email' => $email,
                         'telephone' => $telephone,
                         'adresse' => $adresse,
-                        'adresse' => $adresse,
                         'objet' => $objet,
                         'message' => $message,
 
