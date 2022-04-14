@@ -26,6 +26,7 @@ $(document).ready(function () {
 
         //recuperation valeur  data-target
         var url = $a.attr('href');
+        console.log(url);
 
         //recuperer classe sans "."
         // var id = url.slice(1, url.length);
@@ -143,7 +144,7 @@ function getVehicules() {
         // var n = d.toString();
         $.ajax({
             type: 'GET',
-            url: '/reservation/liste-vehicules-disponibles',
+            url: '/backoffice/reservation/liste-vehicules-disponibles',
             data: {
                 'dateDepart': dateDebutValue, 'dateRetour': dateFinValue
             },

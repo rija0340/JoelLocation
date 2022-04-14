@@ -115,7 +115,7 @@ class VehiculeDataController extends AbstractController
 
 
     /**
-     * @Route("reservation/liste-vehicules-disponibles", name="vehicules_disponibles",methods={"GET","POST"}))
+     * @Route("backoffice/reservation/liste-vehicules-disponibles", name="vehicules_disponibles",methods={"GET","POST"}))
      */
     public function vehiculesDisponibles(Request $request)
     {

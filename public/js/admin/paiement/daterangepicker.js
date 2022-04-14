@@ -66,10 +66,12 @@ $(function() { // voir configuration daterangepicker
     });
 
     function calculChiffreAffaire(dateDebut, dateFin) {
-
+        $('body').loadingModal({
+            text: 'Chargement...'
+        });
         $.ajax({
             type: 'GET',
-            url: '/paiement/liste-paiements',
+            url: '/backoffice/paiement/liste-paiements',
             data: {
                 'dateDebut': dateDebut,
                 'dateFin': dateFin
@@ -77,6 +79,9 @@ $(function() { // voir configuration daterangepicker
             Type: "json",
             success: function(data) {
                 LoadDataDatatable(data);
+                $('.dateDebut').html(dateDebut);
+                $('.dateFin').html(dateFin);
+                $('body').loadingModal('destroy');
             },
             error: function(erreur) {
                 // alert('La requête n\'a pas abouti' + erreur);

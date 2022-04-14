@@ -165,7 +165,7 @@ class Mailjet
         return $response->success();
     }
 
-    public function confirmationDevis($nom, $email, $objet, $dateResa, $refResa, $vehicule, $dateHeureDepart, $dateHeureRetour, $linkDevis)
+    public function confirmationDevis($nom, $email, $objet, $dateResa, $refResa, $vehicule, $dateHeureDepart, $dateHeureRetour, $linkDevis, $linkReservation)
     {
         $mj = new Client($this->api_key, $this->api_key_secret, true, ['version' => 'v3.1']);
         $body = [
@@ -192,6 +192,7 @@ class Mailjet
                         'dateHeureDepart' => $dateHeureDepart,
                         'dateHeureRetour' => $dateHeureRetour,
                         'linkDevis' => $linkDevis,
+                        'linkReservation' => $linkReservation,
                         //                        'dateValiditeDevis'=> $dateValiditeDevis
                     ]
                 ]

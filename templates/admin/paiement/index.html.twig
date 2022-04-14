@@ -12,6 +12,8 @@
 	<link href="{{asset('admin/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css')}}" rel="stylesheet">
 	<link href="{{asset('admin/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css')}}" rel="stylesheet">
 	<link href="{{asset('css/admin/paiement.css')}}" rel="stylesheet">
+	<link href="{{ asset('css/loading-body/jquery.loadingModal.min.css') }}"rel="stylesheet">
+
 
 
 {% endblock %}
@@ -22,9 +24,9 @@
 		<div class="text-center">
 			<h4>PAIEMENT DES RESERVATIONS</h4>
 			<h4 style="color:red;">DU
-				<span>09 SEPTEMBRE 2020</span>
+				<span class="dateDebut"> </span>
 				AU
-				<span>08 OCTOBRE 2020</span>
+				<span class="dateFin" ></span>
 			</h4>
 		</div>
 		<div class="alert alert-info">
@@ -140,6 +142,8 @@
 	<script type="text/javascript" src="{{asset('admin\vendors\bootstrap-daterangepicker\daterangepicker.js')}}"></script>
 	<script src="{{asset('plugins/daterangepicker/daterangepicker.js')}}"></script>
 	{# // <script src="{{asset('js/admin/bootstrap-datepicker.fr.min.js')}}"></script> #}
+	<script src="{{ asset('js/loading-body/jquery.loadingModal.min.js') }}"></script>
+
 	<script type="text/javascript" src="{{asset('js/admin/paiement/daterangepicker.js')}}"></script>
 
 {% endblock  %}

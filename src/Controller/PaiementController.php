@@ -36,7 +36,6 @@ class PaiementController extends AbstractController
 
         $paiements = $this->paiementRepo->findByDates($dateDebut, $dateFin);
 
-        // dd($paiements, $dateDebut, $dateFin);
 
         $data = array();
         foreach ($paiements as $key => $paiement) {

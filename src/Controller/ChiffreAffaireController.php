@@ -63,9 +63,15 @@ class ChiffreAffaireController extends AbstractController
             $somme_CPT = 0;
             $somme_WEB = 0;
             foreach ($this->reservationRepo->findByOneORTwoDatesIncludedBetween($dateDebut, $dateFin) as $res) {
-                if ($res->getVehicule() == $vehicule) {
+//                dd($this->reservationRepo->findByOneORTwoDatesIncludedBetween($dateDebut, $dateFin));
+                if (  $res->getVehicule() == $vehicule) {
                     //categoriser les réservations selon nature (CPT ou WEB)
-                    if ($res->getModeReservation()->getLibelle() == 'WEB') {
+                    if ($res->getModeReservation() != null){
+                       $type = $res->getModeReservation()->getLibelle();
+                    }else{
+                        $type = substr($res->getReference(),0,3);
+                    }
+                    if ($type == 'WEB') {
                         //caculer durée d'une réservation 
                         if ($dateDebut < $res->getDateDebut() && $res->getDateDebut() < $dateFin && $res->getDateFin() > $dateFin) {
                             $somme_WEB = $somme_WEB +  ($this->dateHelper->calculDuree($res->getDateDebut(), $dateFin) * ($res->getPrix() / $this->dateHelper->calculDuree($res->getDateDebut(), $res->getDateFin())));

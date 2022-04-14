@@ -70,7 +70,6 @@ class PaiementController extends AbstractController
         ValidationReservationClientSession $validationSession,
         Mailjet $mail
 
-
     ) {
         $this->devisController = $devisController;
         $this->reservRepo = $reservRepo;

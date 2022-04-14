@@ -384,8 +384,11 @@ class VenteComptoirController extends AbstractController
         $devis = $this->devisRepo->findOneBy(['numero' => $numDevis]);
 
         $url = $this->generateUrl('devis_pdf', ['id' => $devis->getId()]);
+        $url_reservation = $this->generateUrl('validation_step2', ['id' => $devis->getId()]);
         $url = "https://joellocation.com" . $url;
-        $linkDevis = "<a href='" . $url . "'>lien</a>";
+        $url_reservation = "https://joellocation.com" . $url_reservation;
+        $linkDevis = "<a style='text-decoration: none; color: inherit;' href='" . $url . "'>Télécharger mon devis</a>";
+        $linkReservation = "<a style='text-decoration: none; color: inherit;' href='" . $url_reservation . "'>JE RESERVE</a>";
 
         $fullName = $devis->getClient()->getPrenom() . " " . $devis->getClient()->getNom();
         $email = $devis->getClient()->getMail();
@@ -398,7 +401,8 @@ class VenteComptoirController extends AbstractController
             $devis->getVehicule()->getMarque() . " " . $devis->getVehicule()->getModele(),
             $this->dateHelper->frenchDate($devis->getDateDepart()) . " " . $this->dateHelper->frenchHour($devis->getDateDepart()),
             $this->dateHelper->frenchDate($devis->getDateRetour()) . " " . $this->dateHelper->frenchHour($devis->getDateRetour()),
-            $linkDevis
+            $linkDevis,
+            $linkReservation
 //            $this->dateHelper->frenchDate($devis->getDateRetour()->modify('+3 days'))
         );
 
