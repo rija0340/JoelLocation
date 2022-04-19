@@ -35,7 +35,7 @@ use function Composer\Autoload\includeFile;
 
 class PaiementController extends AbstractController
 {
-    private  $devisController;
+    private $devisController;
     private $reservRepo;
     private $reservController;
     private $garantiesRepo;
@@ -70,7 +70,8 @@ class PaiementController extends AbstractController
         ValidationReservationClientSession $validationSession,
         Mailjet $mail
 
-    ) {
+    )
+    {
         $this->devisController = $devisController;
         $this->reservRepo = $reservRepo;
         $this->reservController = $reservController;
@@ -98,6 +99,7 @@ class PaiementController extends AbstractController
             'devis' => $devis
         ]);
     }
+
     /**
      * @Route("/espaceclient/paiement-stripe/succes/{stripeSessionId}", name="payement_success", methods={"GET","POST"})
      */
@@ -168,6 +170,7 @@ class PaiementController extends AbstractController
 
     }
     //test de paiement par stripe (page de paiement hebergé sur site stripe)
+
     /**
      * @Route("/espaceclient/paiement-stripe/{refDevis}", name="paiementStripe", methods={"GET","POST"})
      */
@@ -194,8 +197,13 @@ class PaiementController extends AbstractController
             $sommePaiement = $devis->getPrix();
         }
         //key stripe à changer si changement de compte striê
+        //key for test
         Stripe::setApiKey('sk_test_51JiGijGsAu4Sp9QQtyfjOoOQMb6kfGjE1z50X5vrW6nS7wLtK5y2HmodT3ByrI7tQl9dsvP69fkN4vVfH5676nDo00VgFOzXct');
 
+        //key of Joel compte (mode live)
+        //Stripe::setApiKey('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');
+        //key of Joel compte (mode test)
+//        Stripe::setApiKey('sk_test_51JQIYYBicYM5dT7NhQraQ8jd57aqJBIDuru7VpKTcmwvHIDO8pMgL4vj1ARZTFgdznDkDG9MKaQegs8xCThlvJA300LmatfyYq');
         $YOUR_DOMAIN = 'http://localhost:8000';
         $checkout_session = Session::create([
             'customer_email' => $devis->getClient()->getMail(),
@@ -209,7 +217,7 @@ class PaiementController extends AbstractController
                         'images' => [$YOUR_DOMAIN . "/uploads/vehicules" . $devis->getVehicule()->getImage()],
                         'description' => $devis->getVehicule()->getMarque() . " " . $devis->getVehicule()->getModele()
                     ],
-                    'unit_amount' => $sommePaiement * 100
+                    'unit_amount' => $sommePaieeveryment * 100
                 ],
                 'quantity' => 1,
             ]],
