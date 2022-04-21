@@ -25,8 +25,10 @@ class PaiementRepository extends ServiceEntityRepository
 
     public function findByDates($dateDebut, $dateFin)
     {
+        $dateDebut = $dateDebut->format('Y-m-d');
+        $dateFin = $dateFin->format('Y-m-d');
         return $this->createQueryBuilder('p')
-            ->andWhere(':dateDebut <  p.createdAt AND p.createdAt < :dateFin ')
+            ->where(":dateDebut <=  DATE_FORMAT(p.createdAt,'%Y-%m-%d') AND DATE_FORMAT(p.createdAt,'%Y-%m-%d') <= :dateFin ")
             ->setParameter('dateDebut', $dateDebut)
             ->setParameter('dateFin', $dateFin)
             ->orderBy('p.id', 'ASC')
