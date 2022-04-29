@@ -202,6 +202,84 @@ class Mailjet
         return $response->success();
     }
 
+
+    public function confirmationPaiement($nom, $email, $objet, $dateResa, $refResa, $vehicule, $dateHeureDepart, $dateHeureRetour, $prixResa, $sommePaiement)
+    {
+        $mj = new Client($this->api_key, $this->api_key_secret, true, ['version' => 'v3.1']);
+        $body = [
+            'Messages' => [
+                [
+                    'From' => [
+                        'Email' => "contact.joellocation@gmail.com",
+                        'Name' => "JOEL LOCATION"
+                    ],
+                    'To' => [
+                        [
+                            'Email' => $email,
+                            'Name' => $nom
+                        ]
+                    ],
+                    //  A CHANGER
+                    'TemplateID' => 3760365, //template codé en html dans mailjet
+                    'TemplateLanguage' => true,
+                    'Subject' => $objet,
+                    'Variables' => [
+                        'nom' => $nom,
+                        'dateResa' => $dateResa,
+                        'refResa' => $refResa,
+                        'vehicule' => $vehicule,
+                        'dateHeureDepart' => $dateHeureDepart,
+                        'dateHeureRetour' => $dateHeureRetour,
+                        'prixResa' => $prixResa,
+                        'sommePaiement' => $sommePaiement,
+                        //                        'dateValiditeDevis'=> $dateValiditeDevis
+                    ]
+                ]
+            ]
+        ];
+        $response = $mj->post(Resources::$Email, ['body' => $body]);
+        return $response->success();
+    }
+
+
+    public function confirmationPaiementSolde($nom, $email, $objet, $dateResa, $refResa, $vehicule, $dateHeureDepart, $dateHeureRetour, $prixResa, $sommePaiement)
+    {
+        $mj = new Client($this->api_key, $this->api_key_secret, true, ['version' => 'v3.1']);
+        $body = [
+            'Messages' => [
+                [
+                    'From' => [
+                        'Email' => "contact.joellocation@gmail.com",
+                        'Name' => "JOEL LOCATION"
+                    ],
+                    'To' => [
+                        [
+                            'Email' => $email,
+                            'Name' => $nom
+                        ]
+                    ],
+                    //  A CHANGER
+                    'TemplateID' => 3760365, //template codé en html dans mailjet
+                    'TemplateLanguage' => true,
+                    'Subject' => $objet,
+                    'Variables' => [
+                        'nom' => $nom,
+                        'dateResa' => $dateResa,
+                        'refResa' => $refResa,
+                        'vehicule' => $vehicule,
+                        'dateHeureDepart' => $dateHeureDepart,
+                        'dateHeureRetour' => $dateHeureRetour,
+                        'prixResa' => $prixResa,
+                        'sommePaiement' => $sommePaiement,
+                        //                        'dateValiditeDevis'=> $dateValiditeDevis
+                    ]
+                ]
+            ]
+        ];
+        $response = $mj->post(Resources::$Email, ['body' => $body]);
+        return $response->success();
+    }
+
     public function envoiDevis($nom, $email, $objet, $dateResa, $refResa, $vehicule, $dateHeureDepart, $dateHeureRetour, $linkDevis)
     {
         $mj = new Client($this->api_key, $this->api_key_secret, true, ['version' => 'v3.1']);

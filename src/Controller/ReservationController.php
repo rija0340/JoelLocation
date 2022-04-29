@@ -538,6 +538,8 @@ class ReservationController extends AbstractController
         if ($form->isSubmitted() && $form->isSubmitted()) {
 
             // ajouter un conducteur
+            $conducteur->setIsPrincipal(false);
+            $conducteur->setClient($reservation->getClient());
             $this->em->persist($conducteur);
             $this->em->flush();
 
@@ -570,7 +572,7 @@ class ReservationController extends AbstractController
         $numPermis = explode(')', $conducteur[1]);
         $numeroPermis = $numPermis[0];
 
-        $conducteur =  $this->conducteurRepo->findOneBy(['numeroPermis' => $numeroPermis, 'reservation' => null]);
+        $conducteur =  $this->conducteurRepo->findOneBy(['numeroPermis' => $numeroPermis]);
         $reservation = $this->reservationRepo->find($request->request->get('idReservation'));
 
 
@@ -590,14 +592,16 @@ class ReservationController extends AbstractController
     {
         $id = $request->query->get('idReservation');
         $reservation = $this->reservationRepo->find($id);
-        $conducteurs = $this->conducteurRepo->findBy(['client' => $reservation->getClient(), 'reservation' => null]);
+        $conducteurs = $this->conducteurRepo->findBy(['client' => $reservation->getClient()]);
 
         $data = array();
         foreach ($conducteurs as $key => $conducteur) {
 
-            $data[$key]['nom'] = $conducteur->getNom();
-            $data[$key]['prenom'] = $conducteur->getPrenom();
-            $data[$key]['numPermis'] = $conducteur->getNumeroPermis();
+            if( count($conducteur->getReservations()) == 0){
+                $data[$key]['nom'] = $conducteur->getNom();
+                $data[$key]['prenom'] = $conducteur->getPrenom();
+                $data[$key]['numPermis'] = $conducteur->getNumeroPermis();
+            }
         }
 
 

@@ -8,13 +8,13 @@ autocomplete(listeConducteurs);
 
 function getElements() {
     idReservation = document.getElementById('idReservation').value;
-    console.log(idReservation);
+
 }
 
 //enabled by library jquery.ui
 function autocomplete(listeConducteurs) {
     $(function () {
-        $("#selectConducteur").autocomplete({ source: listeConducteurs });
+        $("#selectConducteur").autocomplete({source: listeConducteurs});
     });
 }
 
@@ -22,10 +22,10 @@ function autocomplete(listeConducteurs) {
 function getListConducteurs() {
     $.ajax({
         type: 'GET',
-        url: '/backoffice/reservation/liste-conducteurs',
-        data: { 'idReservation': idReservation },
+        // url: '/backoffice/reservation/liste-conducteurs',
+        url: '/backoffice/reservation/liste-conducteurs/',
+        data: {'idReservation': idReservation},
         success: function (data) {
-
             console.log(data);
             for (let i = 0; i < data.length; i++) {
                 listeConducteurs.push(data[i].nom + ' ' + data[i].prenom + ' (' + data[i].numPermis + ')');
