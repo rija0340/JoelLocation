@@ -16,10 +16,8 @@ class Mailjet
     // private $email_from = "rija0340@gmail.com";
     // private $templateID  = 3190943;
 
-    // key pour compte contact.joellocation@gmail.com
-    //    private $api_key = 'affab7bbb2f993c330acfdd8deac52b7';
-    //    private $api_key_secret =  '78d2b360a2025239389a1f9032c0e5d8';
 
+    // key pour compte contact.joellocation@gmail.com
     //new api key march 2022
     private $api_key = 'affab7bbb2f993c330acfdd8deac52b7';
     private $api_key_secret = '78d2b360a2025239389a1f9032c0e5d8';
@@ -220,7 +218,7 @@ class Mailjet
                         ]
                     ],
                     //  A CHANGER
-                    'TemplateID' => 3760365, //template codé en html dans mailjet
+                    'TemplateID' => 3895677, //template codé en html dans mailjet
                     'TemplateLanguage' => true,
                     'Subject' => $objet,
                     'Variables' => [
@@ -259,7 +257,7 @@ class Mailjet
                         ]
                     ],
                     //  A CHANGER
-                    'TemplateID' => 3760365, //template codé en html dans mailjet
+                    'TemplateID' => 3906925, //template codé en html dans mailjet
                     'TemplateLanguage' => true,
                     'Subject' => $objet,
                     'Variables' => [

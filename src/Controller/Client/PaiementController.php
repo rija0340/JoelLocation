@@ -151,7 +151,7 @@ class PaiementController extends AbstractController
         $reservation = $this->reservRepo->findOneBy(['stripeSessionId' => $stripeSessionId]);
         //envoi de mail client pour confirmation de paiement
         $contentMail = 'Bonjour, votre réservation numéro ' . $reservation->getReference() . 'a bien été payé';
-//        $this->mail->send($reservation->getClient()->getMail(), $reservation->getClient()->getNom(), "Confirmation payement", $contentMail);
+        //        $this->mail->send($reservation->getClient()->getMail(), $reservation->getClient()->getNom(), "Confirmation payement", $contentMail);
 
         $this->mail->confirmationPaiement(
             $reservation->getClient()->getNom(),
@@ -159,7 +159,7 @@ class PaiementController extends AbstractController
             'Confirmation de paiement',
             $reservation->getDateReservation()->format('d/m/Y'),
             $reservation->getReference(),
-            $reservation->getVehicule()->getMarque()." ".$reservation->getVehicule()->getModele(),
+            $reservation->getVehicule()->getMarque() . " " . $reservation->getVehicule()->getModele(),
             $reservation->getDateDebut()->format('d/m/Y H:i'),
             $reservation->getDateFin()->format('d/m/Y H:i'),
             $reservation->getPrix(),
@@ -212,10 +212,10 @@ class PaiementController extends AbstractController
         //        Stripe::setApiKey('sk_test_51JiGijGsAu4Sp9QQtyfjOoOQMb6kfGjE1z50X5vrW6nS7wLtK5y2HmodT3ByrI7tQl9dsvP69fkN4vVfH5676nDo00VgFOzXct');
 
         //key of Joel compte (mode live)
-        //Stripe::setApiKey('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');
+        Stripe::setApiKey('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');
         //key of Joel compte (mode test)
-        Stripe::setApiKey('sk_test_51JQIYYBicYM5dT7NhQraQ8jd57aqJBIDuru7VpKTcmwvHIDO8pMgL4vj1ARZTFgdznDkDG9MKaQegs8xCThlvJA300LmatfyYq');
-        $YOUR_DOMAIN = 'http://localhost:8000';
+        // Stripe::setApiKey('sk_test_51JQIYYBicYM5dT7NhQraQ8jd57aqJBIDuru7VpKTcmwvHIDO8pMgL4vj1ARZTFgdznDkDG9MKaQegs8xCThlvJA300LmatfyYq');
+        $YOUR_DOMAIN = 'https://joellocation.com';
         $checkout_session = Session::create([
             'customer_email' => $devis->getClient()->getMail(),
             'payment_method_types' => ['card'],

@@ -177,10 +177,21 @@ class PaiementSoldeController extends AbstractController
         $paiement->setCreatedAt($this->dateHelper->dateNow());
         $this->em->persist($paiement);
         $this->em->flush();
-        //envoi de mail client
-        $contentMail = "Bonjour, Le solde concernant votre réservation numero " . $reservation->getReference() . "d'un montant de " . $sommePaiement . " € a été payé avec succès ";
-        $this->mail->send($reservation->getClient()->getMail(), $reservation->getClient()->getNom(), "Confirmation payement de solde", $contentMail);
 
+        //envoi de mail client pour confirmation de paiement solde
+
+        $this->mail->confirmationPaiementSolde(
+            $reservation->getClient()->getNom(),
+            $reservation->getClient()->getMail(),
+            'Confirmation paiement de solde',
+            $reservation->getDateReservation()->format('d/m/Y'),
+            $reservation->getReference(),
+            $reservation->getVehicule()->getMarque()." ".$reservation->getVehicule()->getModele(),
+            $reservation->getDateDebut()->format('d/m/Y H:i'),
+            $reservation->getDateFin()->format('d/m/Y H:i'),
+            $sommePaiement,
+            $sommePaiement
+        );
 
         // ajouter le paiement dans l'entité appelPaiement correspondant
         $appel = $this->appelPaiementRepo->findOneBy(['reservation' => $reservation]);

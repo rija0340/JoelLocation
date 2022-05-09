@@ -193,7 +193,7 @@ class User implements UserInterface
     public function setId(int $id): self
     {
         $this->id = $id;
-        
+
         return $this;
     }
 
@@ -207,7 +207,7 @@ class User implements UserInterface
     {
         return $this->mail;
     }
-    
+
     public function setMail(string $mail): self
     {
         $this->mail = $mail;

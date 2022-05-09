@@ -52,7 +52,8 @@ class NouvelleReservationController extends AbstractController
         ReservationSession $reservationSession,
         Mailjet $mailjet
 
-    ) {
+    )
+    {
         $this->reservationRepo = $reservationRepo;
         $this->devisRepo = $devisRepo;
         $this->garantiesRepo = $garantiesRepo;
@@ -378,11 +379,29 @@ class NouvelleReservationController extends AbstractController
 
         $contenu = "Bonjour, votre devis numéro " . $devis->getNumero() . " a bien été enregistré, veuillez vous rendre dans votre espace client pour valider le devis";
         //to, client_nom, objet, message du client
-        $this->mailjet->send(
-            $dev->getClient()->getMail(),
-            $dev->getClient()->getNom(),
-            "Devis",
-            $contenu
+
+        $fullName = $devis->getClient()->getPrenom() . " " . $devis->getClient()->getNom();
+        $email = $devis->getClient()->getMail();
+
+        $url = $this->generateUrl('devis_pdf', ['id' => $devis->getId()]);
+        $url_reservation = $this->generateUrl('validation_step2', ['id' => $devis->getId()]);
+        $url = "https://joellocation.com" . $url;
+        $url_reservation = "https://joellocation.com" . $url_reservation;
+        $linkDevis = "<a style='text-decoration: none; color: inherit;' href='" . $url . "'>Télécharger mon devis</a>";
+        $linkReservation = "<a style='text-decoration: none; color: inherit;' href='" . $url_reservation . "'>JE RESERVE</a>";
+// envoi de mail pour confirmation devis
+        $this->mail->confirmationDevis(
+            $fullName,
+            $email,
+            "Confirmation de demande de devis",
+            $this->dateHelper->frenchDate($devis->getDateCreation()),
+            $devis->getNumero(),
+            $devis->getVehicule()->getMarque() . " " . $devis->getVehicule()->getModele(),
+            $this->dateHelper->frenchDate($devis->getDateDepart()) . " " . $this->dateHelper->frenchHour($devis->getDateDepart()),
+            $this->dateHelper->frenchDate($devis->getDateRetour()) . " " . $this->dateHelper->frenchHour($devis->getDateRetour()),
+            $linkDevis,
+            $linkReservation
+//            $this->dateHelper->frenchDate($devis->getDateRetour()->modify('+3 days'))
         );
 
         return $this->redirectToRoute('client_reservations');
