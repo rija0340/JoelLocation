@@ -112,7 +112,7 @@ class PaiementSoldeController extends AbstractController
             return $this->redirectToRoute('espaceClient_index');
         }
 
-        Stripe::setApiKey('sk_test_51JiGijGsAu4Sp9QQtyfjOoOQMb6kfGjE1z50X5vrW6nS7wLtK5y2HmodT3ByrI7tQl9dsvP69fkN4vVfH5676nDo00VgFOzXct');
+        Stripe::setApiKey('sk_test_51JQIYYBicYM5dT7NhQraQ8jd57aqJBIDuru7VpKTcmwvHIDO8pMgL4vj1ARZTFgdznDkDG9MKaQegs8xCThlvJA300LmatfyYq');
 
         $YOUR_DOMAIN = 'http://127.0.0.1:8000';
         $checkout_session = Session::create([

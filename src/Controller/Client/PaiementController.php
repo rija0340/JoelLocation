@@ -214,10 +214,9 @@ class PaiementController extends AbstractController
         //key for test
         //        Stripe::setApiKey('sk_test_51JiGijGsAu4Sp9QQtyfjOoOQMb6kfGjE1z50X5vrW6nS7wLtK5y2HmodT3ByrI7tQl9dsvP69fkN4vVfH5676nDo00VgFOzXct');
 
-        //key of Joel compte (mode live)
-        Stripe::setApiKey('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');
+
         //key of Joel compte (mode test)
-        // Stripe::setApiKey('sk_test_51JQIYYBicYM5dT7NhQraQ8jd57aqJBIDuru7VpKTcmwvHIDO8pMgL4vj1ARZTFgdznDkDG9MKaQegs8xCThlvJA300LmatfyYq');
+         Stripe::setApiKey('sk_test_51JQIYYBicYM5dT7NhQraQ8jd57aqJBIDuru7VpKTcmwvHIDO8pMgL4vj1ARZTFgdznDkDG9MKaQegs8xCThlvJA300LmatfyYq');
         $YOUR_DOMAIN = 'https://joellocation.com';
         $checkout_session = Session::create([
             'customer_email' => $devis->getClient()->getMail(),
