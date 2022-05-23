@@ -76,7 +76,7 @@
 										{{ res.duree }}
 										jours
 									</td>
-									<td>{{ res.prix }}€</td>
+									<td>{{ res.prix|number_format(2, ',', ' ') }}€</td>
 									<td>
 										{# contrat en cours #}
 										{% if (res.dateDebut < dateNow) and  (dateNow < res.dateFin) %}
@@ -212,7 +212,7 @@
 									{{ res.duree }}
 									jours
 								</td>
-								<td>{{ res.prix }}€</td>
+								<td>{{ res.prix|number_format(2, ',', ' ') }}€</td>
 								<td>
 									{# contrat en cours #}
 									{% if (res.dateDebut < dateNow) and  (dateNow < res.dateFin) %}

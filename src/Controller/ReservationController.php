@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\AppelPaiementRepository;
 use DateTime;
 use DateTimeZone;
 use Dompdf\Dompdf;
@@ -83,6 +84,7 @@ class ReservationController extends AbstractController
     private $mailjet;
     private $flashy;
     private $modePaiementRepo;
+    private $appelPaiementRepository;
 
     public function __construct(
         ModePaiementRepository $modePaiementRepo,
@@ -100,7 +102,8 @@ class ReservationController extends AbstractController
         UserRepository $userRepo,
         VehiculeRepository $vehiculeRepo,
         OptionsRepository $optionsRepo,
-        GarantieRepository $garantiesRepo
+        GarantieRepository $garantiesRepo,
+        AppelPaiementRepository $appelPaiementRepository
 
     ) {
 
@@ -120,6 +123,7 @@ class ReservationController extends AbstractController
         $this->router = $router;
         $this->conducteurRepo = $conducteurRepo;
         $this->modePaiementRepo = $modePaiementRepo;
+        $this->appelPaiementRepository = $appelPaiementRepository;
     }
 
     /**
@@ -281,21 +285,16 @@ class ReservationController extends AbstractController
             return $this->redirectToRoute('reservation_cancel_index');
         }
 
-
-
-//        $depart = $reservation->getDateDebut();
-//        $retour = $reservation->getDateFin();
-//
-//        $d = $this->dateHelper->calculDuree($depart, $retour);
-//        dd($depart, $retour, $d);
-
+        //appel à paiement si existe
+        $appelPaiement = $this->appelPaiementRepository->findOneBy(['reservation'=> $reservation]);
 
         return $this->render('admin/reservation/crud/show.html.twig', [
             'reservation' => $reservation,
             'formKM' => $formKM->createView(),
             'formAjoutPaiement' => $formAjoutPaiement->createView(),
             'formReportResa' => $formReportResa->createView(),
-            'formAnnulation' => $formAnnulation->createView()
+            'formAnnulation' => $formAnnulation->createView(),
+            'appelPaiement'=> $appelPaiement
 
         ]);
     }

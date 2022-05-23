@@ -87,10 +87,10 @@
 
 				<h3 class="heading">Prix de base de location</h3>
 				<div class="prix_location">
-					<span id="prixTotal">{{ tarifVehicule|number_format(2,'.') }}</span>
+					<span id="prixTotal">{{ tarifVehicule|number_format(2,","," ") }}</span>
 					EUR<br>
 					soit
-					<span id="prixJournalier">{{ (tarifVehicule / duree) |number_format(2,'.')}}</span>
+					<span id="prixJournalier">{{ (tarifVehicule / duree) |number_format(2,","," ")}}</span>
 					euro/jour
 				</div>
 				<div class="prestation">
@@ -129,7 +129,7 @@
 							{% for option in options %}
 								<li>{{option.appelation}}
 									:
-									{{option.prix}}
+									{{option.prix|number_format(2,","," ")}}
 									€</li>
 							{% endfor %}
 						</ul>
@@ -142,7 +142,7 @@
 						{% for garantie in garanties %}
 							<li>{{garantie.appelation}}
 								:
-								{{garantie.prix}}
+								{{garantie.prix|number_format(2,","," ")}}
 								€</li>
 						{% endfor %}
 					</ul>
@@ -154,10 +154,10 @@
 						jours
 					</h5>
 					<span class="tarifTotal">
-						<h5 class="text-danger">{{tarifTotal}}€</h5>
+						<h5 class="text-danger">{{tarifTotal|number_format(2,","," ")}}€</h5>
 					</span><br>
 					<span class="tarifJournalier">Soit
-						{{(tarifTotal / duree)|number_format(2,'.') }}€ / jour</span>
+						{{(tarifTotal / duree)|number_format(2,","," ") }}€ / jour</span>
 				</div>
 			</div>
 		</div>

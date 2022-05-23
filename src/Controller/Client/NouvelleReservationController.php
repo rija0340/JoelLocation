@@ -390,7 +390,7 @@ class NouvelleReservationController extends AbstractController
         $linkDevis = "<a style='text-decoration: none; color: inherit;' href='" . $url . "'>Télécharger mon devis</a>";
         $linkReservation = "<a style='text-decoration: none; color: inherit;' href='" . $url_reservation . "'>JE RESERVE</a>";
 // envoi de mail pour confirmation devis
-        $this->mail->confirmationDevis(
+        $this->mailjet->confirmationDevis(
             $fullName,
             $email,
             "Confirmation de demande de devis",

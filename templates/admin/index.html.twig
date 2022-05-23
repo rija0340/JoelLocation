@@ -34,7 +34,7 @@
 					<p class="mt-0 pt-0">mois en cours
 					</p>
 					<h5>€
-						{{ CA_WEB_moinsEncours + CA_CPT_moinsEncours }}</h5>
+						{{ (CA_WEB_moinsEncours + CA_CPT_moinsEncours)|number_format(2, ',', ' ') }}</h5>
 				</div>
 			</div>
 		</div>
@@ -46,7 +46,7 @@
 					<p class="mt-0 pt-0">mois en cours
 					</p>
 					<h5>€
-						{{ CA_WEB_moinsEncours }}</h5>
+						{{ CA_WEB_moinsEncours|number_format(2,","," ") }}</h5>
 				</div>
 			</div>
 		</div>
@@ -58,7 +58,7 @@
 					<p class="mt-0 pt-0">mois en cours
 					</p>
 					<h5>€
-						{{CA_CPT_moinsEncours }}</h5>
+						{{CA_CPT_moinsEncours|number_format(2,","," ") }}</h5>
 				</div>
 			</div>
 		</div>
@@ -70,7 +70,7 @@
 					<p class="mt-0 pt-0">année en cours
 					</p>
 					<h5>€
-						{{CA_anneeEnCours}}</h5>
+						{{CA_anneeEnCours|number_format(2,","," ")}}</h5>
 				</div>
 			</div>
 		</div>
@@ -260,7 +260,7 @@
 										<th scope="row">{{reservation.dateReservation |date('d/m/Y - H:i')}}</th>
 										<td>{{reservation.reference}}</td>
 										<td>{{reservation.client.nom}}</td>
-										<td>{{reservation.prix}}
+										<td>{{reservation.prix|number_format(2,","," ")}}
 											€</td>
 										<td>
 											<a class="btn btn-dark text-white" href="{{ path('reservation_show', {'id': reservation.id} ) }}">Voir</a>
@@ -323,7 +323,7 @@
 											<th scope="row">{{devis.dateCreation |date('d/m/Y - H:i')}}</th>
 											<td>{{devis.numero}}</td>
 											<td>{{devis.client.nom}}</td>
-											<td>{{devis.prix}}
+											<td>{{devis.prix|number_format(2,","," ")}}
 												€</td>
 											<td>
 												<a class="btn btn-dark text-white" href="{{ path('devis_show', {'id': devis.id} ) }}">Voir</a>

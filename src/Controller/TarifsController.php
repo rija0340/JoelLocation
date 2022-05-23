@@ -41,8 +41,6 @@ class TarifsController extends AbstractController
     public function index(TarifsRepository $tarifsRepo): Response
     {
 
-
-
         $listeTarifs = new Tarifs();
         $listeTarifs =  $tarifsRepo->findAll();
         $nbrTarifs = count($listeTarifs);

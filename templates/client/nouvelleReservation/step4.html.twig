@@ -80,6 +80,7 @@
                                                 <span id="date_depart">{{ dateDepart|date('m/d/Y') }}</span>
                                                 <span id="heure_depart">{{ dateDepart|date('H:i') }}</span>
                                             </p>
+                                            
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -109,7 +110,7 @@
                                             <span id="prixTotal">{{ tarifVehicule }}</span>
                                             EUR<br>
                                             soit
-                                            <span id="prixJournalier">{{ (tarifVehicule / duree)|number_format(2,'.') }}</span>
+                                            <span id="prixJournalier">{{ (tarifVehicule / duree)|number_format(2,","," ") }}</span>
                                             euro/jour
                                         </div>
                                     </div>

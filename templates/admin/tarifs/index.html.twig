@@ -65,10 +65,10 @@
 						{% set j = 1 %}
 						{% for tarif in tarifs %}
 							{% if tarif != null %}
-								<td>{{tarif.troisJours}}</td>
-								<td>{{tarif.septJours}}</td>
-								<td>{{tarif.quinzeJours}}</td>
-								<td>{{tarif.trenteJours}}</td>
+								<td>{{tarif.troisJours|number_format(2,","," ")}}</td>
+								<td>{{tarif.septJours|number_format(2,","," ")}}</td>
+								<td>{{tarif.quinzeJours|number_format(2,","," ")}}</td>
+								<td>{{tarif.trenteJours|number_format(2,","," ")}}</td>
 								<td style="padding : 2px;">
 									<div class="text-center">
 										<span style="font-size : 0.7em;">

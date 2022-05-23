@@ -187,8 +187,8 @@ class PaiementController extends AbstractController
      */
     public function paiementStripe(Request $request, $refDevis)
     {
-
         $devis = $this->devisRepo->findOneBy(['numero' => $refDevis]);
+
 
         if (!$devis || $devis->getClient() != $this->getUser()) {
             $this->flashy->error("Le devis n'existe pas");
@@ -207,6 +207,9 @@ class PaiementController extends AbstractController
         if ($modePaiement == 100) {
             $sommePaiement = $devis->getPrix();
         }
+
+
+
         //key stripe à changer si changement de compte striê
         //key for test
         //        Stripe::setApiKey('sk_test_51JiGijGsAu4Sp9QQtyfjOoOQMb6kfGjE1z50X5vrW6nS7wLtK5y2HmodT3ByrI7tQl9dsvP69fkN4vVfH5676nDo00VgFOzXct');

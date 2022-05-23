@@ -44,7 +44,7 @@
 									jours
 								</span>
 							</td>
-							<td>{{ reserv.prix }}
+							<td>{{ reserv.prix|number_format(2,","," ") }}
 								€
 							</td>
 							<td>
@@ -58,10 +58,10 @@
 										<div class="dropdown-item">
 											{% if reserv.prix > reserv.sommePaiements %}
 												<form action="{{ path('paiement_sold') }}" method="POST">
-													<input type="hidden" name="montantSolde" value="{{ reserv.prix - reserv.sommePaiements }}">
+													<input type="hidden" name="montantSolde" value="{{ (reserv.prix - reserv.sommePaiements)|number_format(2,","," ") }}">
 													<input type="hidden" name="reservation" value="{{ reserv.id }}">
 													<button class="btn btn-link-danger">Payer solde
-														{{ reserv.prix - reserv.sommePaiements }}€
+														{{ (reserv.prix - reserv.sommePaiements)|number_format(2,","," ") }}€
 													</button>
 												</form>
 											{% endif %}
@@ -117,7 +117,7 @@
 								{{ reserv.duree}}
 								jours
 							</td>
-							<td>{{ reserv.prix }}
+							<td>{{ reserv.prix|number_format(2,","," ") }}
 								€</td>
 							<td class=" d-flex justify-content-center ">
 								<div class="row">
@@ -173,7 +173,7 @@
 									jours
 								</span>
 							</td>
-							<td>{{ reserv.prix }}
+							<td>{{ reserv.prix|number_format(2,","," ") }}
 								€
 							</td>
 							<td>
@@ -187,10 +187,10 @@
 										<div class="dropdown-item">
 											{% if reserv.prix > reserv.sommePaiements %}
 												<form action="{{ path('paiement_sold') }}" method="POST">
-													<input type="hidden" name="montantSolde" value="{{ reserv.prix - reserv.sommePaiements }}">
+													<input type="hidden" name="montantSolde" value="{{ (reserv.prix - reserv.sommePaiements)|number_format(2,","," ") }}">
 													<input type="hidden" name="reservation" value="{{ reserv.id }}">
 													<button class="btn btn-link-danger">Payer solde
-														{{ reserv.prix - reserv.sommePaiements }}€
+														{{ (reserv.prix - reserv.sommePaiements)|number_format(2,","," ") }}€
 													</button>
 												</form>
 											{% endif %}
@@ -250,7 +250,7 @@
 									jours
 								</span>
 							</td>
-							<td>{{ reserv.prix }}
+							<td>{{ reserv.prix|number_format(2,","," ") }}
 								€
 							</td>
 							<td
@@ -265,10 +265,10 @@
 										<div class="dropdown-item">
 											{% if reserv.prix > reserv.sommePaiements %}
 												<form action="{{ path('paiement_sold') }}" method="POST">
-													<input type="hidden" name="montantSolde" value="{{ reserv.prix - reserv.sommePaiements }}">
+													<input type="hidden" name="montantSolde" value="{{ (reserv.prix - reserv.sommePaiements)|number_format(2,","," ") }}">
 													<input type="hidden" name="reservation" value="{{ reserv.id }}">
 													<button class="btn btn-link-danger">Payer solde
-														{{ reserv.prix - reserv.sommePaiements }}€
+														{{ (reserv.prix - reserv.sommePaiements)|number_format(2,","," ") }}€
 													</button>
 												</form>
 											{% endif %}
@@ -287,7 +287,6 @@
 									</div>
 								</div>
 								{# fin dropdown #}
-
 							</td>
 						</tr>
 					{% endfor %}

@@ -411,7 +411,7 @@
 					</div>
 					<div class="col-auto ml-auto d-flex align-items-center">
 						<div class="js-prix">
-							{{reservation.prix}}
+							{{reservation.prix|number_format(2,","," ")}}
 							€
 						</div>
 					</div>
@@ -427,7 +427,7 @@
 					</div>
 					<div class="col-md-4 col-sm-4 col-xs-4">
 						<div class="text-right">
-							{{reservation.tarifVehicule}}€
+							{{reservation.tarifVehicule|number_format(2,","," ")}}€
 						</div>
 					</div>
 
@@ -436,7 +436,7 @@
 					</div>
 					<div class="col-md-4 col-sm-4 col-xs-4">
 						<div class="text-right">
-							0 €
+							0.00 €
 						</div>
 					</div>
 
@@ -444,7 +444,7 @@
 						<i class="fa fa-chevron-right"></i>Total options souscrites
 					</div>
 					<div class="col-md-4 col-sm-4 col-xs-4">
-						<div class="text-right">{{reservation.prixGaranties}}€</div>
+						<div class="text-right">{{reservation.prixGaranties|number_format(2,","," ")}}€</div>
 					</div>
 
 					<div class="col-md-8 col-sm-8 col-xs-8">
@@ -453,7 +453,7 @@
 					</div>
 					<div class="col-md-4 col-sm-4 col-xs-4">
 						<div class="text-right">
-							{{reservation.prixOptions}}
+							{{reservation.prixOptions|number_format(2,","," ")}}
 							€
 						</div>
 					</div>
@@ -472,7 +472,7 @@
 					</div>
 					<div class="col-md-4 col-sm-4 col-xs-4">
 						<div class="text-right">
-							{{reservation.prix}}
+							{{reservation.prix|number_format(2,","," ")}}
 							€
 						</div>
 					</div>
@@ -498,6 +498,10 @@
 							</button>
 							<div class="dropdown-menu">
 								<button class="dropdown-item" id="btnAjouterPaiement">Ajouter un paiement</button>
+{#								<button class="dropdown-item" id="btnRelancePaiementSolde">Relance paiement solde</button>#}
+								<a type="button" href="{{path('envoi_email_appel_paiement_index', {'id': appelPaiement.id})}}" class="dropdown-item">
+									Relance paiement solde
+								</a>
 							</div>
 						</div>
 					</div>
@@ -542,7 +546,7 @@
 									<td>Débit</td>
 									<td>{{paiement.modePaiement.libelle}}</td>
 									<td></td>
-									<td>{{paiement.montant}}</td>
+									<td>{{paiement.montant|number_format(2,","," ")}}</td>
 									<td></td>
 									<td>
 										<form method="post" action="{{ path('reservation_paiement_delete', {'id': paiement.id, 'reservation' : reservation.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer ce paiement ?');">
@@ -575,7 +579,7 @@
 
 				<div class="col-md-4 col-sm-4 col-xs-4">
 					<div class="text-right">
-						{{reservation.sommePaiements}}€
+						{{reservation.sommePaiements|number_format(2,","," ")}}€
 					</div>
 				</div>
 
@@ -584,7 +588,7 @@
 				</div>
 				<div class="col-md-4 col-sm-4 col-xs-4">
 					<div class="text-right">
-						{{reservation.prix - reservation.sommePaiements}}€
+						{{(reservation.prix - reservation.sommePaiements)|number_format(2,","," ")}}€
 					</div>
 				</div>
 			</div>
@@ -719,6 +723,7 @@
 	<script src="{{asset('js/admin/factureJsPDF.js')}}"></script>
 	{% if reservation.sommePaiements < reservation.prix %}
 		<script src="{{asset('js/admin/reservation/ajout_paiement.js')}}"></script>
+		<script src="{{asset('js/admin/reservation/relance_paiement_solde.js')}}"></script>
 	{% endif %}
 	{# generer facture avec jsPDf mais doomPDF est plus pratique à cause des conditions à considerer #}
 	{# // <script src="{{asset('js/admin/reservation/generer_facture.js')}}"></script> #}

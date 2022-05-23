@@ -239,6 +239,44 @@ class Mailjet
         return $response->success();
     }
 
+    public function appelPaimentSolde($nom, $email, $objet, $dateResa, $refResa, $vehicule, $dateHeureDepart, $dateHeureRetour, $prixResa, $sommePaiement, $soldePaiement)
+    {
+        $mj = new Client($this->api_key, $this->api_key_secret, true, ['version' => 'v3.1']);
+        $body = [
+            'Messages' => [
+                [
+                    'From' => [
+                        'Email' => "contact.joellocation@gmail.com",
+                        'Name' => "JOEL LOCATION"
+                    ],
+                    'To' => [
+                        [
+                            'Email' => $email,
+                            'Name' => $nom
+                        ]
+                    ],
+                    //  A CHANGER
+                    'TemplateID' => 3953714, //template codé en html dans mailjet
+                    'TemplateLanguage' => true,
+                    'Subject' => $objet,
+                    'Variables' => [
+                        'nom' => $nom,
+                        'dateResa' => $dateResa,
+                        'refResa' => $refResa,
+                        'vehicule' => $vehicule,
+                        'dateHeureDepart' => $dateHeureDepart,
+                        'dateHeureRetour' => $dateHeureRetour,
+                        'prixResa' => $prixResa,
+                        'sommePaiement' => $sommePaiement,
+                        'soldePaiement' => $soldePaiement,
+                        //                        'dateValiditeDevis'=> $dateValiditeDevis
+                    ]
+                ]
+            ]
+        ];
+        $response = $mj->post(Resources::$Email, ['body' => $body]);
+        return $response->success();
+    }
 
     public function confirmationPaiementSolde($nom, $email, $objet, $dateResa, $refResa, $vehicule, $dateHeureDepart, $dateHeureRetour, $prixResa, $sommePaiement)
     {
@@ -348,6 +386,9 @@ class Mailjet
         $response = $mj->post(Resources::$Email, ['body' => $body]);
         return $response->success();
     }
+
+
+
 
     //Vous : {{var:nom:""}}
     //Réservation du : {{var:dateResa:""}}
