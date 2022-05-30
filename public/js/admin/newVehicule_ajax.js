@@ -21,17 +21,17 @@ function getValues() {
 function retrieveModeleAjax() {
     $.ajax({
         type: 'GET',
-        url: '/modele/liste',
+        url: '/backoffice/modele/liste',
         data: {
             'marqueID': marqueID
         },
         Type: "json",
-        success: function(data) {
+        success: function (data) {
             console.log(data);
             populateSelectNew(data, "selectModele", "libelle");
 
         },
-        error: function(erreur) {
+        error: function (erreur) {
             // alert('La requête n\'a pas abouti' + erreur);
             console.log(erreur.responseText);
         }
