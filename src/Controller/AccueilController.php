@@ -234,7 +234,21 @@ class AccueilController extends AbstractController
                         // envoyer le mail
                         // $status = $this->mailjet->sendToMe($nom, $email, $telephone, $adresse, $objet, $message);
                         // $this->mailjet->sendToMe($nom, $email, $telephone, $adresse, $objet, $message);
-                        $this->mailjet->sendToContacJoelLocation($nom, $email, $telephone, $adresse, $objet, $message);
+
+                        // concatenation du bouton avec un url 
+
+                        $btnRepondre = '<a href="mailto:' . $email . ' " style="
+                        background-color: red;
+                        border: none;
+                        color: white;
+                        padding: 15px 32px;
+                        text-align: center;
+                        text-decoration: none;
+                        display: inline-block;
+                        font-size: 16px;
+                        ">Répondre</a>';
+
+                        $this->mailjet->sendToContacJoelLocation($nom, $email, $telephone, $adresse, $objet, $message, $btnRepondre);
                         $this->flashy->success("Votre email a bien été envoyé");
                     }
                 } else {

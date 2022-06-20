@@ -15,10 +15,10 @@ $(document).ready(function () {
     let thedata;
     let completeData;
 
-//affichage peride intervalle
+    //affichage peride intervalle
 
 
-//declaration boutons pour changement scale affichage
+    //declaration boutons pour changement scale affichage
     var btn7jours;
     var btn14jours;
     var btn1mois;
@@ -39,7 +39,7 @@ $(document).ready(function () {
         });
         retrieveDataAjax();
 
-//afindra anatin'ny retrive data ilay fonction git init mba aazona ale maximum amle date task
+        //afindra anatin'ny retrive data ilay fonction git init mba aazona ale maximum amle date task
     };
 
     function retrieveDataAjax() {
@@ -57,7 +57,7 @@ $(document).ready(function () {
                     }
                 }
                 //on ne peut pas acceder à end_date property de data[0]
-                object_max_date =  StringDateToObject(dataWithoutParent[0].end_date_formated);
+                object_max_date = StringDateToObject(dataWithoutParent[0].end_date_formated);
 
                 // maxDate = new Date(maxDate);
                 for (var j = 1; j < dataWithoutParent.length; j++) {
@@ -70,7 +70,7 @@ $(document).ready(function () {
                 object_max_date = object_max_date.setDate(object_max_date.getDate() + 5);
                 //la date est converti en timestamp c'est pourquoi on doit faire new Date
                 object_max_date = new Date(object_max_date);
-                ganttInit( dateNow.toLocaleDateString("en"), object_max_date.toLocaleDateString("en"));
+                ganttInit(dateNow.toLocaleDateString("en"), object_max_date.toLocaleDateString("en"), 20);
                 // addTextPeriode(dateNow.toLocaleDateString("en"), object_max_date.toLocaleDateString("en"));
                 getData(data);
                 createCheckboxes(getUniqueListVehicules(data));
@@ -87,7 +87,7 @@ $(document).ready(function () {
         });
     }
 
-    function ganttInit(startDateScale, endDateScale) {
+    function ganttInit(startDateScale, endDateScale, cellWidth) {
         gantt.config.readonly = true;
         gantt.config.columns = [{
             name: "text",
@@ -105,7 +105,7 @@ $(document).ready(function () {
         gantt.config.scales = [{
             unit: "day",
             step: 1,
-            format: "%d %M %Y"
+            format: "%d %m %Y"
         }];
         // test sur les bares de taches
         gantt.templates.task_text = function (start, end, task) {
@@ -136,11 +136,17 @@ $(document).ready(function () {
         };
 
         // class en fonction type(ilaina)
-
         //valeur largeur colonne
-        gantt.config.min_column_width = 40;
+
+        if (typeof cellWidth !== 'undefined') {
+            gantt.config.min_column_width = cellWidth;
+        } else {
+            gantt.config.min_column_width = 40;
+        }
         //cell for date
         gantt.config.scale_height = 50;
+
+        // $('.gantt_scale_cell').css('text-size', "7px");
 
 
         gantt.i18n.setLocale("fr");
@@ -224,7 +230,7 @@ $(document).ready(function () {
         if (data.length != 0) {
 
 
-            gantt.parse({data: data});
+            gantt.parse({ data: data });
 
             if (startDatePeriode != null && endDatePeriode != null) {
                 addTextPeriode(dateToShortFormat(newDate(startDatePeriode)), dateToShortFormat(newDate(endDatePeriode)));
@@ -235,7 +241,7 @@ $(document).ready(function () {
 
     }
 
-// datedebutplanning = document.getElementById('datedebutplanning');
+    // datedebutplanning = document.getElementById('datedebutplanning');
 
     datedebutplanning.onchange = function () {
         dateValue = this.value;
@@ -313,7 +319,7 @@ $(document).ready(function () {
 
         if (datedebutplanning.value == 0) {
             var startDate = newDate(Date.now());
-            ganttInit(startDate, startDatePlus7Days(startDate));
+            ganttInit(startDate, startDatePlus7Days(startDate), 20);
 
             if (document.querySelector('div .selectAll').firstElementChild.checked) {
 
@@ -342,7 +348,7 @@ $(document).ready(function () {
     function changeScale14jours() {
         if (datedebutplanning.value == 0) {
             var startDate = newDate(Date.now());
-            ganttInit(startDate, startDatePlus14Days(startDate));
+            ganttInit(startDate, startDatePlus14Days(startDate), 20);
             // ganttLoadData(thedata, startDate, startDatePlus14Days(startDate));
             if (document.querySelector('div .selectAll').firstElementChild.checked) {
 
@@ -371,7 +377,7 @@ $(document).ready(function () {
     function changeScale1mois() {
         if (datedebutplanning.value == 0) {
             var startDate = newDate(Date.now());
-            ganttInit(startDate, startDatePlus1Mouth(startDate));
+            ganttInit(startDate, startDatePlus1Mouth(startDate), 10);
             // ganttLoadData(thedata, startDate, startDatePlus1Mouth(startDate));
 
             if (document.querySelector('div .selectAll').firstElementChild.checked) {
@@ -400,7 +406,7 @@ $(document).ready(function () {
     function changeScale2mois() {
         if (datedebutplanning.value == 0) {
             var startDate = newDate(Date.now());
-            ganttInit(startDate, startDatePlus2Mouths(startDate));
+            ganttInit(startDate, startDatePlus2Mouths(startDate), 10);
             // ganttLoadData(thedata, startDate, startDatePlus2Mouths(startDate));
             if (document.querySelector('div .selectAll').firstElementChild.checked) {
 
@@ -614,7 +620,7 @@ $(document).ready(function () {
         // ganttLoadData(thedata);
         selectedVehicules = null;
     }
-    function StringDateToObject(date){
+    function StringDateToObject(date) {
         var objectDate;
         objectDate = date.split(" ")[0];
         objectDate = objectDate.split('-');

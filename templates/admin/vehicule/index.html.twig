@@ -6,12 +6,12 @@
 
 {% block stylesheets %}
 	<!-- Datatables -->
-	<link href="../../admin/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
-	<link href="../../admin/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
-	<link href="../../admin/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
-	<link href="../../admin/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
-	<link href="../../admin/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
-	<link href="../../css/admin/vehicules.css" rel="stylesheet">
+	<link href="{{asset('admin/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css')}}" rel="stylesheet">
+	<link href="{{asset('admin/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css')}}" rel="stylesheet">
+	<link href="{{asset('admin/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css')}}" rel="stylesheet">
+	<link href="{{asset('admin/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css')}}" rel="stylesheet">
+	<link href="{{asset('admin/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css')}}" rel="stylesheet">
+	<link href="{{asset('css/admin/vehicules.css')}}" rel="stylesheet">
 
 {% endblock %}
 {% block current_page %}
@@ -48,7 +48,7 @@
 								{% for vehicule in vehicules %}
 									<tr class="text-center">
 										<td>
-											<img src="uploads/vehicules/{{ vehicule.image }}" alt="{{ vehicule.image }}" class="img-circle  " style="width : 90px;">
+											<img src="/uploads/vehicules/{{ vehicule.image }}" alt="{{ vehicule.image }}" class="img-circle  " style="width : 90px;">
 										</td>
 										<td>
 											{{vehicule.immatriculation}}
@@ -60,27 +60,30 @@
 											{{vehicule.carburation}}</td>
 										<td></td>
 										<td class="text-center">
-
-
-											<a href="{{ path('vehicule_edit', {'id': vehicule.id}) }}" class="btn btn-link">
-												<i class="fa  fa-gear (alias)"></i>
-											</a>
-
-											<a href="{{ path('vehicule_show', {'id': vehicule.id}) }}" class="btn btn-link">
-												<i class="fa  fa-list-ul"></i>
-											</a>
-
-											<form method="post" action="{{ path('vehicule_delete', {'id': vehicule.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer ce véhicule ?');">
-												<input type="hidden" name="_method" value="DELETE">
-												<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ vehicule.id) }}">
-												<button class="btn btn-link">
-													<i class="fa fa-trash" aria-hidden="true"></i>
-												</button>
-											</form>
+											<div class="row">
+												<div class="col-auto">
+													<a title="Modifier" href="{{ path('vehicule_edit', {'id': vehicule.id}) }}" class="btn btn-link">
+														<i class="fa  fa-gear (alias)"></i>
+													</a>
+												</div>
+												<div class="col-auto">
+													<a title="Détails" href="{{ path('vehicule_show', {'id': vehicule.id}) }}" class="btn btn-link">
+														<i class="fa  fa-list-ul"></i>
+													</a>
+												</div>
+												<div class="col-auto">
+													<form method="post" action="{{ path('vehicule_delete', {'id': vehicule.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer ce véhicule ?');">
+														<input type="hidden" name="_method" value="DELETE">
+														<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ vehicule.id) }}">
+														<button class="btn btn-link" title="Supprimer">
+															<i class="fa fa-trash" aria-hidden="true"></i>
+														</button>
+													</form>
+												</div>
+											</div>
 										</td>
 									</tr>
 								{% endfor %}
-
 							</tbody>
 						</table>
 					</div>
@@ -90,21 +93,21 @@
 	{% endblock %}
 	{% block javascripts %}
 		<!-- Datatables -->
-		<script src="../../admin/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
-		<script src="../../admin/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-		<script src="../../admin/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-		<script src="../../admin/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
-		<script src="../../admin/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
-		<script src="../../admin/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
-		<script src="../../admin/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
-		<script src="../../admin/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
-		<script src="../../admin/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
-		<script src="../../admin/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-		<script src="../../admin/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-		<script src="../../admin/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
-		<script src="../../admin/vendors/jszip/dist/jszip.min.js"></script>
-		<script src="../../admin/vendors/pdfmake/build/pdfmake.min.js"></script>
-		<script src="../../admin/vendors/pdfmake/build/vfs_fonts.js"></script>
+		<script src="{{asset('admin/vendors/datatables.net/js/jquery.dataTables.min.js')}}"></script>
+		<script src="{{asset('admin/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js')}}"></script>
+		<script src="{{asset('admin/vendors/datatables.net-buttons/js/dataTables.buttons.min.js')}}"></script>
+		<script src="{{asset('admin/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js')}}"></script>
+		<script src="{{asset('admin/vendors/datatables.net-buttons/js/buttons.flash.min.js')}}"></script>
+		<script src="{{asset('admin/vendors/datatables.net-buttons/js/buttons.html5.min.js')}}"></script>
+		<script src="{{asset('admin/vendors/datatables.net-buttons/js/buttons.print.min.js')}}"></script>
+		<script src="{{asset('admin/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js')}}"></script>
+		<script src="{{asset('admin/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js')}}"></script>
+		<script src="{{asset('admin/vendors/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
+		<script src="{{asset('admin/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js')}}"></script>
+		<script src="{{asset('admin/vendors/datatables.net-scroller/js/dataTables.scroller.min.js')}}"></script>
+		<script src="{{asset('admin/vendors/jszip/dist/jszip.min.js')}}"></script>
+		<script src="{{asset('admin/vendors/pdfmake/build/pdfmake.min.js')}}"></script>
+		<script src="{{asset('admin/vendors/pdfmake/build/vfs_fonts.js')}}"></script>
 		<script>
 			// changement de langue pour le table datatable plugin de jquery
 $(document).ready(function () {

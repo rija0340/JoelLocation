@@ -484,7 +484,7 @@
 			</div>
 			<div class="fs-10" style="border : 1px solid black; margin-bottom : 2px">
 				Sièges__________Console centrale tableau de bord:__________ Ciel de toit:__________ Garnitures
-				        intérieures:_____________
+												        intérieures:_____________
 				<br>
 				Revêtement de sol:__________ Coffre:__________ Portes__________
 				<br>
@@ -602,7 +602,7 @@
 						</tr>
 						<tr>
 							<td>lavage (35.5€)</td>
-							<td></td>
+							<td>{{ dump(reservation) }}</td>
 						</tr>
 						<tr>
 							<td>Refuelling (80.00€)</td>
@@ -668,7 +668,7 @@
 					<br>
 
 					Aucune location est remboursable. Létat des lieux du véhicule est réalisé sur véhicule propre intérieur et
-					            extérieur
+															            extérieur
 				</div>
 			</div>
 			<div
@@ -686,9 +686,9 @@
 								Je soussignée___
 								<strong>
 									{{ reservation.client.nom }}</strong>___autorise la société Joellocation a prélevé sur mon
-									                    compte à
-									                    l'aide de l'empreinte de ma carte bancaire, le montant de la franchise ou caution du présent contrat
-									                    ceci en cas d'accident responsable, de vol, tentative de vol ou dommage occasionné au véhicule loué.
+																											                    compte à
+																											                    l'aide de l'empreinte de ma carte bancaire, le montant de la franchise ou caution du présent contrat
+																											                    ceci en cas d'accident responsable, de vol, tentative de vol ou dommage occasionné au véhicule loué.
 							</td>
 						</tr>
 					</tbody>

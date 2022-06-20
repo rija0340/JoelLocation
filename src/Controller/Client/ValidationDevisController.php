@@ -2,6 +2,7 @@
 
 namespace App\Controller\Client;
 
+use App\Classe\ReserverDevis;
 use App\Entity\Devis;
 use App\Service\DateHelper;
 use App\Form\ClientInfoType;
@@ -35,6 +36,7 @@ class ValidationDevisController extends AbstractController
     private $validationSession;
     private $em;
     private $reservationHelper;
+    private $reserverDevis;
 
     public function __construct(
         ReservationRepository $reservationRepo,
@@ -47,11 +49,11 @@ class ValidationDevisController extends AbstractController
         FlashyNotifier $flashy,
         ValidationReservationClientSession $validationSession,
         EntityManagerInterface $em,
-        ReservationHelper $reservationHelper
+        ReservationHelper $reservationHelper,
+        ReserverDevis $reserverDevis
 
 
-    )
-    {
+    ) {
         $this->reservationRepo = $reservationRepo;
         $this->devisRepo = $devisRepo;
         $this->garantiesRepo = $garantiesRepo;
@@ -63,6 +65,7 @@ class ValidationDevisController extends AbstractController
         $this->validationSession = $validationSession;
         $this->em = $em;
         $this->reservationHelper = $reservationHelper;
+        $this->reserverDevis = $reserverDevis;
     }
 
     /**
@@ -79,10 +82,8 @@ class ValidationDevisController extends AbstractController
 
         if ($vehiculeIsNotAvailable) {
             $vehiculesAvailable = $this->reservationHelper->getVehiculesDisponible($reservations);
-
         } else {
             $vehiculesAvailable = null;
-
         }
 
         // $devisID = $request->request->get('reservID');
@@ -151,7 +152,7 @@ class ValidationDevisController extends AbstractController
             } else {
                 $conducteurAdditionnel = true;
             }
-            if ($devis->getConducteur() != $conducteurAdditionnel){
+            if ($devis->getConducteur() != $conducteurAdditionnel) {
                 $devis->setConducteur($conducteurAdditionnel);
             }
 
@@ -256,7 +257,7 @@ class ValidationDevisController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($client);
             $entityManager->flush();
-//            $this->validationSession->addModePaiment();
+            //store the value of the paiement
             $devis->setPayementPercentage(intval($request->get('modePaiement')));
             $this->em->flush();
 
@@ -265,7 +266,12 @@ class ValidationDevisController extends AbstractController
             //si la reservation n'existe pas encore en passe au paiement
             if (count($this->reservationRepo->findBy(['numDevis' => $devis->getId()])) == 0) {
                 //redirection vers un autre controller pour le paiement
-                return $this->redirectToRoute('paiementStripe', ['refDevis' => $refDevis]);
+                // return $this->redirectToRoute('paiementStripe', ['refDevis' => $refDevis]);
+                //envoi au client RIB JOEL, paiementStripe -> dans client/paiementcontroller
+
+                $this->reserverDevis->reserver($devis);
+                $this->flashy->success("Devis transformé en réservation");
+                return $this->redirectToRoute('client_reservations');
             } else {
                 return $this->redirectToRoute('validation_step3', ['id' => $devis->getId()]);
             }
@@ -306,4 +312,30 @@ class ValidationDevisController extends AbstractController
             return $this->render('client/reservation/validation/error.html.twig');
         }
     }
+
+    /**
+     * @Route("/espaceclient/envoi-RIB/{devisID}", name="step4envoiRIB", methods={"GET","POST"})
+     */
+    public function step4envoiRIB(Request $request, $devisID): Response
+    {
+
+        $client = $this->getUser();
+        if ($client == null) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        dd('envoyer RIB Joellocation par email');
+        // $listeDevis = $this->devisRepo->findBy(['client' => $client]);
+        // $devis = $this->devisRepo->find($devisID);
+
+        // if ($devis->getClient() == $client) {
+        //     return $this->render('client/reservation/validation/step4paiement.html.twig', [
+        //         'devis' => $devis,
+        //     ]);
+        // } else {
+        //     return $this->render('client/reservation/validation/error.html.twig');
+        // }
+    }
+
+    //envoi RIB par email -> 
 }

@@ -239,8 +239,19 @@ class Mailjet
         return $response->success();
     }
 
-    public function appelPaimentSolde($nom, $email, $objet, $dateResa, $refResa, $vehicule, $dateHeureDepart, $dateHeureRetour, $prixResa, $sommePaiement, $soldePaiement)
-    {
+    public function appelPaimentSolde(
+        $nom,
+        $email,
+        $objet,
+        $dateResa,
+        $refResa,
+        $vehicule,
+        $dateHeureDepart,
+        $dateHeureRetour,
+        $prixResa,
+        $sommePaiement,
+        $soldePaiement
+    ) {
         $mj = new Client($this->api_key, $this->api_key_secret, true, ['version' => 'v3.1']);
         $body = [
             'Messages' => [
@@ -352,7 +363,7 @@ class Mailjet
     }
 
 
-    public function sendToContacJoelLocation($nom, $email, $telephone, $adresse, $objet, $message)
+    public function sendToContacJoelLocation($nom, $email, $telephone, $adresse, $objet, $message, $btnRepondre)
     {
         $mj = new Client($this->api_key, $this->api_key_secret, true, ['version' => 'v3.1']);
         $body = [
@@ -378,6 +389,7 @@ class Mailjet
                         'adresse' => $adresse,
                         'objet' => $objet,
                         'message' => $message,
+                        'btnRepondre' => $btnRepondre,
 
                     ]
                 ]
