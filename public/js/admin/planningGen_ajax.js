@@ -39,7 +39,6 @@ $(document).ready(function () {
         });
         retrieveDataAjax();
 
-        //afindra anatin'ny retrive data ilay fonction git init mba aazona ale maximum amle date task
     };
 
     function retrieveDataAjax() {
@@ -79,6 +78,14 @@ $(document).ready(function () {
                 // checkAllClickCallback();
                 // ganttLoadData(thedata);
                 $('body').loadingModal('destroy');
+
+                //hauteur de la table 
+                var i = 0;
+                $('.gantt_tree_content').each(function () {
+                    i = i + 1;
+                });
+                console.log(i);
+                $('#gantt_here').css('max-height', i * 45 + 'px');
 
             },
             error: function () {
@@ -245,7 +252,7 @@ $(document).ready(function () {
 
     datedebutplanning.onchange = function () {
         dateValue = this.value;
-        ganttInit(dateValue, startDatePlus2Mouths(dateValue));
+        ganttInit(dateValue, startDatePlus2Mouths(dateValue), 20);
         ganttLoadData(thedata, dateValue, startDatePlus2Mouths(dateValue));
 
     }
@@ -330,7 +337,7 @@ $(document).ready(function () {
             }
 
         } else {
-            ganttInit(datedebutplanning.value, startDatePlus7Days(datedebutplanning.value));
+            ganttInit(datedebutplanning.value, startDatePlus7Days(datedebutplanning.value), 20);
 
             if (document.querySelector('div .selectAll').firstElementChild.checked) {
 
@@ -360,7 +367,7 @@ $(document).ready(function () {
 
         } else {
 
-            ganttInit(datedebutplanning.value, startDatePlus14Days(datedebutplanning.value));
+            ganttInit(datedebutplanning.value, startDatePlus14Days(datedebutplanning.value), 20);
             // ganttLoadData(thedata, datedebutplanning.value, startDatePlus14Days(datedebutplanning.value));
             if (document.querySelector('div .selectAll').firstElementChild.checked) {
 
@@ -389,7 +396,7 @@ $(document).ready(function () {
             }
 
         } else {
-            ganttInit(datedebutplanning.value, startDatePlus1Mouth(datedebutplanning.value));
+            ganttInit(datedebutplanning.value, startDatePlus1Mouth(datedebutplanning.value), 10);
             // ganttLoadData(thedata, datedebutplanning.value, startDatePlus1Mouth(datedebutplanning.value));
 
             if (document.querySelector('div .selectAll').firstElementChild.checked) {
@@ -418,7 +425,7 @@ $(document).ready(function () {
 
         } else {
 
-            ganttInit(datedebutplanning.value, startDatePlus2Mouths(datedebutplanning.value));
+            ganttInit(datedebutplanning.value, startDatePlus2Mouths(datedebutplanning.value), 10);
             // ganttLoadData(thedata, datedebutplanning.value, startDatePlus2Mouths(datedebutplanning.value));
             if (document.querySelector('div .selectAll').firstElementChild.checked) {
 
