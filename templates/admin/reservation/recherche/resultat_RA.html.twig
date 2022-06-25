@@ -36,7 +36,7 @@
 							Chiffre d'affaire période
 						</h2>
 						<div class="font-weight-bold text-dark text">
-							{{chiffreAffaire}}
+							{{chiffreAffaire|number_format(2, ',', ' ')}}
 							€
 						</div>
 					</div>
@@ -119,7 +119,7 @@
 								{{res.duree}}
 								jours
 							</td>
-							<td>{{res.prix}}
+							<td>{{res.prix|number_format(2, ',', ' ')}}
 								€
 							</td>
 							<td>

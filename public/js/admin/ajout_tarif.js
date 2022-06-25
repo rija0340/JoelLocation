@@ -26,7 +26,6 @@ function addEventListener() {
 
 function getData() {
 
-    console.log(this.parentNode);
 
     var numMois = this.parentElement.parentElement.previousElementSibling.innerText;
     var vehicule = this.parentElement.parentElement.parentElement.firstElementChild.innerText;
@@ -34,12 +33,6 @@ function getData() {
     modele = vehicule.substring(vehicule.indexOf(' ') + 1);
     marque = vehicule.split(' ')[0];
     month = getMonth(numMois);
-
-    console.log('ity ny volana' + month);
-
-    console.log('marque :' + marque);
-    console.log('modele :' + modele);
-    console.log('mois :' + month);
 
     createInputs(this);
     disableButtons();

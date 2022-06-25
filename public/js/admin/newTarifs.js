@@ -71,7 +71,7 @@ $(function () {
     function retrieveModeleAjax(marqueID) {
         $.ajax({
             type: 'GET',
-            url: '/modele/liste',
+            url: '/backoffice/modele/liste',
             data: {
                 'marqueID': marqueID
             },

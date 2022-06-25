@@ -145,15 +145,15 @@ class PdfController extends AbstractController
 
 
         // logo joellocation
-        $footer = $this->getParameter('logo') . '/pdf/footer-joellocation.png';
-        $footer_data = base64_encode(file_get_contents($footer));
-        $footer_src = 'data:image/png;base64,' . $footer_data;
+        // $footer = $this->getParameter('logo') . '/pdf/footer-joellocation.png';
+        // $footer_data = base64_encode(file_get_contents($footer));
+        // $footer_src = 'data:image/png;base64,' . $footer_data;
 
         $html = $this->renderView('admin/reservation/pdf/facture_pdf.html.twig', [
 
             'logo' => $logo_src,
             'reservation' => $reservation,
-            'footer' =>  $footer_src
+            // 'footer' =>  $footer_src
 
         ]);
 

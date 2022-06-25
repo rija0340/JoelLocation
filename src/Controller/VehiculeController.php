@@ -19,7 +19,9 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
-
+/**
+ * @Route("/backoffice")
+ */
 class VehiculeController extends AbstractController
 {
     private $slugger;

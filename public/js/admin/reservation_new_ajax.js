@@ -93,7 +93,7 @@ function retrieveDataAjax() {
 
     $.ajax({
         type: 'GET',
-        url: '/reservation/vehiculeDispoFonctionDates',
+        url: '/backoffice/reservation/vehiculeDispoFonctionDates',
         data: {
             'dateDepart': dateDepart,
             'dateRetour': dateRetour,

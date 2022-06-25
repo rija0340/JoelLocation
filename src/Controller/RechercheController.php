@@ -61,6 +61,7 @@ class RechercheController extends AbstractController
 
             $client = $userRepository->findOneBy(["nom" => $client_nom]);
 
+
             if ($client != null) {
                 $reservation = $reservationRepository->findBy(["client" => $client]);
             } else {
@@ -138,7 +139,6 @@ class RechercheController extends AbstractController
     public function rechercher_res(Request $request): Response
     {
 
-
         $vehicules = $this->vehiculeRepo->findAll();
         $formRA = $this->createForm(RechercheAVType::class);
 
@@ -147,11 +147,13 @@ class RechercheController extends AbstractController
         //tous les resultats null par défaut
         $resultatRS = null;
         $resultatRIM = null;
+        $RSkeyword = false;
 
         $formRA->handleRequest($request);
         //traiement pour recherche simple
-        if ($request->request->get("inputRechercheSimple")) {
-            $resultatRS = $this->getRechercheSimple($request->request->get("inputRechercheSimple"));
+        if ($request->get("inputRechercheSimple")) {
+            $resultatRS = $this->getRechercheSimple($request->get("inputRechercheSimple"));
+            $RSkeyword = true;
         }
 
         //traitement pour recherche Immatriculation
@@ -215,7 +217,8 @@ class RechercheController extends AbstractController
             'resultatRIM' => $resultatRIM,
             'dateRechercheRIM' => $dateRechercheRIM,
             'vehiculeRechercheRIM' => $vehiculeRechercheRIM,
-            'dateNow' => $dateNow
+            'dateNow' => $dateNow,
+            'RSkeyword' => $RSkeyword
 
         ]);
     }
@@ -235,14 +238,14 @@ class RechercheController extends AbstractController
             //if($client_id){
             // $client = $userRepository->findOneBy(["id" => $client_id]);
             $client = $this->userRepo->findOneBy(["nom" => $client_nom]);
-            //}
-            // if ($client == null) {
-            //     $client = $userRepository->findOneBy(["nom" => $recherche]);
-            // }
+            if ($client == null) {
+                $client = $this->userRepo->findOneBy(["prenom" => $recherche]);
+            }
             if ($client != null) {
-                $reservation = $this->reservationRepo->findBy(["client" => $client]);
+                // $reservation = $this->reservationRepo->findRechercheSimple($client_nom);
+                $reservation = $this->reservationRepo->findBy(["client" => $client, "code_reservation" => "devisTransformé"]);
             } else {
-                $reservation = $this->reservationRepo->findBy(["reference" => $recherche]);
+                $reservation = $this->reservationRepo->findBy(["reference" => $recherche, "code_reservation" => "devisTransformé"]);
             }
         }
         return $reservation;

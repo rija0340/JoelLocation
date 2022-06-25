@@ -1,9 +1,9 @@
-
 // changement de langue pour le table datatable plugin de jquery
 $(document).ready(function () {
     $("#datatable_devis").dataTable().fnDestroy();
     $('#datatable_devis').dataTable({
-
+        "scrollX":true,
+        "order": [[0, "desc"]],
         "language": {
             "emptyTable": "Aucune donnée disponible dans le tableau",
             "lengthMenu": "Afficher _MENU_ éléments",

@@ -35,7 +35,7 @@ class StopSalesController extends AbstractController
     private $tarifsHelper;
     private $marqueRepo;
     private $em;
-
+    
     public function __construct(EntityManagerInterface $em, MarqueRepository $marqueRepo, ModeleRepository $modeleRepo, TarifsHelper $tarifsHelper, DateHelper $dateHelper, TarifsRepository $tarifsRepo, ReservationRepository $reservationRepo,  UserRepository $userRepo, VehiculeRepository $vehiculeRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
     {
 
@@ -52,7 +52,7 @@ class StopSalesController extends AbstractController
         $this->em = $em;
     }
     /**
-     * @Route("/stop_sales", name="stop_sales", methods={"GET","POST"})
+     * @Route("/backoffice/stop_sales", name="stop_sales", methods={"GET","POST"})
      */
     public function stop_sales(Request $request, ReservationRepository $reservationRepository,  UserRepository $userRepo,  VehiculeRepository $vehiculeRepository): Response
     {
@@ -89,7 +89,7 @@ class StopSalesController extends AbstractController
         ]);
     }
     /**
-     * @Route("/stopSalesNew", name="stopSalesNew", methods={"GET","POST"})
+     * @Route("/backoffice/stopSalesNew", name="stopSalesNew", methods={"GET","POST"})
      */
     public function stopSalesNew(Request $request, VehiculeRepository $vehiculeRepository,  UserRepository $userRepo): Response
     {
@@ -117,7 +117,7 @@ class StopSalesController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/editStopSale", name="stopSale_edit", methods={"GET","POST"}, requirements={"id":"\d+"})
+     * @Route("/backoffice/{id}/editStopSale", name="stopSale_edit", methods={"GET","POST"}, requirements={"id":"\d+"})
      */
     public function editStopSale(Request $request, Reservation $reservation, ReservationRepository $reservationRepository): Response
     {
@@ -143,7 +143,7 @@ class StopSalesController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/delete", name="stopSale_delete", methods={"DELETE"},requirements={"id":"\d+"})
+     * @Route("/backoffice/{id}/delete", name="stopSale_delete", methods={"DELETE"},requirements={"id":"\d+"})
      */
     public function stopSaleDelete(Request $request, Reservation $reservation): Response
     {

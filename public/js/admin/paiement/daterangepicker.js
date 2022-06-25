@@ -1,4 +1,4 @@
-$(function() { // voir configuration daterangepicker
+$(function () { // voir configuration daterangepicker
     var start = moment().subtract(60, 'days');
     var end = moment();
 
@@ -52,13 +52,13 @@ $(function() { // voir configuration daterangepicker
 
     //on load du fenetre, initialisation
 
-    window.onload = function() {
+    window.onload = function () {
 
         calculChiffreAffaire(start._d.format('d-m-Y'), end._d.format('d-m-Y'));
     };
 
     // fonction après evenement click bouton apply
-    $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
+    $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
         var dateDebut = picker.startDate.format('DD-MM-YYYY');
         var dateFin = picker.endDate.format('DD-MM-YYYY');
 
@@ -66,19 +66,24 @@ $(function() { // voir configuration daterangepicker
     });
 
     function calculChiffreAffaire(dateDebut, dateFin) {
-
+        $('body').loadingModal({
+            text: 'Chargement...'
+        });
         $.ajax({
             type: 'GET',
-            url: '/paiement/liste-paiements',
+            url: '/backoffice/paiement/liste-paiements',
             data: {
                 'dateDebut': dateDebut,
                 'dateFin': dateFin
             },
             Type: "json",
-            success: function(data) {
+            success: function (data) {
                 LoadDataDatatable(data);
+                $('.dateDebut').html(dateDebut);
+                $('.dateFin').html(dateFin);
+                $('body').loadingModal('destroy');
             },
-            error: function(erreur) {
+            error: function (erreur) {
                 // alert('La requête n\'a pas abouti' + erreur);
                 console.log(erreur.responseText);
             }
@@ -113,8 +118,8 @@ $(function() { // voir configuration daterangepicker
                     { "data": "date" },
                     {
                         "data": "reservationID",
-                        render: function(data, type, row, val) {
-                            return '<a href="http://localhost:8000/backoffice/reservation/details/' + row.reservationID + '">  <i class=" fa fa-info-circle text-danger" style="font-size: 2em !important; "></i> </a>';
+                        render: function (data, type, row, val) {
+                            return '<a href="(https://joellocation.com/backoffice/reservation/details/' + row.reservationID + '">  <i class=" fa fa-info-circle text-danger" style="font-size: 2em !important; "></i> </a>';
                         }
                     },
                 ],
@@ -360,7 +365,7 @@ $(function() { // voir configuration daterangepicker
                     { "data": "date" },
                     {
                         "data": "reservationID",
-                        render: function(data, type, row, val) {
+                        render: function (data, type, row, val) {
                             return '<a href="http://localhost:8000/backoffice/reservation/details/' + row.reservationID + '">  <i class=" fa fa-info-circle text-danger" style="font-size: 2em !important; "></i> </a>';
                         }
                     },

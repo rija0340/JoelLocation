@@ -118,7 +118,7 @@ class VenteComptoirController extends AbstractController
 //        $this->reservationSession->removeReservation();
 
         $form = $this->createForm(ReservationStep1Type::class);
-        if($this->reservationSession->getReservation() != null){
+        if ($this->reservationSession->getReservation() != null) {
             $form->get('lieuSejour')->setData('Mety sa tsia');
         }
         $form->handleRequest($request);
@@ -208,7 +208,7 @@ class VenteComptoirController extends AbstractController
             'data' => $data,
             'dateDepart' => $dateDepart,
             'dateRetour' => $dateRetour,
-            'session'=> $this->reservationSession->getReservation()
+            'session' => $this->reservationSession->getReservation()
         ]);
     }
 
@@ -383,8 +383,12 @@ class VenteComptoirController extends AbstractController
         //url de téléchargement du devis
         $devis = $this->devisRepo->findOneBy(['numero' => $numDevis]);
 
-//        $url = $this->generateUrl('devis_pdf', ['id' => $devis->getId()]);
-//        $url = "https://joellocation.com" . $url;
+        $url = $this->generateUrl('devis_pdf', ['id' => $devis->getId()]);
+        $url_reservation = $this->generateUrl('validation_step2', ['id' => $devis->getId()]);
+        $url = "https://joellocation.com" . $url;
+        $url_reservation = "https://joellocation.com" . $url_reservation;
+        $linkDevis = "<a style='text-decoration: none; color: inherit;' href='" . $url . "'>Télécharger mon devis</a>";
+        $linkReservation = "<a style='text-decoration: none; color: inherit;' href='" . $url_reservation . "'>JE RESERVE</a>";
 
         $fullName = $devis->getClient()->getPrenom() . " " . $devis->getClient()->getNom();
         $email = $devis->getClient()->getMail();
@@ -396,7 +400,9 @@ class VenteComptoirController extends AbstractController
             $devis->getNumero(),
             $devis->getVehicule()->getMarque() . " " . $devis->getVehicule()->getModele(),
             $this->dateHelper->frenchDate($devis->getDateDepart()) . " " . $this->dateHelper->frenchHour($devis->getDateDepart()),
-            $this->dateHelper->frenchDate($devis->getDateRetour()) . " " . $this->dateHelper->frenchHour($devis->getDateRetour())
+            $this->dateHelper->frenchDate($devis->getDateRetour()) . " " . $this->dateHelper->frenchHour($devis->getDateRetour()),
+            $linkDevis,
+            $linkReservation
 //            $this->dateHelper->frenchDate($devis->getDateRetour()->modify('+3 days'))
         );
 

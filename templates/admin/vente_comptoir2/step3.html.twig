@@ -104,11 +104,11 @@
 
 						<h3 class="heading">Prix de base de location</h3>
 						<div class="prix_location">
-							<span id="prixTotal">{{ tarifVehicule }}</span>
-							EUR<br>
+							<span id="prixTotal">{{ tarifVehicule|number_format(2,","," ") }}</span>
+							€<br>
 							soit
-							<span id="prixJournalier">{{ (tarifVehicule / duree)|number_format('2','.')}}</span>
-							euro/jour
+							<span id="prixJournalier">{{ (tarifVehicule / duree)|number_format(2,","," ")}}</span>
+							€/jour
 						</div>
 						<div class="prestation">
 							<h3 class="heading">Prestations incluses</h3>
@@ -207,7 +207,7 @@
 												{{option.appelation}}
 												{% if option.prix != 0  %}
 													:
-													{{option.prix}}€
+													{{option.prix |number_format(2,","," ")}}€
 												{% endif %}
 												<input type="checkbox" name="checkboxOptions[]" value="{{option.id}}">
 												<span class="checkmark"></span>
@@ -242,7 +242,7 @@
 											<div class="col-auto">
 												<label class="label-container">{{option.appelation}}
 													:
-													{{option.prix}}
+													{{option.prix|number_format(2,","," ")}}
 													€
 													<input type="checkbox" name="checkboxOptions[]" value="{{option.id}}">
 													<span class="checkmark"></span>
@@ -288,7 +288,7 @@
 											class="row">
 											{# <div class="col-auto p-0"><label class="label-container">90€<input type="checkbox" checked="checked"><span class="checkmark"></span></label></div> #}
 
-											<label class="label-container">{{garantie.prix}}
+											<label class="label-container">{{garantie.prix|number_format(2,","," ")}}
 												€
 												<input type="checkbox" name="checkboxGaranties[]" value="{{garantie.id}}">
 												<span class="checkmark"></span>

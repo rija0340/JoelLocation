@@ -33,7 +33,7 @@ function getValues() {
 function retrieveModeleAjax() {
     $.ajax({
         type: 'GET',
-        url: '/modele/liste',
+        url: '/backoffice/modele/liste',
         data: {
             'marqueID': marqueID
         },

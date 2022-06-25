@@ -110,7 +110,7 @@ function retrieveDataAjax() {
     // var n = d.toString();
     $.ajax({
         type: 'GET',
-        url: '/reservation/vehiculeDispoFonctionDates',
+        url: '/backoffice/reservation/vehiculeDispoFonctionDates',
         data: {
             "dateDebutday": dateDebutDay, "dateDebutmonth": dateDebutMonth, "dateDebutyear": dateDebutYear, "dateDebuthours": dateDebutHours, "dateDebutminutes": dateDebutMinutes,
 

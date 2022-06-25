@@ -211,18 +211,17 @@ class ReservationController extends AbstractController
 
             //check if the driver is already included in this reservation
             foreach ($allDrivers as $driver) {
-                if(!in_array( $driver->getId(),  $idAddedDrivers)){
+                if (!in_array($driver->getId(),  $idAddedDrivers)) {
                     array_push($avalaibleDrivers, $driver);
                 }
             }
-
-        }else{
+        } else {
             $avalaibleDrivers = $allDrivers;
         }
 
         return $this->render('client/reservation/details/form_add_conducteur.html.twig', [
             'reservation' => $reservation,
-            'avalaibleDrivers'=>$avalaibleDrivers
+            'avalaibleDrivers' => $avalaibleDrivers
         ]);
     }
 

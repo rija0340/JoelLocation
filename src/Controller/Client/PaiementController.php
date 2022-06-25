@@ -13,6 +13,7 @@ use App\Entity\ModePaiement;
 use Stripe\Checkout\Session;
 use App\Service\TarifsHelper;
 use App\Classe\ReservationClient;
+use App\Classe\ReserverDevis;
 use App\Classe\ValidationReservationClientSession;
 use App\Controller\DevisController;
 use App\Repository\DevisRepository;
@@ -35,7 +36,7 @@ use function Composer\Autoload\includeFile;
 
 class PaiementController extends AbstractController
 {
-    private  $devisController;
+    private $devisController;
     private $reservRepo;
     private $reservController;
     private $garantiesRepo;
@@ -50,6 +51,7 @@ class PaiementController extends AbstractController
     private $validationSession;
     private $mail;
     private $modeReservationRepo;
+    private $reserverDevis;
 
 
     public function __construct(
@@ -68,8 +70,8 @@ class PaiementController extends AbstractController
         EntityManagerInterface $em,
         ModePaiementRepository $modePaiementRepo,
         ValidationReservationClientSession $validationSession,
-        Mailjet $mail
-
+        Mailjet $mail,
+        ReserverDevis $reserverDevis
 
     ) {
         $this->devisController = $devisController;
@@ -87,6 +89,7 @@ class PaiementController extends AbstractController
         $this->validationSession = $validationSession;
         $this->mail = $mail;
         $this->modeReservationRepo = $modeReservationRepo;
+        $this->reserverDevis = $reserverDevis;
     }
 
     /**
@@ -99,6 +102,7 @@ class PaiementController extends AbstractController
             'devis' => $devis
         ]);
     }
+
     /**
      * @Route("/espaceclient/paiement-stripe/succes/{stripeSessionId}", name="payement_success", methods={"GET","POST"})
      */
@@ -119,7 +123,7 @@ class PaiementController extends AbstractController
         }
 
         //enregistrement devis comme une réservation
-        $this->reserverDevis($devis, $stripeSessionId);
+        $this->transformerDevis->reserver($devis, $stripeSessionId);
 
         //enregistrer paiement dans table paiement
         $paiement = new Paiement;
@@ -149,9 +153,22 @@ class PaiementController extends AbstractController
 
         //recupération entity reservation concerné
         $reservation = $this->reservRepo->findOneBy(['stripeSessionId' => $stripeSessionId]);
-        //envoi de mail client
+        //envoi de mail client pour confirmation de paiement
         $contentMail = 'Bonjour, votre réservation numéro ' . $reservation->getReference() . 'a bien été payé';
-        $this->mail->send($reservation->getClient()->getMail(), $reservation->getClient()->getNom(), "Confirmation payement", $contentMail);
+        //        $this->mail->send($reservation->getClient()->getMail(), $reservation->getClient()->getNom(), "Confirmation payement", $contentMail);
+
+        $this->mail->confirmationPaiement(
+            $reservation->getClient()->getNom(),
+            $reservation->getClient()->getMail(),
+            'Confirmation de paiement',
+            $reservation->getDateReservation()->format('d/m/Y'),
+            $reservation->getReference(),
+            $reservation->getVehicule()->getMarque() . " " . $reservation->getVehicule()->getModele(),
+            $reservation->getDateDebut()->format('d/m/Y H:i'),
+            $reservation->getDateFin()->format('d/m/Y H:i'),
+            $reservation->getPrix(),
+            $sommePaiement
+        );
 
         //ajouter dans appel à paiement si somme paiement inférieur à due
         if ($sommePaiement < $devis->getPrix()) {
@@ -166,15 +183,14 @@ class PaiementController extends AbstractController
         return $this->render('client/paiement/success.html.twig', [
             "reservation" => $reservation,
         ]);
-
     }
     //test de paiement par stripe (page de paiement hebergé sur site stripe)
+
     /**
      * @Route("/espaceclient/paiement-stripe/{refDevis}", name="paiementStripe", methods={"GET","POST"})
      */
     public function paiementStripe(Request $request, $refDevis)
     {
-
         $devis = $this->devisRepo->findOneBy(['numero' => $refDevis]);
 
         if (!$devis || $devis->getClient() != $this->getUser()) {
@@ -194,10 +210,15 @@ class PaiementController extends AbstractController
         if ($modePaiement == 100) {
             $sommePaiement = $devis->getPrix();
         }
-        //key stripe à changer si changement de compte striê
-        Stripe::setApiKey('sk_test_51JiGijGsAu4Sp9QQtyfjOoOQMb6kfGjE1z50X5vrW6nS7wLtK5y2HmodT3ByrI7tQl9dsvP69fkN4vVfH5676nDo00VgFOzXct');
 
-        $YOUR_DOMAIN = 'http://localhost:8000';
+        //key stripe à changer si changement de compte stripê
+        //key for test
+        //        Stripe::setApiKey('sk_test_51JiGijGsAu4Sp9QQtyfjOoOQMb6kfGjE1z50X5vrW6nS7wLtK5y2HmodT3ByrI7tQl9dsvP69fkN4vVfH5676nDo00VgFOzXct');
+
+
+        //key of Joel compte (mode test)
+        Stripe::setApiKey('sk_test_51JQIYYBicYM5dT7NhQraQ8jd57aqJBIDuru7VpKTcmwvHIDO8pMgL4vj1ARZTFgdznDkDG9MKaQegs8xCThlvJA300LmatfyYq');
+        $YOUR_DOMAIN = 'https://joellocation.com';
         $checkout_session = Session::create([
             'customer_email' => $devis->getClient()->getMail(),
             'payment_method_types' => ['card'],
@@ -225,56 +246,5 @@ class PaiementController extends AbstractController
 
         // rediriger vers page de paiement hebergé sur stripe
         return $this->redirect($checkout_session->url);
-    }
-
-
-    public function reserverDevis(Devis $devis, $stripeSessionId)
-    {
-
-        $reservation = new Reservation();
-        $reservation->setVehicule($devis->getVehicule());
-        $reservation->setStripeSessionId($stripeSessionId);
-        $reservation->setClient($devis->getClient());
-        $reservation->setDateDebut($devis->getDateDepart());
-        $reservation->setDateFin($devis->getDateRetour());
-        $reservation->setAgenceDepart($devis->getAgenceDepart());
-        $reservation->setAgenceRetour($devis->getAgenceRetour());
-        $reservation->setNumDevis($devis->getId()); //reference numero devis reservé
-        //boucle pour ajout options 
-        foreach ($devis->getOptions() as $option) {
-            $reservation->addOption($option);
-        }
-
-        //boucle pour ajout garantie 
-
-        foreach ($devis->getGaranties() as $garantie) {
-            $reservation->addGaranty($garantie);
-        }
-
-        $reservation->setPrix($devis->getPrix());
-        $reservation->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($devis->getOptions()));
-        $reservation->setPrixGaranties($this->tarifsHelper->sommeTarifsOptions($devis->getGaranties()));
-        $reservation->setDuree($this->dateHelper->calculDuree($devis->getDateDepart(), $devis->getDateRetour()));
-        $reservation->setTarifVehicule($this->tarifsHelper->calculTarifVehicule($devis->getDateDepart(), $devis->getDateRetour(), $devis->getVehicule()));
-        $reservation->setPrix($devis->getPrix());
-        $reservation->setDateReservation($this->dateHelper->dateNow());
-        $reservation->setCodeReservation('devisTransformé');
-        $reservation->setArchived(false);
-        $reservation->setCanceled(false);
-        $reservation->setModeReservation($this->modeReservationRepo->findOneBy(['libelle' => 'WEB']));
-        // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
-        $lastID = $this->reservRepo->findBy(array(), array('id' => 'DESC'), 1);
-        if ($lastID == null) {
-            $currentID = 1;
-        } else {
-            $currentID = $lastID[0]->getId() + 1;
-        }
-
-        $reservation->setRefRes($reservation->getModeReservation()->getLibelle(), $currentID);
-
-        $this->em->persist($reservation);
-        $this->em->flush();
-        // dump($reservation);
-        // die();
     }
 }

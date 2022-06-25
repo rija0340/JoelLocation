@@ -55,7 +55,7 @@
 
 										</td>
 										<td>{{appelPaiement.reservation.dateDebut|date('d/m/Y H:i')}}</td>
-										<td>{{appelPaiement.montant}}</td>
+										<td>{{appelPaiement.montant|number_format(2,","," ")}}€</td>
 										<td>{{appelPaiement.type}}</td>
 
 										<td>{{appelPaiement.reservation.client.nom}}</td>

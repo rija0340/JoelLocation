@@ -5,7 +5,7 @@
 {% endblock %}
 {% block stylesheets %}
 	<link href="{{ asset( 'css/client/validationDevis.css')}}" rel="stylesheet">
-	<link href="{{asset('css/client/step2OptionsGaranties.css')}}" rel="stylesheet">
+{#	<link href="{{asset('css/client/step2OptionsGaranties.css')}}" rel="stylesheet">#}
 	<link href="{{asset('css/admin/vente_comptoir.css')}}" rel="stylesheet">
 
 
@@ -187,13 +187,13 @@
 
 									<div class="row">
 										<div class="col-auto">
-											<label class="label-conducteur">Oui
+											<label class="label-conducteur"><span class="font-weight-bold">Oui</span>
 												<input type="radio" checked name="radio-conducteur" value="true">
 												<span class="checkmark-conducteur"></span>
 											</label>
 										</div>
 										<div class="col-auto">
-											<label class="label-conducteur">Non
+											<label class="label-conducteur"><span class="font-weight-bold">Non</span>
 												<input type="radio" name="radio-conducteur" value="false">
 												<span class="checkmark-conducteur"></span>
 											</label>
@@ -250,7 +250,7 @@
 										</div>
 										<div class="col-md-8">
 											<div class="x_title">
-												<h5>
+												<h5 class="">
 													{{option.appelation}}
 												</h5>
 											</div>

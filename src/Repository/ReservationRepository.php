@@ -274,7 +274,7 @@ class ReservationRepository extends ServiceEntityRepository
     public function findReservationsSansStopSales()
     {
         return $this->createQueryBuilder('r')
-            ->andWhere(' r.code_reservation != :code ')
+            ->where(' r.code_reservation != :code ')
             ->setParameter('code', 'stopSale')
             ->andWhere("r.canceled = FALSE OR r.canceled = 'NULL' AND r.archived = FALSE AND r.reported = FALSE OR r.archived = 'NULL'")
             // ->setParameter('date', $this->dateHelper->dateNow())
@@ -289,7 +289,7 @@ class ReservationRepository extends ServiceEntityRepository
     public function findReservationsSansStopSalesBetweenDates($dateDebut, $dateFin)
     {
         return $this->createQueryBuilder('r')
-            ->andWhere(' r.code_reservation != :code ')
+            ->where(' r.code_reservation != :code ')
             ->andWhere(' r.date_debut > :dateDebut AND r.date_fin < :dateFin ')
             ->setParameter('code', 'stopSale')
             ->setParameter('dateDebut', $dateDebut)
@@ -309,14 +309,12 @@ class ReservationRepository extends ServiceEntityRepository
     public function findByOneORTwoDatesIncludedBetween($dateDebut, $dateFin)
     {
         return $this->createQueryBuilder('r')
-            ->andWhere(' r.code_reservation != :code ')
-            ->andWhere('  :dateDebut < r.date_debut AND r.date_debut < :dateFin')
-            ->orWhere('  :dateDebut < r.date_fin AND r.date_fin < :dateFin')
-            ->orWhere('  :dateDebut < r.date_debut AND r.date_fin < :dateFin')
+            ->where('  :dateDebut < r.date_debut AND r.date_debut < :dateFin AND r.date_fin > :dateFin AND r.code_reservation != :code ')
+            ->orWhere('   r.date_debut < :dateDebut AND r.date_debut < :dateFin  AND  r.date_fin< :dateFin AND r.code_reservation != :code ')
+            ->orWhere('  :dateDebut < r.date_debut AND r.date_fin < :dateFin AND r.code_reservation != :code ')
             ->setParameter('code', 'stopSale')
             ->setParameter('dateDebut', $dateDebut)
             ->setParameter('dateFin', $dateFin)
-            ->setParameter('code', 'stopSale')
             ->andWhere("r.canceled = FALSE OR  r.canceled = 'NULL'  AND r.archived = FALSE AND r.reported = FALSE OR r.reported = 'NULL'")
             // ->setParameter('date', $this->dateHelper->dateNow())
             ->orderBy('r.date_reservation', 'DESC')
@@ -449,6 +447,19 @@ class ReservationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+
+    /**
+     * @return Reservation[] Returns an array of Reservation objects
+     */
+    public function findRechercheSimple($client_nom)
+    {
+        return $this->createQueryBuilder('r')
+            ->where("r.code_reservation != :code")
+            ->andWhere(' r.client.nom LIKE :keyword OR r.client.prenom LIKE :keyword')
+            ->setParameter('code', 'stopSale')
+            ->getQuery()
+            ->getResult();
+    }
     /**
      * @return Reservation[] Returns an array of Reservation objects
      */
@@ -474,49 +485,53 @@ class ReservationRepository extends ServiceEntityRepository
 
         if ($vehicule == null && $typeTarif == null) {
             return $this->createQueryBuilder('r')
-                ->where(' :debutPeriode < r.date_debut AND r.date_debut < :finPeriode AND r.client != :client')
+                ->where(' :debutPeriode < r.date_debut AND r.date_debut < :finPeriode AND r.code_reservation != :code')
                 ->andWhere("r.canceled = FALSE OR  r.canceled = 'NULL'  AND r.archived = FALSE AND r.reported = FALSE OR r.reported = 'NULL'")
 
                 ->setParameter('debutPeriode', $debutPeriode)
                 ->setParameter('finPeriode', $finPeriode)
-                ->setParameter('client', $superAdmin)
+                // ->setParameter('client', $superAdmin)
+                ->setParameter('code', "stopSale")
                 ->getQuery()
                 ->getResult();
         } else {
             if ($vehicule != null && $typeTarif == null) {
                 return $this->createQueryBuilder('r')
-                    ->where(' :debutPeriode < r.date_debut AND r.date_debut < :finPeriode AND r.vehicule = :vehicule AND r.client != :client')
+                    ->where(' :debutPeriode < r.date_debut AND r.date_debut < :finPeriode AND r.vehicule = :vehicule AND r.code_reservation != :code')
                     ->andWhere("r.canceled = FALSE OR  r.canceled = 'NULL'  AND r.archived = FALSE AND r.reported = FALSE OR r.reported = 'NULL'")
 
                     ->setParameter('debutPeriode', $debutPeriode)
                     ->setParameter('finPeriode', $finPeriode)
                     ->setParameter('vehicule', $vehicule)
-                    ->setParameter('client', $superAdmin)
+                    ->setParameter('code', "stopSale")
+                    // ->setParameter('client', $superAdmin)
                     ->getQuery()
                     ->getResult();
             }
             if ($vehicule == null && $typeTarif != null) {
                 return $this->createQueryBuilder('r')
-                    ->where(' :debutPeriode < r.date_debut AND r.date_debut < :finPeriode AND r.reference LIKE :typeTarif AND r.client != :client')
+                    ->where(' :debutPeriode < r.date_debut AND r.date_debut < :finPeriode AND r.reference LIKE :typeTarif AND r.code_reservation != :code')
                     ->andWhere("r.canceled = FALSE OR  r.canceled = 'NULL'  AND r.archived = FALSE AND r.reported = FALSE OR r.reported = 'NULL'")
 
                     ->setParameter('debutPeriode', $debutPeriode)
                     ->setParameter('finPeriode', $finPeriode)
                     ->setParameter('typeTarif', $typeTarif)
-                    ->setParameter('client', $superAdmin)
+                    ->setParameter('code', 'stopSale')
+                    // ->setParameter('client', $superAdmin)
                     ->getQuery()
                     ->getResult();
             }
             if ($vehicule != null && $typeTarif != null) {
                 return $this->createQueryBuilder('r')
-                    ->where(' :debutPeriode < r.date_debut AND r.date_debut < :finPeriode AND r.reference LIKE :typeTarif AND r.vehicule = :vehicule AND r.client != :client')
+                    ->where(' :debutPeriode < r.date_debut AND r.date_debut < :finPeriode AND r.reference LIKE :typeTarif AND r.vehicule = :vehicule AND r.code_reservation != :code')
                     ->andWhere("r.canceled = FALSE OR  r.canceled = 'NULL'  AND r.archived = FALSE AND r.reported = FALSE OR r.reported = 'NULL'")
 
                     ->setParameter('debutPeriode', $debutPeriode)
                     ->setParameter('finPeriode', $finPeriode)
                     ->setParameter('typeTarif', $typeTarif)
                     ->setParameter('vehicule', $vehicule)
-                    ->setParameter('client', $superAdmin)
+                    ->setParameter('code', 'stopSale')
+                    // ->setParameter('client', $superAdmin)
                     ->getQuery()
                     ->getResult();
             }
@@ -533,41 +548,45 @@ class ReservationRepository extends ServiceEntityRepository
 
         if ($vehicule == null && $typeTarif == null) {
             return $this->createQueryBuilder('r')
-                ->where(' :debutPeriode < r.date_fin AND r.date_fin < :finPeriode AND r.client != :client')
+                ->where(' :debutPeriode < r.date_fin AND r.date_fin < :finPeriode AND r.code_reservation != :code')
                 ->setParameter('debutPeriode', $debutPeriode)
                 ->setParameter('finPeriode', $finPeriode)
-                ->setParameter('client', $superAdmin)
+                ->setParameter('code', 'stopSale')
+                // ->setParameter('client', $superAdmin)
                 ->getQuery()
                 ->getResult();
         } else {
             if ($vehicule != null && $typeTarif == null) {
                 return $this->createQueryBuilder('r')
-                    ->where(' :debutPeriode < r.date_fin AND r.date_fin < :finPeriode AND r.vehicule = :vehicule AND r.client != :client')
+                    ->where(' :debutPeriode < r.date_fin AND r.date_fin < :finPeriode AND r.vehicule = :vehicule ANDr.code_reservation != :code')
                     ->setParameter('debutPeriode', $debutPeriode)
                     ->setParameter('finPeriode', $finPeriode)
                     ->setParameter('vehicule', $vehicule)
-                    ->setParameter('client', $superAdmin)
+                    ->setParameter('code', 'stopSale')
+                    // ->setParameter('client', $superAdmin)
                     ->getQuery()
                     ->getResult();
             }
             if ($vehicule == null && $typeTarif != null) {
                 return $this->createQueryBuilder('r')
-                    ->where(' :debutPeriode < r.date_fin AND r.date_fin < :finPeriode AND r.reference LIKE :typeTarif AND r.client != :client')
+                    ->where(' :debutPeriode < r.date_fin AND r.date_fin < :finPeriode AND r.reference LIKE :typeTarif AND r.code_reservation != :code')
                     ->setParameter('debutPeriode', $debutPeriode)
                     ->setParameter('finPeriode', $finPeriode)
                     ->setParameter('typeTarif', $typeTarif)
-                    ->setParameter('client', $superAdmin)
+                    ->setParameter('code', 'stopSale')
+                    // ->setParameter('client', $superAdmin)
                     ->getQuery()
                     ->getResult();
             }
             if ($vehicule != null && $typeTarif != null) {
                 return $this->createQueryBuilder('r')
-                    ->where(' :debutPeriode < r.date_fin AND r.date_fin < :finPeriode AND r.reference LIKE :typeTarif AND r.vehicule = :vehicule AND r.client != :client')
+                    ->where(' :debutPeriode < r.date_fin AND r.date_fin < :finPeriode AND r.reference LIKE :typeTarif AND r.vehicule = :vehicule AND r.code_reservation != :code')
                     ->setParameter('debutPeriode', $debutPeriode)
                     ->setParameter('finPeriode', $finPeriode)
                     ->setParameter('typeTarif', $typeTarif)
                     ->setParameter('vehicule', $vehicule)
-                    ->setParameter('client', $superAdmin)
+                    ->setParameter('code', 'stopSale')
+                    // ->setParameter('client', $superAdmin)
                     ->getQuery()
                     ->getResult();
             }
@@ -590,41 +609,45 @@ class ReservationRepository extends ServiceEntityRepository
 
         if ($vehicule == null && $typeTarif == null) {
             return $this->createQueryBuilder('r')
-                ->where(' :debutPeriode < r.date_reservation AND r.date_reservation < :finPeriode AND r.client != :client')
+                ->where(' :debutPeriode < r.date_reservation AND r.date_reservation < :finPeriode AND r.code_reservation != :code')
                 ->setParameter('debutPeriode', $debutPeriode)
                 ->setParameter('finPeriode', $finPeriode)
-                ->setParameter('client', $superAdmin)
+                ->setParameter('code', 'stopSale')
+                // ->setParameter('client', $superAdmin)
                 ->getQuery()
                 ->getResult();
         } else {
             if ($vehicule != null && $typeTarif == null) {
                 return $this->createQueryBuilder('r')
-                    ->where(' :debutPeriode < r.date_reservation AND r.date_reservation < :finPeriode AND r.vehicule = :vehicule AND r.client != :client')
+                    ->where(' :debutPeriode < r.date_reservation AND r.date_reservation < :finPeriode AND r.vehicule = :vehicule AND r.code_reservation != :code')
                     ->setParameter('debutPeriode', $debutPeriode)
                     ->setParameter('finPeriode', $finPeriode)
                     ->setParameter('vehicule', $vehicule)
-                    ->setParameter('client', $superAdmin)
+                    ->setParameter('code', 'stopSale')
+                    // ->setParameter('client', $superAdmin)
                     ->getQuery()
                     ->getResult();
             }
             if ($vehicule == null && $typeTarif != null) {
                 return $this->createQueryBuilder('r')
-                    ->where(' :debutPeriode < r.date_reservation AND r.date_reservation < :finPeriode AND r.reference LIKE :typeTarif AND r.client != :client')
+                    ->where(' :debutPeriode < r.date_reservation AND r.date_reservation < :finPeriode AND r.reference LIKE :typeTarif AND r.code_reservation != :code')
                     ->setParameter('debutPeriode', $debutPeriode)
                     ->setParameter('finPeriode', $finPeriode)
                     ->setParameter('typeTarif', $typeTarif)
-                    ->setParameter('client', $superAdmin)
+                    ->setParameter('code', 'stopSale')
+                    // ->setParameter('client', $superAdmin)
                     ->getQuery()
                     ->getResult();
             }
             if ($vehicule != null && $typeTarif != null) {
                 return $this->createQueryBuilder('r')
-                    ->where(' :debutPeriode < r.date_reservation AND r.date_reservation < :finPeriode AND r.reference LIKE :typeTarif AND r.vehicule = :vehicule AND r.client != :client')
+                    ->where(' :debutPeriode < r.date_reservation AND r.date_reservation < :finPeriode AND r.reference LIKE :typeTarif AND r.vehicule = :vehicule AND r.code_reservation != :code')
                     ->setParameter('debutPeriode', $debutPeriode)
                     ->setParameter('finPeriode', $finPeriode)
                     ->setParameter('typeTarif', $typeTarif)
                     ->setParameter('vehicule', $vehicule)
-                    ->setParameter('client', $superAdmin)
+                    ->setParameter('code', 'stopSale')
+                    // ->setParameter('client', $superAdmin)
                     ->getQuery()
                     ->getResult();
             }

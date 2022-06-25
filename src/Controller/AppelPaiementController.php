@@ -90,13 +90,23 @@ class AppelPaiementController extends AbstractController
     {
 
         $email_to = $appelPaiement->getReservation()->getClient()->getMail();
+        $reservation = $appelPaiement->getReservation();
         $nom_client = $appelPaiement->getReservation()->getClient()->getNom();
-        $reference_reservation = $appelPaiement->getReservation()->getReference();
         $montant = $appelPaiement->getMontant();
-        $subject = "Appel à paiement";
-        $message = "Bonjour " . $nom_client . ", nous vous envoyons cet email pour vous rappeler que vous n'avez pas encore regularisé le paiement de votre réservation N° " . $reference_reservation . ". Ceci est un montant de " . $montant . " €. Veuillez vous connecter dans votre espace client pour pouvoir payer votre dûe";
 
-        $this->mailjet->send($email_to, $nom_client, $subject, $message);
+        $this->mailjet->appelPaimentSolde(
+            $nom_client,
+            $email_to,
+            "Appel à paiement",
+            $reservation->getDateReservation()->format('d/m/Y H:i'),
+            $reservation->getReference(),
+            $reservation->getVehicule()->getMarque() . " " . $reservation->getVehicule()->getModele(),
+            $reservation->getDateDebut()->format('d/m/Y H:i'),
+            $reservation->getDateFin()->format('d/m/Y H:i'),
+            $reservation->getPrix(),
+            $reservation->getSommePaiements(),
+            $montant
+        );
         $this->flashy->success("Votre mail a été envoyé");
 
         $appelPaiement->setDateDemande($this->dateHelper->dateNow());

@@ -102,9 +102,9 @@ $(function() { // voir configuration daterangepicker
                         var line =
                             `
                     <td>${data[i].vehicule}</td>
-                    <td>${data[i].ca}</td>
-						<td>${data[i].web}</td>
-						<td>${data[i].cpt}</td>
+                    <td>${data[i].ca}€</td>
+						<td>${data[i].web}€</td>
+						<td>${data[i].cpt}€</td>
 						<td></td>
 						<td></td>
 						<td></td>

@@ -37,7 +37,9 @@ use Symfony\Component\Security\Core\Encoder\PasswordHasherEncoder;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-
+/**
+ * @Route("/backoffice/")
+ */
 class DevisController extends AbstractController
 {
 
@@ -75,7 +77,7 @@ class DevisController extends AbstractController
     }
 
     /**
-     * @Route("/devis", name="devis_index")
+     * @Route("devis", name="devis_index")
      */
     public function index(): Response
     {
@@ -89,7 +91,7 @@ class DevisController extends AbstractController
 
 
     /**
-     * @Route("/devis/new", name="devis_new", methods={"GET","POST"})
+     * @Route("devis/new", name="devis_new", methods={"GET","POST"})
      */
     public function newDevis(Request $request): Response
     {
@@ -282,7 +284,7 @@ class DevisController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="devis_delete", methods={"DELETE"})
+     * @Route("devis/{id}", name="devis_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Devis $devis): Response
     {

@@ -112,7 +112,7 @@ class PaiementSoldeController extends AbstractController
             return $this->redirectToRoute('espaceClient_index');
         }
 
-        Stripe::setApiKey('sk_test_51JiGijGsAu4Sp9QQtyfjOoOQMb6kfGjE1z50X5vrW6nS7wLtK5y2HmodT3ByrI7tQl9dsvP69fkN4vVfH5676nDo00VgFOzXct');
+        Stripe::setApiKey('sk_test_51JQIYYBicYM5dT7NhQraQ8jd57aqJBIDuru7VpKTcmwvHIDO8pMgL4vj1ARZTFgdznDkDG9MKaQegs8xCThlvJA300LmatfyYq');
 
         $YOUR_DOMAIN = 'http://127.0.0.1:8000';
         $checkout_session = Session::create([
@@ -177,10 +177,21 @@ class PaiementSoldeController extends AbstractController
         $paiement->setCreatedAt($this->dateHelper->dateNow());
         $this->em->persist($paiement);
         $this->em->flush();
-        //envoi de mail client
-        $contentMail = "Bonjour, Le solde concernant votre réservation numero " . $reservation->getReference() . "d'un montant de " . $sommePaiement . " € a été payé avec succès ";
-        $this->mail->send($reservation->getClient()->getMail(), $reservation->getClient()->getNom(), "Confirmation payement de solde", $contentMail);
 
+        //envoi de mail client pour confirmation de paiement solde
+
+        $this->mail->confirmationPaiementSolde(
+            $reservation->getClient()->getNom(),
+            $reservation->getClient()->getMail(),
+            'Confirmation paiement de solde',
+            $reservation->getDateReservation()->format('d/m/Y'),
+            $reservation->getReference(),
+            $reservation->getVehicule()->getMarque()." ".$reservation->getVehicule()->getModele(),
+            $reservation->getDateDebut()->format('d/m/Y H:i'),
+            $reservation->getDateFin()->format('d/m/Y H:i'),
+            $sommePaiement,
+            $sommePaiement
+        );
 
         // ajouter le paiement dans l'entité appelPaiement correspondant
         $appel = $this->appelPaiementRepo->findOneBy(['reservation' => $reservation]);

@@ -3,8 +3,8 @@
 $(document).ready(function () {
     $("#datatable").dataTable().fnDestroy();
     $('#datatable').dataTable({
-        "scrollX":true,
-        "order": [[ 0, "desc" ]],
+        "scrollX": true,
+        "order": [[0, "desc"]],
         "language": {
             "emptyTable": "Aucune donnée disponible dans le tableau",
             "lengthMenu": "Afficher _MENU_ éléments",

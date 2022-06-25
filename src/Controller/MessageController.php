@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Knp\Component\Pager\PaginatorInterface;
 
 /**
- * @Route("/message")
+ * @Route("/backoffice/message")
  */
 class MessageController extends AbstractController
 {
