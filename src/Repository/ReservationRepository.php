@@ -192,11 +192,11 @@ class ReservationRepository extends ServiceEntityRepository
 
         return $this->createQueryBuilder('r')
             ->andWhere('r.client = :client AND r.date_debut > :date')
-            ->andWhere('r.code_reservation = :code')
+            ->andWhere("r.code_reservation = 'devisTransformé' OR r.code_reservation = 'reservationDirect'")
+            // ->andWhere("r.code_reservation = :code")
             ->andWhere("r.canceled = FALSE OR r.canceled = 'NULL' AND r.archived = FALSE OR r.archived = 'NULL'")
-
             ->setParameter('date', $this->dateHelper->dateNow())
-            ->setParameter('code', 'devisTransformé')
+            // ->setParameter('code', 'reservationDirect')
             ->setParameter('client', $client)
             ->orderBy('r.id', 'DESC')
             ->getQuery()

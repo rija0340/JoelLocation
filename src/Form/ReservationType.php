@@ -4,16 +4,18 @@ namespace App\Form;
 
 use App\Entity\Vehicule;
 use App\Entity\Reservation;
-use App\Repository\ReservationRepository;
+use App\Form\FraisSupplResaType;
 use Symfony\Component\Form\AbstractType;
+use App\Repository\ReservationRepository;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class ReservationType extends AbstractType
 {

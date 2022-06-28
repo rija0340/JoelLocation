@@ -2,6 +2,7 @@
 
 namespace App\Controller\Client;
 
+use App\Classe\Mailjet;
 use App\Classe\ReserverDevis;
 use App\Entity\Devis;
 use App\Service\DateHelper;
@@ -19,6 +20,7 @@ use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Classe\ValidationReservationClientSession;
+use App\Entity\Reservation;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -37,6 +39,7 @@ class ValidationDevisController extends AbstractController
     private $em;
     private $reservationHelper;
     private $reserverDevis;
+    private $mailjet;
 
     public function __construct(
         ReservationRepository $reservationRepo,
@@ -50,7 +53,8 @@ class ValidationDevisController extends AbstractController
         ValidationReservationClientSession $validationSession,
         EntityManagerInterface $em,
         ReservationHelper $reservationHelper,
-        ReserverDevis $reserverDevis
+        ReserverDevis $reserverDevis,
+        Mailjet $mailjet
 
 
     ) {
@@ -66,6 +70,7 @@ class ValidationDevisController extends AbstractController
         $this->em = $em;
         $this->reservationHelper = $reservationHelper;
         $this->reserverDevis = $reserverDevis;
+        $this->mailjet = $mailjet;
     }
 
     /**
@@ -254,11 +259,13 @@ class ValidationDevisController extends AbstractController
 
         if ($formClient->isSubmitted() && $formClient->isValid()) {
 
+            // dd('tets');
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($client);
             $entityManager->flush();
             //store the value of the paiement
-            $devis->setPayementPercentage(intval($request->get('modePaiement')));
+            // $devis->setPayementPercentage(intval($request->get('modePaiement')));
             $this->em->flush();
 
             $refDevis = $devis->getNumero();
@@ -267,10 +274,33 @@ class ValidationDevisController extends AbstractController
             if (count($this->reservationRepo->findBy(['numDevis' => $devis->getId()])) == 0) {
                 //redirection vers un autre controller pour le paiement
                 // return $this->redirectToRoute('paiementStripe', ['refDevis' => $refDevis]);
-                //envoi au client RIB JOEL, paiementStripe -> dans client/paiementcontroller
 
-                $this->reserverDevis->reserver($devis);
+                $reservation = new Reservation();
+                $reservation = $this->reserverDevis->reserver($devis);
                 $this->flashy->success("Devis transformé en réservation");
+
+                //lien pour telechargement devis
+                $url = $this->generateUrl('devis_pdf', ['id' => $devis->getId()]);
+                $url = "https://joellocation.com" . $url;
+                $linkDevis = "<a style='text-decoration: none; color: inherit;' href='" . $url . "'>Télécharger mon devis</a>";
+
+                // envoi de mail de confirmation de réservation au client
+                $this->mailjet->confirmationReservation(
+                    $reservation->getClient()->getPrenom() . ' ' . $reservation->getClient()->getNom(),
+                    $reservation->getClient()->getMail(),
+                    "Confirmation de réservation",
+                    $reservation->getDateReservation()->format('d/m/Y H:i'),
+                    $reservation->getReference(),
+                    $reservation->getVehicule()->getMarque() . ' ' . $reservation->getVehicule()->getModele(),
+                    $reservation->getDateDebut()->format('d/m/Y H:i'),
+                    $reservation->getDateFin()->format('d/m/Y H:i'),
+                    $reservation->getPrix(),
+                    $this->tarifsHelper->VingtCinqPourcent($reservation->getPrix()),
+                    $this->tarifsHelper->CinquantePourcent($reservation->getPrix()),
+                    $reservation->getPrix() - $this->tarifsHelper->VingtCinqPourcent($reservation->getPrix()),
+                    $linkDevis
+                );
+
                 return $this->redirectToRoute('client_reservations');
             } else {
                 return $this->redirectToRoute('validation_step3', ['id' => $devis->getId()]);

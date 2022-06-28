@@ -7,6 +7,7 @@ use Dompdf\Options;
 use Knp\Snappy\Pdf;
 use App\Entity\Devis;
 use App\Entity\Reservation;
+use App\Repository\DevisRepository;
 use App\Service\DateHelper;
 use App\Repository\ReservationRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,8 +21,10 @@ class PdfController extends AbstractController
 
     private $datehelper;
     private $reservationRepo;
-    public function __construct(ReservationRepository $reservationRepo, DateHelper $datehelper)
+    private $devisRepo;
+    public function __construct(ReservationRepository $reservationRepo, DateHelper $datehelper, DevisRepository $devisRepository)
     {
+        $this->devisRepo = $devisRepo;
         $this->datehelper = $datehelper;
         $this->reservationRepo = $reservationRepo;
     }
@@ -142,6 +145,8 @@ class PdfController extends AbstractController
         $logo = $this->getParameter('logo') . '/Joellocation-logo-resized.png';
         $logo_data = base64_encode(file_get_contents($logo));
         $logo_src = 'data:image/png;base64,' . $logo_data;
+        $createdAt = $this->datehelper->dateNow();
+        $devis = $this->devisRepo->findOneBy(intval($reservation->getNumDevis()));
 
 
         // logo joellocation
@@ -153,6 +158,8 @@ class PdfController extends AbstractController
 
             'logo' => $logo_src,
             'reservation' => $reservation,
+            'createdAt' => $createdAt,
+            'devis' => $devis
             // 'footer' =>  $footer_src
 
         ]);

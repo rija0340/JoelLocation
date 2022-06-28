@@ -129,8 +129,22 @@ class Mailjet
         return $response->success();
     }
 
-    public function confirmationReservation($nom, $email, $objet, $dateResa, $refResa, $vehicule, $dateHeureDepart, $dateHeureRetour)
-    {
+    public function confirmationReservation(
+        $nom,
+        $email,
+        $objet,
+        $dateResa,
+        $refResa,
+        $vehicule,
+        $dateHeureDepart,
+        $dateHeureRetour,
+        $montantResa,
+        $vingtcinqPourcent,
+        $cinquantePourcent,
+        $soixantequizePourcent,
+        $linkDevis
+
+    ) {
         $mj = new Client($this->api_key, $this->api_key_secret, true, ['version' => 'v3.1']);
         $body = [
             'Messages' => [
@@ -154,7 +168,12 @@ class Mailjet
                         'refResa' => $refResa,
                         'vehicule' => $vehicule,
                         'dateHeureDepart' => $dateHeureDepart,
-                        'dateHeureRetour' => $dateHeureRetour
+                        'dateHeureRetour' => $dateHeureRetour,
+                        'montantResa' => $montantResa,
+                        'vingtcinqPourcent' => $vingtcinqPourcent,
+                        'cinquantePourcent' => $cinquantePourcent,
+                        'soixantequizePourcent' => $soixantequizePourcent,
+                        'linkDevis' =>  $linkDevis
                     ]
                 ]
             ]

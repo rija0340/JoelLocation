@@ -74,11 +74,11 @@
 					</div>
 					<div class="divTarifVehicule border-bottom">
 						<h5>Prix de base de location</h5>
-						{{tarifVehicule|number_format(2,","," ")}}
+						{{tarifVehicule}}
 						€
 						<br>
 						soit
-						{{ (tarifVehicule / duree)|number_format(2,","," ")}}
+						{{ (tarifVehicule / duree)|number_format(2,'.')}}
 						€ / jour
 					</div>
 					<div class="divOptions border-bottom">
@@ -98,7 +98,7 @@
 											{{option.appelation}}
 										</div>
 										<div class="ml-auto">
-											{{option.prix|number_format(2,","," ")}}€
+											{{option.prix}}€
 										</div>
 									</div>
 
@@ -118,7 +118,7 @@
 											{{garantie.appelation}}
 										</div>
 										<div class="ml-auto">
-											{{garantie.prix|number_format(2,","," ")}}€
+											{{garantie.prix}}€
 
 										</div>
 									</div>
@@ -133,9 +133,9 @@
 					{{devis.duree}}
 					jours
 				</h5>
-				<span class="tarifTotal">{{devis.prix|number_format(2,","," ")}}€</span><br>
+				<span class="tarifTotal">{{devis.prix}}€</span><br>
 				<span class="tarifJournalier">Soit
-					{{(devis.prix / devis.duree)|number_format(2,","," ") }}€ / jour</span>
+					{{(devis.prix / devis.duree)|number_format(2,'.') }}€ / jour</span>
 			</div>
 		</div>
 		<div class="col-md-9 ">
@@ -178,27 +178,47 @@
 					</h3>
 				</div>
 				<div>
-					“Mode de paiement par Virement uniquement. Pour valider votre réservation, vous devez effectuer un premier paiement. Si vous confirmez, un  email  vous  sera  envoyé  avec  le RIB et le montant que vous pouvez payer comme acompte.”
+
+					<label class="label-radio">
+						Je souhaite régler en une seule fois le montant de
+						{{devis.prix}}€
+						<input type="radio" value="100" name="modePaiement">
+						<span class="checkmark-radio"></span>
+					</label>
+
+					<label class="label-radio">
+						Je paie un acompte de
+						{{ devis.prix / 2 }}€ (50%) et avant la date de location je paie le reste de
+						{{devis.prix - ((devis.prix)/2)}}€
+						<input type="radio" value="50" name="modePaiement">
+						<span class="checkmark-radio"></span>
+					</label>
+
+					<label class="label-radio">
+						Je paie un acompte de
+						{{ devis.prix / 4 }}€ (25%) et avant la date de location je paie le reste de
+						{{devis.prix - ((devis.prix)/4)}}€
+						<input type="radio" value="25" name="modePaiement">
+						<span class="checkmark-radio"></span>
+					</label>
+
+
 				</div>
 			</div>
 			<div class="card mdl-shadow--2dp p-4 divConditionGeneralVente">
 				<div class="text-center">
-					<h3>Conditions générales de vente
+					<h3>Condition générale de vente
 					</h3>
 				</div>
 				<label class="label-container">
-					Je reconnais avoir prix connaissance des
-					<a href="/cgl/Joel location conditions générales de location_Version 1.0.pdf">
-						conditions générales de location
-					</a>
-					que j'accepte sans réserve
+					Je reconnais avoir prix connaissance des conditions générales de vente que j'accepte sans réserve
 					<input type="checkbox" name="conditionGeneralVente" id="conditionGeneralVente">
 					<span class="checkmark"></span>
 				</label>
 			</div>
 			<div class="text-center mt-3 mb-3">
 				<button class="btn btn-danger" id="validerPaiement">
-					Je confirme
+					{{ button_label|default('Enregistrer') }}
 				</button>
 			</div>
 			{{ form_end(formClient) }}
@@ -207,5 +227,5 @@
 {% endblock %}
 {% block javascripts %}
 	<script src="{{ asset('js/client/reservation/validation_devis/step3infosClient.js')}}"></script>
-	{# // <script src="https://js.stripe.com/v3/"></script> #}
+	<script src="https://js.stripe.com/v3/"></script>
 {% endblock %}

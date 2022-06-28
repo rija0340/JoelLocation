@@ -93,6 +93,7 @@ class ReservationController extends AbstractController
 
         $res_attente_dateDebut = $this->reservationRepo->findReservationsAttenteDateDebut($client, $date);
 
+
         //récupération des réservation en attente (devis envoyé et en attente de validation par client)
         // $reservationEnAttentes = $this->reservRepo->findReservationEnAttente($client, $date);
         $devis = $this->devisRepo->findBy(['client' => $client, 'transformed' => false], ['dateCreation' => 'DESC']);

@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Repository\AppelPaiementRepository;
 use DateTime;
 use DateTimeZone;
 use Dompdf\Dompdf;
@@ -22,6 +21,7 @@ use App\Form\InfosResaType;
 use App\Form\StopSalesType;
 use App\Service\DateHelper;
 use App\Entity\InfosVolResa;
+use App\Form\AnnulationType;
 use App\Form\ClientEditType;
 use App\Form\ConducteurType;
 use App\Form\ReportResaType;
@@ -32,14 +32,16 @@ use App\Service\TarifsHelper;
 use App\Form\InfosVolResaType;
 use App\Form\AjoutPaiementType;
 use App\Form\EditStopSalesType;
+use App\Form\FraisSupplResaType;
 use App\Classe\ClasseReservation;
-use App\Entity\AnnulationReservation;
-use App\Form\AnnulationType;
 use App\Form\OptionsGarantiesType;
 use App\Repository\UserRepository;
 use App\Repository\MarqueRepository;
 use App\Repository\ModeleRepository;
 use App\Repository\TarifsRepository;
+use App\Entity\AnnulationReservation;
+use App\Entity\FraisSupplResa;
+use App\Form\CollectionFraisSupplResaType;
 use App\Repository\OptionsRepository;
 use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
@@ -49,6 +51,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use phpDocumentor\Reflection\Types\This;
 use App\Repository\ReservationRepository;
 use App\Repository\ModePaiementRepository;
+use App\Repository\AppelPaiementRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use MercurySeries\FlashyBundle\FlashyNotifier;
@@ -196,6 +199,11 @@ class ReservationController extends AbstractController
         $formKM = $this->createForm(KilometrageType::class, $vehicule);
         $formKM->handleRequest($request);
 
+
+        // form pour ajouter collection de frais supplementaire
+        // $formCollectionFraisSupplResa = $this->createForm(CollectionFraisSupplResaType::class, $reservation);
+        // $formCollectionFraisSupplResa->handleRequest($request);
+
         //extraction d'un conducteur parmi les conducteurs du client
         $conducteurs =  $reservation->getConducteursClient();
         $conducteur = $conducteurs[0];
@@ -286,7 +294,24 @@ class ReservationController extends AbstractController
         }
 
         //appel à paiement si existe
-        $appelPaiement = $this->appelPaiementRepository->findOneBy(['reservation'=> $reservation]);
+        $appelPaiement = $this->appelPaiementRepository->findOneBy(['reservation' => $reservation]);
+
+
+        //gestion ajout frais supplementaire
+        //gestion annulation reservation
+        // if ($formCollectionFraisSupplResa->isSubmitted() && $formCollectionFraisSupplResa->isValid()) {
+
+        //     foreach ($reservation->getFraisSupplResas() as $frais) {
+        //         $frais->setReservation($reservation);
+
+        //         // calculer prix ht frais
+        //         $frais->setTotalHT($frais->getPrixUnitaire() * $frais->getQuantite());
+
+        //         $this->em->persist($frais);
+
+        //         $this->em->flush();
+        //     }
+        // }
 
         return $this->render('admin/reservation/crud/show.html.twig', [
             'reservation' => $reservation,
@@ -294,7 +319,8 @@ class ReservationController extends AbstractController
             'formAjoutPaiement' => $formAjoutPaiement->createView(),
             'formReportResa' => $formReportResa->createView(),
             'formAnnulation' => $formAnnulation->createView(),
-            'appelPaiement'=> $appelPaiement
+            'appelPaiement' => $appelPaiement,
+            // 'formCollectionFraisSupplResa' => $formCollectionFraisSupplResa->createView()
 
         ]);
     }
@@ -596,7 +622,7 @@ class ReservationController extends AbstractController
         $data = array();
         foreach ($conducteurs as $key => $conducteur) {
 
-            if( count($conducteur->getReservations()) == 0){
+            if (count($conducteur->getReservations()) == 0) {
                 $data[$key]['nom'] = $conducteur->getNom();
                 $data[$key]['prenom'] = $conducteur->getPrenom();
                 $data[$key]['numPermis'] = $conducteur->getNumeroPermis();

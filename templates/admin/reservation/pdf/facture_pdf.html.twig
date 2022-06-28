@@ -150,6 +150,9 @@
 			#note {
 				margin-top: 50px;
 			}
+			.bold {
+				font-weight: bolder;
+			}
 		</style>
 	</head>
 	<body>
@@ -171,10 +174,11 @@
 				<strong>Facture N° FA00029</strong><br>
 				Date de création : 13-06-2021
 				<br>
-				Date d'échéance : 30-06-2021
+				Date d'échéance :
+				{{reservation.dateDebut|format('d/m/Y H:i')}}
 				<br>
 				Devis associé:
-				{{ reservation.numDevis }}
+				{{ devis.numero }}
 			</div>
 			<div class="details_client">
 
@@ -192,8 +196,10 @@
 				<strong>Objet :
 				</strong>
 				Location
-				{{ reservation.vehicule.marque }}
-				{{ reservation.vehicule.modele }}
+				<span class="bold">
+					{{ reservation.vehicule.marque }}
+					{{ reservation.vehicule.modele }}
+				</span>
 				du
 				{{ reservation.dateDebut|date('d/m/Y H:i') }}
 				au
@@ -230,9 +236,9 @@
 								{{ reservation.agenceRetour }}.
 							</td>
 							<td class="text-right">{{ reservation.duree }}j</td>
-							<td class="text-right">{{ reservation.prix / reservation.duree }}</td>
-							<td class="text-right">{{ reservation.prix }}</td>
-							<td class="text-right">{{ reservation.prix + taxe }}</td>
+							<td class="text-right">{{ (reservation.prix / reservation.duree)|number_format(2,","," ") }}</td>
+							<td class="text-right">{{ (reservation.prix)|number_format(2,","," ")}}</td>
+							<td class="text-right">{{ (reservation.prix + taxe)|number_format(2,","," ") }}</td>
 						</tr>
 					</tbody>
 				</table>
@@ -260,15 +266,15 @@
 				<table id="montant" style="width : 100%;">
 					<tr class="bg-pink">
 						<td>Montant HT</td>
-						<td class="text-right">{{ reservation.prix|number_format(2, '.') }}€</td>
+						<td class="text-right">{{ reservation.prix|number_format(2,","," ") }}€</td>
 					</tr>
 					<tr>
 						<td>Total TVA 8.5 %</td>
-						<td class="text-right">{{ taxe }}€</td>
+						<td class="text-right">{{ taxe|number_format(2,","," ")  }}€</td>
 					</tr>
 					<tr class="bg-danger text-white">
 						<td>Total TTC</td>
-						<td class="text-right">{{ (reservation.prix + taxe)|number_format(2, '.') }}</td>
+						<td class="text-right">{{ (reservation.prix + taxe)|number_format(2,","," ") }}</td>
 					</tr>
 					{% for paiement in reservation.paiements %}
 						<tr class="bg-pink">
@@ -278,7 +284,7 @@
 								le
 								{{ paiement.datePaiement|date('d/m/Y') }}</td>
 							<td class="text-right">
-								{{ paiement.montant|number_format(2, '.') }}
+								{{ paiement.montant|number_format(2,","," ") }}
 								€
 							</td>
 						</tr>
@@ -286,7 +292,7 @@
 					<tr class="bg-danger text-white">
 						<td>Reste à payer</td>
 						<td class="text-right">
-							{{ reservation.prix - reservation.sommePaiements }}
+							{{ ((reservation.prix + taxe) - reservation.sommePaiements)|number_format(2,","," ") }}
 							€
 						</td>
 					</tr>

@@ -18,6 +18,7 @@ use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Classe\ReservationSession;
+use App\Entity\Reservation;
 use App\Service\ReservationHelper;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -274,10 +275,11 @@ class NouvelleReservationController extends AbstractController
 
 
     /**
-     * @Route("/espaceclient/nouvelle-reservation/enregistrer-devis", name="client_saveDevis", methods={"GET","POST"})
+     * @Route("/espaceclient/nouvelle-reservation/enregistrer-devis/{type}", name="client_saveDevis", methods={"GET","POST"})
      */
-    public function saveDevis(Request $request): Response
+    public function saveDevis(Request $request, $type): Response
     {
+
 
         $optionsData = $this->reservationSession->getOptions();
         $garantiesData = $this->reservationSession->getGaranties();
@@ -383,10 +385,10 @@ class NouvelleReservationController extends AbstractController
         $email = $devis->getClient()->getMail();
 
         $url = $this->generateUrl('devis_pdf', ['id' => $devis->getId()]);
-        $url_reservation = $this->generateUrl('validation_step2', ['id' => $devis->getId()]);
         $url = "https://joellocation.com" . $url;
-        $url_reservation = "https://joellocation.com" . $url_reservation;
         $linkDevis = "<a style='text-decoration: none; color: inherit;' href='" . $url . "'>Télécharger mon devis</a>";
+        $url_reservation = $this->generateUrl('validation_step2', ['id' => $devis->getId()]);
+        $url_reservation = "https://joellocation.com" . $url_reservation;
         $linkReservation = "<a style='text-decoration: none; color: inherit;' href='" . $url_reservation . "'>JE RESERVE</a>";
         // envoi de mail pour confirmation devis
         // $this->mailjet->confirmationDevis(
@@ -402,6 +404,10 @@ class NouvelleReservationController extends AbstractController
         //     $linkReservation
         // );
 
-        return $this->redirectToRoute('client_reservations');
+        if ($type == 'devis') {
+            return $this->redirectToRoute('client_reservations');
+        } elseif ($type == 'reservation') {
+            return $this->redirectToRoute('validation_step3', ['id' => $devis->getId()]);
+        }
     }
 }

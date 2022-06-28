@@ -29,6 +29,7 @@ class Reservation
         $this->garanties = new ArrayCollection();
         $this->setReportedFalseValue();
         $this->conducteursClient = new ArrayCollection();
+        $this->fraisSupplResas = new ArrayCollection();
     }
 
     /**
@@ -207,6 +208,11 @@ class Reservation
      * @ORM\ManyToMany(targetEntity=Conducteur::class, inversedBy="reservations")
      */
     private $conducteursClient;
+
+    /**
+     * @ORM\OneToMany(targetEntity=FraisSupplResa::class, mappedBy="reservation", orphanRemoval=true, cascade={"persist"})
+     */
+    private $fraisSupplResas;
 
 
     public function getId(): ?int
@@ -708,6 +714,36 @@ class Reservation
     public function removeConducteursClient(Conducteur $conducteursClient): self
     {
         $this->conducteursClient->removeElement($conducteursClient);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|FraisSupplResa[]
+     */
+    public function getFraisSupplResas(): Collection
+    {
+        return $this->fraisSupplResas;
+    }
+
+    public function addFraisSupplResa(FraisSupplResa $fraisSupplResa): self
+    {
+        if (!$this->fraisSupplResas->contains($fraisSupplResa)) {
+            $this->fraisSupplResas[] = $fraisSupplResa;
+            $fraisSupplResa->setReservation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFraisSupplResa(FraisSupplResa $fraisSupplResa): self
+    {
+        if ($this->fraisSupplResas->removeElement($fraisSupplResa)) {
+            // set the owning side to null (unless already changed)
+            if ($fraisSupplResa->getReservation() === $this) {
+                $fraisSupplResa->setReservation(null);
+            }
+        }
 
         return $this;
     }

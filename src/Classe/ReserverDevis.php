@@ -78,32 +78,8 @@ class ReserverDevis
         $this->em->persist($reservation);
         $this->em->persist($devis);
         $this->em->flush();
-        // dump($reservation);
-        // die();
 
-        //envoi de mail de confirmation de reservation
-        // $this->mailjet->confirmationReservation(
-        //     $reservation->getClient()->getNom(),
-        //     $reservation->getClient()->getMail(),
-        //     'Confirmation de Réservation',
-        //     $reservation->getDateReservation()->format('d/m/Y'),
-        //     $reservation->getReference(),
-        //     $reservation->getVehicule()->getMarque() . " " . $reservation->getVehicule()->getModele(),
-        //     $reservation->getDateDebut()->format('d/m/Y H:i'),
-        //     $reservation->getDateFin()->format('d/m/Y H:i')
-        // );
-        // $this->mail->confirmationPaiement(
-        //     $reservation->getClient()->getNom(),
-        //     $reservation->getClient()->getMail(),
-        //     'Confirmation de paiement',
-        //     $reservation->getDateReservation()->format('d/m/Y'),
-        //     $reservation->getReference(),
-        //     $reservation->getVehicule()->getMarque() . " " . $reservation->getVehicule()->getModele(),
-        //     $reservation->getDateDebut()->format('d/m/Y H:i'),
-        //     $reservation->getDateFin()->format('d/m/Y H:i'),
-        //     $reservation->getPrix(),
-        //     //à corriger car il n'y plus de paiement en ligne
-        //     0,
-        // );
+
+        return $reservation;
     }
 }
