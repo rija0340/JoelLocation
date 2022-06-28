@@ -20,26 +20,26 @@ class ClientEdit2Type extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-        ->add('nom', TextType::class)
-        ->add('prenom', TextType::class)
-        ->add('adresse', TextType::class)
-        ->add('complementAdresse', TextType::class)
-        ->add('ville', TextType::class)
-        ->add('codePostal', NumberType::class)
-        ->add('mail', TextType::class)
-        ->add('telephone', TextType::class)
-        ->add('portable', TextType::class)
-        ->add('dateNaissance', DateType::class, [
-            'widget' => 'single_text',
-            'required' => false
-        ])
-        ->add('lieuNaissance', TextType::class)
-        ->add('numeroPermis', TextType::class)
-        ->add('datePermis', DateType::class, [
-            'widget' => 'single_text',
-            'required' => false
-        ])
-        ->add('villeDelivrancePermis', TextType::class)
+            ->add('nom', TextType::class)
+            ->add('prenom', TextType::class)
+            ->add('adresse', TextType::class)
+            ->add('complementAdresse', TextType::class)
+            ->add('ville', TextType::class)
+            ->add('codePostal', NumberType::class)
+            ->add('mail', TextType::class)
+            ->add('telephone', TextType::class)
+            ->add('portable', TextType::class)
+            ->add('dateNaissance', DateType::class, [
+                'widget' => 'single_text',
+                'required' => false
+            ])
+            ->add('lieuNaissance', TextType::class)
+            ->add('numeroPermis', TextType::class)
+            ->add('datePermis', DateType::class, [
+                'widget' => 'single_text',
+                'required' => false
+            ])
+            ->add('villeDelivrancePermis', TextType::class)
             /* ->add('username')
             ->add('roles')
             ->add('password')
