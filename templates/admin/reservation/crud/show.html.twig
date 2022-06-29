@@ -398,367 +398,374 @@
 				<p class="font-italic">Pas de dépassement d'horaire</p>
 
 			</div>
+			<div class="x_title">
+				<h2>
+					<i class="fa fa-chevron-right"></i>Frais supplémentaires
+				</h2>
+				<div class="clearfix"></div>
+			</div>
 			<div
-				class="x_content">
+				class="x_content mb-5">
 				{# options et garanties souscrites #}
-				<div class="x_title">
+
+
+				{% form_theme formCollectionFraisSupplResa _self %}
+
+				{{form_start(formCollectionFraisSupplResa)}}
+				<div class="form-group">
+					<table class="table table-bordered" id="frais-table">
+						<thead>
+							<tr>
+								<th>Description</th>
+								<th>Prix u.</th>
+								<th>Quantité</th>
+								<th>Remise</th>
+								<th>Prix HT</th>
+								<th>Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+
+							{{form_widget(formCollectionFraisSupplResa)}}
+
+						</tbody>
+					</table>
+				</div>
+				<button class="btn btn-danger" type="submit">Enregistrer</button>
+				{{form_end(formCollectionFraisSupplResa)}}</tr>
+		</div>
+		{# Montant de la reservation #}
+		<div class="x_title">
+			<div class="row">
+				<div class="col-auto pl-2">
 					<h2>
-						<i class="fa fa-chevron-right"></i>Frais supplémentaires
+						<i class="fa fa-chevron-right"></i>montant de la réservation
 					</h2>
-					<div class="clearfix"></div>
+				</div>
+				<div class="col-auto ml-auto d-flex align-items-center">
+					<div class="js-prix">
+						{{ (prixResaTTC + totalFraisTTC)|number_format(2,","," ") }}
+						€
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="x_content ">
+			<div class="row">
+				<div class="col-md-8 col-sm-8 col-xs-8">
+					<i class="fa fa-chevron-right"></i>Location NDMR
+					{{ reservation.duree }}
+					jours
+				</div>
+				<div class="col-md-4 col-sm-4 col-xs-4">
+					<div class="text-right">
+						{{ reservation.tarifVehicule|number_format(2,","," ") }}€
+					</div>
+				</div>
+
+				<div class="col-md-8 col-sm-8 col-xs-8">
+					<i class="fa fa-chevron-right"></i>Total dépassements horaires
+				</div>
+				<div class="col-md-4 col-sm-4 col-xs-4">
+					<div class="text-right">
+						0.00 €
+					</div>
+				</div>
+
+				<div class="col-md-8 col-sm-8 col-xs-8">
+					<i class="fa fa-chevron-right"></i>Total options souscrites
+				</div>
+				<div class="col-md-4 col-sm-4 col-xs-4">
+					<div class="text-right">{{ reservation.prixGaranties|number_format(2,","," ") }}€</div>
+				</div>
+
+				<div class="col-md-8 col-sm-8 col-xs-8">
+					<i class="fa fa-chevron-right"></i>Total garanties souscrites
+
+				</div>
+				<div class="col-md-4 col-sm-4 col-xs-4">
+					<div class="text-right">
+						{{ reservation.prixOptions|number_format(2,","," ") }}
+						€
+					</div>
+				</div>
+
+				<div class="col-md-8 col-sm-8 col-xs-8">
+					<i class="fa fa-chevron-right"></i>Montant de la remise
+				</div>
+				<div class="col-md-4 col-sm-4 col-xs-4">
+					<div class="text-right">
+						0 €
+					</div>
+				</div>
+				<div class="col-md-8 col-sm-8 col-xs-8">
+					<i class="fa fa-chevron-right"></i>Montant frais supplémentaires HT
+				</div>
+				<div class="col-md-4 col-sm-4 col-xs-4">
+					<div class="text-right">
+						{{totalFraisHT|number_format(2,","," ")}}
+						€
+					</div>
+				</div>
+
+				<div class="col-md-8 col-sm-8 col-xs-8">
+					<i class="fa fa-chevron-right"></i>Montant à régler
+				</div>
+				<div class="col-md-4 col-sm-4 col-xs-4">
+					<div class="text-right">
+						{{ (totalFraisTTC + prixResaTTC)|number_format(2,","," ") }}
+						€
+					</div>
 				</div>
 
 
-				{# {% form_theme formCollectionFraisSupplResa _self %}
-				
-								{{form_start(formCollectionFraisSupplResa)}}
-								<div class="form-group">
-									<table class="table table-bordered" id="frais-table">
-										<thead>
-											<tr>
-												<th>Description</th>
-												<th>Prix unitaire</th>
-												<th>Quantité</th>
-												<th>Remise</th>
-											</tr>
-										</thead>
-										<tbody>
-				
-											{{form_widget(formCollectionFraisSupplResa)}}
-				
-										</tbody>
-									</table>
-								</div>
-								<button class="btn btn-danger" type="submit">Enregistrer</button>
-								{{form_end(formCollectionFraisSupplResa)}}</tr> #}
+			</div>
 
-				{# Montant de la reservation #}
-				{# Montant de la reservation #}
-					<div class="x_title"> <div class="row">
-						<div class="col-auto pl-2">
-							<h2>
-								<i class="fa fa-chevron-right"></i>montant de la réservation
-							</h2>
-						</div>
-						<div class="col-auto ml-auto d-flex align-items-center">
-							<div class="js-prix">
-								{{ reservation.prix|number_format(2,","," ") }}
-								€
-							</div>
+		</div>
+
+		{# options et garanties souscrites #}
+		<div class="x_title">
+			<h2>
+				<i class="fa fa-chevron-right"></i>réglement(s)
+			</h2>
+			<div class="clearfix"></div>
+		</div>
+		<div class="x_content">
+
+			{% if reservation.sommePaiements < (prixResaTTC + totalFraisTTC) %}
+				<div class="d-flex justify-content-end">
+					<div class="btn-group mb-1">
+						<button type="button" class="btn btn-danger dropdown-toggle font-weight-bold " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Autre réglement
+						</button>
+						<div class="dropdown-menu">
+							<button class="dropdown-item" id="btnAjouterPaiement">Ajouter un paiement</button>
+							{# <button class="dropdown-item" id="btnRelancePaiementSolde">Relance paiement solde</button> #}
+							{% if appelPaiement is not null %}
+								<a type="button" href="{{ path('envoi_email_appel_paiement_index', {'id': appelPaiement.id}) }}" class="dropdown-item">
+									Relance paiement solde
+								</a>
+							{% endif %}
 						</div>
 					</div>
-					<div class="clearfix"></div>
 				</div>
-				<div class="x_content ">
-					<div class="row">
-						<div class="col-md-8 col-sm-8 col-xs-8">
-							<i class="fa fa-chevron-right"></i>Location NDMR
-							{{ reservation.duree }}
-							jours
-						</div>
-						<div class="col-md-4 col-sm-4 col-xs-4">
-							<div class="text-right">
-								{{ reservation.tarifVehicule|number_format(2,","," ") }}€
-							</div>
-						</div>
-
-						<div class="col-md-8 col-sm-8 col-xs-8">
-							<i class="fa fa-chevron-right"></i>Total dépassements horaires
-						</div>
-						<div class="col-md-4 col-sm-4 col-xs-4">
-							<div class="text-right">
-								0.00 €
-							</div>
-						</div>
-
-						<div class="col-md-8 col-sm-8 col-xs-8">
-							<i class="fa fa-chevron-right"></i>Total options souscrites
-						</div>
-						<div class="col-md-4 col-sm-4 col-xs-4">
-							<div class="text-right">{{ reservation.prixGaranties|number_format(2,","," ") }}€</div>
-						</div>
-
-						<div class="col-md-8 col-sm-8 col-xs-8">
-							<i class="fa fa-chevron-right"></i>Total garanties souscrites
-
-						</div>
-						<div class="col-md-4 col-sm-4 col-xs-4">
-							<div class="text-right">
-								{{ reservation.prixOptions|number_format(2,","," ") }}
-								€
-							</div>
-						</div>
-
-						<div class="col-md-8 col-sm-8 col-xs-8">
-							<i class="fa fa-chevron-right"></i>Montant de la remise
-						</div>
-						<div class="col-md-4 col-sm-4 col-xs-4">
-							<div class="text-right">
-								0 €
-							</div>
-						</div>
-
-						<div class="col-md-8 col-sm-8 col-xs-8">
-							<i class="fa fa-chevron-right"></i>Montant à régler
-						</div>
-						<div class="col-md-4 col-sm-4 col-xs-4">
-							<div class="text-right">
-								{{ reservation.prix|number_format(2,","," ") }}
-								€
-							</div>
-						</div>
-
-
+			{% endif %}
+			<div id="formAjoutPaiement" class="hide">
+				{{ form_start(formAjoutPaiement) }}
+				<div class="row">
+					<div class="col-md-3">
+						<label for="">Mode paiement :
+						</label>
+						{{ form_widget(formAjoutPaiement.modePaiement) }}
 					</div>
-
+					<div class="col-md-3">
+						<label for="">Montant :
+						</label>
+						{{ form_widget(formAjoutPaiement.montant) }}
+					</div>
+					<div class="col-2">
+						<label for="" class="text-white">d</label><br>
+						<button type="submit" class="btn btn-danger">Enregistrer</button>
+					</div>
 				</div>
+				{{ form_end(formAjoutPaiement) }}
+			</div>
+			<table class="table table-bordered text-center mt-2">
+				<thead class="bg-dark text-white text-uppercase">
+					<tr>
+						<th>date</th>
+						<th>type</th>
+						<th>méthode</th>
+						<th>référence</th>
+						<th>montant</th>
+						<th>motif</th>
+						<th>action</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% if reservation.paiements|length > 0 %}
+						{% for paiement in reservation.paiements %}
+							<tr>
+								<td>{{ paiement.datePaiement|date('d/m/Y H:i') }}</td>
+								<td>Débit</td>
+								<td>{{ paiement.modePaiement.libelle }}</td>
+								<td></td>
+								<td>{{ paiement.montant|number_format(2,","," ") }}</td>
+								<td></td>
+								<td>
+									<form method="post" action="{{ path('reservation_paiement_delete', {'id': paiement.id, 'reservation' : reservation.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer ce paiement ?');">
+										<input type="hidden" name="_method" value="DELETE">
+										<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ paiement.id) }}">
+										<button class="btn btn-danger">
+											<i class="fa fa-trash (alias)" aria-hidden="true"></i>
+											Supprimer
+										</button>
+									</form>
+								</td>
+							</tr>
+						{% endfor %}
+					{% else %}
+						<tr>
+							<td colspan="7">
+								Aucun paiement effectué
+							</td>
+						</tr>
 
-				{# options et garanties souscrites #}
-				<div class="x_title">
-					<h2>
-						<i class="fa fa-chevron-right"></i>réglement(s)
-					</h2>
-					<div class="clearfix"></div>
+					</td>
+				{% endif %}
+			</tbody>
+		</table>
+
+		<div class="row">
+			<div class="col-md-8 col-sm-8 col-xs-8">
+				<i class="fa fa-chevron-right"></i>Total des règlements effectués :
+			</div>
+
+			<div class="col-md-4 col-sm-4 col-xs-4">
+				<div class="text-right">
+					{{ reservation.sommePaiements|number_format(2,","," ") }}€
 				</div>
-				<div class="x_content">
+			</div>
 
-					{% if reservation.sommePaiements < reservation.prix %}
-						<div class="d-flex justify-content-end">
-							<div class="btn-group mb-1">
-								<button type="button" class="btn btn-danger dropdown-toggle font-weight-bold " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									Autre réglement
-								</button>
-								<div class="dropdown-menu">
-									<button class="dropdown-item" id="btnAjouterPaiement">Ajouter un paiement</button>
-									{# <button class="dropdown-item" id="btnRelancePaiementSolde">Relance paiement solde</button> #}
-									{% if appelPaiement is not null %}
-										<a type="button" href="{{ path('envoi_email_appel_paiement_index', {'id': appelPaiement.id}) }}" class="dropdown-item">
-											Relance paiement solde
-										</a>
+			<div class="col-md-8 col-sm-8 col-xs-8">
+				<i class="fa fa-chevron-right"></i>Solde
+			</div>
+			<div class="col-md-4 col-sm-4 col-xs-4">
+				<div class="text-right">
+					{{ ((totalFraisTTC + prixResaTTC) - reservation.sommePaiements)|number_format(2,","," ") }}€
+				</div>
+			</div>
+		</div>
+
+
+		{# avis client #}
+		<div class="x_title">
+			<h2>
+				<i class="fa fa-chevron-right"></i>avis client
+			</h2>
+			<div class="clearfix"></div>
+		</div>
+
+		{% if reservation.avis %}
+
+			<div class="x_content">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="row">
+							<div class="col-auto">
+								Global
+							</div>
+							<div class="col-auto">
+								<div class="x_content">
+									{% for i in 1..(reservation.avis.global) %}
+										<i class="fa fa-star"></i>
+									{% endfor %}
+									{% if reservation.avis.global != 5 %}
+										{% for j in 1..(5 - reservation.avis.global) %}
+											<i class="fa fa-star-o"></i>
+										{% endfor %}
 									{% endif %}
 								</div>
 							</div>
 						</div>
-					{% endif %}
-					<div id="formAjoutPaiement" class="hide">
-						{{ form_start(formAjoutPaiement) }}
+					</div>
+					<div class="col-md-4">
 						<div class="row">
-							<div class="col-md-3">
-								<label for="">Mode paiement :
-								</label>
-								{{ form_widget(formAjoutPaiement.modePaiement) }}
+							<div class="col-auto">
+								Ponctualité
 							</div>
-							<div class="col-md-3">
-								<label for="">Montant :
-								</label>
-								{{ form_widget(formAjoutPaiement.montant) }}
-							</div>
-							<div class="col-2">
-								<label for="" class="text-white">d</label><br>
-								<button type="submit" class="btn btn-danger">Enregistrer</button>
+							<div class="col-auto">
+								<div class="x_content">
+									{% for i in 1..(reservation.avis.ponctualite) %}
+										<i class="fa fa-star"></i>
+									{% endfor %}
+									{% if reservation.avis.ponctualite != 5 %}
+										{% for j in 1..(5 - reservation.avis.ponctualite) %}
+											<i class="fa fa-star-o"></i>
+										{% endfor %}
+									{% endif %}
+								</div>
 							</div>
 						</div>
-						{{ form_end(formAjoutPaiement) }}
 					</div>
-					<table class="table table-bordered text-center mt-2">
-						<thead class="bg-dark text-white text-uppercase">
-							<tr>
-								<th>date</th>
-								<th>type</th>
-								<th>méthode</th>
-								<th>référence</th>
-								<th>montant</th>
-								<th>motif</th>
-								<th>action</th>
-							</tr>
-						</thead>
-						<tbody>
-							{% if reservation.paiements|length > 0 %}
-								{% for paiement in reservation.paiements %}
-									<tr>
-										<td>{{ paiement.datePaiement|date('d/m/Y H:i') }}</td>
-										<td>Débit</td>
-										<td>{{ paiement.modePaiement.libelle }}</td>
-										<td></td>
-										<td>{{ paiement.montant|number_format(2,","," ") }}</td>
-										<td></td>
-										<td>
-											<form method="post" action="{{ path('reservation_paiement_delete', {'id': paiement.id, 'reservation' : reservation.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer ce paiement ?');">
-												<input type="hidden" name="_method" value="DELETE">
-												<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ paiement.id) }}">
-												<button class="btn btn-danger">
-													<i class="fa fa-trash (alias)" aria-hidden="true"></i>
-													Supprimer
-												</button>
-											</form>
-										</td>
-									</tr>
-								{% endfor %}
-							{% else %}
-								<tr>
-									<td colspan="7">
-										Aucun paiement effectué
-									</td>
-								</tr>
-
-							</td>
-						{% endif %}
-					</tbody>
-				</table>
-
-				<div class="row">
-					<div class="col-md-8 col-sm-8 col-xs-8">
-						<i class="fa fa-chevron-right"></i>Total des règlements effectués :
-					</div>
-
-					<div class="col-md-4 col-sm-4 col-xs-4">
-						<div class="text-right">
-							{{ reservation.sommePaiements|number_format(2,","," ") }}€
+					<div class="col-md-4">
+						<div class="row">
+							<div class="col-auto">
+								Accueil
+							</div>
+							<div class="col-auto">
+								<div class="x_content">
+									{% for i in 1..(reservation.avis.accueil) %}
+										<i class="fa fa-star"></i>
+									{% endfor %}
+									{% if reservation.avis.accueil != 5 %}
+										{% for j in 1..(5 - reservation.avis.accueil) %}
+											<i class="fa fa-star-o"></i>
+										{% endfor %}
+									{% endif %}
+								</div>
+							</div>
 						</div>
 					</div>
-
-					<div class="col-md-8 col-sm-8 col-xs-8">
-						<i class="fa fa-chevron-right"></i>Solde
-					</div>
-					<div class="col-md-4 col-sm-4 col-xs-4">
-						<div class="text-right">
-							{{ (reservation.prix - reservation.sommePaiements)|number_format(2,","," ") }}€
+					<div class="col-md-4">
+						<div class="row">
+							<div class="col-auto">
+								Service:
+							</div>
+							<div class="col-auto">
+								<div class="x_content">
+									{% for i in 1..(reservation.avis.service) %}
+										<i class="fa fa-star"></i>
+									{% endfor %}
+									{% if reservation.avis.service != 5 %}
+										{% for j in 1..(5 - reservation.avis.service) %}
+											<i class="fa fa-star-o"></i>
+										{% endfor %}
+									{% endif %}
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
+			</div>
+		{% else %}
+			<div class="text-center">
+				Aucun avis pour cette réservation
 			</div>
+		{% endif %}
+	</div>
+	<!-- Large modal -->
+	{# <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Large modal</button> #}
+	{% include "admin/reservation/crud/modal/modalKM.html.twig" %}
+	{% include "admin/reservation/crud/modal/modalReportReservation.html.twig" %}
+	{# modal pour annulation #}
+	{% include "admin/reservation/crud/modal/modalAnnulation.html.twig" %}
+	{# fin modal #}
+{% endblock %}{# block representant personnalisation affichage du champ collection_frais_suppl_resa #}{#form represente le champ addfrais #}{% block collection_frais_suppl_resa_widget  %}
 
-			{# avis client #}
-			<div class="x_title">
-				<h2>
-					<i class="fa fa-chevron-right"></i>avis client
-				</h2>
-				<div class="clearfix"></div>
-			</div>
-
-			{% if reservation.avis %}
-
-				<div class="x_content">
-					<div class="row">
-						<div class="col-md-4">
-							<div class="row">
-								<div class="col-auto">
-									Global
-								</div>
-								<div class="col-auto">
-									<div class="x_content">
-										{% for i in 1..(reservation.avis.global) %}
-											<i class="fa fa-star"></i>
-										{% endfor %}
-										{% if reservation.avis.global != 5 %}
-											{% for j in 1..(5 - reservation.avis.global) %}
-												<i class="fa fa-star-o"></i>
-											{% endfor %}
-										{% endif %}
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<div class="row">
-								<div class="col-auto">
-									Ponctualité
-								</div>
-								<div class="col-auto">
-									<div class="x_content">
-										{% for i in 1..(reservation.avis.ponctualite) %}
-											<i class="fa fa-star"></i>
-										{% endfor %}
-										{% if reservation.avis.ponctualite != 5 %}
-											{% for j in 1..(5 - reservation.avis.ponctualite) %}
-												<i class="fa fa-star-o"></i>
-											{% endfor %}
-										{% endif %}
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<div class="row">
-								<div class="col-auto">
-									Accueil
-								</div>
-								<div class="col-auto">
-									<div class="x_content">
-										{% for i in 1..(reservation.avis.accueil) %}
-											<i class="fa fa-star"></i>
-										{% endfor %}
-										{% if reservation.avis.accueil != 5 %}
-											{% for j in 1..(5 - reservation.avis.accueil) %}
-												<i class="fa fa-star-o"></i>
-											{% endfor %}
-										{% endif %}
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<div class="row">
-								<div class="col-auto">
-									Service:
-								</div>
-								<div class="col-auto">
-									<div class="x_content">
-										{% for i in 1..(reservation.avis.service) %}
-											<i class="fa fa-star"></i>
-										{% endfor %}
-										{% if reservation.avis.service != 5 %}
-											{% for j in 1..(5 - reservation.avis.service) %}
-												<i class="fa fa-star-o"></i>
-											{% endfor %}
-										{% endif %}
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			{% else %}
-				<div class="text-center">
-					Aucun avis pour cette réservation
-				</div>
-			{% endif %}
-		</div>
-		<!-- Large modal -->
-		{# <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Large modal</button> #}
-		{% include "admin/reservation/crud/modal/modalKM.html.twig" %}
-		{% include "admin/reservation/crud/modal/modalReportReservation.html.twig" %}
-		{# modal pour annulation #}
-		{% include "admin/reservation/crud/modal/modalAnnulation.html.twig" %}
-		{# fin modal #}
-	{% endblock %}
-	{# block representant personnalisation affichage du champ collection_frais_suppl_resa #}
-	{# form represente le champ addfrais #}
-	{# {% block collection_frais_suppl_resa_widget  %}
-		<p>Ajouter des frais</p>
-	
-		{{form_widget(form)}}
-		<div class="form-group">
-			<button type="button" id="add-frais" class="btn btn-secondary">Ajouter frais</button>
-		</div>
-	{% endblock %} #}
-	{# {% block collection_entry_row %}
-		{{form_widget(form)}}
-	{% endblock %} #}
-	{# pour chaque entry -> sous champs dans fraistype #}
-	{# form dans le bloc represente une entry (un sous champ) #}
-	{# {% block collection_entry_widget %}
-		<tr id="block_{{id}}" class="table-ligne">
-			<th scope="row">{{form_widget(form.description)}}</th>
-			<td>{{form_widget(form.prixUnitaire)}}</td>
-			<td>{{form_widget(form.quantite)}}</td>
-			<td>{{form_widget(form.remise)}}</td>
-			<td>{{form_widget(form.totalHT)}}</td>
-			<td>
-				<button class="btn btn-danger" type="button" data-action="delete" data-target="block_{{id}}">X</button>
-			</td>
-		</tr>
-	{% endblock %} #}{% block javascripts %}<!-- Datatables --><script src="{{ asset('admin/vendors/datatables.net/js/jquery.dataTables.min.js') }}"> </script>
+	{{form_widget(form)}}
+	<div class="form-group">
+		<button type="button" id="add-frais" class="btn btn-secondary">Ajouter ligne</button>
+	</div>
+{% endblock %}
+{% block collection_entry_row %}
+	{{form_widget(form)}}
+{% endblock %}{# pour chaque entry -> sous champs dans fraistype #}{# form dans le bloc represente une entry (un sous champ) #}{% block collection_entry_widget %}
+	<tr id="block_{{id}}" class="table-ligne text-center">
+		<td>{{form_widget(form.description)}}</td>
+		<td style="width : 80px">{{form_widget(form.prixUnitaire, {attr:{'class':'prixUnitaire'}})}}</td>
+		<td style="width : 80px">{{form_widget(form.quantite, {attr:{'class':'quantite'}})}}</td>
+		<td style="width : 80px">{{form_widget(form.remise, {attr:{'class':'remise'}})}}</td>
+		<td style="width : 80px">{{form_widget(form.totalHT, {attr:{'class':'totalHT'}})}}</td>
+		<td style="width : 120px">
+			<button title="Supprimer" class="btn btn-danger" type="button" data-action="delete" data-target="block_{{id}}">
+				<i class="fa fa-trash"></i>
+			</button>
+		</td>
+	</tr>
+{% endblock %}
+{% block javascripts %}<!-- Datatables --><script src="{{ asset('admin/vendors/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 	<script src="{{ asset('admin/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
 	<script src="{{ asset('admin/vendors/datatables.net-buttons/js/dataTables.buttons.min.js') }}"></script>
 	<script src="{{ asset('admin/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js') }}"></script>
@@ -784,34 +791,5 @@
 	{# generer facture avec jsPDf mais doomPDF est plus pratique à cause des conditions à considerer #}
 	{# // <script src="{{asset('js/admin/reservation/generer_facture.js')}}"></script> #}
 
-	//
-	<script>
-
-		// 		$(document).ready(function () {
-								
-								// $('#add-frais').click(function () { // recuperation numero futur champ a ajouter
-								// const index = $('#frais-table .table-ligne').length;
-								
-								// // recuperer
-								// const template = $('#collection_frais_suppl_resa_fraisSupplResas').data('prototype').replace(/__name__/g, index);
-								
-								// // injecter le code dans la div
-								
-								// // td.appendChild(template);
-								// $('#frais-table tbody').append(template);
-								// handleDelete();
-								// });
-								
-								// });
-								
-								// function handleDelete() {
-								
-								// $('button[data-action="delete"]').click(function () {
-								// const target = this.dataset.target;
-								// $('#' + target).remove();
-								
-								// });
-								// }
-								// handleDelete();
-								// 	</script>
-								{% endblock %}
+	<script src="{{asset('js/admin/reservation/frais_suppl_resa.js')}}"></script>
+{% endblock %}

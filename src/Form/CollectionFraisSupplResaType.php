@@ -23,7 +23,8 @@ class CollectionFraisSupplResaType extends AbstractType
                     'allow_delete' => true,
                     'delete_empty' => true,
                     'prototype' => true,
-                    'by_reference' => false
+                    'by_reference' => false,
+                    'label' => false
                 ]
             );
     }

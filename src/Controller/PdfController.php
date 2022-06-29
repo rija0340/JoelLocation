@@ -22,7 +22,7 @@ class PdfController extends AbstractController
     private $datehelper;
     private $reservationRepo;
     private $devisRepo;
-    public function __construct(ReservationRepository $reservationRepo, DateHelper $datehelper, DevisRepository $devisRepository)
+    public function __construct(ReservationRepository $reservationRepo, DateHelper $datehelper, DevisRepository $devisRepo)
     {
         $this->devisRepo = $devisRepo;
         $this->datehelper = $datehelper;
@@ -135,6 +135,28 @@ class PdfController extends AbstractController
      */
     public function facturePDF(Pdf $knpSnappyPdf, Reservation $reservation)
     {
+        //numerotation facture 
+        $idResa = $reservation->getId();
+        $createdAt = $this->datehelper->dateNow();
+        $currentYear = $createdAt->format('Y');
+        $currentYear = str_split($currentYear, 2);
+
+        $sommeFraisTotalHT = 0;
+        foreach ($reservation->getFraisSupplResas() as $resa) {
+            $sommeFraisTotalHT = $sommeFraisTotalHT + $resa->getTotalHT();
+        }
+
+        if ($idResa > 99) {
+            $numeroFacture = 'FA ' . $currentYear[1] . '00' . $idResa;
+        } elseif ($idResa > 999) {
+            $numeroFacture = 'FA' . $currentYear[1] . '0' . $idResa;
+        } elseif ($idResa > 9999) {
+            $numeroFacture = 'FA' . $currentYear[1] . $idResa;
+        } elseif ($idResa < 99 && $idResa > 10) {
+            $numeroFacture = 'FA ' . $currentYear[1] . '000' . $idResa;
+        } elseif ($idResa < 10) {
+            $numeroFacture = 'FA ' . $currentYear[1] . '0000' . $idResa;
+        }
 
         // Configure Dompdf according to your needs7
         $pdfOptions = new Options();
@@ -146,20 +168,26 @@ class PdfController extends AbstractController
         $logo_data = base64_encode(file_get_contents($logo));
         $logo_src = 'data:image/png;base64,' . $logo_data;
         $createdAt = $this->datehelper->dateNow();
-        $devis = $this->devisRepo->findOneBy(intval($reservation->getNumDevis()));
+        $devis = $this->devisRepo->findOneBy(['id' => intval($reservation->getNumDevis())]);
 
-
+        // dd($devis); 
         // logo joellocation
         // $footer = $this->getParameter('logo') . '/pdf/footer-joellocation.png';
         // $footer_data = base64_encode(file_get_contents($footer));
         // $footer_src = 'data:image/png;base64,' . $footer_data;
+
+
 
         $html = $this->renderView('admin/reservation/pdf/facture_pdf.html.twig', [
 
             'logo' => $logo_src,
             'reservation' => $reservation,
             'createdAt' => $createdAt,
-            'devis' => $devis
+            'devis' => $devis,
+            'numeroFacture' => $numeroFacture,
+            'frais' => $reservation->getFraisSupplResas(),
+            'sommeFraisTotalHT' => $sommeFraisTotalHT,
+            'taxe' => 8.5
             // 'footer' =>  $footer_src
 
         ]);

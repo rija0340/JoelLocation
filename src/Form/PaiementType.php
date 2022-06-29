@@ -10,13 +10,14 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 
 class PaiementType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('montant', NumberType::class)
+            ->add('montant', MoneyType::class)
             ->add('date_paiement', DateType::class, [
                 'widget' => 'single_text',
                 'required' => false
@@ -25,8 +26,7 @@ class PaiementType extends AbstractType
             ->add('reservation', EntityType::class)
             ->add('mode_paiement', EntityType::class)
             ->add('utilisateur', EntityType::class)
-            ->add('client', EntityType::class)
-        ;
+            ->add('client', EntityType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)

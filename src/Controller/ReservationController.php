@@ -194,15 +194,25 @@ class ReservationController extends AbstractController
      */
     public function show(Reservation $reservation, Request $request): Response
     {
+
+
+        // calcul totalHT frais 
+        $totalFraisHT = 0;
+        foreach ($reservation->getFraisSupplResas() as $frais) {
+            $totalFraisHT = $totalFraisHT +  $frais->getTotalHT();
+        }
+        // tva 8.5%
+        $totalFraisTTC = $totalFraisHT + (($totalFraisHT * 8.5) / 100);
+        $prixResaTTC =  ($reservation->getPrix() + (($reservation->getPrix() * 8.5) / 100));
+
         $vehicule = $reservation->getVehicule();
         // form pour kilométrage vehicule
         $formKM = $this->createForm(KilometrageType::class, $vehicule);
         $formKM->handleRequest($request);
 
-
         // form pour ajouter collection de frais supplementaire
-        // $formCollectionFraisSupplResa = $this->createForm(CollectionFraisSupplResaType::class, $reservation);
-        // $formCollectionFraisSupplResa->handleRequest($request);
+        $formCollectionFraisSupplResa = $this->createForm(CollectionFraisSupplResaType::class, $reservation);
+        $formCollectionFraisSupplResa->handleRequest($request);
 
         //extraction d'un conducteur parmi les conducteurs du client
         $conducteurs =  $reservation->getConducteursClient();
@@ -222,8 +232,10 @@ class ReservationController extends AbstractController
         $formAnnulation->handleRequest($request);
 
         if ($formAjoutPaiement->isSubmitted() && $formAjoutPaiement->isValid()) {
+
+
             // tester si la somme des paiements dépasse le prix
-            if ($reservation->getSommePaiements()  + $formAjoutPaiement->getData()['montant'] > $reservation->getPrix()) {
+            if ($reservation->getSommePaiements()  + $formAjoutPaiement->getData()['montant'] > ($totalFraisTTC + $prixResaTTC)) {
 
                 $this->flashy->error("Erreur sur l'ajout de paiement car le total du paiement est supérieur au due");
                 return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
@@ -232,11 +244,13 @@ class ReservationController extends AbstractController
                 $paiement  = new Paiement();
                 $paiement->setClient($reservation->getClient());
                 $paiement->setDatePaiement($this->dateHelper->dateNow());
-                $paiement->setMontant($formAjoutPaiement->getData()['montant']);
+                $paiement->setMontant(floatval($formAjoutPaiement->getData()['montant']));
                 $paiement->setReservation($reservation);
                 $paiement->setModePaiement($this->modePaiementRepo->find($formAjoutPaiement->getData()['modePaiement']));
                 $paiement->setMotif("Réservation");
                 $paiement->setCreatedAt($this->dateHelper->dateNow());
+
+
                 $this->em->persist($paiement);
                 $this->em->flush();
 
@@ -299,20 +313,21 @@ class ReservationController extends AbstractController
 
         //gestion ajout frais supplementaire
         //gestion annulation reservation
-        // if ($formCollectionFraisSupplResa->isSubmitted() && $formCollectionFraisSupplResa->isValid()) {
+        if ($formCollectionFraisSupplResa->isSubmitted() && $formCollectionFraisSupplResa->isValid()) {
+            foreach ($reservation->getFraisSupplResas() as $fraisSuppl) {
+                // dd($frais);
+                $fraisSuppl->setReservation($reservation);
+                // calculer prix ht frais
+                $this->em->persist($fraisSuppl);
+            }
+            $this->em->flush();
 
-        //     foreach ($reservation->getFraisSupplResas() as $frais) {
-        //         $frais->setReservation($reservation);
+            // dd($reservation->getFraisSupplResas());
+        }
 
-        //         // calculer prix ht frais
-        //         $frais->setTotalHT($frais->getPrixUnitaire() * $frais->getQuantite());
 
-        //         $this->em->persist($frais);
 
-        //         $this->em->flush();
-        //     }
-        // }
-
+        // dd($reservation->getPrix(), $prixResaTTC);
         return $this->render('admin/reservation/crud/show.html.twig', [
             'reservation' => $reservation,
             'formKM' => $formKM->createView(),
@@ -320,8 +335,10 @@ class ReservationController extends AbstractController
             'formReportResa' => $formReportResa->createView(),
             'formAnnulation' => $formAnnulation->createView(),
             'appelPaiement' => $appelPaiement,
-            // 'formCollectionFraisSupplResa' => $formCollectionFraisSupplResa->createView()
-
+            'formCollectionFraisSupplResa' => $formCollectionFraisSupplResa->createView(),
+            'totalFraisHT' => $totalFraisHT,
+            'totalFraisTTC' => $totalFraisTTC,
+            'prixResaTTC' => $prixResaTTC
         ]);
     }
 

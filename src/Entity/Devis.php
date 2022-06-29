@@ -310,7 +310,12 @@ class Devis
         if ($currentID < 10000 && $currentID > 1000) {
             $currentID = '0' . $currentID;
         }
-        $ref  = "DV" . $currentID;
+
+        $dateNow = new \DateTime('now');
+
+        $currentYear = (str_split($dateNow->format('Y'), 2))[1];
+
+        $ref  = "DV" . $currentYear . $currentID;
         $this->setNumero($ref);
     }
 

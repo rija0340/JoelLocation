@@ -66,7 +66,7 @@
 			.details_client {
 				display: inline-block;
 				vertical-align: top;
-				padding-left: 250px;
+				padding-left: 200px;
 				padding-top: 50px;
 			}
 
@@ -171,17 +171,18 @@
 			</div>
 			<br>
 			<div class="details_facture">
-				<strong>Facture N° FA00029</strong><br>
-				Date de création : 13-06-2021
+				<strong>Facture N°
+					{{numeroFacture}}</strong><br>
+				Date de création :
+				{{createdAt|date('d/m/Y')}}
 				<br>
 				Date d'échéance :
-				{{reservation.dateDebut|format('d/m/Y H:i')}}
+				{{reservation.dateDebut|date('d/m/Y H:i')}}
 				<br>
 				Devis associé:
 				{{ devis.numero }}
 			</div>
 			<div class="details_client">
-
 				<strong>{{ reservation.client.nom }}
 					{{ reservation.client.prenom }}</strong>
 				<br>
@@ -196,20 +197,16 @@
 				<strong>Objet :
 				</strong>
 				Location
-<<<<<<< HEAD
-				<span class="bold">
+				<strong>
 					{{ reservation.vehicule.marque }}
 					{{ reservation.vehicule.modele }}
-				</span>
-=======
-				<strong>{{ reservation.vehicule.marque }}
-				{{ reservation.vehicule.modele }}</strong>
->>>>>>> 697b413609037a0086f5e51a08bf2623a1139705
+				</strong>
 				du
 				{{ reservation.dateDebut|date('d/m/Y H:i') }}
 				au
-				{{ reservation.dateFin|date('d/m/Y H:i') }}. KM illimités</div>
-			{# table gauche droite, info client et conducteurs #}
+				{{ reservation.dateFin|date('d/m/Y H:i') }}. KM illimités
+				{# table gauche droite, info client et conducteurs #}
+			</div>
 			<div class="">
 				<table id="recap_table" class=" p-0 " style="width : 100%;">
 					<thead class="bg-danger text-white">
@@ -223,7 +220,8 @@
 					</thead>
 					<tbody>
 						<tr class="bg-pink">
-							{% set taxe = (reservation.prix * 8.5) / 100 %}
+							{% set taxeResa = (reservation.prix * taxe) / 100 %}
+							{% set taxeFrais = (sommeFraisTotalHT * taxe) / 100 %}
 							<td>
 								{{ reservation.vehicule.marque }}
 								{{ reservation.vehicule.modele }}
@@ -243,8 +241,20 @@
 							<td class="text-right">{{ reservation.duree }}j</td>
 							<td class="text-right">{{ (reservation.prix / reservation.duree)|number_format(2,","," ") }}</td>
 							<td class="text-right">{{ (reservation.prix)|number_format(2,","," ")}}</td>
-							<td class="text-right">{{ (reservation.prix + taxe)|number_format(2,","," ") }}</td>
+							<td class="text-right">{{ (reservation.prix + taxeResa)|number_format(2,","," ") }}</td>
 						</tr>
+						{% for frais in frais %}
+							<tr class="bg-pink">
+								<td>
+									{{ frais.description }}
+								</td>
+								<td class="text-right">{{ frais.quantite }}j</td>
+								<td class="text-right">{{ frais.prixUnitaire|number_format(2,","," ") }}</td>
+								<td class="text-right">{{ frais.totalHT|number_format(2,","," ") }}</td>
+								<td class="text-right">{{ (frais.totalHT + ( frais.totalHT * taxe / 100))|number_format(2,","," ") }}</td>
+							</tr>
+						{% endfor %}
+
 					</tbody>
 				</table>
 
@@ -271,15 +281,15 @@
 				<table id="montant" style="width : 100%;">
 					<tr class="bg-pink">
 						<td>Montant HT</td>
-						<td class="text-right">{{ reservation.prix|number_format(2,","," ") }}€</td>
+						<td class="text-right">{{ (reservation.prix + sommeFraisTotalHT) |number_format(2,","," ") }}€</td>
 					</tr>
 					<tr>
 						<td>Total TVA 8.5 %</td>
-						<td class="text-right">{{ taxe|number_format(2,","," ")  }}€</td>
+						<td class="text-right">{{ (taxeResa + taxeFrais)|number_format(2,","," ")  }}€</td>
 					</tr>
 					<tr class="bg-danger text-white">
 						<td>Total TTC</td>
-						<td class="text-right">{{ (reservation.prix + taxe)|number_format(2,","," ") }}</td>
+						<td class="text-right">{{ (reservation.prix + taxeResa + sommeFraisTotalHT + taxeFrais)|number_format(2,","," ") }}</td>
 					</tr>
 					{% for paiement in reservation.paiements %}
 						<tr class="bg-pink">
@@ -297,7 +307,7 @@
 					<tr class="bg-danger text-white">
 						<td>Reste à payer</td>
 						<td class="text-right">
-							{{ ((reservation.prix + taxe) - reservation.sommePaiements)|number_format(2,","," ") }}
+							{{ ((reservation.prix + taxeResa + sommeFraisTotalHT + taxeFrais ) - reservation.sommePaiements)|number_format(2,","," ") }}
 							€
 						</td>
 					</tr>

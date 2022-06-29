@@ -210,7 +210,7 @@ class Reservation
     private $conducteursClient;
 
     /**
-     * @ORM\OneToMany(targetEntity=FraisSupplResa::class, mappedBy="reservation", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=FraisSupplResa::class, mappedBy="reservation", orphanRemoval=true)
      */
     private $fraisSupplResas;
 

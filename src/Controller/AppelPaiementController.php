@@ -53,6 +53,15 @@ class AppelPaiementController extends AbstractController
         //on met dans un tableau toutes les entities appelapaiement(chacun relié à une réservation)
         $appelPaiements1 = $this->appelPaiementRepo->findAll();
 
+        // verifier paiement si client a déjà payer dette
+        foreach ($reservations as $resa) {
+
+            if ($resa->getReference() == 'WEB2022MAI00065') {
+
+                dd($resa->getSommePaiements(), $resa->getPrix());
+            }
+        }
+
         //on met toutes les réservations reliés aux entités appels à paiement dans un tableau
         $reservationsInvolved = [];
         foreach ($appelPaiements1 as $appel) {
@@ -61,7 +70,7 @@ class AppelPaiementController extends AbstractController
 
         //comparer toutes les reservations existantes à celles qui sont déjà 
         foreach ($reservations as $reservation) {
-            //si une réservation n'est pas encore dans l'encore la table appel alors qu'elle devra y être
+            //si une réservation n'est pas encore dans la table appel alors qu'elle devra y être
             //on construit une nouvelle entité et on l'y insère 
             if (!in_array($reservation, $reservationsInvolved)) {
 
