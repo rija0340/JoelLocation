@@ -167,7 +167,7 @@
 				{{ devis.dateCreation|date('d/m/Y') }}
 				<br>
 				Date d'échéance :
-				{{ devis.dateCreation|date_modify("+7 day")|date("d/m/Y") }}
+				{{ devis.dateDepart|date_modify("+7 day")|date("d/m/Y") }}
 
 			</div>
 			<div class="details_client">
