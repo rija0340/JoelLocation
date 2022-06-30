@@ -36,7 +36,6 @@ class NouvelleReservationController extends AbstractController
     private $tarifsHelper;
     private $vehiculeRepo;
     private $reservationHelper;
-    private $mailjet;
     private $reservationSession;
 
     public function __construct(
@@ -50,8 +49,7 @@ class NouvelleReservationController extends AbstractController
         VehiculeRepository $vehiculeRepo,
         FlashyNotifier $flashy,
         ReservationHelper $reservationHelper,
-        ReservationSession $reservationSession,
-        Mailjet $mailjet
+        ReservationSession $reservationSession
 
     ) {
         $this->reservationRepo = $reservationRepo;
@@ -64,7 +62,6 @@ class NouvelleReservationController extends AbstractController
         $this->flashy = $flashy;
         $this->reservationHelper = $reservationHelper;
         $this->reservationSession = $reservationSession;
-        $this->mailjet = $mailjet;
     }
     //step1 choix des paramètres de la réservation
 
@@ -280,7 +277,6 @@ class NouvelleReservationController extends AbstractController
     public function saveDevis(Request $request, $type): Response
     {
 
-
         $optionsData = $this->reservationSession->getOptions();
         $garantiesData = $this->reservationSession->getGaranties();
 
@@ -320,7 +316,6 @@ class NouvelleReservationController extends AbstractController
         $devis->setDateCreation($this->dateHelper->dateNow());
         //si l'heure de la date est égal à zero 
         $devis->setDuree($this->dateHelper->calculDuree($this->reservationSession->getDateDepart(), $this->reservationSession->getDateRetour()));
-
         $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($this->reservationSession->getDateDepart(), $this->reservationSession->getDateRetour(), $vehicule);
         $devis->setTarifVehicule($tarifVehicule);
         $prixOptions = $this->tarifsHelper->sommeTarifsOptions($optionsObjects);
@@ -375,36 +370,9 @@ class NouvelleReservationController extends AbstractController
             return $this->redirectToRoute('client_reservations');
         }
 
-        $this->flashy->success('Le devis a été enregistré avec succés');
-        //effacher session reservation
-
-        $contenu = "Bonjour, votre devis numéro " . $devis->getNumero() . " a bien été enregistré, veuillez vous rendre dans votre espace client pour valider le devis";
-        //to, client_nom, objet, message du client
-
-        $fullName = $devis->getClient()->getPrenom() . " " . $devis->getClient()->getNom();
-        $email = $devis->getClient()->getMail();
-
-        $url = $this->generateUrl('devis_pdf', ['id' => $devis->getId()]);
-        $url = "https://joellocation.com" . $url;
-        $linkDevis = "<a style='text-decoration: none; color: inherit;' href='" . $url . "'>Télécharger mon devis</a>";
-        $url_reservation = $this->generateUrl('validation_step2', ['id' => $devis->getId()]);
-        $url_reservation = "https://joellocation.com" . $url_reservation;
-        $linkReservation = "<a style='text-decoration: none; color: inherit;' href='" . $url_reservation . "'>JE RESERVE</a>";
-        // envoi de mail pour confirmation devis
-        // $this->mailjet->confirmationDevis(
-        //     $fullName,
-        //     $email,
-        //     "Confirmation de demande de devis",
-        //     $this->dateHelper->frenchDate($devis->getDateCreation()),
-        //     $devis->getNumero(),
-        //     $devis->getVehicule()->getMarque() . " " . $devis->getVehicule()->getModele(),
-        //     $this->dateHelper->frenchDate($devis->getDateDepart()) . " " . $this->dateHelper->frenchHour($devis->getDateDepart()),
-        //     $this->dateHelper->frenchDate($devis->getDateRetour()) . " " . $this->dateHelper->frenchHour($devis->getDateRetour()),
-        //     $linkDevis,
-        //     $linkReservation
-        // );
-
         if ($type == 'devis') {
+            $this->flashy->success('Le devis a été enregistré avec succés');
+            $this->reservationHelper->sendMailConfirmationDevis($devis);
             return $this->redirectToRoute('client_reservations');
         } elseif ($type == 'reservation') {
             return $this->redirectToRoute('validation_step3', ['id' => $devis->getId()]);

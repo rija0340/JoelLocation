@@ -26,6 +26,7 @@ use App\Form\Devis\OptionsGarantiesType;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Controller\ReservationController;
 use App\Repository\ReservationRepository;
+use App\Service\ReservationHelper;
 use Symfony\Component\HttpFoundation\Request;
 // Include Dompdf required namespaces
 use Symfony\Component\HttpFoundation\Response;
@@ -569,30 +570,10 @@ class DevisController extends AbstractController
     /**
      * @Route("devis/envoyer-devis/{id}", name="envoyer_devis", methods={"GET","POST"},requirements={"id":"\d+"})
      */
-    public function envoyerDevis(Request $request, Devis $devis): Response
+    public function envoyerDevis(Request $request, Devis $devis, ReservationHelper $reservationHelper): Response
     {
 
-        $mail = $devis->getClient()->getMail();
-        $nom = $devis->getClient()->getNom();
-
-        $url   = $this->generateUrl('devis_pdf', ['id' => $devis->getId()]);
-        $url = "https://joellocation.com" . $url;
-        $linkDevis = "<a href='" . $url . "'>lien</a>";
-
-//        $content = "Bonjour, " . '<br>' . "Vous pouvez télécharger votre devis N°" . $devis->getNumero() . "en cliquant sur ce <a href='" . $url . "'>lien</a>.";
-
-        $this->mailjet->envoiDevis(
-            $devis->getClient()->getPrenom().' '.$devis->getClient()->getNom(),
-            $devis->getClient()->getMail(),
-            "Téléchargement de devis",
-            $this->dateHelper->frenchDate($devis->getDateCreation()),
-            $devis->getNumero(),
-            $devis->getVehicule()->getMarque() ." ".$devis->getVehicule()->getModele(),
-            $this->dateHelper->frenchDate($devis->getDateDepart())." ".$this->dateHelper->frenchHour($devis->getDateDepart()),
-            $this->dateHelper->frenchDate($devis->getDateRetour())." ".$this->dateHelper->frenchHour($devis->getDateRetour()),
-            $linkDevis
-        );
-
+        $reservationHelper->sendMailConfirmationDevis($devis);
         $this->flashy->success("L'url de téléchargement du devis N°" . $devis->getNumero() . " a été envoyé");
         return $this->redirectToRoute('devis_show', ['id' => $devis->getId()]);
     }

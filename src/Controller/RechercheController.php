@@ -51,6 +51,8 @@ class RechercheController extends AbstractController
     {
         $recherche = $request->query->get('recherche');
 
+
+
         $reservation[] = new Reservation();
 
         if ($recherche != null) {

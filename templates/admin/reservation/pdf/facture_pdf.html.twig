@@ -180,7 +180,7 @@
 				{{reservation.dateDebut|date('d/m/Y H:i')}}
 
 				<br>
-				{% if devis is defined %}
+				{% if devis is defined and devis is not null %}
 					Devis associé:
 					{{ devis.numero }}
 				{% endif %}

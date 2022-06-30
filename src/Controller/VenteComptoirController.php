@@ -85,8 +85,7 @@ class VenteComptoirController extends AbstractController
         ReservationSession $reservationSession,
         Mailjet $mail,
         ReservationHelper $reservationHelper
-    )
-    {
+    ) {
 
         $this->reservationSession = $reservationSession;
         $this->flashy = $flashy;
@@ -115,7 +114,7 @@ class VenteComptoirController extends AbstractController
     public function step1(Request $request, SessionInterface $session): Response
     {
         //remove contenu session avant toute chose
-//        $this->reservationSession->removeReservation();
+        //        $this->reservationSession->removeReservation();
 
         $form = $this->createForm(ReservationStep1Type::class);
         if ($this->reservationSession->getReservation() != null) {
@@ -141,7 +140,7 @@ class VenteComptoirController extends AbstractController
             $this->reservationSession->addTypeVehicule($typeVehicule);
             $this->reservationSession->addLieuSejour($lieuSejour);
 
-//           dd( $this->reservationSession->getReservation());
+            //           dd( $this->reservationSession->getReservation());
 
             return $this->redirectToRoute('step2');
         }
@@ -383,28 +382,7 @@ class VenteComptoirController extends AbstractController
         //url de téléchargement du devis
         $devis = $this->devisRepo->findOneBy(['numero' => $numDevis]);
 
-        $url = $this->generateUrl('devis_pdf', ['id' => $devis->getId()]);
-        $url_reservation = $this->generateUrl('validation_step2', ['id' => $devis->getId()]);
-        $url = "https://joellocation.com" . $url;
-        $url_reservation = "https://joellocation.com" . $url_reservation;
-        $linkDevis = "<a style='text-decoration: none; color: inherit;' href='" . $url . "'>Télécharger mon devis</a>";
-        $linkReservation = "<a style='text-decoration: none; color: inherit;' href='" . $url_reservation . "'>JE RESERVE</a>";
-
-        $fullName = $devis->getClient()->getPrenom() . " " . $devis->getClient()->getNom();
-        $email = $devis->getClient()->getMail();
-        $this->mail->confirmationDevis(
-            $fullName,
-            $email,
-            "Confirmation de demande de devis",
-            $this->dateHelper->frenchDate($devis->getDateCreation()),
-            $devis->getNumero(),
-            $devis->getVehicule()->getMarque() . " " . $devis->getVehicule()->getModele(),
-            $this->dateHelper->frenchDate($devis->getDateDepart()) . " " . $this->dateHelper->frenchHour($devis->getDateDepart()),
-            $this->dateHelper->frenchDate($devis->getDateRetour()) . " " . $this->dateHelper->frenchHour($devis->getDateRetour()),
-            $linkDevis,
-            $linkReservation
-//            $this->dateHelper->frenchDate($devis->getDateRetour()->modify('+3 days'))
-        );
+        $this->reservationHelper->sendMailConfirmationDevis($devis);
 
         $this->flashy->success('Le devis a été enregistré avec succés et un mail a été envoyé au client');
         return $this->redirectToRoute('devis_index');
@@ -650,16 +628,7 @@ class VenteComptoirController extends AbstractController
         $this->flashy->success("Réservation effectuée avec succès");
         //envoi de mail de confirmation de réservation
 
-        $this->mail->confirmationReservation(
-            $reservation->getClient()->getPrenom() . " " . $reservation->getClient()->getNom()
-            , $reservation->getClient()->getMail(),
-            "Confirmation de réservation",
-            $this->dateHelper->frenchDate($reservation->getDateReservation()) . " -- " . $this->dateHelper->frenchHour($reservation->getDateReservation()),
-            $reservation->getReference(),
-            $reservation->getVehicule()->getMarque() . " " . $reservation->getVehicule()->getModele(),
-            $reservation->getAgenceDepart() . "  " . $this->dateHelper->frenchDate($reservation->getDateDebut()) . " -- " . $this->dateHelper->frenchHour($reservation->getDateDebut()),
-            $reservation->getAgenceRetour() . "  " . $this->dateHelper->frenchDate($reservation->getDateFin()) . " -- " . $this->dateHelper->frenchHour($reservation->getDateFin())
-        );
+
 
         return $this->redirectToRoute('reservation_index');
     }

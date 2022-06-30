@@ -102,6 +102,7 @@ class PdfController extends AbstractController
         $vehicule_src = 'data:image/png;base64,' . $vehicule_data;
 
 
+
         $html = $this->renderView('admin/reservation/pdf/contrat_pdf.html.twig', [
 
             'logo' => $logo_src,
@@ -170,15 +171,13 @@ class PdfController extends AbstractController
         $logo_data = base64_encode(file_get_contents($logo));
         $logo_src = 'data:image/png;base64,' . $logo_data;
         $createdAt = $this->datehelper->dateNow();
-        $devis = $this->devisRepo->findOneBy(['id' => intval($reservation->getNumDevis())]);
+        $devis = $this->devisRepo->find(intval($reservation->getNumDevis()));
 
         // dd($devis); 
         // logo joellocation
         // $footer = $this->getParameter('logo') . '/pdf/footer-joellocation.png';
         // $footer_data = base64_encode(file_get_contents($footer));
         // $footer_src = 'data:image/png;base64,' . $footer_data;
-
-
 
         $html = $this->renderView('admin/reservation/pdf/facture_pdf.html.twig', [
 

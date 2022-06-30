@@ -2,6 +2,8 @@
 
 namespace App\Service;
 
+use App\Classe\Mailjet;
+use App\Repository\DevisRepository;
 use App\Repository\TarifsRepository;
 use App\Repository\OptionsRepository;
 use App\Repository\GarantieRepository;
@@ -18,15 +20,27 @@ class ReservationHelper
     private $tarifsRepo;
     private $dateHelper;
     private $reservationRepo;
+    private $mailjet;
+    private $devisRepo;
 
-    public function __construct(ReservationRepository $reservationRepo, DateHelper $dateHelper, TarifsRepository $tarifsRepo, VehiculeRepository $vehiculeRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
-    {
+    public function __construct(
+        ReservationRepository $reservationRepo,
+        DateHelper $dateHelper,
+        TarifsRepository $tarifsRepo,
+        VehiculeRepository $vehiculeRepo,
+        OptionsRepository $optionsRepo,
+        GarantieRepository $garantiesRepo,
+        Mailjet $mailjet,
+        DevisRepository $devisRepo
+    ) {
         $this->vehiculeRepo = $vehiculeRepo;
         $this->optionsRepo = $optionsRepo;
         $this->garantiesRepo = $garantiesRepo;
         $this->tarifsRepo = $tarifsRepo;
         $this->dateHelper = $dateHelper;
         $this->reservationRepo = $reservationRepo;
+        $this->mailjet = $mailjet;
+        $this->devisRepo = $devisRepo;
     }
 
     //paramètres : reservations qui sont inclus durant l'intervalle de date de début et date de fin 
@@ -178,5 +192,60 @@ class ReservationHelper
     public function getPrixResaTTC($reservation)
     {
         return ($reservation->getPrix() + ($reservation->getPrix() * 8.5 / 100));
+    }
+
+    public function sendMailConfirmationReservation($reservation)
+    {
+        //lien pour telechargement devis
+        // $url = $this->generateUrl('devis_pdf', ['id' => $devis->getId()]);
+
+        $devis = $this->devisRepo->find($reservation->getNumDevis());
+        $url = '/backoffice/devispdf/' . $devis->getId();
+        $url = "https://joellocation.com" . $url;
+        $linkDevis = "<a style='text-decoration: none; color: inherit;' href='" . $url . "'>Télécharger mon devis</a>";
+
+        $this->mailjet->confirmationReservation(
+            $reservation->getClient()->getPrenom() . ' ' . $reservation->getClient()->getNom(),
+            $reservation->getClient()->getMail(),
+            "Confirmation de réservation",
+            $reservation->getDateReservation()->format('d/m/Y H:i'),
+            $reservation->getReference(),
+            $reservation->getVehicule()->getMarque() . ' ' . $reservation->getVehicule()->getModele(),
+            $reservation->getDateDebut()->format('d/m/Y H:i'),
+            $reservation->getDateFin()->format('d/m/Y H:i'),
+            $reservation->getPrix(),
+            $this->tarifsHelper->VingtCinqPourcent($reservation->getPrix()),
+            $this->tarifsHelper->CinquantePourcent($reservation->getPrix()),
+            $reservation->getPrix() - $this->tarifsHelper->VingtCinqPourcent($reservation->getPrix()),
+            $linkDevis
+        );
+    }
+
+
+    public function sendMailConfirmationDevis($devis)
+    {
+
+        $url = '/backoffice/devispdf/' . $devis->getId();
+        $url_reservation = '/espaceclient/validation/options-garanties/{id}' . $devis->getId();
+        $url = "https://joellocation.com" . $url;
+        $url_reservation = "https://joellocation.com" . $url_reservation;
+        $linkDevis = "<a style='text-decoration: none; color: inherit;' href='" . $url . "'>Télécharger mon devis</a>";
+        $linkReservation = "<a style='text-decoration: none; color: inherit;' href='" . $url_reservation . "'>JE RESERVE</a>";
+
+        $fullName = $devis->getClient()->getPrenom() . " " . $devis->getClient()->getNom();
+        $email = $devis->getClient()->getMail();
+        $this->mailjet->confirmationDevis(
+            $fullName,
+            $email,
+            "Confirmation de demande de devis",
+            $this->dateHelper->frenchDate($devis->getDateCreation()),
+            $devis->getNumero(),
+            $devis->getVehicule()->getMarque() . " " . $devis->getVehicule()->getModele(),
+            $this->dateHelper->frenchDate($devis->getDateDepart()) . " " . $this->dateHelper->frenchHour($devis->getDateDepart()),
+            $this->dateHelper->frenchDate($devis->getDateRetour()) . " " . $this->dateHelper->frenchHour($devis->getDateRetour()),
+            $linkDevis,
+            $linkReservation
+            //            $this->dateHelper->frenchDate($devis->getDateRetour()->modify('+3 days'))
+        );
     }
 }
