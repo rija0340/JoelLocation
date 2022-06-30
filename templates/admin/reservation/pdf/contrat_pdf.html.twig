@@ -246,7 +246,11 @@
 									<td class="bg-danger  text-white text-center fs-12">Numéro de contrat</td>
 								</tr>
 								<tr>
-									<td>{{reservation.reference}}</td>
+									{% if devis is defined  %}
+										<td>{{devis.numero}}</td>
+									{% else %}
+										<td>Pas de devis associé</td>
+									{% endif %}
 								</tr>
 							</tbody>
 						</table>
