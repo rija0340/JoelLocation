@@ -1,6 +1,31 @@
 $(document).ready(function () {
 
+
+    // $(window).on('load', function () {
+
+    //     console.log($('#frais-table tbody tr').length);
+
+    //     if (parseInt($('#frais-table tbody tr').length) == 0) {
+    //         console.log($('#frais-table'));
+    //         $('#frais-table').addClass('hide');
+    //     } else {
+    //         $('#frais-table').removeClass('hide');
+    //     }
+
+    // });
+
     $('#add-frais').click(function () { // recuperation numero futur champ a ajouter
+
+
+        // remove hide if table hidden
+        if ($('#frais-table').hasClass('hide')) {
+            $('#frais-table').removeClass('hide');
+        }
+
+        if ($('#btnSaveFrais').hasClass('hide')) {
+            $('#btnSaveFrais').removeClass('hide');
+        }
+
         const index = $('#frais-table .table-ligne').length;
         // recuperer
         const template = $('#collection_frais_suppl_resa_fraisSupplResas').data('prototype').replace(/__name__/g, index);
@@ -21,7 +46,19 @@ $(document).ready(function () {
             const target = this.dataset.target;
             $('#' + target).remove();
 
+
+            if (parseInt($('#frais-table tbody tr').length) == 0) {
+                console.log($('#frais-table'));
+                $('#frais-table').addClass('hide');
+                $('#btnSaveFrais').addClass('hide');
+            } else {
+                $('#btnSaveFrais').removeClass('hide');
+                $('#frais-table').removeClass('hide');
+            }
+
         });
+
+
     }
     handleDelete();
     handleChangePrixUnitaire();
@@ -63,6 +100,8 @@ $(document).ready(function () {
 
         });
     }
+
+
 
 
 

@@ -29,6 +29,7 @@ use App\Form\UserClientType;
 use App\Form\KilometrageType;
 use App\Form\ReservationType;
 use App\Service\TarifsHelper;
+use App\Entity\FraisSupplResa;
 use App\Form\InfosVolResaType;
 use App\Form\AjoutPaiementType;
 use App\Form\EditStopSalesType;
@@ -36,12 +37,11 @@ use App\Form\FraisSupplResaType;
 use App\Classe\ClasseReservation;
 use App\Form\OptionsGarantiesType;
 use App\Repository\UserRepository;
+use App\Service\ReservationHelper;
 use App\Repository\MarqueRepository;
 use App\Repository\ModeleRepository;
 use App\Repository\TarifsRepository;
 use App\Entity\AnnulationReservation;
-use App\Entity\FraisSupplResa;
-use App\Form\CollectionFraisSupplResaType;
 use App\Repository\OptionsRepository;
 use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
@@ -50,6 +50,7 @@ use App\Repository\ConducteurRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use phpDocumentor\Reflection\Types\This;
 use App\Repository\ReservationRepository;
+use App\Form\CollectionFraisSupplResaType;
 use App\Repository\ModePaiementRepository;
 use App\Repository\AppelPaiementRepository;
 use Knp\Component\Pager\PaginatorInterface;
@@ -192,18 +193,11 @@ class ReservationController extends AbstractController
     /**
      * @Route("/details/{id}", name="reservation_show", methods={"GET", "POST"},requirements={"id":"\d+"})
      */
-    public function show(Reservation $reservation, Request $request): Response
+    public function show(Reservation $reservation, Request $request, ReservationHelper $reservationHelper): Response
     {
 
 
-        // calcul totalHT frais 
-        $totalFraisHT = 0;
-        foreach ($reservation->getFraisSupplResas() as $frais) {
-            $totalFraisHT = $totalFraisHT +  $frais->getTotalHT();
-        }
-        // tva 8.5%
-        $totalFraisTTC = $totalFraisHT + (($totalFraisHT * 8.5) / 100);
-        $prixResaTTC =  ($reservation->getPrix() + (($reservation->getPrix() * 8.5) / 100));
+
 
         $vehicule = $reservation->getVehicule();
         // form pour kilométrage vehicule
@@ -233,9 +227,8 @@ class ReservationController extends AbstractController
 
         if ($formAjoutPaiement->isSubmitted() && $formAjoutPaiement->isValid()) {
 
-
             // tester si la somme des paiements dépasse le prix
-            if ($reservation->getSommePaiements()  + $formAjoutPaiement->getData()['montant'] > ($totalFraisTTC + $prixResaTTC)) {
+            if ($reservation->getSommePaiements()  + $formAjoutPaiement->getData()['montant'] > $reservationHelper->getTotalResaFraisTTC($reservation)) {
 
                 $this->flashy->error("Erreur sur l'ajout de paiement car le total du paiement est supérieur au due");
                 return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
@@ -310,7 +303,6 @@ class ReservationController extends AbstractController
         //appel à paiement si existe
         $appelPaiement = $this->appelPaiementRepository->findOneBy(['reservation' => $reservation]);
 
-
         //gestion ajout frais supplementaire
         //gestion annulation reservation
         if ($formCollectionFraisSupplResa->isSubmitted() && $formCollectionFraisSupplResa->isValid()) {
@@ -322,12 +314,15 @@ class ReservationController extends AbstractController
             }
             $this->em->flush();
 
-            // dd($reservation->getFraisSupplResas());
+            $totalFraisTTC = $reservationHelper->getTotalFraisTTC($reservation);
+            $prixResaTTC =  $reservationHelper->getPrixResaTTC($reservation);
+        }
+        // calcul totalHT frais 
+        $totalFraisHT = 0;
+        foreach ($reservation->getFraisSupplResas() as $frais) {
+            $totalFraisHT = $totalFraisHT +  $frais->getTotalHT();
         }
 
-
-
-        // dd($reservation->getPrix(), $prixResaTTC);
         return $this->render('admin/reservation/crud/show.html.twig', [
             'reservation' => $reservation,
             'formKM' => $formKM->createView(),
@@ -337,8 +332,9 @@ class ReservationController extends AbstractController
             'appelPaiement' => $appelPaiement,
             'formCollectionFraisSupplResa' => $formCollectionFraisSupplResa->createView(),
             'totalFraisHT' => $totalFraisHT,
-            'totalFraisTTC' => $totalFraisTTC,
-            'prixResaTTC' => $prixResaTTC
+            'totalFraisTTC' => $reservationHelper->getTotalFraisTTC($reservation),
+            'prixResaTTC' => $reservationHelper->getPrixResaTTC($reservation),
+            'totalResaFraisTTC' => $reservationHelper->getTotalResaFraisTTC($reservation)
         ]);
     }
 

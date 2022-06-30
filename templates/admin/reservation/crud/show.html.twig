@@ -413,13 +413,12 @@
 
 				{{form_start(formCollectionFraisSupplResa)}}
 				<div class="form-group">
-					<table class="table table-bordered" id="frais-table">
+					<table class="table table-bordered {% if reservation.fraisSupplResas|length == 0 %} hide {% endif %} " id="frais-table">
 						<thead>
 							<tr>
 								<th>Description</th>
 								<th>Prix u.</th>
 								<th>Quantité</th>
-								<th>Remise</th>
 								<th>Prix HT</th>
 								<th>Actions</th>
 							</tr>
@@ -431,7 +430,7 @@
 						</tbody>
 					</table>
 				</div>
-				<button class="btn btn-danger" type="submit">Enregistrer</button>
+				<button id="btnSaveFrais" class="btn btn-danger {% if reservation.fraisSupplResas|length == 0 %} hide {% endif %}" type="submit">Enregistrer</button>
 				{{form_end(formCollectionFraisSupplResa)}}</tr>
 		</div>
 		{# Montant de la reservation #}
@@ -533,7 +532,7 @@
 		</div>
 		<div class="x_content">
 
-			{% if reservation.sommePaiements < (prixResaTTC + totalFraisTTC) %}
+			{% if reservation.sommePaiements < totalResaFraisTTC %}
 				<div class="d-flex justify-content-end">
 					<div class="btn-group mb-1">
 						<button type="button" class="btn btn-danger dropdown-toggle font-weight-bold " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -756,7 +755,6 @@
 		<td>{{form_widget(form.description)}}</td>
 		<td style="width : 80px">{{form_widget(form.prixUnitaire, {attr:{'class':'prixUnitaire'}})}}</td>
 		<td style="width : 80px">{{form_widget(form.quantite, {attr:{'class':'quantite'}})}}</td>
-		<td style="width : 80px">{{form_widget(form.remise, {attr:{'class':'remise'}})}}</td>
 		<td style="width : 80px">{{form_widget(form.totalHT, {attr:{'class':'totalHT'}})}}</td>
 		<td style="width : 120px">
 			<button title="Supprimer" class="btn btn-danger" type="button" data-action="delete" data-target="block_{{id}}">
@@ -783,7 +781,7 @@
 	<script src="{{ asset('js/admin/jspdf.min.js') }}"></script>
 	<script src="{{ asset('js/admin/jspdf.plugin.autotable.js') }}"></script>
 	<script src="{{ asset('js/admin/factureJsPDF.js') }}"></script>
-	{% if reservation.sommePaiements < reservation.prix %}
+	{% if reservation.sommePaiements < totalResaFraisTTC %}
 		<script src="{{ asset('js/admin/reservation/ajout_paiement.js') }}"></script>
 		<script src="{{ asset('js/admin/reservation/relance_paiement_solde.js') }}"></script>
 		<script src="{{ asset('js/admin/reservation/ajout_frais.js') }}"></script>

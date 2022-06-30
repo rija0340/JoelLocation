@@ -134,4 +134,49 @@ class ReservationHelper
 
         return array_unique($vehicules);
     }
+
+    /** 
+     * @return float total frais supplementaire
+     */
+    public function getTotalFraisTTC($reservation)
+    {
+        $somme = 0;
+        foreach ($reservation->getFraisSupplResas() as $frais) {
+            $somme = $somme + $frais->getTotalHT();
+        }
+        return ($somme + ($somme * 8.5 / 100));
+    }
+
+    /** 
+     * @return float total frais supplementaire
+     */
+    public function getTotalFraisHT($reservation)
+    {
+        $somme = 0;
+        foreach ($reservation->getFraisSupplResas() as $frais) {
+            $somme = $somme + $frais->getTotalHT();
+        }
+        return $somme;
+    }
+
+    /** 
+     * @return float total frais supplementaire
+     */
+    public function getTotalResaFraisTTC($reservation)
+    {
+        $somme = 0;
+        foreach ($reservation->getFraisSupplResas() as $frais) {
+            $somme = $somme + $frais->getTotalHT();
+        }
+        $somme = $somme + $reservation->getPrix();
+        return ($somme + ($somme * 8.5 / 100));
+    }
+
+    /** 
+     * @return float total frais supplementaire
+     */
+    public function getPrixResaTTC($reservation)
+    {
+        return ($reservation->getPrix() + ($reservation->getPrix() * 8.5 / 100));
+    }
 }

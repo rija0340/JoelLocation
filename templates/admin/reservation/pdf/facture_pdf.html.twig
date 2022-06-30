@@ -178,9 +178,12 @@
 				<br>
 				Date d'échéance :
 				{{reservation.dateDebut|date('d/m/Y H:i')}}
+
 				<br>
-				Devis associé:
-				{{ devis.numero }}
+				{% if devis is defined %}
+					Devis associé:
+					{{ devis.numero }}
+				{% endif %}
 			</div>
 			<div class="details_client">
 				<strong>{{ reservation.client.nom }}
