@@ -163,7 +163,7 @@
 			<div class="logo"><img src="{{ logo }}" alt="logo" width="150px" height="80px" type="images/png"></div>
 			<div class="adresse">
 				94 Chemin de la hache<br>
-				97160 le moul
+				97160 Le Moule
 				<br>
 				Tél: 0690737674 / 0767321447<br>
 				Email: joel@joellocation.com<br>
@@ -177,7 +177,7 @@
 				{{createdAt|date('d/m/Y')}}
 				<br>
 				Date d'échéance :
-				{{reservation.dateDebut|date('d/m/Y H:i')}}
+				{{reservation.dateDebut|date('d/m/Y')}}
 
 				<br>
 				{% if devis is defined and devis is not null %}
@@ -292,7 +292,7 @@
 					</tr>
 					<tr class="bg-danger text-white">
 						<td>Total TTC</td>
-						<td class="text-right">{{ (reservation.prix + taxeResa + sommeFraisTotalHT + taxeFrais)|number_format(2,","," ") }}</td>
+						<td class="text-right">{{ (reservation.prix + taxeResa + sommeFraisTotalHT + taxeFrais)|number_format(2,","," ") }}€</td>
 					</tr>
 					{% for paiement in reservation.paiements %}
 						<tr class="bg-pink">

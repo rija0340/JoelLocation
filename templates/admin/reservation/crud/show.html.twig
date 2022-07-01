@@ -438,7 +438,7 @@
 			<div class="row">
 				<div class="col-auto pl-2">
 					<h2>
-						<i class="fa fa-chevron-right"></i>montant de la réservation
+						<i class="fa fa-chevron-right"></i>montant de la réservation TTC
 					</h2>
 				</div>
 				<div class="col-auto ml-auto d-flex align-items-center">
@@ -500,7 +500,7 @@
 				</div>
 
 				<div class="col-md-8 col-sm-8 col-xs-8">
-					<i class="fa fa-chevron-right"></i>Montant à régler
+					<i class="fa fa-chevron-right"></i>Montant à régler TTC
 				</div>
 				<div class="col-md-4 col-sm-4 col-xs-4">
 					<div class="text-right">
@@ -748,7 +748,7 @@
 		<td style="width : 80px">{{form_widget(form.quantite, {attr:{'class':'quantite'}})}}</td>
 		<td style="width : 80px">{{form_widget(form.totalHT, {attr:{'class':'totalHT'}})}}</td>
 		<td style="width : 120px">
-			<button title="Supprimer" class="btn btn-danger" type="button" data-action="delete" data-target="block_{{id}}">
+			<button title="Supprimer" class="btn btn-danger" type="button" data-action="delete" data-target="block_{{id}}" onclick="return confirm('Voulez-vous supprimer cette ligne?')">
 				<i class="fa fa-trash"></i>
 			</button>
 		</td>

@@ -48,7 +48,6 @@ $(document).ready(function () {
 
 
             if (parseInt($('#frais-table tbody tr').length) == 0) {
-                console.log($('#frais-table'));
                 $('#frais-table').addClass('hide');
                 $('#btnSaveFrais').addClass('hide');
             } else {
@@ -56,7 +55,9 @@ $(document).ready(function () {
                 $('#frais-table').removeClass('hide');
             }
 
+            $('#btnSaveFrais').trigger('click');
         });
+
 
 
     }

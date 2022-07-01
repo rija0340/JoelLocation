@@ -150,15 +150,15 @@ class PdfController extends AbstractController
         }
 
         if ($idResa > 99) {
-            $numeroFacture = 'FA ' . $currentYear[1] . '00' . $idResa;
+            $numeroFacture = 'FA' . $currentYear[1] . '00' . $idResa;
         } elseif ($idResa > 999) {
             $numeroFacture = 'FA' . $currentYear[1] . '0' . $idResa;
         } elseif ($idResa > 9999) {
             $numeroFacture = 'FA' . $currentYear[1] . $idResa;
         } elseif ($idResa < 99 && $idResa > 10) {
-            $numeroFacture = 'FA ' . $currentYear[1] . '000' . $idResa;
+            $numeroFacture = 'FA' . $currentYear[1] . '000' . $idResa;
         } elseif ($idResa < 10) {
-            $numeroFacture = 'FA ' . $currentYear[1] . '0000' . $idResa;
+            $numeroFacture = 'FA' . $currentYear[1] . '0000' . $idResa;
         }
 
         // Configure Dompdf according to your needs7
