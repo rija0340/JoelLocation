@@ -104,10 +104,11 @@ function retrieveDataAjax() {
         },
         Type: "json",
         success: function (data) {
-
             populateSelectElem(data);
             dataForSelect(data)
-
+            if (data.length = 0) {
+                alert("Il n'y a pas de véhicule disponible");
+            }
         },
         error: function (erreur) {
             // alert('La requête n\'a pas abouti' + erreur);

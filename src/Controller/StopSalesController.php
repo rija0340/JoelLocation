@@ -35,7 +35,7 @@ class StopSalesController extends AbstractController
     private $tarifsHelper;
     private $marqueRepo;
     private $em;
-    
+
     public function __construct(EntityManagerInterface $em, MarqueRepository $marqueRepo, ModeleRepository $modeleRepo, TarifsHelper $tarifsHelper, DateHelper $dateHelper, TarifsRepository $tarifsRepo, ReservationRepository $reservationRepo,  UserRepository $userRepo, VehiculeRepository $vehiculeRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
     {
 
@@ -68,6 +68,7 @@ class StopSalesController extends AbstractController
 
         $formStopSales->handleRequest($request);
 
+
         if ($formStopSales->isSubmitted() && $formStopSales->isValid()) {
 
             $vehicule = $vehiculeRepository->find($request->request->get('select'));
@@ -76,6 +77,7 @@ class StopSalesController extends AbstractController
             $reservation->setCodeReservation('stopSale');
             $reservation->setAgenceDepart('garage');
             $reservation->setArchived(false);
+            $reservation->setDuree($this->dateHelper->calculDuree($formStopSales->getData()->getDateDebut(), $formStopSales->getData()->getDateFin()));
             $reservation->setClient($super_admin);
             $reservation->setDateReservation($this->dateHelper->dateNow());
             $entityManager->persist($reservation);

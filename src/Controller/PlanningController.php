@@ -107,8 +107,8 @@ class PlanningController extends AbstractController
             $datas[$key]['start_date'] = $reservation->getDateDebut()->format('d-m-Y H:i');
             $datas[$key]['start_date_formated'] = $reservation->getDateDebut()->format('d-m-Y H:i');
 
-//            $datas[$key]['duration'] = $this->dateHelper->calculDuree($reservation->getDateDebut(), $reservation->getDateFin());
-            $datas[$key]['duration'] = $reservation->getDuree() ;
+            //            $datas[$key]['duration'] = $this->dateHelper->calculDuree($reservation->getDateDebut(), $reservation->getDateFin());
+            $datas[$key]['duration'] = $reservation->getDuree();
             $datas[$key]['end_date_formated'] = $reservation->getDateFin()->format('d-m-Y H:i');
             $datas[$key]['parent'] = $reservation->getVehicule()->getId();
             $datas[$key]['agenceDepart'] = $reservation->getAgenceDepart();

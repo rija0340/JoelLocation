@@ -41,6 +41,11 @@ $(document).ready(function () {
 
     };
 
+    // bnt submit modif handle
+    // $('#btnSubmitResa').click(function (e) {
+
+    // });
+
     function retrieveDataAjax() {
         var maxDate;
         var dateNow = new Date();

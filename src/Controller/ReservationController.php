@@ -343,15 +343,26 @@ class ReservationController extends AbstractController
      */
     public function edit(Request $request, Reservation $reservation): Response
     {
+
+
         $form = $this->createForm(ReservationType::class, $reservation);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $vehicule = $this->vehiculeRepo->find($request->request->get('select'));
-            $reservation->setVehicule($vehicule);
-            $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('reservation_index');
+            // le champ véhicule ne peux être vide
+            if ($request->request->get('select') == "") {
+
+                $this->flashy->error("Le véhicule ne peut être pas vide");
+                return $this->redirectToRoute('reservation_edit', ['id' => $reservation->getId()]);
+            } else {
+
+                $vehicule = $this->vehiculeRepo->find($request->request->get('select'));
+                $reservation->setVehicule($vehicule);
+                $this->getDoctrine()->getManager()->flush();
+
+                return $this->redirectToRoute('reservation_index');
+            }
         }
 
         return $this->render('admin/reservation/crud/edit.html.twig', [

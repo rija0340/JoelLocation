@@ -246,10 +246,10 @@
 									<td class="bg-danger  text-white text-center fs-12">Numéro de contrat</td>
 								</tr>
 								<tr>
-									{% if devis is defined  %}
-										<td>{{devis.numero}}</td>
-									{% else %}
-										<td>Pas de devis associé</td>
+								{% if devis is defined and devis is not null %}
+									Devis associé:
+								{{ devis.numero }}
+							
 									{% endif %}
 								</tr>
 							</tbody>
@@ -262,7 +262,7 @@
 									<td class="bg-danger text-white text-center fs-12">Date de contrat</td>
 								</tr>
 								<tr>
-									<td>22 Mars 2021</td>
+									<td>{{ reservation.dateDebut|date('d/m/Y') }}</td>
 								</tr>
 
 							</tbody>
@@ -411,7 +411,9 @@
 								<td colspan="2" class="bg-danger text-center text-white text-uppercase">Adresse en guadeloupe</td>
 							</tr>
 							<tr>
-								<td colspan="2"></td>
+								<td colspan="2">
+								-
+								</td>
 							</tr>
 						{% else %}
 							{% for conducteur in reservation.conducteursClient %}
