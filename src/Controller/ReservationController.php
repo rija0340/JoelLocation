@@ -51,6 +51,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use phpDocumentor\Reflection\Types\This;
 use App\Repository\ReservationRepository;
 use App\Form\CollectionFraisSupplResaType;
+use App\Repository\AnnulationReservationRepository;
 use App\Repository\ModePaiementRepository;
 use App\Repository\AppelPaiementRepository;
 use Knp\Component\Pager\PaginatorInterface;
@@ -193,12 +194,12 @@ class ReservationController extends AbstractController
     /**
      * @Route("/details/{id}", name="reservation_show", methods={"GET", "POST"},requirements={"id":"\d+"})
      */
-    public function show(Reservation $reservation, Request $request, ReservationHelper $reservationHelper): Response
+    public function show(Reservation $reservation, Request $request, ReservationHelper $reservationHelper, AnnulationReservationRepository $annulationResa): Response
     {
 
 
 
-
+        // dd($reservation);
         $vehicule = $reservation->getVehicule();
         // form pour kilométrage vehicule
         $formKM = $this->createForm(KilometrageType::class, $vehicule);
@@ -288,16 +289,21 @@ class ReservationController extends AbstractController
         //gestion annulation reservation
         if ($formAnnulation->isSubmitted() && $formAnnulation->isValid()) {
 
-            $annulation->setReservation($reservation);
-            $annulation->setCreatedAt($this->dateHelper->dateNow());
-            $this->em->persist($annulation);
-            $this->em->flush();
-            $reservation->setCanceled(true);
-            $this->em->flush();
+            $annulResa =  $annulationResa->findBy(['reservation' => $reservation]);
 
-            $this->flashy->success("L'annulation dela réservation N°" . $reservation->getReference() . "a été effectué avec succès");
-            $this->em->flush();
-            return $this->redirectToRoute('reservation_cancel_index');
+            if ($annulation != null) {
+                $this->flashy->success('Cette réservation est déjà annulée');
+                return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
+            } else {
+                $annulation->setReservation($reservation);
+                $annulation->setCreatedAt($this->dateHelper->dateNow());
+                $this->em->persist($annulation);
+                $reservation->setCanceled(true);
+
+                $this->flashy->success("L'annulation dela réservation N°" . $reservation->getReference() . "a été effectué avec succès");
+                $this->em->flush();
+                return $this->redirectToRoute('reservation_cancel_index');
+            }
         }
 
         //appel à paiement si existe
@@ -323,6 +329,8 @@ class ReservationController extends AbstractController
             $totalFraisHT = $totalFraisHT +  $frais->getTotalHT();
         }
 
+
+
         return $this->render('admin/reservation/crud/show.html.twig', [
             'reservation' => $reservation,
             'formKM' => $formKM->createView(),
@@ -334,7 +342,7 @@ class ReservationController extends AbstractController
             'totalFraisHT' => $totalFraisHT,
             'totalFraisTTC' => $reservationHelper->getTotalFraisTTC($reservation),
             'prixResaTTC' => $reservationHelper->getPrixResaTTC($reservation),
-            'totalResaFraisTTC' => $reservationHelper->getTotalResaFraisTTC($reservation)
+            'totalResaFraisTTC' => $reservationHelper->getTotalResaFraisTTC($reservation),
         ]);
     }
 

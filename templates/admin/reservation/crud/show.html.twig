@@ -39,6 +39,7 @@
 
 
 {% block content %}
+
 	{# utile pour autocompletion #}
 	<input
 	type="hidden" value="{{ reservation.id }}" id="idReservation">
@@ -50,16 +51,30 @@
 	<!-- top tiles -->
 	<div class="x_panel">
 
-		<div class="btn-group mb-4">
-			<button type="button" class="btn btn-danger dropdown-toggle text-white font-weight-bold" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				Réservation
-			</button>
-			<div class="dropdown-menu">
-				<a class="dropdown-item" data-toggle="modal" data-target=".modalReportReservation">Reporter la réservation</a>
-				<a class="dropdown-item" href="#">Mail de confirmation</a>
-				<a class="dropdown-item" data-toggle="modal" data-target=".modalAnnulation">Annuler la réservation</a>
-				<a class="dropdown-item" href="#">Fermer le contrat</a>
-				<a class="dropdown-item" href="{{ path('reservation_archive', {'id':reservation.id}) }}">Archiver la réservation</a>
+		<div class="d-flex bd-highlight">
+			<div class="p-2  bd-highlight">
+				<div class="btn-group mb-4">
+					<button type="button" class="btn btn-danger dropdown-toggle text-white font-weight-bold" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Réservation
+					</button>
+					<div class="dropdown-menu">
+						<a class="dropdown-item" data-toggle="modal" data-target=".modalReportReservation">Reporter la réservation</a>
+						<a class="dropdown-item" href="#">Mail de confirmation</a>
+						{% if reservation.canceled == false  %}
+							<a class="dropdown-item" data-toggle="modal" data-target=".modalAnnulation">Annuler la réservation</a>
+						{% endif %}
+						<a class="dropdown-item" href="#">Fermer le contrat</a>
+						<a class="dropdown-item" href="{{ path('reservation_archive', {'id':reservation.id}) }}">Archiver la réservation</a>
+					</div>
+				</div>
+			</div>
+			<div class="p-2 w-100 flex-grow text-center bd-highlight">
+				<div class="">
+
+					<h3 class="m-0 text-danger">
+
+						{{ reservation.canceled ?  ' <i class="fa fa-warning"></i> Resa annulée' : '' }}</h3>
+				</div>
 			</div>
 		</div>
 
@@ -476,7 +491,7 @@
 					<i class="fa fa-chevron-right"></i>Total options souscrites
 				</div>
 				<div class="col-md-4 col-sm-4 col-xs-4">
-					<div class="text-right">{{ reservation.prixGaranties|number_format(2,","," ") }}€</div>
+					<div class="text-right">{{ reservation.prixOptions|number_format(2,","," ") }}€</div>
 				</div>
 
 				<div class="col-md-8 col-sm-8 col-xs-8">
@@ -485,7 +500,7 @@
 				</div>
 				<div class="col-md-4 col-sm-4 col-xs-4">
 					<div class="text-right">
-						{{ reservation.prixOptions|number_format(2,","," ") }}
+						{{ reservation.prixGaranties|number_format(2,","," ") }}
 						€
 					</div>
 				</div>

@@ -8,6 +8,8 @@ use Knp\Snappy\Pdf;
 use App\Entity\Devis;
 use App\Entity\Reservation;
 use App\Repository\DevisRepository;
+use App\Repository\GarantieRepository;
+use App\Repository\OptionsRepository;
 use App\Service\DateHelper;
 use App\Repository\ReservationRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PdfController extends AbstractController
 {
@@ -22,11 +25,20 @@ class PdfController extends AbstractController
     private $datehelper;
     private $reservationRepo;
     private $devisRepo;
-    public function __construct(ReservationRepository $reservationRepo, DateHelper $datehelper, DevisRepository $devisRepo)
-    {
+    private $optionsRepo;
+    private $garantieRepo;
+    public function __construct(
+        ReservationRepository $reservationRepo,
+        DateHelper $datehelper,
+        DevisRepository $devisRepo,
+        GarantieRepository $garantieRepo,
+        OptionsRepository $optionsRepo
+    ) {
         $this->devisRepo = $devisRepo;
         $this->datehelper = $datehelper;
         $this->reservationRepo = $reservationRepo;
+        $this->optionsRepo = $optionsRepo;
+        $this->garantieRepo = $garantieRepo;
     }
 
 
@@ -101,7 +113,24 @@ class PdfController extends AbstractController
         $vehicule_data = base64_encode(file_get_contents($vehicule));
         $vehicule_src = 'data:image/png;base64,' . $vehicule_data;
 
+        $options = $reservation->getOptions();
+        $allOptions = $this->optionsRepo->findAll();
 
+        //construction de tableau pour options
+        $allOptions = [];
+        $options = $reservation->getOptions();
+        foreach ($options as $option) {
+            $allOptions[$option->getAppelation()]['appelation'] = $option->getAppelation();
+            $allOptions[$option->getAppelation()]['prix'] = $option->getPrix();
+        }
+
+        //construction de tableu de tableaux pour garanties
+        $allGaranties = [];
+        $garanties = $reservation->getGaranties();
+        foreach ($garanties as $garantie) {
+            $allGaranties[$garantie->getAppelation()]['appelation'] = $garantie->getAppelation();
+            $allGaranties[$garantie->getAppelation()]['prix'] = $garantie->getPrix();
+        }
 
         $html = $this->renderView('admin/reservation/pdf/contrat_pdf.html.twig', [
 
@@ -109,6 +138,8 @@ class PdfController extends AbstractController
             'reservation' => $reservation,
             'devis' => $this->devisRepo->find(intval($reservation->getNumDevis())),
             'vehicule' => $vehicule_src,
+            'allOptions' => $allOptions,
+            'allGaranties' => $allGaranties
 
         ]);
 
