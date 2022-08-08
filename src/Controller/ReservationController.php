@@ -194,7 +194,7 @@ class ReservationController extends AbstractController
     /**
      * @Route("/details/{id}", name="reservation_show", methods={"GET", "POST"},requirements={"id":"\d+"})
      */
-    public function show(Reservation $reservation, Request $request, ReservationHelper $reservationHelper, AnnulationReservationRepository $annulationResa): Response
+    public function show(Reservation $reservation, Request $request, ReservationHelper $reservationHelper, AnnulationReservationRepository $annulationResaRepo): Response
     {
 
 
@@ -221,10 +221,7 @@ class ReservationController extends AbstractController
         $formReportResa = $this->createForm(ReportResaType::class, $reservation);
         $formReportResa->handleRequest($request);
 
-        //form pour report reservation
-        $annulation = new AnnulationReservation();
-        $formAnnulation = $this->createForm(AnnulationType::class, $annulation);
-        $formAnnulation->handleRequest($request);
+
 
         if ($formAjoutPaiement->isSubmitted() && $formAjoutPaiement->isValid()) {
 
@@ -286,12 +283,17 @@ class ReservationController extends AbstractController
             return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
         }
 
+        //form pour annulation reservation
+        $annulation = new AnnulationReservation();
+        $formAnnulation = $this->createForm(AnnulationType::class, $annulation);
+        $formAnnulation->handleRequest($request);
+
         //gestion annulation reservation
         if ($formAnnulation->isSubmitted() && $formAnnulation->isValid()) {
 
-            $annulResa =  $annulationResa->findBy(['reservation' => $reservation]);
+            $annulResa =  $annulationResaRepo->findOneBy(['reservation' => $reservation]);
 
-            if ($annulation != null) {
+            if ($annulResa != null) {
                 $this->flashy->success('Cette réservation est déjà annulée');
                 return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
             } else {
@@ -328,8 +330,6 @@ class ReservationController extends AbstractController
         foreach ($reservation->getFraisSupplResas() as $frais) {
             $totalFraisHT = $totalFraisHT +  $frais->getTotalHT();
         }
-
-
 
         return $this->render('admin/reservation/crud/show.html.twig', [
             'reservation' => $reservation,
@@ -513,6 +513,7 @@ class ReservationController extends AbstractController
             $this->em->flush();
             return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
         }
+
 
         return $this->render('admin/reservation/crud/options_garanties/edit.html.twig', [
             'form' => $form->createView(),

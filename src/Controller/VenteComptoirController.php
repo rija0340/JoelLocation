@@ -339,6 +339,12 @@ class VenteComptoirController extends AbstractController
             $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
         }
 
+        if ($this->reservationSession->getConducteur() == "true") {
+            $tarifTotal = 50 +  $this->tarifsHelper->calculTarifTotal($tarifVehicule, $this->optionsObjectsFromSession(), $this->garantiesObjectsFromSession());
+        } else {
+            $tarifTotal = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $this->optionsObjectsFromSession(), $this->garantiesObjectsFromSession());
+        }
+
         return $this->render('admin/vente_comptoir2/step4.html.twig', [
 
             'form' => $form->createView(),
@@ -352,7 +358,7 @@ class VenteComptoirController extends AbstractController
             'options' => $this->optionsObjectsFromSession(),
             'garanties' => $this->garantiesObjectsFromSession(),
             'conducteur' => $this->reservationSession->getConducteur(),
-            'tarifTotal' => $this->tarifsHelper->calculTarifTotal($tarifVehicule, $this->optionsObjectsFromSession(), $this->garantiesObjectsFromSession())
+            'tarifTotal' => $tarifTotal
 
         ]);
     }
@@ -364,10 +370,17 @@ class VenteComptoirController extends AbstractController
      */
     public function saveOnlyDevis(Request $request): Response
     {
-        $numDevis = $this->saveDevis($request);
+        // check if a similar devis already exists
+        $result = $this->saveDevis($request);
 
-        $this->flashy->success('Le devis numero ' . $numDevis . 'a été enregistré avec succés');
-        return $this->redirectToRoute('devis_index');
+        if ($result != "devisExist") {
+            $numDevis = $result;
+            $this->flashy->success('Le devis numero ' . $numDevis . ' a été enregistré avec succés');
+            return $this->redirectToRoute('devis_index');
+        } else {
+            $this->flashy->error("Un devis similaire existe déjà !");
+            return $this->redirectToRoute('devis_index');
+        }
     }
 
     //enregistrement de devis dans base de données sans envoi mail au client
@@ -377,19 +390,25 @@ class VenteComptoirController extends AbstractController
      */
     public function saveDevisSendMail(Request $request): Response
     {
-        $numDevis = $this->saveDevis($request);
 
-        //url de téléchargement du devis
-        $devis = $this->devisRepo->findOneBy(['numero' => $numDevis]);
+        $result = $this->saveDevis($request);
 
-        $this->reservationHelper->sendMailConfirmationDevis($devis);
-
-        $this->flashy->success('Le devis a été enregistré avec succés et un mail a été envoyé au client');
-        return $this->redirectToRoute('devis_index');
+        if ($result != "devisExist") {
+            $numDevis = $result;
+            //url de téléchargement du devis
+            $devis = $this->devisRepo->findOneBy(['numero' => $numDevis]);
+            $this->reservationHelper->sendMailConfirmationDevis($devis);
+            $this->flashy->success('Le devis a été enregistré avec succés et un mail a été envoyé au client');
+            return $this->redirectToRoute('devis_index');
+        } else {
+            $this->flashy->error("Un devis similaire existe déjà !");
+            return $this->redirectToRoute('devis_index');
+        }
     }
 
     public function saveDevis($request)
     {
+
         //extracion mail from string format : "nom prenom (mail)"
         $client = $request->request->get('client');
         $client = explode('(', $client);
@@ -401,68 +420,88 @@ class VenteComptoirController extends AbstractController
         //ajout client dans session
         $this->reservationSession->addClient($client);
 
-        //enregistrement session dans devis
-        $devis = new Devis();
-
         //utile pour eviter erreur new entity, cette erreur apparait lorsque on utilise directement objet véhicule dans session
         $vehicule = $this->vehiculeRepo->find($this->reservationSession->getVehicule());
         // dd($vehicule);
-        //trouver les options et garanties à l'aide des ID 
-        //ajout de ID unique dans la base pour pouvoir telecharger par un lien envoyé au client par mail
-        $devis->setDownloadId(uniqid());
 
-        $devis->setAgenceDepart($this->reservationSession->getAgenceDepart());
-        $devis->setAgenceRetour($this->reservationSession->getAgenceRetour());
-        $devis->setDateDepart($this->reservationSession->getDateDepart());
-        $devis->setDateRetour($this->reservationSession->getDateRetour());
-        $devis->setVehicule($vehicule);
-        $devis->setLieuSejour($this->reservationSession->getLieuSejour());
-        $devis->setClient($this->reservationSession->getClient());
-        $devis->setDateCreation($this->dateHelper->dateNow());
+        $isDevisExist = $this->devisRepo->findOneBy([
+            'dateDepart' => $this->reservationSession->getDateDepart(),
+            'dateRetour' => $this->reservationSession->getDateRetour(),
+            'client' => $client,
+            'vehicule' => $vehicule
+        ]);
 
-        $devis->setDuree($this->dateHelper->calculDuree($this->reservationSession->getDateDepart(), $this->reservationSession->getDateRetour()));
+        if ($isDevisExist == null) {
+            //trouver les options et garanties à l'aide des ID 
+            //ajout de ID unique dans la base pour pouvoir telecharger par un lien envoyé au client par mail
+            //enregistrement session dans devis
+            $devis = new Devis();
 
-        // si l'admin a entrée un autre tarif dans étape 2, alors on considère ce tarif
-        if ($this->reservationSession->getTarifVehicule()) {
-            $tarifVehicule = $this->reservationSession->getTarifVehicule();
-        } else {
-            $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($this->reservationSession->getDateDepart(), $this->reservationSession->getDateRetour(), $vehicule);
-        }
-        $devis->setTarifVehicule($tarifVehicule);
-        $prixOptions = $this->tarifsHelper->sommeTarifsOptions($this->optionsObjectsFromSession());
-        $devis->setPrixOptions($prixOptions);
-        $prixGaranties = $this->tarifsHelper->sommeTarifsGaranties($this->garantiesObjectsFromSession());
-        $devis->setPrixGaranties($prixGaranties);
-        $devis->setPrix($tarifVehicule + $prixGaranties + $prixOptions);
-        $devis->setConducteur(true);
-        $devis->setTransformed(false);
+            $devis->setDownloadId(uniqid());
 
-        //options et garanties sont des tableaux d'objet dans session
-        // checker si options n'est pas null
-        if ($this->optionsObjectsFromSession() != null) {
-            foreach ($this->optionsObjectsFromSession() as $option) {
-                $devis->addOption($option);
+            $devis->setAgenceDepart($this->reservationSession->getAgenceDepart());
+            $devis->setAgenceRetour($this->reservationSession->getAgenceRetour());
+            $devis->setDateDepart($this->reservationSession->getDateDepart());
+            $devis->setDateRetour($this->reservationSession->getDateRetour());
+            $devis->setVehicule($vehicule);
+            $devis->setLieuSejour($this->reservationSession->getLieuSejour());
+            $devis->setClient($this->reservationSession->getClient());
+            $devis->setDateCreation($this->dateHelper->dateNow());
+
+            $devis->setDuree($this->dateHelper->calculDuree($this->reservationSession->getDateDepart(), $this->reservationSession->getDateRetour()));
+
+            // si l'admin a entrée un autre tarif dans étape 2, alors on considère ce tarif
+            if ($this->reservationSession->getTarifVehicule()) {
+                $tarifVehicule = $this->reservationSession->getTarifVehicule();
+            } else {
+                $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($this->reservationSession->getDateDepart(), $this->reservationSession->getDateRetour(), $vehicule);
             }
-        }
-        if ($this->garantiesObjectsFromSession() != null) {
-            foreach ($this->garantiesObjectsFromSession() as $garantie) {
-                $devis->addGaranty($garantie);
+            $devis->setTarifVehicule($tarifVehicule);
+            $prixOptions = $this->tarifsHelper->sommeTarifsOptions($this->optionsObjectsFromSession());
+            $devis->setPrixOptions($prixOptions);
+            $prixGaranties = $this->tarifsHelper->sommeTarifsGaranties($this->garantiesObjectsFromSession());
+            $devis->setPrixGaranties($prixGaranties);
+
+            //si le client a choisi conducteur optionnel on ajoute 50€
+            if ($this->reservationSession->getConducteur() == "true") {
+                $devis->setConducteur(true);
+                $devis->setPrix($tarifVehicule + $prixGaranties + $prixOptions + 50);
+            } else if ($this->reservationSession->getConducteur() == "false") {
+                $devis->setConducteur(false);
+                $devis->setPrix($tarifVehicule + $prixGaranties + $prixOptions);
             }
-        }
-        // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
-        $lastID = $this->devisRepo->findBy(array(), array('id' => 'DESC'), 1);
-        if ($lastID == null) {
-            $currentID = 1;
+
+            $devis->setTransformed(false);
+
+            //options et garanties sont des tableaux d'objet dans session
+            // checker si options n'est pas null
+            if ($this->optionsObjectsFromSession() != null) {
+                foreach ($this->optionsObjectsFromSession() as $option) {
+                    $devis->addOption($option);
+                }
+            }
+            if ($this->garantiesObjectsFromSession() != null) {
+                foreach ($this->garantiesObjectsFromSession() as $garantie) {
+                    $devis->addGaranty($garantie);
+                }
+            }
+            // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
+            $lastID = $this->devisRepo->findBy(array(), array('id' => 'DESC'), 1);
+            if ($lastID == null) {
+                $currentID = 1;
+            } else {
+
+                $currentID = $lastID[0]->getId() + 1;
+            }
+            $devis->setNumeroDevis($currentID);
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($devis);
+            $entityManager->flush();
+            return $devis->getNumero();
         } else {
-
-            $currentID = $lastID[0]->getId() + 1;
+            return "devisExist";
         }
-        $devis->setNumeroDevis($currentID);
-
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($devis);
-        $entityManager->flush();
-        return $devis->getNumero();
     }
 
     /**
@@ -602,7 +641,17 @@ class VenteComptoirController extends AbstractController
         $prixOptions = $this->tarifsHelper->sommeTarifsOptions($this->optionsObjectsFromSession());
         $prixGaranties = $this->tarifsHelper->sommeTarifsGaranties($this->garantiesObjectsFromSession());
 
-        $reservation->setPrix($tarifVehicule + $prixOptions + $prixGaranties);
+        //gestion conducteur optionnel et prix
+
+        if ($this->reservationSession->getConducteur() == "false") {
+            $reservation->setConducteur(false);
+            $reservation->setPrix($tarifVehicule + $prixOptions + $prixGaranties);
+        } else if ($this->reservationSession->getConducteur() == "true") {
+            $reservation->setConducteur(true);
+            $reservation->setPrix($tarifVehicule + $prixOptions + $prixGaranties + 50);
+        }
+
+
         $reservation->setTarifVehicule($tarifVehicule);
         $reservation->setPrixGaranties($this->tarifsHelper->sommeTarifsGaranties($this->garantiesObjectsFromSession()));
         $reservation->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($this->optionsObjectsFromSession()));

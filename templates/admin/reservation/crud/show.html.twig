@@ -60,7 +60,8 @@
 					<div class="dropdown-menu">
 						<a class="dropdown-item" data-toggle="modal" data-target=".modalReportReservation">Reporter la réservation</a>
 						<a class="dropdown-item" href="#">Mail de confirmation</a>
-						{% if reservation.canceled == false  %}
+						{# on ne peut pas annuler si déjà canceled ou terminé #}
+						{% if reservation.canceled == false and reservation.dateFin|date('d/m/Y') >  "now"|date('d/m/Y')  %}
 							<a class="dropdown-item" data-toggle="modal" data-target=".modalAnnulation">Annuler la réservation</a>
 						{% endif %}
 						<a class="dropdown-item" href="#">Fermer le contrat</a>

@@ -53,16 +53,23 @@ class ReserverDevis
             $reservation->addGaranty($garantie);
         }
 
-        $reservation->setPrix($devis->getPrix());
         $reservation->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($devis->getOptions()));
         $reservation->setPrixGaranties($this->tarifsHelper->sommeTarifsOptions($devis->getGaranties()));
         $reservation->setDuree($this->dateHelper->calculDuree($devis->getDateDepart(), $devis->getDateRetour()));
         $reservation->setTarifVehicule($this->tarifsHelper->calculTarifVehicule($devis->getDateDepart(), $devis->getDateRetour(), $devis->getVehicule()));
+
         $reservation->setPrix($devis->getPrix());
+
         $reservation->setDateReservation($this->dateHelper->dateNow());
         $reservation->setCodeReservation('devisTransformé');
         $reservation->setArchived(false);
         $reservation->setCanceled(false);
+        if ($devis->getConducteur()) {
+
+            $reservation->setConducteur(true);
+        } else {
+            $reservation->setConducteur(false);
+        }
         $reservation->setModeReservation($this->modeReservationRepo->findOneBy(['libelle' => 'WEB']));
         // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
         $lastID = $this->reservRepo->findBy(array(), array('id' => 'DESC'), 1);

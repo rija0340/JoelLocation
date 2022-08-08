@@ -187,11 +187,19 @@ class ReservationHelper
     }
 
     /** 
-     * @return float total frais supplementaire
+     * @return float total prix ttc
      */
     public function getPrixResaTTC($reservation)
     {
         return ($reservation->getPrix() + ($reservation->getPrix() * 8.5 / 100));
+    }
+
+    /** 
+     * @return float en ttc d'un somme quelconque
+     */
+    public function getPrixTTC($prix)
+    {
+        return ($prix + ($prix * 8.5 / 100));
     }
 
     public function sendMailConfirmationReservation($reservation)

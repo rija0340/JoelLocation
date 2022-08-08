@@ -107,7 +107,7 @@
 
 				display: inline-block;
 				vertical-align: top;
-				width: 350px;
+				width: 275px;
 			}
 
 			#recu_depot_table tr td {
@@ -126,7 +126,7 @@
 			.recu_depot {
 				display: inline-block;
 				vertical-align: top;
-				width: 356px;
+				width: 425px;
 			}
 
 			.d-inline-block {
@@ -237,6 +237,9 @@
 			}
 			td {
 				padding-left: 2px;
+			}
+			.text-nowrap {
+				white-space: nowrap !important;
 			}
 		</style>
 	</head>
@@ -386,7 +389,7 @@
 						{% if reservation.conducteursClient|length == 0 %}
 							<tr>
 								<td>Nom</td>
-								<td></td>
+								<td class="text-nowrap text-white">lorem lorem lorem lorem lorem</td>
 							</tr>
 							<tr>
 								<td>Prénom</td>
@@ -641,7 +644,7 @@
 									{% if key == 'Lavage'  %}
 										{{allOptions['Lavage']['prix']}}€
 									{% else %}
-										0€
+										0 €
 									{% endif %}
 								{% endfor %}
 							</td>
@@ -652,7 +655,7 @@
 								{% if reservation.conducteur %}
 									50€
 								{% else %}
-									0€
+									0 €
 								{% endif %}
 							</td>
 						</tr>
@@ -663,7 +666,7 @@
 									{% if key == 'Refueling'  %}
 										{{allOptions['Refueling']['prix']}}€
 									{% else %}
-										0€
+										0 €
 									{% endif %}
 								{% endfor %}
 							</td>
@@ -675,7 +678,7 @@
 									{% if key == 'Siège bébé'  %}
 										{{allOptions['Siège bébé']['prix']}}€
 									{% else %}
-										0€
+										0 €
 									{% endif %}
 								{% endfor %}
 							</td>
@@ -687,7 +690,7 @@
 									{% if key == 'Siège nourrisson'  %}
 										{{allOptions['Siège nourrisson']['prix']}}€
 									{% else %}
-										0€
+										0 €
 									{% endif %}
 								{% endfor %}
 							</td>
@@ -699,7 +702,7 @@
 									{% if key == 'garantie bris de glace & pneus'  %}
 										{{allGaranties['garantie bris de glace & pneus']['prix']}}€
 									{% else %}
-										0€
+										0 €
 									{% endif %}
 								{% endfor %}
 							</td>
@@ -711,7 +714,7 @@
 									{% if key == 'assistance esprit tranquille'  %}
 										{{allGaranties['assistance esprit tranquille']['prix']}}€
 									{% else %}
-										0€
+										0 €
 									{% endif %}
 								{% endfor %}
 							</td>
@@ -723,7 +726,7 @@
 									{% if key == 'assistance premium'  %}
 										{{allGaranties['assistance premium']['prix']}}€
 									{% else %}
-										0€
+										0 €
 									{% endif %}
 								{% endfor %}
 							</td>
@@ -732,19 +735,19 @@
 							<td>
 								<strong>Total TTC</strong>
 							</td>
-							<td></td>
+							<td>{{totalTTC|number_format(2,","," ") }}€</td>
 						</tr>
 						<tr>
 							<td>
 								<strong>ACOMPTE</strong>
 							</td>
-							<td></td>
+							<td>{{sommePaiements ? (sommePaiements|number_format(2,","," ")) ~ ' €' : ''}}</td>
 						</tr>
 						<tr>
 							<td>
 								<strong>RESTE A PAYER</strong>
 							</td>
-							<td></td>
+							<td>{{ restePayerTTC|number_format(2,","," ") €}}</td>
 						</tr>
 						<tr>
 							<td>
@@ -818,9 +821,9 @@
 					<tbody class="fs-12">
 						<tr>
 							<td>Date départ</td>
-							<td>{{ reservation.dateDebut|date('d/m/Y H:i') }}</td>
+							<td class="text-nowrap">{{ reservation.dateDebut|date('d/m/Y H:i') }}</td>
 							<td>Date retour</td>
-							<td>{{ reservation.dateFin|date('d/m/Y H:i') }}</td>
+							<td class="text-nowrap">{{ reservation.dateFin|date('d/m/Y H:i') }}</td>
 						</tr>
 						<tr>
 							<td>JOELLOCATION</td>
@@ -829,7 +832,10 @@
 							<td></td>
 						</tr>
 						<tr>
-							<td>Locataire (lu et apprové)</td>
+							<td>Locataire (lu et apprové)
+								<span class="text-white">
+									lorem lorem lorem lorem lorem lorem</span>
+							</td>
 							<td></td>
 							<td>Locataire</td>
 							<td></td>

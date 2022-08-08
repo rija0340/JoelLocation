@@ -59,7 +59,7 @@ class PlanningController extends AbstractController
     {
 
         //toutes les réservations sauf canceled , stopsales et tous
-        $reservations = $reservationRepo->findReservationsSansCanceled();
+        $reservations = $reservationRepo->findResasPlanGen();
         $vehicules = $vehiculeRepo->findAll();
 
         //mettre toutes les véhicules reservées dans un tableau

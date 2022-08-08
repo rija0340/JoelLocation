@@ -253,6 +253,12 @@ class NouvelleReservationController extends AbstractController
             }
         }
 
+        if ($this->reservationSession->getConducteur() == "true") {
+            $tarifTotal = 50 +  $this->tarifsHelper->calculTarifTotal($tarifVehicule, $optionsObjects, $garantiesObjects);
+        } else if ($this->reservationSession->getConducteur() == "false") {
+            $tarifTotal = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $optionsObjects, $garantiesObjects);
+        }
+
         return $this->render('client/nouvelleReservation/step4.html.twig', [
 
             'vehicule' => $vehicule,
@@ -265,7 +271,7 @@ class NouvelleReservationController extends AbstractController
             'garanties' => $garantiesObjects,
             'options' => $optionsObjects,
             'conducteur' => $this->reservationSession->getConducteur(),
-            'tarifTotal' => $this->tarifsHelper->calculTarifTotal($tarifVehicule, $optionsObjects, $garantiesObjects)
+            'tarifTotal' => $tarifTotal
 
         ]);
     }
@@ -322,8 +328,17 @@ class NouvelleReservationController extends AbstractController
         $devis->setPrixOptions($prixOptions);
         $prixGaranties = $this->tarifsHelper->sommeTarifsGaranties($garantiesObjects);
         $devis->setPrixGaranties($prixGaranties);
-        $devis->setPrix($tarifVehicule + $prixGaranties + $prixOptions);
-        $devis->setConducteur(true);
+
+        //gestion conducteur optionnel et prix
+
+        if ($this->reservationSession->getConducteur() == "false") {
+            $devis->setConducteur(false);
+            $devis->setPrix($tarifVehicule + $prixGaranties + $prixOptions);
+        } else if ($this->reservationSession->getConducteur() == "true") {
+            $devis->setConducteur(true);
+            $devis->setPrix(50 + $tarifVehicule + $prixGaranties + $prixOptions);
+        }
+
         $devis->setTransformed(false);
         //ajout de ID unique dans la base pour pouvoir telecharger par un lien envoyé au client par mail
         $devis->setDownloadId(uniqid());

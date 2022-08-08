@@ -12,6 +12,7 @@ use App\Repository\GarantieRepository;
 use App\Repository\OptionsRepository;
 use App\Service\DateHelper;
 use App\Repository\ReservationRepository;
+use App\Service\ReservationHelper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -27,18 +28,21 @@ class PdfController extends AbstractController
     private $devisRepo;
     private $optionsRepo;
     private $garantieRepo;
+    private $reservationHelper;
     public function __construct(
         ReservationRepository $reservationRepo,
         DateHelper $datehelper,
         DevisRepository $devisRepo,
         GarantieRepository $garantieRepo,
-        OptionsRepository $optionsRepo
+        OptionsRepository $optionsRepo,
+        ReservationHelper $reservationHelper
     ) {
         $this->devisRepo = $devisRepo;
         $this->datehelper = $datehelper;
         $this->reservationRepo = $reservationRepo;
         $this->optionsRepo = $optionsRepo;
         $this->garantieRepo = $garantieRepo;
+        $this->reservationHelper = $reservationHelper;
     }
 
 
@@ -98,7 +102,6 @@ class PdfController extends AbstractController
     public function pdfcontrat(Pdf $knpSnappyPdf, Reservation $reservation)
     {
 
-
         // Configure Dompdf according to your needs7
         $pdfOptions = new Options();
         $pdfOptions->set('defaultFont', 'Arial');
@@ -132,6 +135,16 @@ class PdfController extends AbstractController
             $allGaranties[$garantie->getAppelation()]['prix'] = $garantie->getPrix();
         }
 
+        //total a payer  = prix de la réservation - somme paiements déjà effectués
+        $sommePaiements =  $reservation->getSommePaiements();
+        // $totalHT = $reservation->getPrix() - $sommePaiements;
+
+        $restePayerHT = $reservation->getPrix() - $sommePaiements;
+        $restePayerTTC = $this->reservationHelper->getPrixTTC($restePayerHT);
+
+        $totalTTC = $this->reservationHelper->getPrixResaTTC($reservation);
+
+
         $html = $this->renderView('admin/reservation/pdf/contrat_pdf.html.twig', [
 
             'logo' => $logo_src,
@@ -139,7 +152,10 @@ class PdfController extends AbstractController
             'devis' => $this->devisRepo->find(intval($reservation->getNumDevis())),
             'vehicule' => $vehicule_src,
             'allOptions' => $allOptions,
-            'allGaranties' => $allGaranties
+            'allGaranties' => $allGaranties,
+            'sommePaiements' => $sommePaiements,
+            'totalTTC' => $totalTTC,
+            'restePayerTTC' => $restePayerTTC
 
         ]);
 

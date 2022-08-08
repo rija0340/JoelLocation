@@ -15,12 +15,10 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @ORM\Entity(repositoryClass=DevisRepository::class)
- * @UniqueEntity(fields={"client","vehicule", "dateDepart"})
+ * @UniqueEntity(fields={"client","vehicule", "dateDepart", "dateRetour"})
  */
 class Devis
 {
-
-
 
     /**
      * @ORM\Id
