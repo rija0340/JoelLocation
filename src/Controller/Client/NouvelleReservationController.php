@@ -155,7 +155,7 @@ class NouvelleReservationController extends AbstractController
 
         //utilisation de paginator pour liste véhicule disponible
         //pagination
-        $vehiculesDisponible = $paginator->paginate(
+        $vehiculesDisponiblePagination = $paginator->paginate(
             $vehiculesDisponible, // Requête contenant les données à paginer (ici nos articles)
             $request->query->getInt('page', 1), // Numéro de la page en cours, passé dans l'URL, 1 si aucune page
             3 // Nombre de résultats par page
@@ -163,6 +163,7 @@ class NouvelleReservationController extends AbstractController
 
         return $this->render('client/nouvelleReservation/step2.html.twig', [
             'vehiculesDisponible' => $vehiculesDisponible,
+            'vehiculesDisponiblePagination' => $vehiculesDisponiblePagination,
             'data' => $data,
         ]);
     }

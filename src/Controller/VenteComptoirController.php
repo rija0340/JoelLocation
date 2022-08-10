@@ -196,13 +196,16 @@ class VenteComptoirController extends AbstractController
         // dd($session->get('step1', []));
         //utilisation de paginator pour liste véhicule disponible
         //pagination
-        $vehiculesDisponible = $paginator->paginate(
+        $vehiculesDisponiblePagination = $paginator->paginate(
             $vehiculesDisponible, // Requête contenant les données à paginer (ici nos articles)
             $request->query->getInt('page', 1), // Numéro de la page en cours, passé dans l'URL, 1 si aucune page
             3 // Nombre de résultats par page
         );
 
+        // dd($vehiculesDisponible);
+
         return $this->render('admin/vente_comptoir2/step2.html.twig', [
+            'vehiculesDisponiblePagination' => $vehiculesDisponiblePagination,
             'vehiculesDisponible' => $vehiculesDisponible,
             'data' => $data,
             'dateDepart' => $dateDepart,

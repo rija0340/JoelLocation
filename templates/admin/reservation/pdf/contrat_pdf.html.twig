@@ -299,7 +299,7 @@
 				</div>
 			</div>
 
-			<div style="margin-top: 5px; margin-bottom: 5px">Location de voiture du
+			<div style="margin-top: 5px; margin-bottom: 5px" class="text-center">Location de voiture du
 				{{ reservation.dateDebut|date('d/m/Y') }}
 				à
 				{{ reservation.dateDebut|date('H:i') }}
@@ -312,7 +312,7 @@
 			<div class="locataire p-0 ">
 				<table id="locataire_table" class="table-border p-0 " style="width : 100%;">
 					<tbody class="fs-12">
-						<tr style="background-color : red">
+						<tr style="background-color : red" class="text-center">
 							<td colspan="2" class="text-white">LOCATAIRE</td>
 						</tr>
 						<tr style="padding:2px">
@@ -747,7 +747,7 @@
 							<td>
 								<strong>RESTE A PAYER</strong>
 							</td>
-							<td>{{ restePayerTTC|number_format(2,","," ") €}}</td>
+							<td>{{ restePayerTTC|number_format(2,","," ") }}€</td>
 						</tr>
 						<tr>
 							<td>

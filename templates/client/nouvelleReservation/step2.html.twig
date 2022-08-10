@@ -50,13 +50,13 @@
 
 {% block body %}
 	<div class="text-center mb-1">
-	<a href="{{path('client_step1')}}" class="btn btn-dark">Revenir à l'étape précédente</a>
+		<a href="{{path('client_step1')}}" class="btn btn-dark">Revenir à l'étape précédente</a>
 		<button class="btn btn-danger" type="submit" form="formStep2">
 			Enregistrer
 		</button>
 	</div>
 	<form action="{{path('client_step2')}}" method="post" id="formStep2">
-		{% for vehicule in vehiculesDisponible %}
+		{% for vehicule in vehiculesDisponiblePagination %}
 			<div class="card mb-3" style="height : auto;">
 				<div class="card-body">
 					<div class="row">
@@ -137,8 +137,8 @@
 
 
 									{# <label>Choisir ce véhicule
-																																																																																																				<input type="radio" name="vehicule" value="{{vehicule.id}}" required="true" class="radio">
-																																																																																																			</label> #}
+																																																																																																																															<input type="radio" name="vehicule" value="{{vehicule.id}}" required="true" class="radio">
+																																																																																																																														</label> #}
 									<div>
 										{% for data in data %}
 											{% if data['vehicule'] == vehicule %}
@@ -159,14 +159,14 @@
 			{% endfor %}
 			<div class="d-flex justify-content-center mt-1">
 				<div class=" ">
-					{{ knp_pagination_render(vehiculesDisponible) }}
+					{{ knp_pagination_render(vehiculesDisponiblePagination) }}
 				</div>
 			</div>
 			<div class="text-center">
 				<a href="{{path('client_step1')}}" class="btn btn-dark">Revenir à l'étape précédente</a>
-		<button class="btn btn-danger" type="submit" form="formStep2">
-			Enregistrer
-		</button>
+				<button class="btn btn-danger" type="submit" form="formStep2">
+					Enregistrer
+				</button>
 			</div>
 		</form>
 	{% endblock %}

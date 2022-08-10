@@ -72,7 +72,7 @@
 	<form action="{{path('step2')}}" method="post" id="formStep2">
 
 		{% if vehiculesDisponible|length > 0 %}
-			{% for vehicule in vehiculesDisponible %}
+			{% for vehicule in vehiculesDisponiblePagination %}
 				<div class="card mb-3" style="height : auto;">
 					<div class="card-body">
 						<div class="row">
@@ -179,7 +179,7 @@
 
 			<div class="d-flex justify-content-center mt-1">
 				<div class=" ">
-					{{ knp_pagination_render(vehiculesDisponible) }}
+					{{ knp_pagination_render(vehiculesDisponiblePagination) }}
 				</div>
 			</div>
 			{% if vehiculesDisponible|length > 0 %}
