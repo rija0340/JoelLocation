@@ -159,6 +159,7 @@ class PlanningController extends AbstractController
             }
         }
 
+
         return new JsonResponse($data2);
     }
 

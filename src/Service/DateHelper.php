@@ -120,12 +120,14 @@ class DateHelper
     {
 
         $duree = date_diff($dateDepart, $dateRetour);
+
         $heures = ($duree->days * 24) + $duree->h;
 
         $nombreJours = $heures / 24;
         if (is_float($nombreJours)) {
             $entier = floor($nombreJours);
-            if (($nombreJours - $entier) < 1) {
+            // dd($nombreJours);
+            if (($nombreJours - $entier) > 0.5) {
                 $nombreJours = $entier + 1;
             }
         }
@@ -137,15 +139,17 @@ class DateHelper
     {
         return new DateTime('NOW', new DateTimeZone('+0300'));
     }
-    function frenchDate($date){
+    function frenchDate($date)
+    {
 
         $d = $date->format('d');
         $m = $this->getMonthFullName($date);
         $Y = $date->format('Y');
 
-        return $d ." ". $m ." ". $Y;
+        return $d . " " . $m . " " . $Y;
     }
-    function frenchHour($date){
+    function frenchHour($date)
+    {
 
         return $date->format('H:i');
     }

@@ -197,9 +197,17 @@ class ReservationController extends AbstractController
     public function show(Reservation $reservation, Request $request, ReservationHelper $reservationHelper, AnnulationReservationRepository $annulationResaRepo): Response
     {
 
+        // $d = $this->dateHelper->calculDuree($reservation->getDateDebut(), $reservation->getDateFin());
+        // $d1 = $reservation->getDateDebut();
+        // $d2 = $reservation->getDateFin();
+        // dd($d, $d1, $d2, date_diff($d1, $d2)->days);
 
+        // $reservations = $this->reservationRepo->findAll();
+        // foreach ($reservations as $key => $value) {
+        //     $reservation->setDuree($this->dateHelper->calculDuree($reservation->getDateDebut(), $reservation->getDateFin()));
+        // }
+        // $this->em->flush();
 
-        // dd($reservation);
         $vehicule = $reservation->getVehicule();
         // form pour kilométrage vehicule
         $formKM = $this->createForm(KilometrageType::class, $vehicule);
@@ -728,7 +736,9 @@ class ReservationController extends AbstractController
     public function retourAnticipe(Request $request,  Reservation $reservation): Response
     {
 
+        //changement de date de fin et de durée
         $reservation->setDateFin($this->dateHelper->dateNow());
+        $reservation->setDuree($this->dateHelper->calculDuree($reservation->getDateDebut(), $reservation->getDateFin()));
         $this->em->flush();
 
         $this->flashy->success("Le retour anticipé a été éfféctué avec succès");
