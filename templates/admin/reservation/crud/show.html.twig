@@ -185,10 +185,10 @@
 				<div class=" text-center">
 					<a type="button" class="btn btn-primary text-nowrap" href="{{ path('reservation_infosClient_edit', {'id': reservation.id}) }}">
 						<i class="fa fa-user mr-1"></i>Modifier les informations</a>
-					<a href="{{ path('reservation_retour_anticipe', {'id' : reservation.id }) }}" type="button" class="btn btn-dark text-nowrap">
+					<a href="{{ path('reservation_retour_anticipe', {'id' : reservation.id }) }}" type="button" class="btn btn-dark text-nowrap" onclick="return confirm('Voulez-vous continuer l'opération ?')">
 						<i class="fa fa-reply-all mr-1"></i>Retour anticipé</a>
 					<a type="button" class="btn btn-warning text-nowrap" href="{{ path('reservation_edit', {'id': reservation.id} ) }}">
-						<i class="fa fa-cog"></i>
+						<i class=" fa fa-cog"></i>
 						Modifier la réservation</a>
 					<a type="button" class="btn btn-danger text-nowrap" href="{{ path('optionsGaranties_edit', {'id': reservation.id} ) }}">
 						<i class="fa fa-edit (alias)"></i>

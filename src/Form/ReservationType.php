@@ -7,6 +7,7 @@ use App\Entity\Reservation;
 use App\Form\FraisSupplResaType;
 use Symfony\Component\Form\AbstractType;
 use App\Repository\ReservationRepository;
+use DateTime;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -24,9 +25,15 @@ class ReservationType extends AbstractType
         $builder
             ->add('date_debut', DateTimeType::class, [
                 'widget' => 'single_text',
+                'attr' => [
+                    "step" => "any"
+                ]
             ])
             ->add('date_fin', DateTimeType::class, [
                 'widget' => 'single_text',
+                'attr' => [
+                    "step" => "any"
+                ]
             ])
             // ->add('type')
             // ->add('date_reservation', DateTimeType::class, [
@@ -36,7 +43,7 @@ class ReservationType extends AbstractType
             // ->add('code_reservation')
             // ->add('client')
             // ->add('mode_reservation')
-            // ->add('etat_reservation')
+            // ->add('prix')
             ->add('agenceDepart', ChoiceType::class, [
                 'choices'  => [
                     'Aéroport de Point-à-pitre' => 'Aéroport de Point-à-pitre',

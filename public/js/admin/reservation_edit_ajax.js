@@ -13,10 +13,23 @@ getElements();
 addEventListener();
 
 window.onload = function test() {
+
+    // $('#reservation_date_debut').datepicker({
+    //     language: "fr",
+    //     startDate: new Date()
+    // });
+    // ('#reservation_date_fin').datepicker({
+    //     language: "fr",
+    //     startDate: new Date()
+    // });
+
     dateDebutValue = document.getElementById("reservation_date_debut").value;
     dateFinValue = document.getElementById("reservation_date_fin").value;
     imVehValue = document.getElementById("reservation_vehicule").value; //envoyé depuis controller et puis reçu dans edit html (champ caché)
     retrieveDataAjax();
+
+
+
 };
 
 function getElements() {

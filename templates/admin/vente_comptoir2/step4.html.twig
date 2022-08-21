@@ -118,26 +118,27 @@
 						</li>
 					</ul>
 				</div>
-				{% if options != null and conducteur != "false" %}
-					<div class="options">
-						<h3 class="heading">Options</h3>
-
-						<ul>
-							{% if conducteur == "true" %}
-								<li>Conducteur additionnel : 50€</li>
-							{% endif %}
+				<div class="options">
+					<h3 class="heading">{{(options != null or conducteur != "false") ? "Options" : "" }}</h3>
+					<ul>
+						{% if conducteur == "true" %}
+							<li>Conducteur additionnel : 50€</li>
+						{% endif %}
+						{% if options != null   %}
 							{% for option in options %}
 								<li>{{option.appelation}}
 									:
 									{{option.prix|number_format(2,","," ")}}
 									€</li>
 							{% endfor %}
-						</ul>
+						{% endif %}
+					</ul>
 
-					</div>
-				{% endif %}
+				</div>
 				<div class="garanties">
-					<h3 class="heading">Garanties</h3>
+
+					<h3 class="heading">{{ garanties != null ? Garanties : ''}}
+					</h3>
 					<ul>
 						{% for garantie in garanties %}
 							<li>{{garantie.appelation}}

@@ -113,6 +113,8 @@ $(document).ready(function () {
         //hide task unscheduled
         gantt.config.show_unscheduled = false;
 
+        gantt.config.duration_unit = "minute";
+
         //affichage scale (organisation date, mois, jours, année)
         gantt.config.scales = [{
             unit: "day",
@@ -639,6 +641,12 @@ $(document).ready(function () {
         objectDate = new Date(objectDate[2] + "-" + objectDate[1] + "-" + objectDate[0]);
         return objectDate;
     }
+
+    // reinitiliser filtre
+
+    $('#reinit').click(function () {
+        window.location.href = '/backoffice/planning-general';
+    });
 
 
 });

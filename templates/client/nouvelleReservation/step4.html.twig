@@ -147,23 +147,24 @@
 							<div class="col-md-12">
 								<div class="row">
 									<div class="col-md-6" id='listeOptions'>
-										<h3 class="heading">Option(s)</h3>
+										<div class="options">
+											<h3 class="heading">{{(options != null or conducteur != "false") ? "Options" : "" }}</h3>
+											<ul>
+												{% if conducteur == "true" %}
+													<li>Conducteur additionnel : 50€</li>
+												{% endif %}
+												{% if options != null   %}
+													{% for option in options %}
+														<li>{{option.appelation}}
+															:
+															{{option.prix|number_format(2,","," ")}}
+															€</li>
+													{% endfor %}
+												{% endif %}
+											</ul>
 
-										<ul>
-											{% if conducteur == "true" %}
-												<li>
-													Conducteur additionnel : 50€
-												</li>
+										</div>
 
-											{% endif %}
-											{% for option in options %}
-												<li>{{ option.appelation }}
-													:
-													{{ option.prix }}
-													€
-												</li>
-											{% endfor %}
-										</ul>
 									</div>
 									{% if garanties|length > 0 %}
 										<div class="col-md-6" id='listeGaranties'>

@@ -178,12 +178,7 @@ class ReservationHelper
      */
     public function getTotalResaFraisTTC($reservation)
     {
-        $somme = 0;
-        foreach ($reservation->getFraisSupplResas() as $frais) {
-            $somme = $somme + $frais->getTotalHT();
-        }
-        $somme = $somme + $reservation->getPrix();
-        return ($somme + ($somme * 8.5 / 100));
+        return $this->getTotalFraisTTC($reservation) + $reservation->getPrix();
     }
 
     /** 
@@ -191,7 +186,7 @@ class ReservationHelper
      */
     public function getPrixResaTTC($reservation)
     {
-        return ($reservation->getPrix() + ($reservation->getPrix() * 8.5 / 100));
+        return $reservation->getPrix();
     }
 
     /** 

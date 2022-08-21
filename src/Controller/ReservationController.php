@@ -197,16 +197,36 @@ class ReservationController extends AbstractController
     public function show(Reservation $reservation, Request $request, ReservationHelper $reservationHelper, AnnulationReservationRepository $annulationResaRepo): Response
     {
 
-        // $d = $this->dateHelper->calculDuree($reservation->getDateDebut(), $reservation->getDateFin());
-        // $d1 = $reservation->getDateDebut();
-        // $d2 = $reservation->getDateFin();
-        // dd($d, $d1, $d2, date_diff($d1, $d2)->days);
-
         // $reservations = $this->reservationRepo->findAll();
-        // foreach ($reservations as $key => $value) {
-        //     $reservation->setDuree($this->dateHelper->calculDuree($reservation->getDateDebut(), $reservation->getDateFin()));
+        // foreach ($reservations as $resa) {
+        //     $resa->setDuree($this->dateHelper->calculDuree($resa->getDateDebut(), $resa->getDateFin()));
         // }
         // $this->em->flush();
+
+        // die("vita");
+
+        // $reservations = $this->reservationRepo->findAll();
+        // $arrayResa = [];
+        // foreach ($reservations as $resa) {
+
+        //     if ($resa->getReference() != '') {
+
+        //         $arrayResa[$resa->getReference()] = array(
+        //             'dateDepart' => $resa->getDateDebut()->format('d-m-Y H:i'),
+        //             'dateFin' => $resa->getDateFin()->format('d-m-Y H:i'),
+        //             'duree' => $this->dateHelper->calculDuree($resa->getDateDebut(), $resa->getDateFin())
+        //         );
+        //     }
+        // }
+
+        // dd($arrayResa);
+
+        // $biz = $reservation;
+        // $diff = $this->dateHelper->calculDuree($biz->getDateDebut(), $biz->getDateFin());
+        // dd($diff, $biz->getDateDebut(), $biz->getDateFin());
+
+
+        //test nouvelle methode pour calculer diff dates
 
         $vehicule = $reservation->getVehicule();
         // form pour kilométrage vehicule
@@ -329,15 +349,9 @@ class ReservationController extends AbstractController
                 $this->em->persist($fraisSuppl);
             }
             $this->em->flush();
+        }
 
-            $totalFraisTTC = $reservationHelper->getTotalFraisTTC($reservation);
-            $prixResaTTC =  $reservationHelper->getPrixResaTTC($reservation);
-        }
-        // calcul totalHT frais 
-        $totalFraisHT = 0;
-        foreach ($reservation->getFraisSupplResas() as $frais) {
-            $totalFraisHT = $totalFraisHT +  $frais->getTotalHT();
-        }
+        // dd($reservationHelper->getPrixTTC(10) + $reservation->getPrix());
 
         return $this->render('admin/reservation/crud/show.html.twig', [
             'reservation' => $reservation,
@@ -347,7 +361,7 @@ class ReservationController extends AbstractController
             'formAnnulation' => $formAnnulation->createView(),
             'appelPaiement' => $appelPaiement,
             'formCollectionFraisSupplResa' => $formCollectionFraisSupplResa->createView(),
-            'totalFraisHT' => $totalFraisHT,
+            'totalFraisHT' => $reservationHelper->getTotalFraisHT($reservation),
             'totalFraisTTC' => $reservationHelper->getTotalFraisTTC($reservation),
             'prixResaTTC' => $reservationHelper->getPrixResaTTC($reservation),
             'totalResaFraisTTC' => $reservationHelper->getTotalResaFraisTTC($reservation),
@@ -360,7 +374,7 @@ class ReservationController extends AbstractController
     public function edit(Request $request, Reservation $reservation): Response
     {
 
-
+        $ancientPrix = $reservation->getPrix();
         $form = $this->createForm(ReservationType::class, $reservation);
         $form->handleRequest($request);
 
@@ -374,10 +388,26 @@ class ReservationController extends AbstractController
             } else {
 
                 $vehicule = $this->vehiculeRepo->find($request->request->get('select'));
+                $tarifVeh = $this->tarifsHelper->calculTarifVehicule($form->getData()->getDateDebut(), $form->getData()->getDateFin(), $vehicule);
                 $reservation->setVehicule($vehicule);
-                $this->getDoctrine()->getManager()->flush();
+                $duree = $this->dateHelper->calculDuree($form->getData()->getDateDebut(), $form->getData()->getDateFin());
+                $reservation->setDuree($duree);
 
-                return $this->redirectToRoute('reservation_index');
+                // si le prix a été modifié
+                if ($form->getData()->getPrix() != $ancientPrix) {
+                    $reservation->setTarifVehicule($tarifVeh);
+                    $reservation->setPrix($form->getData()->getPrix());
+                } else {
+                    $reservation->setTarifVehicule($tarifVeh);
+                    $t = $this->tarifsHelper->calculTarifVehicule($form->getData()->getDateDebut(), $form->getData()->getDateFin(), $vehicule);
+                    $reservation->setPrix($this->tarifsHelper->calculTarifTotal($tarifVeh, $reservation->getOptions(), $reservation->getGaranties()));
+                }
+                // dd($reservation);
+
+                $this->em->flush();
+
+                $this->flashy->success("Modification effectuée");
+                return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
             }
         }
 

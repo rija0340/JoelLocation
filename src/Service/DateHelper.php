@@ -119,20 +119,22 @@ class DateHelper
     function calculDuree($dateDepart, $dateRetour)
     {
 
+        $strd1 = $dateDepart->format('d-m-Y');
+        $strd2 = $dateRetour->format('d-m-Y');
+        $dateDepart = new DateTime($strd1);
+        $dateRetour = new DateTime($strd2);
         $duree = date_diff($dateDepart, $dateRetour);
 
-        $heures = ($duree->days * 24) + $duree->h;
+        return intval($duree->days);
+    }
+    function getDureeMinute($dateDepart, $dateRetour)
+    {
+        $duree = date_diff($dateDepart, $dateRetour);
+        $d = $duree->days;
+        $h = $duree->h;
+        $i = $duree->i;
 
-        $nombreJours = $heures / 24;
-        if (is_float($nombreJours)) {
-            $entier = floor($nombreJours);
-            // dd($nombreJours);
-            if (($nombreJours - $entier) > 0.5) {
-                $nombreJours = $entier + 1;
-            }
-        }
-
-        return $nombreJours;
+        return ($d * 24 * 60 + $h * 60 + $i);
     }
 
     function dateNow()

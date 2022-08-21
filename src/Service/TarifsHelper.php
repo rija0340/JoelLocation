@@ -63,6 +63,7 @@ class TarifsHelper
 
         $tarifVehicule = 0;
 
+
         if (!is_null($tarif)) {
 
             if ($duree <= 3) $tarifVehicule = $tarif->getTroisJours();
@@ -71,7 +72,7 @@ class TarifsHelper
 
             if ($duree > 7 && $duree <= 15) $tarifVehicule = $tarif->getQuinzeJours();
 
-            if ($duree > 15 && $duree <= 30) $tarifVehicule = $tarif->getTrenteJours();
+            if ($duree > 15) $tarifVehicule = $tarif->getTrenteJours();
         }
 
         return $tarifVehicule;
@@ -101,7 +102,7 @@ class TarifsHelper
                 $prix = $prix + $garantie->getPrix();
             }
             return $prix;
-        }else{
+        } else {
             return 0;
         }
     }
