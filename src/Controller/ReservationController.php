@@ -197,11 +197,11 @@ class ReservationController extends AbstractController
     public function show(Reservation $reservation, Request $request, ReservationHelper $reservationHelper, AnnulationReservationRepository $annulationResaRepo): Response
     {
 
-        // $reservations = $this->reservationRepo->findAll();
-        // foreach ($reservations as $resa) {
-        //     $resa->setDuree($this->dateHelper->calculDuree($resa->getDateDebut(), $resa->getDateFin()));
-        // }
-        // $this->em->flush();
+        $reservations = $this->reservationRepo->findAll();
+        foreach ($reservations as $resa) {
+            $resa->setDuree($this->dateHelper->calculDuree($resa->getDateDebut(), $resa->getDateFin()));
+        }
+        $this->em->flush();
 
         // die("vita");
 
