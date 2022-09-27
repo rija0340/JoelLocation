@@ -173,6 +173,11 @@ class User implements UserInterface
      */
     private $resetPasswords;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $sexe;
+
 
     public function __construct()
     {
@@ -727,6 +732,18 @@ class User implements UserInterface
                 $resetPassword->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSexe(): ?string
+    {
+        return $this->sexe;
+    }
+
+    public function setSexe(?string $sexe): self
+    {
+        $this->sexe = $sexe;
 
         return $this;
     }

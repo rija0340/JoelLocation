@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
@@ -24,6 +25,12 @@ class ClientInfoType extends AbstractType
             ])
             ->add('mail', EmailType::class,  [
                 'required' => true
+            ])
+            ->add('sexe', ChoiceType::class, [
+                'choices'  => [
+                    'Masculin' => 'masculin',
+                    'Féminin' => 'feminin',
+                ],
             ])
             ->add('portable', TelType::class,  [
                 'required' => true

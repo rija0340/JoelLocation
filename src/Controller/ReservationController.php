@@ -593,6 +593,9 @@ class ReservationController extends AbstractController
         return $this->redirectToRoute($this->getReferer($request), ['id' => $reservation->getId()]);
     }
 
+
+
+
     /**
      *  @Route("/modifier/{id}/infos-client/", name="reservation_infosClient_edit", methods={"GET","POST"},requirements={"id":"\d+"})
      *
@@ -803,7 +806,35 @@ class ReservationController extends AbstractController
 
         $this->mailjet->send($mail, $nom, "devis", $content);
 
+        // a decommenter 
+        //lien pour telechargement devis
+        // $url = $this->generateUrl('contrat_pdf', ['id' => $reservation->getId()]);
+        // $url = "https://joellocation.com" . $url;
+        // $numero = $reservation->getReference();
+        // $linkContrat = "<a style='text-decoration: none; color: inherit;' href='" . $url . "'>Télécharger mon contrat</a>";
+        // $this->mailjet->sendContratLink($mail, $nom, "Contrat", $numero, $linkContrat);
+
         $this->flashy->success("L'url de téléchargement de la réservation N°" . $reservation->getReference() . " a été envoyé");
+        return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
+    }
+
+    /**
+     * @Route("/envoyer-facture-pdf/{id}", name="envoyer_facture", methods={"GET","POST"},requirements={"id":"\d+"})
+     */
+    public function envoyerFacture(Request $request, Reservation $reservation): Response
+    {
+
+        $mail = $reservation->getClient()->getMail();
+        $nom = $reservation->getClient()->getNom();
+        // a decommenter 
+        $url = $this->generateUrl('facture_pdf', ['id' => $reservation->getId()]);
+        $url = "https://joellocation.com" . $url;
+        $numero = $reservation->getReference();
+        $linkFacture = "<a style='text-decoration: none; color: inherit;' href='" . $url . "'>Télécharger ma facture</a>";
+
+        $this->mailjet->sendContratLink($mail, $nom, "Facture", $numero, $linkFacture);
+
+        $this->flashy->success("Url facture envoyé");
         return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
     }
 

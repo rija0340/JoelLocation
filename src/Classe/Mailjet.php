@@ -418,8 +418,69 @@ class Mailjet
         return $response->success();
     }
 
+    //envoi de contrat de pdf par mail (lien) a partir details reservation
+    public function sendContratLink($to_email, $to_name, $objet, $numero, $linkContrat)
+    {
+        $mj = new Client($this->api_key, $this->api_key_secret, true, ['version' => 'v3.1']);
+        $body = [
+            'Messages' => [
+                [
+                    'From' => [
+                        'Email' => "contact.joellocation@gmail.com",
+                        'Name' => "JOEL LOCATION"
+                    ],
+                    'To' => [
+                        [
+                            'Email' => $to_email,
+                            'Name' => $to_name
+                        ]
+                    ],
+                    'TemplateID' => 3771104, //template codé en html dans mailjet
+                    'TemplateLanguage' => true,
+                    'Subject' => $objet,
+                    'Variables' => [
+                        'nom' => $to_name,
+                        'numero' => $numero,
+                        'linkContrat' => $linkContrat
+                    ]
+                ]
+            ]
+        ];
+        $response = $mj->post(Resources::$Email, ['body' => $body]);
+        return $response->success();
+    }
 
-
+    //envoi de contrat de pdf par mail (lien) a partir details reservation
+    public function sendFactureLink($to_email, $to_name, $objet, $numero, $linkFacture)
+    {
+        $mj = new Client($this->api_key, $this->api_key_secret, true, ['version' => 'v3.1']);
+        $body = [
+            'Messages' => [
+                [
+                    'From' => [
+                        'Email' => "contact.joellocation@gmail.com",
+                        'Name' => "JOEL LOCATION"
+                    ],
+                    'To' => [
+                        [
+                            'Email' => $to_email,
+                            'Name' => $to_name
+                        ]
+                    ],
+                    'TemplateID' => 3771104, //template codé en html dans mailjet
+                    'TemplateLanguage' => true,
+                    'Subject' => $objet,
+                    'Variables' => [
+                        'nom' => $to_name,
+                        'numero' => $numero,
+                        'linkFacture' => $linkFacture
+                    ]
+                ]
+            ]
+        ];
+        $response = $mj->post(Resources::$Email, ['body' => $body]);
+        return $response->success();
+    }
 
     //Vous : {{var:nom:""}}
     //Réservation du : {{var:dateResa:""}}

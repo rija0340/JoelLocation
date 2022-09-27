@@ -137,7 +137,7 @@
 				</div>
 				<div class="garanties">
 
-					<h3 class="heading">{{ garanties != null ? Garanties : ''}}
+					<h3 class="heading">{{ garanties != null ? "Garanties" : ''}}
 					</h3>
 					<ul>
 						{% for garantie in garanties %}
@@ -197,9 +197,13 @@
 								<label for="">Nom</label>
 								{{ form_widget(form.nom) }}
 							</div>
-							<div class="col-md-6">
+							<div class="col-md-4">
 								<label for="">Prénom</label>
 								{{ form_widget(form.prenom) }}
+							</div>
+							<div class="col-md-2">
+								<label for="">Sexe</label>
+								{{ form_widget(form.sexe) }}
 							</div>
 							<div class="col-md-6">
 								<label for="">Email</label>
