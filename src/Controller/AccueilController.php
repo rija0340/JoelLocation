@@ -248,7 +248,9 @@ class AccueilController extends AbstractController
                         font-size: 16px;
                         ">Répondre</a>';
 
-                        $this->mailjet->sendToContacJoelLocation($nom, $email, $telephone, $adresse, $objet, $message, $btnRepondre);
+                    $this->mailjet->sendToContacJoelLocation($nom, $email, $telephone, $adresse, $objet, $message, $btnRepondre);
+                        //  $template = "accueil/cgu.html.twig";
+                      //  $mailer->send($objet, "contact@joellocation@gmail.com", $email, $template, []);
                         $this->flashy->success("Votre email a bien été envoyé");
                     }
                 } else {
@@ -262,7 +264,7 @@ class AccueilController extends AbstractController
             // } else {
             //     $this->flashy->error("Votre email n'a pas été envoyé");
             // }
-            return $this->redirectToRoute('accueil');
+            return $this->redirectToRoute('formulaire-contact');
         }
         return $this->render('accueil/contact.html.twig', [
             'form' => $form->createView()

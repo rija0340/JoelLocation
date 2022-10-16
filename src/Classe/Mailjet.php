@@ -19,9 +19,16 @@ class Mailjet
 
     // key pour compte contact.joellocation@gmail.com
     //new api key march 2022
-    private $api_key = 'affab7bbb2f993c330acfdd8deac52b7';
-    private $api_key_secret = '78d2b360a2025239389a1f9032c0e5d8';
-    private $email_from = "contact.joellocation@gmail.com";
+//    private $api_key = 'affab7bbb2f993c330acfdd8deac52b7';
+  //  private $api_key_secret = '78d2b360a2025239389a1f9032c0e5d8';
+   // private $email_from = "contact.joellocation@gmail.com";
+
+   //new api key septembre 2022
+    private $api_key = '1d6221cd1ca39b1bc345588aceeaf8b9';
+    private $api_key_secret = 'cf50e0acf88905e421fc2711d94d7508';
+    private $email_from = "contact@joellocation@gmail.com";
+    private $email_joellocation = "contact@joellocation@gmail.com";
+
 
     private $templateID = 3331640;
 
@@ -69,17 +76,17 @@ class Mailjet
             'Messages' => [
                 [
                     'From' => [
-                        'Email' => "contact.joellocation@gmail.com",
+                        'Email' => $this->email_joellocation,
                         'Name' => $nom
                     ],
                     'To' => [
                         [
-                            'Email' => "contact.joellocation@gmail.com",
+                            'Email' => $this->email_joellocation,
                             'Name' => "JOEL LOCATION"
                         ]
                     ],
                     //                    'TemplateID' => 3357170, //template codé en html dans mailjet
-                    'TemplateID' => 3856453, //template codé en html dans mailjet
+                    'TemplateID' => 4241743, //template codé en html dans mailjet
                     'TemplateLanguage' => true,
                     'Subject' => $objet,
                     'Variables' => [
@@ -389,16 +396,16 @@ class Mailjet
             'Messages' => [
                 [
                     'From' => [
-                        'Email' => "contact.joellocation@gmail.com",
+                        'Email' => "contact@joellocation.com",
                         'Name' => "JOEL LOCATION"
                     ],
                     'To' => [
                         [
-                            'Email' => "contact.joellocation@gmail.com",
+                            'Email' => "contact@joellocation.com",
                             'Name' => $nom
                         ]
                     ],
-                    'TemplateID' => 3856453, //template codé en html dans mailjet
+                    'TemplateID' => 4241743, //template codé en html dans mailjet
                     'TemplateLanguage' => true,
                     'Subject' => $objet,
                     'Variables' => [

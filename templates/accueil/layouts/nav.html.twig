@@ -27,8 +27,8 @@
 																														<a href="{{ path('app_login') }}">Mon compte</a>
 																													{% endif %}
 																												</li> #}
-				<li class="{% if app.request.attributes.get('_route') starts with 'formulaire-contact' %}current-menu-item{% endif %}">
-					<a href="{{ path('formulaire-contact') }}">Contact</a>
+				<li class="{% if app.request.attributes.get('_route') starts with 'formulaire-contact' %}current-menu-item{% endif %}" >
+					<a href="{{ path('formulaire-contact') }}" >Contact</a>
 				</li>
 				<li class="{% if app.request.attributes.get('_route') starts with 'foireauxquestion' %}current-menu-item{% endif %}">
 					<a href="{{ path('foireauxquestion') }}">FAQ</a>
