@@ -248,9 +248,9 @@ class AccueilController extends AbstractController
                         font-size: 16px;
                         ">Répondre</a>';
 
-                        $template = "<h1>ceci est un email</h1>";
-                        $mailer->send($objet, "contact@joellocation@gmail.com", $email, $template, []);
-                        // $this->mailjet->sendToContacJoelLocation($nom, $email, $telephone, $adresse, $objet, $message, $btnRepondre);
+                        $this->mailjet->sendToContacJoelLocation($nom, $email, $telephone, $adresse, $objet, $message, $btnRepondre);
+                        //  $template = "accueil/cgu.html.twig";
+                        //  $mailer->send($objet, "contact@joellocation@gmail.com", $email, $template, []);
                         $this->flashy->success("Votre email a bien été envoyé");
                     }
                 } else {
