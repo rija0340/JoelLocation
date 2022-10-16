@@ -189,7 +189,20 @@
 				{% endif %}
 			</div>
 			<div class="details_client">
-				<strong>{{ reservation.client.nom }}
+				<strong>
+
+					<span>
+						{% if  devis.client.sexe == ""  %}
+
+							{% elseif devis.client.sexe == 'masculin' %}
+								Mr
+							{% elseif devis.client.sexe == 'feminin' %}
+								Mlle/Mme
+						{% endif %}
+
+					</span>
+
+					{{ reservation.client.nom }}
 					{{ reservation.client.prenom }}</strong>
 				<br>
 				{{ reservation.client.adresse }}

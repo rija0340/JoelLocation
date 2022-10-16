@@ -15,8 +15,8 @@
 		<div class="section-title mt-5 mb-5">
 			<h2 class="text-center title ">Veuillez vous inscrire</h2>
 			{# <p class="m-0 p-0 text-center">Vous avez déjà un compte ?
-							<a href="{{path('app_login')}}" class="btn btn-link">Se connecter</a>
-						</p> #}
+													<a href="{{path('app_login')}}" class="btn btn-link">Se connecter</a>
+												</p> #}
 		</div>
 		{# <h2 class="text-center title mt-5 mb-5">Veuillez vous inscrire</h2> #}
 
@@ -43,6 +43,15 @@
 							</div>
 							<label class="bmd-label-floating">Prénom :</label>
 							{{form_widget(form.prenom )}}
+						</div>
+					</div>
+					<div class="col-lg-6" class="bmd-label-floating">
+						<div class="form-group">
+							<div class="form-error">
+								{{ form_errors(form.sexe) }}
+							</div>
+							<label class="bmd-label-floating">Sexe :</label>
+							{{form_widget(form.sexe)}}
 						</div>
 					</div>
 					<div class="col-lg-6" class="bmd-label-floating">

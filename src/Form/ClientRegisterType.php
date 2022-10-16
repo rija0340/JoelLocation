@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\User;
 use Doctrine\DBAL\Types\FloatType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -25,6 +26,12 @@ class ClientRegisterType extends AbstractType
             ->add('nom', TextType::class)
             ->add('prenom', TextType::class)
             ->add('adresse', TextType::class)
+            ->add('sexe', ChoiceType::class, [
+                'choices'  => [
+                    'Masculin' => 'masculin',
+                    'Féminin' => 'feminin',
+                ],
+            ])
             ->add('mail', EmailType::class, [
                 'invalid_message' => 'Cette adresse mail est déjà utilisée'
             ])

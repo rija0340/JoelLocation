@@ -52,7 +52,7 @@ class Conducteur
     /**
      * @ORM\Column(type="date", nullable=true)
      */
-    private $dateObtention;
+    private $dateExpiration;
 
 
     /**
@@ -160,14 +160,14 @@ class Conducteur
         return $this;
     }
 
-    public function getDateObtention(): ?\DateTimeInterface
+    public function getDateExpiration(): ?\DateTimeInterface
     {
-        return $this->dateObtention;
+        return $this->dateExpiration;
     }
 
-    public function setDateObtention(?\DateTimeInterface $dateObtention): self
+    public function setDateExpiration(?\DateTimeInterface $dateExpiration): self
     {
-        $this->dateObtention = $dateObtention;
+        $this->dateExpiration = $dateExpiration;
 
         return $this;
     }
