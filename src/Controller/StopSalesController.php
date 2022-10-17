@@ -15,6 +15,7 @@ use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ReservationRepository;
+use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -35,8 +36,9 @@ class StopSalesController extends AbstractController
     private $tarifsHelper;
     private $marqueRepo;
     private $em;
+    private $flashy;
 
-    public function __construct(EntityManagerInterface $em, MarqueRepository $marqueRepo, ModeleRepository $modeleRepo, TarifsHelper $tarifsHelper, DateHelper $dateHelper, TarifsRepository $tarifsRepo, ReservationRepository $reservationRepo,  UserRepository $userRepo, VehiculeRepository $vehiculeRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
+    public function __construct(FlashyNotifier $flashy, EntityManagerInterface $em, MarqueRepository $marqueRepo, ModeleRepository $modeleRepo, TarifsHelper $tarifsHelper, DateHelper $dateHelper, TarifsRepository $tarifsRepo, ReservationRepository $reservationRepo,  UserRepository $userRepo, VehiculeRepository $vehiculeRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
     {
 
         $this->reservationRepo = $reservationRepo;
@@ -50,6 +52,7 @@ class StopSalesController extends AbstractController
         $this->modeleRepo = $modeleRepo;
         $this->marqueRepo = $marqueRepo;
         $this->em = $em;
+        $this->flashy = $flashy;
     }
     /**
      * @Route("/backoffice/stop_sales", name="stop_sales", methods={"GET","POST"})
@@ -125,12 +128,17 @@ class StopSalesController extends AbstractController
     {
         $listeStopSales =  $reservationRepository->findStopSales();
 
+        // dd($reservation);
         $formStopSales = $this->createForm(StopSalesType::class, $reservation);
         $formStopSales->handleRequest($request);
 
-        // dd($reservation);
 
         if ($formStopSales->isSubmitted() && $formStopSales->isValid()) {
+
+            if ($request->request->get('select') == null) {
+                $this->flashy->error("Véhicule ne peut pas être vide");
+                return $this->redirectToRoute("stopSale_edit", ['id' => $reservation->getId()]);
+            }
             $vehicule = $this->vehiculeRepo->find($request->request->get('select'));
             $reservation->setVehicule($vehicule);
             $this->getDoctrine()->getManager()->flush();

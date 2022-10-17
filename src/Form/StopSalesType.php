@@ -31,9 +31,9 @@ class StopSalesType extends AbstractType
             // ->add('garantie')
             ->add('commentaire', TextareaType::class, [
                 'attr' => ['class' => 'tinymce'],
-            ])
-            // ->add('client')
-            ->add('vehicule', HiddenType::class);
+            ]);
+        // ->add('client')
+        // ->add('vehicule', HiddenType::class);
         // ->add('mode_reservation')
         // ->add('etat_reservation');
     }

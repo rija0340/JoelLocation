@@ -130,7 +130,7 @@ function setParamDateDebutForAjax() {
 function retrieveDataAjax() {
     $.ajax({
         type: 'GET',
-        url: '/reservation/vehiculeDispoFonctionDates',
+        url: '/backoffice/reservation/liste-vehicules-disponibles',
         data: {
             // "dateDebutday": dateDebutDay, "dateDebutmonth": dateDebutMonth, "dateDebutyear": dateDebutYear, "dateDebuthours": dateDebutHours, "dateDebutminutes": dateDebutMinutes,
 
@@ -139,6 +139,8 @@ function retrieveDataAjax() {
         },
         Type: "json",
         success: function (data) {
+
+            console.log(data);
 
             populateSelectElem(data);
             dataForSelect(data)
@@ -162,7 +164,8 @@ function populateSelectElem(options) {
         var option = document.createElement("option");
         option.text = opt.marque + ' ' + opt.modele + ' ' + opt.immatriculation;
         option.value = opt.id;
-        if (imVehValue == option.text) {
+        var immatriculation = opt.immatriculation;
+        if (imVehValue == immatriculation) {
             option.setAttribute('selected', 'selected');
         }
         select.add(option);

@@ -1,11 +1,14 @@
 {{ form_start(formStopSales) }}
 <div class="row">
 
-
+	{% if vehicule is defined %}
+		<input type="hidden" value="{{vehicule.immatriculation}}" id="stop_sales_vehicule">
+	{% endif %}
 	<div class="form-group col-md-6">
 		<label for="">Date début:</label>
 		{% if vehicule is defined %}
-			{{ form_widget(formStopSales.date_debut, {'attr': {'readonly': 'readonly'}}) }}
+			{# {{ form_widget(formStopSales.date_debut, {'attr': {'readonly': 'readonly'}}) }} #}
+			{{ form_widget(formStopSales.date_debut) }}
 		{% else %}
 			{{ form_widget(formStopSales.date_debut) }}
 		{% endif %}
@@ -13,7 +16,8 @@
 	<div class="form-group col-md-6">
 		<label for="">Date fin :</label>
 		{% if vehicule is defined %}
-			{{ form_widget(formStopSales.date_fin, {'attr': {'readonly': 'readonly'}}) }}
+			{# {{ form_widget(formStopSales.date_fin, {'attr': {'readonly': 'readonly'}}) }} #}
+			{{ form_widget(formStopSales.date_fin) }}
 		{% else %}
 			{{ form_widget(formStopSales.date_fin) }}
 		{% endif %}
@@ -23,20 +27,21 @@
 		<label for="">Motif :</label>
 		{{ form_widget(formStopSales.type) }}
 	</div>
+	{# 
+									{% if vehicule is defined %}
+										<div class="form-group col-md-6">
+											<label for="">Véhicule :</label>
+											<input type="text" value="{{vehicule.marque}} {{vehicule.modele}} {{vehicule.immatriculation}}" readonly class="form-control">
+										</div> #}
+	{# {% else %} #}
 
-	{% if vehicule is defined %}
-		<div class="form-group col-md-6">
-			<label for="">Véhicule :</label>
-			<input type="text" value="{{vehicule.marque}} {{vehicule.modele}} {{vehicule.immatriculation}}" readonly class="form-control">
-		</div>
-	{% else %}
+	<div class=" form-group col-md-6">
+		<label for="">Véhicule :</label>
+		<select name="select" id="selectVehicule" class="form-control"></select>
+		{# {{ form_widget(form.vehicule) }} #}
+	</div>
+	{# {% endif %} #}
 
-		<div class=" form-group col-md-6">
-			<label for="">Véhicule :</label>
-			<select name="select" id="selectVehicule" class="form-control"></select>
-			{# {{ form_widget(form.vehicule) }} #}
-		</div>
-	{% endif %}
 
 	<div class="form-group col-md-12">
 		<label for="">Commentaire:</label>
