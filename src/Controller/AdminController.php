@@ -109,10 +109,13 @@ class AdminController extends AbstractController
     //chiffre d'affaire mois en cours
     foreach ($allReservations as $reservation) {
       if ($this->dateHelper->dateNow()->format('m') == $reservation->getDateDebut()->format('m')) {
-        if ($reservation->getModeReservation()->getLibelle() == 'WEB') {
-          $CA_WEB_moinsEncours = $CA_WEB_moinsEncours +  $reservation->getPrix();
-        } else {
-          $CA_CPT_moinsEncours = $CA_CPT_moinsEncours +  $reservation->getPrix();
+
+        if ($reservation->getModeReservation() != null) {
+          if ($reservation->getModeReservation()->getLibelle() == 'WEB') {
+            $CA_WEB_moinsEncours = $CA_WEB_moinsEncours +  $reservation->getPrix();
+          } else {
+            $CA_CPT_moinsEncours = $CA_CPT_moinsEncours +  $reservation->getPrix();
+          }
         }
       }
       //chiffre d'affaire année en cours
