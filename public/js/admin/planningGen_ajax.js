@@ -88,7 +88,7 @@ function retrieveDataAjax() {
                 i = i + 1;
             });
             console.log(i);
-            $('#gantt_here').css('max-height', i * 45 + 'px');
+            $('#gantt_here').css('max-height', i * 55 + 'px');
 
         },
         error: function () {
@@ -170,7 +170,39 @@ function ganttInit(startDateScale, endDateScale, cellWidth) {
 
     gantt.init("gantt_here");
 
+
     //redirection vers des urls selon l'etat de la réservation
+
+    // gantt.attachEvent("onTaskClick", function (id, e) {
+    //     var taskID = gantt.getTask(id).id_r;
+    //     var etat = gantt.getTask(id).etat;
+
+    // });
+
+    gantt.attachEvent("onTaskClick", function (id) {
+        setTimeout(function () {
+            gantt.ext.quickInfo.show(id);
+
+            //custom add ce n'est pas censé être ici mais cela ne fonctionne pas ailleur
+            // debut ajout
+
+            var task = gantt.getTask(id);
+            var taskID = gantt.getTask(id).id_r;
+            var url = "https://joellocation.com/backoffice/reservation/details/" + taskID;
+            gantt.ext.quickInfo.setContent({
+                content:
+                    "Référence : " + task.reference + "<br>" +
+                    "Agence de départ : " + task.agenceDepart + "<br>" +
+                    "Agence de retour : " + task.agenceRetour + "<br>" +
+                    "Téléphone : " + task.telClient + "<br>" +
+                    "<a class='btn btn-outline-danger' href=" + url + "   >Détails</a>"
+            });
+            // fin ajout
+
+        }, 0);
+        return true;
+    });
+
     gantt.attachEvent("onTaskDblClick", function (id, e) {
         var taskID = gantt.getTask(id).id_r;
         var etat = gantt.getTask(id).etat;

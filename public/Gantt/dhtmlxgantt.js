@@ -38038,25 +38038,7 @@ To use dhtmlxGantt in non-GPL projects (and get Pro version of the product), ple
                         return gantt.templates.task_time(start, end, ev);
                     };
                     gantt.templates.quick_info_class = function (start, end, task) { return ""; };
-                    gantt.attachEvent("onTaskClick", function (id) {
-                        setTimeout(function () {
-                            gantt.ext.quickInfo.show(id);
 
-                            //custom add ce n'est pas censé être ici mais cela ne fonctionne pas ailleur
-                            // debut ajout
-                            var task = gantt.getTask(id);
-                            gantt.ext.quickInfo.setContent({
-                                content:
-                                    "Reference : " + task.reference + "<br>" +
-                                    "Agence de départ : " + task.agenceDepart + "<br>" +
-                                    "Agence de retour : " + task.agenceRetour + "<br>" +
-                                    "Téléphone : " + task.telClient + "<br>"
-                            });
-                            // fin ajout
-
-                        }, 0);
-                        return true;
-                    });
                     var events = ["onViewChange", "onLightbox", "onBeforeTaskDelete", "onBeforeDrag"];
                     var hidingFunction = function () {
                         gantt.ext.quickInfo.hide();
