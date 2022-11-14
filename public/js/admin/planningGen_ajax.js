@@ -188,15 +188,29 @@ function ganttInit(startDateScale, endDateScale, cellWidth) {
 
             var task = gantt.getTask(id);
             var taskID = gantt.getTask(id).id_r;
-            var url = "https://joellocation.com/backoffice/reservation/details/" + taskID;
-            gantt.ext.quickInfo.setContent({
-                content:
-                    "Référence : " + task.reference + "<br>" +
-                    "Agence de départ : " + task.agenceDepart + "<br>" +
-                    "Agence de retour : " + task.agenceRetour + "<br>" +
-                    "Téléphone : " + task.telClient + "<br>" +
-                    "<a class='btn btn-outline-danger' href=" + url + "   >Détails</a>"
-            });
+            var etat = gantt.getTask(id).etat;
+
+            console.log(task);
+
+            if (etat == "stopSale") {
+                var url = "https://joellocation.com/backoffice/" + taskID + "/editStopSale";
+                gantt.ext.quickInfo.setContent({
+                    content:
+                        "Date début : " + task.start_date_formated + "<br>" +
+                        "Date fin : " + task.end_date_formated + "<br>" +
+                        "<a class='btn btn-outline-danger' href=" + url + "   >Modifier</a>"
+                });
+            } else {
+                var url = "https://joellocation.com/backoffice/reservation/details/" + taskID;
+                gantt.ext.quickInfo.setContent({
+                    content:
+                        "Référence :  <a class='' href=" + url + "   >" + task.reference + "</a>   <br>" +
+                        "Agence de départ : " + task.agenceDepart + "<br>" +
+                        "Agence de retour : " + task.agenceRetour + "<br>" +
+                        "Téléphone : " + task.telClient + "<br>"
+                });
+            }
+
             // fin ajout
 
         }, 0);
