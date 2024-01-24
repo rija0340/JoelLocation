@@ -47,7 +47,7 @@ class ReservationHelper
     //cette fonction renvoi les véhicules disponibles qui ne sont pas occupées dans ces réservations
     public function getVehiculesDisponible($reservations)
     {
-        $vehicules = $this->vehiculeRepo->findAll();
+        $vehicules = $this->vehiculeRepo->findAllVehiculesWithoutVendu();
         //mettre toutes les véhicules reservées dans un tableau
         $vehiculesInvolved = [];
         foreach ($reservations as $res) {
@@ -196,6 +196,8 @@ class ReservationHelper
     {
         return ($prix + ($prix * 8.5 / 100));
     }
+
+
 
     public function sendMailConfirmationReservation($reservation)
     {

@@ -23,6 +23,7 @@ use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ReservationRepository;
+use App\Service\VehiculeHelper;
 use DoctrineExtensions\Query\Mysql\Format;
 use GuzzleHttp\RetryMiddleware;
 use Knp\Component\Pager\PaginatorInterface;
@@ -52,6 +53,7 @@ class AdminController extends AbstractController
   private $em;
   private $devisRepo;
   private $avisRepo;
+  private $vehiculeHelper;
 
   public function __construct(
     AvisRepository $avisRepo,
@@ -66,7 +68,8 @@ class AdminController extends AbstractController
     UserRepository $userRepo,
     VehiculeRepository $vehiculeRepo,
     OptionsRepository $optionsRepo,
-    GarantieRepository $garantiesRepo
+    GarantieRepository $garantiesRepo,
+    VehiculeHelper $vehiculeHelper
   ) {
 
     $this->reservationRepo = $reservationRepo;
@@ -82,6 +85,7 @@ class AdminController extends AbstractController
     $this->em = $em;
     $this->devisRepo = $devisRepo;
     $this->avisRepo = $avisRepo;
+    $this->vehiculeHelper = $vehiculeHelper;
   }
 
 

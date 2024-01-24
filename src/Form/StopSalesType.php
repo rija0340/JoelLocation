@@ -4,9 +4,11 @@ namespace App\Form;
 
 use App\Entity\Reservation;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -23,6 +25,17 @@ class StopSalesType extends AbstractType
             ])
             ->add('date_fin', DateTimeType::class, [
                 'widget' => 'single_text',
+            ])
+            ->add('vendu', CheckboxType::class, [
+                'mapped' => false,
+                'required' => false,
+
+                'attr' => ['class' => 'form-check-control'],
+            ])
+            ->add('dateVente', DateType::class, [
+                'widget' => 'single_text',
+                'mapped' => false,
+                'required' => false
             ])
             // ->add('lieu')
             // ->add('code_reservation')

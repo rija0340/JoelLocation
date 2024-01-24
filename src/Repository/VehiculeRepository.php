@@ -71,9 +71,6 @@ class VehiculeRepository extends ServiceEntityRepository
     }
 
 
-
-
-
     public function findByIM($im): ?Vehicule
     {
         return $this->createQueryBuilder('v')
@@ -83,7 +80,52 @@ class VehiculeRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    public function findAllVehiculesWithoutVendu()
+    {
+        $allVehicules = $this->findAllOrderedByIdDesc();
+        $allVehiculesWithoutVendu = [];
+        foreach ($allVehicules as  $vehicule) {
+            $vehiculeOptions = $vehicule->getOptions();
+            if (!is_null($vehiculeOptions)) {
+                if (array_key_exists("vendu", $vehiculeOptions)) {
+                    if ($vehiculeOptions['vendu'] == 1) {
+                    } else {
+                        array_push($allVehiculesWithoutVendu, $vehicule);
+                    }
+                }
+            } else {
 
+                array_push($allVehiculesWithoutVendu, $vehicule);
+            }
+        }
+        return $allVehiculesWithoutVendu;
+    }
+
+    public function findAllVehiculesVendu()
+    {
+        $allVehicules = $this->findAllOrderedByIdDesc();
+        $allVehiculesVendu = [];
+        foreach ($allVehicules as $vehicule) {
+            $vehiculeOptions = $vehicule->getOptions();
+            if (!is_null($vehiculeOptions)) {
+                dump(in_array("vendu", $vehiculeOptions), $vehiculeOptions);
+                if (array_key_exists("vendu", $vehiculeOptions)) {
+                    if ($vehiculeOptions['vendu'] == "1") {
+                        array_push($allVehiculesVendu, $vehicule);
+                    }
+                }
+            }
+        }
+        return $allVehiculesVendu;
+    }
+
+    public function findAllOrderedByIdDesc()
+    {
+        return $this->createQueryBuilder('v')
+            ->orderBy('v.id', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 
     // /**
     //  * @return Vehicule[] Returns an array of Vehicule objects

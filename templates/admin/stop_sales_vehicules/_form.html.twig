@@ -28,11 +28,11 @@
 		{{ form_widget(formStopSales.type) }}
 	</div>
 	{# 
-									{% if vehicule is defined %}
-										<div class="form-group col-md-6">
-											<label for="">Véhicule :</label>
-											<input type="text" value="{{vehicule.marque}} {{vehicule.modele}} {{vehicule.immatriculation}}" readonly class="form-control">
-										</div> #}
+																			{% if vehicule is defined %}
+																				<div class="form-group col-md-6">
+																					<label for="">Véhicule :</label>
+																					<input type="text" value="{{vehicule.marque}} {{vehicule.modele}} {{vehicule.immatriculation}}" readonly class="form-control">
+																				</div> #}
 	{# {% else %} #}
 
 	<div class=" form-group col-md-6">
@@ -42,7 +42,15 @@
 	</div>
 	{# {% endif %} #}
 
-
+	<div class="form-group col-md-6">
+		<label for="">Cocher la case si vendu:</label>
+		{{ form_widget(formStopSales.vendu) }}
+	</div>
+	<div class="form-group col-md-6">
+		<label for="">Date de vente:
+		</label>
+		{{ form_widget(formStopSales.dateVente) }}
+	</div>
 	<div class="form-group col-md-12">
 		<label for="">Commentaire:</label>
 		{# <input name="date_fin" id="dateFin" type="text" date="date_debut" class="form-control" placeholder="jj/mm/aaaaa hh:mm" onfocus="(this.type='datetime-local')" onblur="(this.type='text')"> #}

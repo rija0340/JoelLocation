@@ -838,6 +838,27 @@ class ReservationController extends AbstractController
         return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
     }
 
+
+
+    /**
+     * @Route("/reservations-par-vehicule/{id}", name="reservations_par_vehicule", methods={"GET","POST"},requirements={"id":"\d+"})
+     */
+    public function reservationsByVehicule(Vehicule $vehicule): Response
+    {
+
+
+        $reservations  = $this->reservationRepo->findBy(['vehicule' => $vehicule]);
+
+        return $this->render('admin/reservation/liste_par_vehicule/index.html.twig', [
+            'reservations' => $reservations,
+            'vehicule' => $vehicule
+
+        ]);
+    }
+
+
+
+
     //return referer->route avant la rédirection (source)
     public function getReferer($request)
     {

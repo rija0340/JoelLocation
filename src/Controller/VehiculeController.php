@@ -41,9 +41,9 @@ class VehiculeController extends AbstractController
     public function index(VehiculeRepository $vehiculeRepository, Request $request, PaginatorInterface $paginator, ReservationRepository $reservationRepository): Response
     {
 
-
         $pagination = $paginator->paginate(
-            $vehiculeRepository->findBy([], ["id" => "DESC"]), /* query NOT result */
+            // $vehiculeRepository->findBy([], ["id" => "DESC"]), /* query NOT result */
+            $vehiculeRepository->findAllVehiculesWithoutVendu(),
             $request->query->getInt('page', 1)/*page number*/,
             20/*limit per page*/
         );
@@ -172,5 +172,20 @@ class VehiculeController extends AbstractController
 
 
         return new JsonResponse($data);
+    }
+
+
+
+    /**
+     * @Route("/vehicules-vendus/", name="vehicules_vendus", methods={"GET"})
+     */
+    public function vehiculesVendus(VehiculeRepository $vehiculeRepository, Request $request): Response
+    {
+
+        $vehicules = $vehiculeRepository->findAllVehiculesVendu();
+
+        return $this->render('admin/vehicule/vendus.html.twig', [
+            'vehicules' => $vehicules
+        ]);
     }
 }

@@ -141,7 +141,7 @@ class RechercheController extends AbstractController
     public function rechercher_res(Request $request): Response
     {
 
-        $vehicules = $this->vehiculeRepo->findAll();
+        $vehicules = $this->vehiculeRepo->findAllVehiculesWithoutVendu();
         $formRA = $this->createForm(RechercheAVType::class);
 
         $dateNow = $this->dateHelper->dateNow();

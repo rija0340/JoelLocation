@@ -118,7 +118,7 @@ class NouvelleReservationController extends AbstractController
         //$dateDepart et $dateRetour choisis dans step1 de la réservation
         $vehiculesReserves = [];
         $reservations = $this->reservationRepo->findReservationIncludeDates($dateDepart, $dateRetour);
-        $vehicules = $this->vehiculeRepo->findAll();
+        $vehicules = $this->vehiculeRepo->findAllVehiculesWithoutVendu();
 
         //vehicule disponible en fonction des réservés
         $vehiculesDisponible = $this->reservationHelper->getVehiculesDisponible($reservations);

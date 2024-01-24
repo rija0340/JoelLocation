@@ -1,6 +1,6 @@
 {% extends 'base2.html.twig' %}
 
-{% block title %}Flotte véhicules
+{% block title %}Véhicules vendus
 {% endblock %}
 
 
@@ -17,17 +17,13 @@
 {% block current_page %}
 	<h2>
 		<i class="fa fa-car"></i>
-		Flotte véhicule
+		Véhicules vendus
 	</h2>
 {% endblock %}
 {% block content %}
 	<!-- top tiles -->
 	<div class="x_panel">
-		<p class="text-center font-weight-bold">
-			<i class="fa fa-info mr-1"></i>
-			<a href="{{path('vehicule_new')}}" class="text-red">
-				Pour ajouter un nouveau véhicule, veuillez cliquer ici</a>
-		</p>
+		<p class="text-center font-weight-bold"></p>
 		<div class="x_content">
 			<div class="row">
 				<div class="col-sm-12">
@@ -41,7 +37,7 @@
 									<th class="text-nowrap">kilométrage</th>
 									<th class="text-nowrap">description</th>
 									<th>état</th>
-									<th style="width : 25px;">action</th>
+									<th>Action</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -59,62 +55,42 @@
 										<td>
 											{{vehicule.carburation}}</td>
 										<td></td>
-										<td class="text-center">
-											<div class="d-flex justify-content-center m-0 p-0">
-												<div class="">
-													<a title="Modifier" href="{{ path('vehicule_edit', {'id': vehicule.id}) }}" class="btn btn-link">
-														<i class="fa  fa-gear (alias)"></i>
-													</a>
-												</div>
-												<div class="">
-													<a title="Détails" href="{{ path('vehicule_show', {'id': vehicule.id}) }}" class="btn btn-link">
-														<i class="fa  fa-list-ul"></i>
-													</a>
-												</div>
-												<div class="">
-													<a title="Liste résas" href="{{ path('reservations_par_vehicule', {'id': vehicule.id}) }}" class="btn btn-link">
+										<td class="text-center" style="">
+											<div class="row">
+												<div class="col-12">
+													<a title="Liste réservations" href="{{ path('reservations_par_vehicule', {'id': vehicule.id}) }}" class="btn btn-link">
 														<i class="fa  fa-list"></i>
 													</a>
-												</div>
-												<div class="">
-													<form method="post" action="{{ path('vehicule_delete', {'id': vehicule.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer ce véhicule ?');">
-														<input type="hidden" name="_method" value="DELETE">
-														<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ vehicule.id) }}">
-														<button class="btn btn-link" title="Supprimer">
-															<i class="fa fa-trash" aria-hidden="true"></i>
-														</button>
-													</form>
 												</div>
 											</div>
 										</td>
 									</tr>
-								{% endfor %}
-							</tbody>
-						</table>
-					</div>
+								</tbody>
+							{% endfor %}
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>
-	{% endblock %}
-	{% block javascripts %}
-		<!-- Datatables -->
-		<script src="{{asset('admin/vendors/datatables.net/js/jquery.dataTables.min.js')}}"></script>
-		<script src="{{asset('admin/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js')}}"></script>
-		<script src="{{asset('admin/vendors/datatables.net-buttons/js/dataTables.buttons.min.js')}}"></script>
-		<script src="{{asset('admin/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js')}}"></script>
-		<script src="{{asset('admin/vendors/datatables.net-buttons/js/buttons.flash.min.js')}}"></script>
-		<script src="{{asset('admin/vendors/datatables.net-buttons/js/buttons.html5.min.js')}}"></script>
-		<script src="{{asset('admin/vendors/datatables.net-buttons/js/buttons.print.min.js')}}"></script>
-		<script src="{{asset('admin/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js')}}"></script>
-		<script src="{{asset('admin/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js')}}"></script>
-		<script src="{{asset('admin/vendors/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
-		<script src="{{asset('admin/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js')}}"></script>
-		<script src="{{asset('admin/vendors/datatables.net-scroller/js/dataTables.scroller.min.js')}}"></script>
-		<script src="{{asset('admin/vendors/jszip/dist/jszip.min.js')}}"></script>
-		<script src="{{asset('admin/vendors/pdfmake/build/pdfmake.min.js')}}"></script>
-		<script src="{{asset('admin/vendors/pdfmake/build/vfs_fonts.js')}}"></script>
-		<script>
-			// changement de langue pour le table datatable plugin de jquery
+	</div>
+{% endblock %}
+{% block javascripts %}<!-- Datatables --><script src="{{asset('admin/vendors/datatables.net/js/jquery.dataTables.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/datatables.net-buttons/js/dataTables.buttons.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/datatables.net-buttons/js/buttons.flash.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/datatables.net-buttons/js/buttons.html5.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/datatables.net-buttons/js/buttons.print.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js')}}"></script>
+	<script src="{{asset('admin/vendors/datatables.net-scroller/js/dataTables.scroller.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/jszip/dist/jszip.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/pdfmake/build/pdfmake.min.js')}}"></script>
+	<script src="{{asset('admin/vendors/pdfmake/build/vfs_fonts.js')}}"></script>
+	<script>
+		// changement de langue pour le table datatable plugin de jquery
 $(document).ready(function () {
 $("#datatable").dataTable().fnDestroy();
 $('#datatable').dataTable({
@@ -303,6 +279,4 @@ targets: 0
 // "bDestroy": true
 });
 });
-		</script>
-		{# // <script src="../../js/admin/datatable.fr.js"></script> #}
-	{% endblock  %}
+	</script>{# // <script src="../../js/admin/datatable.fr.js"></script> #}{% endblock  %}

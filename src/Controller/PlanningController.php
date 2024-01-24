@@ -74,13 +74,15 @@ class PlanningController extends AbstractController
 
         //recuperation date debut et fin de l'ensemble des reservations liées à une voiture
         //afficher tous les véhicules
-        $allVehicules = $this->vehiculeRepo->findAll();
+        // $allVehicules = $this->vehiculeRepo->findAll();
+
+        $allVehiculesWithoutVendu = $this->vehiculeRepo->findAllVehiculesWithoutVendu();
 
         $data1 = array();
         $datas = array();
         $data2 = [];
         //liste des véhicules pour être affiché sur le planning (colonne à gauche)
-        foreach ($allVehicules as $key => $vehicule) {
+        foreach ($allVehiculesWithoutVendu as $key => $vehicule) {
             $i = 0;
             $reservationsV = $reservationRepo->findLastReservationsV($vehicule);
             foreach ($reservationsV as $res) {

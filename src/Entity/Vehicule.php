@@ -154,6 +154,11 @@ class Vehicule
      */
     private $saisisseurKm;
 
+    /**
+     * @ORM\Column(type="json", nullable=true)
+     */
+    private $options = [];
+
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
@@ -513,6 +518,18 @@ class Vehicule
     public function setSaisisseurKm(?User $saisisseurKm): self
     {
         $this->saisisseurKm = $saisisseurKm;
+
+        return $this;
+    }
+
+    public function getOptions(): ?array
+    {
+        return $this->options;
+    }
+
+    public function setOptions(?array $options): self
+    {
+        $this->options = $options;
 
         return $this;
     }
