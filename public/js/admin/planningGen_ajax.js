@@ -75,6 +75,10 @@ function retrieveDataAjax() {
             ganttInit(dateNow.toLocaleDateString("en"), object_max_date.toLocaleDateString("en"), 20);
             // addTextPeriode(dateNow.toLocaleDateString("en"), object_max_date.toLocaleDateString("en"));
             getData(data);
+
+            console.log("getUniqueListVehicules(data)");
+            console.log(getUniqueListVehicules(data));
+
             createCheckboxes(getUniqueListVehicules(data));
 
             document.querySelector('div .selectAll').firstElementChild.click();
@@ -508,18 +512,14 @@ function getUniqueListVehicules(data) {
             listVehicules.push(data[i].marque_modele.toLowerCase());
         }
     }
-    filteredList[0] = listVehicules[0]; //initilisation
 
-    for (let i = 1; i < listVehicules.length; i++) {
+    for (let i = 0; i < listVehicules.length; i++) {
 
-        for (let j = 0; j < filteredList.length; j++) {
-            if (listVehicules[i] == filteredList[j]) {
-                a++;
-            }
+        const marque_modele = listVehicules[i].split(" ");
+        const marque = marque_modele[0];
 
-        }
-        if (a == 0) {
-            filteredList.push(listVehicules[i])
+        if (!filteredList.includes(marque)) {
+            filteredList.push(marque);
         }
     }
 
