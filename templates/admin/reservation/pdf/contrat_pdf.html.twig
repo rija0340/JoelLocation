@@ -318,14 +318,12 @@
 						<tr style="padding:2px">
 							<td style="padding:2px">
 								<span>
-									{% if devis is defined and devis is not null %}
-										{% if  devis.client.sexe == ""  %}
+									{% if  devis.client.sexe == ""  %}
 
-											{% elseif devis.client.sexe == 'masculin' %}
-												Mr
-											{% elseif devis.client.sexe == 'feminin' %}
-												Mlle/Mme
-										{% endif %}
+										{% elseif devis.client.sexe == 'masculin' %}
+											Mr
+										{% elseif devis.client.sexe == 'feminin' %}
+											Mlle/Mme
 									{% endif %}
 
 								</span>
@@ -364,35 +362,29 @@
 								le
 								{{ reservation.client.datePermis|date('d/m/Y') }}</td>
 						</tr>
-						{% if 'Aéroport' in  reservation.agenceDepart  %}
-							<tr>
-								<td colspan="2" class="text-center text-white bg-danger">INFOS TRANSFERT
-								</td>
-							</tr>
-							<tr>
-								<td>Infos arrivée</td>
-								<td>
-									{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.heureVolAller|date('d/m/Y') : "  " }}
-									, Vol
-									{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.numVolAller : "   " }}
-									à
-									{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.heureVolAller|date('H:i') : "   " }}
-
-								</td>
-								<td></td>
-							</tr>
-							<tr>
-								<td>Infos retour
-								</td>
-								<td>
-									{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.heureVolRetour|date('d/m/Y') : "  " }}
-									, Vol
-									{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.numVolRetour : "   " }}
-									à
-									{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.heureVolRetour|date('H:i') :  "   " }}
-								</td>
-							</tr>
-						{% endif %}
+						<tr>
+							<td colspan="2" class="text-center text-white bg-danger">INFOS TRANSFERT
+							</td>
+						</tr>
+						<tr>
+							<td>Infos arrivée</td>
+							<td>{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.heureVolAller|date('d/m/Y') : "  " }}
+								, Vol
+								{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.numVolAller : "   " }}
+								à
+								{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.heureVolAller|date('H:i') : "   " }}</td>
+						</tr>
+						<tr>
+							<td>Infos retour
+							</td>
+							<td>
+								{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.heureVolRetour|date('d/m/Y') : "  " }}
+								, Vol
+								{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.numVolRetour : "   " }}
+								à
+								{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.heureVolRetour|date('H:i') :  "   " }}
+							</td>
+						</tr>
 					</tbody>
 				</table>
 			</div>
