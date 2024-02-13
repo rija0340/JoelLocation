@@ -108,7 +108,6 @@ class VehiculeRepository extends ServiceEntityRepository
         foreach ($allVehicules as $vehicule) {
             $vehiculeOptions = $vehicule->getOptions();
             if (!is_null($vehiculeOptions)) {
-                dump(in_array("vendu", $vehiculeOptions), $vehiculeOptions);
                 if (array_key_exists("vendu", $vehiculeOptions)) {
                     if ($vehiculeOptions['vendu'] == "1") {
                         array_push($allVehiculesVendu, $vehicule);
