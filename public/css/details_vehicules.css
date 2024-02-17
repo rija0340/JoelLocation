@@ -1,24 +1,29 @@
-ul{
-    padding:0px;
+ul {
+    padding: 0px;
     margin-left: 10px;
     /* border: 1px solid black; */
 }
 
-.image_voiture{
-    width: 2000px;
+.image_voiture {
+    /* width: 2000px; */
+    width: 100%;
     /* border: 1px solid black; */
 }
-.image_voiture_twigo{
+
+.image_voiture_twigo {
     width: 1500px;
     /* border: 1px solid black; */
 }
-.conditions{
+
+.conditions {
     margin-left: 10px;
 }
-.caracteristiques{
+
+.caracteristiques {
     margin-left: 8px;
 }
-.caracteristiques ul{
+
+.caracteristiques ul {
 
     list-style: none;
 }
@@ -26,17 +31,19 @@ ul{
 .conditions ul {
     list-style: none;
 }
+
 .conditions li::before {
-    content: "•"; 
+    content: "•";
     margin-right: 5px;
     color: red;
 }
 
-.section-title{
+.section-title {
     margin-top: 40px;
     margin-bottom: 40px;
 }
-.texte{
+
+.texte {
     padding: 5px;
 }
 
@@ -45,12 +52,12 @@ ul{
 
 /*extra large device*/
 @media (min-width: 1200px) {
-	
 
-    .caracteristiques ul li i{
+
+    .caracteristiques ul li i {
         width: 25px;
     }
-    
+
 }
 
 
@@ -58,15 +65,15 @@ ul{
 
 /* larges devices */
 
-@media  (min-width: 992px)and (max-width: 1199.98px) {
-		/* hero slider (carousel) custom*/
+@media (min-width: 992px)and (max-width: 1199.98px) {
+    /* hero slider (carousel) custom*/
 
 
 }
 
 /*  medium device(tablets) */
 @media (min-width: 768px) and (max-width: 991.98px) {
-    .section-title{
+    .section-title {
         margin-top: 25px;
         margin-bottom: 25px;
     }
@@ -77,16 +84,19 @@ ul{
 
 /* small device */
 @media (min-width: 576px) and (max-width: 767.98px) {
-    h4{
+    h4 {
         font-size: 18px;
     }
-	ul li{
+
+    ul li {
         font-size: 12px;
     }
-    .caracteristiques ul li i{
+
+    .caracteristiques ul li i {
         width: 15px;
     }
-    .section-title{
+
+    .section-title {
         margin-top: 20px;
         margin-bottom: 20px;
     }
@@ -98,21 +108,22 @@ ul{
 /*extra small device */
 @media (max-width: 575.98px) {
 
-    h4{
+    h4 {
         font-size: 18px;
     }
-	
-	ul li{
+
+    ul li {
         font-size: 12px;
     }
-    .caracteristiques ul li i{
+
+    .caracteristiques ul li i {
         width: 15px;
     }
-    .section-title{
+
+    .section-title {
         margin-top: 20px;
         margin-bottom: 20px;
     }
-    
+
 
 }
-

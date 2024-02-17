@@ -57,20 +57,9 @@ class AccueilController extends AbstractController
      */
     public function index(): Response
     {
-        $troisvehicules = [];
-        $vehicules = $this->vehiculeRepo->findAll();
-        $i = 0;
-        foreach ($vehicules as $vehicule) {
-            if ($i < 3) {
-                // exit;
-                $troisvehicules[$i] = $vehicule;
-                $i++;
-            }
-        }
 
-        // dd($vehicules[0]);
         return $this->render('accueil/index.html.twig', [
-            'vehicules' => $troisvehicules
+            'vehicules' => $this->getUniqueModeleNosVehicules()
         ]);
     }
 
@@ -85,6 +74,28 @@ class AccueilController extends AbstractController
         ]);
     }
 
+    /** 
+     * cette fonction retourne unique modele de véhicule selon modeles voulu
+     */
+    public function getUniqueModeleNosVehicules()
+    {
+        $vehiculesToDisplay = [];
+        $vehicules = $this->vehiculeRepo->findAllVehiculesWithoutVendu();
+        $i = 0;
+        $modele = ['captur', 'twingo', 'clio', 'clio 5'];
+
+        for ($i = 0; $i < count($modele); $i++) {
+            foreach ($vehicules as $key => $vehicule) {
+
+                $nomModele = strtolower($vehicule->getModele()->getLibelle());
+                if ($nomModele == $modele[$i]) {
+                    array_push($vehiculesToDisplay, $vehicule);
+                    break;
+                }
+            }
+        }
+        return $vehiculesToDisplay;
+    }
 
     /**
      * @Route("/capture", name="capture")
@@ -136,18 +147,10 @@ class AccueilController extends AbstractController
      */
     public function noVehicules(): Response
     {
-        $vehicules = $this->vehiculeRepo->findAll();
-        $i = 0;
-        foreach ($vehicules as $vehicule) {
-            if ($i < 3) {
-                // exit;
-                $troisvehicules[$i] = $vehicule;
-                $i++;
-            }
-        }
+
         return $this->render('accueil/nosvehicule.html.twig', [
             'controller_name' => 'AccueilController',
-            'vehicules' => $troisvehicules,
+            'vehicules' => $this->getUniqueModeleNosVehicules(),
         ]);
     }
 
@@ -157,6 +160,7 @@ class AccueilController extends AbstractController
      */
     public function notreVehicule(int $id): Response
     {
+
         $vehicule = $this->getDoctrine()->getRepository(Vehicule::class)->findOneBy(['id' => $id]);
         return $this->render('accueil/notrevehicule.html.twig', [
             'controller_name' => 'AccueilController',

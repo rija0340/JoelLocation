@@ -16,90 +16,97 @@
 			<h2>{{ vehicule.marque }}
 				{{ vehicule.modele }}</h2>
 		</div>
-		<div class="mb-3 pl-3 d-flex">
-			<div class="image_voiture">
-				<img src="uploads/vehicules/{{ vehicule.image }}" alt="{{ vehicule.modele }}">
-			</div>
-			<div class="texte">
-				<p class="text-justify">
-					{{ vehicule.details }}
-				</p>
-				<div>
-					<h4>
-						Conditions de location
-						{{ vehicule.marque }}
-						{{ vehicule.modele }}
-					</h4>
-				</div>
-				<div class="conditions">
-					<ul>
-						<li>
-							Kilométrage illimité
-						</li>
-						<li>
-							Âge minimum : 21 ans
-						</li>
-						<li>
-							Plus de 2 ans de permis de conduire
-						</li>
-						<li>
-							Possibilité de régler en plusieurs fois
-						</li>
-						<li>
-							Caution :
-							{{ vehicule.caution }}
-							€
-						</li>
-					</ul>
-				</div>
-				<div>
-					<h4>
-						Caractéristiques de
-						{{ vehicule.marque }}
-						{{ vehicule.modele }}
-					</h4>
-				</div>
-				<div class="caracteristiques">
-					<ul>
-						<li>
-							<i class="fa fa-battery-full"></i>
-							Carburant :
-							{{ vehicule.carburation }}
-						</li>
-						<li>
-							<i class="fa fa-sun-o" aria-hidden="true"></i>
-							Boite de vitesse :
-							{{ vehicule.vitesse }}
-						</li>
-						<li>
-							<i class="fa fa-shopping-bag" aria-hidden="true"></i>
-							Nombre max de bagages :
-							{{ vehicule.bagages }}
-						</li>
-						<li>
-							<i class="fa fa-car" aria-hidden="true"></i>
-							Nombre de portes :
-							{{ vehicule.portes }}
-						</li>
-						<li>
-							<i class="fa fa-users" aria-hidden="true"></i>
-							Max passagers:
-							{{ vehicule.passagers }}
-						</li>
-						<li>
-							<i class="fa fa-rss" aria-hidden="true"></i>
-							Atouts :
-							{{ vehicule.atouts }}
-						</li>
-					</ul>
+		<div class="mb-3 pl-3 row">
+
+			<div class="col-md-6 col-xs-12">
+				<div class="d-flex justify-content-center">
+					<div class="image_voiture ">
+						<img src="uploads/vehicules/{{ vehicule.image }}" alt="{{ vehicule.modele }}">
+					</div>
 				</div>
 			</div>
+			<div class="col-md-6 col-xs-12">
+				<div class="texte">
+					<p class="text-justify">
+						{{ vehicule.details }}
+					</p>
+					<div>
+						<h4>
+							Conditions de location
+							{{ vehicule.marque }}
+							{{ vehicule.modele }}
+						</h4>
+					</div>
+					<div class="conditions">
+						<ul>
+							<li>
+								Kilométrage illimité
+							</li>
+							<li>
+								Âge minimum : 21 ans
+							</li>
+							<li>
+								Plus de 2 ans de permis de conduire
+							</li>
+							<li>
+								Possibilité de régler en plusieurs fois
+							</li>
+							<li>
+								Caution :
+								{{ vehicule.caution }}
+								€
+							</li>
+						</ul>
+					</div>
+					<div>
+						<h4>
+							Caractéristiques de
+							{{ vehicule.marque }}
+							{{ vehicule.modele }}
+						</h4>
+					</div>
+					<div class="caracteristiques">
+						<ul>
+							<li>
+								<i class="fa fa-battery-full"></i>
+								Carburant :
+								{{ vehicule.carburation }}
+							</li>
+							<li>
+								<i class="fa fa-sun-o" aria-hidden="true"></i>
+								Boite de vitesse :
+								{{ vehicule.vitesse }}
+							</li>
+							<li>
+								<i class="fa fa-shopping-bag" aria-hidden="true"></i>
+								Nombre max de bagages :
+								{{ vehicule.bagages }}
+							</li>
+							<li>
+								<i class="fa fa-car" aria-hidden="true"></i>
+								Nombre de portes :
+								{{ vehicule.portes }}
+							</li>
+							<li>
+								<i class="fa fa-users" aria-hidden="true"></i>
+								Max passagers:
+								{{ vehicule.passagers }}
+							</li>
+							<li>
+								<i class="fa fa-rss" aria-hidden="true"></i>
+								Atouts :
+								{{ vehicule.atouts }}
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
 		</div>
 		<div class="d-flex justify-content-center">
 			<div>
 				<a href="{{ path('formulaire-contact') }}" class="button">Demander un devis</a>
 			</div>
 		</div>
-
 	</div>
 {% endblock %}
