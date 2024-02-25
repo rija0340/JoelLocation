@@ -82,7 +82,7 @@ class AccueilController extends AbstractController
         $vehiculesToDisplay = [];
         $vehicules = $this->vehiculeRepo->findAllVehiculesWithoutVendu();
         $i = 0;
-        $modele = ['captur', 'twingo', 'clio', 'clio 5'];
+        $modele = ['twingo', 'clio', 'clio 5', 'captur'];
 
         for ($i = 0; $i < count($modele); $i++) {
             foreach ($vehicules as $key => $vehicule) {

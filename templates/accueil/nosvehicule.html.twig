@@ -9,35 +9,5 @@
 {% endblock %}
 
 {% block body %}
-	<div class="hero-slider">
-		<div class="portfolio-area">
-			<div class="container" id="vehicule">
-				<div class="section-title">
-					<h2>Nos Véhicules</h2>
-					<p>Vous pouvez choisir parmi les véhicules que nous offrons</p>
-				</div>
-				<div class="row">
-					{% for vehicule in vehicules %}
-						<div class="single-portfolio col-md-3">
-							<div class="inner">
-								<div class="portfolio-img">
-									<img src="uploads/vehicules/{{ vehicule.image }}" alt="{{ vehicule.modele }}" title="{{ vehicule.modele }}">
-
-									<div class="hover-content">
-										<div style="margin-bottom:100px">
-											<h3 class="m-0 p-0 text-center " style="color:#af0000">{{ vehicule.marque }}
-												{{ vehicule.modele }}</h3>
-										</div>
-										<div>
-											<a href="{{ path('notrevehicule', {'id': vehicule.id}) }}" class="button">Voir plus de détails</a>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					{% endfor %}
-				</div>
-			</div>
-		</div>
-	</div>
+	{% include "accueil/parts/nosvehicules.html.twig" %}
 {% endblock %}
