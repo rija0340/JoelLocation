@@ -21,12 +21,22 @@ class EditClientReservationType extends AbstractType
         $builder
             ->add('nom', TextType::class)
             ->add('prenom', TextType::class)
-            ->add('adresse', TextType::class)
-            ->add('complementAdresse', TextType::class)
-            ->add('ville', TextType::class)
-            ->add('codePostal', NumberType::class)
+            ->add('adresse', TextType::class, [
+                'required' => false
+            ])
+            ->add('complementAdresse', TextType::class, [
+                'required' => false
+            ])
+            ->add('ville', TextType::class, [
+                'required' => false
+            ])
+            ->add('codePostal', NumberType::class, [
+                'required' => false
+            ])
             ->add('mail', EmailType::class)
-            ->add('telephone', TelType::class)
+            ->add('telephone', TelType::class, [
+                'required' => false
+            ])
             ->add('portable', TelType::class)
             ->add('infosResa', InfosResaType::class)
             ->add('infosVolResa', InfosVolResaType::class);
