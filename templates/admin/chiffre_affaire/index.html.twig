@@ -5,89 +5,74 @@
 
 
 {% block stylesheets %}
-    <!-- bootstrap-wysiwyg -->
-    <link
-            href="../../admin/vendors/google-code-prettify/bin/prettify.min.css" rel="stylesheet">
-    <!-- Select2 -->
-    <link
-            href="../../admin/vendors/select2/dist/css/select2.min.css" rel="stylesheet">
-    <!-- Switchery -->
-    <link
-            href="../../admin/vendors/switchery/dist/switchery.min.css" rel="stylesheet">
-    <!-- starrr -->
-    <link
-            href="../../admin/vendors/starrr/dist/starrr.css" rel="stylesheet">
-    <!-- bootstrap-daterangepicker -->
-    <link href="../../admin/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
 
-    <link
-            href="../../admin/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
-    <!-- bootstrap-datetimepicker -->
-    <link
-            href="../../admin/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
-    <!-- Ion.RangeSlider -->
-    <link href="../../admin/vendors/normalize-css/normalize.css" rel="stylesheet">
-    <link href="../../admin/vendors/ion.rangeSlider/css/ion.rangeSlider.css" rel="stylesheet">
-    <link href="../../admin/vendors/ion.rangeSlider/css/ion.rangeSlider.skinFlat.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
-    <link href="../../css/admin/daterangepicker/custom_style.css" rel="stylesheet">
+	<!-- bootstrap-wysiwyg -->
+	<link
+	rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css" integrity="sha512-PW9BfYtoXV6XYb/4FTkBoJEBM92TrGk7N324cCmF5i2dY02YvBg6ZPEAnSOZ5i2/nGPbsYFQwVzDxVVoWEKWww==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+	<!-- Select2 -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+	<!-- Switchery -->
+	<!-- bootstrap-daterangepicker -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.5/daterangepicker.min.css" integrity="sha512-rBi1cGvEdd3NmSAQhPWId5Nd6QxE8To4ADjM2a6n0BrqQdisZ/RPUlm0YycDzvNL1HHAh1nKZqI0kSbif+5upQ==" crossorigin="anonymous" referrerpolicy="no-referrer"/> <link
+	href="{{asset('admin/vendors/bootstrap-daterangepicker/daterangepicker.css')}}" rel="stylesheet">
+	<!-- Ion.RangeSlider -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css" integrity="sha512-NWCafukXClS6fKch6bSMl/WvPzZrD1OGMf1oMAnFYXSSKZ7hgeswls+r4SdK4bFJauVwmvFf7HlMwji2TsjROA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css" integrity="sha512-NWCafukXClS6fKch6bSMl/WvPzZrD1OGMf1oMAnFYXSSKZ7hgeswls+r4SdK4bFJauVwmvFf7HlMwji2TsjROA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+	<link href="{{asset('css/admin/daterangepicker/custom_style.css')}}" rel="stylesheet">
 
 {% endblock %}
 
 {% block current_page %}
-    <h2>
-        <i class="fa fa-euro"></i>Chiffre d'affaire</h2>
+	<h2>
+		<i class="fa fa-euro"></i>Chiffre d'affaire</h2>
 {% endblock %}
 
 {% block content %}
-    <div class="x_panel">
-        <div class="text-center ">
-            <h2 style=" font-weight: 900 !important;">CHIFFRE D'AFFAIRE</h2>
-            <h2 class="text-uppercase text-danger font-weight-bold">
-                <span id="datesRange"></span>
-            </h2>
-        </div>
-        <div class="x_content">
-            <div class="row mb-4">
-                <div class="col-auto">
-                    <label for="" class="font-weight-bold">Période :</label>
-                    <div id="reportrange"
-                         style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
-                        <i class="fa fa-calendar"></i>&nbsp;
-                        <span></span>
-                        <i class="fa fa-caret-down"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="overflow-auto">
-                <table id="table" class="table table-bordered simpletable ">
-                    <thead class="text-center">
-                    <tr>
-                        <th>FAMILLE</th>
-                        <th>CA</th>
-                        <th>WEB</th>
-                        <th>CPT</th>
-                        <th>RESAS</th>
-                        <th>PRIX/J</th>
-                        <th>STOP SALE</th>
-                    </tr>
-                    </thead>
-                    <tbody id='tbody'></tbody>
-                </table>
-            </div>
+	<div class="x_panel">
+		<div class="text-center ">
+			<h2 style=" font-weight: 900 !important;">CHIFFRE D'AFFAIRE</h2>
+			<h2 class="text-uppercase text-danger font-weight-bold">
+				<span id="datesRange"></span>
+			</h2>
+		</div>
+		<div class="x_content">
+			<div class="row mb-4">
+				<div class="col-auto">
+					<label for="" class="font-weight-bold">Période :</label>
+					<div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+						<i class="fa fa-calendar"></i>&nbsp;
+						<span></span>
+						<i class="fa fa-caret-down"></i>
+					</div>
+				</div>
+			</div>
+			<div class="overflow-auto">
+				<table id="table" class="table table-bordered simpletable ">
+					<thead class="text-center">
+						<tr>
+							<th>FAMILLE</th>
+							<th>CA</th>
+							<th>WEB</th>
+							<th>CPT</th>
+							<th>RESAS</th>
+							<th>PRIX/J</th>
+							<th>STOP SALE</th>
+						</tr>
+					</thead>
+					<tbody id='tbody'></tbody>
+				</table>
+			</div>
 
-        </div>
-    </div>
+		</div>
+	</div>
 {% endblock %}
 
 {% block javascripts %}
 
-    <script src="../../admin/vendors/moment/moment.js"></script>
-    {# manova anle langue ho francais amle moment izay ampiasain'ny date picker #}
-    <script src="../../plugins/moment/locale/fr.js"></script>
-    <script type="text/javascript" src="../../admin\vendors\bootstrap-daterangepicker\daterangepicker.js"></script>
-    <script src="../../plugins/daterangepicker/daterangepicker.js"></script>
-    {# // <script src="../../js/admin/bootstrap-datepicker.fr.min.js"></script> #}
-    <script src="{{ asset('js/admin/chiffre_affaire/daterangepicker.js') }}"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/locale/fr.min.js" integrity="sha512-RAt2+PIRwJiyjWpzvvhKAG2LEdPpQhTgWfbEkFDCo8wC4rFYh5GQzJBVIFDswwaEDEYX16GEE/4fpeDNr7OIZw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.5/daterangepicker.min.js" integrity="sha512-mh+AjlD3nxImTUGisMpHXW03gE6F4WdQyvuFRkjecwuWLwD2yCijw4tKA3NsEFpA1C3neiKhGXPSIGSfCYPMlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script src="{{ asset('js/admin/chiffre_affaire/daterangepicker.js') }}"></script>
 
 {% endblock %}

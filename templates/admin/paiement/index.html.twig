@@ -6,14 +6,9 @@
 
 {% block stylesheets %}
 	<!-- Datatables -->
-	<link href="{{asset('admin/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css')}}" rel="stylesheet">
-	<link href="{{asset('admin/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css')}}" rel="stylesheet">
-	<link href="{{asset('admin/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css')}}" rel="stylesheet">
-	<link href="{{asset('admin/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css')}}" rel="stylesheet">
-	<link href="{{asset('admin/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css')}}" rel="stylesheet">
+	{% include "admin/_parts/datatables/css.html.twig" %}
 	<link href="{{asset('css/admin/paiement.css')}}" rel="stylesheet">
-	<link href="{{ asset('css/loading-body/jquery.loadingModal.min.css') }}"rel="stylesheet">
-
+	<link href="{{ asset('css/loading-body/jquery.loadingModal.min.css') }}" rel="stylesheet">
 
 
 {% endblock %}
@@ -24,9 +19,9 @@
 		<div class="text-center">
 			<h4>PAIEMENT DES RESERVATIONS</h4>
 			<h4 style="color:red;">DU
-				<span class="dateDebut"> </span>
+				<span class="dateDebut"></span>
 				AU
-				<span class="dateFin" ></span>
+				<span class="dateFin"></span>
 			</h4>
 		</div>
 		<div class="alert alert-info">
@@ -119,24 +114,9 @@
 {% endblock %}
 {% block javascripts %}
 	<!-- Datatables -->
-	<script src="{{asset('admin/vendors/datatables.net/js/jquery.dataTables.min.js')}}"></script>
-	<script src="{{asset('admin/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js')}}"></script>
-	<script src="{{asset('admin/vendors/datatables.net-buttons/js/dataTables.buttons.min.js')}}"></script>
-	<script src="{{asset('admin/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js')}}"></script>
-	<script src="{{asset('admin/vendors/datatables.net-buttons/js/buttons.flash.min.js')}}"></script>
-	<script src="{{asset('admin/vendors/datatables.net-buttons/js/buttons.html5.min.js')}}"></script>
-	<script src="{{asset('admin/vendors/datatables.net-buttons/js/buttons.print.min.js')}}"></script>
-	<script src="{{asset('admin/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js')}}"></script>
-	<script src="{{asset('admin/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js')}}"></script>
-	<script src="{{asset('admin/vendors/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
-	<script src="{{asset('admin/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js')}}"></script>
-	<script src="{{asset('admin/vendors/datatables.net-scroller/js/dataTables.scroller.min.js')}}"></script>
-	<script src="{{asset('admin/vendors/jszip/dist/jszip.min.js')}}"></script>
-	<script src="{{asset('admin/vendors/pdfmake/build/pdfmake.min.js')}}"></script>
-	<script src="{{asset('admin/vendors/pdfmake/build/vfs_fonts.js')}}"></script>
+	{% include "admin/_parts/datatables/js.html.twig" %}
 	{# // <script src="{{asset('js/admin/datatable.fr.js')}}"></script> #}
-	{# daterangepicker #}
-	<script src="{{asset('admin/vendors/moment/moment.js')}}"></script>
+	{# daterangepicker #}<script src="{{asset('admin/vendors/moment/moment.js')}}"> </script>
 	{# manova anle langue ho francais amle moment izay ampiasain'ny date picker #}
 	<script src="{{asset('plugins/moment/locale/fr.js')}}"></script>
 	<script type="text/javascript" src="{{asset('admin\vendors\bootstrap-daterangepicker\daterangepicker.js')}}"></script>

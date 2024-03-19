@@ -4,117 +4,97 @@
 {% endblock %}
 
 {% block stylesheets %}
-    <!-- Datatables -->
-    <link href="../../admin/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
-    <link href="../../admin/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
-    <link href="../../admin/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
-    <link href="../../admin/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
-    <link href="../../admin/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+	<!-- Datatables -->
+	{% include "admin/_parts/datatables/css.html.twig" %}
 
 {% endblock %}
 {% block current_page %}
 
-    <h2>
-        <i class="fa fa-list"></i>Clients / Prospects</h2>
+	<h2>
+		<i class="fa fa-list"></i>Clients / Prospects</h2>
 
 {% endblock %}
 
 {% block content %}
-    <div class="x_panel">
-        <div class="x_title">
-            <div class="row">
-                <div class="col-auto">
-                    <h2>
-                        <i class="fa fa-list"></i>Clients / Prospects</h2>
-                </div>
-                <div class="col-auto ml-auto">
-                    <a href="{{ path('client_new') }}" class="btn btn-danger">
-                        <i class="fa fa-plus" aria-hidden="true"></i>
-                        Ajouter</a>
-                </div>
-            </div>
-            <div class="clearfix"></div>
-        </div>
-        <div class="overflow-auto">
-            <table class="table " id="datatable">
-                <thead class="text-uppercase ">
-                <tr>
-                    <th>Id</th>
-                    <th>Nom</th>
-                    <th>Prénom</th>
-                    <th>Email</th>
-                    <th>Date d'inscription</th>
-                    <th>Réservations</th>
-                    <th>actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for user in clients %}
-                    <tr>
-                        <td>{{ user.id }}</td>
+	<div class="x_panel">
+		<div class="x_title">
+			<div class="row">
+				<div class="col-auto">
+					<h2>
+						<i class="fa fa-list"></i>Clients / Prospects</h2>
+				</div>
+				<div class="col-auto ml-auto">
+					<a href="{{ path('client_new') }}" class="btn btn-danger">
+						<i class="fa fa-plus" aria-hidden="true"></i>
+						Ajouter</a>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="overflow-auto">
+			<table class="table " id="datatable">
+				<thead class="text-uppercase ">
+					<tr>
+						<th>Id</th>
+						<th>Nom</th>
+						<th>Prénom</th>
+						<th>Email</th>
+						<th>Date d'inscription</th>
+						<th>Réservations</th>
+						<th>actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for user in clients %}
+						<tr>
+							<td>{{ user.id }}</td>
 
-                        <td>
-                            {{ user.nom }}
-                        </td>
-                        <td>
-                            {{ user.prenom }}
-                        </td>
-                        <td>{{ user.mail }}</td>
-                        <td>
-                            {{ user.dateInscription ? user.dateInscription|date('d-m-Y H:i') : '' }}
-                        </td>
-                        <td>
-                            {% set i = 0 %}
-                            {% for reservation in user.reservations %}
-                                {% set i = i + 1 %}
-                            {% endfor %}
-                            {{ i }}
-                        </td>
-                        <td>
-                            <div class="row">
-                                <div class="col-auto p-0 m-0">
-                                    <a href="{{ path('client_show', {'id': user.id}) }}" class="btn btn-link ">
-                                        <i class="fa fa-list"></i>
-                                    </a>
-                                </div>
-                                {% if is_granted("ROLE_ADMIN") %}
-                                    <div class="col-auto p-0 m-0">
-                                        <form method="post" action="{{ path('client_delete', {'id': user.id}) }}"
-                                              onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer cet utilisateur?');">
-                                            <input type="hidden" name="_method" value="DELETE">
-                                            <input type="hidden" name="_token"
-                                                   value="{{ csrf_token('delete' ~ user.id) }}">
-                                            <button class="btn btn-link">
-                                                <i class="fa fa-trash" aria-hidden="true"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                {% endif %}
-                            </div>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
+							<td>
+								{{ user.nom }}
+							</td>
+							<td>
+								{{ user.prenom }}
+							</td>
+							<td>{{ user.mail }}</td>
+							<td>
+								{{ user.dateInscription ? user.dateInscription|date('Y-m-d') : '' }}
+							</td>
+							<td>
+								{% set i = 0 %}
+								{% for reservation in user.reservations %}
+									{% set i = i + 1 %}
+								{% endfor %}
+								{{ i }}
+							</td>
+							<td>
+								<div class="row">
+									<div class="col-auto p-0 m-0">
+										<a href="{{ path('client_show', {'id': user.id}) }}" class="btn btn-link ">
+											<i class="fa fa-list"></i>
+										</a>
+									</div>
+									{% if is_granted("ROLE_ADMIN") %}
+										<div class="col-auto p-0 m-0">
+											<form method="post" action="{{ path('client_delete', {'id': user.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer cet utilisateur?');">
+												<input type="hidden" name="_method" value="DELETE">
+												<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+												<button class="btn btn-link">
+													<i class="fa fa-trash" aria-hidden="true"></i>
+												</button>
+											</form>
+										</div>
+									{% endif %}
+								</div>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
 {% endblock %}
 {% block javascripts %}
-    <!-- Datatables -->
-    <script src="../../admin/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="../../admin/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-    <script src="../../admin/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="../../admin/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
-    <script src="../../admin/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
-    <script src="../../admin/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
-    <script src="../../admin/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
-    <script src="../../admin/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
-    <script src="../../admin/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
-    <script src="../../admin/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="../../admin/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-    <script src="../../admin/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
-    <script src="../../admin/vendors/jszip/dist/jszip.min.js"></script>
-    <script src="../../admin/vendors/pdfmake/build/pdfmake.min.js"></script>
-    <script src="../../admin/vendors/pdfmake/build/vfs_fonts.js"></script>
-    <script src="../../js/admin/datatable.fr.js"></script>
+	<!-- Datatables -->
+	{% include "admin/_parts/datatables/js.html.twig" %}
+	<script src="{{asset('js/admin/datatables/client_prospect.js')}}"></script>
 {% endblock %}

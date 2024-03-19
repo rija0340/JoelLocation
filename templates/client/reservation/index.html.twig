@@ -38,287 +38,227 @@
 							<td>{{ reserv.dateReservation|date('d/m/Y - H:i') }}</td>
 							<td>{{ reserv.vehicule.marque }}
 								{{ reserv.vehicule.modele }}</td>
-							<td>{{ reserv.dateDebut|date('d/m/Y - H:i') }}<br>
+							<td>{{ reserv.dateDebut|date('d/m/Y - H:i')}}<br>
 								<span class="text-center font-italic">
 									{{ reserv.duree }}
-									jours
-								</span>
+									jours</td>
 							</td>
-							<td>{{ reserv.prix|number_format(2,","," ") }}
-								€
-							</td>
-							<td>
+						</tr>
+					</span>
+				</tbody>
+			</td>
+			<td>{{ reserv.prix|number_format(2,","," ") }}
+				€
+			</td>
+			<td>
 
-								{# dropdown #}
-								<div class="btn-group p-0" role="group">
-									<button id="btnGroupDrop1" class="btn btn-link-danger" type="button" class="btn btn-link p-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-										<i class="fa fa-bars"></i>
+				{# dropdown #}
+				<div class="btn-group p-0" role="group">
+					<button id="btnGroupDrop1" class="btn btn-link-danger" type="button" class="btn btn-link p-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="fa fa-bars"></i>
+					</button>
+					<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+						<div class="dropdown-item">
+							{% if reserv.prix > reserv.sommePaiements %}
+								<form action="{{ path('paiement_sold') }}" method="POST">
+									<input type="hidden" name="montantSolde" value="{{ (reserv.prix - reserv.sommePaiements)|number_format(2,","," ") }}">
+									<input type="hidden" name="reservation" value="{{ reserv.id }}">
+									<button class="btn btn-link-danger">Payer solde
+										{{ (reserv.prix - reserv.sommePaiements)|number_format(2,","," ") }}€
 									</button>
-									<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-										<div class="dropdown-item">
-											{% if reserv.prix > reserv.sommePaiements %}
-												<form action="{{ path('paiement_sold') }}" method="POST">
-													<input type="hidden" name="montantSolde" value="{{ (reserv.prix - reserv.sommePaiements)|number_format(2,","," ") }}">
-													<input type="hidden" name="reservation" value="{{ reserv.id }}">
-													<button class="btn btn-link-danger">Payer solde
-														{{ (reserv.prix - reserv.sommePaiements)|number_format(2,","," ") }}€
-													</button>
-												</form>
-											{% endif %}
-										</div>
-										<div class="dropdown-item">
-											<a href="{{ path('add_avis', {'id': reserv.id}) }}" class="btn btn-link-dark">Ajouter avis</a>
-										</div>
-										<div class="dropdown-item">
-											<a href="{{ path('client_reservation_show', {'id' : reserv.id}) }} " class="btn btn-link-dark">
-												Détails
-											</a>
-										</div>
-									</div>
-								</div>
-								{# fin dropdown #}
-								{% if reserv.prix > reserv.sommePaiements %}
-									<i class="fa fa-warning">Solde</i>
-								{% endif %}
-							</td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
-	</div>
-	<div class="x_panel">
+								</form>
+							{% endif %}
+						</div>
+						<div class="dropdown-item">
+							<a href="{{ path('add_avis', {'id': reserv.id}) }}" class="btn btn-link-dark">Ajouter avis</a>
+						</div>
+						<div class="dropdown-item">
+							<a href="{{ path('client_reservation_show', {'id' : reserv.id}) }} " class="btn btn-link-dark">
+								Détails
+							</a>
+						</div>
+					</div>
+				</div>
+				{# fin dropdown #}
+				{% if reserv.prix > reserv.sommePaiements %}
+					<i class="fa fa-warning">Solde</i>
+				{% endif %}
+			</td>
+		</tr>
+	{% endfor %}
+</tbody></table></div></div><div class="x_panel"><h3>Devis</h3><div class="clearfix"></div><div class="x_title"></div><div class="overflow-auto"><table class="table w-100 " id="datatable_devis">
+<thead>
+	<tr>
+		<th class="hide">Numéro Devis</th>
+		<th>Numéro Devis</th>
+		<th>Date de création</th>
+		<th>Réservation/véhicule</th>
+		<th>Dates/Durée</th>
+		<th>Prix</th>
+		<th>Action</th>
+	</tr>
+</thead>
+<tbody>
+	{% for reserv in devis %}
+		<tr>
+			<td id="devisID " class="hide">{{reserv.id}}</td>
+			<td>{{ reserv.numero }}</td>
+			<td>{{ reserv.dateCreation ? reserv.dateCreation|date('d/m/Y - H:i') : '' }}</td>
+			<td>{{ reserv.vehicule.marque}}
+				{{ reserv.vehicule.modele}}</td>
+			<td>{{ reserv.dateDepart ? reserv.dateDepart|date('d/m/Y - H:i') : '' }}/
+				{{ reserv.duree}}
+				jours
+			</td>
+			<td>{{ reserv.prix|number_format(2,","," ") }}
+				€</td>
+			<td class=" d-flex justify-content-center ">
+				<div class="row">
+					<div class="col-auto mr-4 p-0">
+						<a href="{{path('devis_pdf', {'id': reserv.id})}}" class="text-dark" title="Télécharger pdf">
+							<i class="fa fa-arrow-circle-o-down" style="font-size: 1.5em !important;"></i>
+						</a>
+						{# <a class="telechargerDevis" id="telechargerDevis"><i class="fa fa-arrow-circle-o-down" style="font-size: 1.5em !important;"></i></a> #}
+					</div>
+					<div class="col-auto m-0 p-0">
+						{% if date(reserv.dateDepart) > date("now") or reserv.transformed == true  %}
+							<a class="btn btn-link text-danger m-0 p-0" style=" -webkit-appearance: none" href="{{path('validation_step2', {'id':reserv.id})}}" id="validerDevis" title="Valider">
+								<i class="fa fa-check" style="font-size: 1.5em !important;"></i>
+							</a>
+						{% endif %}
+					</div>
+				</div>
+			</td>
+		</tr>
+	{% endfor %}
+</tbody></table></div></div><div class="x_panel"><h3>Réservations à venir</h3><div class="clearfix"></div><div class="x_title"></div><div class="overflow-auto"><table class="table" id="datatable_a_venir">
+<thead>
+	<tr>
+		<th>Numéro Devis</th>
+		<th>Date de création</th>
+		<th>Réservation/véhicule</th>
+		<th>Dates/Durée</th>
+		<th>Prix</th>
+		<th>Action</th>
+	</tr>
+</thead>
+<tbody>
+	{% for reserv in res_attente_dateDebut %}
+		<tr>
+			<td>{{ reserv.reference }}</td>
+			<td>{{ reserv.dateReservation ? reserv.dateReservation|date('d/m/Y - H:i') : '' }}</td>
+			<td>{{ reserv.vehicule.marque }}
+				{{ reserv.vehicule.modele }}
+			</td>
+			<td>{{ reserv.dateDebut ? reserv.dateDebut|date('d/m/Y - H:i ') : '' }}/<br>
+				<span class="text-center font-italic">
+					{{ reserv.duree }}
+					jours
+				</span>
+			</td>
+			<td>{{ reserv.prix|number_format(2,","," ") }}
+				€
+			</td>
+			<td>
 
-		<h3>Devis</h3>
-		<div class="clearfix"></div>
-		<div class="x_title"></div>
-		<div class="overflow-auto">
-			<table class="table w-100 " id="datatable_devis">
-				<thead>
-					<tr>
-						<th class="hide">Numéro Devis</th>
-						<th>Numéro Devis</th>
-						<th>Date de création</th>
-						<th>Réservation/véhicule</th>
-						<th>Dates/Durée</th>
-						<th>Prix</th>
-						<th>Action</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for reserv in devis %}
-						<tr>
-							<td id="devisID " class="hide">{{reserv.id}}</td>
-							<td>{{ reserv.numero }}</td>
-							<td>{{ reserv.dateCreation ? reserv.dateCreation|date('d/m/Y - H:i') : '' }}</td>
-							<td>{{ reserv.vehicule.marque}}
-								{{ reserv.vehicule.modele}}</td>
-							<td>{{ reserv.dateDepart ? reserv.dateDepart|date('d/m/Y - H:i') : '' }}/
-								{{ reserv.duree}}
-								jours
-							</td>
-							<td>{{ reserv.prix|number_format(2,","," ") }}
-								€</td>
-							<td class=" d-flex justify-content-center ">
-								<div class="row">
-									<div class="col-auto mr-4 p-0">
-										<a href="{{path('devis_pdf', {'id': reserv.id})}}" class="text-dark" title="Télécharger pdf">
-											<i class="fa fa-arrow-circle-o-down" style="font-size: 1.5em !important;"></i>
-										</a>
-										{# <a class="telechargerDevis" id="telechargerDevis"><i class="fa fa-arrow-circle-o-down" style="font-size: 1.5em !important;"></i></a> #}
-									</div>
-									<div class="col-auto m-0 p-0">
-										{% if date(reserv.dateDepart) > date("now") or reserv.transformed == true  %}
-											<a class="btn btn-link text-danger m-0 p-0" style=" -webkit-appearance: none" href="{{path('validation_step2', {'id':reserv.id})}}" id="validerDevis" title="Valider">
-												<i class="fa fa-check" style="font-size: 1.5em !important;"></i>
-											</a>
-										{% endif %}
-									</div>
-								</div>
-							</td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
-	</div>
-
-	<div class="x_panel">
-		<h3>Réservations à venir</h3>
-		<div class="clearfix"></div>
-		<div class="x_title"></div>
-		<div class="overflow-auto">
-			<table class="table" id="datatable_a_venir">
-				<thead>
-					<tr>
-						<th>Numéro Devis</th>
-						<th>Date de création</th>
-						<th>Réservation/véhicule</th>
-						<th>Dates/Durée</th>
-						<th>Prix</th>
-						<th>Action</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for reserv in res_attente_dateDebut %}
-						<tr>
-							<td>{{ reserv.reference }}</td>
-							<td>{{ reserv.dateReservation ? reserv.dateReservation|date('d/m/Y - H:i') : '' }}</td>
-							<td>{{ reserv.vehicule.marque }}
-								{{ reserv.vehicule.modele }}
-							</td>
-							<td>{{ reserv.dateDebut ? reserv.dateDebut|date('d/m/Y - H:i ') : '' }}/<br>
-								<span class="text-center font-italic">
-									{{ reserv.duree }}
-									jours
-								</span>
-							</td>
-							<td>{{ reserv.prix|number_format(2,","," ") }}
-								€
-							</td>
-							<td>
-
-								{# dropdown #}
-								<div class="btn-group p-0" role="group">
-									<button id="btnGroupDrop1" class="btn btn-link-danger" type="button" class="btn btn-link p-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-										<i class="fa fa-bars"></i>
+				{# dropdown #}
+				<div class="btn-group p-0" role="group">
+					<button id="btnGroupDrop1" class="btn btn-link-danger" type="button" class="btn btn-link p-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="fa fa-bars"></i>
+					</button>
+					<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+						<div class="dropdown-item">
+							{% if reserv.prix > reserv.sommePaiements %}
+								<form action="{{ path('paiement_sold') }}" method="POST">
+									<input type="hidden" name="montantSolde" value="{{ (reserv.prix - reserv.sommePaiements)|number_format(2,","," ") }}">
+									<input type="hidden" name="reservation" value="{{ reserv.id }}">
+									<button class="btn btn-link-danger">Payer solde
+										{{ (reserv.prix - reserv.sommePaiements)|number_format(2,","," ") }}€
 									</button>
-									<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-										<div class="dropdown-item">
-											{% if reserv.prix > reserv.sommePaiements %}
-												<form action="{{ path('paiement_sold') }}" method="POST">
-													<input type="hidden" name="montantSolde" value="{{ (reserv.prix - reserv.sommePaiements)|number_format(2,","," ") }}">
-													<input type="hidden" name="reservation" value="{{ reserv.id }}">
-													<button class="btn btn-link-danger">Payer solde
-														{{ (reserv.prix - reserv.sommePaiements)|number_format(2,","," ") }}€
-													</button>
-												</form>
-											{% endif %}
-										</div>
-										<div
-											class="dropdown-item">{# <a href="{{path('add_avis', {'id': reserv.id})}}" class="btn btn-link-dark">Ajouter avis</a> #}
-										</div>
-										<div class="dropdown-item">
-											<a href="{{ path('client_reservation_show', {'id' : reserv.id}) }} " class="btn btn-link-dark">
-												Détails
-											</a>
-										</div>
-									</div>
-								</div>
-								{# fin dropdown #}
-								{% if reserv.prix > reserv.sommePaiements %}
-									<i class="fa fa-warning">Solde</i>
-								{% endif %}
-							</td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
-	</div>
+								</form>
+							{% endif %}
+						</div>
+						<div
+							class="dropdown-item">{# <a href="{{path('add_avis', {'id': reserv.id})}}" class="btn btn-link-dark">Ajouter avis</a> #}
+						</div>
+						<div class="dropdown-item">
+							<a href="{{ path('client_reservation_show', {'id' : reserv.id}) }} " class="btn btn-link-dark">
+								Détails
+							</a>
+						</div>
+					</div>
+				</div>
+				{# fin dropdown #}
+				{% if reserv.prix > reserv.sommePaiements %}
+					<i class="fa fa-warning">Solde</i>
+				{% endif %}
+			</td>
+		</tr>
+	{% endfor %}
+</tbody></table></div></div><div class="x_panel"><h3>Réservations réalisées</h3><div class="clearfix"></div><div class="x_title"></div><div class="overflow-auto"><table class="table " id="datatable_termine">
+<thead>
+	<tr>
+		<th>Référence</th>
+		<th>Date de création</th>
+		<th>Réservation/véhicule</th>
+		<th>Dates/Durée</th>
+		<th>Prix</th>
+		<th>Action</th>
+	</tr>
+</thead>
+<tbody>
+	{% for reserv in reservation_effectuers %}
+		<tr>
+			<td>{{ reserv.reference }}</td>
+			<td>{{ reserv.dateReservation|date('d/m/Y - H:i') }}</td>
+			<td>{{ reserv.vehicule.marque }}
+				{{ reserv.vehicule.modele }}
+				{{ reserv.vehicule.immatriculation }}</td>
+			<td>{{ reserv.dateDebut|date('d/m/Y - H:i') }}
+				<br>
+				<span class="text-center font-italic">
+					{{ reserv.duree }}
+					jours
+				</span>
+			</td>
+			<td>{{ reserv.prix|number_format(2,","," ") }}
+				€
+			</td>
+			<td
+				class="text-center">
 
-
-	<div class="x_panel">
-		<h3>Réservations réalisées</h3>
-		<div class="clearfix"></div>
-		<div class="x_title"></div>
-
-		<div class="overflow-auto">
-			<table class="table " id="datatable_termine">
-				<thead>
-					<tr>
-						<th>Référence</th>
-						<th>Date de création</th>
-						<th>Réservation/véhicule</th>
-						<th>Dates/Durée</th>
-						<th>Prix</th>
-						<th>Action</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for reserv in reservation_effectuers %}
-						<tr>
-							<td>{{ reserv.reference }}</td>
-							<td>{{ reserv.dateReservation|date('d/m/Y - H:i') }}</td>
-							<td>{{ reserv.vehicule.marque }}
-								{{ reserv.vehicule.modele }}
-								{{ reserv.vehicule.immatriculation }}</td>
-							<td>{{ reserv.dateDebut|date('d/m/Y - H:i') }}
-								<br>
-								<span class="text-center font-italic">
-									{{ reserv.duree }}
-									jours
-								</span>
-							</td>
-							<td>{{ reserv.prix|number_format(2,","," ") }}
-								€
-							</td>
-							<td
-								class="text-center">
-
-								{# dropdown #}
-								<div class="btn-group p-0" role="group">
-									<button id="btnGroupDrop1" class="btn btn-link-danger" type="button" class="btn btn-link p-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-										<i class="fa fa-bars"></i>
+				{# dropdown #}
+				<div class="btn-group p-0" role="group">
+					<button id="btnGroupDrop1" class="btn btn-link-danger" type="button" class="btn btn-link p-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="fa fa-bars"></i>
+					</button>
+					<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+						<div class="dropdown-item">
+							{% if reserv.prix > reserv.sommePaiements %}
+								<form action="{{ path('paiement_sold') }}" method="POST">
+									<input type="hidden" name="montantSolde" value="{{ (reserv.prix - reserv.sommePaiements)|number_format(2,","," ") }}">
+									<input type="hidden" name="reservation" value="{{ reserv.id }}">
+									<button class="btn btn-link-danger">Payer solde
+										{{ (reserv.prix - reserv.sommePaiements)|number_format(2,","," ") }}€
 									</button>
-									<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-										<div class="dropdown-item">
-											{% if reserv.prix > reserv.sommePaiements %}
-												<form action="{{ path('paiement_sold') }}" method="POST">
-													<input type="hidden" name="montantSolde" value="{{ (reserv.prix - reserv.sommePaiements)|number_format(2,","," ") }}">
-													<input type="hidden" name="reservation" value="{{ reserv.id }}">
-													<button class="btn btn-link-danger">Payer solde
-														{{ (reserv.prix - reserv.sommePaiements)|number_format(2,","," ") }}€
-													</button>
-												</form>
-											{% endif %}
-										</div>
-										{% if reserv.avis == null %}
-											<div class="dropdown-item">
-												<a href="{{ path('add_avis', {'id': reserv.id}) }}" class="btn btn-link-dark">Ajouter
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																														                                                avis</a>
-											</div>
-										{% endif %}
-										<div class="dropdown-item">
-											<a href="{{ path('client_reservation_show', {'id' : reserv.id}) }} " class="btn btn-link-dark">
-												Détails
-											</a>
-										</div>
-									</div>
-								</div>
-								{# fin dropdown #}
-							</td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
-
-	</div>
-{% endblock %}
-{% block javascripts %}
-	<script src="{{ asset( 'js/admin/jspdf.min.js') }}"></script>
-	<script src="{{ asset( 'js/admin/jspdf.plugin.autotable.js') }}"></script>
-	<script src="{{ asset( 'js/admin/devisJsPDF.js') }}"></script>
-	{# // <script src="{{ asset( 'js/client/reservation.js') }}"></script> #}
-	{# js pour pop-up btn ... #}
-	{# // <script src="{{ asset('js/client/pop-up/reservation.js') }}"></script> #}
-
-	{# datatable #}
-	<!-- Datatables --><script src="{{ asset('admin/vendors/datatables.net/js/jquery.dataTables.min.js') }}"> </script>
-	<script src="{{ asset('admin/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
-	<script src="{{ asset('admin/vendors/datatables.net-buttons/js/dataTables.buttons.min.js') }}"></script>
-	<script src="{{ asset('admin/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js') }}"></script>
-	<script src="{{ asset('admin/vendors/datatables.net-buttons/js/buttons.flash.min.js') }}"></script>
-	<script src="{{ asset('admin/vendors/datatables.net-buttons/js/buttons.html5.min.js') }}"></script>
-	<script src="{{ asset('admin/vendors/datatables.net-buttons/js/buttons.print.min.js') }}"></script>
-	<script src="{{ asset('admin/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js') }}"></script>
-	<script src="{{ asset('admin/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js') }}"></script>
-	<script src="{{ asset('admin/vendors/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
-	<script src="{{ asset('admin/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js') }}"></script>
-	<script src="{{ asset('admin/vendors/datatables.net-scroller/js/dataTables.scroller.min.js') }}"></script>
-	<script src="{{ asset('js/client/reservation/index/en_cours.datatable.fr.js') }}"></script>
-	<script src="{{ asset('js/client/reservation/index/devis.datatable.fr.js') }}"></script>
-	<script src="{{ asset('js/client/reservation/index/a_venir.datatable.fr.js') }}"></script>
-	<script src="{{ asset('js/client/reservation/index/termine.datatable.fr.js') }}"></script>
-{% endblock %}
+								</form>
+							{% endif %}
+						</div>
+						{% if reserv.avis == null %}
+							<div class="dropdown-item">
+								<a href="{{ path('add_avis', {'id': reserv.id}) }}" class="btn btn-link-dark">Ajouter
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																									                                                avis</a>
+							</div>
+						{% endif %}
+						<div class="dropdown-item">
+							<a href="{{ path('client_reservation_show', {'id' : reserv.id}) }} " class="btn btn-link-dark">
+								Détails
+							</a>
+						</div>
+					</div>
+				</div>
+				{# fin dropdown #}
+			</td>
+		</tr>
+	{% endfor %}
+</tbody></table></div></div>{% endblock %}{% block javascripts %}<script src="{{ asset( 'js/admin/jspdf.min.js') }}"></script><script src="{{ asset( 'js/admin/jspdf.plugin.autotable.js') }}"></script><script src="{{ asset( 'js/admin/devisJsPDF.js') }}"></script>{# // <script src="{{ asset( 'js/client/reservation.js') }}"></script> #}{# js pour pop-up btn ... #}{# // <script src="{{ asset('js/client/pop-up/reservation.js') }}"></script> #}{# datatable #}<!-- Datatables --><script src="{{ asset('admin/vendors/datatables.net/js/jquery.dataTables.min.js') }}"> </script><script src="{{ asset('admin/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script><script src="{{ asset('admin/vendors/datatables.net-buttons/js/dataTables.buttons.min.js') }}"></script><script src="{{ asset('admin/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js') }}"></script><script src="{{ asset('admin/vendors/datatables.net-buttons/js/buttons.flash.min.js') }}"></script><script src="{{ asset('admin/vendors/datatables.net-buttons/js/buttons.html5.min.js') }}"></script><script src="{{ asset('admin/vendors/datatables.net-buttons/js/buttons.print.min.js') }}"></script><script src="{{ asset('admin/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js') }}"></script><script src="{{ asset('admin/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js') }}"></script><script src="{{ asset('admin/vendors/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script><script src="{{ asset('admin/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js') }}"></script><script src="{{ asset('admin/vendors/datatables.net-scroller/js/dataTables.scroller.min.js') }}"></script><script src="{{ asset('js/client/reservation/index/en_cours.datatable.fr.js') }}"></script><script src="{{ asset('js/client/reservation/index/devis.datatable.fr.js') }}"></script><script src="{{ asset('js/client/reservation/index/a_venir.datatable.fr.js') }}"></script><script src="{{ asset('js/client/reservation/index/termine.datatable.fr.js') }}"></script>{% endblock %}

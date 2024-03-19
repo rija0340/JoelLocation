@@ -3,7 +3,7 @@ $(document).ready(function () {
     $("#datatable").dataTable().fnDestroy();
     $('#datatable').dataTable({
         "scrollX": true,
-        "order": [[0, "desc"]],
+        "order": [[1, "desc"]],
         "language": languages_fr
         // "bDestroy": true
     });

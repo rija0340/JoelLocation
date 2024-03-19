@@ -6,11 +6,7 @@
 
 {% block stylesheets %}
 	<!-- Datatables -->
-	<link href="{{asset('admin/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css')}}" rel="stylesheet">
-	<link href="{{asset('admin/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css')}}" rel="stylesheet">
-	<link href="{{asset('admin/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css')}}" rel="stylesheet">
-	<link href="{{asset('admin/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css')}}" rel="stylesheet">
-	<link href="{{asset('admin/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css')}}" rel="stylesheet">
+	{% include "admin/_parts/datatables/css.html.twig" %}
 
 {% endblock %}
 
@@ -56,58 +52,44 @@
 				</div>
 			</div>
 			<div class="overflow-auto">
-			<table id="datatable" class="table table-hover" style="width : 100%">
-				<thead class="bg-dark text-white text-uppercase text-center">
-					<tr>
-						<th>Immatriculation</th>
-						<th>modèle</th>
-						<th class="text-nowrap">dernière réservation</th>
-						<th class="text-nowrap">prochaine réservation</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for veh in vehiculesDisponible %}
+				<table id="datatable" class="table table-hover" style="width : 100%">
+					<thead class="bg-dark text-white text-uppercase text-center">
 						<tr>
-							<td>{{veh.Immatriculation}}</td>
-							<td>{{veh.modele}}</td>
-							<td>
-								{% for reservation in listPastReservations %}
-									{% if (reservation.vehicule == veh) %}
-										{{ reservation.dateFin|date('d/m/Y H:i') }}
-									{% endif %}
-								{% endfor %}
-							</td>
-							<td>
-								{% for reservation in listNextReservations %}
-									{% if (reservation.vehicule == veh) %}
-										{{ reservation.dateDebut|date('d/m/Y H:i') }}
-									{% endif %}
-								{% endfor %}
-							</td>
-
+							<th>Immatriculation</th>
+							<th>modèle</th>
+							<th class="text-nowrap">dernière réservation</th>
+							<th class="text-nowrap">prochaine réservation</th>
 						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
+					</thead>
+					<tbody>
+						{% for veh in vehiculesDisponible %}
+							<tr>
+								<td>{{veh.Immatriculation}}</td>
+								<td>{{veh.modele}}</td>
+								<td>
+									{% for reservation in listPastReservations %}
+										{% if (reservation.vehicule == veh) %}
+											{{ reservation.dateFin|date('d/m/Y H:i') }}
+										{% endif %}
+									{% endfor %}
+								</td>
+								<td>
+									{% for reservation in listNextReservations %}
+										{% if (reservation.vehicule == veh) %}
+											{{ reservation.dateDebut|date('d/m/Y H:i') }}
+										{% endif %}
+									{% endfor %}
+								</td>
+
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
 			</div>
 		{% endblock %}
 
 		{% block javascripts %}
 			<!-- Datatables -->
-			<script src="{{asset('admin/vendors/datatables.net/js/jquery.dataTables.min.js')}}"></script>
-			<script src="{{asset('admin/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js')}}"></script>
-			<script src="{{asset('admin/vendors/datatables.net-buttons/js/dataTables.buttons.min.js')}}"></script>
-			<script src="{{asset('admin/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js')}}"></script>
-			<script src="{{asset('admin/vendors/datatables.net-buttons/js/buttons.flash.min.js')}}"></script>
-			<script src="{{asset('admin/vendors/datatables.net-buttons/js/buttons.html5.min.js')}}"></script>
-			<script src="{{asset('admin/vendors/datatables.net-buttons/js/buttons.print.min.js')}}"></script>
-			<script src="{{asset('admin/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js')}}"></script>
-			<script src="{{asset('admin/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js')}}"></script>
-			<script src="{{asset('admin/vendors/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
-			<script src="{{asset('admin/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js')}}"></script>
-			<script src="{{asset('admin/vendors/datatables.net-scroller/js/dataTables.scroller.min.js')}}"></script>
-			<script src="{{asset('admin/vendors/jszip/dist/jszip.min.js')}}"></script>
-			<script src="{{asset('admin/vendors/pdfmake/build/pdfmake.min.js')}}"></script>
-			<script src="{{asset('admin/vendors/pdfmake/build/vfs_fonts.js')}}"></script>
+			{% include "admin/_parts/datatables/js.html.twig" %}
 			<script src="{{asset('js/admin/datatable.fr.js')}}"></script>
 		{% endblock %}
