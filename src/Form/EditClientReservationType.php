@@ -35,7 +35,8 @@ class EditClientReservationType extends AbstractType
             ])
             ->add('mail', EmailType::class)
             ->add('telephone', TelType::class, [
-                'required' => false
+                'required' => false,
+                'empty_data' => ""
             ])
             ->add('portable', TelType::class)
             ->add('infosResa', InfosResaType::class)
