@@ -113,28 +113,40 @@
 
 $(document).ready(function () {
 
-    defaultSelectedOptions = $("#options_garanties_data").data('selected-options');
-    defaultSelectedGaranties = $("#options_garanties_data").data('selected-garanties');
-    garanties = $("#options_garanties_data").data('garanties');
-    options = $("#options_garanties_data").data('options');
+    let defaultSelectedOptions = $("#options_garanties_data").data('selected-options');
+    let defaultSelectedGaranties = $("#options_garanties_data").data('selected-garanties');
+    let defaultConducteur = $("#options_garanties_data").data('conducteur');
+    let garanties = $("#options_garanties_data").data('garanties');
+    let options = $("#options_garanties_data").data('options');
+    let subscribedOptions = $("#optionsSubscribed");
+    let subscribedGaranties = $("#garantiesSubscribed");
 
+    const conducteurLabel = "Conducteur additionnel";
 
     var optionsPrix = 0;
     var garantiesPrix = 0;
-    var checkedOptions = [];
-    var checkedGaranties = [];
 
     setDefaultGaranties();
     setDefaultOptions();
+    setDefaultConducteur();
     calculSommeOptions();
     calculSommeGaranties();
+
+    function setDefaultConducteur() {
+        if (parseInt(defaultConducteur) == 1) {
+            let li = document.createElement('li');
+            li.innerText = conducteurLabel;
+            subscribedOptions.append(li);
+
+        }
+    }
 
     //check les checkes options
     function setDefaultOptions() {
         for (let i = 0; i < defaultSelectedOptions.length; i++) {
-            li = document.createElement('li');
+            let li = document.createElement('li');
             li.innerHTML = defaultSelectedOptions[i].appelation;
-            $("#optionsSubscribed").append(li);
+            optionsSubscribed.append(li);
 
         }
         $("input[name='checkboxOptions[]']").each(function () {
@@ -153,9 +165,9 @@ $(document).ready(function () {
 
     function setDefaultGaranties() {
         for (let i = 0; i < defaultSelectedGaranties.length; i++) {
-            li = document.createElement('li');
+            let li = document.createElement('li');
             li.innerHTML = defaultSelectedGaranties[i].appelation;
-            $("#garantiesSubscribed").append(li);
+            subscribedGaranties.append(li);
 
         }
         $("input[name='checkboxGaranties[]']").each(function () {
@@ -184,7 +196,11 @@ $(document).ready(function () {
                 }
             }
         });
-        $("#prixOptions").html(optionsPrix + " €");
+
+        let conducteurPrix = $('input[name="radio-conducteur"]:checked').val() == "true" ? 50 : 0;
+
+        //ajouter prix conducteur avec prix options
+        $("#prixOptions").html(optionsPrix + conducteurPrix + " €");
 
     }
 
@@ -196,7 +212,6 @@ $(document).ready(function () {
                 for (let i = 0; i < garanties.length; i++) {
                     if ($(this).val() == garanties[i].id) {
                         garantiesPrix = garantiesPrix + garanties[i].prix;
-                        checkedGaranties.push(garanties[i]);
                     }
                 }
             }
@@ -218,8 +233,16 @@ $(document).ready(function () {
             calculSommeOptions();
             clearOptions();
             setSelectedOptions();
-            // console.log("anaty change");
         });
+    });
+
+    // handle conducteur change 
+
+    $("input[name='radio-conducteur']").change(function () {
+
+        calculSommeOptions();
+        clearOptions();
+        setSelectedOptions();
     });
 
 
@@ -230,14 +253,19 @@ $(document).ready(function () {
                 console.log($(this));
                 for (let i = 0; i < options.length; i++) {
                     if ($(this).val() == options[i].id) {
-                        li = document.createElement('li');
+                        let li = document.createElement('li');
                         li.innerHTML = options[i].appelation;
-                        // ul = $("#optionsSubscribed");
-                        $("#optionsSubscribed").append(li);
+                        subscribedOptions.append(li);
                     }
                 }
             }
         });
+        if ($('input[name="radio-conducteur"]:checked').val() == "true") {
+            let li = document.createElement('li');
+            li.innerHTML = conducteurLabel;
+            subscribedOptions.append(li);
+        }
+
     }
 
 
@@ -247,10 +275,9 @@ $(document).ready(function () {
             if ($(this).is(':checked')) {
                 for (let i = 0; i < garanties.length; i++) {
                     if ($(this).val() == garanties[i].id) {
-                        li = document.createElement('li');
+                        let li = document.createElement('li');
                         li.innerHTML = garanties[i].appelation;
-                        // ul = $("#optionsSubscribed");
-                        $("#garantiesSubscribed").append(li);
+                        subscribedGaranties.append(li);
                     }
                 }
             }
@@ -258,18 +285,18 @@ $(document).ready(function () {
     }
 
     function clearOptions() {
-        var optionsChildren = $("#optionsSubscribed").children();
+        var optionsChildren = subscribedOptions.children();
         if (optionsChildren.length > 0) {
-            for (let i = 0 ; i < optionsChildren.length ; i++) {
+            for (let i = 0; i < optionsChildren.length; i++) {
                 optionsChildren[i].remove();
             }
         }
     }
 
     function clearGaranties() {
-        var garantiesChildren = $("#garantiesSubscribed").children();
+        var garantiesChildren = subscribedGaranties.children();
         if (garantiesChildren.length > 0) {
-            for (let i = 0 ; i < garantiesChildren.length ; i++) {
+            for (let i = 0; i < garantiesChildren.length; i++) {
                 garantiesChildren[i].remove();
             }
         }

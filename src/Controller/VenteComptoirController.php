@@ -64,6 +64,7 @@ class VenteComptoirController extends AbstractController
     private $reservationHelper;
     private $modePaiementRepo;
     private $modeReservationRepo;
+    private $tarifConductSuppl;
 
     public function __construct(
         ModeReservationRepository $modeReservationRepo,
@@ -106,6 +107,7 @@ class VenteComptoirController extends AbstractController
         $this->reservationHelper = $reservationHelper;
         $this->modePaiementRepo = $modePaiementRepo;
         $this->modeReservationRepo = $modeReservationRepo;
+        $this->tarifConductSuppl = $this->tarifsHelper->getPrixConducteurSupplementaire();
     }
 
     /**
@@ -114,7 +116,8 @@ class VenteComptoirController extends AbstractController
     public function step1(Request $request, SessionInterface $session): Response
     {
         //remove contenu session avant toute chose
-        //        $this->reservationSession->removeReservation();
+
+        $this->reservationSession->removeReservation();
 
         $form = $this->createForm(ReservationStep1Type::class);
         if ($this->reservationSession->getReservation() != null) {
@@ -343,7 +346,7 @@ class VenteComptoirController extends AbstractController
         }
 
         if ($this->reservationSession->getConducteur() == "true") {
-            $tarifTotal = 50 +  $this->tarifsHelper->calculTarifTotal($tarifVehicule, $this->optionsObjectsFromSession(), $this->garantiesObjectsFromSession());
+            $tarifTotal = $this->tarifConductSuppl +  $this->tarifsHelper->calculTarifTotal($tarifVehicule, $this->optionsObjectsFromSession(), $this->garantiesObjectsFromSession());
         } else {
             $tarifTotal = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $this->optionsObjectsFromSession(), $this->garantiesObjectsFromSession());
         }
@@ -468,7 +471,7 @@ class VenteComptoirController extends AbstractController
             //si le client a choisi conducteur optionnel on ajoute 50€
             if ($this->reservationSession->getConducteur() == "true") {
                 $devis->setConducteur(true);
-                $devis->setPrix($tarifVehicule + $prixGaranties + $prixOptions + 50);
+                $devis->setPrix($tarifVehicule + $prixGaranties + $prixOptions + $this->tarifConductSuppl);
             } else if ($this->reservationSession->getConducteur() == "false") {
                 $devis->setConducteur(false);
                 $devis->setPrix($tarifVehicule + $prixGaranties + $prixOptions);
@@ -651,7 +654,7 @@ class VenteComptoirController extends AbstractController
             $reservation->setPrix($tarifVehicule + $prixOptions + $prixGaranties);
         } else if ($this->reservationSession->getConducteur() == "true") {
             $reservation->setConducteur(true);
-            $reservation->setPrix($tarifVehicule + $prixOptions + $prixGaranties + 50);
+            $reservation->setPrix($tarifVehicule + $prixOptions + $prixGaranties + $this->tarifConductSuppl);
         }
 
 

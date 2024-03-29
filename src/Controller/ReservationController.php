@@ -90,6 +90,7 @@ class ReservationController extends AbstractController
     private $flashy;
     private $modePaiementRepo;
     private $appelPaiementRepository;
+    private $tarifConductSuppl;
 
     public function __construct(
         ModePaiementRepository $modePaiementRepo,
@@ -129,6 +130,7 @@ class ReservationController extends AbstractController
         $this->conducteurRepo = $conducteurRepo;
         $this->modePaiementRepo = $modePaiementRepo;
         $this->appelPaiementRepository = $appelPaiementRepository;
+        $this->tarifConductSuppl = $this->tarifsHelper->getPrixConducteurSupplementaire();
     }
 
     /**
@@ -355,6 +357,7 @@ class ReservationController extends AbstractController
 
         return $this->render('admin/reservation/crud/show.html.twig', [
             'reservation' => $reservation,
+            'prixOptions' => $reservation->getConducteur() == true ? $reservation->getPrixOptions() + $this->tarifConductSuppl : $reservation->getPrixOptions(),
             'formKM' => $formKM->createView(),
             'formAjoutPaiement' => $formAjoutPaiement->createView(),
             'formReportResa' => $formReportResa->createView(),
@@ -447,7 +450,7 @@ class ReservationController extends AbstractController
     }
 
     /**
-     *  @Route("/modifier/options-garanties/{id}", name="optionsGaranties_edit", methods={"GET","POST"},requirements={"id":"\d+"})
+     *  @Route("/modifier/options-garanties/{id}", name="reservation_optionsGaranties_edit", methods={"GET","POST"},requirements={"id":"\d+"})
      */
     public function editOptionsGaranties(Request $request, Reservation $reservation): Response
     {
@@ -505,6 +508,12 @@ class ReservationController extends AbstractController
 
             $checkboxOptions = $request->get("checkboxOptions");
             $checkboxGaranties = $request->get("checkboxGaranties");
+            $conduteur = $request->get('radio-conducteur');
+
+            //changement valeur conducteur
+            $conducteur = ($conduteur == "true") ? true : false;
+            $reservation->setConducteur($conducteur);
+            $this->em->flush();
 
             if ($checkboxOptions != []) {
                 // tous enlever et puis entrer tous les options
@@ -546,16 +555,17 @@ class ReservationController extends AbstractController
 
             $reservation->setPrixGaranties($this->tarifsHelper->sommeTarifsGaranties($reservation->getGaranties()));
             $reservation->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($reservation->getOptions()));
-            $reservation->setPrix($reservation->getTarifVehicule() + $reservation->getPrixOptions() + $reservation->getPrixGaranties());
+            $prixConducteur = $conduteur == "true"  ? $this->tarifConductSuppl : 0;
+            $reservation->setPrix($reservation->getTarifVehicule() + $reservation->getPrixOptions() + $reservation->getPrixGaranties() + $prixConducteur);
 
             $this->em->flush();
             return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
         }
 
 
-        return $this->render('admin/reservation/crud/options_garanties/edit.html.twig', [
+        return $this->render('admin/devis_reservation/options_garanties/edit.html.twig', [
             'form' => $form->createView(),
-            'reservation' => $reservation,
+            'devis' => $reservation,
             'garanties' => $garanties,
             'options' => $options,
             'routeReferer' => 'reservation_show',
@@ -563,6 +573,8 @@ class ReservationController extends AbstractController
             'dataGaranties' => $dataGaranties,
             'allOptions' => $allOptions,
             'allGaranties' => $allGaranties,
+            'conducteur' => $reservation->getConducteur(),
+            'type' => 'reservation'
 
         ]);
     }

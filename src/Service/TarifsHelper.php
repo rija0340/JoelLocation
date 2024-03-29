@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\Options;
 use App\Repository\TarifsRepository;
 use App\Repository\OptionsRepository;
 use App\Repository\GarantieRepository;
@@ -25,6 +26,12 @@ class TarifsHelper
         $this->garantiesRepo = $garantiesRepo;
         $this->tarifsRepo = $tarifsRepo;
         $this->dateHelper = $dateHelper;
+    }
+
+
+    function getPrixConducteurSupplementaire()
+    {
+        return 50;
     }
 
     function calculTarifTotal($tarifVehicule, $options, $garanties)

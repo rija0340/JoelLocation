@@ -57,10 +57,24 @@ class DevisController extends AbstractController
     private $em;
     private $mailjet;
     private $flashy;
+    private $tarifConductSuppl;
 
 
-    public function __construct(FlashyNotifier $flashy, Mailjet $mailjet, EntityManagerInterface $em, DateHelper $dateHelper, TarifsHelper $tarifsHelper,  UserRepository $userRepo, DevisRepository $devisRepo, ReservationRepository $reservationRepo, VehiculeRepository $vehiculeRepo,   TarifsRepository $tarifsRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo, ReservationController $reservController)
-    {
+    public function __construct(
+        FlashyNotifier $flashy,
+        Mailjet $mailjet,
+        EntityManagerInterface $em,
+        DateHelper $dateHelper,
+        TarifsHelper $tarifsHelper,
+        UserRepository $userRepo,
+        DevisRepository $devisRepo,
+        ReservationRepository $reservationRepo,
+        VehiculeRepository $vehiculeRepo,
+        TarifsRepository $tarifsRepo,
+        OptionsRepository $optionsRepo,
+        GarantieRepository $garantiesRepo,
+        ReservationController $reservController
+    ) {
 
         $this->reservationRepo = $reservationRepo;
         $this->vehiculeRepo = $vehiculeRepo;
@@ -75,6 +89,7 @@ class DevisController extends AbstractController
         $this->em = $em;
         $this->mailjet = $mailjet;
         $this->flashy = $flashy;
+        $this->tarifConductSuppl = $this->tarifsHelper->getPrixConducteurSupplementaire();
     }
 
     /**
@@ -200,6 +215,7 @@ class DevisController extends AbstractController
 
         return $this->render('admin/devis/details.html.twig', [
             'devis' => $devis,
+            'prixOptions' => $devis->getConducteur() == true ? $devis->getPrixOptions() + $this->tarifConductSuppl : $devis->getPrixOptions()
         ]);
     }
 
@@ -397,7 +413,7 @@ class DevisController extends AbstractController
 
         // Output the generated PDF to Browser (force download)
         $dompdf->stream("devis.pdf", [
-            "Attachment" => true,
+            "Attachment" => false,
         ]);
     }
 
@@ -441,7 +457,6 @@ class DevisController extends AbstractController
         $garanties = $this->garantiesRepo->findAll();
         $options = $this->optionsRepo->findAll();
         $form->handleRequest($request);
-
         //serializer options et garanties de devis
         $dataOptions = [];
         foreach ($devis->getOptions() as $key => $option) {
@@ -482,6 +497,12 @@ class DevisController extends AbstractController
 
             $checkboxOptions = $request->get("checkboxOptions");
             $checkboxGaranties = $request->get("checkboxGaranties");
+            $conduteur = $request->get('radio-conducteur');
+
+            //changement valeur conducteur
+            $conducteur = ($conduteur == "true") ? true : false;
+            $devis->setConducteur($conducteur);
+            $this->em->flush();
 
             if ($checkboxOptions != []) {
                 // tous enlever et puis entrer tous les options
@@ -522,13 +543,14 @@ class DevisController extends AbstractController
             }
             $devis->setPrixGaranties($this->tarifsHelper->sommeTarifsGaranties($devis->getGaranties()));
             $devis->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($devis->getOptions()));
-            $devis->setPrix($devis->getTarifVehicule() + $devis->getPrixOptions() + $devis->getPrixGaranties());
+            $prixConducteur = $conduteur == "true"  ? $this->tarifConductSuppl : 0;
+            $devis->setPrix($devis->getTarifVehicule() + $devis->getPrixOptions() + $devis->getPrixGaranties() + $prixConducteur);
 
             $this->em->flush();
             return $this->redirectToRoute('devis_show', ['id' => $devis->getId()]);
         }
 
-        return $this->render('admin/devis/options_garanties/edit.html.twig', [
+        return $this->render('admin/devis_reservation/options_garanties/edit.html.twig', [
             'form' => $form->createView(),
             'devis' => $devis,
             'garanties' => $garanties,
@@ -538,6 +560,8 @@ class DevisController extends AbstractController
             'dataGaranties' => $dataGaranties,
             'allOptions' => $allOptions,
             'allGaranties' => $allGaranties,
+            'conducteur' => $devis->getConducteur(),
+            'type' => 'devis'
 
         ]);
     }

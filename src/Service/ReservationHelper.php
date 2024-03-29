@@ -202,7 +202,6 @@ class ReservationHelper
     public function sendMailConfirmationReservation($reservation)
     {
         //lien pour telechargement devis
-        // $url = $this->generateUrl('devis_pdf', ['id' => $devis->getId()]);
 
         $devis = $this->devisRepo->find($reservation->getNumDevis());
         $url = '/backoffice/devispdf/' . $devis->getId();

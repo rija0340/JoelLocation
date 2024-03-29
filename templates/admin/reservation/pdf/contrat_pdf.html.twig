@@ -318,14 +318,15 @@
 						<tr style="padding:2px">
 							<td style="padding:2px">
 								<span>
-									{% if  devis.client.sexe == ""  %}
+									{% if devis is defined and devis is not null %}
+										{% if  devis.client.sexe == ""  %}
 
-										{% elseif devis.client.sexe == 'masculin' %}
-											Mr
-										{% elseif devis.client.sexe == 'feminin' %}
-											Mlle/Mme
+											{% elseif devis.client.sexe == 'masculin' %}
+												Mr
+											{% elseif devis.client.sexe == 'feminin' %}
+												Mlle/Mme
+										{% endif %}
 									{% endif %}
-
 								</span>
 								Nom</td>
 							<td style="padding:2px">{{ reservation.client.nom }}</td>
