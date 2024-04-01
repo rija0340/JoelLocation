@@ -64,7 +64,6 @@ class VenteComptoirController extends AbstractController
     private $reservationHelper;
     private $modePaiementRepo;
     private $modeReservationRepo;
-    private $tarifConductSuppl;
 
     public function __construct(
         ModeReservationRepository $modeReservationRepo,
@@ -107,7 +106,6 @@ class VenteComptoirController extends AbstractController
         $this->reservationHelper = $reservationHelper;
         $this->modePaiementRepo = $modePaiementRepo;
         $this->modeReservationRepo = $modeReservationRepo;
-        $this->tarifConductSuppl = $this->tarifsHelper->getPrixConducteurSupplementaire();
     }
 
     /**
@@ -142,8 +140,6 @@ class VenteComptoirController extends AbstractController
             $this->reservationSession->addDateRetour($dateRetour);
             $this->reservationSession->addTypeVehicule($typeVehicule);
             $this->reservationSession->addLieuSejour($lieuSejour);
-
-            //           dd( $this->reservationSession->getReservation());
 
             return $this->redirectToRoute('step2');
         }
@@ -196,7 +192,6 @@ class VenteComptoirController extends AbstractController
             $data[$key]['tarif'] = $tarif;
         }
 
-        // dd($session->get('step1', []));
         //utilisation de paginator pour liste véhicule disponible
         //pagination
         $vehiculesDisponiblePagination = $paginator->paginate(
@@ -204,8 +199,6 @@ class VenteComptoirController extends AbstractController
             $request->query->getInt('page', 1), // Numéro de la page en cours, passé dans l'URL, 1 si aucune page
             3 // Nombre de résultats par page
         );
-
-        // dd($vehiculesDisponible);
 
         return $this->render('admin/vente_comptoir2/step2.html.twig', [
             'vehiculesDisponiblePagination' => $vehiculesDisponiblePagination,
@@ -345,11 +338,8 @@ class VenteComptoirController extends AbstractController
             $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
         }
 
-        if ($this->reservationSession->getConducteur() == "true") {
-            $tarifTotal = $this->tarifConductSuppl +  $this->tarifsHelper->calculTarifTotal($tarifVehicule, $this->optionsObjectsFromSession(), $this->garantiesObjectsFromSession());
-        } else {
-            $tarifTotal = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $this->optionsObjectsFromSession(), $this->garantiesObjectsFromSession());
-        }
+        $hasConducteur = $this->reservationSession->getConducteur() == "true"  ? true : false;
+        $tarifTotal = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $this->optionsObjectsFromSession(), $this->garantiesObjectsFromSession(), $hasConducteur);
 
         return $this->render('admin/vente_comptoir2/step4.html.twig', [
 
@@ -428,7 +418,6 @@ class VenteComptoirController extends AbstractController
 
         //utile pour eviter erreur new entity, cette erreur apparait lorsque on utilise directement objet véhicule dans session
         $vehicule = $this->vehiculeRepo->find($this->reservationSession->getVehicule());
-        // dd($vehicule);
 
         $isDevisExist = $this->devisRepo->findOneBy([
             'dateDepart' => $this->reservationSession->getDateDepart(),
@@ -462,20 +451,17 @@ class VenteComptoirController extends AbstractController
             } else {
                 $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($this->reservationSession->getDateDepart(), $this->reservationSession->getDateRetour(), $vehicule);
             }
-            $devis->setTarifVehicule($tarifVehicule);
-            $prixOptions = $this->tarifsHelper->sommeTarifsOptions($this->optionsObjectsFromSession());
-            $devis->setPrixOptions($prixOptions);
-            $prixGaranties = $this->tarifsHelper->sommeTarifsGaranties($this->garantiesObjectsFromSession());
-            $devis->setPrixGaranties($prixGaranties);
 
-            //si le client a choisi conducteur optionnel on ajoute 50€
             if ($this->reservationSession->getConducteur() == "true") {
                 $devis->setConducteur(true);
-                $devis->setPrix($tarifVehicule + $prixGaranties + $prixOptions + $this->tarifConductSuppl);
             } else if ($this->reservationSession->getConducteur() == "false") {
                 $devis->setConducteur(false);
-                $devis->setPrix($tarifVehicule + $prixGaranties + $prixOptions);
             }
+
+            $devis->setTarifVehicule($tarifVehicule);
+            $devis->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($this->optionsObjectsFromSession(), $devis->getConducteur()));
+            $devis->setPrixGaranties($this->tarifsHelper->sommeTarifsGaranties($this->garantiesObjectsFromSession()));
+            $devis->setPrix($tarifVehicule + $devis->getPrixOptions() + $devis->getPrixGaranties());
 
             $devis->setTransformed(false);
 
@@ -563,7 +549,10 @@ class VenteComptoirController extends AbstractController
         $vehicule = $this->vehiculeRepo->find($this->reservationSession->getVehicule());
         $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
         $prixGaranties = $this->tarifsHelper->sommeTarifsGaranties($this->garantiesObjectsFromSession());
-        $prixOptions = $this->tarifsHelper->sommeTarifsOptions($this->optionsObjectsFromSession());
+
+        $conducteur = $this->reservationSession->getConducteur() == "true" ? true : false;
+
+        $prixOptions = $this->tarifsHelper->sommeTarifsOptions($this->optionsObjectsFromSession(), $conducteur);
         $tarifTotal = $tarifVehicule + $prixGaranties + $prixOptions;
 
         //numero du devis
@@ -596,7 +585,6 @@ class VenteComptoirController extends AbstractController
      */
     public function reserverDevis(Request $request): Response
     {
-        // dd($request);
         //extracion mail from string format : "nom prenom (mail)"
         $client = $request->request->get('client');
         $montantPaiement = $request->request->get('montant');
@@ -644,23 +632,19 @@ class VenteComptoirController extends AbstractController
             $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
         }
 
-        $prixOptions = $this->tarifsHelper->sommeTarifsOptions($this->optionsObjectsFromSession());
-        $prixGaranties = $this->tarifsHelper->sommeTarifsGaranties($this->garantiesObjectsFromSession());
-
-        //gestion conducteur optionnel et prix
-
         if ($this->reservationSession->getConducteur() == "false") {
             $reservation->setConducteur(false);
-            $reservation->setPrix($tarifVehicule + $prixOptions + $prixGaranties);
         } else if ($this->reservationSession->getConducteur() == "true") {
             $reservation->setConducteur(true);
-            $reservation->setPrix($tarifVehicule + $prixOptions + $prixGaranties + $this->tarifConductSuppl);
         }
 
+        $prixOptions = $this->tarifsHelper->sommeTarifsOptions($this->optionsObjectsFromSession(), $reservation->getConducteur());
+        $prixGaranties = $this->tarifsHelper->sommeTarifsGaranties($this->garantiesObjectsFromSession());
 
         $reservation->setTarifVehicule($tarifVehicule);
-        $reservation->setPrixGaranties($this->tarifsHelper->sommeTarifsGaranties($this->garantiesObjectsFromSession()));
-        $reservation->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($this->optionsObjectsFromSession()));
+        $reservation->setPrixOptions($prixOptions);
+        $reservation->setPrixGaranties($prixGaranties);
+        $reservation->setPrix($tarifVehicule + $prixOptions + $prixGaranties);
         $reservation->setDateReservation($this->dateHelper->dateNow());
         $reservation->setCodeReservation('devisTransformé');
         // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)

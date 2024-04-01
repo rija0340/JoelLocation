@@ -187,8 +187,8 @@ class DevisController extends AbstractController
                 $currentID = $lastID[0]->getId() + 1;
             }
             $devis->setNumeroDevis($currentID);
-
-            $prix = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $options, $garanties);
+            // tous les prix sont en TTC
+            $prix = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $options, $garanties, $devis->getConducteur());
 
             $devis->setPrix($prix);
 
@@ -212,10 +212,8 @@ class DevisController extends AbstractController
      */
     public function show(Devis $devis): Response
     {
-
         return $this->render('admin/devis/details.html.twig', [
             'devis' => $devis,
-            'prixOptions' => $devis->getConducteur() == true ? $devis->getPrixOptions() + $this->tarifConductSuppl : $devis->getPrixOptions()
         ]);
     }
 
@@ -227,38 +225,6 @@ class DevisController extends AbstractController
 
         return $this->render('client/reservation/details.html.twig', [
             'devis' => $devis,
-        ]);
-    }
-
-    /**
-     * @Route("devis/{id}/edit", name="devis_edit", methods={"GET","POST"})
-     */
-    public function edit(Request $request, Devis $devis): Response
-    {
-        $form = $this->createForm(DevisType::class, $devis);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            $dateDepart = $request->request->get('devis')['dateDepart'];
-            $dateRetour = $request->request->get('devis')['dateRetour'];
-            $siege = $request->request->get('devis')['siege'];
-            $garantie = $request->request->get('devis')['garantie'];
-            $vehicule = $request->request->get('devis')['vehicule'];
-            // $vehicule = $request->request->get('selectVehicule');
-            $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
-            $prix = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $siege, $garantie);
-            $devis->setPrix($prix);
-            // $devis->setVehicule($this->vehiculeRepo->find($vehicule));
-            $devis->setDuree($this->dateHelper->calculDuree($dateDepart, $dateRetour));
-            $this->getDoctrine()->getManager()->flush();
-            return $this->redirectToRoute('devis_index');
-        }
-
-        return $this->render('admin/devis/edit.html.twig', [
-            'form' => $form->createView(),
-            'devis' => $devis
         ]);
     }
 
@@ -285,7 +251,7 @@ class DevisController extends AbstractController
             $vehicule = $this->vehiculeRepo->find($vehicule);
 
             $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
-            $tarifTotal = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $devis->getOptions(), $devis->getGaranties());
+            $tarifTotal = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $devis->getOptions(), $devis->getGaranties(), $devis->getConducteur());
 
             $devis->setPrix($tarifTotal);
             $devis->setVehicule($vehicule);
@@ -359,67 +325,7 @@ class DevisController extends AbstractController
         return $this->redirectToRoute('reservation_index');
     }
 
-    /**
-     * @Route("devispdf/{id}", name="devis_pdf", methods={"GET"})
-     */
-    public function pdfdevis(Pdf $knpSnappyPdf, Devis $devis, UserRepository $userRepository, VehiculeRepository $vehiculeRepository, DevisRepository $devisRepository)
-    {
-        // Configure Dompdf according to your needs
-        $pdfOptions = new Options();
-        $pdfOptions->set('defaultFont', 'Arial');
-        // Instantiate Dompdf with our options
-        $dompdf = new Dompdf($pdfOptions);
-        $client = new User();
-        $vehicule = new Vehicule();
-        $client = $devisRepository->findOneBy(['client' => $devis->getClient()]);
-        $user = $userRepository->findOneBy(["id" => $client->getId()]);
-        $vehicule = $devisRepository->findOneBy(['vehicule' => $devis->getVehicule()]);
-        //$quantite = $devis->getDateDepart()->diff($devis->getDateRetour());
-        $quantite = date_diff($devis->getDateDepart(), $devis->getDateRetour());
-        $logo = $this->getParameter('logo') . '/Joel-Location-new.png';
-        $logo_data = base64_encode(file_get_contents($logo));
-        $logo_src = 'data:image/png;base64,' . $logo_data;
-        $prixunitaire = $devis->getPrix();
-        $prixht = $prixunitaire * $quantite->d;
-        $tva = 8.5 / 100;
-        $montant = $tva * $prixht;
-        $total = $prixht * (1 + $tva);
-        $html = $this->renderView('admin/devis/pdfdevis.html.twig', [
-            'devis'  => $devis,
-            'client' => $user,
-            'vehicule' => $vehicule,
-            'quantite' => $quantite,
-            'logo' => $logo_src,
-            'prix_unitaire' => $prixunitaire,
-            'tva' => $tva,
-            'montanttva' => $montant,
-            'prixht' => $prixht,
-            'total' => $total,
-        ]);
-
-        /* return new PdfResponse(
-            $knpSnappyPdf->getOutputFromHtml($html),
-            'file.pdf'
-        ); */
-
-        // Load HTML to Dompdf
-        $dompdf->loadHtml($html);
-
-        // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
-        $dompdf->setPaper('A4', 'portrait');
-
-        // Render the HTML as PDF
-        $dompdf->render();
-
-        // Output the generated PDF to Browser (force download)
-        $dompdf->stream("devis.pdf", [
-            "Attachment" => false,
-        ]);
-    }
-
-
     // fonction dans details devis -*/****************************** */
-
 
     /**
      *  @Route("devis/modifier-infos-client/{id}", name="devis_infosClient_edit", methods={"GET","POST"},requirements={"id":"\d+"})
@@ -542,9 +448,8 @@ class DevisController extends AbstractController
                 $this->em->flush();
             }
             $devis->setPrixGaranties($this->tarifsHelper->sommeTarifsGaranties($devis->getGaranties()));
-            $devis->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($devis->getOptions()));
-            $prixConducteur = $conduteur == "true"  ? $this->tarifConductSuppl : 0;
-            $devis->setPrix($devis->getTarifVehicule() + $devis->getPrixOptions() + $devis->getPrixGaranties() + $prixConducteur);
+            $devis->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($devis->getOptions(), $devis->getConducteur()));
+            $devis->setPrix($devis->getTarifVehicule() + $devis->getPrixOptions() + $devis->getPrixGaranties());
 
             $this->em->flush();
             return $this->redirectToRoute('devis_show', ['id' => $devis->getId()]);

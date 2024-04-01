@@ -199,7 +199,7 @@ class ValidationDevisController extends AbstractController
                 $this->em->flush();
             }
             $devis->setPrixGaranties($this->tarifsHelper->sommeTarifsGaranties($devis->getGaranties()));
-            $devis->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($devis->getOptions()));
+            $devis->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($devis->getOptions(), $devis->getConducteur()));
             $devis->setPrix($devis->getTarifVehicule() + $devis->getPrixOptions() + $devis->getPrixGaranties());
 
             $this->em->flush();
@@ -258,8 +258,6 @@ class ValidationDevisController extends AbstractController
         $formClient->handleRequest($request);
 
         if ($formClient->isSubmitted() && $formClient->isValid()) {
-
-            // dd('tets');
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($client);

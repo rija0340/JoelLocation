@@ -13,6 +13,7 @@ use App\Repository\OptionsRepository;
 use App\Service\DateHelper;
 use App\Repository\ReservationRepository;
 use App\Service\ReservationHelper;
+use App\Service\TarifsHelper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -29,13 +30,15 @@ class PdfController extends AbstractController
     private $optionsRepo;
     private $garantieRepo;
     private $reservationHelper;
+    private $tarifsHelper;
     public function __construct(
         ReservationRepository $reservationRepo,
         DateHelper $datehelper,
         DevisRepository $devisRepo,
         GarantieRepository $garantieRepo,
         OptionsRepository $optionsRepo,
-        ReservationHelper $reservationHelper
+        ReservationHelper $reservationHelper,
+        TarifsHelper $tarifsHelper
     ) {
         $this->devisRepo = $devisRepo;
         $this->datehelper = $datehelper;
@@ -43,6 +46,7 @@ class PdfController extends AbstractController
         $this->optionsRepo = $optionsRepo;
         $this->garantieRepo = $garantieRepo;
         $this->reservationHelper = $reservationHelper;
+        $this->tarifsHelper = $tarifsHelper;
     }
 
 
@@ -67,12 +71,19 @@ class PdfController extends AbstractController
         // $footer = $this->getParameter('logo') . '/pdf/footer-joellocation.png';
         // $footer_data = base64_encode(file_get_contents($footer));
         // $footer_src = 'data:image/png;base64,' . $footer_data;
+        $prixTotalTTC = $devis->getPrix();
+        $prixTotalHT =  $this->tarifsHelper->calculTarifHTfromTTC($prixTotalTTC);
+        $prixTaxe =  $this->tarifsHelper->calculTaxeFromHT($prixTotalHT);
+        $prixUnit = $prixTotalHT / $devis->getDuree();
 
         $html = $this->renderView('admin/reservation/pdf/devis_pdf.html.twig', [
 
             'logo' => $logo_src,
             'devis' => $devis,
-            // 'footer' =>  $footer_src
+            'prixTotalTTC' => $prixTotalTTC,
+            'prixTotalHT' => $prixTotalHT,
+            'prixTaxe' => $prixTaxe,
+            'prixUnit' => $prixUnit,
 
         ]);
 
@@ -218,11 +229,29 @@ class PdfController extends AbstractController
         $createdAt = $this->datehelper->dateNow();
         $devis = $this->devisRepo->find(intval($reservation->getNumDevis()));
 
-        // dd($devis); 
         // logo joellocation
         // $footer = $this->getParameter('logo') . '/pdf/footer-joellocation.png';
         // $footer_data = base64_encode(file_get_contents($footer));
         // $footer_src = 'data:image/png;base64,' . $footer_data;
+
+        //le prix frais supplémentaire est déja en HT
+        // $prixFraisSupplHT =  $reservation->getFraisSupplResas();
+
+        $prixFraisSupplHT = 0;
+        foreach ($reservation->getFraisSupplResas() as $key => $value) {
+            $prixFraisSupplHT += $value->getTotalHT();
+        }
+
+        $prixHT = $this->tarifsHelper->calculTarifHTfromTTC($reservation->getPrix());
+        $prixTaxe = $this->tarifsHelper->calculTaxeFromHT($prixHT);
+        $prixUnitHT = $prixHT / $reservation->getDuree();
+        $prixTTC = $prixTaxe + $prixHT;
+
+        $prixTaxeFraisSuppl = $this->tarifsHelper->calculTaxeFromHT($prixFraisSupplHT);
+        $prixTotalHT = $prixHT + $sommeFraisTotalHT;
+
+        $prixTaxeTotal = $this->tarifsHelper->calculTaxeFromHT($prixTotalHT);
+        $prixTotalTTC = $prixTotalHT + $prixTaxeTotal;
 
         $html = $this->renderView('admin/reservation/pdf/facture_pdf.html.twig', [
 
@@ -233,8 +262,15 @@ class PdfController extends AbstractController
             'numeroFacture' => $numeroFacture,
             'frais' => $reservation->getFraisSupplResas(),
             'sommeFraisTotalHT' => $sommeFraisTotalHT,
-            'taxe' => 8.5
-            // 'footer' =>  $footer_src
+            'prixFraisSupplHT' => $prixFraisSupplHT,
+            'prixHT' => $prixHT,
+            'prixTotalHT' => $prixTotalHT,
+            'prixTaxeTotal' => $prixTaxeTotal,
+            'prixTaxe' => $prixTaxe,
+            'prixUnitHT' => $prixUnitHT,
+            'prixTotalTTC' => $prixTotalTTC,
+            'prixTTC' => $prixTTC,
+            'taxe' => $this->tarifsHelper->getTaxe()
 
         ]);
 

@@ -205,8 +205,6 @@ class ReservationController extends AbstractController
         }
         $this->em->flush();
 
-        // die("vita");
-
         // $reservations = $this->reservationRepo->findAll();
         // $arrayResa = [];
         // foreach ($reservations as $resa) {
@@ -221,12 +219,8 @@ class ReservationController extends AbstractController
         //     }
         // }
 
-        // dd($arrayResa);
-
         // $biz = $reservation;
         // $diff = $this->dateHelper->calculDuree($biz->getDateDebut(), $biz->getDateFin());
-        // dd($diff, $biz->getDateDebut(), $biz->getDateFin());
-
 
         //test nouvelle methode pour calculer diff dates
 
@@ -345,7 +339,6 @@ class ReservationController extends AbstractController
         //gestion annulation reservation
         if ($formCollectionFraisSupplResa->isSubmitted() && $formCollectionFraisSupplResa->isValid()) {
             foreach ($reservation->getFraisSupplResas() as $fraisSuppl) {
-                // dd($frais);
                 $fraisSuppl->setReservation($reservation);
                 // calculer prix ht frais
                 $this->em->persist($fraisSuppl);
@@ -353,11 +346,8 @@ class ReservationController extends AbstractController
             $this->em->flush();
         }
 
-        // dd($reservationHelper->getPrixTTC(10) + $reservation->getPrix());
-
         return $this->render('admin/reservation/crud/show.html.twig', [
             'reservation' => $reservation,
-            'prixOptions' => $reservation->getConducteur() == true ? $reservation->getPrixOptions() + $this->tarifConductSuppl : $reservation->getPrixOptions(),
             'formKM' => $formKM->createView(),
             'formAjoutPaiement' => $formAjoutPaiement->createView(),
             'formReportResa' => $formReportResa->createView(),
@@ -376,7 +366,6 @@ class ReservationController extends AbstractController
      */
     public function edit(Request $request, Reservation $reservation): Response
     {
-
         $ancientPrix = $reservation->getPrix();
         $form = $this->createForm(ReservationType::class, $reservation);
         $form->handleRequest($request);
@@ -403,9 +392,8 @@ class ReservationController extends AbstractController
                 } else {
                     $reservation->setTarifVehicule($tarifVeh);
                     $t = $this->tarifsHelper->calculTarifVehicule($form->getData()->getDateDebut(), $form->getData()->getDateFin(), $vehicule);
-                    $reservation->setPrix($this->tarifsHelper->calculTarifTotal($tarifVeh, $reservation->getOptions(), $reservation->getGaranties()));
+                    $reservation->setPrix($this->tarifsHelper->calculTarifTotal($tarifVeh, $reservation->getOptions(), $reservation->getGaranties(), $reservation->getConducteur()));
                 }
-                // dd($reservation);
 
                 $this->em->flush();
 
@@ -444,7 +432,6 @@ class ReservationController extends AbstractController
         $reservation->setArchived(true);
         $this->em->flush();
 
-        // dd($reservation);
         $this->flashy->success("La réservation N° " . $reservation->getReference() . " a été archivée");
         return $this->redirectToRoute('reservation_index');
     }
@@ -498,7 +485,7 @@ class ReservationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $reservation->setPrixGaranties($reservation->getSommeGaranties());
-            $reservation->setPrixOptions($reservation->getSommeOptions());
+            $reservation->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($reservation->getOptions(), $reservation->getConducteur()));
             $reservation->setPrix($reservation->getTarifVehicule() + $reservation->getPrixGaranties() + $reservation->getPrixOptions());
             $this->em->flush();
             return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
@@ -554,9 +541,8 @@ class ReservationController extends AbstractController
             }
 
             $reservation->setPrixGaranties($this->tarifsHelper->sommeTarifsGaranties($reservation->getGaranties()));
-            $reservation->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($reservation->getOptions()));
-            $prixConducteur = $conduteur == "true"  ? $this->tarifConductSuppl : 0;
-            $reservation->setPrix($reservation->getTarifVehicule() + $reservation->getPrixOptions() + $reservation->getPrixGaranties() + $prixConducteur);
+            $reservation->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($reservation->getOptions(), $reservation->getConducteur()));
+            $reservation->setPrix($reservation->getTarifVehicule() + $reservation->getPrixOptions() + $reservation->getPrixGaranties());
 
             $this->em->flush();
             return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);

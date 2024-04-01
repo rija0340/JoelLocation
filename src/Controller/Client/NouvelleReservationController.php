@@ -173,7 +173,6 @@ class NouvelleReservationController extends AbstractController
      */
     public function step3(Request $request)
     {
-        //dd($this->reservationSession->getVehicule());
         //recupérer liste options et  garanties dans base de données
         $options = $this->optionsRepo->findAll();
         $garanties = $this->garantiesRepo->findAll();
@@ -254,11 +253,9 @@ class NouvelleReservationController extends AbstractController
             }
         }
 
-        if ($this->reservationSession->getConducteur() == "true") {
-            $tarifTotal = 50 +  $this->tarifsHelper->calculTarifTotal($tarifVehicule, $optionsObjects, $garantiesObjects);
-        } else if ($this->reservationSession->getConducteur() == "false") {
-            $tarifTotal = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $optionsObjects, $garantiesObjects);
-        }
+        $hasConducteur =  $this->reservationSession->getConducteur() == "true" ? true : false;
+
+        $tarifTotal = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $optionsObjects, $garantiesObjects, $hasConducteur);
 
         return $this->render('client/nouvelleReservation/step4.html.twig', [
 
@@ -311,7 +308,6 @@ class NouvelleReservationController extends AbstractController
 
         //utile pour eviter erreur new entity, cette erreur apparait lorsque on utilise directement objet véhicule dans session
         $vehicule = $this->vehiculeRepo->find($this->reservationSession->getVehicule());
-        // dd($vehicule);
 
         $devis->setAgenceDepart($this->reservationSession->getAgenceDepart());
         $devis->setAgenceRetour($this->reservationSession->getAgenceRetour());
@@ -323,22 +319,22 @@ class NouvelleReservationController extends AbstractController
         $devis->setDateCreation($this->dateHelper->dateNow());
         //si l'heure de la date est égal à zero 
         $devis->setDuree($this->dateHelper->calculDuree($this->reservationSession->getDateDepart(), $this->reservationSession->getDateRetour()));
+
+        if ($this->reservationSession->getConducteur() == "false") {
+            $devis->setConducteur(false);
+        } else if ($this->reservationSession->getConducteur() == "true") {
+            $devis->setConducteur(true);
+        }
+
         $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($this->reservationSession->getDateDepart(), $this->reservationSession->getDateRetour(), $vehicule);
         $devis->setTarifVehicule($tarifVehicule);
-        $prixOptions = $this->tarifsHelper->sommeTarifsOptions($optionsObjects);
+
+        $prixOptions = $this->tarifsHelper->sommeTarifsOptions($optionsObjects, $devis->getConducteur());
         $devis->setPrixOptions($prixOptions);
         $prixGaranties = $this->tarifsHelper->sommeTarifsGaranties($garantiesObjects);
         $devis->setPrixGaranties($prixGaranties);
 
-        //gestion conducteur optionnel et prix
-
-        if ($this->reservationSession->getConducteur() == "false") {
-            $devis->setConducteur(false);
-            $devis->setPrix($tarifVehicule + $prixGaranties + $prixOptions);
-        } else if ($this->reservationSession->getConducteur() == "true") {
-            $devis->setConducteur(true);
-            $devis->setPrix(50 + $tarifVehicule + $prixGaranties + $prixOptions);
-        }
+        $devis->setPrix($tarifVehicule + $prixGaranties + $prixOptions);
 
         $devis->setTransformed(false);
         //ajout de ID unique dans la base pour pouvoir telecharger par un lien envoyé au client par mail

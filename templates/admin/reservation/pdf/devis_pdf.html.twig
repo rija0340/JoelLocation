@@ -190,6 +190,7 @@
 				<br>
 				{{ devis.client.complementAdresse }}
 				<br>
+				{{devis.client.codePostal}}
 				{{ devis.client.ville }}
 
 			</div>
@@ -217,7 +218,6 @@
 					</thead>
 					<tbody>
 						<tr class="bg-pink">
-							{% set taxe = (devis.prix * 8.5) / 100 %}
 							<td class="p-5">
 								<strong>{{ devis.vehicule.marque }}
 									{{ devis.vehicule.modele }}</strong>
@@ -235,9 +235,9 @@
 								{{ devis.agenceRetour }}.
 							</td>
 							<td class="text-right p-5">{{ devis.duree }}j</td>
-							<td class="text-right p-5">{{ (devis.prix / devis.duree)|number_format(2,","," ") }}</td>
-							<td class="text-right p-5">{{ (devis.prix)|number_format(2,","," ") }}</td>
-							<td class="text-right p-5">{{ (devis.prix + taxe)|number_format(2,","," ") }}</td>
+							<td class="text-right p-5">{{ (prixUnit)|number_format(2,","," ") }}</td>
+							<td class="text-right p-5">{{ (prixTotalHT)|number_format(2,","," ") }}</td>
+							<td class="text-right p-5">{{ (prixTotalTTC)|number_format(2,","," ") }}</td>
 						</tr>
 					</tbody>
 				</table>
@@ -267,15 +267,15 @@
 				<table style="width : 100%">
 					<tr class="bg-pink">
 						<td class="p-5">Montant HT</td>
-						<td class="text-right p-5">{{ devis.prix|number_format(2,","," ") }}€</td>
+						<td class="text-right p-5">{{ prixTotalHT|number_format(2,","," ") }}€</td>
 					</tr>
 					<tr>
 						<td class="p-5">Total TVA 8.5 %</td>
-						<td class="text-right p-5">{{ taxe|number_format(2,","," ") }}€</td>
+						<td class="text-right p-5">{{ prixTaxe|number_format(2,","," ") }}€</td>
 					</tr>
 					<tr class="bg-danger text-white">
 						<td class="p-5">Total TTC</td>
-						<td class="text-right p-5">{{ (devis.prix + taxe)|number_format(2,","," ")  }}</td>
+						<td class="text-right p-5">{{ (prixTotalTTC)|number_format(2,","," ")  }}</td>
 					</tr>
 				</table>
 			</div>

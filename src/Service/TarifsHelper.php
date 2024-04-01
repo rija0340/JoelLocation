@@ -10,6 +10,43 @@ use App\Repository\VehiculeRepository;
 
 
 class TarifsHelper
+/**
+ * Helper class for calculating tariff prices.
+ * 
+ * Contains methods for:
+ * - Calculating total tariff price based on vehicle, options, and warranties
+ * - Getting vehicle tariff price based on rental dates 
+ * - Summing option prices
+ * - Summing warranty prices
+ * - Calculating percentage discounts
+ * - Converting between pre-tax and post-tax prices
+ * 
+ * Uses injected repositories and date helper to get necessary data.
+ */
+/**
+ * Helper class for calculating tariff prices.
+ * 
+ * Contains methods for:
+ * - Calculating total tariff price based on vehicle, options, and warranties
+ * - Getting vehicle tariff price based on rental dates 
+ * - Summing option prices
+ * - Summing warranty prices
+ * - Calculating percentage discounts
+ * - Converting between pre-tax and post-tax prices
+ * 
+ * Uses injected repositories and date helper to get necessary data.
+ */
+/**
+ * Helper class for calculating tariff prices.
+ * 
+ * Contains methods for:
+ * - Getting vehicle, option, and warranty prices
+ * - Calculating total price from components
+ * - Applying percentage discounts
+ * - Converting between pre-tax and post-tax prices
+ * 
+ * Uses injected repositories and date helper.
+ */
 {
 
     private $vehiculeRepo;
@@ -17,6 +54,7 @@ class TarifsHelper
     private $garantiesRepo;
     private $tarifsRepo;
     private $dateHelper;
+    private $taxe;
 
     public function __construct(DateHelper $dateHelper, TarifsRepository $tarifsRepo, VehiculeRepository $vehiculeRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
     {
@@ -26,6 +64,7 @@ class TarifsHelper
         $this->garantiesRepo = $garantiesRepo;
         $this->tarifsRepo = $tarifsRepo;
         $this->dateHelper = $dateHelper;
+        $this->taxe = 0.085; //TVA = 8.5%
     }
 
 
@@ -34,11 +73,20 @@ class TarifsHelper
         return 50;
     }
 
-    function calculTarifTotal($tarifVehicule, $options, $garanties)
+    function getTaxe(){
+        return $this->taxe;
+    }
+
+    /**
+     * calcul le tarif total d'une réservation, 
+     * @params tarifVehicule, options, garanties
+     * tous les tarifs sont en TTC
+     */
+    function calculTarifTotal($tarifVehicule, $options, $garanties, $hasConducteur)
     {
 
         if ($options != []) {
-            $optionsPrix = $this->sommeTarifsOptions($options);
+            $optionsPrix = $this->sommeTarifsOptions($options, $hasConducteur);
         } else {
             $optionsPrix = 0;
         }
@@ -86,17 +134,18 @@ class TarifsHelper
     }
 
 
-    function sommeTarifsOptions($options)
+    function sommeTarifsOptions($options, $hasConducteur)
     {
+        $prixConductSuppl = ($hasConducteur  == true) ? $this->getPrixConducteurSupplementaire() : 0;
         if ($options != null) {
             $prix = 0;
             foreach ($options as  $option) {
 
                 $prix = $prix  + $option->getPrix();
             }
-            return $prix;
+            return $prix + $prixConductSuppl;
         } else {
-            return 0;
+            return $prixConductSuppl;
         }
     }
 
@@ -127,5 +176,24 @@ class TarifsHelper
         $value = (25 * $tarif) / 100;
 
         return $value;
+    }
+
+    //function pour calculer le prix ttc
+    function calculTarifTTCfromHT($tarifHT)
+    {
+        $prixTTC = $tarifHT * (1 + $this->taxe);
+        return $prixTTC;
+    }
+
+    function calculTarifHTfromTTC($tarifTTC)
+    {
+        $prixHT = $tarifTTC / (1 + $this->taxe);
+        return $prixHT;
+    }
+
+    function calculTaxeFromHT($tarifHT)
+    {
+
+        return $tarifHT * $this->taxe;
     }
 }

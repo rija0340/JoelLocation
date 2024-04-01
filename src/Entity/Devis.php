@@ -135,7 +135,7 @@ class Devis
 
     // public $serializedOptions;
     // public $serializer;
-
+    // Tous les prix sont en ttc
     public function __construct()
     {
         $this->options = new ArrayCollection();

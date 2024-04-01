@@ -192,12 +192,14 @@
 				<strong>
 
 					<span>
-						{% if  devis.client.sexe == ""  %}
+						{% if devis is defined and devis is not null %}
+							{% if  devis.client.sexe == ""  %}
 
-							{% elseif devis.client.sexe == 'masculin' %}
-								Mr
-							{% elseif devis.client.sexe == 'feminin' %}
-								Mlle/Mme
+								{% elseif devis.client.sexe == 'masculin' %}
+									Mr
+								{% elseif devis.client.sexe == 'feminin' %}
+									Mlle/Mme
+							{% endif %}
 						{% endif %}
 
 					</span>
@@ -239,8 +241,7 @@
 					</thead>
 					<tbody>
 						<tr class="bg-pink">
-							{% set taxeResa = (reservation.prix * taxe) / 100 %}
-							{% set taxeFrais = (sommeFraisTotalHT * taxe) / 100 %}
+
 							<td>
 								{{ reservation.vehicule.marque }}
 								{{ reservation.vehicule.modele }}
@@ -258,9 +259,9 @@
 								{{ reservation.agenceRetour }}.
 							</td>
 							<td class="text-right">{{ reservation.duree }}j</td>
-							<td class="text-right">{{ (reservation.prix / reservation.duree)|number_format(2,","," ") }}</td>
-							<td class="text-right">{{ (reservation.prix)|number_format(2,","," ")}}</td>
-							<td class="text-right">{{ (reservation.prix + taxeResa)|number_format(2,","," ") }}</td>
+							<td class="text-right">{{ (prixUnitHT)|number_format(2,","," ") }}</td>
+							<td class="text-right">{{ (prixHT)|number_format(2,","," ")}}</td>
+							<td class="text-right">{{ (prixTTC)|number_format(2,","," ") }}</td>
 						</tr>
 						{% for frais in frais %}
 							<tr class="bg-pink">
@@ -270,7 +271,7 @@
 								<td class="text-right">{{ frais.quantite }}j</td>
 								<td class="text-right">{{ frais.prixUnitaire|number_format(2,","," ") }}</td>
 								<td class="text-right">{{ frais.totalHT|number_format(2,","," ") }}</td>
-								<td class="text-right">{{ (frais.totalHT + ( frais.totalHT * taxe / 100))|number_format(2,","," ") }}</td>
+								<td class="text-right">{{ (frais.totalHT + ( frais.totalHT * taxe))|number_format(2,","," ") }}</td>
 							</tr>
 						{% endfor %}
 
@@ -300,15 +301,15 @@
 				<table id="montant" style="width : 100%;">
 					<tr class="bg-pink">
 						<td>Montant HT</td>
-						<td class="text-right">{{ (reservation.prix + sommeFraisTotalHT) |number_format(2,","," ") }}€</td>
+						<td class="text-right">{{ (prixTotalHT) |number_format(2,","," ") }}€</td>
 					</tr>
 					<tr>
 						<td>Total TVA 8.5 %</td>
-						<td class="text-right">{{ (taxeResa + taxeFrais)|number_format(2,","," ")  }}€</td>
+						<td class="text-right">{{ (prixTaxeTotal)|number_format(2,","," ")  }}€</td>
 					</tr>
 					<tr class="bg-danger text-white">
 						<td>Total TTC</td>
-						<td class="text-right">{{ (reservation.prix + taxeResa + sommeFraisTotalHT + taxeFrais)|number_format(2,","," ") }}€</td>
+						<td class="text-right">{{ (prixTotalTTC)|number_format(2,","," ") }}€</td>
 					</tr>
 					{% for paiement in reservation.paiements %}
 						<tr class="bg-pink">
@@ -326,7 +327,7 @@
 					<tr class="bg-danger text-white">
 						<td>Reste à payer</td>
 						<td class="text-right">
-							{{ ((reservation.prix + taxeResa + sommeFraisTotalHT + taxeFrais ) - reservation.sommePaiements)|number_format(2,","," ") }}
+							{{ ((prixTotalTTC ) - reservation.sommePaiements)|number_format(2,","," ") }}
 							€
 						</td>
 					</tr>

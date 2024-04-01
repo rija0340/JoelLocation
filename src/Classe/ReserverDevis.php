@@ -53,8 +53,8 @@ class ReserverDevis
             $reservation->addGaranty($garantie);
         }
 
-        $reservation->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($devis->getOptions()));
-        $reservation->setPrixGaranties($this->tarifsHelper->sommeTarifsOptions($devis->getGaranties()));
+        $reservation->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($devis->getOptions(), $devis->getConducteur()));
+        $reservation->setPrixGaranties($this->tarifsHelper->sommeTarifsGaranties($devis->getGaranties()));
         $reservation->setDuree($this->dateHelper->calculDuree($devis->getDateDepart(), $devis->getDateRetour()));
         $reservation->setTarifVehicule($this->tarifsHelper->calculTarifVehicule($devis->getDateDepart(), $devis->getDateRetour(), $devis->getVehicule()));
 
