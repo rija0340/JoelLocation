@@ -2,9 +2,6 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 		<title>Devis de location</title>
 		<style>
 
@@ -20,7 +17,7 @@
 				position: absolute;
 				bottom: 0;
 				width: 100%;
-				padding: 10px;
+				padding: 0;
 			}
 
 			.table-bordered th,
@@ -36,34 +33,27 @@
 
 			}
 
-			.joellocation {
-				font-family: 'Montserrat', sans-serif;
-				font-size: 16px;
-				line-height: 1.5;
-				color: #333;
-				margin-bottom: 1em;
-			}
-			.details_facture {
-
-				display: inline-block;
-				vertical-align: top;
-				padding-top: 30px;
-				/* width: 350px; */
-
-			}
-
-
 			.adresse {
 				display: inline-block;
 				vertical-align: top;
 				padding-left: 300px;
 
 			}
+
+			.details_facture {
+
+				display: inline-block;
+				vertical-align: top;
+				padding-top: 50px;
+				/* width: 350px; */
+
+			}
+
 			.details_client {
 				display: inline-block;
 				vertical-align: top;
 				padding-left: 250px;
-				padding-top: 30px;
+				padding-top: 50px;
 			}
 
 			.conditions_reglement {
@@ -71,21 +61,13 @@
 				display: inline-block;
 				vertical-align: top;
 				padding-top: 25px;
-				font-size: 14px;
 
 			}
 
-			/* .table1 {
-				display: inline-block;
-				vertical-align: top;
-
-				width: 245px;
-			} */
 			.table1 {
 				display: inline-block;
 				vertical-align: top;
 				width: 245px;
-				float: right;
 			}
 
 			.table-border {
@@ -154,8 +136,7 @@
 			}
 
 			#note {
-				margin-top: 30px;
-				font-size: 14px;
+				margin-top: 50px;
 			}
 
 			.signature {
@@ -171,7 +152,7 @@
 			{# logo et adresse #}
 			<div class="logo"><img src="{{ logo }}" alt="logo" width="150px" height="80px" type="images/png"></div>
 			<div class="adresse">
-				<strong class="joellocation">JOEL LOCATION</strong><br>
+				<strong>Joellocation</strong><br>
 				94 chemin de la hache<br>
 				97160 Le Moule<br>
 				Tél: 0690737674 / 0767321447<br>
@@ -186,16 +167,21 @@
 				{{ devis.dateCreation|date('d-m-Y') }}<br>
 				Date d'échéance  :
 				{{ devis.dateCreation|date_modify("+7 day")|date('d-m-Y') }}
+
 			</div>
 			<div class="details_client">
+
 				<strong>
+
 					<span>
 						{% if  devis.client.sexe == ""  %}
+
 							{% elseif devis.client.sexe == 'masculin' %}
 								Mr
 							{% elseif devis.client.sexe == 'feminin' %}
 								Mlle/Mme
 						{% endif %}
+
 					</span>
 					{{ devis.client.nom }}
 					{{ devis.client.prenom }}</strong>
@@ -206,6 +192,7 @@
 				<br>
 				{{devis.client.codePostal}}
 				{{ devis.client.ville }}
+
 			</div>
 			<div style="margin-top: 10px; margin-bottom: 10px">
 				<strong>Objet :
@@ -240,11 +227,11 @@
 								jours.
 								<br>
 								Retrait le
-								{{ devis.dateDepart|date('d/m/Y') }}. Lieu :
+								{{ devis.dateDepart|date('d/m/Y') }}. Lieu :
 								{{ devis.agenceDepart }}.
 								<br>
 								Retour le
-								{{ devis.dateRetour|date('d/m/Y') }}. Lieu :
+								{{ devis.dateRetour|date('d/m/Y') }}. Lieu :
 								{{ devis.agenceRetour }}.
 							</td>
 							<td class="text-right p-5">{{ devis.duree }}j</td>
@@ -309,7 +296,7 @@
 				<br>
 				forfaitaire pour frais de recouvrement due au créancier en cas de
 				<br>
-				retard de paiement est de 80EUR (quatre vingt euros).
+				retard de paiement est de 80EUR (quatre vingt euros).
 			</div>
 			<div class="table1 ">
 				<table style="width : 100%">
@@ -345,15 +332,13 @@
 			<div class="">
 				<div class="signature">Signature</div>
 			</div>
-		</section>
-		<section id="footer " class="bg-danger">
-			<div class=" text-white text-center fs-12">
-				SIRET : 87868990000016 APE: 7711A
-				<br>
-				N°TVA FR40878689900
-				<br>
-				www.joellocation.com
-			</div>
-		</section>
+		</body>
 	</body>
-</html>
+</html></section><section id="footer " class="bg-danger">
+<div class=" text-white text-center fs-12">
+	SIRET : 87868990000016 APE: 7711A
+	<br>
+	N°TVA FR40878689900
+	<br>
+	www.joellocation.com
+</div></section></body></html>

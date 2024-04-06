@@ -71,19 +71,15 @@ class PdfController extends AbstractController
         // $footer = $this->getParameter('logo') . '/pdf/footer-joellocation.png';
         // $footer_data = base64_encode(file_get_contents($footer));
         // $footer_src = 'data:image/png;base64,' . $footer_data;
-        $prixTotalTTC = $devis->getPrix();
-        $prixTotalHT =  $this->tarifsHelper->calculTarifHTfromTTC($prixTotalTTC);
-        $prixTaxe =  $this->tarifsHelper->calculTaxeFromHT($prixTotalHT);
-        $prixUnit = $prixTotalHT / $devis->getDuree();
 
         $html = $this->renderView('admin/reservation/pdf/devis_pdf.html.twig', [
 
             'logo' => $logo_src,
             'devis' => $devis,
-            'prixTotalTTC' => $prixTotalTTC,
-            'prixTotalHT' => $prixTotalHT,
-            'prixTaxe' => $prixTaxe,
-            'prixUnit' => $prixUnit,
+            'prixTotalTTC' => $devis->getPrix(),
+            'taxe' => $this->tarifsHelper->getTaxe(),
+            'tarifVehiculeTTC' => $devis->getTarifVehicule(),
+            'prixConductTTC' => $this->tarifsHelper->getPrixConducteurSupplementaire()
 
         ]);
 
@@ -164,7 +160,8 @@ class PdfController extends AbstractController
             'allGaranties' => $allGaranties,
             'sommePaiements' => $sommePaiements,
             'totalTTC' => $totalTTC,
-            'restePayerTTC' => $restePayerTTC
+            'restePayerTTC' => $restePayerTTC,
+
 
         ]);
 
@@ -271,6 +268,7 @@ class PdfController extends AbstractController
             'prixTotalTTC' => $prixTotalTTC,
             'prixTTC' => $prixTTC,
             'taxe' => $this->tarifsHelper->getTaxe()
+
 
         ]);
 
