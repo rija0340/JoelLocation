@@ -31,72 +31,202 @@ function getData(data) {
 }
 
 
-window.onload = function () {
+window.onload = async function () {
     $('body').loadingModal({
         text: 'Chargement...'
     });
-    retrieveDataAjax();
+
+    try {
+        await retrieveDataAjax();
+    } catch (error) {
+        console.error('Error retrieving data:', error);
+    }
+
+    //cacher container-custom-tarif 
+    document.querySelector('.container-custom-tarif').style.display = 'none';
+
+    //deselectionner customtarif input
+    document.querySelector('#has-custom-tarif').checked = false;
 
 };
 
 // bnt submit modif handle
-// $('#btnSubmitResa').click(function (e) {
 
+// $('#btnSubmitResa').click(function (e) {
 // });
 
-function retrieveDataAjax() {
+async function retrieveDataAjax() {
     var maxDate;
     var dateNow = new Date();
-    $.ajax({
-        type: 'GET',
-        url: '/planningGeneralData',
-        timeout: 3000,
-        success: function (data) {
-            var dataWithoutParent = [];
-            for (var i = 0; i < data.length; i++) {
-                if (data[i].parent != 0) {
-                    dataWithoutParent.push(data[i]);
-                }
+
+    try {
+        const response = await fetch('/planningGeneralData', {
+            timeout: 3000
+        });
+        const data = await response.json();
+
+        var dataWithoutParent = [];
+
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].parent !== 0) {
+                dataWithoutParent.push(data[i]);
             }
-            //on ne peut pas acceder à end_date property de data[0]
-            object_max_date = StringDateToObject(dataWithoutParent[0].end_date_formated);
-
-            // maxDate = new Date(maxDate);
-            for (var j = 1; j < dataWithoutParent.length; j++) {
-
-                object_date = StringDateToObject(dataWithoutParent[j].end_date_formated);
-                if (object_date.getTime() > object_max_date.getTime()) {
-                    object_max_date = object_date;
-                }
-            }
-            object_max_date = object_max_date.setDate(object_max_date.getDate() + 5);
-            //la date est converti en timestamp c'est pourquoi on doit faire new Date
-            object_max_date = new Date(object_max_date);
-            ganttInit(dateNow.toLocaleDateString("en"), object_max_date.toLocaleDateString("en"), 20);
-            // addTextPeriode(dateNow.toLocaleDateString("en"), object_max_date.toLocaleDateString("en"));
-            getData(data);
-            createCheckboxes(getUniqueListVehicules(data));
-
-            document.querySelector('div .selectAll').firstElementChild.click();
-            // checkAllClickCallback();
-            // ganttLoadData(thedata);
-            $('body').loadingModal('destroy');
-
-            //hauteur de la table 
-            var i = 0;
-            $('.gantt_tree_content').each(function () {
-                i = i + 1;
-            });
-            console.log(i);
-            $('#gantt_here').css('max-height', i * 55 + 'px');
-
-        },
-        error: function () {
-            alert('La requête n\'a pas abouti');
         }
-    });
+
+        //on ne peut pas acceder à end_date property de data[0]
+        object_max_date = StringDateToObject(dataWithoutParent[0].end_date_formated);
+
+        for (var j = 1; j < dataWithoutParent.length; j++) {
+            object_date = StringDateToObject(dataWithoutParent[j].end_date_formated);
+
+            if (object_date.getTime() > object_max_date.getTime()) {
+                object_max_date = object_date;
+            }
+        }
+
+        object_max_date = object_max_date.setDate(object_max_date.getDate() + 5);
+        object_max_date = new Date(object_max_date);
+
+        ganttInit(dateNow.toLocaleDateString("en"), object_max_date.toLocaleDateString("en"), 20);
+
+        getData(data);
+        createCheckboxes(getUniqueListVehicules(data));
+        document.querySelector('div .selectAll').firstElementChild.click();
+
+        $('body').loadingModal('destroy');
+
+        //hauteur de la table
+        var i = 0;
+        $('.gantt_tree_content').each(function () {
+            i = i + 1;
+        });
+
+        console.log(i);
+        $('#gantt_here').css('max-height', i * 55 + 'px');
+    } catch (error) {
+        alert('La requête n\'a pas aboutir');
+        console.error('Error:', error);
+    }
 }
 
+/**
+ * Fetches available vehicles based on the provided departure and return dates.
+ * @param {string} dateDepart - The departure date in the format 'YYYY-MM-DD'.
+ * @param {string} dateRetour - The return date in the format 'YYYY-MM-DD'.
+ * @returns {Promise<Array<Object>>} - A promise that resolves to an array of available vehicles.
+ */
+async function getVehiculeFromDates(dateDepart, dateRetour) {
+    try {
+        const url = `/backoffice/reservation/liste-vehicules-disponibles?dateDepart=${dateDepart}&dateRetour=${dateRetour}`;
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        console.error('Error fetching available vehicles:', error);
+        throw error;
+    }
+}
+
+//create options from liste in data
+function createOptions(data, task) {
+
+    setTarifBddToHtml("");
+    //select element html 
+    const selectEl = document.getElementById('vehicule');
+
+    // Clear the existing options
+    selectEl.innerHTML = '';
+    const vehicleArray = Object.values(data);
+
+    // Create a default option
+    const defaultOption = document.createElement('option');
+    defaultOption.value = ''; // No value for the default option
+    //add attr id to defaultoption
+    defaultOption.setAttribute('id', 'default-option');
+    defaultOption.textContent = 'Select a vehicle'; // You can change this text as per your requirement
+    selectEl.appendChild(defaultOption);
+
+    vehicleArray.forEach(option => {
+        const optionElement = document.createElement('option');
+        optionElement.value = option.immatriculation;
+        optionElement.textContent = option.marque + " " + option.modele + " " + option.immatriculation;
+        selectEl.appendChild(optionElement);
+
+    });
+
+    //ajout gestion evenement
+    selectEl.addEventListener('change',
+        (event) => {
+            updateTarifVehiculeAndResa(event, data, task);
+        }
+    );
+    //set valeur tafir du premier vehicule 
+}
+
+function updateTarifVehiculeAndResa(event, data, task) {
+    const tarifBddEl = document.getElementById('tarif-bdd');
+    const tarifResaEl = document.getElementById('tarif-resa');
+    tarifBddEl.innerHTML = '';
+    tarifResaEl.innerHTML = '';
+    let vehiculeObj = data.find(item => item.immatriculation === event.target.value)
+    setTarifBddToHtml(vehiculeObj.tarifBdd);
+    // somme tarif vehicule et options garanties 
+    tarifResaEl.value = vehiculeObj.tarifBdd + task.tarifOptionsGaranties;
+}
+
+/**
+ * cette fonction prend tarif d'une vehicule
+ *  depuis la base et le met sur l'input 
+ * @param {} value 
+ */
+function setTarifBddToHtml(value) {
+    const tarifBddEl = document.getElementById('tarif-bdd');
+    tarifBddEl.innerHTML = '';
+    tarifBddEl.value = value;
+}
+
+function getForm() {
+    return document.getElementById("my-form");
+};
+
+function save() {
+    var task = gantt.getTask(taskId);
+
+    task.text = getForm().querySelector("[name='description']").value;
+
+    if (task.$new) {
+        delete task.$new;
+        gantt.addTask(task, task.parent);
+    } else {
+        gantt.updateTask(task.id);
+    }
+
+    gantt.hideLightbox();
+}
+
+function cancel() {
+    var task = gantt.getTask(taskId);
+
+    if (task.$new)
+        gantt.deleteTask(task.id);
+    gantt.hideLightbox();
+}
+
+function remove() {
+    gantt.deleteTask(taskId);
+    gantt.hideLightbox();
+}
 function ganttInit(startDateScale, endDateScale, cellWidth) {
     gantt.config.readonly = true;
     gantt.config.columns = [{
@@ -127,6 +257,139 @@ function ganttInit(startDateScale, endDateScale, cellWidth) {
             return " ";
         }
     };
+
+
+    //test lightbox
+    gantt.attachEvent("onContextMenu", function (id, linkId, e) {
+
+        if (id) {
+            gantt.showLightbox(id);
+        }
+
+    });
+
+    var taskId = null;
+
+    gantt.showLightbox = function (id) {
+        taskId = id;
+        var task = gantt.getTask(id);
+        // Get the button element
+        const modalButton = document.querySelector('button[data-target="#exampleModal"]');
+        const refInput = document.getElementById('reference');
+        const tarifResaInput = document.getElementById('tarif-resa');
+        const tarifOptionsGarantiesInput = document.getElementById('tarifs-options-garanties');
+        const dateDepartInput = document.getElementById('dateDepart');
+        const dateRetourInput = document.getElementById('dateRetour');
+        const hasCustomTarifInput = document.getElementById('has-custom-tarif');
+        const tarifBddContainer = document.querySelector('.container-tarif-bdd');
+        const customTarifContainer = document.querySelector('.container-custom-tarif');
+        const customTarifInput = document.getElementById('custom-tarif');
+        const tarifBddInput = document.getElementById('tarif-bdd');
+        //deselectionner customtarif input
+        hasCustomTarifInput.checked = false;
+        //effacer value
+        customTarifInput.value = '';
+
+        // Single event listener for both input fields
+        dateDepartInput.addEventListener('change', handleDateChange);
+        dateRetourInput.addEventListener('change', handleDateChange);
+        customTarifInput.addEventListener('input', (event) => {
+            //mettre a jour tarif resa 
+            let value = event.target.value;
+            value = value == "" ? 0 : value;
+            let tarifresa = parseInt(value) + parseInt(tarifOptionsGarantiesInput.value);
+            tarifResaInput.value = tarifresa;
+
+        });
+
+        //pour custom tarif checkbox
+        hasCustomTarifInput.addEventListener('change', () => {
+            //switch input 
+            if (hasCustomTarifInput.checked) {
+                //display none
+                tarifBddContainer.style.display = 'none';
+                customTarifContainer.style.display = 'block';
+                tarifBddInput.value = '';
+
+                //mise a jour tarif resa  =  tarif options garanties seulement
+                tarifResaInput.value = tarifOptionsGarantiesInput.value;
+
+                //mettre tarifresainput required
+                tarifResaInput.required = true;
+            } else {
+                //display block
+                tarifBddContainer.style.display = 'block';
+                customTarifContainer.style.display = 'none';
+                customTarifInput.value = '';
+                document.getElementById('default-option').selected = true;
+                tarifResaInput.removeAttribute('required');
+            }
+
+
+        });
+
+        function handleDateChange(event) {
+            const dateDepart = dateDepartInput.value;
+            const dateRetour = dateRetourInput.value;
+
+            getVehiculeFromDates(dateDepart, dateRetour)
+                .then(dataVehicule => {
+                    createOptions(dataVehicule, task);
+
+                })
+                .catch(error => {
+                    console.error('Error fetching available vehicles:', error);
+                });
+        }
+
+        //add data to inputs
+        refInput.value = task.reference;
+        tarifResaInput.value = task.tarifResa;
+        tarifOptionsGarantiesInput.value = task.tarifOptionsGaranties;
+
+        let dateDepart = convertDateToIsoDate(task.start_date);
+        let dateRetour = convertDateToIsoDate(task.end_date);
+
+        getVehiculeFromDates(dateDepart, dateRetour)
+            .then(dataVehicule => {
+                createOptions(dataVehicule, task);
+            })
+            .catch(error => {
+                console.error('Error fetching available vehicles:', error);
+            });
+
+        var today = new Date();
+        var formattedToday = today.toISOString().split('T')[0];
+        dateDepartInput.value = dateDepart;
+        dateDepartInput.setAttribute('min', formattedToday);
+        dateRetourInput.value = dateRetour;
+        dateRetourInput.setAttribute('min', formattedToday);
+        //click pour ouvrir le modal 
+        modalButton.click();
+
+        //set dynamically href value 
+        const protocol = location.protocol; // 'http:' or 'https:'
+        const hostname = location.hostname; // 'localhost'
+        const port = location.port; // '8000'
+
+        const baseUrl = `${protocol}//${hostname}:${port}`;
+
+        console.log("baseUrl");
+        console.log(baseUrl);
+
+        document.getElementById('form-task').setAttribute('action', `/backoffice/reservation/${task.id_r}/edit/`);
+
+    };
+
+
+
+    gantt.hideLightbox = function () {
+        getForm().style.display = "";
+        taskId = null;
+    }
+
+    //fin test lightbox
+
 
     //date de début et fin de l'affichage tasks
     if (startDateScale != null && endDateScale != null) {
@@ -236,6 +499,38 @@ function ganttInit(startDateScale, endDateScale, cellWidth) {
     });
 
 }
+
+function convertDateToIsoDate(date) {
+
+    const dateObj = new Date(date);
+
+    console.log("dateObj");
+    console.log(dateObj);
+
+    // Convert the date to the ISO 8601 format
+    const isoDateTime = dateObj.toISOString().slice(0, 16);
+
+    return isoDateTime;
+}
+
+// const form = document.getElementById('form-task');
+
+// form.addEventListener('submit', (e) => {
+
+//     e.preventDefault();
+
+//     fetch(form.action, {
+//         method: 'POST',
+//         body: new FormData(form)
+//     })
+//         .then(response => {
+//             // handle response
+//         })
+//         .catch(error => {
+//             // handle error
+//         });
+
+// });
 
 function ganttLoadData(data, startDatePeriode, endDatePeriode) {
 

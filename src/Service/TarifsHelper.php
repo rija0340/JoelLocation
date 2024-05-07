@@ -73,7 +73,8 @@ class TarifsHelper
         return 50;
     }
 
-    function getTaxe(){
+    function getTaxe()
+    {
         return $this->taxe;
     }
 
@@ -117,7 +118,6 @@ class TarifsHelper
         $tarif = $this->tarifsRepo->findOneBy(['marque' => $marque, 'modele' => $modele, 'mois' => $mois]);
 
         $tarifVehicule = 0;
-
 
         if (!is_null($tarif)) {
 

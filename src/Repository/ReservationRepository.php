@@ -322,23 +322,40 @@ class ReservationRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+    // /**
+    //  * @return Reservation[] Returns an array of Reservation objects
+    //  */
+    // public function findReservationIncludeDates($dateDebut, $dateFin)
+    // {
+    //     return $this->createQueryBuilder('r')
+    //         // ->where(' r.date_debut < :dateDebut AND r.date_fin > :dateDebut AND r.date_debut < :dateFin AND  r.date_fin < :dateFin ')
+    //         // ->orWhere(' r.date_debut > :dateDebut AND r.date_fin > :dateDebut AND r.date_debut < :dateFin AND  r.date_fin < :dateFin ')
+    //         // ->orWhere(' r.date_debut > :dateDebut AND r.date_fin < :dateDebut AND r.date_debut > :dateFin AND  r.date_fin < :dateFin ')
+    //         // ->orWhere(' r.date_debut < :dateDebut AND r.date_fin > :dateDebut AND r.date_debut < :dateFin AND  r.date_fin > :dateFin ')
+    //         ->where("r.date_debut > :dateDebut AND r.date_debut < :dateFin AND r.date_fin > :dateFin AND r.date_fin > :dateDebut")
+    //         ->orWhere("r.date_debut < :dateDebut AND r.date_debut < :dateFin AND r.date_fin > :dateDebut AND r.date_fin > :dateFin")
+    //         ->orWhere("r.date_debut < :dateDebut AND r.date_debut < :dateFin AND r.date_fin > :dateDebut AND r.date_fin < :dateFin ")
+    //         ->orWhere("r.date_debut > :dateDebut AND r.date_debut < :dateFin AND r.date_fin > :dateDebut AND r.date_fin < :dateFin ")
+    //         ->andWhere("r.canceled = FALSE OR  r.canceled IS NULL  AND r.archived = FALSE AND r.reported = FALSE OR r.reported IS NULL AND r.type IS NULL ")
+
+    //         // ->andWhere(' r.date_fin > :dateFin AND r.date_debut < :dateFin')
+    //         ->setParameter('dateDebut', $dateDebut)
+    //         ->setParameter('dateFin', $dateFin)
+    //         ->getQuery()
+    //         ->getResult();
+    // }
+
     /**
      * @return Reservation[] Returns an array of Reservation objects
      */
     public function findReservationIncludeDates($dateDebut, $dateFin)
     {
         return $this->createQueryBuilder('r')
-            // ->where(' r.date_debut < :dateDebut AND r.date_fin > :dateDebut AND r.date_debut < :dateFin AND  r.date_fin < :dateFin ')
-            // ->orWhere(' r.date_debut > :dateDebut AND r.date_fin > :dateDebut AND r.date_debut < :dateFin AND  r.date_fin < :dateFin ')
-            // ->orWhere(' r.date_debut > :dateDebut AND r.date_fin < :dateDebut AND r.date_debut > :dateFin AND  r.date_fin < :dateFin ')
-            // ->orWhere(' r.date_debut < :dateDebut AND r.date_fin > :dateDebut AND r.date_debut < :dateFin AND  r.date_fin > :dateFin ')
-            ->where("r.date_debut > :dateDebut AND r.date_debut < :dateFin AND r.date_fin > :dateFin AND r.date_fin > :dateDebut")
-            ->orWhere("r.date_debut < :dateDebut AND r.date_debut < :dateFin AND r.date_fin > :dateDebut AND r.date_fin > :dateFin")
-            ->orWhere("r.date_debut < :dateDebut AND r.date_debut < :dateFin AND r.date_fin > :dateDebut AND r.date_fin < :dateFin ")
-            ->orWhere("r.date_debut > :dateDebut AND r.date_debut < :dateFin AND r.date_fin > :dateDebut AND r.date_fin < :dateFin ")
-            ->andWhere("r.canceled = FALSE OR  r.canceled IS NULL  AND r.archived = FALSE AND r.reported = FALSE OR r.reported IS NULL")
-
-            // ->andWhere(' r.date_fin > :dateFin AND r.date_debut < :dateFin')
+            ->where("(r.date_debut BETWEEN :dateDebut AND :dateFin) OR (r.date_fin BETWEEN :dateDebut AND :dateFin)")
+            ->andWhere("r.canceled = FALSE OR r.canceled IS NULL")
+            ->andWhere("r.archived = FALSE")
+            ->andWhere("r.reported = FALSE OR r.reported IS NULL")
+            ->andWhere("r.type IS NULL")
             ->setParameter('dateDebut', $dateDebut)
             ->setParameter('dateFin', $dateFin)
             ->getQuery()

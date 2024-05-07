@@ -2,25 +2,18 @@
 
 namespace App\Controller;
 
-use App\Entity\Reservation;
-use App\Entity\Vehicule;
-use App\Repository\VehiculeRepository;
-use App\Form\ReservationType;
-use App\Repository\ReservationRepository;
+use DateTime;
 use App\Service\DateHelper;
 use App\Service\ReservationHelper;
-use DateTime;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\VehiculeRepository;
+use App\Repository\ReservationRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
 // use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Validator\Constraints\Date;
-use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class PlanningController extends AbstractController
 {
@@ -103,6 +96,7 @@ class PlanningController extends AbstractController
         $c = 0;
         //liste des réservations qui vont être affichées dans la colonne de droite
         foreach ($reservations as $key => $reservation) {
+
             $datas[$key]['id'] = uniqid();
             $datas[$key]['id_r'] = $reservation->getId();
             $datas[$key]['client'] = $reservation->getClient()->getNom() . " " . $reservation->getClient()->getPrenom();
@@ -116,7 +110,11 @@ class PlanningController extends AbstractController
             $datas[$key]['agenceDepart'] = $reservation->getAgenceDepart();
             $datas[$key]['agenceRetour'] = $reservation->getAgenceRetour();
             $datas[$key]['reference'] = $reservation->getReference();
+            $datas[$key]['immatriculation'] = $reservation->getVehicule()->getImmatriculation();
             $datas[$key]['telClient'] = $reservation->getClient()->getTelephone();
+            $datas[$key]['tarifResa'] = $reservation->getPrix();
+            $datas[$key]['tarifOptionsGaranties'] = $reservation->getPrixOptions() + $reservation->getPrixGaranties();
+            $datas[$key]['vehicule'] = $this->vehiculeObjToArray($reservation);
             // $datas[$key]['unscheduled'] = true;
             $datas[$key]['text'] = ""; //util pour eviter erreur quick_info
             // tester si une reservation est en cours ou términé ou nouvelle
@@ -161,8 +159,21 @@ class PlanningController extends AbstractController
             }
         }
 
-
         return new JsonResponse($data2);
+    }
+
+    public function vehiculeObjToArray($reservation)
+    {
+        $vehicule = $reservation->getVehicule();
+        $vehiculeArray = array();
+        $vehiculeArray['id'] = $vehicule->getId();
+        $vehiculeArray['marque'] = $vehicule->getMarque()->getLibelle();
+        $vehiculeArray['modele'] = $vehicule->getModele()->getLibelle();
+        $vehiculeArray['immatriculation'] = $vehicule->getImmatriculation();
+        $vehiculeArray['type'] = $vehicule->getType();
+        $vehiculeArray['tarif'] = $reservation->getTarifVehicule();
+
+        return $vehiculeArray;
     }
 
 

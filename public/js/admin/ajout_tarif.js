@@ -203,7 +203,7 @@ function saveInputs() {
 
     $.ajax({
         type: 'GET',
-        url: '/tarif/newTarif',
+        url: '/backoffice/tarif/newTarif',
         data: {
 
             'marque': marque,
@@ -218,7 +218,7 @@ function saveInputs() {
 
         Type: "json",
         success: function (data) {
-            window.location.href = '/tarifs';
+            window.location.href = '/backoffice/tarifs';
         },
         error: function (erreur) {
             // alert('La requête n\'a pas abouti' + erreur);

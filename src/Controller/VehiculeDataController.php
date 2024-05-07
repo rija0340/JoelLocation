@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Vehicule;
 use App\Service\DateHelper;
 use App\Service\TarifsHelper;
 use App\Repository\MarqueRepository;
@@ -55,10 +56,8 @@ class VehiculeDataController extends AbstractController
         $dateDepart = $request->query->get('dateDepart');
         $dateRetour = $request->query->get('dateRetour');
 
-
         $dateDebut = new \DateTime($dateDepart);
         $dateFin = new \DateTime($dateRetour);
-
 
         $datas = array();
         $data = array();
@@ -72,10 +71,9 @@ class VehiculeDataController extends AbstractController
             $data[$key]['modele'] = $vehicule->getModele()->getLibelle();
         }
 
-
         $listeUnique = array_unique($data, SORT_REGULAR);
-        // dump($listeUnique);
-        // die();
+
+        dd($listeUnique, $data);
 
         //data2 => liste véhicule sans immatriculation
         $data2 = array();
@@ -147,8 +145,8 @@ class VehiculeDataController extends AbstractController
             $data2[$key]['portes'] = $vehicule->getPortes();
             $data2[$key]['passagers'] = $vehicule->getPassagers();
             $data2[$key]['image'] = $vehicule->getImage();
+            $data2[$key]['tarifBdd'] = $this->tarifsHelper->calculTarifVehicule($dateDebut, $dateFin, $vehicule);
         }
-
         return new JsonResponse($data2);
     }
     /**
@@ -162,8 +160,31 @@ class VehiculeDataController extends AbstractController
         $dateDepart = new \DateTime($dateDepart);
         $dateRetour = new \DateTime($dateRetour);
         $datas = array();
-        // dump($this->reservationRepo->findReservationIncludeDates($dateDepart, $dateRetour));
-        // die();
+
+        foreach ($this->reservationRepo->findReservationIncludeDates($dateDepart, $dateRetour) as $key => $reservation) {
+            $datas[$key]['id'] = $reservation->getVehicule()->getId();
+            $datas[$key]['marque'] = $reservation->getVehicule()->getMarque()->getLibelle();
+            $datas[$key]['modele'] = $reservation->getVehicule()->getModele()->getLibelle();
+            $datas[$key]['immatriculation'] = $reservation->getVehicule()->getImmatriculation();
+        }
+
+        return new JsonResponse($datas);
+    }
+
+    /**
+     * @Route("reservation/tarif-vehicule", name="tarif_vehicule",methods={"GET"}))
+     */
+    public function tarifVehicule(Request $request)
+    {
+
+        $dateDepart = $request->query->get('dateDepart');
+        $dateRetour = $request->query->get('dateRetour');
+        $vehiculeIM = $request->query->get('immatriculation');
+
+
+        $dateDepart = new \DateTime($dateDepart);
+        $dateRetour = new \DateTime($dateRetour);
+        $datas = array();
 
         foreach ($this->reservationRepo->findReservationIncludeDates($dateDepart, $dateRetour) as $key => $reservation) {
             $datas[$key]['id'] = $reservation->getVehicule()->getId();

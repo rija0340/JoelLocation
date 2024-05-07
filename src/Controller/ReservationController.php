@@ -54,6 +54,7 @@ use App\Form\CollectionFraisSupplResaType;
 use App\Repository\AnnulationReservationRepository;
 use App\Repository\ModePaiementRepository;
 use App\Repository\AppelPaiementRepository;
+use DoctrineExtensions\Query\Mysql\Date;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use MercurySeries\FlashyBundle\FlashyNotifier;
@@ -366,6 +367,40 @@ class ReservationController extends AbstractController
      */
     public function edit(Request $request, Reservation $reservation): Response
     {
+
+        if ($request->query->has('type') && $request->query->get('type') == 'from_planning') {
+
+            $reference = $request->query->get("reference");
+
+            $reservation = $this->reservationRepo->findOneBy(['reference' => $reference]);
+
+            $dateDepart =  $request->query->get("dateDepart");
+            $dateRetour = $request->query->get("dateRetour");
+            $immatriculation = $request->query->get("vehicule");
+
+            $dateDepart = DateTime::createFromFormat('Y-m-d\TH:i', $dateDepart);
+            $dateRetour = DateTime::createFromFormat('Y-m-d\TH:i', $dateRetour);
+
+            $vehicule = $this->vehiculeRepo->findOneBy(['immatriculation' => $immatriculation]);
+            $reservation->setVehicule($vehicule);
+            //tarif vehicule
+            if ($request->query->has('has-custom-tarif') && $request->query->get('has-custom-tarif') == 'true') {
+                $tarifVeh =  intval($request->query->get("custom-tarif"));
+            } else {
+
+                $tarifVeh = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
+            }
+            //duree
+            $duree = $this->dateHelper->calculDuree($dateDepart, $dateRetour);
+            $reservation->setDuree($duree);
+
+            $reservation->setTarifVehicule($tarifVeh);
+            $reservation->setPrix($this->tarifsHelper->calculTarifTotal($tarifVeh, $reservation->getOptions(), $reservation->getGaranties(), $reservation->getConducteur()));
+
+            $this->em->flush();
+            return $this->redirectToRoute('planGen');
+        }
+
         $ancientPrix = $reservation->getPrix();
         $form = $this->createForm(ReservationType::class, $reservation);
         $form->handleRequest($request);
