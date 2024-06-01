@@ -1,10 +1,9 @@
-// changement de langue pour le table datatable plugin de jquery
-$(document).ready(function () {
-    $("#datatable").dataTable().fnDestroy();
-    $('#datatable').dataTable({
+// datatable-config.js
+var datatableConfig = function (dateColumnIndex) {
+    return {
         columnDefs: [
             {
-                targets: 1,
+                targets: dateColumnIndex,
                 render: function (data, type, row) {
                     if (type === 'display') {
                         var date = moment(data);
@@ -16,8 +15,9 @@ $(document).ready(function () {
             }
         ],
         "scrollX": true,
-        "order": [[1, "desc"]],
+        "order": [
+            [dateColumnIndex, "desc"]
+        ],
         "language": languages_fr
-        // "bDestroy": true
-    });
-});
+    };
+};

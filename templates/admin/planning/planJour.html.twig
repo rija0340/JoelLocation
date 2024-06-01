@@ -98,4 +98,5 @@
 </div>{% endblock %}{% block javascripts %}
 <!-- Datatables -->
 {% include "admin/_parts/datatables/js.html.twig" %}
-<script src="{{asset('js/admin/datatable.fr.js')}}"></script>{% endblock  %}
+<script src="{{ asset('js/admin/datatables/datatablesConfig.js') }}"></script>
+<script src="{{asset('js/admin/datatables/plan_jour.js')}}"></script>{% endblock  %}

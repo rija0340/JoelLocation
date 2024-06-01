@@ -57,7 +57,7 @@
 								{% for reservation in listeStopSales %}
 									<tr class="text-center">
 										<td>
-											{{ reservation.dateReservation ? reservation.dateReservation|date('Y-m-d') : '' }}
+											{{ reservation.dateReservation ? reservation.dateReservation|date('Y-m-d H:i') : '' }}
 										</td>
 										<td>
 											{{ reservation.dateDebut ? reservation.dateDebut|date('d-m-Y H:i') : '' }}
@@ -108,6 +108,7 @@
 			{% block javascripts %}
 				<!-- Datatables -->
 				{% include "admin/_parts/datatables/js.html.twig" %}
+				<script src="{{ asset('js/admin/datatables/datatablesConfig.js') }}"></script>
 				<script src="{{asset('js/admin/datatables/stop_sales.js')}}"></script>
 				<script src="{{ asset('js/admin/stop_sales.js') }}"></script>
 

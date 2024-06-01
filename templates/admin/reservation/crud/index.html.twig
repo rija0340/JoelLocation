@@ -50,7 +50,7 @@
 					<tbody>
 						{% for reservation in reservations %}
 							<tr>
-								<td>{{ reservation.dateReservation|date('Y-m-d')  }}</td>
+								<td>{{ reservation.dateReservation|date('Y-m-d H:i')  }}</td>
 								<td class="text-center">
 									{% if reservation.sommePaiements == 0  %}
 										<div class="badge badge-danger">NOT
@@ -94,6 +94,7 @@
 {% block javascripts %}
 
 	{% include "admin/_parts/datatables/js.html.twig" %}
+	<script src="{{ asset('js/admin/datatables/datatablesConfig.js') }}"></script>
 	<script src="{{asset('js/admin/datatables/nouvelle_resa.js')}}"></script>
 
 {% endblock %}

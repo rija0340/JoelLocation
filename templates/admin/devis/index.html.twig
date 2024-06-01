@@ -61,7 +61,7 @@
 									<div class="badge badge-danger p-2">NOT</div>
 								{% endif %}
 							</td>
-							<td>{{ devis.dateCreation ? devis.dateCreation|date('Y-m-d') : '' }}</td>
+							<td>{{ devis.dateCreation ? devis.dateCreation|date('Y-m-d H:i:s') : '' }}</td>
 							<td>
 								{{ devis.client.nom }}</td>
 							<td>{{ devis.vehicule }}</td>
@@ -89,5 +89,7 @@
 {% block javascripts %}
 	<!-- Datatables -->
 	{% include "admin/_parts/datatables/js.html.twig" %}
+
+	<script src="{{ asset('js/admin/datatables/datatablesConfig.js') }}"></script>
 	<script src="{{ asset('js/admin/datatables/devis.js') }}"></script>
 {% endblock %}

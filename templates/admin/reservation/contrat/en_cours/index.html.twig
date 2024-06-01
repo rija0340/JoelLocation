@@ -62,7 +62,7 @@
 												</div>
 											{% endif %}
 										</td>
-										<td>{{ reservation.dateReservation ? reservation.dateReservation|date('Y-m-d') : '' }}</td>
+										<td>{{ reservation.dateReservation ? reservation.dateReservation|date('Y-m-d H:i') : '' }}</td>
 										<td>{{ reservation.client.prenom }}
 											{{ reservation.client.nom }}</td>
 										<td>{{ reservation.vehicule }}</td>
@@ -94,6 +94,7 @@
 
 	<!-- Datatables -->
 	{% include "admin/_parts/datatables/js.html.twig" %}
+	<script src="{{ asset('js/admin/datatables/datatablesConfig.js') }}"></script>
 	<script src="{{asset('js/admin/datatables/contrat_en_cours.js')}}"></script>
 
 {% endblock  %}

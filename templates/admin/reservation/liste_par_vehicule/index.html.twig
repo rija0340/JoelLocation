@@ -58,7 +58,7 @@
 					<tbody>
 						{% for reservation in reservations %}
 							<tr>
-								<td>{{ reservation.dateReservation|date('d-m-Y H:i')  }}</td>
+								<td>{{ reservation.dateReservation|date('Y-m-d H:i')  }}</td>
 								<td class="text-center">
 									{% if reservation.sommePaiements == 0  %}
 										<div class="badge badge-danger">NOT

@@ -96,5 +96,6 @@
 {% block javascripts %}
 	<!-- Datatables -->
 	{% include "admin/_parts/datatables/js.html.twig" %}
+	<script src="{{ asset('js/admin/datatables/datatablesConfig.js') }}"></script>
 	<script src="{{asset('js/admin/datatables/client_prospect.js')}}"></script>
 {% endblock %}

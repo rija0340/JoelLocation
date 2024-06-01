@@ -58,7 +58,7 @@
 											</div>
 
 										</td>
-										<td>{{ reservation.dateReservation|date('d/m/Y H:i') }}</td>
+										<td>{{ reservation.dateReservation|date('Y-m-d H:i') }}</td>
 										<td>{{reservation.client.nom}}</td>
 										<td>
 											{{reservation.reference}}
@@ -97,7 +97,6 @@
 	<!-- Datatables -->
 	{% include "admin/_parts/datatables/js.html.twig" %}
 	<script src="{{asset('js/admin/datatable.fr.js')}}"></script>
-
 	<script></script>
 
 {% endblock  %}

@@ -43,7 +43,7 @@
 												<span class="badge badge-warning p-2">DEP</span>
 											</div>
 										</td>
-										<td>{{annulation.reservation.dateReservation|date('Y-m-d')}}</td>
+										<td>{{annulation.reservation.dateReservation|date('Y-m-d H:i')}}</td>
 										<td class="text-nowrap">
 											{{annulation.reservation.client.nom}}
 										</td>
@@ -91,6 +91,7 @@
 
 	<!-- Datatables -->
 	{% include "admin/_parts/datatables/js.html.twig" %}
+	<script src="{{ asset('js/admin/datatables/datatablesConfig.js') }}"></script>
 	<script src="{{asset('js/admin/datatables/annulation.js')}}"></script>
 
 {% endblock  %}

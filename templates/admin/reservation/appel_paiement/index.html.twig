@@ -49,7 +49,7 @@
 											<a href="{{path('reservation_show', {'id':appelPaiement.reservation.id})}}" class="">{{appelPaiement.reservation.reference}}</a>
 
 										</td>
-										<td>{{appelPaiement.reservation.dateDebut|date('d/m/Y H:i')}}</td>
+										<td>{{appelPaiement.reservation.dateDebut|date('Y-m-d H:i:s')}}</td>
 										<td>{{appelPaiement.montant|number_format(2,","," ")}}€</td>
 										<td>{{appelPaiement.type}}</td>
 
@@ -95,5 +95,6 @@
 
 	<!-- Datatables -->
 	{% include "admin/_parts/datatables/js.html.twig" %}
+	<script src="{{ asset('js/admin/datatables/datatablesConfig.js') }}"></script>
 	<script src="{{asset('js/admin/datatables/appel_paiement.js')}}"></script>
 {% endblock  %}
