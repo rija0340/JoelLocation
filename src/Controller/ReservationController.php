@@ -393,9 +393,12 @@ class ReservationController extends AbstractController
             //duree
             $duree = $this->dateHelper->calculDuree($dateDepart, $dateRetour);
             $reservation->setDuree($duree);
-
+            $reservation->setDateDebut($dateDepart);
+            $reservation->setDateFin($dateRetour);
             $reservation->setTarifVehicule($tarifVeh);
             $reservation->setPrix($this->tarifsHelper->calculTarifTotal($tarifVeh, $reservation->getOptions(), $reservation->getGaranties(), $reservation->getConducteur()));
+
+            $this->flashy->success("Modification réussie de la réservation " . $reservation->getReference());
 
             $this->em->flush();
             return $this->redirectToRoute('planGen');
