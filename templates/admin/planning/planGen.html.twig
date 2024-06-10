@@ -184,16 +184,5 @@
 <script src="{{asset('js/admin/planningGen_ajax.js')}}"></script>
 <script src="{{asset('js/admin/taskclickevent.js')}}"></script>
 <script src="{{asset('js/admin/planning/scroll.js')}}"></script>
-<script>
-	document.addEventListener("DOMContentLoaded", function () { // Get the cancel button element
-var cancelButton = document.getElementById("cancelButton");
-
-// Add click event listener to the cancel button
-cancelButton.addEventListener("click", function () { // Get the modal element
-var modal = document.getElementById("exampleModal");
-
-// Hide the modal
-$(modal).modal("hide");
-});
-});
-</script>{% endblock %}
+<script src="{{asset('js/admin/planning/edit_resa.js')}}"></script>
+{% endblock %}

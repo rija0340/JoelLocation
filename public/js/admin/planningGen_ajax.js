@@ -109,81 +109,6 @@ async function retrieveDataAjax() {
     }
 }
 
-/**
- * Fetches available vehicles based on the provided departure and return dates.
- * @param {string} dateDepart - The departure date in the format 'YYYY-MM-DD'.
- * @param {string} dateRetour - The return date in the format 'YYYY-MM-DD'.
- * @returns {Promise<Array<Object>>} - A promise that resolves to an array of available vehicles.
- */
-async function getVehiculeFromDates(dateDepart, dateRetour) {
-    try {
-        const url = `/backoffice/reservation/liste-vehicules-disponibles?dateDepart=${dateDepart}&dateRetour=${dateRetour}`;
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error ${response.status}`);
-        }
-
-        const data = await response.json();
-        return data;
-
-    } catch (error) {
-        console.error('Error fetching available vehicles:', error);
-        throw error;
-    }
-}
-
-//create options from liste in data
-function createOptions(data, task) {
-
-    setTarifBddToHtml("");
-    //select element html 
-    const selectEl = document.getElementById('vehicule');
-
-    // Clear the existing options
-    selectEl.innerHTML = '';
-    const vehicleArray = Object.values(data);
-
-    // Create a default option
-    const defaultOption = document.createElement('option');
-    defaultOption.value = ''; // No value for the default option
-    //add attr id to defaultoption
-    defaultOption.setAttribute('id', 'default-option');
-    defaultOption.textContent = 'Select a vehicle'; // You can change this text as per your requirement
-    selectEl.appendChild(defaultOption);
-
-    vehicleArray.forEach(option => {
-        const optionElement = document.createElement('option');
-        optionElement.value = option.immatriculation;
-        optionElement.textContent = option.marque + " " + option.modele + " " + option.immatriculation;
-        selectEl.appendChild(optionElement);
-
-    });
-
-    //ajout gestion evenement
-    selectEl.addEventListener('change',
-        (event) => {
-            updateTarifVehiculeAndResa(event, data, task);
-        }
-    );
-    //set valeur tafir du premier vehicule 
-}
-
-function updateTarifVehiculeAndResa(event, data, task) {
-    const tarifBddEl = document.getElementById('tarif-bdd');
-    const tarifResaEl = document.getElementById('tarif-resa');
-    tarifBddEl.innerHTML = '';
-    tarifResaEl.innerHTML = '';
-    let vehiculeObj = data.find(item => item.immatriculation === event.target.value)
-    setTarifBddToHtml(vehiculeObj.tarifBdd);
-    // somme tarif vehicule et options garanties 
-    tarifResaEl.value = vehiculeObj.tarifBdd + task.tarifOptionsGaranties;
-}
 
 /**
  * cette fonction prend tarif d'une vehicule
@@ -263,133 +188,24 @@ function ganttInit(startDateScale, endDateScale, cellWidth) {
     gantt.attachEvent("onContextMenu", function (id, linkId, e) {
 
         if (id) {
-            gantt.showLightbox(id);
+            const task = gantt.getTask(id);
+            gantt.showLightbox(task);
         }
 
     });
 
     var taskId = null;
 
-    gantt.showLightbox = function (id) {
-        taskId = id;
-        var task = gantt.getTask(id);
-        // Get the button element
-        const modalButton = document.querySelector('button[data-target="#exampleModal"]');
-        const refInput = document.getElementById('reference');
-        const tarifResaInput = document.getElementById('tarif-resa');
-        const tarifOptionsGarantiesInput = document.getElementById('tarifs-options-garanties');
-        const dateDepartInput = document.getElementById('dateDepart');
-        const dateRetourInput = document.getElementById('dateRetour');
-        const hasCustomTarifInput = document.getElementById('has-custom-tarif');
-        const tarifBddContainer = document.querySelector('.container-tarif-bdd');
-        const customTarifContainer = document.querySelector('.container-custom-tarif');
-        const customTarifInput = document.getElementById('custom-tarif');
-        const tarifBddInput = document.getElementById('tarif-bdd');
-        //deselectionner customtarif input
-        hasCustomTarifInput.checked = false;
-        //effacer value
-        customTarifInput.value = '';
-
-        // Single event listener for both input fields
-        dateDepartInput.addEventListener('change', handleDateChange);
-        dateRetourInput.addEventListener('change', handleDateChange);
-        customTarifInput.addEventListener('input', (event) => {
-            //mettre a jour tarif resa 
-            let value = event.target.value;
-            value = value == "" ? 0 : value;
-            let tarifresa = parseInt(value) + parseInt(tarifOptionsGarantiesInput.value);
-            tarifResaInput.value = tarifresa;
-
-        });
-
-        //pour custom tarif checkbox
-        hasCustomTarifInput.addEventListener('change', () => {
-            //switch input 
-            if (hasCustomTarifInput.checked) {
-                //display none
-                tarifBddContainer.style.display = 'none';
-                customTarifContainer.style.display = 'block';
-                tarifBddInput.value = '';
-
-                //mise a jour tarif resa  =  tarif options garanties seulement
-                tarifResaInput.value = tarifOptionsGarantiesInput.value;
-
-                //mettre tarifresainput required
-                tarifResaInput.required = true;
-            } else {
-                //display block
-                tarifBddContainer.style.display = 'block';
-                customTarifContainer.style.display = 'none';
-                customTarifInput.value = '';
-                document.getElementById('default-option').selected = true;
-                tarifResaInput.removeAttribute('required');
-            }
-
-
-        });
-
-        function handleDateChange(event) {
-            const dateDepart = dateDepartInput.value;
-            const dateRetour = dateRetourInput.value;
-
-            getVehiculeFromDates(dateDepart, dateRetour)
-                .then(dataVehicule => {
-                    createOptions(dataVehicule, task);
-
-                })
-                .catch(error => {
-                    console.error('Error fetching available vehicles:', error);
-                });
-        }
-
-        //add data to inputs
-        refInput.value = task.reference;
-        tarifResaInput.value = task.tarifResa;
-        tarifOptionsGarantiesInput.value = task.tarifOptionsGaranties;
-
-        let dateDepart = convertDateToIsoDate(task.start_date);
-        let dateRetour = convertDateToIsoDate(task.end_date);
-
-        getVehiculeFromDates(dateDepart, dateRetour)
-            .then(dataVehicule => {
-                createOptions(dataVehicule, task);
-            })
-            .catch(error => {
-                console.error('Error fetching available vehicles:', error);
-            });
-
-        var today = new Date();
-        var formattedToday = today.toISOString().split('T')[0];
-        dateDepartInput.value = dateDepart;
-        dateDepartInput.setAttribute('min', formattedToday);
-        dateRetourInput.value = dateRetour;
-        dateRetourInput.setAttribute('min', formattedToday);
-        //click pour ouvrir le modal 
-        modalButton.click();
-
-        //set dynamically href value 
-        const protocol = location.protocol; // 'http:' or 'https:'
-        const hostname = location.hostname; // 'localhost'
-        const port = location.port; // '8000'
-
-        const baseUrl = `${protocol}//${hostname}:${port}`;
-
-        console.log("baseUrl");
-        console.log(baseUrl);
-
-        document.getElementById('form-task').setAttribute('action', `/backoffice/reservation/${task.id_r}/edit/`);
-
-    };
-
+    gantt.showLightbox = function (task) {
+        editResa(task);
+    }
 
 
     gantt.hideLightbox = function () {
         getForm().style.display = "";
         taskId = null;
     }
-
     //fin test lightbox
-
 
     //date de début et fin de l'affichage tasks
     if (startDateScale != null && endDateScale != null) {
@@ -500,18 +316,7 @@ function ganttInit(startDateScale, endDateScale, cellWidth) {
 
 }
 
-function convertDateToIsoDate(date) {
 
-    const dateObj = new Date(date);
-
-    console.log("dateObj");
-    console.log(dateObj);
-
-    // Convert the date to the ISO 8601 format
-    const isoDateTime = dateObj.toISOString().slice(0, 16);
-
-    return isoDateTime;
-}
 
 // const form = document.getElementById('form-task');
 
