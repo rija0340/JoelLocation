@@ -346,12 +346,16 @@ class ReservationRepository extends ServiceEntityRepository
     // }
 
     /**
+     * Cette fonction return les reservation qui peuvent être inclu dans ces date 
+     * comparaison de la date debut parametre si inclus dans les dates debut et fin d'une reservation existantes 
+     * meme chose pour la date fin du parametre 
      * @return Reservation[] Returns an array of Reservation objects
      */
     public function findReservationIncludeDates($dateDebut, $dateFin)
     {
         return $this->createQueryBuilder('r')
-            ->where("(r.date_debut BETWEEN :dateDebut AND :dateFin) OR (r.date_fin BETWEEN :dateDebut AND :dateFin)")
+            // ->where("(r.date_debut BETWEEN :dateDebut AND :dateFin) OR (r.date_fin BETWEEN :dateDebut AND :dateFin)")
+            ->where("(:dateDebut  BETWEEN r.date_debut  AND r.date_fin) OR (:dateFin BETWEEN r.date_debut  AND r.date_fin)")
             ->andWhere("r.canceled = FALSE OR r.canceled IS NULL")
             ->andWhere("r.archived = FALSE")
             ->andWhere("r.reported = FALSE OR r.reported IS NULL")
