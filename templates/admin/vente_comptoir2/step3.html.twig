@@ -104,12 +104,18 @@
 
 						<h3 class="heading">Prix de base de location</h3>
 						<div class="prix_location">
-							<span id="prixTotal">{{ tarifVehicule|number_format(2,","," ") }}</span>
-							€<br>
-							soit
-							<span id="prixJournalier">{{ (tarifVehicule / duree)|number_format(2,","," ")}}</span>
-							€/jour
+							{% if tarifVehicule != 0  and duree != 0 %}
+								<span id="prixTotal">{{ tarifVehicule|number_format(2,',',' ') }}
+									€</span><br>
+								soit
+								<span id="prixJournalier">{{ (tarifVehicule / duree)|number_format(2,',',' ') }}/jour €</span>
+							{% else %}
+								<span id="prixTotal">0.00 €</span><br>
+								soit
+								<span id="prixJournalier">0.00 €/jour</span>
+							{% endif %}
 						</div>
+
 						<div class="prestation">
 							<h3 class="heading">Prestations incluses</h3>
 							<ul class="pl-2">

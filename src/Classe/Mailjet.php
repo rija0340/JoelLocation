@@ -189,7 +189,7 @@ class Mailjet
         return $response->success();
     }
 
-    public function confirmationDevis($nom, $email, $objet, $dateResa, $refResa, $vehicule, $dateHeureDepart, $dateHeureRetour, $linkDevis, $linkReservation)
+    public function confirmationDevis($nom, $email, $objet, $devisDate, $devisRef, $vehiculeMarqueModele, $dateHeureDepart, $dateHeureRetour, $devisLink, $resaLink)
     {
         $mj = new Client($this->api_key, $this->api_key_secret, true, ['version' => 'v3.1']);
         $body = [
@@ -205,18 +205,19 @@ class Mailjet
                             'Name' => $nom
                         ]
                     ],
-                    'TemplateID' => 3760365, //template codé en html dans mailjet
+                    // 'TemplateID' => 3760365, //template codé en html dans mailjet
+                    'TemplateID' => 4245800, //template codé en html dans mailjet
                     'TemplateLanguage' => true,
                     'Subject' => $objet,
                     'Variables' => [
                         'nom' => $nom,
-                        'dateResa' => $dateResa,
-                        'refResa' => $refResa,
-                        'vehicule' => $vehicule,
+                        'devisDate' => $devisDate,
+                        'devisRef' => $devisRef,
+                        'vehiculeMarqueModele' => $vehiculeMarqueModele,
                         'dateHeureDepart' => $dateHeureDepart,
                         'dateHeureRetour' => $dateHeureRetour,
-                        'linkDevis' => $linkDevis,
-                        'linkReservation' => $linkReservation,
+                        'devisLink' => $devisLink,
+                        'resaLink' => $resaLink,
                         //                        'dateValiditeDevis'=> $dateValiditeDevis
                     ]
                 ]
@@ -442,12 +443,11 @@ class Mailjet
                             'Name' => $to_name
                         ]
                     ],
-                    'TemplateID' => 3771104, //template codé en html dans mailjet
+                    'TemplateID' => 6081475, //template codé en html dans mailjet
                     'TemplateLanguage' => true,
                     'Subject' => $objet,
                     'Variables' => [
-                        'nom' => $to_name,
-                        'numero' => $numero,
+                        'resaRef' => $numero,
                         'linkContrat' => $linkContrat
                     ]
                 ]
@@ -474,12 +474,11 @@ class Mailjet
                             'Name' => $to_name
                         ]
                     ],
-                    'TemplateID' => 3771104, //template codé en html dans mailjet
+                    'TemplateID' => 6093456, //template codé en html dans mailjet
                     'TemplateLanguage' => true,
                     'Subject' => $objet,
                     'Variables' => [
-                        'nom' => $to_name,
-                        'numero' => $numero,
+                        'resaRef' => $numero,
                         'linkFacture' => $linkFacture
                     ]
                 ]

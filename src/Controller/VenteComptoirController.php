@@ -393,7 +393,7 @@ class VenteComptoirController extends AbstractController
             $numDevis = $result;
             //url de téléchargement du devis
             $devis = $this->devisRepo->findOneBy(['numero' => $numDevis]);
-            $this->reservationHelper->sendMailConfirmationDevis($devis);
+            $this->reservationHelper->sendMailConfirmationDevis($devis, $request);
             $this->flashy->success('Le devis a été enregistré avec succés et un mail a été envoyé au client');
             return $this->redirectToRoute('devis_index');
         } else {

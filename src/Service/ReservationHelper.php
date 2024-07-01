@@ -9,7 +9,8 @@ use App\Repository\OptionsRepository;
 use App\Repository\GarantieRepository;
 use App\Repository\ReservationRepository;
 use App\Repository\VehiculeRepository;
-
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ReservationHelper
 {
@@ -22,6 +23,8 @@ class ReservationHelper
     private $reservationRepo;
     private $mailjet;
     private $devisRepo;
+    private $site;
+    private $router;
 
     public function __construct(
         ReservationRepository $reservationRepo,
@@ -31,7 +34,9 @@ class ReservationHelper
         OptionsRepository $optionsRepo,
         GarantieRepository $garantiesRepo,
         Mailjet $mailjet,
-        DevisRepository $devisRepo
+        DevisRepository $devisRepo,
+        Site $site,
+        UrlGeneratorInterface $router
     ) {
         $this->vehiculeRepo = $vehiculeRepo;
         $this->optionsRepo = $optionsRepo;
@@ -41,6 +46,8 @@ class ReservationHelper
         $this->reservationRepo = $reservationRepo;
         $this->mailjet = $mailjet;
         $this->devisRepo = $devisRepo;
+        $this->site = $site;
+        $this->router = $router;
     }
 
     //paramètres : reservations qui sont inclus durant l'intervalle de date de début et date de fin 
@@ -226,15 +233,19 @@ class ReservationHelper
     }
 
 
-    public function sendMailConfirmationDevis($devis)
+    public function sendMailConfirmationDevis($devis, Request $request)
     {
 
-        $url = '/backoffice/devispdf/' . $devis->getId();
-        $url_reservation = '/espaceclient/validation/options-garanties/{id}' . $devis->getId();
-        $url = "https://joellocation.com" . $url;
-        $url_reservation = "https://joellocation.com" . $url_reservation;
-        $linkDevis = "<a style='text-decoration: none; color: inherit;' href='" . $url . "'>Télécharger mon devis</a>";
-        $linkReservation = "<a style='text-decoration: none; color: inherit;' href='" . $url_reservation . "'>JE RESERVE</a>";
+        $baseUrl = $this->site->getBaseUrl($request);
+        $devisLink   = $this->router->generate('devis_pdf', ['id' => $devis->getId()]);
+        $validationDevisLink   = $this->router->generate('validation_step2', ['id' => $devis->getId()]);
+
+        // $devisLink = '/backoffice/devispdf/' . $devis->getId();
+        // $resaLink = '/espaceclient/validation/options-garanties/{id}' . $devis->getId();
+        $devisLink = $baseUrl . $devisLink;
+        $validationDevisLink = $baseUrl . $validationDevisLink;
+        // $linkDevis = "<a style='text-decoration: none; color: inherit;' href='" . $devisLink . "'>Télécharger mon devis</a>";
+        // $linkReservation = "<a style='text-decoration: none; color: inherit;' href='" . $resaLink . "'>JE RESERVE</a>";
 
         $fullName = $devis->getClient()->getPrenom() . " " . $devis->getClient()->getNom();
         $email = $devis->getClient()->getMail();
@@ -247,8 +258,8 @@ class ReservationHelper
             $devis->getVehicule()->getMarque() . " " . $devis->getVehicule()->getModele(),
             $this->dateHelper->frenchDate($devis->getDateDepart()) . " " . $this->dateHelper->frenchHour($devis->getDateDepart()),
             $this->dateHelper->frenchDate($devis->getDateRetour()) . " " . $this->dateHelper->frenchHour($devis->getDateRetour()),
-            $linkDevis,
-            $linkReservation
+            $devisLink,
+            $validationDevisLink
             //            $this->dateHelper->frenchDate($devis->getDateRetour()->modify('+3 days'))
         );
     }

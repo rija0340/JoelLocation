@@ -54,6 +54,7 @@ use App\Form\CollectionFraisSupplResaType;
 use App\Repository\AnnulationReservationRepository;
 use App\Repository\ModePaiementRepository;
 use App\Repository\AppelPaiementRepository;
+use App\Service\Site;
 use DoctrineExtensions\Query\Mysql\Date;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -829,18 +830,16 @@ class ReservationController extends AbstractController
     /**
      * @Route("/envoyer-contrat-pdf/{id}", name="envoyer_contrat", methods={"GET","POST"},requirements={"id":"\d+"})
      */
-    public function envoyerContrat(Request $request, Reservation $reservation): Response
+    public function envoyerContrat(Request $request, Reservation $reservation, Site $site): Response
     {
 
         $mail = $reservation->getClient()->getMail();
         $nom = $reservation->getClient()->getNom();
 
-        $url   = $this->generateUrl('contrat_pdf', ['id' => $reservation->getId()]);
-        $url = "https://joellocation.com" . $url;
+        $contratLink   = $this->generateUrl('contrat_pdf', ['id' => $reservation->getId()]);
 
-        $content = "Bonjour, " . '<br>' . "Vous pouvez télécharger le contrat concernant la réservation N°" . $reservation->getReference() . "en cliquant sur ce <a href='" . $url . "'>lien</a>.";
-
-        $this->mailjet->send($mail, $nom, "devis", $content);
+        $url  = $site->getBaseUrl($request) . $contratLink;
+        $this->mailjet->sendContratLink($mail, $nom, "Contrat", $reservation->getReference(), $url);
 
         // a decommenter 
         //lien pour telechargement devis
@@ -850,25 +849,27 @@ class ReservationController extends AbstractController
         // $linkContrat = "<a style='text-decoration: none; color: inherit;' href='" . $url . "'>Télécharger mon contrat</a>";
         // $this->mailjet->sendContratLink($mail, $nom, "Contrat", $numero, $linkContrat);
 
-        $this->flashy->success("L'url de téléchargement de la réservation N°" . $reservation->getReference() . " a été envoyé");
+        $this->flashy->success("L'url du contrat de la réservation N°" . $reservation->getReference() . " a été envoyé");
         return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
     }
 
     /**
      * @Route("/envoyer-facture-pdf/{id}", name="envoyer_facture", methods={"GET","POST"},requirements={"id":"\d+"})
      */
-    public function envoyerFacture(Request $request, Reservation $reservation): Response
+    public function envoyerFacture(Request $request, Reservation $reservation, Site $site): Response
     {
 
         $mail = $reservation->getClient()->getMail();
         $nom = $reservation->getClient()->getNom();
         // a decommenter 
-        $url = $this->generateUrl('facture_pdf', ['id' => $reservation->getId()]);
-        $url = "https://joellocation.com" . $url;
-        $numero = $reservation->getReference();
-        $linkFacture = "<a style='text-decoration: none; color: inherit;' href='" . $url . "'>Télécharger ma facture</a>";
+        $factureLink = $this->generateUrl('facture_pdf', ['id' => $reservation->getId()]);
+        $url  = $site->getBaseUrl($request) . $factureLink;
 
-        $this->mailjet->sendContratLink($mail, $nom, "Facture", $numero, $linkFacture);
+        // $url = "https://joellocation.com" . $url;
+        // $numero = $reservation->getReference();
+        // $linkFacture = "<a style='text-decoration: none; color: inherit;' href='" . $url . "'>Télécharger ma facture</a>";
+
+        $this->mailjet->sendFactureLink($mail, $nom, "Facture", $reservation->getReference(), $url);
 
         $this->flashy->success("Url facture envoyé");
         return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);

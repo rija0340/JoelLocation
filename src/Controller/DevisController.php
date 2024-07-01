@@ -502,7 +502,7 @@ class DevisController extends AbstractController
     public function envoyerDevis(Request $request, Devis $devis, ReservationHelper $reservationHelper): Response
     {
 
-        $reservationHelper->sendMailConfirmationDevis($devis);
+        $reservationHelper->sendMailConfirmationDevis($devis, $request);
         $this->flashy->success("L'url de téléchargement du devis N°" . $devis->getNumero() . " a été envoyé");
         return $this->redirectToRoute('devis_show', ['id' => $devis->getId()]);
     }
