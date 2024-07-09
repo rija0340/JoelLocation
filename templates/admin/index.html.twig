@@ -20,9 +20,12 @@
 {% endblock %}
 
 {% block content %}
-
+	<a class="btn btn-success" href="{{path('envoi_email')}}">
+		Envoi de mail par symfony mailerr
+	</a>
 	<div class="bg-pink p-2 m-2 mt-2">
 		<i class="fa fa-warning (alias)"></i>
+
 		Les données statistiques sont basées sur les réservations à J-1. Elles sont actualisées automatiquement chaque soir.
 	</div>
 	<div class="row">

@@ -54,10 +54,11 @@ class SymfonyMailer
             ->from($from)
             ->to($to)
             ->subject($subjet)
-            ->html(
-                //specifier chemin template dans l'appel de cette fonction
-                $this->twig->render($template, $parameters)
-            );
+            ->text('Sending emails is fun again!');
+        // ->html(
+        //     //specifier chemin template dans l'appel de cette fonction
+        //     $this->twig->render($template, $parameters)
+        // );
         $this->mailer->send($email);
     }
 

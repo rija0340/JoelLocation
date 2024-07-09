@@ -23,6 +23,7 @@ use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ReservationRepository;
+use App\Service\SymfonyMailer;
 use App\Service\VehiculeHelper;
 use DoctrineExtensions\Query\Mysql\Format;
 use GuzzleHttp\RetryMiddleware;
@@ -54,6 +55,7 @@ class AdminController extends AbstractController
   private $devisRepo;
   private $avisRepo;
   private $vehiculeHelper;
+  private $symfonyMailer;
 
   public function __construct(
     AvisRepository $avisRepo,
@@ -69,7 +71,8 @@ class AdminController extends AbstractController
     VehiculeRepository $vehiculeRepo,
     OptionsRepository $optionsRepo,
     GarantieRepository $garantiesRepo,
-    VehiculeHelper $vehiculeHelper
+    VehiculeHelper $vehiculeHelper,
+    SymfonyMailer $symfonyMailer
   ) {
 
     $this->reservationRepo = $reservationRepo;
@@ -86,6 +89,7 @@ class AdminController extends AbstractController
     $this->devisRepo = $devisRepo;
     $this->avisRepo = $avisRepo;
     $this->vehiculeHelper = $vehiculeHelper;
+    $this->symfonyMailer = $symfonyMailer;
   }
 
 
@@ -225,5 +229,13 @@ class AdminController extends AbstractController
       'garanties' => $garanties,
       'options' => $options,
     ]);
+  }
+
+  /**
+   * @Route("/envoi-email", name="envoi_email", methods={"GET","POST"})
+   */
+  public function envoiEmail()
+  {
+    $this->symfonyMailer->send("mety sa tsy mety", "contact@joellocation@gmail.com", "rakotoarinelinarija@gmail.com", "", []);
   }
 }
