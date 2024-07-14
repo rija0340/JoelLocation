@@ -238,5 +238,6 @@ class AdminController extends AbstractController
   public function envoiEmail()
   {
     $this->symfonyMailer->send("mety sa tsy mety", "contact@joellocation@gmail.com", "rakotoarinelinarija@gmail.com", "", []);
+    die('vita aloh ny send mail');
   }
 }
