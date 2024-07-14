@@ -242,6 +242,7 @@ class AdminController extends AbstractController
       die('tonga soa amanatsara any kosa e');
     } catch (TransportExceptionInterface $e) {
       echo '<pre>',  print_r($e, TRUE), '</pre>';
+      die('misy erreur');
     }
   }
 }
