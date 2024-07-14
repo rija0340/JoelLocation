@@ -246,5 +246,6 @@ class AdminController extends AbstractController
       echo '</pre>';
       die('ato amle erreur zazao');
     }
+    die('ivelany');
   }
 }
