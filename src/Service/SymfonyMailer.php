@@ -64,7 +64,9 @@ class SymfonyMailer
             $this->mailer->send($email);
             die('tonga ato za');
         } catch (TransportExceptionInterface $e) {
-            echo '<pre>',  print_r($e, TRUE), '</pre>';
+            echo '<pre>';
+            print_r($e, TRUE);
+            echo '</pre>';
         }
     }
 
