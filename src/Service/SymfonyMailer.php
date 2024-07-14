@@ -67,6 +67,7 @@ class SymfonyMailer
             echo '<pre>';
             print_r($e, TRUE);
             echo '</pre>';
+            die('ato amle erreur zazao');
         }
     }
 
