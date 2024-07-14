@@ -33,6 +33,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 /**
  * @Route("/backoffice")
@@ -236,6 +237,11 @@ class AdminController extends AbstractController
    */
   public function envoiEmail()
   {
-    $this->symfonyMailer->send("mety sa tsy mety", "contact@joellocation@gmail.com", "rakotoarinelinarija@gmail.com", "", []);
+    try {
+      $this->symfonyMailer->send("mety sa tsy mety", "contact@joellocation@gmail.com", "rakotoarinelinarija@gmail.com", "", []);
+      die('tonga soa amanatsara any kosa e');
+    } catch (TransportExceptionInterface $e) {
+      echo '<pre>',  print_r($e, TRUE), '</pre>';
+    }
   }
 }
