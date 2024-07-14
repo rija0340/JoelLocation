@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\Bridge\Google\Transport\GmailSmtpTransport;
 
 class SymfonyMailer
@@ -59,7 +60,12 @@ class SymfonyMailer
         //     //specifier chemin template dans l'appel de cette fonction
         //     $this->twig->render($template, $parameters)
         // );
-        $this->mailer->send($email);
+        try {
+            $this->mailer->send($email);
+            die('tonga ato za');
+        } catch (TransportExceptionInterface $e) {
+            echo '<pre>',  print_r($e, TRUE), '</pre>';
+        }
     }
 
     // test another method for fixing tls error
