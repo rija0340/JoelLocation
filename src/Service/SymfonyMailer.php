@@ -60,15 +60,7 @@ class SymfonyMailer
         //     //specifier chemin template dans l'appel de cette fonction
         //     $this->twig->render($template, $parameters)
         // );
-        try {
-            $this->mailer->send($email);
-            die('tonga ato za');
-        } catch (TransportExceptionInterface $e) {
-            echo '<pre>';
-            print_r($e, TRUE);
-            echo '</pre>';
-            die('ato amle erreur zazao');
-        }
+        $this->mailer->send($email);
     }
 
     // test another method for fixing tls error
