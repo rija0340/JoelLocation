@@ -269,10 +269,20 @@ function ganttInit(startDateScale, endDateScale, cellWidth) {
             var taskID = gantt.getTask(id).id_r;
             var etat = gantt.getTask(id).etat;
 
-            console.log(task);
+            const protocol = location.protocol; // 'http:' or 'https:'
+            const hostname = location.hostname; // 'localhost'
+            const port = location.port; // '8000'
+
+            let baseUrl = `${protocol}//${hostname}`;
+            if (port) {
+                baseUrl += `:${port}`;
+            }
+
+            console.log("baseUrl");
+            console.log(baseUrl);
 
             if (etat == "stopSale") {
-                var url = "https://joellocation.com/backoffice/" + taskID + "/editStopSale";
+                var url = baseUrl + "/backoffice/" + taskID + "/editStopSale";
                 gantt.ext.quickInfo.setContent({
                     content:
                         "Date début : " + task.start_date_formated + "<br>" +
@@ -280,7 +290,7 @@ function ganttInit(startDateScale, endDateScale, cellWidth) {
                         "<a class='btn btn-outline-danger' href=" + url + "   >Modifier</a>"
                 });
             } else {
-                var url = "https://joellocation.com/backoffice/reservation/details/" + taskID;
+                var url = baseUrl + "/backoffice/reservation/details/" + taskID;
                 gantt.ext.quickInfo.setContent({
                     content:
                         "Référence :  <a class='' href=" + url + "   >" + task.reference + "</a>   <br>" +
