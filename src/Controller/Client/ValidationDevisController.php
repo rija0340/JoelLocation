@@ -232,7 +232,8 @@ class ValidationDevisController extends AbstractController
             'allOptions' => $allOptions,
             'allGaranties' => $allGaranties,
             'vehiculeIsNotAvailable' => $vehiculeIsNotAvailable,
-            'vehiculesAvailable' => $vehiculesAvailable
+            'vehiculesAvailable' => $vehiculesAvailable,
+            'prixConductSuppl' => $this->tarifsHelper->getPrixConducteurSupplementaire()
         ]);
     }
 

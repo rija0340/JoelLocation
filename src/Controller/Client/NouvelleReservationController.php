@@ -384,7 +384,7 @@ class NouvelleReservationController extends AbstractController
 
         if ($type == 'devis') {
             $this->flashy->success('Le devis a été enregistré avec succés');
-            $this->reservationHelper->sendMailConfirmationDevis($devis);
+            $this->reservationHelper->sendMailConfirmationDevis($devis, $request);
             return $this->redirectToRoute('client_reservations');
         } elseif ($type == 'reservation') {
             return $this->redirectToRoute('validation_step3', ['id' => $devis->getId()]);
