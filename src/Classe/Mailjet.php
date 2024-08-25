@@ -228,6 +228,7 @@ class Mailjet
     }
 
 
+
     public function confirmationPaiement($nom, $email, $objet, $dateResa, $refResa, $vehicule, $dateHeureDepart, $dateHeureRetour, $prixResa, $sommePaiement)
     {
         $mj = new Client($this->api_key, $this->api_key_secret, true, ['version' => 'v3.1']);
@@ -488,6 +489,38 @@ class Mailjet
         return $response->success();
     }
 
+    public function resetPassword($nom, $prenom, $email, $object, $resetPwdLink)
+    {
+        $mj = new Client($this->api_key, $this->api_key_secret, true, ['version' => 'v3.1']);
+        $body = [
+            'Messages' => [
+                [
+                    'From' => [
+                        'Email' => "contact.joellocation@gmail.com",
+                        'Name' => "JOEL LOCATION"
+                    ],
+                    'To' => [
+                        [
+                            'Email' => $email,
+                            'Name' => $nom
+                        ]
+                    ],
+                    'TemplateID' => 6232296, //template codé en html dans mailjet
+                    'TemplateLanguage' => true,
+                    'Subject' => $object,
+                    'Variables' => [
+                        'fullname' => $prenom . " " . $nom,
+                        'email' => $email,
+                        'resetPwdLink' => $resetPwdLink,
+
+                    ]
+                ]
+            ]
+        ];
+        $response = $mj->post(Resources::$Email, ['body' => $body]);
+        return $response->success();
+    }
+    //
     //Vous : {{var:nom:""}}
     //Réservation du : {{var:dateResa:""}}
     //Code de référence : {{var:refResa:""}}

@@ -9,6 +9,7 @@ use App\Form\ResetPasswordType;
 use App\Repository\ResetPasswordRepository;
 use App\Repository\UserRepository;
 use App\Service\DateHelper;
+use App\Service\Site;
 use Doctrine\ORM\EntityManagerInterface;
 use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,6 +28,8 @@ class ResetPasswordController extends AbstractController
     private $resetPasswordRepo;
     private $flashy;
     private $passwordEncoder;
+    private $site;
+    private $mailjet;
 
 
     public function __construct(
@@ -35,7 +38,9 @@ class ResetPasswordController extends AbstractController
         DateHelper $dateHelper,
         ResetPasswordRepository $resetPasswordRepo,
         FlashyNotifier $flashy,
-        UserPasswordEncoderInterface $passwordEncoder
+        UserPasswordEncoderInterface $passwordEncoder,
+        Site $site,
+        Mailjet $mailjet
 
     ) {
 
@@ -45,6 +50,8 @@ class ResetPasswordController extends AbstractController
         $this->resetPasswordRepo = $resetPasswordRepo;
         $this->flashy = $flashy;
         $this->passwordEncoder = $passwordEncoder;
+        $this->site = $site;
+        $this->mailjet = $mailjet;
     }
 
 
@@ -79,12 +86,10 @@ class ResetPasswordController extends AbstractController
 
                     'token' => $resetpassword->getToken()
                 ]);
-                $url = "https://joellocation.com" . $url;
-                $content = "Bonjour " . $user->getNom() . "<br/> Vous avez demandé à réinitialiser votre mot de passe sur le site Joel Location";
-                $content .= "Merci de bien vouloir cliquer sur le lien suivant pour <a href='" . $url . "'> mettre à jour votre mot de passe.</a>";
 
-                $mail = new Mailjet();
-                $mail->send($user->getMail(), $user->getNom() . " " . $user->getPrenom(), "Réinitialiser votre mot de passe", $content);
+                $baseUrl  = $this->site->getBaseUrl($request) . $url;
+
+                $this->mailjet->resetPassword($user->getNom(), $user->getPrenom(), $user->getMail(), "Réinitialiser votre mot de passe", $baseUrl);
 
                 $this->flashy->success("Vous allez recevoir un email avec la procédure pour réinitialiser votre mot de passe");
             } else {
