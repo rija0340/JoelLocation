@@ -295,7 +295,9 @@ function ganttInit(startDateScale, endDateScale, cellWidth) {
                     content:
                         "Référence :  <a class='' href=" + url + "   >" + task.reference + "</a>   <br>" +
                         "Agence de départ : " + task.agenceDepart + "<br>" +
+                        "Date de départ : " + task.start_date_formated + "<br>" +
                         "Agence de retour : " + task.agenceRetour + "<br>" +
+                        "Date de retour : " + task.end_date_formated + "<br>" +
                         "Téléphone : " + task.telClient + "<br>"
                 });
             }

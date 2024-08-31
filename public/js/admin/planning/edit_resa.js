@@ -73,6 +73,11 @@ function addDataToModalForm(task) {
     tarifResaInput.value = task.tarifResa;
     tarifOptionsGarantiesInput.value = task.tarifOptionsGaranties;
 
+    console.log("task.start_date");
+    console.log(task.start_date);
+    console.log("task.end_date");
+    console.log(task.end_date);
+
     let dateDepart = convertDateToIsoDate(task.start_date);
     let dateRetour = convertDateToIsoDate(task.end_date);
 
@@ -238,11 +243,16 @@ function convertDateToIsoDate(date) {
 
     const dateObj = new Date(date);
 
-    console.log("dateObj");
-    console.log(dateObj);
+    const year = dateObj.getFullYear();
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    const hours = String(dateObj.getHours()).padStart(2, '0');
+    const minutes = String(dateObj.getMinutes()).padStart(2, '0');
+
+    const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}`;
 
     // Convert the date to the ISO 8601 format
-    const isoDateTime = dateObj.toISOString().slice(0, 16);
+    // const formattedDate = dateObj.toISOString().slice(0, 16);
 
-    return isoDateTime;
+    return formattedDate;
 }

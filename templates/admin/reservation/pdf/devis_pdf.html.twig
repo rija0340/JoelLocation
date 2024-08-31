@@ -14,7 +14,7 @@
 			}
 
 			#body {
-				margin: 40px;
+				margin: 0 40px 40px;
 			}
 			#footer {
 				position: absolute;
@@ -70,9 +70,12 @@
 
 				display: inline-block;
 				vertical-align: top;
-				padding-top: 25px;
-				font-size: 14px;
+				padding-top: 20px;
+				font-size: 13px;
 
+			}
+			.details-prix {
+				font-size: 15px;
 			}
 
 			/* .table1 {
@@ -154,22 +157,25 @@
 			}
 
 			#note {
-				margin-top: 30px;
-				font-size: 14px;
+				margin-top: 25px;
+				font-size: 13px;
 			}
 
 			.signature {
 				padding-left: 250px;
 				font-weight: bold;
-				padding-top: 50px;
+				padding-top: 25px;
 			}
 		</style>
 	</head>
 	<body>
+		<section>
+			<div class="entete"><img src="{{ entete }}" alt="entete" width="800px" height="40px" type="images/png"></div>
+		</section>
 		<section
 			id="body">
 			{# logo et adresse #}
-			<div class="logo"><img src="{{ logo }}" alt="logo" width="150px" height="80px" type="images/png"></div>
+			<div class="logo"><img src="{{ logo }}" alt="logo" width="auto" height="80px" type="images/png"></div>
 			<div class="adresse">
 				<strong class="joellocation">JOEL LOCATION</strong><br>
 				94 chemin de la hache<br>
@@ -219,7 +225,7 @@
 				{{ devis.dateRetour|date('d/m/Y') }}</div>
 			{# table gauche droite, info client et conducteurs #}
 			<div class="">
-				<table class=" p-0 " style="width : 100%;">
+				<table class=" p-0 details-prix " style="width : 100%;">
 					<thead class="bg-danger text-white">
 						<tr>
 							<th>Désignation</th>
@@ -237,7 +243,7 @@
 								<br>
 								Location de véhicule pour
 								{{ devis.duree }}
-								jours.
+								jour(s).
 								<br>
 								Retrait le
 								{{ devis.dateDepart|date('d/m/Y') }}. Lieu :

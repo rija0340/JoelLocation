@@ -15,7 +15,7 @@
 			}
 
 			#body {
-				margin: 30px 40px 40px;
+				margin: 10px 40px 40px;
 			}
 
 			#footer {
@@ -52,7 +52,7 @@
 			.contrat_location {
 				display: inline-block;
 				vertical-align: top;
-				margin-left: 80px;
+				margin-left: 140px;
 			}
 			#contrat_location_table1 {
 				width: 100px;
@@ -166,6 +166,12 @@
 				display: flex !important;
 			}
 
+
+			.justify-content-end {
+				-ms-flex-pack: end !important;
+				justify-content: flex-end !important
+			}
+
 			.text-white {
 				color: #fff !important;
 			}
@@ -244,19 +250,21 @@
 		</style>
 	</head>
 	<body>
+		<section>
+			<div class="entete"><img src="{{ entete }}" alt="entete" width="800px" height="40px" type="images/png"></div>
+		</section>
 		<section id="body">
 			<div>
-				<div class="logo"><img src="{{ logo }}" alt="logo" width="130px" height="80px" type="images/png"></div>
+				<div class="logo"><img src="{{ logo }}" alt="logo" width="auto" height="80px" type="images/png"></div>
 				<div class="adresse">
 					<strong style="font-weight : bold">JoelLocation</strong>
 					<br>
 					94 Chemin de la hache<br>
-					97160 Le Moule
+					97160 Le Moule (Guadeloupe)
 					<br>
 					Tél: 0690737674 / 0767321447<br>
-					Email: joel@joellocation.com<br>
-					SIRET : 87868990000016<br>
-					www.joellocation.com
+					joel@joellocation.com<br>
+					joellocation.com
 				</div>
 				<div class="contrat_location">
 					<h2 class="p-0">Contrat de location
@@ -369,21 +377,32 @@
 						</tr>
 						<tr>
 							<td>Infos arrivée</td>
-							<td>{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.heureVolAller|date('d/m/Y') : "  " }}
-								, Vol
-								{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.numVolAller : "   " }}
-								à
-								{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.heureVolAller|date('H:i') : "   " }}</td>
+							<td>
+								{% if reservation.client.infosVolResa %}
+
+									{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.heureVolAller|date('d/m/Y') : "  " }}
+									, Vol
+									{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.numVolAller : "   " }}
+									à
+									{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.heureVolAller|date('H:i') : "   " }}
+
+
+								{% endif %}
+							</td>
 						</tr>
 						<tr>
 							<td>Infos retour
 							</td>
 							<td>
-								{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.heureVolRetour|date('d/m/Y') : "  " }}
-								, Vol
-								{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.numVolRetour : "   " }}
-								à
-								{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.heureVolRetour|date('H:i') :  "   " }}
+								{% if reservation.client.infosVolResa %}
+
+									{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.heureVolRetour|date('d/m/Y') : "  " }}
+									, Vol
+									{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.numVolRetour : "   " }}
+									à
+									{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.heureVolRetour|date('H:i') :  "   " }}
+
+								{% endif %}
 							</td>
 						</tr>
 					</tbody>
@@ -570,7 +589,11 @@
 					<tr>
 						<td colspan="4"></td>
 						<td colspan="5">
-							<img src="{{ vehicule }}" alt="véhicule" width="400px" height="150px" type="images/png">
+							<div class="text-center d-flex justify-content-center align-items-center">
+								<div class="text-center d-flex justify-content-center align-items-center">
+									<img src="{{ vehicule }}" alt="véhicule" width="auto" height="150px" type="images/png">
+								</div>
+							</td>
 						</td>
 						<td colspan="4"></td>
 					</tr>
@@ -744,26 +767,35 @@
 							</td>
 						</tr>
 						<tr>
-							<td>
-								<strong>Total TTC</strong>
+							<td class="">
+								<div class=" d-flex justify-content-end">
+									<strong>Total TTC</strong>
+								</div>
+
 							</td>
 							<td>{{totalTTC|number_format(2,","," ") }}€</td>
 						</tr>
 						<tr>
 							<td>
-								<strong>ACOMPTE</strong>
+								<div class=" d-flex justify-content-end">
+									<strong>ACOMPTE</strong>
+								</div>
 							</td>
 							<td>{{sommePaiements ? (sommePaiements|number_format(2,","," ")) ~ ' €' : ''}}</td>
 						</tr>
 						<tr>
 							<td>
-								<strong>RESTE A PAYER</strong>
+								<div class=" d-flex justify-content-end">
+									<strong>RESTE A PAYER</strong>
+								</div>
 							</td>
 							<td>{{ restePayerTTC|number_format(2,","," ") }}€</td>
 						</tr>
 						<tr>
 							<td>
-								<strong>CAUTION</strong>
+								<div class=" d-flex justify-content-end">
+									<strong>CAUTION</strong>
+								</div>
 							</td>
 							<td>
 								<strong>800€</strong>
@@ -803,7 +835,6 @@
 					</div>
 					<br>
 
-					Aucune location est remboursable. Létat des lieux du véhicule est réalisé sur véhicule propre intérieur et extérieur
 				</div>
 			</div>
 			<div
@@ -822,7 +853,7 @@
 								<strong>
 									{{ reservation.client.nom }}
 									{{ reservation.client.prenom }}
-								</strong>___autorise la société Joellocation a prélevé sur mon compte à l'aide de l'empreinte de ma carte bancaire, le montant de la franchise ou caution du présent contrat ceci en cas d'accident responsable, de vol, tentative de vol ou dommage occasionné au véhicule loué.
+								</strong>___autorise la société Joellocation a prélevé sur mon compte à l'aide de l'empreinte de ma carte bancaire, le montant de la franchise ou caution du présent contrat ceci en cas d'accident responsable, de vol, tentative de vol ou dommage occasionné au véhicule loué. Le locataire déclare adhérer à toutes les conditions générales de location.
 							</td>
 						</tr>
 					</tbody>
@@ -858,9 +889,8 @@
 					<tbody>
 						<tr>
 							<td class="fs-12">
-								Le locataire déclare adhérer à toutes les conditions générales de location
+								Aucune location est remboursable. Létat des lieux du véhicule est réalisé sur véhicule propre intérieur et extérieur
 							</td>
-
 						</tr>
 					</tbody>
 				</table>

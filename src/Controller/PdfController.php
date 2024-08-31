@@ -66,15 +66,15 @@ class PdfController extends AbstractController
         $logo_data = base64_encode(file_get_contents($logo));
         $logo_src = 'data:image/png;base64,' . $logo_data;
 
-
-        // logo joellocation
-        // $footer = $this->getParameter('logo') . '/pdf/footer-joellocation.png';
-        // $footer_data = base64_encode(file_get_contents($footer));
-        // $footer_src = 'data:image/png;base64,' . $footer_data;
+        // en tete joellocation
+        $entete = $this->getParameter('logo') . '/pdf/entete-joellocation.png';
+        $entete_data = base64_encode(file_get_contents($entete));
+        $entete_src = 'data:image/png;base64,' . $entete_data;
 
         $html = $this->renderView('admin/reservation/pdf/devis_pdf.html.twig', [
 
             'logo' => $logo_src,
+            'entete' => $entete_src,
             'devis' => $devis,
             'prixTotalTTC' => $devis->getPrix(),
             'taxe' => $this->tarifsHelper->getTaxe(),
@@ -123,6 +123,11 @@ class PdfController extends AbstractController
         $vehicule_data = base64_encode(file_get_contents($vehicule));
         $vehicule_src = 'data:image/png;base64,' . $vehicule_data;
 
+        // en tete joellocation
+        $entete = $this->getParameter('logo') . '/pdf/entete-joellocation.png';
+        $entete_data = base64_encode(file_get_contents($entete));
+        $entete_src = 'data:image/png;base64,' . $entete_data;
+
         $options = $reservation->getOptions();
         $allOptions = $this->optionsRepo->findAll();
 
@@ -153,6 +158,7 @@ class PdfController extends AbstractController
         $html = $this->renderView('admin/reservation/pdf/contrat_pdf.html.twig', [
 
             'logo' => $logo_src,
+            'entete' => $entete_src,
             'reservation' => $reservation,
             'devis' => $this->devisRepo->find(intval($reservation->getNumDevis())),
             'vehicule' => $vehicule_src,
@@ -226,11 +232,10 @@ class PdfController extends AbstractController
         $createdAt = $this->datehelper->dateNow();
         $devis = $this->devisRepo->find(intval($reservation->getNumDevis()));
 
-        // logo joellocation
-        // $footer = $this->getParameter('logo') . '/pdf/footer-joellocation.png';
-        // $footer_data = base64_encode(file_get_contents($footer));
-        // $footer_src = 'data:image/png;base64,' . $footer_data;
-
+        // en tete joellocation
+        $entete = $this->getParameter('logo') . '/pdf/entete-joellocation.png';
+        $entete_data = base64_encode(file_get_contents($entete));
+        $entete_src = 'data:image/png;base64,' . $entete_data;
         //le prix frais supplémentaire est déja en HT
         // $prixFraisSupplHT =  $reservation->getFraisSupplResas();
 
@@ -239,12 +244,13 @@ class PdfController extends AbstractController
             $prixFraisSupplHT += $value->getTotalHT();
         }
 
+        $tarifVehiculeTTC = $reservation->getTarifVehicule();
+
         $prixHT = $this->tarifsHelper->calculTarifHTfromTTC($reservation->getPrix());
         $prixTaxe = $this->tarifsHelper->calculTaxeFromHT($prixHT);
         $prixUnitHT = $prixHT / $reservation->getDuree();
         $prixTTC = $prixTaxe + $prixHT;
 
-        $prixTaxeFraisSuppl = $this->tarifsHelper->calculTaxeFromHT($prixFraisSupplHT);
         $prixTotalHT = $prixHT + $sommeFraisTotalHT;
 
         $prixTaxeTotal = $this->tarifsHelper->calculTaxeFromHT($prixTotalHT);
@@ -253,21 +259,23 @@ class PdfController extends AbstractController
         $html = $this->renderView('admin/reservation/pdf/facture_pdf.html.twig', [
 
             'logo' => $logo_src,
+            'entete' => $entete_src,
             'reservation' => $reservation,
             'createdAt' => $createdAt,
             'devis' => $devis,
             'numeroFacture' => $numeroFacture,
             'frais' => $reservation->getFraisSupplResas(),
+            'tarifVehiculeTTC' => $tarifVehiculeTTC,
             'sommeFraisTotalHT' => $sommeFraisTotalHT,
             'prixFraisSupplHT' => $prixFraisSupplHT,
             'prixHT' => $prixHT,
             'prixTotalHT' => $prixTotalHT,
             'prixTaxeTotal' => $prixTaxeTotal,
-            'prixTaxe' => $prixTaxe,
             'prixUnitHT' => $prixUnitHT,
             'prixTotalTTC' => $prixTotalTTC,
             'prixTTC' => $prixTTC,
-            'taxe' => $this->tarifsHelper->getTaxe()
+            'taxe' => $this->tarifsHelper->getTaxe(),
+            'prixConductTTC' => $this->tarifsHelper->getPrixConducteurSupplementaire()
 
 
         ]);

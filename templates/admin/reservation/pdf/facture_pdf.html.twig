@@ -156,21 +156,24 @@
 		</style>
 	</head>
 	<body>
+		<section>
+			<div class="entete"><img src="{{ entete }}" alt="entete" width="800px" height="40px" type="images/png"></div>
+		</section>
 		<section
 			id="body">
 
 			{# logo et adresse #}
-			<div class="logo"><img src="{{ logo }}" alt="logo" width="150px" height="80px" type="images/png"></div>
+			<div class="logo"><img src="{{ logo }}" alt="logo" width="auto" height="80px" type="images/png"></div>
 			<div class="adresse">
 				<strong style="font-weight : bold">JoelLocation</strong>
 				<br>
 				94 Chemin de la hache<br>
-				97160 Le Moule
+				97160 Le Moule (Guadeloupe)
 				<br>
 				Tél: 0690737674 / 0767321447<br>
 				Email: joel@joellocation.com<br>
 				Num TVA Intra : FR40878689900<br>
-				Site : www.joellocation.com
+				Site : joellocation.com
 			</div>
 			<br>
 			<div class="details_facture">
@@ -248,7 +251,7 @@
 								<br>
 								Location de véhicule pour
 								{{ reservation.duree }}
-								jours.
+								jour(s).
 								<br>
 								Retrait le
 								{{ reservation.dateDebut|date('d/m/Y') }}. Lieu :
@@ -259,9 +262,14 @@
 								{{ reservation.agenceRetour }}.
 							</td>
 							<td class="text-right">{{ reservation.duree }}j</td>
-							<td class="text-right">{{ (prixUnitHT)|number_format(2,","," ") }}</td>
-							<td class="text-right">{{ (prixHT)|number_format(2,","," ")}}</td>
-							<td class="text-right">{{ (prixTTC)|number_format(2,","," ") }}</td>
+
+							<td class="text-right p-5">{{ ((tarifVehiculeTTC - (tarifVehiculeTTC * taxe)) / reservation.duree)|number_format(2,","," ") }}</td>
+							<td class="text-right p-5">{{ (tarifVehiculeTTC - (tarifVehiculeTTC * taxe))|number_format(2,","," ") }}</td>
+							<td class="text-right p-5">{{ (tarifVehiculeTTC)|number_format(2,","," ") }}</td>
+
+							{# <td class="text-right">{{ (prixUnitHT)|number_format(2,","," ") }}</td>
+																																										<td class="text-right">{{ (prixHT)|number_format(2,","," ")}}</td>
+																																										<td class="text-right">{{ (prixTTC)|number_format(2,","," ") }}</td> #}
 						</tr>
 						{% for frais in frais %}
 							<tr class="bg-pink">
@@ -272,6 +280,41 @@
 								<td class="text-right">{{ frais.prixUnitaire|number_format(2,","," ") }}</td>
 								<td class="text-right">{{ frais.totalHT|number_format(2,","," ") }}</td>
 								<td class="text-right">{{ (frais.totalHT + ( frais.totalHT * taxe))|number_format(2,","," ") }}</td>
+							</tr>
+						{% endfor %}
+						{% if reservation.conducteur %}
+							<tr class="bg-pink">
+								<td class="p-5">
+									Conducteur additionnel
+								</td>
+								<td class="text-right p-5">1</td>
+								{# prix ht unitaire #}
+								<td class="text-right p-5">{{ (prixConductTTC - (prixConductTTC * taxe)  )|number_format(2,","," ") }}</td>
+								<td class="text-right p-5">{{ (prixConductTTC - (prixConductTTC * taxe))|number_format(2,","," ") }}</td>
+								<td class="text-right p-5">{{ (prixConductTTC)|number_format(2,","," ") }}</td>
+							</tr>
+						{% endif %}
+						{% for option in reservation.options %}
+							<tr class="bg-pink">
+								<td class="p-5">
+									{{ option.appelation }}
+								</td>
+								<td class="text-right p-5">1</td>
+								<td class="text-right p-5">{{ (option.prix - (option.prix * taxe))|number_format(2,","," ") }}</td>
+								<td class="text-right p-5">{{ (option.prix - (option.prix * taxe))|number_format(2,","," ") }}</td>
+								<td class="text-right p-5">{{ (option.prix)|number_format(2,","," ") }}</td>
+							</tr>
+						{% endfor %}
+
+						{% for garantie in reservation.garanties %}
+							<tr class="bg-pink">
+								<td class="p-5">
+									{{ garantie.appelation }}
+								</td>
+								<td class="text-right p-5">1</td>
+								<td class="text-right p-5">{{ (garantie.prix - (garantie.prix * taxe))|number_format(2,","," ") }}</td>
+								<td class="text-right p-5">{{ (garantie.prix - (garantie.prix * taxe))|number_format(2,","," ") }}</td>
+								<td class="text-right p-5">{{ (garantie.prix)|number_format(2,","," ") }}</td>
 							</tr>
 						{% endfor %}
 
@@ -352,7 +395,7 @@
 					<br>
 					N°TVA FR40878689900
 					<br>
-					www.joellocation.com
+					joellocation.com
 				</div>
 			</div>
 		</section>
