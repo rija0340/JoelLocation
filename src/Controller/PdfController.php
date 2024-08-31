@@ -67,7 +67,7 @@ class PdfController extends AbstractController
         $logo_src = 'data:image/png;base64,' . $logo_data;
 
         // en tete joellocation
-        $entete = $this->getParameter('logo') . '/pdf/entete-joellocation.png';
+        $entete = $this->getParameter('logo') . '/pdf/entete-joellocation.PNG';
         $entete_data = base64_encode(file_get_contents($entete));
         $entete_src = 'data:image/png;base64,' . $entete_data;
 
@@ -124,7 +124,7 @@ class PdfController extends AbstractController
         $vehicule_src = 'data:image/png;base64,' . $vehicule_data;
 
         // en tete joellocation
-        $entete = $this->getParameter('logo') . '/pdf/entete-joellocation.png';
+        $entete = $this->getParameter('logo') . '/pdf/entete-joellocation.PNG';
         $entete_data = base64_encode(file_get_contents($entete));
         $entete_src = 'data:image/png;base64,' . $entete_data;
 
