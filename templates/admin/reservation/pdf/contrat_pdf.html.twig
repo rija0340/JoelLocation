@@ -22,7 +22,7 @@
 				position: absolute;
 				bottom: 0;
 				width: 100%;
-				padding: 5px;
+				padding: 10px;
 			}
 
 			/* #footer_content {
@@ -114,6 +114,9 @@
 				padding: 1px;
 			}
 
+			#recap_table {
+				margin-top: 5px;
+			}
 			#recap_table tr td {
 				padding: 1px;
 			}
@@ -207,6 +210,9 @@
 
 			.text-white {
 				color: white !important;
+			}
+			.text-red {
+				color: red !important;
 			}
 
 			.fs-10 {
@@ -361,15 +367,15 @@
 						</tr>
 						<tr>
 							<td>Date/lieu de naissance</td>
-							<td>{{ reservation.client.dateNaissance|date('d/m/Y') }}
-								à
-								{{ reservation.client.lieuNaissance }}</td>
+							<td>{{  reservation.client.dateNaissance ? reservation.client.dateNaissance|date('d/m/Y') : '' }}
+
+								{{ reservation.client.lieuNaissance ?  "à " ~ reservation.client.lieuNaissance  : ""  }}</td>
 						</tr>
 						<tr>
 							<td>N°/Date de permis</td>
 							<td>{{ reservation.client.numeroPermis }}
-								le
-								{{ reservation.client.datePermis|date('d/m/Y') }}</td>
+
+								{{ reservation.client.datePermis ? "le " ~ reservation.client.datePermis|date('d/m/Y') : '' }}</td>
 						</tr>
 						<tr>
 							<td colspan="2" class="text-center text-white bg-danger">INFOS TRANSFERT
@@ -471,22 +477,22 @@
 							</tr>
 							<tr>
 								<td colspan="2">
-									<div class='text-white'>
-										-
+									<div class='text-white' style="min-height: 20px;">
+										lorem lorem lorem lorem
 									</div>
 								</td>
 							</tr>
 						{% else %}
+							{% set loopCount = 0 %}
 							{% for conducteur in reservation.conducteursClient %}
+								{% set loopCount = loopCount + 1 %}
 								<tr>
 									<td style="min-height: 5px">Nom</td>
-									<td style="min-height: 5px">{{ conducteur.nom }}
-									</td>
+									<td style="min-height: 5px">{{ conducteur.nom }}</td>
 								</tr>
 								<tr>
 									<td>Prénom</td>
-									<td>{{ conducteur.prenom }}
-									</td>
+									<td>{{ conducteur.prenom }}</td>
 								</tr>
 								<tr>
 									<td>Date/lieu de naissance</td>
@@ -495,20 +501,40 @@
 										{{ conducteur.villeNaissance }}</td>
 								</tr>
 								<tr>
-									<td>
-										N°/Date de permis
-									</td>
+									<td>N°/Date de permis</td>
 									<td>{{ conducteur.numeroPermis }}
 										le
 										{{ conducteur.dateDelivrance|date('d/m/Y') }}</td>
 								</tr>
-
 							{% endfor %}
+
+							{% if loopCount < 2 %}
+								<tr>
+									<td style="min-height: 5px">Nom</td>
+									<td style="min-height: 5px"></td>
+								</tr>
+								<tr>
+									<td>Prénom</td>
+									<td></td>
+								</tr>
+								<tr>
+									<td>Date/lieu de naissance</td>
+									<td></td>
+								</tr>
+								<tr>
+									<td>N°/Date de permis</td>
+									<td></td>
+								</tr>
+							{% endif %}
 							<tr>
 								<td colspan="2" class="bg-danger text-center text-white text-uppercase">adresse en guadeloupe</td>
 							</tr>
 							<tr>
-								<td colspan="2"></td>
+								<td colspan="2">
+									<div class='text-white' style="min-height: 20px;">
+										lorem lorem lorem lorem
+									</div>
+								</td>
 							</tr>
 						{% endif %}
 					</tbody>
@@ -615,7 +641,7 @@
 						</td>
 						<td rowspan="2">1/2</td>
 						<td rowspan="2">3/4</td>
-						<td rowspan="2">1/1</td>
+						<td rowspan="2" style="color: red !important; font-size:14px ; font-weight : bold">1/1</td>
 						<td>
 							Marque
 						</td>
@@ -821,12 +847,16 @@
 					<div class="d-inline-block-bottom">
 						<input type="checkbox" class="p-0 m-0">
 					</div>
+					<br>
 					<div class="d-inline-block-bottom p-2">
 						Chèque
 					</div>
 					<div class="d-inline-block-bottom">
 						<input type="checkbox" class="p-0 m-0">
 					</div>
+					<span class="text-white">
+						lorem lorem lo
+					</span>
 					<div class="d-inline-block-bottom p-2">
 						Virement
 					</div>
@@ -849,18 +879,20 @@
 						</tr>
 						<tr>
 							<td style="padding:1px;">
-								Je soussignée___
+								Je soussignée
 								<strong>
 									{{ reservation.client.nom }}
 									{{ reservation.client.prenom }}
-								</strong>___autorise la société Joellocation a prélevé sur mon compte à l'aide de l'empreinte de ma carte bancaire, le montant de la franchise ou caution du présent contrat ceci en cas d'accident responsable, de vol, tentative de vol ou dommage occasionné au véhicule loué. Le locataire déclare adhérer à toutes les conditions générales de location.
+								</strong>
+								autorise la société Joellocation a prélevé sur mon compte à l'aide de l'empreinte de ma carte bancaire, le montant de la franchise ou caution du présent contrat ceci en cas d'accident responsable, de vol, tentative de vol ou dommage occasionné au véhicule loué.
+								<span class="text-red">Le locataire déclare adhérer à toutes les conditions générales de location.
+								</span>
 							</td>
 						</tr>
 					</tbody>
 				</table>
 				{# table dessous table recu de depot #}
 				<table id="recap_table" class="table-border" style="width : 100%">
-					<tbody class="fs-12"></tbody>
 					<tbody class="fs-12">
 						<tr>
 							<td>Date départ</td>
@@ -869,10 +901,10 @@
 							<td class="text-nowrap">{{ reservation.dateFin|date('d/m/Y H:i') }}</td>
 						</tr>
 						<tr>
-							<td>JOELLOCATION</td>
-							<td></td>
-							<td>JOELLOCATION</td>
-							<td></td>
+							<td style="height: 50px;">JOELLOCATION</td>
+							<td style="height: 50px;"></td>
+							<td style="height: 50px;">JOELLOCATION</td>
+							<td style="height: 50px;"></td>
 						</tr>
 						<tr>
 							<td>Locataire (lu et apprové)
@@ -889,7 +921,10 @@
 					<tbody>
 						<tr>
 							<td class="fs-12">
-								Aucune location est remboursable. Létat des lieux du véhicule est réalisé sur véhicule propre intérieur et extérieur
+								Aucune location est remboursable.
+								<span class="text-red">
+									Létat des lieux du véhicule est réalisé sur véhicule propre intérieur et extérieur
+								</span>
 							</td>
 						</tr>
 					</tbody>

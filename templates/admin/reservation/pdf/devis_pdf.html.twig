@@ -37,7 +37,7 @@
 			}
 
 			.joellocation {
-				font-family: 'Montserrat', sans-serif;
+				font-family: 'Arial', sans-serif;
 				font-size: 16px;
 				line-height: 1.5;
 				color: #333;
@@ -177,7 +177,7 @@
 			{# logo et adresse #}
 			<div class="logo"><img src="{{ logo }}" alt="logo" width="auto" height="80px" type="images/png"></div>
 			<div class="adresse">
-				<strong class="joellocation">JOEL LOCATION</strong><br>
+				<strong class="joellocation">JOELLOCATION</strong><br>
 				94 chemin de la hache<br>
 				97160 Le Moule<br>
 				Tél: 0690737674 / 0767321447<br>
@@ -196,19 +196,16 @@
 			<div class="details_client">
 				<strong>
 					<span>
-						{% if  devis.client.sexe == ""  %}
-							{% elseif devis.client.sexe == 'masculin' %}
-								Mr
-							{% elseif devis.client.sexe == 'feminin' %}
-								Mlle/Mme
-						{% endif %}
+						{{ devis.client.sexe ? devis.client.sexe : '' }}
 					</span>
-					{{ devis.client.nom }}
-					{{ devis.client.prenom }}</strong>
+					{{ devis.client.nom | upper }}
+					{{ devis.client.prenom | upper }}</strong>
 				<br>
 				{{ devis.client.adresse }}
-				<br>
-				{{ devis.client.complementAdresse }}
+				{% if devis.client.complementAdresse %}
+					<br>
+					{{ devis.client.complementAdresse }}
+				{% endif %}
 				<br>
 				{{devis.client.codePostal}}
 				{{ devis.client.ville }}
@@ -243,7 +240,11 @@
 								<br>
 								Location de véhicule pour
 								{{ devis.duree }}
-								jour(s).
+								{%  if devis.duree == 1 %}
+									jour.
+								{% else %}
+									jours.
+								{% endif %}
 								<br>
 								Retrait le
 								{{ devis.dateDepart|date('d/m/Y') }}. Lieu :
@@ -253,9 +254,10 @@
 								{{ devis.dateRetour|date('d/m/Y') }}. Lieu :
 								{{ devis.agenceRetour }}.
 							</td>
+							{% set taxMultiplier = 1 + taxeRate %}
 							<td class="text-right p-5">{{ devis.duree }}j</td>
-							<td class="text-right p-5">{{ ((tarifVehiculeTTC - (tarifVehiculeTTC * taxe)) / devis.duree)|number_format(2,","," ") }}</td>
-							<td class="text-right p-5">{{ (tarifVehiculeTTC - (tarifVehiculeTTC * taxe))|number_format(2,","," ") }}</td>
+							<td class="text-right p-5">{{ ((tarifVehiculeTTC / taxMultiplier) / devis.duree)|number_format(2,","," ") }}</td>
+							<td class="text-right p-5">{{ (tarifVehiculeTTC / taxMultiplier )|number_format(2,","," ") }}</td>
 							<td class="text-right p-5">{{ (tarifVehiculeTTC)|number_format(2,","," ") }}</td>
 						</tr>
 						{% if devis.conducteur %}
@@ -265,8 +267,8 @@
 								</td>
 								<td class="text-right p-5">1</td>
 								{# prix ht unitaire #}
-								<td class="text-right p-5">{{ (prixConductTTC - (prixConductTTC * taxe)  )|number_format(2,","," ") }}</td>
-								<td class="text-right p-5">{{ (prixConductTTC - (prixConductTTC * taxe))|number_format(2,","," ") }}</td>
+								<td class="text-right p-5">{{ (prixConductTTC   / taxMultiplier) |number_format(2,","," ") }}</td>
+								<td class="text-right p-5">{{ (prixConductTTC / taxMultiplier)|number_format(2,","," ") }}</td>
 								<td class="text-right p-5">{{ (prixConductTTC)|number_format(2,","," ") }}</td>
 							</tr>
 						{% endif %}
@@ -276,8 +278,8 @@
 									{{ option.appelation }}
 								</td>
 								<td class="text-right p-5">1</td>
-								<td class="text-right p-5">{{ (option.prix - (option.prix * taxe))|number_format(2,","," ") }}</td>
-								<td class="text-right p-5">{{ (option.prix - (option.prix * taxe))|number_format(2,","," ") }}</td>
+								<td class="text-right p-5">{{ (option.prix / taxMultiplier)|number_format(2,","," ") }}</td>
+								<td class="text-right p-5">{{ (option.prix / taxMultiplier)|number_format(2,","," ") }}</td>
 								<td class="text-right p-5">{{ (option.prix)|number_format(2,","," ") }}</td>
 							</tr>
 						{% endfor %}
@@ -288,8 +290,8 @@
 									{{ garantie.appelation }}
 								</td>
 								<td class="text-right p-5">1</td>
-								<td class="text-right p-5">{{ (garantie.prix - (garantie.prix * taxe))|number_format(2,","," ") }}</td>
-								<td class="text-right p-5">{{ (garantie.prix - (garantie.prix * taxe))|number_format(2,","," ") }}</td>
+								<td class="text-right p-5">{{ (garantie.prix / taxMultiplier)|number_format(2,","," ") }}</td>
+								<td class="text-right p-5">{{ (garantie.prix / taxMultiplier)|number_format(2,","," ") }}</td>
 								<td class="text-right p-5">{{ (garantie.prix)|number_format(2,","," ") }}</td>
 							</tr>
 						{% endfor %}
@@ -321,11 +323,11 @@
 				<table style="width : 100%">
 					<tr class="bg-pink">
 						<td class="p-5">Montant HT</td>
-						<td class="text-right p-5">{{ (prixTotalTTC - (prixTotalTTC * taxe))|number_format(2,","," ") }}€</td>
+						<td class="text-right p-5">{{ (prixTotalTTC / taxMultiplier)|number_format(2,","," ") }}€</td>
 					</tr>
 					<tr>
 						<td class="p-5">Total TVA 8.5 %</td>
-						<td class="text-right p-5">{{ (prixTotalTTC * taxe)|number_format(2,","," ") }}€</td>
+						<td class="text-right p-5">{{ (prixTotalTTC -  (prixTotalTTC / taxMultiplier))|number_format(2,","," ") }}€</td>
 					</tr>
 					<tr class="bg-danger text-white">
 						<td class="p-5">Total TTC</td>
@@ -344,7 +346,9 @@
 				<br>
 				Deuxième conducteur gratuit.<br>
 				Âge minimum pour le conducteur: 21 ans et 2 ans de permis.<br>
-				En acceptant ce devis (par email, ou devis signé), vous acceptez aux Conditions Générales de Location.<br>
+				En acceptant ce devis (par email, ou devis signé),
+				<br>
+				vous acceptez aux Conditions Générales de Location.<br>
 				Merci de confirmer votre réservation avant la date d'expiration.<br>
 				Au plaisir de vous compter parmi nos clients.<br>
 			</div>

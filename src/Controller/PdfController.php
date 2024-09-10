@@ -77,7 +77,7 @@ class PdfController extends AbstractController
             'entete' => $entete_src,
             'devis' => $devis,
             'prixTotalTTC' => $devis->getPrix(),
-            'taxe' => $this->tarifsHelper->getTaxe(),
+            'taxeRate' => $this->tarifsHelper->getTaxe(),
             'tarifVehiculeTTC' => $devis->getTarifVehicule(),
             'prixConductTTC' => $this->tarifsHelper->getPrixConducteurSupplementaire()
 

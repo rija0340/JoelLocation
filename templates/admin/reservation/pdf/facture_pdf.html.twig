@@ -46,6 +46,13 @@
 				/* width: 350px; */
 
 			}
+			.joellocation {
+				font-family: 'Arial', sans-serif;
+				font-size: 16px;
+				line-height: 1.5;
+				color: #333;
+				margin-bottom: 1em;
+			}
 
 			.adresse {
 				display: inline-block;
@@ -81,7 +88,7 @@
 			.table1 {
 				display: inline-block;
 				vertical-align: top;
-				width: 275px;
+				width: 300px;
 
 			}
 
@@ -145,13 +152,32 @@
 			.text-uppercase {
 				text-transform: uppercase !important;
 			}
-
+			.d-flex {
+				display: -ms-flexbox !important;
+				display: flex !important
+			}
+			.mr-auto,
+			.mx-auto {
+				margin-right: auto !important
+			}
 
 			#note {
 				margin-top: 50px;
 			}
 			.bold {
 				font-weight: bolder;
+			}
+			.condition-montants {
+				width: 100%;
+				overflow: hidden; /* Clearfix */
+			}
+
+			/* .conditions_reglement {
+				float: left;
+			}*/
+			.table1 {
+				float: right;
+				position: relative;
 			}
 		</style>
 	</head>
@@ -165,7 +191,7 @@
 			{# logo et adresse #}
 			<div class="logo"><img src="{{ logo }}" alt="logo" width="auto" height="80px" type="images/png"></div>
 			<div class="adresse">
-				<strong style="font-weight : bold">JoelLocation</strong>
+				<strong class="joellocation">JOELLOCATION</strong>
 				<br>
 				94 Chemin de la hache<br>
 				97160 Le Moule (Guadeloupe)
@@ -193,26 +219,17 @@
 			</div>
 			<div class="details_client">
 				<strong>
-
 					<span>
-						{% if devis is defined and devis is not null %}
-							{% if  devis.client.sexe == ""  %}
-
-								{% elseif devis.client.sexe == 'masculin' %}
-									Mr
-								{% elseif devis.client.sexe == 'feminin' %}
-									Mlle/Mme
-							{% endif %}
-						{% endif %}
-
+						{{ reservation.client.sexe ? reservation.client.sexe : "" }}
 					</span>
-
-					{{ reservation.client.nom }}
-					{{ reservation.client.prenom }}</strong>
+					{{ reservation.client.nom | upper }}
+					{{ reservation.client.prenom | upper }}</strong>
 				<br>
 				{{ reservation.client.adresse }}
-				<br>
-				{{ reservation.client.complementAdresse }}
+				{% if reservation.client.complementAdresse %}
+					<br>
+					{{ reservation.client.complementAdresse }}
+				{% endif %}
 				<br>
 				{{ reservation.client.ville }}
 
@@ -251,7 +268,11 @@
 								<br>
 								Location de véhicule pour
 								{{ reservation.duree }}
-								jour(s).
+								{%  if reservation.duree == 1 %}
+									jour.
+								{% else %}
+									jours.
+								{% endif %}
 								<br>
 								Retrait le
 								{{ reservation.dateDebut|date('d/m/Y') }}. Lieu :
@@ -261,15 +282,16 @@
 								{{ reservation.dateFin|date('d/m/Y') }}. Lieu :
 								{{ reservation.agenceRetour }}.
 							</td>
+							{% set taxMultiplier = 1 + taxe %}
 							<td class="text-right">{{ reservation.duree }}j</td>
 
-							<td class="text-right p-5">{{ ((tarifVehiculeTTC - (tarifVehiculeTTC * taxe)) / reservation.duree)|number_format(2,","," ") }}</td>
-							<td class="text-right p-5">{{ (tarifVehiculeTTC - (tarifVehiculeTTC * taxe))|number_format(2,","," ") }}</td>
+							<td class="text-right p-5">{{ ((tarifVehiculeTTC / taxMultiplier) / reservation.duree)|number_format(2,","," ") }}</td>
+							<td class="text-right p-5">{{ (tarifVehiculeTTC / taxMultiplier)|number_format(2,","," ") }}</td>
 							<td class="text-right p-5">{{ (tarifVehiculeTTC)|number_format(2,","," ") }}</td>
 
 							{# <td class="text-right">{{ (prixUnitHT)|number_format(2,","," ") }}</td>
-																																										<td class="text-right">{{ (prixHT)|number_format(2,","," ")}}</td>
-																																										<td class="text-right">{{ (prixTTC)|number_format(2,","," ") }}</td> #}
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																					<td class="text-right">{{ (prixHT)|number_format(2,","," ")}}</td>
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																					<td class="text-right">{{ (prixTTC)|number_format(2,","," ") }}</td> #}
 						</tr>
 						{% for frais in frais %}
 							<tr class="bg-pink">
@@ -289,8 +311,8 @@
 								</td>
 								<td class="text-right p-5">1</td>
 								{# prix ht unitaire #}
-								<td class="text-right p-5">{{ (prixConductTTC - (prixConductTTC * taxe)  )|number_format(2,","," ") }}</td>
-								<td class="text-right p-5">{{ (prixConductTTC - (prixConductTTC * taxe))|number_format(2,","," ") }}</td>
+								<td class="text-right p-5">{{ (prixConductTTC / taxMultiplier  )|number_format(2,","," ") }}</td>
+								<td class="text-right p-5">{{ (prixConductTTC / taxMultiplier  )|number_format(2,","," ") }}</td>
 								<td class="text-right p-5">{{ (prixConductTTC)|number_format(2,","," ") }}</td>
 							</tr>
 						{% endif %}
@@ -300,8 +322,8 @@
 									{{ option.appelation }}
 								</td>
 								<td class="text-right p-5">1</td>
-								<td class="text-right p-5">{{ (option.prix - (option.prix * taxe))|number_format(2,","," ") }}</td>
-								<td class="text-right p-5">{{ (option.prix - (option.prix * taxe))|number_format(2,","," ") }}</td>
+								<td class="text-right p-5">{{ (option.prix / taxMultiplier  )|number_format(2,","," ") }}</td>
+								<td class="text-right p-5">{{ (option.prix / taxMultiplier  )|number_format(2,","," ") }}</td>
 								<td class="text-right p-5">{{ (option.prix)|number_format(2,","," ") }}</td>
 							</tr>
 						{% endfor %}
@@ -325,57 +347,63 @@
 
 
 			{# logo et adresse #}
-			<div class="conditions_reglement">
-				<strong>
-					Conditions de règlement
-				</strong><br>
-				Aucun escompte n'est consenti pour règlement anticipe.
-				<br>
-				Tout incident de paiement est passible d'intérêt de retard.<br>
-				Le montant des pénalités résulte de l'application
-				<br>
-				aux sommes restant dues d'un taux d'intérêt légal en
-				<br>
-				vigueur au moment de l'incident. L'indemnité forfaitaire pour frais
-				<br>de recouvrement due au créancier en cas de retard
-				<br>de paiement est de 80EUR.
-			</div>
-			<div class="table1">
-				<table id="montant" style="width : 100%;">
-					<tr class="bg-pink">
-						<td>Montant HT</td>
-						<td class="text-right">{{ (prixTotalHT) |number_format(2,","," ") }}€</td>
-					</tr>
-					<tr>
-						<td>Total TVA 8.5 %</td>
-						<td class="text-right">{{ (prixTaxeTotal)|number_format(2,","," ")  }}€</td>
-					</tr>
-					<tr class="bg-danger text-white">
-						<td>Total TTC</td>
-						<td class="text-right">{{ (prixTotalTTC)|number_format(2,","," ") }}€</td>
-					</tr>
-					{% for paiement in reservation.paiements %}
+			<div class="condition-montants ">
+
+				<div class="conditions_reglement ">
+					<strong>
+						Conditions de règlement
+					</strong><br>
+					Aucun escompte n'est consenti pour règlement anticipe.
+					<br>
+					Tout incident de paiement est passible d'intérêt de retard.<br>
+					Le montant des pénalités résulte de l'application
+					<br>
+					aux sommes restant dues d'un taux d'intérêt légal en
+					<br>
+					vigueur au moment de l'incident.<br>
+					L'indemnité forfaitaire pour frais
+					<br>de recouvrement due au créancier en cas de retard
+					<br>de paiement est de 80EUR.
+				</div>
+
+				<div class="table1 ">
+					<table id="montant">
 						<tr class="bg-pink">
-							<td>Paiement par
-								{{ paiement.modePaiement.libelle }}
-								<br>
-								le
-								{{ paiement.datePaiement|date('d/m/Y') }}</td>
+							<td>Montant HT</td>
+							<td class="text-right">{{ (prixTotalHT) |number_format(2,","," ") }}€</td>
+						</tr>
+						<tr>
+							<td>Total TVA 8.5 %</td>
+							<td class="text-right">{{ (prixTaxeTotal)|number_format(2,","," ")  }}€</td>
+						</tr>
+						<tr class="bg-danger text-white">
+							<td>Total TTC</td>
+							<td class="text-right">{{ (prixTotalTTC)|number_format(2,","," ") }}€</td>
+						</tr>
+						{% for paiement in reservation.paiements %}
+							<tr class="bg-pink">
+								<td>Paiement par
+									{{ paiement.modePaiement.libelle }}
+									<br>
+									le
+									{{ paiement.datePaiement|date('d/m/Y') }}</td>
+								<td class="text-right">
+									{{ paiement.montant|number_format(2,","," ") }}
+									€
+								</td>
+							</tr>
+						{% endfor %}
+						<tr class="bg-danger text-white">
+							<td>Reste à payer</td>
 							<td class="text-right">
-								{{ paiement.montant|number_format(2,","," ") }}
+								{{ ((prixTotalTTC ) - reservation.sommePaiements)|number_format(2,","," ") }}
 								€
 							</td>
 						</tr>
-					{% endfor %}
-					<tr class="bg-danger text-white">
-						<td>Reste à payer</td>
-						<td class="text-right">
-							{{ ((prixTotalTTC ) - reservation.sommePaiements)|number_format(2,","," ") }}
-							€
-						</td>
-					</tr>
-				</table>
+					</table>
+				</div>
 			</div>
+
 			<div id="note">
 				<strong>
 					Note
