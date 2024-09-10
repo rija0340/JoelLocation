@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -746,5 +748,21 @@ class User implements UserInterface
         $this->sexe = $sexe;
 
         return $this;
+    }
+
+    /**
+     * @Assert\Callback
+     */
+    public function validate(ExecutionContextInterface $context, $payload)
+    {
+
+        if (empty($this->getTelephone()) && empty($this->getPortable())) {
+            $context->buildViolation('Vous devez remplir au moins un numéro de téléphone (fixe ou portable).')
+                ->atPath('telephone')
+                ->addViolation();
+            $context->buildViolation('Vous devez remplir au moins un numéro de téléphone (fixe ou portable).')
+                ->atPath('portable')
+                ->addViolation();
+        }
     }
 }
