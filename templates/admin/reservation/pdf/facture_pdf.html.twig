@@ -85,12 +85,12 @@
 
 			}
 
-			.table1 {
+			/* .table1 {
 				display: inline-block;
 				vertical-align: top;
 				width: 300px;
 
-			}
+			} */
 
 			.table-border {
 
@@ -169,15 +169,25 @@
 			}
 			.condition-montants {
 				width: 100%;
-				overflow: hidden; /* Clearfix */
+				position: relative;
+				overflow: visible;
 			}
 
-			/* .conditions_reglement {
-				float: left;
-			}*/
+			.conditions_reglement {
+				width: 55%;
+				display: inline-block;
+				vertical-align: top;
+			}
+
 			.table1 {
-				float: right;
-				position: relative;
+				width: 40%;
+				display: block;
+				vertical-align: top;
+				position: absolute;
+				top: 0;
+				right: -5px;
+				height: auto;
+				min-height: 100%;
 			}
 		</style>
 	</head>
@@ -290,8 +300,8 @@
 							<td class="text-right p-5">{{ (tarifVehiculeTTC)|number_format(2,","," ") }}</td>
 
 							{# <td class="text-right">{{ (prixUnitHT)|number_format(2,","," ") }}</td>
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																					<td class="text-right">{{ (prixHT)|number_format(2,","," ")}}</td>
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																					<td class="text-right">{{ (prixTTC)|number_format(2,","," ") }}</td> #}
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																								<td class="text-right">{{ (prixHT)|number_format(2,","," ")}}</td>
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																								<td class="text-right">{{ (prixTTC)|number_format(2,","," ") }}</td> #}
 						</tr>
 						{% for frais in frais %}
 							<tr class="bg-pink">
@@ -363,7 +373,7 @@
 					vigueur au moment de l'incident.<br>
 					L'indemnité forfaitaire pour frais
 					<br>de recouvrement due au créancier en cas de retard
-					<br>de paiement est de 80EUR.
+					<br>de paiement est de 80EUR.																																																																						Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta eveniet debitis nam reprehenderit repellat, recusandae, inventore aperiam rem aliquid aut, deleniti molestiae consectetur at? Dolores excepturi maxime eos nulla error?
 				</div>
 
 				<div class="table1 ">

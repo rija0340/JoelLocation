@@ -257,10 +257,15 @@ class ReservationController extends AbstractController
                 $this->flashy->error("Erreur sur l'ajout de paiement car le total du paiement est supérieur au due");
                 return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
             } else {
+
+
+                $datePaiement = $formAjoutPaiement->getData()['datePaiement'];
+                $dateObject = new DateTime($datePaiement->format('Y-m-d H:i:s'), new DateTimeZone('UTC'));
+
                 // enregistrement montant et reservation dans table paiement 
                 $paiement  = new Paiement();
                 $paiement->setClient($reservation->getClient());
-                $paiement->setDatePaiement($this->dateHelper->dateNow());
+                $paiement->setDatePaiement($dateObject);
                 $paiement->setMontant(floatval($formAjoutPaiement->getData()['montant']));
                 $paiement->setReservation($reservation);
                 $paiement->setModePaiement($this->modePaiementRepo->find($formAjoutPaiement->getData()['modePaiement']));
