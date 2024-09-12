@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class ConducteurType extends AbstractType
@@ -25,6 +26,9 @@ class ConducteurType extends AbstractType
             ->add('villeDelivrance', TextType::class)
             ->add('dateDelivrance', DateType::class, [
                 'widget' => 'single_text',
+                'required' => false
+            ])
+            ->add('telephone', TelType::class, [
                 'required' => false
             ])
             ->add('dateExpiration', DateType::class, [

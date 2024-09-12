@@ -230,7 +230,7 @@
 				</div>
 				{# <p class="text-success font-weight-bold font-italic">Conducteur principal</p> #}
 				<div class="row info_conducteur">
-					<div class="col-md-3">
+					<div class="col-md-2">
 						<span class="">
 							<strong>
 								Nom/Prénom :{{ conducteur.nom }}
@@ -238,14 +238,14 @@
 							{{ conducteur.prenom }}
 						</span>
 					</div>
-					<div class="col-md-3">
+					<div class="col-md-2">
 						<span class="">
 							<strong>Permis :
 							</strong>
 							{{ conducteur.numeroPermis }}
 						</span>
 					</div>
-					<div class="col-md-3">
+					<div class="col-md-2">
 						<span class="">
 							<strong>Expiration :</strong>
 							{{ conducteur.dateExpiration|date('d/m/Y') }}
@@ -273,8 +273,15 @@
 						<span class="">
 							<strong>Ville de naissance :</strong>
 							{{ conducteur.villeNaissance }}
-						</div>
-						<div class="col-md-3">
+						</span>
+					</div>
+					<div class="col-md-3">
+						<span class="">
+							<strong>Numéro téléphone :</strong>
+							{{ conducteur.telephone }}
+						</span>
+					</div>
+						<div class="col-md-2">
 							<a class="btn btn-warning" href="{{ path('reservation_conducteur_edit', {'id' : conducteur.id, 'reservation' : reservation.id}) }}">
 								<i class="fa fa-reply"></i>
 							</a>
@@ -288,7 +295,7 @@
 								</button>
 							</form>
 						</div>
-					</div>
+				</div>
 					{% set i = i + 1 %}
 				{% endfor %}
 				{% set i = 1 %}

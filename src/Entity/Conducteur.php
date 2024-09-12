@@ -77,6 +77,11 @@ class Conducteur
      */
     private $reservations;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $telephone;
+
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
@@ -233,6 +238,18 @@ class Conducteur
         if ($this->reservations->removeElement($reservation)) {
             $reservation->removeConducteursClient($this);
         }
+
+        return $this;
+    }
+
+    public function getTelephone(): ?string
+    {
+        return $this->telephone;
+    }
+
+    public function setTelephone(?string $telephone): self
+    {
+        $this->telephone = $telephone;
 
         return $this;
     }

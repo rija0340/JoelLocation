@@ -469,7 +469,7 @@
 							</tr>
 							<tr>
 								<td>
-									Téléphone(s)
+									Téléphone
 								</td>
 								<td></td>
 							</tr>
@@ -506,6 +506,10 @@
 									<td>{{ conducteur.numeroPermis }}
 										le
 										{{ conducteur.dateDelivrance|date('d/m/Y') }}</td>
+								</tr>
+								<tr>
+									<td>Téléphone</td>
+									<td>{{ conducteur.telephone }}</td>
 								</tr>
 							{% endfor %}
 
