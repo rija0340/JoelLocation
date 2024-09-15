@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\InfosResaType;
 use App\Form\InfosVolResaType;
 use App\Validator\AtLeastOneField;
+use Doctrine\DBAL\Types\TextType as TypesTextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Callback;
@@ -60,7 +61,12 @@ class EditClientReservationType extends AbstractType
                 'empty_data' => ""    // Added this
             ])
             ->add('infosResa', InfosResaType::class)
-            ->add('infosVolResa', InfosVolResaType::class);
+            ->add('infosVolResa', InfosVolResaType::class)
+            ->add('numeroPermis', TextType::class)
+            ->add('datePermis', DateType::class, [
+                'widget' => 'single_text',
+            ])
+            ->add('villeDelivrancePermis', TextType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)
