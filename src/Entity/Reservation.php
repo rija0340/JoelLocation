@@ -214,6 +214,26 @@ class Reservation
      */
     private $fraisSupplResas;
 
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $kmDepart;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $kmRetour;
+
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private $dateKm;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class)
+     */
+    private $saisisseurKm;
+
 
     public function getId(): ?int
     {
@@ -744,6 +764,54 @@ class Reservation
                 $fraisSupplResa->setReservation(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getKmDepart(): ?float
+    {
+        return $this->kmDepart;
+    }
+
+    public function setKmDepart(?float $kmDepart): self
+    {
+        $this->kmDepart = $kmDepart;
+
+        return $this;
+    }
+
+    public function getKmRetour(): ?float
+    {
+        return $this->kmRetour;
+    }
+
+    public function setKmRetour(?float $kmRetour): self
+    {
+        $this->kmRetour = $kmRetour;
+
+        return $this;
+    }
+
+    public function getDateKm(): ?\DateTimeInterface
+    {
+        return $this->dateKm;
+    }
+
+    public function setDateKm(?\DateTimeInterface $dateKm): self
+    {
+        $this->dateKm = $dateKm;
+
+        return $this;
+    }
+
+    public function getSaisisseurKm(): ?User
+    {
+        return $this->saisisseurKm;
+    }
+
+    public function setSaisisseurKm(?User $saisisseurKm): self
+    {
+        $this->saisisseurKm = $saisisseurKm;
 
         return $this;
     }

@@ -228,10 +228,10 @@ class ReservationController extends AbstractController
 
         $vehicule = $reservation->getVehicule();
         // form pour kilométrage vehicule
-        $formKM = $this->createForm(KilometrageType::class, $vehicule);
+        $formKM = $this->createForm(KilometrageType::class, $reservation);
         $formKM->handleRequest($request);
 
-        // form pour ajouter collection de frais supplementaire
+        // form pour ajouter collection de frais supplementaire²
         $formCollectionFraisSupplResa = $this->createForm(CollectionFraisSupplResaType::class, $reservation);
         $formCollectionFraisSupplResa->handleRequest($request);
 
@@ -285,8 +285,8 @@ class ReservationController extends AbstractController
         //gestion de la formulaire kilometrage
         if ($formKM->isSubmitted() && $formKM->isValid()) {
             //sauvegarde données de kilométrage du véhicule
-            $vehicule->setSaisisseurKm($this->getUser());
-            $vehicule->setDateKm($this->dateHelper->dateNow());
+            $reservation->setSaisisseurKm($this->getUser());
+            $reservation->setDateKm($this->dateHelper->dateNow());
             // $this->em->persist($vehicule);
             $this->em->flush();
 

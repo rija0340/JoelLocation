@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Reservation;
 use App\Entity\Vehicule;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -21,7 +22,7 @@ class KilometrageType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Vehicule::class,
+            'data_class' => Reservation::class,
         ]);
     }
 }
