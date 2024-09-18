@@ -285,14 +285,14 @@
 								{% if devis is defined and devis is not null %}
 									<tr>
 										<td>
-											{{ devis.numero }}
+											{{ devis.numContrat }}
 										</td>
 									</tr>
 								</tr>
 							{% else %}
 								<tr>
 									<td>
-										<p class="text-white">-</p>
+										<p>{{ numContrat }}</p>
 									</td>
 								</tr>
 							{% endif %}

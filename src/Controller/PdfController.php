@@ -167,6 +167,7 @@ class PdfController extends AbstractController
             'sommePaiements' => $sommePaiements,
             'totalTTC' => $totalTTC,
             'restePayerTTC' => $restePayerTTC,
+            'numContrat' => $this->getNumFacture($reservation, "CO")
 
 
         ]);
@@ -197,27 +198,10 @@ class PdfController extends AbstractController
      */
     public function facturePDF(Pdf $knpSnappyPdf, Reservation $reservation)
     {
-        //numerotation facture 
-        $idResa = $reservation->getId();
-        $createdAt = $this->datehelper->dateNow();
-        $currentYear = $createdAt->format('Y');
-        $currentYear = str_split($currentYear, 2);
 
         $sommeFraisTotalHT = 0;
         foreach ($reservation->getFraisSupplResas() as $resa) {
             $sommeFraisTotalHT = $sommeFraisTotalHT + $resa->getTotalHT();
-        }
-
-        if ($idResa > 99) {
-            $numeroFacture = 'FA' . $currentYear[1] . '00' . $idResa;
-        } elseif ($idResa > 999) {
-            $numeroFacture = 'FA' . $currentYear[1] . '0' . $idResa;
-        } elseif ($idResa > 9999) {
-            $numeroFacture = 'FA' . $currentYear[1] . $idResa;
-        } elseif ($idResa < 99 && $idResa > 10) {
-            $numeroFacture = 'FA' . $currentYear[1] . '000' . $idResa;
-        } elseif ($idResa < 10) {
-            $numeroFacture = 'FA' . $currentYear[1] . '0000' . $idResa;
         }
 
         // Configure Dompdf according to your needs7
@@ -263,7 +247,7 @@ class PdfController extends AbstractController
             'reservation' => $reservation,
             'createdAt' => $createdAt,
             'devis' => $devis,
-            'numeroFacture' => $numeroFacture,
+            'numeroFacture' => $this->getNumFacture($reservation, 'FA'),
             'frais' => $reservation->getFraisSupplResas(),
             'tarifVehiculeTTC' => $tarifVehiculeTTC,
             'sommeFraisTotalHT' => $sommeFraisTotalHT,
@@ -298,5 +282,29 @@ class PdfController extends AbstractController
         $dompdf->stream("facture_" . $reservation->getReference() . ".pdf", [
             "Attachment" => true,
         ]);
+    }
+
+
+    public function getNumFacture($reservation, $prefix)
+    {
+        $idResa = $reservation->getId();
+        $createdAt = $this->datehelper->dateNow();
+        $currentYear = $createdAt->format('Y');
+        $currentYear = str_split($currentYear, 2);
+
+
+        if ($idResa > 99) {
+            $numeroFacture = $prefix . $currentYear[1] . '00' . $idResa;
+        } elseif ($idResa > 999) {
+            $numeroFacture = $prefix . $currentYear[1] . '0' . $idResa;
+        } elseif ($idResa > 9999) {
+            $numeroFacture = $prefix . $currentYear[1] . $idResa;
+        } elseif ($idResa < 99 && $idResa > 10) {
+            $numeroFacture = $prefix . $currentYear[1] . '000' . $idResa;
+        } elseif ($idResa < 10) {
+            $numeroFacture = $prefix . $currentYear[1] . '0000' . $idResa;
+        }
+
+        return $numeroFacture;
     }
 }
