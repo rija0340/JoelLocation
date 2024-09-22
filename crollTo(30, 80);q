@@ -1,0 +1,2283 @@
+[33mcommit cf80c6895d9f2dad4eba7e6c63e84f3509ba858d[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Mon Nov 14 19:51:55 2022 +0300
+
+    details stop sale et resa depuis planning
+
+[33mcommit 354f2a48c151359280c08e82436851cd9fd87a1b[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Mon Nov 14 18:50:18 2022 +0300
+
+    ajout btn details sur info resa plan gen
+
+[33mcommit ae1559cac4bb855defa90f33e2ea2dee2412c797[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Thu Nov 3 19:31:04 2022 +0300
+
+    erreur généré par stop sale mode resa null corrigé
+
+[33mcommit bd2bf0dfeed9457a42ae2a8777fe8fe83cc78b05[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Mon Oct 17 19:45:03 2022 +0300
+
+    modif stop sales corrigé
+
+[33mcommit 92f4bb0f9e8bd640722808b1dee40cf0faddcf89[m
+Merge: 37dc8fa b4e60cf
+Author: Raberia <rija0340@gmail.com>
+Date:   Sun Oct 16 21:23:49 2022 +0300
+
+    reglage conflit prod -> local
+
+[33mcommit 37dc8fa10a572e77c1e5c10539dec7535a7625aa[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Sun Oct 16 21:17:01 2022 +0300
+
+    correctio mailjet
+
+[33mcommit b4e60cfbe2f88f43150f9fac3d37127d505a6e57[m
+Merge: 5c3a8e9 9d144c3
+Author: Kaira <husaynmozart@gmail.com>
+Date:   Sun Oct 16 14:15:17 2022 -0400
+
+    merge
+
+[33mcommit 5c3a8e9c6a3e80294120e17111af20eb903017f4[m
+Author: Kaira <husaynmozart@gmail.com>
+Date:   Sun Oct 16 14:01:10 2022 -0400
+
+    presta SEO + mailjet
+
+[33mcommit 9d144c313ec287e2b05e95180a577fae1bf584f5[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Tue Sep 27 20:43:10 2022 +0300
+
+    modidf selon pdf correction Elvicia.pdf
+
+[33mcommit d21113202a3d0d5eb636c69823e432af929f429b[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Mon Aug 22 19:48:09 2022 +0300
+
+    remove ready planningen
+
+[33mcommit 70296bc8c17d379597a9aca0343a1c09fcdfad0e[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Sun Aug 21 21:04:00 2022 +0300
+
+    recalcul des durees de resa
+
+[33mcommit fc808a4787df14dab76162a56e0ecc42b4720f74[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Sun Aug 21 20:38:21 2022 +0300
+
+    fix modif resa, reinit plan, affichag plan, calc duree resa
+
+[33mcommit 1ba6d5ce013272a265e9b257ed01256fadd7af22[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Thu Aug 18 21:25:59 2022 +0300
+
+    tentative correction affichage planning - fail
+
+[33mcommit 1758122f558f853e8799f964c655545265f335bb[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Wed Aug 10 17:26:37 2022 +0300
+
+    correction contrat + affichage prix ttc
+
+[33mcommit df1acee56d03337eb8c32d092f11389454866a70[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Mon Aug 8 20:21:21 2022 +0300
+
+    modification contrat, prix conducteur optionnel...
+
+[33mcommit 52a610e5efc589de9aa9105827ff5160d735ae19[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Thu Jul 28 17:34:34 2022 +0300
+
+    modification premiere partie
+
+[33mcommit c2d339f4a378dcb75ffa90b18734394326d537f0[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Wed Jul 13 21:17:26 2022 +0300
+
+    modification stop sales + reservation
+
+[33mcommit b810915922d03be62d1b899376e8cc003dc249aa[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Fri Jul 1 14:51:05 2022 +0300
+
+    correction contrat
+
+[33mcommit 4a59fc44487b5f90793df87c0ca59ccf03c112c6[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Fri Jul 1 11:17:09 2022 +0300
+
+    correction supprssion ligne
+
+[33mcommit 86cd0900f193a1d56a009fd02465f899db31542a[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Thu Jun 30 14:58:55 2022 +0300
+
+    modif devis pdf
+
+[33mcommit 4586499214bcf5aa681073c874f799073476dafd[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Thu Jun 30 14:55:03 2022 +0300
+
+    correction devis, details resa ...
+
+[33mcommit 6906e35c4a75d5f9765d332dd0e168d14df3930a[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Thu Jun 30 09:53:35 2022 +0300
+
+    modification contrat->devis facultatif
+
+[33mcommit 476b30796f385f4e80992fc4b10c3151f8743a63[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Thu Jun 30 09:05:52 2022 +0300
+
+    correction remarque sur ajout frais et devis optionelle dans facture
+
+[33mcommit bcb9afae33dad2a10a0db48645ab9003c4a06e41[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Wed Jun 29 14:32:45 2022 +0300
+
+    correction facture, frais suppl, details resa
+
+[33mcommit 1562a9c679719e2fc3a87e901d2aa476ecee6e80[m
+Merge: 262926a 697b413
+Author: Raberia <rija0340@gmail.com>
+Date:   Tue Jun 28 15:12:29 2022 +0300
+
+    merge
+
+[33mcommit 262926ac5c658ab019285e50e77b861380f073d3[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Tue Jun 28 15:09:25 2022 +0300
+
+    correction resa
+
+[33mcommit 697b413609037a0086f5e51a08bf2623a1139705[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sun Jun 26 09:42:52 2022 +0300
+
+    mettre en gras les marques de la voiture
+
+[33mcommit 426df3a1c6ee02aa97d917233ea783ccd6f04c46[m
+Merge: 295a1c9 4963d5c
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sat Jun 25 16:16:23 2022 +0300
+
+    Merge branch 'master' of https://github.com/maxivalencia/JoelLocation
+
+[33mcommit 295a1c9420d880cb06427480bd6005c49a0110a4[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sat Jun 25 16:16:13 2022 +0300
+
+    avant pull de modification
+
+[33mcommit 4963d5ce58dc398e549e385ea3d947f8760d95bc[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Wed Jun 22 09:18:10 2022 +0300
+
+    correction remarques
+
+[33mcommit e130e03140e287e031bb5540c6f81a00a2374527[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Mon Jun 20 13:26:04 2022 +0300
+
+    bouton répondre, et tranche suppression stripe
+
+[33mcommit 04559700000a297d19f13297826eb60989744cb1[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Mon May 30 14:28:25 2022 +0300
+
+    modification url pour securisation
+
+[33mcommit 0052de390ee6cb92dd5f7d42b20eecc49ad6a569[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Tue May 24 11:30:22 2022 +0300
+
+    correct bug null
+
+[33mcommit 021f113ec7834604a4990bad082fd0b9391ae5be[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Mon May 23 14:14:04 2022 +0300
+
+    effacement code live stripe
+
+[33mcommit e78fd858607aa1bbd990159e674c47d5f1507cd6[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Mon May 23 12:55:00 2022 +0300
+
+    ajout btn relance paiement details resa + correction affichage
+
+[33mcommit e53b00794c249f584dd30110e125159ee4e8e177[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Mon May 9 17:18:29 2022 +0300
+
+    stripe compte live
+
+[33mcommit 4fba32ec3633c1278e0034476473dede0efd7b1a[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Fri Apr 29 11:29:14 2022 +0300
+
+    correction ajout conducteur + confirmation paiement mail
+
+[33mcommit 3b7ebfb3505b7254368e73874529b59bb06bba54[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Thu Apr 21 11:35:45 2022 +0300
+
+    correction selon remarque SEO
+
+[33mcommit a7a9f88cddedabcde05456c46a4aa6cd2d204e2d[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Thu Apr 21 10:15:55 2022 +0300
+
+    changement http en https
+
+[33mcommit 08f05e58480220a56c2eaa26adc3bb56696b5243[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Thu Apr 21 10:03:17 2022 +0300
+
+    correction sur resultat recherche paiement
+
+[33mcommit 057cb3f7a22d79a18fd050e3942ffa62f8e707c5[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Tue Apr 19 09:58:33 2022 +0300
+
+    ajout key stripe paiementcontroller
+
+[33mcommit 6367cc0e2f799de11dc052a7553d55904e37bdfb[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Thu Apr 14 11:06:25 2022 +0300
+
+    correction contenu mail confirmation devis
+
+[33mcommit 28aa4627098f1284f80158a7597950cb8a48fefc[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Fri Apr 8 14:46:20 2022 +0300
+
+    correction mailjet
+
+[33mcommit deeb869d55cc4e399ae47b6144e914e62ff0cf65[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Fri Apr 8 14:40:15 2022 +0300
+
+    resolution mail, route, filtre datatable, conducteur
+
+[33mcommit 86ba2c782998e69a1ade227890304a6880fa15d8[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Thu Apr 7 15:15:35 2022 +0300
+
+    modification entity reservation
+
+[33mcommit e18e6718af8825140a307b5ad9123eefd2035ef4[m
+Merge: 0635099 d95dde7
+Author: Raberia <rija0340@gmail.com>
+Date:   Tue Apr 5 11:06:27 2022 +0300
+
+    resolution conflict
+
+[33mcommit 0635099dc2c8f7e1c711d95a8cdec14d52a39067[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Tue Apr 5 10:57:15 2022 +0300
+
+    upgrade symfony version
+
+[33mcommit d95dde75e695f3a9f6c1310fc25aae676f52103d[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Fri Apr 1 12:15:59 2022 +0300
+
+    avancement
+
+[33mcommit f4e29bf18ddd141630a2a00071cae84f16162774[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Fri Apr 1 12:00:38 2022 +0300
+
+    avancement
+
+[33mcommit f8bafb0e4a28132cd9701243ff38669d374a3ef2[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Tue Mar 29 09:28:44 2022 +0300
+
+    correction hauteur planning général
+
+[33mcommit 25aeb18ae88a8b2f60eb808e73d8e04671c39012[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Mon Mar 28 15:42:13 2022 +0300
+
+    filtre resolu + nom JOEL LOCATION
+
+[33mcommit daaf680d9d6d4496de8c86035003a20f0bc28016[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Mon Mar 28 09:40:45 2022 +0300
+
+    date planning, correction durée reservation
+
+[33mcommit e1c0b9ab623704b3105f36b88478686c04e1630a[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Fri Mar 25 14:50:06 2022 +0300
+
+    correction bug stop sales et vehicule dispo
+
+[33mcommit dbe0783b1cd31e5693b950bdcc886c1cdf1733a8[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Fri Mar 25 14:06:44 2022 +0300
+
+    correction recherche par immatriculation
+
+[33mcommit 3737107c0506a8d8eaacd8610731a71cd5894055[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Thu Mar 24 13:59:18 2022 +0300
+
+    correction divers erreurs
+
+[33mcommit 6a9fd52050bc460523e7557989694ceceb89343c[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Mon Mar 21 14:27:17 2022 +0300
+
+    fix premiere partie template mail
+
+[33mcommit 415e6a4936c4b1fce0fdc4ce903ca1c0f4316d07[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Wed Mar 9 14:39:12 2022 +0300
+
+    correction modif utilisateur et ajout'
+
+[33mcommit 1821320ee8f793e5eca9e9c1f73e6e3877f08b1d[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Mon Mar 7 14:55:24 2022 +0300
+
+    correction payer solde, envoi contrat mail, phone et complement null
+
+[33mcommit 2d85935b6e589cf79d93df10246082cc55194303[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Tue Mar 1 09:16:36 2022 +0300
+
+    resolution conducteurs client
+
+[33mcommit 7c63a1222a2564968941f320d5e1f305abda2e7a[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Thu Feb 24 19:37:03 2022 +0300
+
+    correction conducteur principal espace client
+
+[33mcommit 2d3e2e8bef843ee4ae337760dc10008d5e07709e[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Thu Feb 17 09:39:23 2022 +0300
+
+    correction edition stopsales
+
+[33mcommit 2db2b337f0dbf1a60b6d7acddc07a416ae347549[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Wed Feb 16 17:10:57 2022 +0300
+
+    correction edition garanties
+
+[33mcommit 557b4b42425bd85bd5be1bf441a790ee24e44c9a[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Sun Feb 13 16:39:35 2022 +0300
+
+    options required false descr
+
+[33mcommit 76acf6abebdd8542822ddbb4daa8d0503b756960[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Sun Feb 13 16:28:31 2022 +0300
+
+    ajout champ description options
+
+[33mcommit 69e16374e46c873fe5e2dfa0fdb4f32047d1fda8[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Sun Feb 13 16:22:25 2022 +0300
+
+    correction optionstype
+
+[33mcommit 7823b2ae3c86ae07d066c6d6e0fd6f2e56ec1486[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Sun Feb 13 16:17:00 2022 +0300
+
+    correction erreur options
+
+[33mcommit 4551a94f495b7a62b1c536e2068e6c7a4325172e[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Sun Feb 13 15:25:01 2022 +0300
+
+    correction bug devis.php
+
+[33mcommit 4b224b1aee6118a86c6ee85b7d4b66cc94a53e16[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Fri Feb 11 18:59:13 2022 +0300
+
+    afficher toutes les vehicules dans plan general
+
+[33mcommit 38f4c1cf19e83c351cf021bee5b7424c401085f0[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Fri Feb 11 15:59:05 2022 +0300
+
+    ajout sitemap pour SEO
+
+[33mcommit 935cad915235fa697c5ef4e87e6ca17d099f95e6[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Fri Feb 11 11:01:05 2022 +0300
+
+    correction edit options garanties + validation search console
+
+[33mcommit b41b79a3cf9e8f2f6af400a4c28239890247a9c0[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Mon Feb 7 08:39:05 2022 +0300
+
+    correction effacement accidentel devis espace client
+
+[33mcommit f8afb4a5a785c98a7225f80b72a0d6b079b5ef70[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Mon Feb 7 08:13:06 2022 +0300
+
+    responsive espace client, garantie optionnel
+
+[33mcommit 50590a11505eb93756450df0aa06c529c6b1328b[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Sun Feb 6 20:30:33 2022 +0300
+
+    correction garanties, overflow table, pdf
+
+[33mcommit 99c5174114736ed74e089475e902bf9484ed7855[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Sun Feb 6 15:09:55 2022 +0300
+
+    essai de hashpassword mais probleme upgrade security
+
+[33mcommit 50b032dc2fc7dcca64aee2b3c9ec0ab63a5b003c[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Sun Feb 6 14:55:45 2022 +0300
+
+    correction envoi identifians user
+
+[33mcommit 70e40f53a4aac56a437fa266c52180e5ccffd845[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Sun Feb 6 13:30:45 2022 +0300
+
+    suppression véhicule et correction reservation vente comptoir
+
+[33mcommit c906567c41629e437254aff8cb90006cd9c0be4a[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Sun Feb 6 11:13:10 2022 +0300
+
+    envoi url devis par email
+
+[33mcommit da882ce875f078aca840dbf4b385a9f589fd1c8e[m
+Merge: b5bf458 f65416d
+Author: Raberia <rija0340@gmail.com>
+Date:   Sun Feb 6 10:15:07 2022 +0300
+
+    regler conflict git
+
+[33mcommit b5bf45883f1fe0ee74f9a1afc75cddb6cc75a006[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Sun Feb 6 10:11:44 2022 +0300
+
+    correction step3 vente comptoir
+
+[33mcommit f65416d7ba36d07ac6abea74eea9885b2b4c92bf[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sun Feb 6 09:46:40 2022 +0300
+
+    avancement upload véhicule
+
+[33mcommit 3b72378885928fdd38e44f7e97d31d75e316929b[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Fri Feb 4 11:22:44 2022 +0300
+
+    service upload image vers client
+
+[33mcommit f910040e051bcd937d3375e4e2485303619c118b[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Fri Feb 4 07:36:22 2022 +0300
+
+    url telechargement de devis par mail
+
+[33mcommit 473be5f0e29214cf21dd968b7515a0b40f1de4d7[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Thu Feb 3 19:51:39 2022 +0300
+
+    nos véhicules affichage
+
+[33mcommit 1bc38dfd9410f347ef0a3b53478ec6731c4f3778[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Tue Feb 1 14:45:13 2022 +0300
+
+    qui somme nous accueil
+
+[33mcommit 6bfacb67009f32d6437864f1f8e8e68e895d59ab[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Tue Feb 1 11:38:46 2022 +0300
+
+    correction bugs
+
+[33mcommit cfc99b5d95d25ffefb9deb2f6781d67b0f036414[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Mon Jan 24 10:45:14 2022 +0300
+
+    initiation google search console indexation
+
+[33mcommit bced6b9794ecf08093801667fd446571726a8043[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Tue Dec 28 14:18:06 2021 +0300
+
+    amelioration
+
+[33mcommit 05065853240a198582ef1bbcd8637cee76fb0edf[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Wed Dec 22 14:45:13 2021 +0300
+
+    dernière avancement
+
+[33mcommit a5fce9a6537f356b34839a02fc81fc6beabbb8a2[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Mon Dec 6 15:33:49 2021 +0300
+
+    ajout daterangepicker paiement
+
+[33mcommit 2a5304d125a5b5eb6ceb6d77cb253a80adc0e789[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Thu Dec 2 15:12:08 2021 +0300
+
+    commentaire mon compte
+
+[33mcommit f638f1c801f137c22801a444b60ace6d38f6f888[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Thu Dec 2 15:08:08 2021 +0300
+
+    envoi devis par email
+
+[33mcommit 22b7784303bbeb1aede0b04d80f29713e1933509[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Tue Nov 30 15:18:00 2021 +0300
+
+    ajout filtre formulaire contact accueil
+
+[33mcommit 3c3dfaeb2ba1f2cfaa916d0bd554b0aeaadb7f92[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Mon Nov 29 14:17:08 2021 +0300
+
+    fonctionnalite accueil admin (statistic)
+
+[33mcommit 4fa81a1b13d5d3bc412ddb309c23ee58a789e72c[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Fri Nov 26 14:48:54 2021 +0300
+
+    details devis + envoi ident connexion
+
+[33mcommit 5ac25299ab46072d3fb6acd18b44907107a3972d[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Wed Nov 24 16:25:38 2021 +0300
+
+    ajout fonctinnalité report reservation
+
+[33mcommit 90bfed599d0fc70bfc1317b0d3b7b25c54b63410[m
+Merge: c24170b 2ab4950
+Author: Raberia <rija0340@gmail.com>
+Date:   Tue Nov 23 15:11:05 2021 +0300
+
+    correction conflict pull
+
+[33mcommit c24170b119a101fbdcaba387b05ed568d78382f7[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Tue Nov 23 15:07:59 2021 +0300
+
+    json_array corrigé par effacement et nouvelle installation composer update
+
+[33mcommit 2ab49503d17ecb79b9d16dad65fe06298a5af774[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Tue Nov 23 14:31:55 2021 +0300
+
+    avancement json_array
+
+[33mcommit 176f83d7819545d62dde1d0dc49b7da75684fa2f[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Tue Nov 23 08:46:50 2021 +0300
+
+    le problème sembre etre regle
+
+[33mcommit 917e0e1e71eff4d8616f67fe4fe627867624e0f9[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Tue Nov 23 08:27:45 2021 +0300
+
+    ajout de bouton generer facture depuis details reservation
+
+[33mcommit 16067986231f32d4d49e6bdfbbfb686cd4c656a4[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Fri Nov 19 16:31:14 2021 +0300
+
+    ajout de de form pour formulaire de contact
+
+[33mcommit 5463bf655f46b902c0cf4ef0954ce5a7af2a6d1d[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Fri Nov 19 10:00:38 2021 +0300
+
+    amelioration
+
+[33mcommit 0bd2637539a9248f94cf6b227931eaad8c043803[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Thu Nov 18 13:22:12 2021 +0300
+
+    ajout DSN dans .env
+
+[33mcommit b9f52231f9039044929abaded05fc8392a3a2c36[m
+Merge: 3684830 37244a7
+Author: Raberia <rija0340@gmail.com>
+Date:   Thu Nov 18 12:43:51 2021 +0300
+
+    pull modif
+
+[33mcommit 368483054adba90c48a94d3db8b54d389f301d17[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Thu Nov 18 12:40:16 2021 +0300
+
+    commentaire link contact accueil
+
+[33mcommit 2e4589af0c46db301f6eae74fd620413bfb96683[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Thu Nov 18 12:17:22 2021 +0300
+
+    ajout fonctionnalité details reservation
+
+[33mcommit 37244a7bb5a651844d1ccce329a73d4621efa340[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Wed Nov 17 20:01:33 2021 +0300
+
+    ajout précision des champs
+
+[33mcommit 4074968ab156336d6ebd2f779a09b86eeeb88a64[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Wed Nov 17 18:08:37 2021 +0300
+
+    avancement
+
+[33mcommit 4e2dd74c39dd43b531cfab19a35ed26b07a61780[m
+Merge: 82433ea 0bb3379
+Author: Raberia <rija0340@gmail.com>
+Date:   Mon Nov 15 08:01:55 2021 +0300
+
+    Merge https://github.com/maxivalencia/JoelLocation into solve
+
+[33mcommit 82433ea48624c4662f9a19daa77a7ce557fc7c50[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Mon Nov 15 08:01:37 2021 +0300
+
+    index reservation client transformé en datatable
+
+[33mcommit 681541503d2d6cafb2a39b973b493931ba378a51[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Sun Nov 14 18:27:19 2021 +0300
+
+    ajout pop up pour boutons espace client
+
+[33mcommit 0bb33795f7dba74e7344088924d014270c246e25[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sun Nov 14 11:56:04 2021 +0300
+
+    resolution première partie de la modification
+
+[33mcommit 71b8174ab6d162fe4ba76272c943978fb2fc0001[m
+Merge: e175e08 e5440e2
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sat Nov 13 18:12:52 2021 +0300
+
+    Merge branch 'master' of https://github.com/maxivalencia/JoelLocation
+
+[33mcommit e5440e25d130302d7b023b8688f066072952a50b[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Fri Nov 12 15:25:17 2021 +0300
+
+    fail to solve the bug
+
+[33mcommit 6de2b41625a45f5b327ef2cedc6a334dafa28072[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Fri Nov 12 10:19:50 2021 +0300
+
+    ajout avis client details reservation termines
+
+[33mcommit f883c4dd3332059eef30f77941c84e55a126bb05[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Thu Nov 11 15:20:29 2021 +0300
+
+    tentative de resolution erreur ARRAY_JSON
+
+[33mcommit ffb8a1a265eb9d9dc14c190a5b148ef64b43b63c[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Wed Nov 10 16:21:23 2021 +0300
+
+    ajout conducteur dans details contract termines
+
+[33mcommit d3d3d1ae32789a7565e68586c7df2e9b06c8dd0c[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Wed Nov 10 13:46:13 2021 +0300
+
+    details reservation ajout conducteur
+
+[33mcommit e175e084bcd92146874a02b4d37904f2ac3b1344[m
+Merge: 2daa67b 24d90aa
+Author: kaira <husaynmozart@gmail.com>
+Date:   Tue Nov 9 18:43:52 2021 +0300
+
+    Merge branch 'master' of https://github.com/maxivalencia/JoelLocation
+
+[33mcommit ed7556e38e0c6c86dee381887d2ab57cf1444cb0[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Tue Nov 9 16:04:27 2021 +0300
+
+    tentative reparation erreur JSON_ARRAY relie a entity User
+
+[33mcommit 24d90aaa1ab6bd2e250f51fd563deed0341b7257[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Tue Nov 9 15:19:32 2021 +0300
+
+    correction ajout conducteur
+
+[33mcommit c33e6834b5c5765eed1f47514273a051627f5b4c[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Tue Nov 9 13:31:51 2021 +0300
+
+    ajout conducteur espace client
+
+[33mcommit 2daa67bc32051e06643e87f9e0a40b4a9a674d19[m
+Merge: 5a15413 b3f1eb3
+Author: kaira <husaynmozart@gmail.com>
+Date:   Mon Nov 8 22:23:35 2021 +0300
+
+    avancement
+
+[33mcommit 5a154130258d3268e7822ce02bc21addb4a73965[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Mon Nov 8 22:22:25 2021 +0300
+
+    avancement
+
+[33mcommit b3f1eb3d5e60b174b993cca14f2321b4923b9a4c[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Mon Nov 8 16:30:29 2021 +0300
+
+    configuration Mailjet
+
+[33mcommit af114df5dd605a2c246b8a5bcfa1b492abe245ef[m
+Merge: 7827df6 8162c37
+Author: Raberia <rija0340@gmail.com>
+Date:   Fri Nov 5 16:59:08 2021 +0300
+
+    pull
+
+[33mcommit 7827df6cf7b6c86114f436c03f2c4760012324a2[m
+Author: Raberia <rija0340@gmail.com>
+Date:   Fri Nov 5 16:52:33 2021 +0300
+
+    mail stocke dans bdd + comment mon compte
+
+[33mcommit 8162c377a7e32c9de5997ccbe9389cfbbd17fa70[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Mon Nov 1 15:25:05 2021 +0300
+
+    avancement mail
+
+[33mcommit 45d35757dbeca31a576c4d6032dcd4eb36db3450[m
+Merge: 0215b20 c9b6693
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sun Oct 31 11:13:21 2021 +0300
+
+    Merge branch 'master' of https://github.com/maxivalencia/JoelLocation
+
+[33mcommit 0215b20ba0615e00ee4cecf0dd6f74af7d227c72[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sun Oct 31 11:11:15 2021 +0300
+
+    reparation inscription
+
+[33mcommit c9b669341e531c5215966230f2a7ccfce180d3ac[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Oct 29 12:00:34 2021 +0300
+
+    remove dump in securityController + popup
+
+[33mcommit 450fa8f95a93ee58ac12063dec0c8444262775a3[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Thu Oct 28 16:22:10 2021 +0300
+
+    modification infos client reservation
+
+[33mcommit c3ea9e2e6a1907908ae2281264a7b311993bb7cc[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Tue Oct 26 13:11:52 2021 +0300
+
+    envoi identifiants connexion
+
+[33mcommit 6ed8a8b74749c6d863d7dba9a64afd50f2533437[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Mon Oct 25 15:18:48 2021 +0300
+
+    annulation reservation
+
+[33mcommit 05ae7308414cc4949e2bf863037dc8c7557e1ec5[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Mon Oct 25 09:43:45 2021 +0300
+
+    correction avis et entity
+
+[33mcommit 45203ab5fc9ec375908ad14abb43d7029f9ff4c0[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Oct 22 15:19:56 2021 +0300
+
+    ajout systeme avis
+
+[33mcommit 46b8310470c83a71bc2e92594e631d20db4cc4d0[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Thu Oct 21 16:21:40 2021 +0300
+
+    boutons dans step4 CPT ok
+
+[33mcommit 6251abb5bfc98427e6467725fb0604a83e26826c[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Wed Oct 20 16:10:12 2021 +0300
+
+    correction Elvicia
+
+[33mcommit 6f13f6e9a77dcd63bded148621de97f7eea4931c[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Oct 15 15:27:42 2021 +0300
+
+    paiement solde
+
+[33mcommit 233b637e547f5ef5fab123784558f323b59a0c8f[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Thu Oct 14 15:01:40 2021 +0300
+
+    recherche, paiement
+
+[33mcommit 5fea092a1229e51f479d7087aa1fd206dba22375[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Wed Oct 13 15:31:19 2021 +0300
+
+    avancement paiement et vente comptoir
+
+[33mcommit 511ed509b2d3c7b3d4a3aededd048170b2f21aa8[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Tue Oct 12 18:03:18 2021 +0300
+
+    Payment et envoi mail
+
+[33mcommit 56278896f28a3cb5e033419fa06d07c482aa0eab[m
+Merge: 6446823 6b6454a
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Oct 8 17:03:07 2021 +0300
+
+    Merge https://github.com/maxivalencia/JoelLocation
+
+[33mcommit 6446823dab8d756eb8635c59612963e66e6e939c[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Oct 8 17:02:45 2021 +0300
+
+    avancement site
+
+[33mcommit 6b6454ab4923243439b8fabd41e1f441daa518aa[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sun Oct 3 12:53:32 2021 +0300
+
+    devis pdf
+
+[33mcommit 16d3a2a0997e267b0b7f1ce08709abdea12948bc[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sun Oct 3 10:52:04 2021 +0300
+
+    devis
+
+[33mcommit 97981d14c514398330ebfab9476587851737e63c[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Thu Sep 30 10:58:55 2021 +0300
+
+    correctif et amelioration
+
+[33mcommit 98bac2c15ea1e7d116c0dea5f43bffd7f4904fd2[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Wed Sep 22 15:26:58 2021 +0300
+
+    envoi mail + mot de passe oublié
+
+[33mcommit 88148de0877f8fb3a8ca9fbcf991f29ba10ca4b6[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Sep 17 13:56:05 2021 +0300
+
+    modification mot de passe + tarifs + status stripe
+
+[33mcommit a396189277eb0cb41d764c1bdf1082706ce5625d[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Sep 10 14:00:14 2021 +0300
+
+    modification fonction tableau tarifs
+
+[33mcommit 15eedfb4e160a91e2d5e0dc97bd8cf832bd4a517[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Wed Sep 8 15:44:40 2021 +0300
+
+    payement en ligne suite
+
+[33mcommit 262bef357fc6d51c36c5e4c8aa2637e8189fd7a8[m
+Merge: 638a939 4e2db9e
+Author: kaira <husaynmozart@gmail.com>
+Date:   Wed Sep 8 08:32:31 2021 +0300
+
+    Merge branch 'master' of https://github.com/maxivalencia/JoelLocation
+
+[33mcommit 638a939c3ccaf387a67692fee8efce4f6e58beeb[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Wed Sep 1 17:31:08 2021 +0300
+
+    montant
+
+[33mcommit 4e2db9eeecbcdc2b41eb51243afaf1a8e05746a6[m
+Merge: 6ef7ed2 f72f326
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Wed Sep 1 07:59:56 2021 +0300
+
+    Merge https://github.com/maxivalencia/JoelLocation
+
+[33mcommit 6ef7ed24f9dbb5f901345a809826556fa7fef0ea[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Wed Sep 1 07:59:42 2021 +0300
+
+    correction bug espace client
+
+[33mcommit f72f3262b7c337e612b7338bc1c3767360318db4[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Tue Aug 31 21:39:09 2021 +0300
+
+    float
+
+[33mcommit 40b1621ff3e08a98d409798c394e375be20f1cd2[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Tue Aug 31 19:20:01 2021 +0300
+
+    avancement payement
+
+[33mcommit 6973c23cff6cc29f24d2129554c975a544138b3e[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sat Aug 28 14:56:36 2021 +0300
+
+    paiement
+
+[33mcommit 65ef2a1255f5a5368c711c80f750025fe80a0e75[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sat Aug 28 12:10:54 2021 +0300
+
+    avant teste
+
+[33mcommit 0c03cb5f61faa09e11f824b3cbfe137aa6626bc7[m
+Merge: 31f1c4c 6ed5529
+Author: kaira <husaynmozart@gmail.com>
+Date:   Fri Aug 27 17:08:37 2021 +0300
+
+    Merge branch 'master' of https://github.com/maxivalencia/JoelLocation
+
+[33mcommit 31f1c4cdb74b39493e9e9cd49a690970f351451b[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Fri Aug 27 17:08:19 2021 +0300
+
+    avancement
+
+[33mcommit 6ed552990adf5854b9fad6dbd141dcd1d15290af[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Aug 27 14:03:47 2021 +0300
+
+    correction affichage espace client
+
+[33mcommit ea62f5fc44eb49192fa9cc7e9e037255a01c1883[m
+Merge: d412b5b c708abb
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Tue Aug 24 08:05:05 2021 +0300
+
+    Merge https://github.com/maxivalencia/JoelLocation
+
+[33mcommit d412b5bb584db7b5dc945474a9862d2ef4a82056[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Tue Aug 24 08:04:39 2021 +0300
+
+    suppression anonymous espace client
+
+[33mcommit c708abb242081eafb5672350200c8f51698d984e[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Mon Aug 23 07:36:50 2021 +0300
+
+    avanacement
+
+[33mcommit 1a9d259f3eddc786eecec1ed5c533db31dfa0b13[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Sun Aug 22 20:23:45 2021 +0300
+
+    ajout arrondissement tarif journalier
+
+[33mcommit f98b67aadd8c180740c34b43d8f982177af123d6[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Sun Aug 22 20:06:46 2021 +0300
+
+    ajout de mode paiement client
+
+[33mcommit 4dc996799377fdd84f65e197e0bbb91285fe870c[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Aug 20 15:31:05 2021 +0300
+
+    correction redirection vers devis
+
+[33mcommit 277cd3e4d9b13e57fed37f04feb77d3c336cf585[m
+Merge: 2489455 d0dcc83
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Aug 20 15:26:41 2021 +0300
+
+    Merge https://github.com/maxivalencia/JoelLocation
+
+[33mcommit 248945518f14b7df6c9bf6e2be165c6d7899fe63[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Aug 20 15:25:56 2021 +0300
+
+    correction et ajout fonctionnalité
+
+[33mcommit d0dcc83546c72375634fdc63458df7fef96eaa0a[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Fri Aug 20 11:10:32 2021 +0300
+
+    reservation possible changement montant
+
+[33mcommit 019614b1ddfe96056fd18310097960d826df4db7[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Aug 13 14:46:53 2021 +0300
+
+    ajout et modification conducteur by client
+
+[33mcommit fac09fabbbb969e4c39d5bd457ee5ced3475e2b3[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Wed Aug 11 14:45:03 2021 +0300
+
+    correction bug apres creation entité modele
+
+[33mcommit 4a66670aa6cca28ce9671e417df06a0135000bac[m
+Merge: dbeae9b 13dcf4e
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Tue Aug 10 13:13:29 2021 +0300
+
+    merge commit et pull
+
+[33mcommit dbeae9b971245331f0dcdab713d0b31b646014b9[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Tue Aug 10 13:07:54 2021 +0300
+
+    ajout entity modele et correction tarif
+
+[33mcommit 13dcf4efbd2f5cd51be9780617b21a3a65b8e847[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Tue Aug 10 05:21:38 2021 +0300
+
+    suppression ajout par défaut disponibilité
+
+[33mcommit d44f4fb4d63e5ec25f487533e6919abb9a163497[m
+Merge: b5965b1 c55fe07
+Author: kaira <husaynmozart@gmail.com>
+Date:   Tue Aug 10 04:27:14 2021 +0300
+
+    Merge branch 'master' of https://github.com/maxivalencia/JoelLocation
+
+[33mcommit b5965b12e2d40672f58d3a70651232fb49e85e20[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Tue Aug 10 04:24:00 2021 +0300
+
+    ajout vehicule
+
+[33mcommit c55fe07cfbd847c875e1712da23da59cf908ed13[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Sun Aug 8 20:10:33 2021 +0300
+
+    ajout click et dblclick functions pour task gantt
+
+[33mcommit cfbb25e1fc66cf913bb0f34bedf037e514eef24a[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Wed Aug 4 15:12:33 2021 +0300
+
+    amelioration espace client
+
+[33mcommit f71e31f8bde6958af9d0c3b1a542d362da6a72b8[m
+Merge: fb427e5 626c222
+Author: kaira <husaynmozart@gmail.com>
+Date:   Wed Aug 4 07:34:52 2021 +0300
+
+    Merge branch 'master' of https://github.com/maxivalencia/JoelLocation
+
+[33mcommit fb427e5df83c1c8308df539f2f486f9261520028[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Wed Aug 4 07:34:40 2021 +0300
+
+    avancement
+
+[33mcommit 626c222a914d1a75f49a95d59b304584a01ac828[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Tue Aug 3 12:22:47 2021 +0300
+
+    correction bugs
+
+[33mcommit fe86d4df2e25062723979f77ea2c1513a1d1bd41[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Tue Aug 3 07:58:10 2021 +0300
+
+    amelioration espace client
+
+[33mcommit 9892e37435a1206420b2dfb82da68e28f69acdc0[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Mon Aug 2 14:45:25 2021 +0300
+
+    ajout details recherche
+
+[33mcommit 7cbd73d2eaa23b093da0149d677a477ada52bee7[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Mon Aug 2 10:11:41 2021 +0300
+
+    recherche avancée
+
+[33mcommit 08cb47ea01ff3fce0914e790276fcf9a30898c45[m
+Merge: 50dd5cb 23d1585
+Author: kaira <husaynmozart@gmail.com>
+Date:   Wed Jul 28 06:51:52 2021 +0300
+
+    Merge branch 'master' of https://github.com/maxivalencia/JoelLocation
+
+[33mcommit 50dd5cbd5c738e373dea690e42105c691bb6cd10[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Wed Jul 28 06:51:34 2021 +0300
+
+    reavancement payement
+
+[33mcommit 23d15854c5890a030791db757c44ee80303e5c8a[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Mon Jul 26 14:54:50 2021 +0300
+
+    correctif espace client + user crud
+
+[33mcommit 05725b36fcdec4f252e690004f98ac733810e142[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Mon Jul 26 09:29:14 2021 +0300
+
+    ajout fonctionnalité espace client
+
+[33mcommit 1081861676eb095f56db5d67b58b6aee9f6b30a4[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Jul 23 13:41:09 2021 +0300
+
+    details reserv client
+
+[33mcommit 905c9c4c2467a9fac2bef460f13af0b93fdbb60c[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Jul 23 08:05:49 2021 +0300
+
+    espace client + tarifs + user details
+
+[33mcommit 2d354b4377421ce290c82b2f4665ddadd44d261e[m
+Merge: 8580746 b553a9c
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Mon Jul 19 16:49:18 2021 +0300
+
+    update git pull
+
+[33mcommit 8580746b6a37fb5ebc2e2021283e375814b1c10b[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Mon Jul 19 16:48:22 2021 +0300
+
+    composer update
+
+[33mcommit f054e6c84829f11f0d4fa7cea4fbdeddb812231e[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Mon Jul 19 16:38:30 2021 +0300
+
+    ajout contrat et facture pdf
+
+[33mcommit b553a9c7220721bab9f8b84fda57b237db1f842b[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sat Jul 17 18:59:35 2021 +0300
+
+    avancement pdf
+
+[33mcommit 1e5815389620bdbbb573d2401e37483fb62b53b3[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Fri Jul 16 13:47:22 2021 +0300
+
+    avancement pdf
+
+[33mcommit 8d1e78ea14e5a3f0dba7bf42d869249bce79492e[m
+Merge: 3e04ba6 aff651b
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Wed Jul 14 17:32:48 2021 +0300
+
+    Merge https://github.com/maxivalencia/JoelLocation
+
+[33mcommit 3e04ba694d0f3376c44e830453ec87225ec31e20[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Wed Jul 14 17:32:32 2021 +0300
+
+    ajout fonctionnalité generer pdf details devis
+
+[33mcommit aff651bbbfbfaef593cc2ce867c479b489f78806[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Wed Jul 14 07:50:18 2021 +0300
+
+    avancement pdf
+
+[33mcommit 1c6ac7ae60c3ede1c078ba52cb7a324c1ccde8e6[m
+Merge: c3bc113 e87c2a8
+Author: kaira <husaynmozart@gmail.com>
+Date:   Wed Jul 14 07:37:14 2021 +0300
+
+    Merge branch 'master' of https://github.com/maxivalencia/JoelLocation
+
+[33mcommit c3bc113106915d0c132dace241f5fee70086b7f5[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Wed Jul 14 07:35:40 2021 +0300
+
+    avancement pdf
+
+[33mcommit c58f5e2e15bc5d8278dd17fa06c50da1d73a3902[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Tue Jul 13 10:17:41 2021 +0300
+
+    avancement pdf
+
+[33mcommit e87c2a86d18007679f262d19cf4c79de1c8145cf[m
+Merge: eaaac8a 636f4f2
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Mon Jul 12 15:17:10 2021 +0300
+
+    Merge https://github.com/maxivalencia/JoelLocation
+
+[33mcommit eaaac8ac615fe08f7cab5acb779b33876d71c79f[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Mon Jul 12 15:16:50 2021 +0300
+
+    ajout result recherche_res + bouton imprim
+
+[33mcommit 636f4f21cd2b0442ba78bed50e661b70e8a45044[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Mon Jul 12 09:41:53 2021 +0300
+
+    avancement pdf
+
+[33mcommit 351bcb3b512fcb8935a6ecb3ee5353f92c945206[m
+Merge: f10c2dd 60af5c4
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Jul 9 15:54:54 2021 +0300
+
+    composer update
+
+[33mcommit f10c2dd749c8c6a2d67cda855d2fd0f7f8a67737[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Jul 9 15:50:36 2021 +0300
+
+    accueil admin
+
+[33mcommit 60af5c40a58e14dcea3203585695102b735c1b9a[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Fri Jul 9 07:27:40 2021 +0300
+
+    préparation pdf
+
+[33mcommit 4c2910ce65958ec8435ae845b5098f727bbdb9e1[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Tue Jul 6 07:31:08 2021 +0300
+
+    avancement
+
+[33mcommit a862c7aea2f8f0479c88c6c323f9536da7fc20b0[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Wed Jun 30 15:17:35 2021 +0300
+
+    recherche simple
+
+[33mcommit 742e3bf2db441015e78a37b2a4e0e79e10e592f9[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Tue Jun 29 13:50:36 2021 +0300
+
+    contrats en cours et termines
+
+[33mcommit df6c65b4e31df6a5ad488eb75bf2543dd0f9be4a[m
+Merge: eb0f400 783aafb
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Mon Jun 28 13:59:05 2021 +0300
+
+    Merge https://github.com/maxivalencia/JoelLocation
+
+[33mcommit eb0f400f9efd6f6a21bf793f50a3ac2dc9bf8d34[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Mon Jun 28 13:57:21 2021 +0300
+
+    mise en marche reserver step4 vente comptoir
+
+[33mcommit 783aafb5c4d63bffa925f3135ba8f5c2797f7038[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sun Jun 27 10:47:13 2021 +0300
+
+    gestion recuperation mot de pass
+
+[33mcommit 6c6faeeef94fc88aa42fc2bddcc96c1b440a6ef5[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Thu Jun 24 15:28:46 2021 +0300
+
+    ajout genererpdf details devis + detection vehicule
+
+[33mcommit 307305d5679bbd41eca37468d779753f7dbaacac[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Thu Jun 24 08:33:49 2021 +0300
+
+    avancemennt sprint finale
+
+[33mcommit d2c9e7f81506d498192667741f720bdb609b907b[m
+Merge: caf125e 00bf835
+Author: kaira <husaynmozart@gmail.com>
+Date:   Wed Jun 23 16:23:41 2021 +0300
+
+    Merge branch 'master' of https://github.com/maxivalencia/JoelLocation
+
+[33mcommit caf125e4b57067b520a7cdc25ca3fa3919aad9ca[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Wed Jun 23 16:23:35 2021 +0300
+
+    continuation
+
+[33mcommit 00bf835075a5eaa9cbc39bcb82edcf75d831a536[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Tue Jun 22 15:17:54 2021 +0300
+
+    ajout option et garanties dans bdd
+
+[33mcommit 176a8ee5d80f830153c730d7a5e9680029827b29[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Mon Jun 21 11:07:53 2021 +0300
+
+    ajout devis crud
+
+[33mcommit a9ff019dbb8c8b39b309c7c3348b5ef98aa16d27[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Jun 18 15:14:31 2021 +0300
+
+    ajout code devis crud
+
+[33mcommit 46592600168ad58613e953941f71423d6aa78487[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Thu Jun 17 10:20:05 2021 +0300
+
+     vente comptoir -> creation client + ajout table devis
+
+[33mcommit baf6f337b94f2a6d787d860cf09016b5f46d171c[m
+Merge: c15418c 539fc82
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Tue Jun 15 15:53:58 2021 +0300
+
+    Merge https://github.com/maxivalencia/JoelLocation
+
+[33mcommit c15418c18ceb3a3b3e3d58e9bddeae4f22a7c2ef[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Tue Jun 15 15:53:37 2021 +0300
+
+    correction stop sales + plan gen
+
+[33mcommit 539fc82fdeaabd7302ba59f6a86dddbb7b66e956[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Mon Jun 14 15:55:48 2021 +0300
+
+    recherche simple et recherche par immatriculation
+
+[33mcommit 2b70f1faf4459df48c29668f423737315832d9bc[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Mon Jun 14 15:31:47 2021 +0300
+
+    recherche simple et recherche par immatriculation
+
+[33mcommit 788fc04055423723640b7ff776937db30f67dbce[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sun Jun 13 20:52:53 2021 +0300
+
+    placement recherche reservation
+
+[33mcommit 99c33a32c9a251f9e18d3399f92f31d387e337a4[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Jun 11 10:27:43 2021 +0300
+
+    ajout stop sales
+
+[33mcommit b779cd2bdc5e554ab74686f83a44bf7bbf97a781[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Thu Jun 10 12:45:09 2021 +0300
+
+    correction vente comptoir
+
+[33mcommit dda69bd37c3acf9e160897afce6fdba0dfbcd6d8[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Thu Jun 10 12:23:31 2021 +0300
+
+    add autocomplete step 4 vente comptoir
+
+[33mcommit 72698868010cb1aefe0b7107324a95ec746f040a[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Thu Jun 10 09:26:33 2021 +0300
+
+    correction bug
+
+[33mcommit 1c01b45d5253a94714b00ed148aaff08efd21c70[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Thu Jun 10 09:07:22 2021 +0300
+
+    vente comptoir modification
+
+[33mcommit 90756873ebef2520a3f070e936920e9d1ccfc06a[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Mon Jun 7 15:37:01 2021 +0300
+
+    avancement vente comptoir
+
+[33mcommit 6f8fac2445977271e9262534446e67046e4ab688[m
+Merge: cab3516 84c56fe
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Jun 4 15:25:11 2021 +0300
+
+    Merge https://github.com/maxivalencia/JoelLocation
+
+[33mcommit cab35162bb03ba59ea09df666cd9c74edee71e7a[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Jun 4 15:24:45 2021 +0300
+
+    correction smartwizard dans vente comptoir
+
+[33mcommit 84c56fef4e68af87d89d9fe97728e6468f215482[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Fri Jun 4 12:04:00 2021 +0300
+
+    roles
+
+[33mcommit 71ad873a7eb66ac9d9f10266fadf854788ff25e9[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Fri Jun 4 11:38:49 2021 +0300
+
+    nouvelle base
+
+[33mcommit 2b089cd53f5374af22f1c2d2cd04397c3cb36f9f[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Jun 4 08:17:52 2021 +0300
+
+    suite correction
+
+[33mcommit 7163d1f98bd72e51cef819b71b7b3cbadcea2645[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Wed Jun 2 15:47:46 2021 +0300
+
+    suite correction admin
+
+[33mcommit bbfb2344fafd1c660876507eda0f583e7d25cdee[m
+Merge: 8f1a1ee ae071a1
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Wed Jun 2 08:28:28 2021 +0300
+
+    Merge https://github.com/maxivalencia/JoelLocation
+
+[33mcommit 8f1a1ee0e73ebd3aeba76d7396a1c50c73c96284[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Wed Jun 2 08:23:42 2021 +0300
+
+    ajout filtre planning général
+
+[33mcommit ae071a157c595947f8b631962bb3abd087ae50da[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Thu May 27 23:11:50 2021 +0300
+
+    gestion utilisateur
+
+[33mcommit 60edda0e19203f19bca6a45496d85d2e662b315d[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Thu May 27 22:57:30 2021 +0300
+
+    gestion utilisateur
+
+[33mcommit 928efa28cbdea0cc6b8b40f42f5023d3a7d8ba0e[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Thu May 27 22:12:35 2021 +0300
+
+    gestion utilisateur
+
+[33mcommit c7f62224aa9d9231da09aa668397c8f061a465d0[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Thu May 27 15:18:40 2021 +0300
+
+    correction remarques part1
+
+[33mcommit aedb2a3aed7ac0a556eb946180d792e16ab1e52d[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Thu May 27 09:18:42 2021 +0300
+
+    modif index véhicule
+
+[33mcommit cf12cabb50245cb8396c861ad90145eb35603aa0[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Tue May 25 14:52:52 2021 +0300
+
+    modif info client
+
+[33mcommit 9b67e20eeda0ba181f7dcc7aaaf8ecf941738484[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri May 21 15:10:28 2021 +0300
+
+    modif info client btn
+
+[33mcommit e6b920cede924cffe6a127192b8fd0296a0ff1fd[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri May 21 15:08:28 2021 +0300
+
+    modif info client
+
+[33mcommit 0daad5191e2ca9152431931774cd4d076b4765b3[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri May 21 14:50:59 2021 +0300
+
+    modif espace client
+
+[33mcommit 599e6cddc5eaa55f766428a73ddca06fdf17d7d5[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Mon May 17 11:36:33 2021 +0300
+
+    ajout couleur task gantt
+
+[33mcommit d58ec9e29b6be6c78e32e1cdb3c45a7347a444c3[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri May 14 13:59:27 2021 +0300
+
+    amelioration
+
+[33mcommit b80e1f55b23abb7309a14ace7f4bc6c0160cb0aa[m
+Merge: 6aa0c7f 89223f2
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri May 14 11:27:30 2021 +0300
+
+    Merge https://github.com/maxivalencia/JoelLocation
+
+[33mcommit 6aa0c7f4decc7f664042840778f6789e3e062e36[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri May 14 11:26:59 2021 +0300
+
+    modification planning
+
+[33mcommit 89223f29298a5a21abbe153d7815a3be4d610da2[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Wed May 12 18:48:31 2021 +0300
+
+    modification
+
+[33mcommit 93f862d502761d515e9856e64c17d9a7bf069426[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Wed May 12 17:32:13 2021 +0300
+
+    planning presque complet(design reste) + reservations
+
+[33mcommit 55f66c0abc0594523b7a6df4d97e3db99f1360c5[m
+Merge: 23dc18b e8c593e
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Mon May 10 15:28:58 2021 +0300
+
+    Merge https://github.com/maxivalencia/JoelLocation
+
+[33mcommit 23dc18b5346da9d776524e3a4d2bceaebf737a58[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Mon May 10 15:27:56 2021 +0300
+
+     au stade de vehicule dispo et modif reservation
+
+[33mcommit e8c593e2def51008c6a34a3473910bcf3fb680c0[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Thu May 6 12:23:29 2021 +0300
+
+    base farany
+
+[33mcommit 4e98b90731ae0f9eb6e6d6dc980d6ed8fc3ac408[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Mon May 3 15:43:53 2021 +0300
+
+     avancement planning
+
+[33mcommit 54d2bc40d429d2133b04bf995955a7c304b6d89a[m
+Merge: 93f89ff f202360
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Sun May 2 11:39:01 2021 +0300
+
+    fix conflict
+
+[33mcommit 93f89ffaa3bd446be662f92ee02d1f38960c35b7[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Sun May 2 11:32:46 2021 +0300
+
+    essai vich mais annulé
+
+[33mcommit f202360bedabdb13e4b372790266bd7b38c20b59[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sat May 1 22:35:28 2021 +0300
+
+    form véhicule
+
+[33mcommit 8d0820c4e4349c6bc26772b160fde6db96af2011[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Sat May 1 18:17:45 2021 +0300
+
+    ajout bundle vichuploader
+
+[33mcommit 1e09235539bcf20af1201a94ee9f83a3a7c02388[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Apr 30 16:22:37 2021 +0300
+
+     modif gestion precedent
+
+[33mcommit ca1353d9c72d760941fc95a6b4c0b4b9a9ccfb94[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Apr 30 16:21:52 2021 +0300
+
+    gestion user et gestion vehicule
+
+[33mcommit a4354a2237bbb6facf80debe912ae07fdd41ad79[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Thu Apr 29 08:34:33 2021 +0300
+
+    ajout gantt dans planning général
+
+[33mcommit 4d05ffcd644d8d77faecc83056bd2a6779fa1bc8[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Tue Apr 27 12:16:02 2021 +0300
+
+    modif espace client
+
+[33mcommit 4b1322562b3fce3863b7d6225148964774330df4[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Sun Apr 25 19:47:31 2021 +0300
+
+    arret dev backoffice sur stop sales
+
+[33mcommit d76e05d399e412098711387a295462d753405169[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Mon Apr 19 15:03:38 2021 +0300
+
+    modification backoffice
+
+[33mcommit 7c775767fed7c4308138fcfc3ace260a1529374a[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Mon Apr 19 09:11:58 2021 +0300
+
+    copie collé capture back office en cours
+
+[33mcommit 8d13bf137acee58e221f8ad136a45c08b373106e[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Tue Apr 13 15:34:44 2021 +0300
+
+    avancement backoffice -> police ...
+
+[33mcommit 5c3bc2f415ce9c3b904cc224fa0b6bfd0cccbdb0[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Apr 9 15:18:08 2021 +0300
+
+    ajout video + avancement backoffice
+
+[33mcommit ba02ea63bde5298d6af18e5aaf160c4fe72050f3[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Mon Apr 5 11:37:33 2021 +0300
+
+    dev backoffice
+
+[33mcommit fa852158cedc490dbe708f3aa87bab9189101c42[m
+Author: Raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Apr 2 16:29:31 2021 +0300
+
+    avancement backoffice
+
+[33mcommit 28480c2a7281c9b707533323bc33b295c5d98ac9[m
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Thu Apr 1 10:21:53 2021 +0300
+
+    correction menu
+
+[33mcommit df5f38d9b7049ac420fea0d8144de78f2e4d2398[m
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Thu Apr 1 09:49:40 2021 +0300
+
+    modification backoffice + correction
+
+[33mcommit a862f0624c6610bc835988c61fe00be16f76929c[m
+Merge: 7c13fe9 3aa1c42
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Wed Mar 31 17:43:50 2021 +0300
+
+    Merge branch 'master' of https://github.com/maxivalencia/JoelLocation
+
+[33mcommit 7c13fe978a752cb28e547a1486bff7e7cfbd2c4a[m
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Wed Mar 31 17:39:51 2021 +0300
+
+    add files
+
+[33mcommit 3aa1c4226a3ddea4bdc4087ae245a09309367d24[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Fri Mar 26 09:11:06 2021 +0300
+
+    affichage véhicule back office
+
+[33mcommit 6b13b5675340c7bba02ce43fe1b11e8d98ed20cc[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Fri Mar 26 08:34:14 2021 +0300
+
+    bug véhicule
+
+[33mcommit 9110f5176901393d3073e899eb9479a65b31673c[m
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Tue Mar 23 10:06:19 2021 +0300
+
+     modification mention legale
+
+[33mcommit be9e78b28808ae6300622b4365fc6e72b1d1032c[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Thu Mar 11 09:55:17 2021 +0300
+
+    redirection des comptes
+
+[33mcommit 85d2845bfc667d6be29b9a8156096a1e902660c0[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Thu Mar 11 08:24:24 2021 +0300
+
+    lien footer
+
+[33mcommit a261d8ca48c4f4655f885ce1a39beb10acfc186c[m
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Wed Mar 10 19:56:52 2021 +0300
+
+    ajout page contact
+
+[33mcommit e8b86ae606ed82b939020c03797fdd55abb29b7c[m
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Mon Mar 8 11:53:04 2021 +0300
+
+    modif lien reseaux sociaux
+
+[33mcommit 2889155ef9716a88460da883dc1acf3c4a432383[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Fri Mar 5 09:53:18 2021 +0300
+
+    cgl
+
+[33mcommit 55dbe50a8ba6b215ff02f1d7c1d05c9d18120834[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Fri Mar 5 09:47:33 2021 +0300
+
+    cgl
+
+[33mcommit a9bdee37220e811d45a3e4b5b1c925dc0d7fa19f[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Fri Mar 5 07:53:00 2021 +0300
+
+    cgl
+
+[33mcommit 6fc5070eee4ec667ba1078f8dae7e2b3908cad7e[m
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Thu Mar 4 15:26:00 2021 +0300
+
+    ajout cond gen utilisation
+
+[33mcommit 45e4b299e4102389e71cfec770949c4794fdee38[m
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Thu Mar 4 14:20:56 2021 +0300
+
+    font pour sakawoule
+
+[33mcommit b0067886844c87c673f7644e9129d1086ae09780[m
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Thu Mar 4 12:12:24 2021 +0300
+
+    ajout instagram + correction bug
+
+[33mcommit a6baa9d3b866fdfb21dc240cdad4f6007c392b93[m
+Merge: 7a42bb2 4457bc7
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Mon Mar 1 10:10:24 2021 +0300
+
+    Merge branch 'master' of https://github.com/maxivalencia/JoelLocation
+
+[33mcommit 7a42bb2c969ffc9f1f878570cca00570295b4af2[m
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Mon Mar 1 10:08:07 2021 +0300
+
+    encre lien
+
+[33mcommit 4457bc7f542673ffaf45716d13b4bb705fab9b43[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Thu Feb 25 18:30:39 2021 +0300
+
+    table faq
+
+[33mcommit ce1b5e62a5aa7d4303034c97f4d54401bab75718[m
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Thu Feb 25 14:25:35 2021 +0300
+
+    logo user connecté
+
+[33mcommit e835aef05cd26433d9626bd8bf7061a52fbf0a41[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Mon Feb 22 16:41:51 2021 +0300
+
+    filtrage des affichages
+
+[33mcommit fd0d8974ed6dd7e44932dde7862a42d2c46b0726[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Mon Feb 22 16:29:35 2021 +0300
+
+    filtrage des affichages
+
+[33mcommit 8314dfeedc86ca6d03fa06a59d3898222cc98c07[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Mon Feb 22 16:11:12 2021 +0300
+
+    filtrage des affichages
+
+[33mcommit 4087d4b0ff81a79632bfd780db5bf1133fe9d29e[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Mon Feb 22 15:47:58 2021 +0300
+
+    pagination
+
+[33mcommit c2a4d80e5276b1ab1732c9cfeff7d7c9a15905f2[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Mon Feb 22 15:32:09 2021 +0300
+
+    pagination
+
+[33mcommit ab00367f26942d8647698a955445b71f62e9390a[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Mon Feb 22 14:59:42 2021 +0300
+
+    avancement bouton terminer
+
+[33mcommit 243041942ff1960029f5cdd82a9ffaf595ac9b78[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Mon Feb 22 14:46:51 2021 +0300
+
+    avancement bouton
+
+[33mcommit 61a93caf4e9f3566b60481fea6ea0e174ff1d7a4[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Mon Feb 22 14:43:57 2021 +0300
+
+    avancement bouton
+
+[33mcommit 1f2c02ca1312e7be85fd2001af9a6ddc5f84470a[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Mon Feb 22 14:41:06 2021 +0300
+
+    avancement bouton
+
+[33mcommit 994c204967265db7f65b353a3b2de86f3f70127a[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Mon Feb 22 14:36:08 2021 +0300
+
+    avancement bouton
+
+[33mcommit ab0bf33cf56147e8c138e5d067e40c36a6af7ce9[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Mon Feb 22 14:32:24 2021 +0300
+
+    avancement bouton
+
+[33mcommit 7a13ef525e110a73ac55b8cc529cfe72b6abd48c[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Mon Feb 22 14:08:12 2021 +0300
+
+    foire aux question
+
+[33mcommit afdcacc26bc6b36115c92f8c03b8f2ef9ae66347[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Mon Feb 22 11:06:28 2021 +0300
+
+    ajout autre véhicule
+
+[33mcommit 4141118fce3e7cd9fa9ead070707c9d5d30c4ef8[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Mon Feb 22 11:05:36 2021 +0300
+
+    ajout autre véhicule
+
+[33mcommit 85556f30e140444ec60c8ef933602c94e964bc54[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Mon Feb 22 10:43:25 2021 +0300
+
+    enregistrement des paiements
+
+[33mcommit c3825a28c3e76cd6d3dbe5151d79087bc66f54a3[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Mon Feb 22 04:41:10 2021 +0300
+
+    page de paiement et paiement
+
+[33mcommit 0747151256365ef588515d434723fad8cdc258cb[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sun Feb 21 09:12:59 2021 +0300
+
+    modificatino annotation en bug
+
+[33mcommit 1eb2851ecea5afc42c60896510517bcb07e4dc56[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sun Feb 21 08:42:50 2021 +0300
+
+    dynamisation vehicule acceuil
+
+[33mcommit 5ef966ebd4e992623373924db798b5d92fa37d75[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sat Feb 20 16:51:46 2021 +0300
+
+    véhicule dynamique
+
+[33mcommit 124a53d0b590d34ef5590c5e420728930c36006f[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Wed Feb 17 21:15:47 2021 +0300
+
+    commencement dynamisation véhicule
+
+[33mcommit b9dc9b1aa0b250ecb8cea5f00885a3c944002b27[m
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Tue Feb 16 13:13:03 2021 +0300
+
+    modification nos vehicules + marque voiture
+
+[33mcommit 53f8ba4ef49283ff110709912857e47eb19c221e[m
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Feb 12 10:41:18 2021 +0300
+
+    correction
+
+[33mcommit dbf0e7507c673aff7d02cbf26cc085c50215e2df[m
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Tue Feb 9 12:33:26 2021 +0300
+
+    amelioration page vehicules
+
+[33mcommit c1299558d90ba88bd44c6888cfc3fc335d357be2[m
+Merge: 555c370 8bab4a0
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Mon Feb 8 14:34:59 2021 +0300
+
+    Merge branch 'master' of https://github.com/maxivalencia/JoelLocation
+
+[33mcommit 555c370995655998d30ab119e9bcdbe89fe96a62[m
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Mon Feb 8 14:34:18 2021 +0300
+
+    correction remarque4
+
+[33mcommit 8bab4a0cd438501eae70d075f71b4a0b8390ab1e[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Mon Feb 8 10:04:00 2021 +0300
+
+    form reservation
+
+[33mcommit 72a1ad1775a08086fa91042a955ea37ef4754267[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Mon Feb 8 09:05:23 2021 +0300
+
+    les reservations dans l'espace client
+
+[33mcommit a8071a0b7c7fd3f6dfa5253c03fe95d0c7aa0b93[m
+Merge: e254aff be4fce0
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Mon Feb 1 11:39:20 2021 +0300
+
+    Merge branch 'master' of https://github.com/maxivalencia/JoelLocation
+
+[33mcommit e254afff0876ea8a4974d3bd35707a221d3a81ae[m
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Mon Feb 1 11:34:30 2021 +0300
+
+    modification photo fille dans form
+
+[33mcommit be4fce00895d3a11388b48ffa4433f6cba87bb50[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sun Jan 31 13:25:35 2021 +0300
+
+    titre
+
+[33mcommit bcfa72819c72a9a82a3c21b133528199b726fae0[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sun Jan 31 13:21:13 2021 +0300
+
+    clio rouge
+
+[33mcommit 7b48684da4e2f82a69d3a23ff02003d6c45ed91e[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sun Jan 31 13:15:19 2021 +0300
+
+    clio rouge
+
+[33mcommit d7fabf4863ba36804c429130f83cc46f7c2ae3a6[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sat Jan 30 07:04:24 2021 +0300
+
+    ancrage contact
+
+[33mcommit 378d862e6da543f35036b6915f583e7757ba846e[m
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Jan 29 15:04:28 2021 +0300
+
+    amelioration avant apercu client
+
+[33mcommit f6b283c21f5fb73da5315803d10456d9225d6dc3[m
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Jan 29 13:10:05 2021 +0300
+
+    modification logo mobile
+
+[33mcommit 2c9b3cdba1e76779d7d6f27847794b7b6cd1d420[m
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Jan 29 11:57:45 2021 +0300
+
+    resolution conflict3
+
+[33mcommit ec9f882a6465831e2c3bb85eef9ffc41241a1f18[m
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Jan 29 11:55:54 2021 +0300
+
+    resolution conflict2
+
+[33mcommit bc2f69b29755f6b6d1e003cc489b3c6a8977b983[m
+Merge: 29ca2a7 acf841b
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Jan 29 11:55:19 2021 +0300
+
+    resolution conflict
+
+[33mcommit 29ca2a75281b914c2e06602a929d497ccd27c16b[m
+Merge: 9cd200b 4994777
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Jan 29 11:38:57 2021 +0300
+
+    amelioration surtout formulaire
+
+[33mcommit acf841bba0f85d3dfa1c990c231af61735eb31f0[m
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Jan 29 11:37:11 2021 +0300
+
+    amelioration surtous formulaire
+
+[33mcommit 4994777cd4a0d201663ed5567f69e7db83b21e99[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Thu Jan 28 11:25:17 2021 +0300
+
+    correction du client
+
+[33mcommit 9cd200b6d66e78e3f8f9e772121ae5d6388e29e2[m
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Wed Jan 27 15:18:23 2021 +0300
+
+    proposition design accueil
+
+[33mcommit f3c800bcfae025adc72b64cfe166dfe06a409349[m
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Thu Jan 21 14:50:24 2021 +0300
+
+    suite remarque
+
+[33mcommit 55815f6cb84b0894753de06b755b309ae3368d9b[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sun Jan 17 22:20:37 2021 +0300
+
+    début page client
+
+[33mcommit 3d6043c25a5f9b9e8cd64eca907f83a4f2e33800[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sun Jan 17 21:51:59 2021 +0300
+
+    début page client
+
+[33mcommit 839ddcb5f59378eb6472d9d99104ba7c69450995[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sun Jan 17 13:04:31 2021 +0300
+
+    les roles
+
+[33mcommit adec70988ea34fe34e636548efda0b320353029d[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sun Jan 17 12:36:14 2021 +0300
+
+    activation login et inscription
+
+[33mcommit 0d6bdf9c3ad73f425ea927b41d58b6580b5e5034[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sun Jan 17 10:41:58 2021 +0300
+
+    image voiture
+
+[33mcommit 669c6d1708903a78061ad96a67902458265061cb[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sat Jan 16 14:31:14 2021 +0300
+
+    autre que réseaux sociaux
+
+[33mcommit 9becdb92ecbd34fb6595f6295d7372f0ff37abb3[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sat Jan 16 14:15:59 2021 +0300
+
+    nos véhicule
+
+[33mcommit 5e2291c9fcd0606eb0ca9ec403f4e24bbbd9215d[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sat Jan 16 14:12:52 2021 +0300
+
+    nos véhicule
+
+[33mcommit 10c65d1c6ca7daf9bac6793fa7e78ad974997e88[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sat Jan 16 13:20:36 2021 +0300
+
+    les à propos
+
+[33mcommit 1c44f073a42f00e6d03dc5e3d3bf512f0cfc482a[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sat Jan 16 11:12:55 2021 +0300
+
+    mise au point caroussel
+
+[33mcommit 2351cdfefa21e565172780ca369157fe8e4b0af7[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sat Jan 16 10:54:59 2021 +0300
+
+    font
+
+[33mcommit 0095f942c5aff12d5676a2df4bfa55e7b5681588[m
+Merge: db86329 c979049
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Jan 15 15:33:23 2021 +0300
+
+    conflict reglé
+
+[33mcommit db863299776d49cf1fec6696d629032bdaccfd10[m
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Fri Jan 15 15:18:17 2021 +0300
+
+    modification suivant remarque
+
+[33mcommit 3cf2a97b926d9256e32ff6e7a6988edd91767bed[m
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Thu Jan 14 10:26:33 2021 +0300
+
+    modification client1
+
+[33mcommit 05cb9afecc9c645a52dbb13cdee1a9cbea8b6001[m
+Merge: 2acb821 69658b3
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Thu Jan 14 09:17:29 2021 +0300
+
+    Merge branch 'rija'
+
+[33mcommit 69658b3210bf10c9cf1a95d80193a09c8dd473cc[m
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Thu Jan 14 08:51:10 2021 +0300
+
+    amelioration menu web et mobile
+
+[33mcommit c97904957205745c97e128a54aacf2dd57e8d1c7[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Tue Jan 12 08:04:15 2021 +0300
+
+    lien logo
+
+[33mcommit 0a382a97fa2213573c02645562d56cb2a128538e[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sun Jan 10 20:32:24 2021 +0300
+
+    avancement backoffice
+
+[33mcommit 88afe7c7b39b5358bf16d899b8318897bd05f3d7[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sun Jan 10 20:14:41 2021 +0300
+
+    avancement backoffice
+
+[33mcommit 242f3ad572e3f870a253619e0c85cf84c695df64[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sun Jan 10 19:45:56 2021 +0300
+
+    base2
+
+[33mcommit eed34175260f67d27df4ccbd74a3810fc00722c6[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sun Jan 10 19:41:23 2021 +0300
+
+    nouvelle photo
+
+[33mcommit 2acb821aa9f2e9c5c79f1c067be0931c098a37d8[m
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Thu Jan 7 15:26:11 2021 +0300
+
+    modification taille logo
+
+[33mcommit 55dfcccf93ec4285d5f6e01f0b093d1126abdeb9[m
+Merge: c60d258 87e0f4d
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Thu Jan 7 15:20:33 2021 +0300
+
+    Merge branch 'master' of https://github.com/maxivalencia/JoelLocation
+
+[33mcommit c60d2581e3dd8b952be254b6ed0459389d435d57[m
+Author: raberia <rakotoarinelinarija@gmail.com>
+Date:   Thu Jan 7 14:59:20 2021 +0300
+
+    modification accueil et quisommes nous
+
+[33mcommit 87e0f4dc85d98982e35042a7fec9ab716cd0d5f7[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Mon Jan 4 21:19:56 2021 +0300
+
+    4-01-2021
+
+[33mcommit 66d2f5980e2ed8e67daf1401bc2b4f07f9cb8155[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Mon Jan 4 21:16:51 2021 +0300
+
+    4-01-2021
+
+[33mcommit b7669d697fb4221c648da1742c0f2ad665f9c2d8[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Mon Jan 4 20:39:37 2021 +0300
+
+    04-01/2021
+
+[33mcommit 4a7afc7007a50c7fda09ad913bb197b039e92d42[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sun Jan 3 21:54:33 2021 +0300
+
+    avancement
+
+[33mcommit d70b0d42ab9999720e519c480e1feb33056f8db4[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sun Jan 3 20:59:50 2021 +0300
+
+    avancement
+
+[33mcommit 4749b91466560fa072b11d34710d0c9f8f79e2dc[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sat Dec 26 11:03:19 2020 +0300
+
+    preparation backoffice
+
+[33mcommit 8b280cb10739381916916803edee1b77eed42a14[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Sat Dec 26 10:08:48 2020 +0300
+
+    entity and crud
+
+[33mcommit 0f77a9bbe442e118369d948c2b1d835ffd279299[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Fri Dec 25 20:49:32 2020 +0300
+
+    avancement accueil
+
+[33mcommit 45d358663e3824c2f5aa8a61f8dd7f631457c67c[m
+Author: kaira <husaynmozart@gmail.com>
+Date:   Fri Dec 25 19:34:50 2020 +0300
+
+    accueil du site

@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20220911132144 extends AbstractMigration
+final class Version20240915155537 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,12 +20,12 @@ final class Version20220911132144 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE conducteur CHANGE date_obtention date_expiration DATE DEFAULT NULL');
+        $this->addSql('ALTER TABLE vehicule DROP INDEX UNIQ_292FFF1DC1E5BBF9, ADD INDEX IDX_292FFF1DC1E5BBF9 (saisisseur_km_id)');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE conducteur CHANGE date_expiration date_obtention DATE DEFAULT NULL');
+        $this->addSql('ALTER TABLE vehicule DROP INDEX IDX_292FFF1DC1E5BBF9, ADD UNIQUE INDEX UNIQ_292FFF1DC1E5BBF9 (saisisseur_km_id)');
     }
 }

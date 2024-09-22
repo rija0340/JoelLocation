@@ -48,6 +48,13 @@
 				padding-left: 25px;
 				font-size: 13px
 			}
+			.joellocation {
+				font-family: 'Arial', sans-serif;
+				font-size: 16px;
+				line-height: 1.5;
+				color: #333;
+				margin-bottom: 1em;
+			}
 
 			.contrat_location {
 				display: inline-block;
@@ -79,21 +86,22 @@
 			.locataire {
 				display: inline-block;
 				vertical-align: top;
-				width: 350px;
+				width: 49.5%;
 			}
 
-			#locataire_table tr td {
-				padding: 1px;
-			}
 
 			/* autre conducteurs */
 			.autre_conducteur {
 				display: inline-block;
 				vertical-align: top;
-				width: 355px;
+				width: 49.5%;
 				height: auto;
 				margin-bottom: 5px;
+				margin-left: 3px;
 
+			}
+			#locataire_table tr td {
+				padding: 1px;
 			}
 			#autre_conducteur_table tr td {
 
@@ -130,7 +138,7 @@
 			.recu_depot {
 				display: inline-block;
 				vertical-align: top;
-				width: 425px;
+				width: 434px;
 			}
 
 			.d-inline-block {
@@ -264,7 +272,7 @@
 			<div>
 				<div class="logo"><img src="{{ logo }}" alt="logo" width="auto" height="80px" type="images/png"></div>
 				<div class="adresse">
-					<strong style="font-weight : bold">JoelLocation</strong>
+					<strong class="joellocation">JOELLOCATION</strong>
 					<br>
 					94 Chemin de la hache<br>
 					97160 Le Moule (Guadeloupe)
@@ -885,6 +893,7 @@
 						<tr>
 							<td style="padding:1px;">
 								Je soussignée
+								{{ reservation.client.sexe }}
 								<strong>
 									{{ reservation.client.nom }}
 									{{ reservation.client.prenom }}
