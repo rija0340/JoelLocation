@@ -110,7 +110,9 @@
 			}
 
 			/* details véhicule */
-			.voiture {}
+			.voiture {
+				padding-top: 5px;
+			}
 
 			.prestations {
 
@@ -262,6 +264,10 @@
 			.text-nowrap {
 				white-space: nowrap !important;
 			}
+
+			.luetapprove {
+				height: 70px;
+			}
 		</style>
 	</head>
 	<body>
@@ -363,6 +369,11 @@
 							<td>{{ reservation.client.adresse }}</td>
 						</tr>
 						<tr>
+							<td>Ville et code postal</td>
+							<td>{{ reservation.client.ville }}
+								{{ reservation.client.codePostal }}</td>
+						</tr>
+						<tr>
 							<td></td>
 							<td>{{ reservation.client.complementAdresse }}</td>
 						</tr>
@@ -393,31 +404,24 @@
 						<tr>
 							<td>Infos arrivée</td>
 							<td>
-								{% if reservation.client.infosVolResa %}
+								{{ reservation.client.infosVolResa.heureVolAller ? reservation.client.infosVolResa.heureVolAller|date('d/m/Y') : "  " }}
 
-									{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.heureVolAller|date('d/m/Y') : "  " }}
-									, Vol
-									{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.numVolAller : "   " }}
-									à
-									{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.heureVolAller|date('H:i') : "   " }}
+								{{ reservation.client.infosVolResa.numVolAller ? ", Vol" ~ reservation.client.infosVolResa.numVolAller : "   " }}
 
-
-								{% endif %}
+								{{ reservation.client.infosVolResa.heureVolAller ? "à" ~ reservation.client.infosVolResa.heureVolAller|date('H:i') : "   " }}
 							</td>
 						</tr>
 						<tr>
 							<td>Infos retour
 							</td>
 							<td>
-								{% if reservation.client.infosVolResa %}
 
-									{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.heureVolRetour|date('d/m/Y') : "  " }}
-									, Vol
-									{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.numVolRetour : "   " }}
-									à
-									{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.heureVolRetour|date('H:i') :  "   " }}
+								{{ reservation.client.infosVolResa.heureVolRetour ? reservation.client.infosVolResa.heureVolRetour|date('d/m/Y') : "  " }}
 
-								{% endif %}
+								{{ reservation.client.infosVolResa.numVolRetour ? ", Vol" ~ reservation.client.infosVolResa.numVolRetour : "   " }}
+
+								{{ reservation.client.infosVolResa.heureVolRetour ? "à"  ~ reservation.client.infosVolResa.heureVolRetour|date('H:i') :  "   " }}
+
 							</td>
 						</tr>
 					</tbody>
@@ -485,7 +489,7 @@
 								<td colspan="2" class="bg-danger text-center text-white text-uppercase">Adresse en guadeloupe</td>
 							</tr>
 							<tr>
-								<td colspan="2">
+								<td colspan="2" style="height: 28px">
 									<div class='text-white'>
 										lorem lorem lorem lorem
 									</div>
@@ -544,7 +548,7 @@
 							</tr>
 							<tr>
 								<td colspan="2">
-									<div class='text-white' style="min-height: 20px;">
+									<div class='text-white' style="min-height: 28px;">
 										lorem lorem lorem lorem
 									</div>
 								</td>
@@ -921,13 +925,13 @@
 							<td style="height: 50px;"></td>
 						</tr>
 						<tr>
-							<td>Locataire (lu et apprové)
+							<td class="luetapprove">Locataire (lu et apprové)
 								<span class="text-white">
 									lorem lorem lorem lorem lorem lorem</span>
 							</td>
-							<td></td>
-							<td>Locataire</td>
-							<td></td>
+							<td class="luetapprove"></td>
+							<td class="luetapprove">Locataire</td>
+							<td class="luetapprove"></td>
 						</tr>
 					</tbody>
 				</table>

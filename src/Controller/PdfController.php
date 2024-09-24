@@ -155,6 +155,9 @@ class PdfController extends AbstractController
 
         $totalTTC = $reservation->getPrix();
 
+        // $test = $reservation->getClient()->getInfosVolResa();
+        // dd($test);
+
         $html = $this->renderView('admin/reservation/pdf/contrat_pdf.html.twig', [
 
             'logo' => $logo_src,
