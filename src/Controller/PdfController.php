@@ -153,10 +153,16 @@ class PdfController extends AbstractController
         $restePayerTTC = $reservation->getPrix() - $sommePaiements;
         // $restePayerTTC = $this->reservationHelper->getPrixTTC($restePayerHT);
 
-        $totalTTC = $reservation->getPrix();
 
-        // $test = $reservation->getClient()->getInfosVolResa();
-        // dd($test);
+        //frais supplémentaires
+        $totalFraisSupplHT = 0;
+        foreach ($reservation->getFraisSupplResas() as $fraisSuppl) {
+            $totalFraisSupplHT += $fraisSuppl->getTotalHT();
+        }
+
+        $totalFraisSupplTTC = $this->tarifsHelper->calculTarifTTCfromHT($totalFraisSupplHT);
+
+        $totalTTC = $reservation->getPrix() + $totalFraisSupplTTC;
 
         $html = $this->renderView('admin/reservation/pdf/contrat_pdf.html.twig', [
 
@@ -170,6 +176,7 @@ class PdfController extends AbstractController
             'sommePaiements' => $sommePaiements,
             'totalTTC' => $totalTTC,
             'restePayerTTC' => $restePayerTTC,
+            'totalFraisSupplTTC' => $totalFraisSupplTTC,
             'numContrat' => $this->getNumFacture($reservation, "CO")
 
 

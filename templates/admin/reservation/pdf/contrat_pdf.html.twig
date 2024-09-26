@@ -266,7 +266,7 @@
 			}
 
 			.luetapprove {
-				height: 70px;
+				height: 87px;
 			}
 		</style>
 	</head>
@@ -712,101 +712,69 @@
 						<tr>
 							<td>location ({{ reservation.dateDebut|date('d/m') }}-{{ reservation.dateFin|date('d/m') }})</td>
 							<td>
-								{{ reservation.prix|number_format(2,","," ") }}€
+								{{ reservation.tarifVehicule|number_format(2,","," ") }}€
 							</td>
 						</tr>
 						<tr>
 							<td>lavage (35.00€)</td>
 							<td>
-								{% for key in allOptions|keys %}
-									{% if key == 'Lavage'  %}
-										{{allOptions['Lavage']['prix']}}€
-									{% else %}
-										0 €
-									{% endif %}
-								{% endfor %}
+								{% set lavage = allOptions['Lavage']['prix']|default(0) %}
+								{{ lavage ? lavage ~ '€' : '0 €' }}
 							</td>
 						</tr>
 						<tr>
 							<td>Multi-conducteurs (50.00€)</td>
 							<td>
-								{% if reservation.conducteur %}
-									50€
-								{% else %}
-									0 €
-								{% endif %}
+								{{ reservation.conducteur ? '50€' : '0 €' }}
 							</td>
 						</tr>
 						<tr>
 							<td>Refueling (80.00€)</td>
 							<td>
-								{% for key in allOptions|keys %}
-									{% if key == 'Refueling'  %}
-										{{allOptions['Refueling']['prix']}}€
-									{% else %}
-										0 €
-									{% endif %}
-								{% endfor %}
+								{% set refueling = allOptions['Refueling']['prix']|default(0) %}
+								{{ refueling ? refueling ~ '€' : '0 €' }}
 							</td>
 						</tr>
 						<tr>
 							<td>Siège auto (30.00€)</td>
 							<td>
-								{% for key in allOptions|keys %}
-									{% if key == 'Siège bébé'  %}
-										{{allOptions['Siège bébé']['prix']}}€
-									{% else %}
-										0 €
-									{% endif %}
-								{% endfor %}
+								{% set siegeBebe = allOptions['Siège bébé']['prix']|default(0) %}
+								{{ siegeBebe ? siegeBebe ~ '€' : '0 €' }}
 							</td>
 						</tr>
 						<tr>
 							<td>Siège nourisson (30.00€)</td>
 							<td>
-								{% for key in allOptions|keys %}
-									{% if key == 'Siège nourrisson'  %}
-										{{allOptions['Siège nourrisson']['prix']}}€
-									{% else %}
-										0 €
-									{% endif %}
-								{% endfor %}
+								{% set siegeNourrisson = allOptions['Siège nourrisson']['prix']|default(0) %}
+								{{ siegeNourrisson ? siegeNourrisson ~ '€' : '0 €' }}
 							</td>
 						</tr>
 						<tr>
 							<td>Garantie bris de glace et pneus</td>
 							<td>
-								{% for key in allGaranties|keys %}
-									{% if key == 'garantie bris de glace & pneus'  %}
-										{{allGaranties['garantie bris de glace & pneus']['prix']}}€
-									{% else %}
-										0 €
-									{% endif %}
-								{% endfor %}
+								{% set garantieBris = allGaranties['garantie bris de glace & pneus']['prix']|default(0) %}
+								{{ garantieBris ? garantieBris ~ '€' : '0 €' }}
 							</td>
 						</tr>
 						<tr>
 							<td>Assistance esprit tranquille</td>
 							<td>
-								{% for key in allGaranties|keys %}
-									{% if key == 'assistance esprit tranquille'  %}
-										{{allGaranties['assistance esprit tranquille']['prix']}}€
-									{% else %}
-										0 €
-									{% endif %}
-								{% endfor %}
+								{% set assistanceTranquille = allGaranties['assistance esprit tranquille']['prix']|default(0) %}
+								{{ assistanceTranquille ? assistanceTranquille ~ '€' : '0 €' }}
 							</td>
 						</tr>
 						<tr>
 							<td>Assurance premium</td>
 							<td>
-								{% for key in allGaranties|keys %}
-									{% if key == 'assistance premium'  %}
-										{{allGaranties['assistance premium']['prix']}}€
-									{% else %}
-										0 €
-									{% endif %}
-								{% endfor %}
+								{% set assurancePremium = allGaranties['assistance premium']['prix']|default(0) %}
+								{{ assurancePremium ? assurancePremium ~ '€' : '0 €' }}
+							</td>
+						</tr>
+						<tr>
+							<td>Frais supplémentaires</td>
+							<td>
+
+								{{ totalFraisSupplTTC|number_format(2,","," ") ~ '€' }}
 							</td>
 						</tr>
 						<tr>
@@ -941,7 +909,7 @@
 							<td class="fs-12">
 								Aucune location est remboursable.
 								<span class="text-red">
-									Létat des lieux du véhicule est réalisé sur véhicule propre intérieur et extérieur
+									L'état des lieux du véhicule est réalisé sur véhicule propre intérieur et extérieur
 								</span>
 							</td>
 						</tr>

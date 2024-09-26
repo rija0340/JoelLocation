@@ -3,12 +3,13 @@
 namespace App\Service;
 
 use App\Classe\Mailjet;
+use App\Service\TarifsHelper;
 use App\Repository\DevisRepository;
 use App\Repository\TarifsRepository;
 use App\Repository\OptionsRepository;
 use App\Repository\GarantieRepository;
-use App\Repository\ReservationRepository;
 use App\Repository\VehiculeRepository;
+use App\Repository\ReservationRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -25,6 +26,7 @@ class ReservationHelper
     private $devisRepo;
     private $site;
     private $router;
+    private $tarifsHelper;
 
     public function __construct(
         ReservationRepository $reservationRepo,
@@ -36,7 +38,8 @@ class ReservationHelper
         Mailjet $mailjet,
         DevisRepository $devisRepo,
         Site $site,
-        UrlGeneratorInterface $router
+        UrlGeneratorInterface $router,
+        TarifsHelper $tarifsHelper
     ) {
         $this->vehiculeRepo = $vehiculeRepo;
         $this->optionsRepo = $optionsRepo;
@@ -48,6 +51,7 @@ class ReservationHelper
         $this->devisRepo = $devisRepo;
         $this->site = $site;
         $this->router = $router;
+        $this->tarifsHelper = $tarifsHelper;
     }
 
     //paramètres : reservations qui sont inclus durant l'intervalle de date de début et date de fin 
@@ -165,7 +169,9 @@ class ReservationHelper
         foreach ($reservation->getFraisSupplResas() as $frais) {
             $somme = $somme + $frais->getTotalHT();
         }
-        return ($somme + ($somme * 8.5 / 100));
+        $prix = $this->tarifsHelper->calculTarifTTCfromHT($somme);
+
+        return $prix;
     }
 
     /** 
@@ -201,7 +207,8 @@ class ReservationHelper
      */
     public function getPrixTTC($prix)
     {
-        return ($prix + ($prix * 8.5 / 100));
+        $taxe = $this->tarifsHelper->getTaxe();
+        return ($prix + ($prix * $taxe));
     }
 
 
