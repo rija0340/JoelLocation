@@ -294,6 +294,83 @@ class PdfController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/generer/facture-devis-pdf/{id}", name="facture_devis_pdf", methods={"GET"},requirements={"id":"\d+"})
+     */
+    public function factureDevisPDF(Pdf $knpSnappyPdf, Devis $devis)
+    {
+
+        // Configure Dompdf according to your needs7
+        $pdfOptions = new Options();
+        $pdfOptions->set('defaultFont', 'Arial');
+        // Instantiate Dompdf with our options
+        $dompdf = new Dompdf($pdfOptions);
+        // logo joellocation
+        $logo = $this->getParameter('logo') . '/Joellocation-logo-resized.png';
+        $logo_data = base64_encode(file_get_contents($logo));
+        $logo_src = 'data:image/png;base64,' . $logo_data;
+        $createdAt = $this->datehelper->dateNow();
+
+        // en tete joellocation
+        $entete = $this->getParameter('logo') . '/pdf/entete-joellocation.PNG';
+        $entete_data = base64_encode(file_get_contents($entete));
+        $entete_src = 'data:image/png;base64,' . $entete_data;
+        //le prix frais supplémentaire est déja en HT
+        // $prixFraisSupplHT =  $reservation->getFraisSupplResas();
+
+
+        $tarifVehiculeTTC = $devis->getTarifVehicule();
+
+        $prixHT = $this->tarifsHelper->calculTarifHTfromTTC($devis->getPrix());
+        $prixTaxe = $this->tarifsHelper->calculTaxeFromHT($prixHT);
+        $prixUnitHT = $prixHT / $devis->getDuree();
+        $prixTTC = $prixTaxe + $prixHT;
+
+        $prixTotalHT = $prixHT;
+
+        $prixTaxeTotal = $this->tarifsHelper->calculTaxeFromHT($prixTotalHT);
+        $prixTotalTTC = $prixTotalHT + $prixTaxeTotal;
+
+        $html = $this->renderView('admin/reservation/pdf/facture_devis_pdf.html.twig', [
+
+            'logo' => $logo_src,
+            'entete' => $entete_src,
+            'devis' => $devis,
+            'createdAt' => $createdAt,
+            'numeroFacture' => $this->getNumFacture($devis, 'FA'),
+            'tarifVehiculeTTC' => $tarifVehiculeTTC,
+            'prixHT' => $prixHT,
+            'prixTotalHT' => $prixTotalHT,
+            'prixTaxeTotal' => $prixTaxeTotal,
+            'prixUnitHT' => $prixUnitHT,
+            'prixTotalTTC' => $prixTotalTTC,
+            'prixTTC' => $prixTTC,
+            'taxe' => $this->tarifsHelper->getTaxe(),
+            'prixConductTTC' => $this->tarifsHelper->getPrixConducteurSupplementaire()
+
+
+        ]);
+
+        /* return new PdfResponse(
+                $knpSnappyPdf->getOutputFromHtml($html),
+                'file.pdf'
+            ); */
+
+        // Load HTML to Dompdf
+        $dompdf->loadHtml($html);
+
+        // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser (force download)
+        $dompdf->stream("facture_" . $devis->getNumero() . ".pdf", [
+            "Attachment" => true,
+        ]);
+    }
+
 
     public function getNumFacture($reservation, $prefix)
     {

@@ -83,6 +83,9 @@
 						<a type="button" class="btn btn-outline-warning text-uppercase p-1" href="{{path('envoyer_devis', {'id': devis.id})}}">
 							<i class="fa fa-file-archive-o"></i>
 							Envoyer le devis</a>
+						<a href="{{ path('facture_devis_pdf', {'id': devis.id}) }}" type="button" class="btn btn-outline-info text-uppercase p-1">
+							<i class="fa fa-send (alias)"></i>
+							générer facture</a>
 					</div>
 				</div>
 			</div>
