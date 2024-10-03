@@ -168,10 +168,13 @@ function updateTarifVehiculeAndResa(event, data, task) {
     tarifBddEl.innerHTML = '';
     tarifResaEl.innerHTML = '';
     inputCustomTarif.value = "";
-    let vehiculeObj = data.find(item => item.immatriculation === event.target.value)
-    setTarifBddToHtml(vehiculeObj.tarifBdd);
-    // somme tarif vehicule et options garanties 
-    tarifResaEl.value = vehiculeObj.tarifBdd + task.tarifOptionsGaranties;
+
+    if (event.target.value != "") {
+        let vehiculeObj = data.find(item => item.immatriculation === event.target.value)
+        setTarifBddToHtml(vehiculeObj.tarifBdd);
+        // somme tarif vehicule et options garanties 
+        tarifResaEl.value = vehiculeObj.tarifBdd + task.tarifOptionsGaranties;
+    }
 }
 
 

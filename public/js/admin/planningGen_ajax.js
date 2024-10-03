@@ -185,14 +185,30 @@ function ganttInit(startDateScale, endDateScale, cellWidth) {
 
 
     //test lightbox
+    // gantt.attachEvent("onContextMenu", function (id, linkId, e) {
+
+    //     if (id) {
+    //         const task = gantt.getTask(id);
+    //         gantt.showLightbox(task);
+    //     }
+
+    //     return false;
+    // });
+
+    let isHandling = false;
+
     gantt.attachEvent("onContextMenu", function (id, linkId, e) {
+        if (isHandling) return;
+        isHandling = true;
 
         if (id) {
             const task = gantt.getTask(id);
             gantt.showLightbox(task);
         }
 
+        setTimeout(() => { isHandling = false; }, 100);
     });
+
 
     var taskId = null;
 
