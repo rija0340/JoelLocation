@@ -211,11 +211,17 @@ function ganttInit(startDateScale, endDateScale, cellWidth) {
 
 
     var taskId = null;
+    let isEditing = false;
 
     gantt.showLightbox = function (task) {
-        editResa(task);
+        if (!isEditing) {
+            isEditing = true;
+            editResa(task);
+            setTimeout(() => {
+                isEditing = false;
+            }, 500);
+        }
     }
-
 
     gantt.hideLightbox = function () {
         getForm().style.display = "";

@@ -118,6 +118,7 @@ class VehiculeDataController extends AbstractController
     public function vehiculesDisponibles(Request $request)
     {
 
+        $refResa = $request->query->get('refResa');
         $dateDepart = $request->query->get('dateDepart');
         $dateRetour = $request->query->get('dateRetour');
 
@@ -126,8 +127,18 @@ class VehiculeDataController extends AbstractController
 
         $listeUnique = [];
         $listeVehiculesDispo = [];
+        $reservation =  $refResa != "" ? $this->reservationRepo->findOneBy(['reference' => $refResa]) : null;
+        $vehiculeResa = !is_null($reservation) ? $reservation->getVehicule() : null;
         $reservations = $this->reservationRepo->findReservationIncludeDates($dateDebut, $dateFin);
         $listeVehiculesDispo = $this->reservationHelper->getVehiculesDisponible($reservations);
+        if (!is_null($vehiculeResa)) {
+            //reservation qui peuvent se chevaucher avec la resa actuel pour les dates
+            $resaByParams = $this->reservationRepo->findReservationIncludeDates($dateDebut, $dateFin, $vehiculeResa);
+            // dd($resaByParams);
+            if (count($resaByParams) == 1 && $resaByParams[0]->getReference() == $refResa) {
+                array_push($listeVehiculesDispo, $vehiculeResa);
+            }
+        }
 
         $data2 = array();
         foreach ($listeVehiculesDispo as $key =>  $vehicule) {

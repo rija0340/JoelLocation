@@ -80,8 +80,9 @@ function addDataToModalForm(task) {
 
     let dateDepart = convertDateToIsoDate(task.start_date);
     let dateRetour = convertDateToIsoDate(task.end_date);
+    let refResa = task.reference;
 
-    getVehiculeFromDates(dateDepart, dateRetour)
+    getVehiculeFromDates(refResa, dateDepart, dateRetour)
         .then(dataVehicule => {
             createOptions(dataVehicule, task);
         })
@@ -117,7 +118,7 @@ function addEventListenerHasCustomTarifCheckbox(task) {
             tarifBddContainer.style.display = 'block';
             customTarifContainer.style.display = 'none';
             customTarifInput.value = '';
-            document.getElementById('default-option').selected = true;
+            // document.getElementById('default-option').selected = true;
             tarifResaInput.removeAttribute('required');
         }
 
@@ -131,8 +132,9 @@ function handleDateChange(task) {
 
     const dateDepart = dateDepartInput.value;
     const dateRetour = dateRetourInput.value;
+    const refResa = task.reference;
 
-    getVehiculeFromDates(dateDepart, dateRetour)
+    getVehiculeFromDates(refResa, dateDepart, dateRetour)
         .then(dataVehicule => {
             createOptions(dataVehicule, task);
 
@@ -200,6 +202,9 @@ function createOptions(data, task) {
         const optionElement = document.createElement('option');
         optionElement.value = option.immatriculation;
         optionElement.textContent = option.marque + " " + option.modele + " " + option.immatriculation;
+        if (task.immatriculation === option.immatriculation) {
+            optionElement.selected = true;
+        }
         selectEl.appendChild(optionElement);
 
     });
@@ -219,9 +224,9 @@ function createOptions(data, task) {
  * @param {string} dateRetour - The return date in the format 'YYYY-MM-DD'.
  * @returns {Promise<Array<Object>>} - A promise that resolves to an array of available vehicles.
  */
-async function getVehiculeFromDates(dateDepart, dateRetour) {
+async function getVehiculeFromDates(refResa, dateDepart, dateRetour) {
     try {
-        const url = `/backoffice/reservation/liste-vehicules-disponibles?dateDepart=${dateDepart}&dateRetour=${dateRetour}`;
+        const url = `/backoffice/reservation/liste-vehicules-disponibles?refResa=${refResa}&dateDepart=${dateDepart}&dateRetour=${dateRetour}`;
         const response = await fetch(url, {
             method: 'GET',
             headers: {

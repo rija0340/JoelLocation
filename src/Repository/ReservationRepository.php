@@ -351,18 +351,22 @@ class ReservationRepository extends ServiceEntityRepository
      * meme chose pour la date fin du parametre 
      * @return Reservation[] Returns an array of Reservation objects
      */
-    public function findReservationIncludeDates($dateDebut, $dateFin)
+    public function findReservationIncludeDates($dateDebut, $dateFin, $vehicule = null)
     {
-        return $this->createQueryBuilder('r')
+        $qb =  $this->createQueryBuilder('r')
             ->where("(r.date_debut BETWEEN :dateDebut AND :dateFin) OR (r.date_fin BETWEEN :dateDebut AND :dateFin) OR (r.date_debut <= :dateDebut AND r.date_fin >= :dateFin)")
             ->andWhere("(r.canceled = FALSE OR r.canceled IS NULL)")
             ->andWhere("r.archived = FALSE")
             ->andWhere("(r.reported = FALSE OR r.reported IS NULL)")
             ->andWhere("r.type IS NULL")
             ->setParameter('dateDebut', $dateDebut)
-            ->setParameter('dateFin', $dateFin)
-            ->getQuery()
-            ->getResult();
+            ->setParameter('dateFin', $dateFin);
+        if ($vehicule !== null) {
+            $qb->andWhere('r.vehicule = :vehicule')
+                ->setParameter('vehicule', $vehicule);
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
 
