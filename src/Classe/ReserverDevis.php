@@ -53,10 +53,15 @@ class ReserverDevis
             $reservation->addGaranty($garantie);
         }
 
-        $reservation->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($devis->getOptions(), $devis->getConducteur()));
-        $reservation->setPrixGaranties($this->tarifsHelper->sommeTarifsGaranties($devis->getGaranties()));
-        $reservation->setDuree($this->dateHelper->calculDuree($devis->getDateDepart(), $devis->getDateRetour()));
-        $reservation->setTarifVehicule($this->tarifsHelper->calculTarifVehicule($devis->getDateDepart(), $devis->getDateRetour(), $devis->getVehicule()));
+        // $reservation->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($devis->getOptions(), $devis->getConducteur()));
+        // $reservation->setPrixGaranties($this->tarifsHelper->sommeTarifsGaranties($devis->getGaranties()));
+        // $reservation->setDuree($this->dateHelper->calculDuree($devis->getDateDepart(), $devis->getDateRetour()));
+        // $reservation->setTarifVehicule($this->tarifsHelper->calculTarifVehicule($devis->getDateDepart(), $devis->getDateRetour(), $devis->getVehicule()));
+
+        $reservation->setPrixOptions($devis->getPrixOptions());
+        $reservation->setPrixGaranties($devis->getPrixGaranties());
+        $reservation->setDuree($devis->getDuree());
+        $reservation->setTarifVehicule($devis->getTarifVehicule());
 
         $reservation->setPrix($devis->getPrix());
 
@@ -64,13 +69,14 @@ class ReserverDevis
         $reservation->setCodeReservation('devisTransformé');
         $reservation->setArchived(false);
         $reservation->setCanceled(false);
+        $reservation->setNumDevis($devis->getNumero());
         if ($devis->getConducteur()) {
 
             $reservation->setConducteur(true);
         } else {
             $reservation->setConducteur(false);
         }
-        $reservation->setModeReservation($this->modeReservationRepo->findOneBy(['libelle' => 'WEB']));
+        $reservation->setModeReservation($this->modeReservationRepo->findOneBy(['libelle' => 'CPT']));
         // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
         $lastID = $this->reservRepo->findBy(array(), array('id' => 'DESC'), 1);
         if ($lastID == null) {

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Classe\Mailjet;
+use App\Classe\ReserverDevis;
 use DateTimeZone;
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -58,6 +59,7 @@ class DevisController extends AbstractController
     private $mailjet;
     private $flashy;
     private $tarifConductSuppl;
+    private $reserverDevis;
 
 
     public function __construct(
@@ -73,6 +75,7 @@ class DevisController extends AbstractController
         TarifsRepository $tarifsRepo,
         OptionsRepository $optionsRepo,
         GarantieRepository $garantiesRepo,
+        ReserverDevis $reserverDevis,
         ReservationController $reservController
     ) {
 
@@ -90,6 +93,7 @@ class DevisController extends AbstractController
         $this->mailjet = $mailjet;
         $this->flashy = $flashy;
         $this->tarifConductSuppl = $this->tarifsHelper->getPrixConducteurSupplementaire();
+        $this->reserverDevis = $reserverDevis;
     }
 
     /**
@@ -97,7 +101,8 @@ class DevisController extends AbstractController
      */
     public function index(): Response
     {
-        $devis = $this->devisRepo->findBy([], ["id" => "ASC"]);
+
+        $devis = $this->devisRepo->findBy(["transformed" => 0], ["id" => "ASC"]);
 
         return $this->render('admin/devis/index.html.twig', [
             'devis' => $devis,
@@ -285,43 +290,10 @@ class DevisController extends AbstractController
      */
     public function reserver(Request $request, Devis $devis)
     {
-        $reservation = new Reservation();
-        $reservation->setVehicule($devis->getVehicule());
-        $reservation->setClient($devis->getClient());
-        $reservation->setDateDebut($devis->getDateDepart());
-        $reservation->setDateFin($devis->getDateRetour());
-        $reservation->setAgenceDepart($devis->getAgenceDepart());
-        $reservation->setAgenceRetour($devis->getAgenceRetour());
-        //boucle pour ajout options 
-        foreach ($devis->getOptions() as $option) {
-            $reservation->addOption($option);
-        }
 
-        //boucle pour ajout garantie 
+        $this->reserverDevis->reserver($devis);
 
-        foreach ($devis->getGaranties() as $garantie) {
-            $reservation->addGaranty($garantie);
-        }
-
-
-        $reservation->setPrix($devis->getPrix());
-        $reservation->setDateReservation(new \DateTime('NOW'));
-        $reservation->setCodeReservation('devisTransformé');
-
-        // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
-        $lastID = $this->reservationRepo->findBy(array(), array('id' => 'DESC'), 1);
-        if ($lastID == null) {
-            $currentID = 1;
-        } else {
-            $currentID = $lastID[0]->getId() + 1;
-        }
-
-        $reservation->setRefRes("CPTGP", $currentID);
-        $entityManager = $this->reservController->getDoctrine()->getManager();
-        $entityManager->persist($reservation);
-        $entityManager->flush();
-        // dump($reservation);
-        // die();
+        $this->flashy->success("Le devis" . $devis->getId() . " a été transformé en réservation");
         return $this->redirectToRoute('reservation_index');
     }
 
