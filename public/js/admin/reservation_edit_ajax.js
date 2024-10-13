@@ -132,24 +132,17 @@ function retrieveDataAjax() {
 
 
 function populateSelectElem(options) {
-
     var select = document.getElementById('selectVehicule');
-    $("#selectVehicule").empty(); //remove old options jquery
+    select.innerHTML = '<option value="">Choisir véhicule</option>';
 
-    for (var i = 0; i < options.length; i++) {
-
-        var opt = options[i];
-        var option = document.createElement("option");
-        option.text = opt.marque + ' ' + opt.modele + ' ' + opt.immatriculation;
-        option.value = opt.id;
+    options.forEach(function (opt) {
+        var option = new Option(opt.marque + ' ' + opt.modele + ' ' + opt.immatriculation, opt.id);
         if (imVehValue == option.text) {
-            option.setAttribute('selected', 'selected');
+            option.selected = true;
         }
         select.add(option);
-
-    }
+    });
 }
-
 function dataForSelect(data) {
     var data2 = [];
 
