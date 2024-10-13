@@ -1,0 +1,71 @@
+.vehicule-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.vehicule-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.vehicule-item i {
+    margin-right: 10px;
+}
+
+.vehicule-item span {
+    margin-left: auto;
+}
+
+.vehicule-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.vehicule-item {
+    background-color: #f8f9fa;
+    padding: 4px 6px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.vehicule-item i {
+    color: #007bff;
+}
+
+.badge-info {
+    background-color: #17a2b8;
+}
+
+.custom-control-input:checked~.custom-control-label .btn-outline-secondary {
+    background-color: black;
+    color: #fff;
+}
+
+.custom-control-input {
+    position: absolute;
+    opacity: 0;
+    z-index: -1;
+}
+
+.custom-control-label {
+    cursor: pointer;
+}
+
+.custom-control-label::before,
+.custom-control-label::after {
+    display: none;
+}
+
+.tarif-info {
+    font-size: 1.1em;
+}
+
+.badge-success {
+    background-color: #ff0000;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 20px;
+}

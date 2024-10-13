@@ -6,7 +6,7 @@
 {% block stylesheets %}
 	<link href="{{ asset( 'css/client/validationDevis.css') }}" rel="stylesheet">
 	<link href="{{ asset('css/admin/options_garanties/edit.css') }}" rel="stylesheet">
-	<link href="{{ asset('css/admin/vente_comptoir.css') }}" rel="stylesheet">
+	<link href="{{ asset('css/admin/vente_comptoir/vente_comptoir.css') }}" rel="stylesheet">
 {% endblock %}
 {% block current_page %}
 	<div class="text-info">
@@ -107,10 +107,10 @@
 									</div>
 									<p>
 										A Joel Location, nous savons que les longs trajets peuvent être fatigants,
-																																																																																																																																																																																																																																																										                                        surtout après un bon bain de mer. C’est pour cela, que nous vous proposons
-																																																																																																																																																																																																																																																										                                        l’ajout d’un deuxième conducteur gratuitement. De plus, les assurances
-																																																																																																																																																																																																																																																										                                        responsabilités civiles et accidents causés aux tiers sont inclus dans votre
-																																																																																																																																																																																																																																																										                                        forfait "location de voiture".
+																																																																																																																																																																																																																																																																				                                        surtout après un bon bain de mer. C’est pour cela, que nous vous proposons
+																																																																																																																																																																																																																																																																				                                        l’ajout d’un deuxième conducteur gratuitement. De plus, les assurances
+																																																																																																																																																																																																																																																																				                                        responsabilités civiles et accidents causés aux tiers sont inclus dans votre
+																																																																																																																																																																																																																																																																				                                        forfait "location de voiture".
 									</p>
 
 									<div class="row">
@@ -146,8 +146,8 @@
 										</h5>
 									</div>
 									<p>Nous mettons à votre disposition des sièges bébé et nourrissons, homologués NF,
-																																																																																																																																																																																																																																																										                                        pour seulement 30 euros TTC. Les rehausseurs pour les enfants de + de 15kg sont
-																																																																																																																																																																																																																																																										                                        totalement gratuits !</p>
+																																																																																																																																																																																																																																																																				                                        pour seulement 30 euros TTC. Les rehausseurs pour les enfants de + de 15kg sont
+																																																																																																																																																																																																																																																																				                                        totalement gratuits !</p>
 									{# test radio #}
 									{% for option in options %}
 										{% if option.type == "siège" %}

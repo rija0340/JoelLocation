@@ -172,6 +172,19 @@ class VenteComptoirController extends AbstractController
         if ($request->request->get('vehicule') != null) {
 
             $tarifVehicule = $request->request->get('tarifVehicule');
+
+            $tarifVehiculeJournalier = $request->request->get('tarifVehiculeJournalier');
+
+            //si les deux sont renseignés, on prend le tarif journalier
+            if ($tarifVehiculeJournalier != null) {
+                $duree =  $this->dateHelper->calculDuree($dateDepart, $dateRetour);
+
+                if (!is_null($duree)) {
+                    $tarifVehicule = $tarifVehiculeJournalier * $duree;
+                }
+            }
+
+
             $id_vehicule = $request->request->get('vehicule');
 
             if ($tarifVehicule != null) {

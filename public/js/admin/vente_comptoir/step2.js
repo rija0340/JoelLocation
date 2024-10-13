@@ -20,30 +20,23 @@ $(document).ready(function () {
 
 
     function addInput() {
-        inputTarifElements = [];
-        var inputTarifElements = document.querySelectorAll("div[class='tarifVehicule']");
-        if (inputTarifElements != 0) {
-            for (let i = 0; i < inputTarifElements.length; i++) {
-                inputTarifElements[i].remove();
-            }
-        }
+        // Remove existing tarif elements
+        document.querySelectorAll(".tarifVehicule").forEach(el => el.remove());
 
-        var div = document.createElement('div');
-        div.classList.add('tarifVehicule');
-        var label = document.createElement('label');
-        label.innerText = "Autre tarif : ";
-        var input = document.createElement('input');
-        input.type = 'text';
-        input.name = 'tarifVehicule';
-        input.classList.add("form-control");
-        input.classList.add("inputTarif");
+        // Create new tarif element
+        const tarifHtml = `
+            <div class="tarifVehicule">
+                <label>Autre tarif total : </label>
+                <input type="text" name="tarifVehicule" class="form-control inputTarif">
+            </div>
 
-        div.appendChild(label);
-        div.appendChild(input);
+            <div class="tarifVehicule">
+                <label>Autre tarif journalier : </label>
+                <input type="text" name="tarifVehiculeJournalier" class="form-control inputTarif">
+            </div>
+        `;
 
-        this.parentElement.insertBefore(div, this.parentElement.lastElementChild);
-        // this.parentElement.lastElementChild.appendChild(input);
-
-
+        // Insert the new element
+        this.parentElement.insertAdjacentHTML('beforeend', tarifHtml);
     }
 });

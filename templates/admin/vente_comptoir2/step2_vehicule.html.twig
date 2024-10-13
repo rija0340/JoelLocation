@@ -1,0 +1,82 @@
+{# import css here #}
+
+{% set vehiculeInfo = [
+    {'icon': 'fa-road', 'label': 'Marque', 'value': vehicule.marque, 'id': 'vehicule_marque'},
+    {'icon': 'fa-wrench', 'label': 'Modele', 'value': vehicule.modele, 'id': 'vehicule_modele'},
+    {'icon': 'fa-plus-square', 'label': 'Immatriculation', 'value': vehicule.immatriculation, 'id': 'vehicule_immatriculation'},
+    {'icon': 'fa-battery-full', 'label': 'Carburant', 'value': vehicule.carburation, 'id': 'vehicule_carburation'},
+    {'icon': 'fa-sun-o', 'label': 'Boite de vitesse', 'value': vehicule.vitesse, 'id': 'vehicule_vitesse'}
+] %}
+{% set vehiculeInfo2 = [
+    {'icon': 'fa-shopping-bag', 'label': 'Nombre max de bagages', 'value': vehicule.bagages, 'id': 'vehicule_bagage'},
+    {'icon': 'fa-car', 'label': 'Nombre de portes', 'value': vehicule.portes, 'id': 'vehicule_portes'},
+    {'icon': 'fa-users', 'label': 'Max passagers', 'value': vehicule.passagers, 'id': 'vehicule_passagers'},
+    {'icon': 'fa-rss', 'label': 'Atouts', 'value': vehicule.atouts, 'id': 'vehicule_atouts'},
+    {'icon': 'fa-rss', 'label': 'Caution', 'value': vehicule.caution, 'id': 'vehicule_caution'}
+] %}
+
+
+<div
+	class="row">
+	{# centrer image vehicule #}
+	<div class="col-md-3 col-sm-3 d-flex justify-content-center align-items-center">
+		<img src="{{vich_uploader_asset(vehicule, 'imageFile') }}" class="img-fluid" style="max-width: 80%;" id="vehicule_photo">
+	</div>
+	<div class="col-md-9 col-sm-9">
+		<div class="row">
+			<div class="col-md-4">
+				<div class="caracteristiques">
+					<ul>
+						{% for item in vehiculeInfo %}
+							<div class="vehicule-item">
+								<i class="fa {{ item.icon }}"></i>
+								{{ item.label }}
+								:
+								<span class="badge badge-secondary " id="{{ item.id }}">{{ item.value }}</span>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="caracteristiques">
+						{% for item in vehiculeInfo2 %}
+							<div class="vehicule-item">
+								<i class="fa {{ item.icon }}" aria-hidden="true"></i>
+								{{ item.label }}
+								:
+								<span class="badge badge-secondary " id="{{ item.id }}">
+									<strong>{{ item.value }}</strong>
+								</span>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+				<div class="col-md-4 text-center">
+					<div class="custom-control custom-radio mt-3">
+						<input type="radio" id="vehicule{{ vehicule.id }}" name="vehicule" class="custom-control-input" value="{{ vehicule.id }}" required>
+						<label class="custom-control-label" for="vehicule{{ vehicule.id }}">
+							<span class="btn btn-outline-secondary">
+								<i class="fa fa-check-circle mr-2"></i>Choisir ce véhicule
+							</span>
+						</label>
+					</div>
+					<div class="tarif-info mt-2">
+						{% for data in data %}
+							{% if data['vehicule'] == vehicule %}
+								<span class="badge badge-success">
+									<i class="fa fa-tag mr-1"></i>Tarif:
+									{{ data['tarif'] }}
+									€
+								</span>
+							{% endif %}
+						{% endfor %}
+					</div>
+					<div class="tarifVehicule mt-2" style="display: none;">
+						<label>Autre tarif :
+						</label>
+						<input type="text" name="tarifVehicule" class="form-control inputTarif">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
