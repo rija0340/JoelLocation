@@ -22,10 +22,11 @@
 				<thead class="text-uppercase bg-dark text-white text-center">
 					<tr>
 						<th>date</th>
+						<th>prenom</th>
 						<th>nom</th>
-						<th>adresse email</th>
 						<th class="">objet</th>
-						<th class="">message</th>
+						<th>adresse email</th>
+						<th class="">status</th>
 					</tr>
 				</thead>
 
@@ -33,14 +34,17 @@
 					{% for email in emails %}
 						<tr>
 							<td>{{email.dateReception|date('d/m/Y H:i')}}</td>
+							<td>{{email.prenom}}</td>
 							<td>{{email.nom}}</td>
-
-							<td>{{email.mail}}</td>
-
 							<td>{{email.objet}}</td>
-
-							<td>{{email.contenu}}</td>
-
+							<td>{{email.mail}}</td>
+							<td>
+								{% if email.contenu == 'success' %}
+									<span class="badge badge-success">{{ email.contenu }}</span>
+								{% else %}
+									<span class="badge badge-danger">{{ email.contenu }}</span>
+								{% endif %}
+							</td>
 
 						</tr>
 					{% endfor %}

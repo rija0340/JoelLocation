@@ -55,6 +55,7 @@ use App\Repository\AnnulationReservationRepository;
 use App\Repository\ModePaiementRepository;
 use App\Repository\AppelPaiementRepository;
 use App\Service\Site;
+use App\Service\SymfonyMailerHelper;
 use DoctrineExtensions\Query\Mysql\Date;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -835,26 +836,22 @@ class ReservationController extends AbstractController
     /**
      * @Route("/envoyer-contrat-pdf/{id}", name="envoyer_contrat", methods={"GET","POST"},requirements={"id":"\d+"})
      */
-    public function envoyerContrat(Request $request, Reservation $reservation, Site $site): Response
+    public function envoyerContrat(Request $request, Reservation $reservation, Site $site, SymfonyMailerHelper $symfonyMailerHelper): Response
     {
+        // envoie de mail utilisant mailjet 
+        // $mail = $reservation->getClient()->getMail();
+        // $nom = $reservation->getClient()->getNom();
 
-        $mail = $reservation->getClient()->getMail();
-        $nom = $reservation->getClient()->getNom();
+        // $contratLink   = $this->generateUrl('contrat_pdf', ['id' => $reservation->getId()]);
 
-        $contratLink   = $this->generateUrl('contrat_pdf', ['id' => $reservation->getId()]);
+        // $url  = $site->getBaseUrl($request) . $contratLink;
+        //  $this->mailjet->sendContratLink($mail, $nom, "Contrat", $reservation->getReference(), $url);
+        // $this->flashy->success("L'url du contrat de la réservation N°" . $reservation->getReference() . " a été envoyé");
+        // fin envoie de mail utilisant mailjet 
 
-        $url  = $site->getBaseUrl($request) . $contratLink;
-        $this->mailjet->sendContratLink($mail, $nom, "Contrat", $reservation->getReference(), $url);
+        $symfonyMailerHelper->sendContrat($request, $reservation);
 
-        // a decommenter 
-        //lien pour telechargement devis
-        // $url = $this->generateUrl('contrat_pdf', ['id' => $reservation->getId()]);
-        // $url = "https://joellocation.com" . $url;
-        // $numero = $reservation->getReference();
-        // $linkContrat = "<a style='text-decoration: none; color: inherit;' href='" . $url . "'>Télécharger mon contrat</a>";
-        // $this->mailjet->sendContratLink($mail, $nom, "Contrat", $numero, $linkContrat);
 
-        $this->flashy->success("L'url du contrat de la réservation N°" . $reservation->getReference() . " a été envoyé");
         return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
     }
 

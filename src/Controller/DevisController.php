@@ -2,42 +2,31 @@
 
 namespace App\Controller;
 
-use App\Classe\Mailjet;
-use App\Classe\ReserverDevis;
-use DateTimeZone;
-use Dompdf\Dompdf;
-use Dompdf\Options;
-use Knp\Snappy\Pdf;
-use App\Entity\User;
 use App\Entity\Devis;
-use App\Form\DevisType;
-use App\Entity\Vehicule;
-use App\Entity\Reservation;
+use App\Classe\Mailjet;
 use App\Service\DateHelper;
+use App\Classe\ReserverDevis;
 use App\Service\TarifsHelper;
 use App\Repository\UserRepository;
+use App\Service\ReservationHelper;
 use App\Form\DevisEditVehiculeType;
 use App\Repository\DevisRepository;
-use App\Repository\TarifsRepository;
 use App\Repository\OptionsRepository;
 use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
 use App\Form\EditClientReservationType;
 use App\Form\Devis\OptionsGarantiesType;
+use App\Service\SymfonyMailerHelper;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Controller\ReservationController;
-use App\Repository\ReservationRepository;
-use App\Service\ReservationHelper;
-use Symfony\Component\HttpFoundation\Request;
+
 // Include Dompdf required namespaces
+use Symfony\Component\HttpFoundation\Request;
+use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
-use MercurySeries\FlashyBundle\FlashyNotifier;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Security\Core\Encoder\PasswordHasherEncoder;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * @Route("/backoffice/")
@@ -45,21 +34,19 @@ use Symfony\Component\Serializer\SerializerInterface;
 class DevisController extends AbstractController
 {
 
-    private $reservationRepo;
     private $userRepo;
     private $vehiculeRepo;
     private $devisRepo;
-    private $tarifsRepo;
     private $garantiesRepo;
     private $optionsRepo;
-    private $reservController;
     private $tarifsHelper;
     private $dateHelper;
     private $em;
     private $mailjet;
     private $flashy;
-    private $tarifConductSuppl;
     private $reserverDevis;
+    private $symfonyMailerHelper;
+
 
 
     public function __construct(
@@ -70,30 +57,26 @@ class DevisController extends AbstractController
         TarifsHelper $tarifsHelper,
         UserRepository $userRepo,
         DevisRepository $devisRepo,
-        ReservationRepository $reservationRepo,
         VehiculeRepository $vehiculeRepo,
-        TarifsRepository $tarifsRepo,
         OptionsRepository $optionsRepo,
         GarantieRepository $garantiesRepo,
         ReserverDevis $reserverDevis,
-        ReservationController $reservController
+        SymfonyMailerHelper $symfonyMailerHelper
+
     ) {
 
-        $this->reservationRepo = $reservationRepo;
         $this->vehiculeRepo = $vehiculeRepo;
         $this->userRepo = $userRepo;
         $this->devisRepo = $devisRepo;
-        $this->tarifsRepo = $tarifsRepo;
         $this->garantiesRepo = $garantiesRepo;
         $this->optionsRepo = $optionsRepo;
-        $this->reservController = $reservController;
         $this->dateHelper = $dateHelper;
         $this->tarifsHelper = $tarifsHelper;
         $this->em = $em;
         $this->mailjet = $mailjet;
         $this->flashy = $flashy;
-        $this->tarifConductSuppl = $this->tarifsHelper->getPrixConducteurSupplementaire();
         $this->reserverDevis = $reserverDevis;
+        $this->symfonyMailerHelper = $symfonyMailerHelper;
     }
 
     /**
@@ -471,11 +454,9 @@ class DevisController extends AbstractController
     /**
      * @Route("devis/envoyer-devis/{id}", name="envoyer_devis", methods={"GET","POST"},requirements={"id":"\d+"})
      */
-    public function envoyerDevis(Request $request, Devis $devis, ReservationHelper $reservationHelper): Response
+    public function envoyerDevis(Request $request, Devis $devis): Response
     {
-
-        $reservationHelper->sendMailConfirmationDevis($devis, $request);
-        $this->flashy->success("L'url de téléchargement du devis N°" . $devis->getNumero() . " a été envoyé");
+        $this->symfonyMailerHelper->sendDevis($request, $devis);
         return $this->redirectToRoute('devis_show', ['id' => $devis->getId()]);
     }
 }

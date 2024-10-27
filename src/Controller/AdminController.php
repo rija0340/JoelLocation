@@ -4,17 +4,20 @@ namespace App\Controller;
 
 use DateTime;
 use App\Classe\Mail;
-use App\Classe\Reservation as ClasseReservation;
 use App\Entity\Tarifs;
 use App\Entity\Reservation;
 use App\Service\DateHelper;
 use App\Form\RechercheAVType;
 use App\Form\ReservationType;
 use App\Service\TarifsHelper;
+use App\Service\SymfonyMailer;
+use App\Service\VehiculeHelper;
+use GuzzleHttp\RetryMiddleware;
+use Symfony\Component\Mime\Email;
 use App\Form\ReservationStep1Type;
 use App\Repository\AvisRepository;
-use App\Repository\DevisRepository;
 use App\Repository\UserRepository;
+use App\Repository\DevisRepository;
 use App\Repository\MarqueRepository;
 use App\Repository\ModeleRepository;
 use App\Repository\TarifsRepository;
@@ -23,17 +26,19 @@ use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ReservationRepository;
-use App\Service\SymfonyMailer;
-use App\Service\VehiculeHelper;
 use DoctrineExtensions\Query\Mysql\Format;
-use GuzzleHttp\RetryMiddleware;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Classe\Reservation as ClasseReservation;
+use App\Entity\Mail as EntityMail;
+use Proxies\__CG__\App\Entity\Mail as AppEntityMail;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Twig\Environment;
 
 /**
  * @Route("/backoffice")
@@ -230,22 +235,5 @@ class AdminController extends AbstractController
       'garanties' => $garanties,
       'options' => $options,
     ]);
-  }
-
-  /**
-   * @Route("/envoi-email", name="envoi_email", methods={"GET","POST"})
-   */
-  public function envoiEmail()
-  {
-    try {
-      $this->symfonyMailer->send("mety sa tsy mety", "contact@joellocation@gmail.com", "rakotoarinelinarija@gmail.com", "", []);
-      die('tonga ato za');
-    } catch (TransportExceptionInterface $e) {
-      echo '<pre>';
-      print_r($e, TRUE);
-      echo '</pre>';
-      die('ato amle erreur zazao');
-    }
-    die('ivelany');
   }
 }

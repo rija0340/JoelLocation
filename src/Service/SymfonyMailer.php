@@ -2,84 +2,67 @@
 
 namespace App\Service;
 
-use Twig\Environment;
 use Symfony\Component\Mime\Email;
-use Symfony\Component\Mailer\Mailer;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\HttpFoundation\Response;
-
-
-// form tuto fix tls error
-
-use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Mailer\Bridge\Google\Transport\GmailSmtpTransport;
 
 class SymfonyMailer
 {
-
-    /**
-     * @var MailerInterface
-     */
     private $mailer;
+    private $context;
 
-    /**
-     * @Environment
-     */
-    private $twig;
-
-    /**
-     * MailerService constructor
-     */
-    public function __construct(MailerInterface $mailer, Environment $twig)
+    public function __construct(MailerInterface $mailer)
     {
         $this->mailer = $mailer;
-        $this->twig = $twig;
+        $this->context = [
+            'phone_number1' => '06 90 73 76 74',
+            'phone_number2' => '07 67 32 14 47',
+            'website_url' => 'https://joellocation.com/',
+            'facebook_url' => 'https://www.facebook.com/joellocation/',
+            'instagram_url' => 'https://www.instagram.com/joel.location/',
+            'youtube_url' => 'https://youtube.com/channel/UCMZZRNgOmDBIghZwg4tTQJQ',
+        ];
     }
 
-    /**
-     * @param string $subject
-     * @param string $from
-     * @param string $to
-     * @param string $template
-     * @param array $parameters
-     * @throws |Symfony|Component|Mailer|Exception|TransportExceptionInterface
-     * @throws |Twig|Error|LoadError
-     * @throws |Twig|Error|RuntimeError
-     * @throws |Twig|Error|SyntaxError
-     */
-    public function send(string $subjet, string $from, string $to, string $template, array $parameters): void
+    public function send(string $to, string $subject)
     {
-        $email = (new Email())
-            ->from($from)
-            ->to($to)
-            ->subject($subjet)
-            ->text('Sending emails is fun again!');
-        // ->html(
-        //     //specifier chemin template dans l'appel de cette fonction
-        //     $this->twig->render($template, $parameters)
-        // );
+        $email = $this->createBaseEmail($to, $subject, 'admin/templates_email/devis.html.twig');
         $this->mailer->send($email);
     }
 
-    // test another method for fixing tls error
-    public function sendMail()
+    public function sendContact(string $to, string $name, string $subject)
     {
-        // For this transport, use the following command line
-        // docker run -p 1080:80 -p 1025:25 djfarrelly/maildev
-        $transport = new EsmtpTransport('localhost', 1025);
+        $email = $this->createBaseEmail($to, $subject, 'admin/templates_email/contact.html.twig');
+        $this->mailer->send($email);
+    }
 
-        // $transport = new GmailSmtpTransport('joel@joellocation.com', 'FIXME');
+    public function sendDevis(string $to, string $name, string $subject, $devisLink)
+    {
+        $this->context['devisLink'] = $devisLink;
+        $this->context['name'] = $name;
+        $email = $this->createBaseEmail($to, $subject, 'admin/templates_email/devis.html.twig');
+        $this->mailer->send($email);
+    }
 
-        $mailer = new Mailer($transport);
+    public function sendContrat(string $to, string $name, string $subject, $contratLink)
+    {
+        $this->context['contratLink'] = $contratLink;
+        $this->context['name'] = $name;
+        $email = $this->createBaseEmail($to, $subject, 'admin/templates_email/contrat.html.twig');
+        $this->mailer->send($email);
+    }
 
-        $email = (new Email())
-            ->from('joel@joellocation.com')
-            ->to('rakotorinelinarija@gmail.com')
-            ->subject('test - ' . microtime(true))
-            ->text('test - ' . microtime(true));
-
-        $mailer->send($email);
+    private function createBaseEmail(string $to, string $subject, string $template): TemplatedEmail
+    {
+        return (new TemplatedEmail())
+            ->from('contact@joellocation.com')
+            ->to($to)
+            ->subject($subject)
+            ->htmlTemplate($template)
+            ->embedFromPath('images/Joel-Location-new.png', 'logo', 'image/png')
+            ->embedFromPath('images/logos/icons8-facebook-48.png', 'facebook-icon', 'image/png')
+            ->embedFromPath('images/logos/icons8-instagram-48.png', 'instagram-icon', 'image/png')
+            ->embedFromPath('images/logos/icons8-youtube-48.png', 'youtube-icon', 'image/png')
+            ->context($this->context);
     }
 }

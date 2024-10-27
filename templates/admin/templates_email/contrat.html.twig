@@ -1,0 +1,114 @@
+{# email-template.html.twig #}
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<style>
+			.email-container {
+				max-width: 500px;
+				margin: 0 auto;
+				font-family: Arial, sans-serif;
+				line-height: 1.6;
+				color: #333;
+			}
+
+			.banner {
+				background-color: #f8ecec;
+				padding: 5px;
+				text-align: center;
+				margin-bottom: 10px;
+			}
+
+			.logo {
+				max-height: 100px;
+				height: 100px;
+				width: auto;
+			}
+
+			.content {
+				padding: 20px 20px 5px;
+				background-color: #ffffff;
+				text-align: justify;
+			}
+
+			.footer {
+				margin-top: 5px;
+				padding: 5px 20px 20px;
+			}
+
+			.social-links {
+				border-top: 1px solid #eee;
+				text-align: center;
+				margin-top: 5px;
+			}
+
+			.contact-info {
+				margin-top: 5px;
+				text-align: left;
+			}
+			.text-center {
+				text-align: center;
+			}
+			.social-icon {
+				width: 24px;
+				height: 24px;
+				text-decoration: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="email-container">
+			<div class="banner"><img src="cid:logo" alt="Company Logo" class="logo">
+			</div>
+
+			<div class="content">
+				<p>Bonjour
+					{{name}},</p>
+				<p>Suite à notre récente discussion, veuillez cliquer sur le bouton en bas pole contrat de location pour le véhicule que vous avez réservé. Ce document contient toutes les informations nécessaires concernant les termes et conditions de la location.</p>
+				<p>
+					Nous vous prions de bien vouloir lire attentivement
+					<span style="text-decoration: underline;">les conditions générales de location</span>
+					. Si vous avez la moindre question ou si quelque chose nécessite une clarification, n'hésitez pas à me contacter. Je suis à votre disposition pour vous assister.
+				</p>
+				<p>
+					Merci de votre confiance en
+					<span style="font-weight: bold;">
+						<span style="color: red;">Joel</span>Location</span>
+					. Nous nous réjouissons de vous fournir le meilleur service possible et nous restons à votre disposition pour toute assistance supplémentaire.
+				</p>
+				<p>Cordiales salutations.</p>
+				<div class="text-center">
+					<a rel="noopener" target="_blank" href="{{contratLink}}" style="background-color: #000; font-size: 12px; font-family: Helvetica, Arial, sans-serif; font-weight: bold; text-decoration: none; padding: 5px 10px; color: #ffffff; border-radius: 5px; display: inline-block; mso-padding-alt: 0;">
+						<span style="mso-text-raise: 15pt;">Télécharger mon contrat</span>
+					</a>
+				</div>
+
+			</div>
+
+			<div class="footer">
+				<div class="contact-info">
+					<p>Tel :
+						{{ phone_number1 }}</p>
+					<p>{{ phone_number2 }}</p>
+					<p>
+						<a href="{{ website_url }}">{{ website_url }}</a>
+					</p>
+					<p>
+						<a href="{{ facebook_url }}">{{ facebook_url }}</a>
+					</p>
+				</div>
+				<div class="social-links">
+					<a href="{{ facebook_url }}" target="_blank">
+						<img src="cid:facebook-icon" alt="Facebook" class="social-icon">
+					</a>
+					<a href="{{ instagram_url }}" target="_blank">
+						<img src="cid:instagram-icon" alt="Instagram" class="social-icon">
+					</a>
+					<a href="{{ youtube_url }}" target="_blank">
+						<img src="cid:youtube-icon" alt="YouTube" class="social-icon">
+					</a>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
