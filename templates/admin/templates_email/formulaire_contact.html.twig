@@ -1,0 +1,105 @@
+{# email-template.html.twig #}
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<style>
+			.email-container {
+				max-width: 500px;
+				margin: 0 auto;
+				font-family: Arial, sans-serif;
+				line-height: 1.6;
+				color: #333;
+			}
+
+			.banner {
+				background-color: #f8ecec;
+				padding: 5px;
+				text-align: center;
+				margin-bottom: 10px;
+			}
+
+			.logo {
+				max-height: 100px;
+				height: 100px;
+				width: auto;
+			}
+
+			.content {
+				padding: 20px 20px 5px;
+				background-color: #ffffff;
+			}
+
+			.footer {
+				margin-top: 5px;
+				padding: 5px 20px 20px;
+			}
+
+			.social-links {
+				border-top: 1px solid #eee;
+				text-align: center;
+				margin-top: 10px;
+				padding-top: 10px;
+			}
+			.social-icon {
+				width: 32px;
+				height: 32px;
+				text-decoration: none;
+			}
+
+			.contact-info {
+				margin-top: 5px;
+				text-align: left;
+			}
+			.contact-info p {
+				margin: 0;
+				padding: 0;
+			}
+			.text-center {
+				text-align: center;
+			}
+			.contact-link {
+				color: #000000;
+				font-weight: bold;
+				text-decoration: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="email-container">
+			<div class="banner"><img src="cid:logo" alt="Company Logo" class="logo">
+			</div>
+
+			<div class="content">
+
+				<p>Un client vous a contacté via le site joellocation.com</p>
+				<p>Cliquez sur le bouton Répondre ci-dessous pour le contacter rapidement.</p>
+
+
+				<p>Nom :
+					{{nom}}
+				</p>
+
+				<p>Email :{{emailClient}}</p>
+
+				<p>Téléphone :{{telephone}}</p>
+
+				<p>Adresse :{{adresse}}</p>
+
+				<p>Message :{{message}}</p>
+
+				<div class="text-center">
+					<a rel="noopener" target="_blank" href="" style="background-color: #000; font-size: 12px; font-family: Helvetica, Arial, sans-serif; font-weight: bold; text-decoration: none; padding: 5px 10px; color: #ffffff; border-radius: 5px; display: inline-block; mso-padding-alt: 0;">
+						<span style="mso-text-raise: 15pt;">Répondre</span>
+					</a>
+				</div>
+				<p>
+					Ceci est une notification provenant de votre adresse contact@joellocation.com
+				</p>
+				<p>
+					Pour répondre au client, veuillez cliquer sur le bouton rouge ci-dessus.
+				</p>
+			</div>
+		</div>
+	</body>
+</html>

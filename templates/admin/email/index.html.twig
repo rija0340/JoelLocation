@@ -33,7 +33,7 @@
 				<tbody>
 					{% for email in emails %}
 						<tr>
-							<td>{{email.dateReception|date('d/m/Y H:i')}}</td>
+							<td>{{ email.dateReception ? email.dateReception|date('Y-m-d H:i:s') : '' }}</td>
 							<td>{{email.prenom}}</td>
 							<td>{{email.nom}}</td>
 							<td>{{email.objet}}</td>
@@ -56,4 +56,6 @@
 {% block javascripts %}
 	<!-- Datatables -->
 	{% include "admin/_parts/datatables/js.html.twig" %}
+	<script src="{{ asset('js/admin/datatables/datatablesConfig.js') }}"></script>
+	<script src="{{ asset('js/admin/datatables/email.js') }}"></script>
 {% endblock %}

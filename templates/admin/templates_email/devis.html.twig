@@ -38,9 +38,12 @@
 			.social-links {
 				border-top: 1px solid #eee;
 				text-align: center;
-				margin-top: 5px;
+				margin-top: 10px;
+				padding-top: 10px;
 			}
 			.social-icon {
+				width: 32px;
+				height: 32px;
 				text-decoration: none;
 			}
 
@@ -48,8 +51,17 @@
 				margin-top: 5px;
 				text-align: left;
 			}
+			.contact-info p {
+				margin: 0;
+				padding: 0;
+			}
 			.text-center {
 				text-align: center;
+			}
+			.contact-link {
+				color: #000000;
+				font-weight: bold;
+				text-decoration: none;
 			}
 		</style>
 	</head>
@@ -59,7 +71,8 @@
 			</div>
 
 			<div class="content">
-				<p>Bonjour,</p>
+				<p>Bonjour
+					{{name}},</p>
 				<p>Veuillez cliquer sur le bouton suivant pour notre meilleure proposition que nous espérons attirer votre attention.</p>
 				<div class="text-center">
 					<a rel="noopener" target="_blank" href="{{devisLink}}" style="background-color: #000; font-size: 12px; font-family: Helvetica, Arial, sans-serif; font-weight: bold; text-decoration: none; padding: 5px 10px; color: #ffffff; border-radius: 5px; display: inline-block; mso-padding-alt: 0;">
@@ -77,10 +90,14 @@
 						{{ phone_number1 }}</p>
 					<p>{{ phone_number2 }}</p>
 					<p>
-						<a href="{{ website_url }}">{{ website_url }}</a>
+						<a href="{{ website_url }}">
+							<span style="font-weight: bold; color:black">https://<span style="color: red;">joel</span>location.com/</span>
+						</a>
 					</p>
 					<p>
-						<a href="{{ facebook_url }}">{{ facebook_url }}</a>
+						<a href="{{ facebook_url }}">
+							<span style="font-weight: bold; color:black">https://www.facebook.com/<span style="color: red;">Joel</span>Location/</span>
+						</a>
 					</p>
 				</div>
 				<div class="social-links">

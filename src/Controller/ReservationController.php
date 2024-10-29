@@ -4,37 +4,19 @@ namespace App\Controller;
 
 use DateTime;
 use DateTimeZone;
-use Dompdf\Dompdf;
-use Dompdf\Options;
-use Knp\Snappy\Pdf;
-use App\Entity\User;
-use App\Form\UserType;
 use App\Classe\Mailjet;
-use App\Entity\Garantie;
 use App\Entity\Paiement;
 use App\Entity\Vehicule;
-use App\Entity\InfosResa;
 use App\Entity\Conducteur;
-use App\Form\VehiculeType;
 use App\Entity\Reservation;
-use App\Form\InfosResaType;
-use App\Form\StopSalesType;
 use App\Service\DateHelper;
-use App\Entity\InfosVolResa;
 use App\Form\AnnulationType;
-use App\Form\ClientEditType;
 use App\Form\ConducteurType;
 use App\Form\ReportResaType;
-use App\Form\UserClientType;
 use App\Form\KilometrageType;
 use App\Form\ReservationType;
 use App\Service\TarifsHelper;
-use App\Entity\FraisSupplResa;
-use App\Form\InfosVolResaType;
 use App\Form\AjoutPaiementType;
-use App\Form\EditStopSalesType;
-use App\Form\FraisSupplResaType;
-use App\Classe\ClasseReservation;
 use App\Form\OptionsGarantiesType;
 use App\Repository\UserRepository;
 use App\Service\ReservationHelper;
@@ -48,7 +30,6 @@ use App\Repository\VehiculeRepository;
 use App\Form\EditClientReservationType;
 use App\Repository\ConducteurRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use phpDocumentor\Reflection\Types\This;
 use App\Repository\ReservationRepository;
 use App\Form\CollectionFraisSupplResaType;
 use App\Repository\AnnulationReservationRepository;
@@ -56,7 +37,6 @@ use App\Repository\ModePaiementRepository;
 use App\Repository\AppelPaiementRepository;
 use App\Service\Site;
 use App\Service\SymfonyMailerHelper;
-use DoctrineExtensions\Query\Mysql\Date;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use MercurySeries\FlashyBundle\FlashyNotifier;
@@ -64,10 +44,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
@@ -75,25 +52,19 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  */
 class ReservationController extends AbstractController
 {
-    private $userRepo;
     private $conducteurRepo;
     private $router;
     private $reservationRepo;
-    private $dateTimestamp;
     private $vehiculeRepo;
-    private $modeleRepo;
     private $optionsRepo;
     private $garantiesRepo;
-    private $tarifsRepo;
     private $dateHelper;
     private $tarifsHelper;
-    private $marqueRepo;
     private $em;
     private $mailjet;
     private $flashy;
     private $modePaiementRepo;
     private $appelPaiementRepository;
-    private $tarifConductSuppl;
 
     public function __construct(
         ModePaiementRepository $modePaiementRepo,
@@ -120,12 +91,8 @@ class ReservationController extends AbstractController
         $this->vehiculeRepo = $vehiculeRepo;
         $this->optionsRepo = $optionsRepo;
         $this->garantiesRepo = $garantiesRepo;
-        $this->tarifsRepo = $tarifsRepo;
-        $this->userRepo = $userRepo;
         $this->dateHelper = $dateHelper;
         $this->tarifsHelper = $tarifsHelper;
-        $this->modeleRepo = $modeleRepo;
-        $this->marqueRepo = $marqueRepo;
         $this->em = $em;
         $this->mailjet = $mailjet;
         $this->flashy = $flashy;
@@ -133,7 +100,6 @@ class ReservationController extends AbstractController
         $this->conducteurRepo = $conducteurRepo;
         $this->modePaiementRepo = $modePaiementRepo;
         $this->appelPaiementRepository = $appelPaiementRepository;
-        $this->tarifConductSuppl = $this->tarifsHelper->getPrixConducteurSupplementaire();
     }
 
     /**
@@ -836,7 +802,7 @@ class ReservationController extends AbstractController
     /**
      * @Route("/envoyer-contrat-pdf/{id}", name="envoyer_contrat", methods={"GET","POST"},requirements={"id":"\d+"})
      */
-    public function envoyerContrat(Request $request, Reservation $reservation, Site $site, SymfonyMailerHelper $symfonyMailerHelper): Response
+    public function envoyerContrat(Request $request, Reservation $reservation, SymfonyMailerHelper $symfonyMailerHelper): Response
     {
         // envoie de mail utilisant mailjet 
         // $mail = $reservation->getClient()->getMail();
@@ -858,22 +824,20 @@ class ReservationController extends AbstractController
     /**
      * @Route("/envoyer-facture-pdf/{id}", name="envoyer_facture", methods={"GET","POST"},requirements={"id":"\d+"})
      */
-    public function envoyerFacture(Request $request, Reservation $reservation, Site $site): Response
+    public function envoyerFacture(Request $request, Reservation $reservation, SymfonyMailerHelper $symfonyMailerHelper): Response
     {
 
-        $mail = $reservation->getClient()->getMail();
-        $nom = $reservation->getClient()->getNom();
-        // a decommenter 
-        $factureLink = $this->generateUrl('facture_pdf', ['id' => $reservation->getId()]);
-        $url  = $site->getBaseUrl($request) . $factureLink;
+        // $mail = $reservation->getClient()->getMail();
+        // $nom = $reservation->getClient()->getNom();
+        // // a decommenter 
+        // $factureLink = $this->generateUrl('facture_pdf', ['id' => $reservation->getId()]);
+        // $url  = $site->getBaseUrl($request) . $factureLink;
 
-        // $url = "https://joellocation.com" . $url;
-        // $numero = $reservation->getReference();
-        // $linkFacture = "<a style='text-decoration: none; color: inherit;' href='" . $url . "'>Télécharger ma facture</a>";
+        // $this->mailjet->sendFactureLink($mail, $nom, "Facture", $reservation->getReference(), $url);
 
-        $this->mailjet->sendFactureLink($mail, $nom, "Facture", $reservation->getReference(), $url);
+        // $this->flashy->success("Url facture envoyé");
+        $symfonyMailerHelper->sendFacture($request, $reservation);
 
-        $this->flashy->success("Url facture envoyé");
         return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
     }
 

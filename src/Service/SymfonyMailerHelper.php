@@ -2,12 +2,14 @@
 
 namespace App\Service;
 
+use DateTime;
+use DateTimeZone;
 use App\Entity\Mail;
 use App\Entity\Devis;
-use App\Entity\Reservation;
 use App\Service\Site;
-use App\Service\SymfonyMailer;
+use App\Entity\Reservation;
 use Psr\Log\LoggerInterface;
+use App\Service\SymfonyMailer;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use MercurySeries\FlashyBundle\FlashyNotifier;
@@ -25,6 +27,7 @@ class SymfonyMailerHelper
     private $em;
     private $emailLogger;
     private $flashy;
+    private $dateHelper;
 
     public function __construct(
         SymfonyMailer $symfonyMailer,
@@ -32,7 +35,8 @@ class SymfonyMailerHelper
         Site $site,
         EntityManagerInterface $em,
         LoggerInterface $emailLogger,
-        FlashyNotifier $flashy
+        FlashyNotifier $flashy,
+        DateHelper $dateHelper
     ) {
         $this->symfonyMailer = $symfonyMailer;
         $this->router = $router;
@@ -40,6 +44,7 @@ class SymfonyMailerHelper
         $this->em = $em;
         $this->emailLogger = $emailLogger;
         $this->flashy = $flashy;
+        $this->dateHelper = $dateHelper;
     }
 
     public function sendDevis(Request $request, Devis $devis)
@@ -50,26 +55,31 @@ class SymfonyMailerHelper
     {
         $this->sendDocument($request, $resa, 'contrat');
     }
+    public function sendFacture(Request $request, Reservation $resa)
+    {
+        $this->sendDocument($request, $resa, 'facture');
+    }
+
     private function sendDocument($request, $entity, $type)
     {
-
         $baseUrl = $this->site->getBaseUrl($request);
-        $route = ($type === 'devis') ? 'devis_pdf' : 'contrat_pdf';
+        $route = $type . '_pdf';
         $documentLink = $baseUrl . $this->router->generate($route, ['id' => $entity->getId()]);
 
         $name = $entity->getClient()->getNom();
         $email = $entity->getClient()->getMail();
-        $reference = ($type === 'devis') ? $entity->getNumero() : $entity->getReference();
+        //check the entity type 
+        $reference = ($entity instanceof Devis) ? $entity->getNumero() : $entity->getReference();
 
         try {
-            $method = ($type === 'devis') ? 'sendDevis' : 'sendContrat';
-            $this->symfonyMailer->$method($email, $name, "Lien de $type", $documentLink);
+            $method =  'send' . ucfirst($type);
+            $this->symfonyMailer->$method($email, $name, ucfirst($type), $documentLink);
 
-            $this->saveMail($entity, "success");
+            $this->saveMail($entity, $type, "success");
             $this->flashy->success("L'url de téléchargement du $type N°$reference a été envoyé");
         } catch (\Exception $e) {
             $this->flashy->error("L'url de téléchargement du $type N°$reference n'a pas été envoyé");
-            $this->saveMail($entity, "failed");
+            $this->saveMail($entity, $type, "failed");
             $this->emailLogger->error(sprintf(
                 'Failed to send %s - Code: %s, Email: %s, Subject: %s, Error: %s',
                 $type,
@@ -81,18 +91,47 @@ class SymfonyMailerHelper
         }
     }
 
-    public function saveMail($entity, $status)
+    public function sendContact($data)
     {
+        //transform the data en json string
+        try {
+            $this->symfonyMailer->sendContact($data);
+
+            $this->saveMail($data, 'contact', "success");
+            $this->flashy->success("Votre message a a été envoyé");
+        } catch (\Exception $e) {
+            $this->flashy->error("Votre message n'a pas été envoyé");
+            $this->saveMail($data, 'contact', "failed");
+            $this->emailLogger->error(sprintf(
+                'Failed to send %s - Error: %s',
+                'Contact',
+                $e->getMessage()
+            ));
+        }
+    }
+
+    public function saveMail($entity, $type, $status)
+    {
+        $json = json_encode($entity);
+
         $email = new Mail();
-        $ref  = ($entity instanceof Reservation) ? $entity->getReference() : $entity->getNumero();
-        $type = ($entity instanceof Reservation) ? ' la reservation' : 'du devis';
-        $email->setPrenom($entity->getClient()->getPrenom());
-        $email->setNom($entity->getClient()->getNom());
-        $email->setMail($entity->getClient()->getMail());
-        $email->setObjet('Lien' . $type . " " . $ref);
-        $email->setContenu($status);
+        if (!is_array($entity)) {
+            $ref  = ($entity instanceof Reservation) ? $entity->getReference() : $entity->getNumero();
+            $email->setPrenom($entity->getClient()->getPrenom());
+            $email->setNom($entity->getClient()->getNom());
+            $email->setMail($entity->getClient()->getMail());
+            $email->setObjet($type . " " . $ref);
+            $email->setContenu($status);
+        } else {
+            $email->setPrenom("");
+            $email->setNom($entity['nom']);
+            $email->setMail($entity['emailClient']);
+            $email->setObjet($type);
+            $email->setContenu($json);
+        }
         //set date of today 
-        $email->setDateReception(new \DateTime('now'));
+        $date  = $this->dateHelper->dateNow();
+        $email->setDateReception($date);
         $this->em->persist($email);
         $this->em->flush();
     }

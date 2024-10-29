@@ -10,6 +10,7 @@ class SymfonyMailer
 {
     private $mailer;
     private $context;
+    private const SENDER = "contact@joellocation.com";
 
     public function __construct(MailerInterface $mailer)
     {
@@ -30,9 +31,10 @@ class SymfonyMailer
         $this->mailer->send($email);
     }
 
-    public function sendContact(string $to, string $name, string $subject)
+    public function sendContact($data)
     {
-        $email = $this->createBaseEmail($to, $subject, 'admin/templates_email/contact.html.twig');
+        $this->context = array_merge($this->context, $data);
+        $email = $this->createBaseEmail(self::SENDER, "Contact", 'admin/templates_email/formulaire_contact.html.twig');
         $this->mailer->send($email);
     }
 
@@ -52,10 +54,18 @@ class SymfonyMailer
         $this->mailer->send($email);
     }
 
+    public function sendFacture(string $to, string $name, string $subject, $factureLink)
+    {
+        $this->context['factureLink'] = $factureLink;
+        $this->context['name'] = $name;
+        $email = $this->createBaseEmail($to, $subject, 'admin/templates_email/facture.html.twig');
+        $this->mailer->send($email);
+    }
+
     private function createBaseEmail(string $to, string $subject, string $template): TemplatedEmail
     {
         return (new TemplatedEmail())
-            ->from('contact@joellocation.com')
+            ->from(self::SENDER)
             ->to($to)
             ->subject($subject)
             ->htmlTemplate($template)
