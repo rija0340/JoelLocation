@@ -64,7 +64,7 @@ class SymfonyMailerHelper
     {
         $baseUrl = $this->site->getBaseUrl($request);
         $route = $type . '_pdf';
-        $documentLink = $baseUrl . $this->router->generate($route, ['id' => $entity->getId()]);
+        $documentLink = $baseUrl . $this->router->generate($route, ['hashedId' =>  sha1($entity->getId())]);
 
         $name = $entity->getClient()->getNom();
         $email = $entity->getClient()->getMail();

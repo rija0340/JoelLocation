@@ -322,6 +322,7 @@ class ReservationController extends AbstractController
 
         return $this->render('admin/reservation/crud/show.html.twig', [
             'reservation' => $reservation,
+            'hashedId' => sha1($reservation->getId()),
             'formKM' => $formKM->createView(),
             'formAjoutPaiement' => $formAjoutPaiement->createView(),
             'formReportResa' => $formReportResa->createView(),

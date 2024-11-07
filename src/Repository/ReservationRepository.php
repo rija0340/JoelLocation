@@ -696,7 +696,29 @@ class ReservationRepository extends ServiceEntityRepository
         return $array;
     }
 
+    public function findByHashedId(string $hashedId)
+    {
+        $conn = $this->getEntityManager()->getConnection();
 
+        $sql = 'SELECT r.*
+                FROM reservation r
+                WHERE SHA1(r.id) = :hashedId';
+
+        $stmt = $conn->prepare($sql);
+        $result = $stmt->executeQuery(['hashedId' => $hashedId]);
+
+        if (!$result->rowCount()) {
+            return null;
+        }
+
+        $reservationData = $result->fetchAssociative();
+        if (!$reservationData) {
+            return null;
+        }
+
+        return $this->getEntityManager()
+            ->find('App\Entity\Reservation', $reservationData['id']);
+    }
     // /**
     //  * @return Reservation[] Returns an array of Reservation objects
     //  */

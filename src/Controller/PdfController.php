@@ -51,10 +51,12 @@ class PdfController extends AbstractController
 
 
     /**
-     * @Route("/generer/devis-pdf/{id}", name="devis_pdf", methods={"GET"},requirements={"id":"\d+"})
+     * @Route("/generer/devis-pdf/{hashedId}", name="devis_pdf", methods={"GET"})
      */
-    public function devisPDF(Pdf $knpSnappyPdf, Devis $devis)
+    public function devisPDF(Pdf $knpSnappyPdf,  $hashedId)
     {
+        $devis  = $this->devisRepo->findByHashedId($hashedId);
+        //get reservation using hashed 
 
         // Configure Dompdf according to your needs7
         $pdfOptions = new Options();
@@ -104,10 +106,13 @@ class PdfController extends AbstractController
     }
 
     /**
-     * @Route("generer/contrat-pdf/{id}", name="contrat_pdf", methods={"GET"},requirements={"id":"\d+"})
+     * @Route("generer/contrat-pdf/{hashedId}", name="contrat_pdf", methods={"GET"})
      */
-    public function pdfcontrat(Pdf $knpSnappyPdf, Reservation $reservation)
+    public function pdfcontrat(Pdf $knpSnappyPdf, $hashedId)
     {
+
+        //get reservation using hashed 
+        $reservation  = $this->reservationRepo->findByHashedId($hashedId);
 
         // Configure Dompdf according to your needs7
         $pdfOptions = new Options();
@@ -204,12 +209,15 @@ class PdfController extends AbstractController
 
 
     /**
-     * @Route("/generer/facture-pdf/{id}", name="facture_pdf", methods={"GET"},requirements={"id":"\d+"})
+     * @Route("/generer/facture-pdf/{hashedId}", name="facture_pdf", methods={"GET"},requirements={"id":"\d+"})
      */
-    public function facturePDF(Pdf $knpSnappyPdf, Reservation $reservation)
+    public function facturePDF(Pdf $knpSnappyPdf,  $hashedId)
     {
 
+        //get reservation using hashed 
+        $reservation  = $this->reservationRepo->findByHashedId($hashedId);
         $sommeFraisTotalHT = 0;
+        
         foreach ($reservation->getFraisSupplResas() as $resa) {
             $sommeFraisTotalHT = $sommeFraisTotalHT + $resa->getTotalHT();
         }

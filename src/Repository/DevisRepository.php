@@ -35,6 +35,30 @@ class DevisRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findByHashedId(string $hashedId)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = 'SELECT r.*
+                FROM devis r
+                WHERE SHA1(r.id) = :hashedId';
+
+        $stmt = $conn->prepare($sql);
+        $result = $stmt->executeQuery(['hashedId' => $hashedId]);
+
+        if (!$result->rowCount()) {
+            return null;
+        }
+
+        $reservationData = $result->fetchAssociative();
+        if (!$reservationData) {
+            return null;
+        }
+
+        return $this->getEntityManager()
+            ->find('App\Entity\Devis', $reservationData['id']);
+    }
+
 
     // /**
     //  * @return Devis[] Returns an array of Devis objects

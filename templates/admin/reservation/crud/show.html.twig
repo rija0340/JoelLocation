@@ -92,7 +92,7 @@
 				kilometrage
 			</button>
 
-			<a href="{{ path('contrat_pdf', {'id': reservation.id}) }}" type="button" id="" class="btn btn-outline-danger text-uppercase p-1">
+			<a href="{{ path('contrat_pdf', {'hashedId': hashedId}) }}" type="button" id="" class="btn btn-outline-danger text-uppercase p-1">
 				<i class="fa fa-newspaper-o"></i>
 				Générer le contrat</a>
 
@@ -102,7 +102,7 @@
 
 			{# <button type="button" class="btn btn-outline-info text-uppercase p-1" id="genererFacturePDF"><i class="fa fa-send (alias)"></i>générer facture</button> #}
 
-			<a href="{{ path('facture_pdf', {'id': reservation.id}) }}" type="button" class="btn btn-outline-info text-uppercase p-1">
+			<a href="{{ path('facture_pdf', {'hashedId': hashedId}) }}" type="button" class="btn btn-outline-info text-uppercase p-1">
 				<i class="fa fa-send (alias)"></i>
 				générer facture</a>
 

@@ -202,6 +202,7 @@ class DevisController extends AbstractController
     {
         return $this->render('admin/devis/details.html.twig', [
             'devis' => $devis,
+            'hashedId' => sha1($devis->getId())
         ]);
     }
 
