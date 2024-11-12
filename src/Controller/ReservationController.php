@@ -357,12 +357,13 @@ class ReservationController extends AbstractController
 
             $vehicule = $this->vehiculeRepo->findOneBy(['immatriculation' => $immatriculation]);
             $reservation->setVehicule($vehicule);
-            //tarif vehicule
+            //tarif vehicule si custom est renseigné
             if ($request->query->has('has-custom-tarif') && $request->query->get('has-custom-tarif') == 'true') {
                 $tarifVeh =  intval($request->query->get("custom-tarif"));
             } else {
-
-                $tarifVeh = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
+                //on garde le tarif du véhicule si pas de custom 
+                // $tarifVeh = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
+                $tarifVeh =  $reservation->getTarifVehicule() ;
             }
             //duree
             $duree = $this->dateHelper->calculDuree($dateDepart, $dateRetour);

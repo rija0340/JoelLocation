@@ -112,14 +112,16 @@ function addEventListenerHasCustomTarifCheckbox(task) {
             // tarifResaInput.value = tarifOptionsGarantiesInput.value;
 
             //mettre tarifresainput required
-            tarifResaInput.required = true;
+            customTarifInput.required = true;
         } else {
             //display block
             tarifBddContainer.style.display = 'block';
             customTarifContainer.style.display = 'none';
             customTarifInput.value = '';
+            //remettre la valeur du tarif resa 
+            tarifResaInput.value = task.tarifResa;
             // document.getElementById('default-option').selected = true;
-            tarifResaInput.removeAttribute('required');
+            customTarifInput.removeAttribute('required');
         }
 
 
@@ -173,9 +175,9 @@ function updateTarifVehiculeAndResa(event, data, task) {
 
     if (event.target.value != "") {
         let vehiculeObj = data.find(item => item.immatriculation === event.target.value)
-        setTarifBddToHtml(vehiculeObj.tarifBdd);
-        // somme tarif vehicule et options garanties 
-        tarifResaEl.value = vehiculeObj.tarifBdd + task.tarifOptionsGaranties;
+        // setTarifBddToHtml(vehiculeObj.tarifBdd);
+        // // somme tarif vehicule et options garanties 
+        // tarifResaEl.value = vehiculeObj.tarifBdd + task.tarifOptionsGaranties;
     }
 }
 
