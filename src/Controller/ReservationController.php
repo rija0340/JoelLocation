@@ -386,14 +386,19 @@ class ReservationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             // le champ véhicule ne peux être vide
+            $dataForm = $immatriculation = $request->request->get('reservation');
             if ($request->request->get('select') == "") {
-
-                $this->flashy->error("Le véhicule ne peut être pas vide");
-                return $this->redirectToRoute('reservation_edit', ['id' => $reservation->getId()]);
+                $immatriculation = $dataForm['immatriculation'];
+                $vehicule = $this->vehiculeRepo->findOneBy(['immatriculation' =>$immatriculation]);
+                // $this->flashy->error("Le véhicule ne peut être pas vide");
+                // return $this->redirectToRoute('reservation_edit', ['id' => $reservation->getId()]);
             } else {
 
                 $vehicule = $this->vehiculeRepo->find($request->request->get('select'));
-                $tarifVeh = $this->tarifsHelper->calculTarifVehicule($form->getData()->getDateDebut(), $form->getData()->getDateFin(), $vehicule);
+            }
+                // $tarifVeh = $this->tarifsHelper->calculTarifVehicule($form->getData()->getDateDebut(), $form->getData()->getDateFin(), $vehicule);
+                //permettre la modification de prix
+                $tarifVeh = $dataForm['tarifVehicule'];
                 $reservation->setVehicule($vehicule);
                 $duree = $this->dateHelper->calculDuree($form->getData()->getDateDebut(), $form->getData()->getDateFin());
                 $reservation->setDuree($duree);
@@ -412,7 +417,6 @@ class ReservationController extends AbstractController
 
                 $this->flashy->success("Modification effectuée");
                 return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
-            }
         }
 
         return $this->render('admin/reservation/crud/edit.html.twig', [

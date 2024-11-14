@@ -113,6 +113,7 @@ class PlanningController extends AbstractController
             $datas[$key]['immatriculation'] = $reservation->getVehicule()->getImmatriculation();
             $datas[$key]['telClient'] = $reservation->getClient()->getTelephone();
             $datas[$key]['tarifResa'] = $reservation->getPrix();
+            $datas[$key]['tarifVehicule'] = $reservation->getTarifVehicule();
             $datas[$key]['tarifOptionsGaranties'] = $reservation->getPrixOptions() + $reservation->getPrixGaranties();
             $datas[$key]['vehicule'] = $this->vehiculeObjToArray($reservation);
             // $datas[$key]['unscheduled'] = true;

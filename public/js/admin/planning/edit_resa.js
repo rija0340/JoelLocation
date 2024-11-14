@@ -6,10 +6,10 @@ var tarifOptionsGarantiesInput = document.getElementById('tarifs-options-garanti
 var dateDepartInput = document.getElementById('dateDepart');
 var dateRetourInput = document.getElementById('dateRetour');
 var hasCustomTarifInput = document.getElementById('has-custom-tarif');
-var tarifBddContainer = document.querySelector('.container-tarif-bdd');
+var tarifVehiculeContainer = document.querySelector('.container-tarif-vehicule');
 var customTarifContainer = document.querySelector('.container-custom-tarif');
 var customTarifInput = document.getElementById('custom-tarif');
-var tarifBddInput = document.getElementById('tarif-bdd');
+var tarifVehiculeInput = document.getElementById('tarif-vehicule');
 var cancelButton = document.getElementById("cancelButton");
 
 
@@ -22,7 +22,7 @@ function editResa(task) {
 
     //cacher custom par defaut 
     customTarifContainer.style.display = "none";
-    tarifBddContainer.style.display = "block";
+    tarifVehiculeContainer.style.display = "block";
 
     // Single event listener for both input fields
     dateDepartInput.addEventListener('change', function () {
@@ -69,8 +69,11 @@ function addActionToForm(task) {
 }
 
 function addDataToModalForm(task) {
+    console.log("task");
+    console.log(task);
     refInput.value = task.reference;
     tarifResaInput.value = task.tarifResa;
+    tarifVehiculeInput.value = task.tarifVehicule;
     tarifOptionsGarantiesInput.value = task.tarifOptionsGaranties;
 
     console.log("task.start_date");
@@ -104,9 +107,9 @@ function addEventListenerHasCustomTarifCheckbox(task) {
         if (hasCustomTarifInput.checked) {
 
             //display none
-            tarifBddContainer.style.display = 'none';
+            tarifVehiculeContainer.style.display = 'none';
             customTarifContainer.style.display = 'block';
-            tarifBddInput.value = '';
+            // tarifBddInput.value = '';
 
             //mise a jour tarif resa  =  tarif options garanties seulement
             // tarifResaInput.value = tarifOptionsGarantiesInput.value;
@@ -115,7 +118,7 @@ function addEventListenerHasCustomTarifCheckbox(task) {
             customTarifInput.required = true;
         } else {
             //display block
-            tarifBddContainer.style.display = 'block';
+            tarifVehiculeContainer.style.display = 'block';
             customTarifContainer.style.display = 'none';
             customTarifInput.value = '';
             //remettre la valeur du tarif resa 
@@ -152,7 +155,7 @@ function showModal() {
 }
 
 function onClickCancelButton() {
-    tarifBddContainer.style.display = "block";
+    tarifVehiculeContainer.style.display = "block";
     customTarifContainer.style.display = "none";
 
     // Add click event listener to the cancel button
@@ -166,10 +169,10 @@ function onClickCancelButton() {
 }
 
 function updateTarifVehiculeAndResa(event, data, task) {
-    const tarifBddEl = document.getElementById('tarif-bdd');
+    const tarifVehiculeEl = document.getElementById('tarif-vehicule');
     const tarifResaEl = document.getElementById('tarif-resa');
     const inputCustomTarif = document.getElementById('custom-tarif');
-    tarifBddEl.innerHTML = '';
+    tarifVehiculeEl.innerHTML = '';
     tarifResaEl.innerHTML = '';
     inputCustomTarif.value = "";
 

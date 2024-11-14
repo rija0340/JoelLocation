@@ -17,11 +17,19 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
 class ReservationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+
+        $reservation = $options['data']; // Access the Reservation entity
+        // Compute the value for the unmapped field
+        $prixOptionsGaranties = $prixOptionsGaranties = $reservation  ?
+        $reservation->getPrixOptions() + $reservation->getPrixGaranties()
+        : 0;
+
         $builder
             ->add('date_debut', DateTimeType::class, [
                 'widget' => 'single_text',
@@ -35,6 +43,27 @@ class ReservationType extends AbstractType
                     "step" => "any"
                 ]
             ])
+            ->add('tarifVehicule', NumberType::class)
+            ->add('prix', NumberType::class,
+            [
+                'attr' => [
+                    'readonly' => true, // Optional: Make it readonly
+                ],
+            ])
+            ->add('prixOptionsGaranties', NumberType::class, [
+                'mapped' => false, // Not linked to the Reservation entity
+                'data' => $prixOptionsGaranties, // Set the computed value
+                'required' => false,
+                'attr' => [
+                    'readonly' => true, // Optional: Make it readonly
+                ],
+                ])
+                ->add('immatriculation', HiddenType::class, [
+                    'mapped' => false,
+                    'data' => $reservation->getVehicule()->getImmatriculation(), // Set the computed value
+                    'required' => false
+                ])
+
             // ->add('type')
             // ->add('date_reservation', DateTimeType::class, [
             //     'widget' => 'single_text',

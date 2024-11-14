@@ -24,6 +24,18 @@
 		<label for="">Agence de retour:</label>
 		{{ form_widget(form.agenceRetour) }}
 	</div>
+	<div class="form-group col-md-4">
+		<label for="">Tarif Véhicule:</label>
+		{{ form_widget(form.tarifVehicule) }}
+	</div>
+	<div class="form-group col-md-4">
+		<label for="">Prix options et garanties:</label>
+		{{ form_widget(form.prixOptionsGaranties) }}
+	</div>
+	<div class="form-group col-md-4">
+		<label for="">Prix Resa:</label>
+		{{ form_widget(form.prix) }}
+	</div>
 	<div class="form-group col-md-6">
 		<label for="">Vehicule actuel:</label>
 		<input type="text" class="form-control" value="{{ reservation.vehicule.marque }} {{ reservation.vehicule.modele }} {{ reservation.vehicule.immatriculation }}" readonly>

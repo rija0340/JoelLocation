@@ -88,4 +88,18 @@
 	<script src="{{ asset('js/loading-body/jquery.loadingModal.min.js') }}"></script>
 	{# // <script src="{{asset('js/datepicker/bootstrap-datepicker.min.js')}}"></script> #}
 	<script src="{{asset('js/admin/reservation_edit_ajax.js')}}"></script>
+	<script>
+		const tarifVehiculeInput = document.getElementById('reservation_tarifVehicule');
+		const prixOptionsGarantiesInput = document.getElementById('reservation_prixOptionsGaranties');
+		const prixInput = document.getElementById('reservation_prix');
+
+		tarifVehiculeInput.addEventListener('input', updatePrice);
+
+		function updatePrice() {
+		const tarifVehicule = parseFloat(tarifVehiculeInput.value) || 0;
+		const prixOptionsGaranties = parseFloat(prixOptionsGarantiesInput.value) || 0;
+		const prix = tarifVehicule + prixOptionsGaranties;
+		prixInput.value = prix.toFixed(2);
+		}
+	</script>
 {% endblock %}
