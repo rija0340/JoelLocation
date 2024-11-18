@@ -28,6 +28,7 @@ use App\Repository\ModeReservationRepository;
 use App\Repository\VehiculeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ReservationRepository;
+use App\Service\SymfonyMailerHelper;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use MercurySeries\FlashyBundle\FlashyNotifier;
@@ -64,6 +65,7 @@ class VenteComptoirController extends AbstractController
     private $reservationHelper;
     private $modePaiementRepo;
     private $modeReservationRepo;
+    private $symfonyMailerHelper;
 
     public function __construct(
         ModeReservationRepository $modeReservationRepo,
@@ -84,7 +86,8 @@ class VenteComptoirController extends AbstractController
         DevisRepository $devisRepo,
         ReservationSession $reservationSession,
         Mailjet $mail,
-        ReservationHelper $reservationHelper
+        ReservationHelper $reservationHelper,
+        SymfonyMailerHelper $symfonyMailerHelper
     ) {
 
         $this->reservationSession = $reservationSession;
@@ -106,6 +109,7 @@ class VenteComptoirController extends AbstractController
         $this->reservationHelper = $reservationHelper;
         $this->modePaiementRepo = $modePaiementRepo;
         $this->modeReservationRepo = $modeReservationRepo;
+        $this->symfonyMailerHelper = $symfonyMailerHelper;
     }
 
     /**
@@ -406,8 +410,9 @@ class VenteComptoirController extends AbstractController
             $numDevis = $result;
             //url de téléchargement du devis
             $devis = $this->devisRepo->findOneBy(['numero' => $numDevis]);
-            $this->reservationHelper->sendMailConfirmationDevis($devis, $request);
-            $this->flashy->success('Le devis a été enregistré avec succés et un mail a été envoyé au client');
+            // $this->reservationHelper->sendMailConfirmationDevis($devis, $request);
+            $this->symfonyMailerHelper->sendDevis($request, $devis);
+            // $this->flashy->success('Le devis a été enregistré avec succés et un mail a été envoyé au client');
             return $this->redirectToRoute('devis_index');
         } else {
             $this->flashy->error("Un devis similaire existe déjà !");
