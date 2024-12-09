@@ -243,10 +243,12 @@
 			<p class="font-weight-bold label">
 				Garantie(s) souscrite(s):
 			</p>
-			{% for garantie in devis.garanties %}
+			<ul class="">
+				{% for garantie in devis.garanties %}
 
-				<p class="js-garantie">{{garantie}}</p>
-			{% endfor %}
+					<li class="js-garantie">{{garantie}}</li>
+				{% endfor %}
+			</ul>
 			{# <p class="font-italic">Aucune garantie souscrite.</p> #}
 			<p class="font-weight-bold label">
 				Taxes de dépassement horaire

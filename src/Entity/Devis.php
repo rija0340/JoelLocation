@@ -6,8 +6,7 @@ use App\Repository\DevisRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-
-
+use App\Entity\OptionsGarantiesInterface;
 // DON'T forget the following use statement!!!
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -17,7 +16,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  * @ORM\Entity(repositoryClass=DevisRepository::class)
  * @UniqueEntity(fields={"client","vehicule", "dateDepart", "dateRetour"})
  */
-class Devis
+class Devis implements OptionsGarantiesInterface
 {
 
     /**
@@ -394,7 +393,7 @@ class Devis
         return $this->prixOptions;
     }
 
-    public function setPrixOptions(float $prixOptions): self
+    public function setPrixOptions(?float $prixOptions): self
     {
         $this->prixOptions = $prixOptions;
 
@@ -406,7 +405,7 @@ class Devis
         return $this->prixGaranties;
     }
 
-    public function setPrixGaranties(float $prixGaranties): self
+    public function setPrixGaranties(?float $prixGaranties): self
     {
         $this->prixGaranties = $prixGaranties;
 

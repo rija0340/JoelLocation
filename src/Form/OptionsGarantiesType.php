@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Devis;
 use App\Entity\Options;
 use App\Entity\Garantie;
 use App\Entity\Reservation;
@@ -34,8 +35,12 @@ class OptionsGarantiesType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-            'data_class' => Reservation::class,
+        // $resolver->setDefaults([
+        //     'data_class' => Reservation::class,
+        // ]);
+        $resolver->setAllowedValues('data_class', [
+            Devis::class,
+            Reservation::class
         ]);
     }
 }

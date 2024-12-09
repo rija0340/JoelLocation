@@ -1,0 +1,54 @@
+<div class="x_panel">
+	<h3>Devis</h3>
+	<div class="clearfix"></div>
+	<div class="x_title"></div>
+	<div class="overflow-auto">
+		<table class="table w-100 " id="datatable_devis">
+			<thead>
+				<tr>
+					<th class="hide">Numéro Devis</th>
+					<th>Numéro Devis</th>
+					<th>Date de création</th>
+					<th>Réservation/véhicule</th>
+					<th>Dates/Durée</th>
+					<th>Prix</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for reserv in devis %}
+					<tr>
+						<td id="devisID " class="hide">{{reserv.id}}</td>
+						<td>{{ reserv.numero }}</td>
+						<td>{{ reserv.dateCreation ? reserv.dateCreation|date('d/m/Y - H:i') : '' }}</td>
+						<td>{{ reserv.vehicule.marque}}
+							{{ reserv.vehicule.modele}}</td>
+						<td>{{ reserv.dateDepart ? reserv.dateDepart|date('d/m/Y - H:i') : '' }}/
+							{{ reserv.duree}}
+							jours
+						</td>
+						<td>{{ reserv.prix|number_format(2,","," ") }}
+							€</td>
+						<td class=" d-flex justify-content-center ">
+							<div class="row">
+								<div class="col-auto mr-4 p-0">
+									<a href="{{path('devis_pdf', {'hashedId': reserv.id|sha1})}}" class="text-dark" title="Télécharger pdf">
+										<i class="fa fa-arrow-circle-o-down" style="font-size: 1.5em !important;"></i>
+									</a>
+									{# <a class="telechargerDevis" id="telechargerDevis"><i class="fa fa-arrow-circle-o-down" style="font-size: 1.5em !important;"></i></a> #}
+								</div>
+								<div class="col-auto m-0 p-0">
+									{% if date(reserv.dateDepart) > date("now") or reserv.transformed == true  %}
+										<a class="btn btn-link text-danger m-0 p-0" style=" -webkit-appearance: none" href="{{path('validation_step2', {'id':reserv.id})}}" id="validerDevis" title="Valider">
+											<i class="fa fa-check" style="font-size: 1.5em !important;"></i>
+										</a>
+									{% endif %}
+								</div>
+							</div>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>

@@ -10,16 +10,15 @@ use App\Service\TarifsHelper;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use App\Entity\OptionsGarantiesInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ReservationRepository::class)
  */
-class Reservation
+class Reservation implements OptionsGarantiesInterface
 {
 
-    private $tarifsGaranties;
-    private $tarifsOptions;
 
     public function __construct()
     {
@@ -509,9 +508,7 @@ class Reservation
         $this->setReference($ref);
     }
 
-    public function frenchMouth()
-    {
-    }
+    public function frenchMouth() {}
 
     public function getTarifVehicule(): ?float
     {

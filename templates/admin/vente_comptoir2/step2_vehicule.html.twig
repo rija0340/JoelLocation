@@ -18,6 +18,7 @@
 
 <div
 	class="row">
+
 	{# centrer image vehicule #}
 	<div class="col-md-3 col-sm-3 d-flex justify-content-center align-items-center">
 		<img src="{{vich_uploader_asset(vehicule, 'imageFile') }}" class="img-fluid" style="max-width: 80%;" id="vehicule_photo">
@@ -26,57 +27,66 @@
 		<div class="row">
 			<div class="col-md-4">
 				<div class="caracteristiques">
-					<ul>
-						{% for item in vehiculeInfo %}
-							<div class="vehicule-item">
-								<i class="fa {{ item.icon }}"></i>
-								{{ item.label }}
-								:
-								<span class="badge badge-secondary " id="{{ item.id }}">{{ item.value }}</span>
+					{% for item in vehiculeInfo %}
+						<div
+							class="vehicule-item">
+							{# <i class="fa {{ item.icon }}"></i> #}
+							<div class="mr-auto ">
+								<span class="badge badge-secondary ">{{ item.label }}:</span>
 							</div>
-						{% endfor %}
-					</div>
+							<div>
+								<span class="" id="{{ item.id }}">{{ item.value }}</span>
+							</div>
+						</div>
+					{% endfor %}
 				</div>
-				<div class="col-md-4">
-					<div class="caracteristiques">
-						{% for item in vehiculeInfo2 %}
-							<div class="vehicule-item">
-								<i class="fa {{ item.icon }}" aria-hidden="true"></i>
-								{{ item.label }}
-								:
-								<span class="badge badge-secondary " id="{{ item.id }}">
-									<strong>{{ item.value }}</strong>
+			</div>
+			<div class="col-md-5">
+				<div class="caracteristiques">
+					{% for item in vehiculeInfo2 %}
+						<div class="vehicule-item d-flex ">
+							<div
+								class="mr-auto ">
+								{# <i class="fa {{ item.icon }}" aria-hidden="true"></i> #}
+								<span class="badge badge-secondary ">{{ item.label }}:</span>
+
+							</div>
+
+							<div>
+								<span class=" " id="{{ item.id }}">
+									{{ item.value }}
 								</span>
 							</div>
-						{% endfor %}
-					</div>
+						</div>
+					{% endfor %}
 				</div>
-				<div class="col-md-4 text-center">
-					<div class="custom-control custom-radio mt-3">
-						<input type="radio" id="vehicule{{ vehicule.id }}" name="vehicule" class="custom-control-input" value="{{ vehicule.id }}" required>
-						<label class="custom-control-label" for="vehicule{{ vehicule.id }}">
-							<span class="btn btn-outline-secondary">
-								<i class="fa fa-check-circle mr-2"></i>Choisir ce véhicule
+			</div>
+			<div class="col-md-3 text-center">
+				<div class="custom-control custom-radio mt-3">
+					<input type="radio" id="vehicule{{ vehicule.id }}" name="vehicule" class="custom-control-input" {% if devis.vehicule is not null and devis.vehicule.id == vehicule.id %} checked {% endif %} value="{{ vehicule.id }}" required>
+					<label class="custom-control-label" for="vehicule{{ vehicule.id }}">
+						<span class="btn btn-outline-secondary">
+							<i class="fa fa-check-circle mr-2"></i>Choisir ce véhicule
+						</span>
+					</label>
+				</div>
+				<div class="tarif-info mt-2">
+					{% for data in data %}
+						{% if data['vehicule'] == vehicule %}
+							<span class="badge badge-success">
+								<i class="fa fa-tag mr-1"></i>Tarif:
+								{{ data['tarif'] }}
+								€
 							</span>
-						</label>
-					</div>
-					<div class="tarif-info mt-2">
-						{% for data in data %}
-							{% if data['vehicule'] == vehicule %}
-								<span class="badge badge-success">
-									<i class="fa fa-tag mr-1"></i>Tarif:
-									{{ data['tarif'] }}
-									€
-								</span>
-							{% endif %}
-						{% endfor %}
-					</div>
-					<div class="tarifVehicule mt-2" style="display: none;">
-						<label>Autre tarif :
-						</label>
-						<input type="text" name="tarifVehicule" class="form-control inputTarif">
-					</div>
+						{% endif %}
+					{% endfor %}
+				</div>
+				<div class="tarifVehicule mt-2" style="display: none;">
+					<label>Autre tarif :
+					</label>
+					<input type="text" name="tarifVehicule" class="form-control inputTarif">
 				</div>
 			</div>
 		</div>
 	</div>
+</div>

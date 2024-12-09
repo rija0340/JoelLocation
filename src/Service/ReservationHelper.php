@@ -3,6 +3,8 @@
 namespace App\Service;
 
 use App\Classe\Mailjet;
+use App\Classe\ReservationSession;
+use App\Entity\Devis;
 use App\Service\TarifsHelper;
 use App\Repository\DevisRepository;
 use App\Repository\TarifsRepository;
@@ -10,7 +12,8 @@ use App\Repository\OptionsRepository;
 use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
 use App\Repository\ReservationRepository;
-use Symfony\Component\HttpFoundation\Request;
+use App\Entity\OptionsGarantiesInterface;
+use App\Repository\UserRepository;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ReservationHelper
@@ -19,39 +22,30 @@ class ReservationHelper
     private $vehiculeRepo;
     private $optionsRepo;
     private $garantiesRepo;
-    private $tarifsRepo;
     private $dateHelper;
     private $reservationRepo;
-    private $mailjet;
-    private $devisRepo;
-    private $site;
-    private $router;
     private $tarifsHelper;
+    private $reservationSession;
+    private $userRepo;
 
     public function __construct(
         ReservationRepository $reservationRepo,
         DateHelper $dateHelper,
-        TarifsRepository $tarifsRepo,
         VehiculeRepository $vehiculeRepo,
         OptionsRepository $optionsRepo,
         GarantieRepository $garantiesRepo,
-        Mailjet $mailjet,
-        DevisRepository $devisRepo,
-        Site $site,
-        UrlGeneratorInterface $router,
-        TarifsHelper $tarifsHelper
+        TarifsHelper $tarifsHelper,
+        ReservationSession $reservationSession,
+        UserRepository $userRepo
     ) {
         $this->vehiculeRepo = $vehiculeRepo;
         $this->optionsRepo = $optionsRepo;
         $this->garantiesRepo = $garantiesRepo;
-        $this->tarifsRepo = $tarifsRepo;
         $this->dateHelper = $dateHelper;
         $this->reservationRepo = $reservationRepo;
-        $this->mailjet = $mailjet;
-        $this->devisRepo = $devisRepo;
-        $this->site = $site;
-        $this->router = $router;
         $this->tarifsHelper = $tarifsHelper;
+        $resaSession = $reservationSession;
+        $userRepo = $userRepo;
     }
 
     //paramètres : reservations qui sont inclus durant l'intervalle de date de début et date de fin 
@@ -213,61 +207,190 @@ class ReservationHelper
 
 
 
-    public function sendMailConfirmationReservation($reservation)
+    // public function sendMailConfirmationDevis($devis, Request $request)
+    // {
+
+    //     $baseUrl = $this->site->getBaseUrl($request);
+    //     $devisLink   = $this->router->generate('devis_pdf', ['id' => $devis->getId()]);
+    //     $validationDevisLink   = $this->router->generate('validation_step2', ['id' => $devis->getId()]);
+
+    //     // $devisLink = '/backoffice/devispdf/' . $devis->getId();
+    //     // $resaLink = '/espaceclient/validation/options-garanties/{id}' . $devis->getId();
+    //     $devisLink = $baseUrl . $devisLink;
+    //     $validationDevisLink = $baseUrl . $validationDevisLink;
+    //     // $linkDevis = "<a style='text-decoration: none; color: inherit;' href='" . $devisLink . "'>Télécharger mon devis</a>";
+    //     // $linkReservation = "<a style='text-decoration: none; color: inherit;' href='" . $resaLink . "'>JE RESERVE</a>";
+
+    //     $fullName = $devis->getClient()->getPrenom() . " " . $devis->getClient()->getNom();
+    //     $email = $devis->getClient()->getMail();
+    //     $this->mailjet->confirmationDevis(
+    //         $fullName,
+    //         $email,
+    //         "Confirmation de demande de devis",
+    //         $this->dateHelper->frenchDate($devis->getDateCreation()),
+    //         $devis->getNumero(),
+    //         $devis->getVehicule()->getMarque() . " " . $devis->getVehicule()->getModele(),
+    //         $this->dateHelper->frenchDate($devis->getDateDepart()) . " " . $this->dateHelper->frenchHour($devis->getDateDepart()),
+    //         $this->dateHelper->frenchDate($devis->getDateRetour()) . " " . $this->dateHelper->frenchHour($devis->getDateRetour()),
+    //         $devisLink,
+    //         $validationDevisLink
+    //         //            $this->dateHelper->frenchDate($devis->getDateRetour()->modify('+3 days'))
+    //     );
+    // }
+
+    public function getOptionsGarantiesAllAndData(OptionsGarantiesInterface $entity)
     {
-        //lien pour telechargement devis
+        $dataOptions = [];
+        foreach ($entity->getOptions() as $key => $option) {
+            $dataOptions[$key]['id'] = $option->getId();
+            $dataOptions[$key]['appelation'] = $option->getAppelation();
+            $dataOptions[$key]['description'] = $option->getDescription();
+            $dataOptions[$key]['type'] = $option->getType();
+            $dataOptions[$key]['prix'] = $option->getPrix();
+        }
+        $dataGaranties = [];
+        foreach ($entity->getGaranties() as $key => $garantie) {
+            $dataGaranties[$key]['id'] = $garantie->getId();
+            $dataGaranties[$key]['appelation'] = $garantie->getAppelation();
+            $dataGaranties[$key]['description'] = $garantie->getDescription();
+            $dataGaranties[$key]['prix'] = $garantie->getPrix();
+        }
 
-        $devis = $this->devisRepo->find($reservation->getNumDevis());
-        $url = '/backoffice/devispdf/' . $devis->getId();
-        $url = "https://joellocation.com" . $url;
-        $linkDevis = "<a style='text-decoration: none; color: inherit;' href='" . $url . "'>Télécharger mon devis</a>";
+        $allOptions = [];
+        foreach ($this->optionsRepo->findAll() as $key => $option) {
+            $allOptions[$key]['id'] = $option->getId();
+            $allOptions[$key]['appelation'] = $option->getAppelation();
+            $allOptions[$key]['description'] = $option->getDescription();
+            $allOptions[$key]['prix'] = $option->getPrix();
+            $allOptions[$key]['type'] = $option->getType();
+        }
 
-        $this->mailjet->confirmationReservation(
-            $reservation->getClient()->getPrenom() . ' ' . $reservation->getClient()->getNom(),
-            $reservation->getClient()->getMail(),
-            "Confirmation de réservation",
-            $reservation->getDateReservation()->format('d/m/Y H:i'),
-            $reservation->getReference(),
-            $reservation->getVehicule()->getMarque() . ' ' . $reservation->getVehicule()->getModele(),
-            $reservation->getDateDebut()->format('d/m/Y H:i'),
-            $reservation->getDateFin()->format('d/m/Y H:i'),
-            $reservation->getPrix(),
-            $this->tarifsHelper->VingtCinqPourcent($reservation->getPrix()),
-            $this->tarifsHelper->CinquantePourcent($reservation->getPrix()),
-            $reservation->getPrix() - $this->tarifsHelper->VingtCinqPourcent($reservation->getPrix()),
-            $linkDevis
-        );
+
+        $allGaranties = [];
+        foreach ($this->garantiesRepo->findAll() as $key => $garantie) {
+            $allGaranties[$key]['id'] = $garantie->getId();
+            $allGaranties[$key]['appelation'] = $garantie->getAppelation();
+            $allGaranties[$key]['description'] = $garantie->getDescription();
+            $allGaranties[$key]['prix'] = $garantie->getPrix();
+        }
+
+        return [
+            'dataOptions' => $dataOptions,
+            'dataGaranties' => $dataGaranties,
+            'allOptions' => $allOptions,
+            'allGaranties' => $allGaranties
+        ];
     }
 
-
-    public function sendMailConfirmationDevis($devis, Request $request)
+    public function createDevisFromResaSession($resaSession)
     {
 
-        $baseUrl = $this->site->getBaseUrl($request);
-        $devisLink   = $this->router->generate('devis_pdf', ['id' => $devis->getId()]);
-        $validationDevisLink   = $this->router->generate('validation_step2', ['id' => $devis->getId()]);
+        $dateDepart = $resaSession->getDateDepart();
+        $dateRetour = $resaSession->getDateRetour();
+        $devis = new Devis();
+        $devis->setDownloadId(uniqid());
+        $devis->setDateDepart($resaSession->getDateDepart());
+        $devis->setDateRetour($resaSession->getDateRetour());
+        $devis->setAgenceDepart($resaSession->getAgenceDepart());
+        $devis->setAgenceRetour($resaSession->getAgenceRetour());
+        if (!is_null($resaSession->getVehicule())) {
+            $vehicule = $this->vehiculeRepo->find($resaSession->getVehicule());
+            $devis->setVehicule($vehicule);
+        }
+        $devis->setDuree($this->dateHelper->calculDuree($dateDepart, $dateRetour));
 
-        // $devisLink = '/backoffice/devispdf/' . $devis->getId();
-        // $resaLink = '/espaceclient/validation/options-garanties/{id}' . $devis->getId();
-        $devisLink = $baseUrl . $devisLink;
-        $validationDevisLink = $baseUrl . $validationDevisLink;
-        // $linkDevis = "<a style='text-decoration: none; color: inherit;' href='" . $devisLink . "'>Télécharger mon devis</a>";
-        // $linkReservation = "<a style='text-decoration: none; color: inherit;' href='" . $resaLink . "'>JE RESERVE</a>";
 
-        $fullName = $devis->getClient()->getPrenom() . " " . $devis->getClient()->getNom();
-        $email = $devis->getClient()->getMail();
-        $this->mailjet->confirmationDevis(
-            $fullName,
-            $email,
-            "Confirmation de demande de devis",
-            $this->dateHelper->frenchDate($devis->getDateCreation()),
-            $devis->getNumero(),
-            $devis->getVehicule()->getMarque() . " " . $devis->getVehicule()->getModele(),
-            $this->dateHelper->frenchDate($devis->getDateDepart()) . " " . $this->dateHelper->frenchHour($devis->getDateDepart()),
-            $this->dateHelper->frenchDate($devis->getDateRetour()) . " " . $this->dateHelper->frenchHour($devis->getDateRetour()),
-            $devisLink,
-            $validationDevisLink
-            //            $this->dateHelper->frenchDate($devis->getDateRetour()->modify('+3 days'))
-        );
+        if ($this->optionsObjectsFromSession($resaSession) != null) {
+            foreach ($this->optionsObjectsFromSession($resaSession) as $option) {
+                $devis->addOption($option);
+            }
+        }
+        if ($this->garantiesObjectsFromSession($resaSession) != null) {
+            foreach ($this->garantiesObjectsFromSession($resaSession) as $garantie) {
+                $devis->addGaranty($garantie);
+            }
+        }
+        $devis->setLieuSejour($resaSession->getLieuSejour());
+        $devis->setDateCreation($this->dateHelper->dateNow());
+
+        //si l'admin a entrée un autre tarif dans étape 2, alors on considère ce tarif
+        if ($resaSession->getTarifVehicule()) {
+            $tarifVehicule = $resaSession->getTarifVehicule();
+        } else {
+            if (!is_null($resaSession->getVehicule())) {
+                $tarifVehicule  = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
+            } else {
+                $tarifVehicule = 0;
+            }
+        }
+        $devis->setTarifVehicule($tarifVehicule);
+
+        $hasConducteur = $resaSession->getConducteur() == "true"  ? true : false;
+        $devis->setConducteur($hasConducteur);
+        $tarifTotal = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $devis->getGaranties(), $devis->getOptions(), $hasConducteur);
+        $devis->setPrix($tarifTotal);
+        $devis->setTransformed(false);
+        $devis->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($this->optionsObjectsFromSession($resaSession), $devis->getConducteur()));
+        $devis->setPrixGaranties($this->tarifsHelper->sommeTarifsGaranties($this->garantiesObjectsFromSession($resaSession)));
+
+        return  $devis;
+    }
+
+    //return an array of objects of options or null
+    public function optionsObjectsFromSession($resaSession)
+    {
+        //on met dans un tableau les objets corresponans aux options cochés
+        $optionsObjects = [];
+        if ($resaSession->getOptions() != null) {
+            foreach ($resaSession->getOptions() as $opt) {
+                array_push($optionsObjects, $this->optionsRepo->find($opt));
+            }
+            return $optionsObjects;
+        } else {
+            return null;
+        }
+    }
+
+    //return an array of objects of garanties
+    public function garantiesObjectsFromSession($resaSession)
+    {
+        //on met dans un tableau les objets corresponans aux garanties cochés
+        $garantiesObjects = [];
+        if ($resaSession->getGaranties() != null) {
+            foreach ($resaSession->getGaranties() as $gar) {
+                array_push($garantiesObjects, $this->garantiesRepo->find($gar));
+            }
+            return $garantiesObjects;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Get array of garantie IDs from devis
+     * @param Devis $devis
+     * @return array
+     */
+    public function getGarantiesIds($devis): array
+    {
+        $garantieIds = [];
+        foreach ($devis->getGaranties() as $garantie) {
+            $garantieIds[] = $garantie->getId();
+        }
+        return $garantieIds;
+    }
+
+    /**
+     * Get array of garantie IDs from devis
+     * @param Devis $devis
+     * @return array
+     */
+    public function getOptionsIds($devis): array
+    {
+        $optionIds = [];
+        foreach ($devis->getOptions() as $option) {
+            $optionIds[] = $option->getId();
+        }
+        return $optionIds;
     }
 }

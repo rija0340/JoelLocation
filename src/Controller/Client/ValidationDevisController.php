@@ -14,7 +14,7 @@ use App\Repository\OptionsRepository;
 use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
 use App\Repository\ReservationRepository;
-use App\Form\ValidationOptionsGarantiesType;
+use App\Form\OptionsGarantiesType;
 use Symfony\Component\HttpFoundation\Request;
 use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\HttpFoundation\Response;
@@ -74,171 +74,6 @@ class ValidationDevisController extends AbstractController
     }
 
     /**
-     * @Route("/espaceclient/validation/options-garanties/{id}", name="validation_step2", methods={"GET","POST"})
-     */
-    public function step2OptionsGaranties(Request $request, Devis $devis): Response
-    {
-
-        //un tableau contenant les véhicules utilisées dans les reservations se déroulant entre
-        //$dateDepart et $dateRetour
-        $reservations = $this->reservationRepo->findReservationIncludeDates($devis->getDateDepart(), $devis->getDateRetour());
-
-        $vehiculeIsNotAvailable = $this->reservationHelper->vehiculeIsInvolved($reservations, $devis->getVehicule());
-
-        if ($vehiculeIsNotAvailable) {
-            $vehiculesAvailable = $this->reservationHelper->getVehiculesDisponible($reservations);
-        } else {
-            $vehiculesAvailable = null;
-        }
-
-        // $devisID = $request->request->get('reservID');
-
-        // if ($devisID == null) {
-        //     $devisID = $request->request->get('devisID');
-        // }
-
-        // $devis = $this->devisRepo->find($devisID);
-        if ($devis->getClient() != $this->getUser()) {
-            $this->flashy->error("Le devis n'existe pas");
-            return $this->redirectToRoute('espaceClient_index');
-        }
-
-        $garanties = $this->garantiesRepo->findAll();
-        $options = $this->optionsRepo->findAll();
-
-        $form = $this->createForm(ValidationOptionsGarantiesType::class, $devis);
-        $form->handleRequest($request);
-
-        //serializer options et garanties de devis
-        $dataOptions = [];
-        foreach ($devis->getOptions() as $key => $option) {
-            $dataOptions[$key]['id'] = $option->getId();
-            $dataOptions[$key]['appelation'] = $option->getAppelation();
-            $dataOptions[$key]['description'] = $option->getDescription();
-            $dataOptions[$key]['type'] = $option->getType();
-            $dataOptions[$key]['prix'] = $option->getPrix();
-        }
-
-        $dataGaranties = [];
-        foreach ($devis->getGaranties() as $key => $garantie) {
-            $dataGaranties[$key]['id'] = $garantie->getId();
-            $dataGaranties[$key]['appelation'] = $garantie->getAppelation();
-            $dataGaranties[$key]['description'] = $garantie->getDescription();
-            $dataGaranties[$key]['prix'] = $garantie->getPrix();
-        }
-
-        $allOptions = [];
-        foreach ($this->optionsRepo->findAll() as $key => $option) {
-            $allOptions[$key]['id'] = $option->getId();
-            $allOptions[$key]['appelation'] = $option->getAppelation();
-            $allOptions[$key]['description'] = $option->getDescription();
-            $allOptions[$key]['prix'] = $option->getPrix();
-            $allOptions[$key]['type'] = $option->getType();
-        }
-
-
-        $allGaranties = [];
-        foreach ($this->garantiesRepo->findAll() as $key => $garantie) {
-            $allGaranties[$key]['id'] = $garantie->getId();
-            $allGaranties[$key]['appelation'] = $garantie->getAppelation();
-            $allGaranties[$key]['description'] = $garantie->getDescription();
-            $allGaranties[$key]['prix'] = $garantie->getPrix();
-        }
-
-        if ($request->get('editedOptionsGaranties') == "true") {
-            $conducteurAdditionnel = $request->get('radio-conducteur');
-            $checkboxOptions = $request->get("checkboxOptions");
-            $checkboxGaranties = $request->get("checkboxGaranties");
-
-            //dd($conducteurAdditionnel);
-            //ajout de boolean conducteur additionnel dans base de données
-            if ($conducteurAdditionnel == 'false') {
-                $conducteurAdditionnel = false;
-            } else {
-                $conducteurAdditionnel = true;
-            }
-            if ($devis->getConducteur() != $conducteurAdditionnel) {
-                $devis->setConducteur($conducteurAdditionnel);
-            }
-
-            if ($checkboxOptions != []) {
-                // tous enlever et puis entrer tous les options
-                foreach ($devis->getOptions() as $option) {
-                    $devis->removeOption($option);
-                }
-                for ($i = 0; $i < count($checkboxOptions); $i++) {
-                    $devis->addOption($this->optionsRepo->find($checkboxOptions[$i]));
-                }
-                $this->em->flush();
-            } else {
-                // si il y a des options, les enlever
-                if (count($devis->getOptions()) > 0) {
-                    foreach ($devis->getOptions() as $option) {
-                        $devis->removeOption($option);
-                    }
-                }
-                $this->em->flush();
-            }
-
-            if ($checkboxGaranties != []) {
-                // tous enlever et puis entrer tous les garanties
-                foreach ($devis->getGaranties() as $garantie) {
-                    $devis->removeGaranty($garantie);
-                }
-                for ($i = 0; $i < count($checkboxGaranties); $i++) {
-                    $devis->addGaranty($this->garantiesRepo->find($checkboxGaranties[$i]));
-                }
-                $this->em->flush();
-            } else {
-                // si il y a des garanties, les enlever
-                if (count($devis->getGaranties()) > 0) {
-                    foreach ($devis->getGaranties() as $garantie) {
-                        $devis->removeGaranty($garantie);
-                    }
-                }
-                $this->em->flush();
-            }
-            $devis->setPrixGaranties($this->tarifsHelper->sommeTarifsGaranties($devis->getGaranties()));
-            $devis->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($devis->getOptions(), $devis->getConducteur()));
-            $devis->setPrix($devis->getTarifVehicule() + $devis->getPrixOptions() + $devis->getPrixGaranties());
-
-            $this->em->flush();
-            return $this->redirectToRoute('validation_step3', ['id' => $devis->getId()]);
-        }
-
-        // if ($form->isSubmitted() && $form->isValid()) {
-
-        //     $devis->setPrix($this->tarifsHelper->sommeTarifsGaranties($devis->getGaranties()) + $this->tarifsHelper->sommeTarifsOptions($devis->getOptions()) + $devis->getTarifVehicule());
-        //     $entityManager = $this->getDoctrine()->getManager();
-        //     $entityManager->persist($devis);
-        //     $entityManager->flush();
-
-        //     return $this->redirectToRoute('validation_step3', ['devisID' => $devisID]);
-        // }
-
-        $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($devis->getDateDepart(), $devis->getDateRetour(), $devis->getVehicule());
-        $duree = $this->dateHelper->calculDuree($devis->getDateDepart(), $devis->getDateRetour());
-
-        return $this->render('client/reservation/validation/step2OptionsGaranties.html.twig', [
-
-            'garanties' => $garanties,
-            'tarifVehicule' => $tarifVehicule,
-            'duree' => $duree,
-            'options' => $options,
-            'devis' => $devis,
-            'form' => $form->createView(),
-            'dataOptions' => $dataOptions,
-            'dataGaranties' => $dataGaranties,
-            'allOptions' => $allOptions,
-            'allGaranties' => $allGaranties,
-            'vehiculeIsNotAvailable' => $vehiculeIsNotAvailable,
-            'vehiculesAvailable' => $vehiculesAvailable,
-            'prixConductSuppl' => $this->tarifsHelper->getPrixConducteurSupplementaire()
-        ]);
-    }
-
-
-    /**
      * @Route("/espaceclient/validation/infos-client/{id}", name="validation_step3", methods={"GET","POST"})
      */
     public function step3infosClient(Request $request, Devis $devis): Response
@@ -279,7 +114,7 @@ class ValidationDevisController extends AbstractController
                 $this->flashy->success("Devis transformé en réservation");
 
                 //lien pour telechargement devis
-                $url = $this->generateUrl('devis_pdf', ['id' => $devis->getId()]);
+                $url = $this->generateUrl('devis_pdf', ['hashedId' => sha1($devis->getId())]);
                 $url = "https://joellocation.com" . $url;
                 $linkDevis = "<a style='text-decoration: none; color: inherit;' href='" . $url . "'>Télécharger mon devis</a>";
 
@@ -313,7 +148,8 @@ class ValidationDevisController extends AbstractController
                 'devis' => $devis,
                 'formClient' => $formClient->createView(),
                 'tarifVehicule' => $tarifVehicule,
-                'duree' => $duree
+                'duree' => $duree,
+                'prixConductSuppl' => $this->tarifsHelper->getPrixConducteurSupplementaire()
             ]);
         } else {
             return $this->render('client/reservation/validation/error.html.twig');

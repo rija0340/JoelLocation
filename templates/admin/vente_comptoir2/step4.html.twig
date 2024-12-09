@@ -8,6 +8,7 @@
 	<link rel="stylesheet" href="{{asset('css/admin/steps.css')}}">
 	<link href="{{asset('css/admin/details_vehicule.css')}}" rel="stylesheet">
 	<link href="{{asset('css/admin/vente_comptoir/vente_comptoir.css')}}" rel="stylesheet">
+	<link href="{{ asset( 'css/client/sidebarResaResume.css')}}" rel="stylesheet">
 {% endblock %}
 {% block current_page_right %}
 	<div class="row">
@@ -50,117 +51,7 @@
 	{# step 4 #}
 	<div class="row">
 		<div class="col-md-3">
-			<div class="x_panel  h-100">
-				<div class="x_title">
-					<h3>
-						<i class="fa fa-chevron-right"></i>
-						Votre réservation
-					</h3>
-				</div>
-				<img src="{{vich_uploader_asset(vehicule, 'imageFile') }}" alt="{{vehicule.marque}} {{vehicule.modele}}" style="width:100%;" id="vehicule_photo">
-
-				<h3 class="heading">Agence départ
-				</h3>
-				<div class="content_depart">
-					<p>
-						<i class="fa fa-map-marker"></i>
-						<span id="agence_depart">{{agenceDepart}}</span><br>
-						<span id="date_depart">{{dateDepart | date('d/m/Y') }}</span>
-						<span id="heure_depart">
-							{{dateDepart | date('H:i') }}</span>
-					</p>
-				</div>
-				<h3 class="heading">Agence retour
-				</h3>
-				<div class="content_retour">
-					<p>
-						<i class="fa fa-map-marker"></i>
-						<span id="agence_retour">{{agenceRetour}}</span><br>
-						<span id="date_retour">{{dateRetour | date('d/m/Y')}}</span>
-						<span id="heure_retour">{{dateRetour | date('H:i')}}</span>
-					</p>
-				</div>
-				<p>
-					Soit
-					<span id="nombre_jours_location">{{duree}}</span>
-					jours de location</p>
-
-				<h3 class="heading">Prix de base de location</h3>
-				<div class="prix_location">
-					<span id="prixTotal">{{ tarifVehicule|number_format(2,","," ") }}</span>
-					EUR<br>
-					soit
-					<span id="prixJournalier">{{ (tarifVehicule / duree) |number_format(2,","," ")}}</span>
-					euro/jour
-				</div>
-				<div class="prestation">
-					<h3 class="heading">Prestations incluses</h3>
-					<ul class="">
-						<li>
-							<i class="fa fa-check"></i>
-							Kilométrage Illimité
-						</li>
-						<li>
-							<i class="fa fa-check"></i>
-							Assurance accidents causés aux tiers
-						</li>
-						<li>
-							<i class="fa fa-check"></i>
-							Assurance responsabilité civile
-						</li>
-						<li>
-							<i class="fa fa-check"></i>
-							Assurance collision (CDW)
-						</li>
-						<li>
-							<i class="fa fa-check"></i>
-							TVA 8.5 %
-						</li>
-					</ul>
-				</div>
-				<div class="options">
-					<h3 class="heading">{{(options != null or conducteur != "false") ? "Options" : "" }}</h3>
-					<ul>
-						{% if conducteur == "true" %}
-							<li>Conducteur additionnel : 50€</li>
-						{% endif %}
-						{% if options != null   %}
-							{% for option in options %}
-								<li>{{option.appelation}}
-									:
-									{{option.prix|number_format(2,","," ")}}
-									€</li>
-							{% endfor %}
-						{% endif %}
-					</ul>
-
-				</div>
-				<div class="garanties">
-
-					<h3 class="heading">{{ garanties != null ? "Garanties" : ''}}
-					</h3>
-					<ul>
-						{% for garantie in garanties %}
-							<li>{{garantie.appelation}}
-								:
-								{{garantie.prix|number_format(2,","," ")}}
-								€</li>
-						{% endfor %}
-					</ul>
-				</div>
-				<hr>
-				<div class="divTarifTotal text-center">
-					<h5 class="heading">Prix total pour
-						{{duree}}
-						jours
-					</h5>
-					<span class="tarifTotal">
-						<h5 class="text-danger">{{tarifTotal|number_format(2,","," ")}}€</h5>
-					</span><br>
-					<span class="tarifJournalier">Soit
-						{{(tarifTotal / duree)|number_format(2,","," ") }}€ / jour</span>
-				</div>
-			</div>
+			{% include "client/reservation/validation/parts/sidebarResaResume.html.twig" %}
 		</div>
 		<div class="col-md-9">
 			<div class="x_panel">

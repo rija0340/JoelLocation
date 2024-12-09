@@ -35,6 +35,7 @@ use App\Form\CollectionFraisSupplResaType;
 use App\Repository\AnnulationReservationRepository;
 use App\Repository\ModePaiementRepository;
 use App\Repository\AppelPaiementRepository;
+use App\Repository\DevisRepository;
 use App\Service\Site;
 use App\Service\SymfonyMailerHelper;
 use Knp\Component\Pager\PaginatorInterface;
@@ -47,9 +48,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-/**
- * @Route("/backoffice/reservation")
- */
 class ReservationController extends AbstractController
 {
     private $conducteurRepo;
@@ -65,6 +63,7 @@ class ReservationController extends AbstractController
     private $flashy;
     private $modePaiementRepo;
     private $appelPaiementRepository;
+    private $reservationHelper;
 
     public function __construct(
         ModePaiementRepository $modePaiementRepo,
@@ -83,7 +82,8 @@ class ReservationController extends AbstractController
         VehiculeRepository $vehiculeRepo,
         OptionsRepository $optionsRepo,
         GarantieRepository $garantiesRepo,
-        AppelPaiementRepository $appelPaiementRepository
+        AppelPaiementRepository $appelPaiementRepository,
+        ReservationHelper $reservationHelper
 
     ) {
 
@@ -100,10 +100,11 @@ class ReservationController extends AbstractController
         $this->conducteurRepo = $conducteurRepo;
         $this->modePaiementRepo = $modePaiementRepo;
         $this->appelPaiementRepository = $appelPaiementRepository;
+        $this->reservationHelper = $reservationHelper;
     }
 
     /**
-     * @Route("/", name="reservation_index", methods={"GET"},requirements={"id":"\d+"})
+     * @Route("/backoffice/reservation/", name="reservation_index", methods={"GET"},requirements={"id":"\d+"})
      */
     public function index(ReservationRepository $reservationRepository, Request $request, PaginatorInterface $paginator): Response
     {
@@ -123,7 +124,7 @@ class ReservationController extends AbstractController
 
 
     /**
-     * @Route("/new", name="reservation_new", methods={"GET","POST"},requirements={"id":"\d+"})
+     * @Route("/backoffice/reservation/new", name="reservation_new", methods={"GET","POST"},requirements={"id":"\d+"})
      */
     public function new(Request $request, VehiculeRepository $vehiculeRepository): Response
     {
@@ -163,7 +164,7 @@ class ReservationController extends AbstractController
 
 
     /**
-     * @Route("/details/{id}", name="reservation_show", methods={"GET", "POST"},requirements={"id":"\d+"})
+     * @Route("/backoffice/reservation/details/{id}", name="reservation_show", methods={"GET", "POST"},requirements={"id":"\d+"})
      */
     public function show(Reservation $reservation, Request $request, ReservationHelper $reservationHelper, AnnulationReservationRepository $annulationResaRepo): Response
     {
@@ -173,23 +174,6 @@ class ReservationController extends AbstractController
             $resa->setDuree($this->dateHelper->calculDuree($resa->getDateDebut(), $resa->getDateFin()));
         }
         $this->em->flush();
-
-        // $reservations = $this->reservationRepo->findAll();
-        // $arrayResa = [];
-        // foreach ($reservations as $resa) {
-
-        //     if ($resa->getReference() != '') {
-
-        //         $arrayResa[$resa->getReference()] = array(
-        //             'dateDepart' => $resa->getDateDebut()->format('d-m-Y H:i'),
-        //             'dateFin' => $resa->getDateFin()->format('d-m-Y H:i'),
-        //             'duree' => $this->dateHelper->calculDuree($resa->getDateDebut(), $resa->getDateFin())
-        //         );
-        //     }
-        // }
-
-        // $biz = $reservation;
-        // $diff = $this->dateHelper->calculDuree($biz->getDateDebut(), $biz->getDateFin());
 
         //test nouvelle methode pour calculer diff dates
 
@@ -337,7 +321,7 @@ class ReservationController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="reservation_edit", methods={"GET","POST"},requirements={"id":"\d+"})
+     * @Route("/backoffice/reservation/{id}/edit", name="reservation_edit", methods={"GET","POST"},requirements={"id":"\d+"})
      */
     public function edit(Request $request, Reservation $reservation): Response
     {
@@ -363,7 +347,7 @@ class ReservationController extends AbstractController
             } else {
                 //on garde le tarif du véhicule si pas de custom 
                 // $tarifVeh = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
-                $tarifVeh =  $reservation->getTarifVehicule() ;
+                $tarifVeh =  $reservation->getTarifVehicule();
             }
             //duree
             $duree = $this->dateHelper->calculDuree($dateDepart, $dateRetour);
@@ -389,34 +373,34 @@ class ReservationController extends AbstractController
             $dataForm = $immatriculation = $request->request->get('reservation');
             if ($request->request->get('select') == "") {
                 $immatriculation = $dataForm['immatriculation'];
-                $vehicule = $this->vehiculeRepo->findOneBy(['immatriculation' =>$immatriculation]);
+                $vehicule = $this->vehiculeRepo->findOneBy(['immatriculation' => $immatriculation]);
                 // $this->flashy->error("Le véhicule ne peut être pas vide");
                 // return $this->redirectToRoute('reservation_edit', ['id' => $reservation->getId()]);
             } else {
 
                 $vehicule = $this->vehiculeRepo->find($request->request->get('select'));
             }
-                // $tarifVeh = $this->tarifsHelper->calculTarifVehicule($form->getData()->getDateDebut(), $form->getData()->getDateFin(), $vehicule);
-                //permettre la modification de prix
-                $tarifVeh = $dataForm['tarifVehicule'];
-                $reservation->setVehicule($vehicule);
-                $duree = $this->dateHelper->calculDuree($form->getData()->getDateDebut(), $form->getData()->getDateFin());
-                $reservation->setDuree($duree);
+            // $tarifVeh = $this->tarifsHelper->calculTarifVehicule($form->getData()->getDateDebut(), $form->getData()->getDateFin(), $vehicule);
+            //permettre la modification de prix
+            $tarifVeh = $dataForm['tarifVehicule'];
+            $reservation->setVehicule($vehicule);
+            $duree = $this->dateHelper->calculDuree($form->getData()->getDateDebut(), $form->getData()->getDateFin());
+            $reservation->setDuree($duree);
 
-                // si le prix a été modifié
-                if ($form->getData()->getPrix() != $ancientPrix) {
-                    $reservation->setTarifVehicule($tarifVeh);
-                    $reservation->setPrix($form->getData()->getPrix());
-                } else {
-                    $reservation->setTarifVehicule($tarifVeh);
-                    $t = $this->tarifsHelper->calculTarifVehicule($form->getData()->getDateDebut(), $form->getData()->getDateFin(), $vehicule);
-                    $reservation->setPrix($this->tarifsHelper->calculTarifTotal($tarifVeh, $reservation->getOptions(), $reservation->getGaranties(), $reservation->getConducteur()));
-                }
+            // si le prix a été modifié
+            if ($form->getData()->getPrix() != $ancientPrix) {
+                $reservation->setTarifVehicule($tarifVeh);
+                $reservation->setPrix($form->getData()->getPrix());
+            } else {
+                $reservation->setTarifVehicule($tarifVeh);
+                $t = $this->tarifsHelper->calculTarifVehicule($form->getData()->getDateDebut(), $form->getData()->getDateFin(), $vehicule);
+                $reservation->setPrix($this->tarifsHelper->calculTarifTotal($tarifVeh, $reservation->getOptions(), $reservation->getGaranties(), $reservation->getConducteur()));
+            }
 
-                $this->em->flush();
+            $this->em->flush();
 
-                $this->flashy->success("Modification effectuée");
-                return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
+            $this->flashy->success("Modification effectuée");
+            return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
         }
 
         return $this->render('admin/reservation/crud/edit.html.twig', [
@@ -428,7 +412,7 @@ class ReservationController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="reservation_delete", methods={"DELETE"},requirements={"id":"\d+"})
+     * @Route("/backoffice/reservation/{id}", name="reservation_delete", methods={"DELETE"},requirements={"id":"\d+"})
      */
     public function delete(Request $request, Reservation $reservation): Response
     {
@@ -442,7 +426,7 @@ class ReservationController extends AbstractController
     }
 
     /**
-     * @Route("/archiver/{id}", name="reservation_archive", methods={"GET", "POST"},requirements={"id":"\d+"})
+     * @Route("/backoffice/reservation/archiver/{id}", name="reservation_archive", methods={"GET", "POST"},requirements={"id":"\d+"})
      */
     public function archiver(Request $request, Reservation $reservation): Response
     {
@@ -454,59 +438,49 @@ class ReservationController extends AbstractController
     }
 
     /**
-     *  @Route("/modifier/options-garanties/{id}", name="reservation_optionsGaranties_edit", methods={"GET","POST"},requirements={"id":"\d+"})
+     * @Route("/espaceclient/validation/options-garanties/{id}", name="validation_step2", methods={"GET","POST"})
+     * @Route("/backoffice/reservation/modifier/options-garanties/{id}", name="reservation_optionsGaranties_edit", methods={"GET","POST"},requirements={"id":"\d+"})
      */
-    public function editOptionsGaranties(Request $request, Reservation $reservation): Response
+    public function editOptionsGaranties(Request $request, $id, DevisRepository $devisRepo): Response
     {
+        // Determine which entity to load based on the route
+        $routeName = $request->get('_route');
+        $vehiculesAvailable = null;
+        $vehiculeIsNotAvailable = null;
+        if ($routeName === 'validation_step2') {
+            $entity = $devisRepo->find($id);
+            //un tableau contenant les véhicules utilisées dans les reservations se déroulant entre
+            //$dateDepart et $dateRetour
+            $reservations = $this->reservationRepo->findReservationIncludeDates($entity->getDateDepart(), $entity->getDateRetour());
 
-        $form = $this->createForm(OptionsGarantiesType::class, $reservation);
+            $vehiculeIsNotAvailable = $this->reservationHelper->vehiculeIsInvolved($reservations, $entity->getVehicule());
+
+            if ($vehiculeIsNotAvailable) {
+                $vehiculesAvailable = $this->reservationHelper->getVehiculesDisponible($reservations);
+            } else {
+                $vehiculesAvailable = null;
+            }
+            // $devis = $this->devisRepo->find($devisID);
+            if ($entity->getClient() != $this->getUser()) {
+                $this->flashy->error("Le devis n'existe pas");
+                return $this->redirectToRoute('espaceClient_index');
+            }
+        } else {
+            $entity = $this->reservationRepo->find($id);
+        }
+
+        // Rest of your logic remains the same since both entities implement OptionsGarantiesInterface
+        $form = $this->createForm(OptionsGarantiesType::class, $entity);
+
         $garanties = $this->garantiesRepo->findAll();
         $options = $this->optionsRepo->findAll();
         $form->handleRequest($request);
 
         //serializer options et garanties de devis
-        $dataOptions = [];
-        foreach ($reservation->getOptions() as $key => $option) {
-            $dataOptions[$key]['id'] =  $option->getId();
-            $dataOptions[$key]['appelation'] = $option->getAppelation();
-            $dataOptions[$key]['description'] = $option->getDescription();
-            $dataOptions[$key]['type'] = $option->getType();
-            $dataOptions[$key]['prix'] = $option->getPrix();
-        }
-
-        $dataGaranties = [];
-        foreach ($reservation->getGaranties() as $key => $garantie) {
-            $dataGaranties[$key]['id'] =  $garantie->getId();
-            $dataGaranties[$key]['appelation'] = $garantie->getAppelation();
-            $dataGaranties[$key]['description'] = $garantie->getDescription();
-            $dataGaranties[$key]['prix'] = $garantie->getPrix();
-        }
-
-        $allOptions = [];
-        foreach ($this->optionsRepo->findAll() as $key => $option) {
-            $allOptions[$key]['id'] =  $option->getId();
-            $allOptions[$key]['appelation'] = $option->getAppelation();
-            $allOptions[$key]['description'] = $option->getDescription();
-            $allOptions[$key]['prix'] = $option->getPrix();
-            $allOptions[$key]['type'] = $option->getType();
-        }
-
-
-        $allGaranties = [];
-        foreach ($this->garantiesRepo->findAll() as $key => $garantie) {
-            $allGaranties[$key]['id'] =  $garantie->getId();
-            $allGaranties[$key]['appelation'] = $garantie->getAppelation();
-            $allGaranties[$key]['description'] = $garantie->getDescription();
-            $allGaranties[$key]['prix'] = $garantie->getPrix();
-        }
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $reservation->setPrixGaranties($reservation->getSommeGaranties());
-            $reservation->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($reservation->getOptions(), $reservation->getConducteur()));
-            $reservation->setPrix($reservation->getTarifVehicule() + $reservation->getPrixGaranties() + $reservation->getPrixOptions());
-            $this->em->flush();
-            return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
-        }
+        $dataOptions =  $this->reservationHelper->getOptionsGarantiesAllAndData($entity)["dataOptions"];
+        $dataGaranties = $this->reservationHelper->getOptionsGarantiesAllAndData($entity)["dataGaranties"];
+        $allOptions = $this->reservationHelper->getOptionsGarantiesAllAndData($entity)["allOptions"];
+        $allGaranties = $this->reservationHelper->getOptionsGarantiesAllAndData($entity)["allGaranties"];
 
         if ($request->get('editedOptionsGaranties') == "true") {
 
@@ -516,23 +490,23 @@ class ReservationController extends AbstractController
 
             //changement valeur conducteur
             $conducteur = ($conduteur == "true") ? true : false;
-            $reservation->setConducteur($conducteur);
+            $entity->setConducteur($conducteur);
             $this->em->flush();
 
             if ($checkboxOptions != []) {
                 // tous enlever et puis entrer tous les options
-                foreach ($reservation->getOptions() as $option) {
-                    $reservation->removeOption($option);
+                foreach ($entity->getOptions() as $option) {
+                    $entity->removeOption($option);
                 }
                 for ($i = 0; $i < count($checkboxOptions); $i++) {
-                    $reservation->addOption($this->optionsRepo->find($checkboxOptions[$i]));
+                    $entity->addOption($this->optionsRepo->find($checkboxOptions[$i]));
                 }
                 $this->em->flush();
             } else {
                 // si il y a des options, les enlever
-                if (count($reservation->getOptions()) > 0) {
-                    foreach ($reservation->getOptions() as $option) {
-                        $reservation->removeOption($option);
+                if (count($entity->getOptions()) > 0) {
+                    foreach ($entity->getOptions() as $option) {
+                        $entity->removeOption($option);
                     }
                 }
                 $this->em->flush();
@@ -540,51 +514,67 @@ class ReservationController extends AbstractController
 
             if ($checkboxGaranties != []) {
                 // tous enlever et puis entrer tous les garanties
-                foreach ($reservation->getGaranties() as $garantie) {
-                    $reservation->removeGaranty($garantie);
+                foreach ($entity->getGaranties() as $garantie) {
+                    $entity->removeGaranty($garantie);
                 }
                 for ($i = 0; $i < count($checkboxGaranties); $i++) {
-                    $reservation->addGaranty($this->garantiesRepo->find($checkboxGaranties[$i]));
+                    $entity->addGaranty($this->garantiesRepo->find($checkboxGaranties[$i]));
                 }
                 $this->em->flush();
             } else {
                 // si il y a des garanties, les enlever
-                if (count($reservation->getGaranties()) > 0) {
-                    foreach ($reservation->getGaranties() as $garantie) {
-                        $reservation->removeGaranty($garantie);
+                if (count($entity->getGaranties()) > 0) {
+                    foreach ($entity->getGaranties() as $garantie) {
+                        $entity->removeGaranty($garantie);
                     }
                 }
                 $this->em->flush();
             }
 
-            $reservation->setPrixGaranties($this->tarifsHelper->sommeTarifsGaranties($reservation->getGaranties()));
-            $reservation->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($reservation->getOptions(), $reservation->getConducteur()));
-            $reservation->setPrix($reservation->getTarifVehicule() + $reservation->getPrixOptions() + $reservation->getPrixGaranties());
+            $entity->setPrixGaranties($this->tarifsHelper->sommeTarifsGaranties($entity->getGaranties()));
+            $entity->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($entity->getOptions(), $entity->getConducteur()));
+            $entity->setPrix($entity->getTarifVehicule() + $entity->getPrixOptions() + $entity->getPrixGaranties());
 
             $this->em->flush();
-            return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
+
+            $redirectRoute = $routeName == "validation_step2" ? 'validation_step3' : 'reservation_show';
+
+            return $this->redirectToRoute($redirectRoute, ['id' => $entity->getId()]);
         }
 
-
-        return $this->render('admin/devis_reservation/options_garanties/edit.html.twig', [
+        $template  = $routeName === 'validation_step2' ? 'client/reservation/validation/step2OptionsGaranties.html.twig' :  'admin/devis_reservation/options_garanties/edit.html.twig';
+        return $this->render($template, [
             'form' => $form->createView(),
-            'devis' => $reservation,
-            'garanties' => $garanties,
-            'options' => $options,
+            'devis' => $entity,
             'routeReferer' => 'reservation_show',
             'dataOptions' => $dataOptions,
             'dataGaranties' => $dataGaranties,
             'allOptions' => $allOptions,
             'allGaranties' => $allGaranties,
-            'conducteur' => $reservation->getConducteur(),
-            'type' => 'reservation'
-
+            'conducteur' => $entity->getConducteur(),
+            'cancelPath' => $this->getCancelPath($routeName, $entity->getId()),
+            'type' => 'reservation', //doit etre dnamique si devis aussi utilise cette fonction 
+            //var pour validation
+            'vehiculesAvailable' => $vehiculesAvailable,
+            'vehiculeIsNotAvailable' => $vehiculeIsNotAvailable,
+            'tarifVehicule' => $entity->getTarifVehicule(),
+            'duree' => $entity->getDuree(),
+            'prixConductSuppl' => $this->tarifsHelper->getPrixConducteurSupplementaire()
         ]);
     }
-
+    private function getCancelPath(string $routeName, $entityId): string
+    {
+        if ($routeName == "reservation_optionsGaranties_edit") {
+            $route = "reservation_show";
+            return $this->generateUrl($route, ['id' => $entityId]);
+        } else if ($routeName == "validation_step2") {
+            $route  = "client_reservations";
+            return $this->generateUrl($route);
+        }
+    }
 
     /**
-     * @Route("/envoi-identification-connexion/{id}", name="reservation_ident_connex", methods={"GET","POST"},requirements={"id":"\d+"})
+     * @Route("/backoffice/reservation/envoi-identification-connexion/{id}", name="reservation_ident_connex", methods={"GET","POST"},requirements={"id":"\d+"})
      */
     public function envoyerIdentConnex(Request $request, Reservation $reservation, UserPasswordEncoderInterface $passwordEncoder): Response
     {
@@ -612,7 +602,7 @@ class ReservationController extends AbstractController
 
 
     /**
-     *  @Route("/modifier/{id}/infos-client/", name="reservation_infosClient_edit", methods={"GET","POST"},requirements={"id":"\d+"})
+     *  @Route("/backoffice/reservation/modifier/{id}/infos-client/", name="reservation_infosClient_edit", methods={"GET","POST"},requirements={"id":"\d+"})
      *
      */
     public function editInfosClient(Request $request, Reservation $reservation): Response
@@ -639,7 +629,7 @@ class ReservationController extends AbstractController
     }
 
     /**
-     *  @Route("/ajouter-conducteur/{reservation}", name="add_conducteur", methods={"GET","POST"},requirements={"id":"\d+"})
+     *  @Route("/backoffice/reservation/ajouter-conducteur/{reservation}", name="add_conducteur", methods={"GET","POST"},requirements={"id":"\d+"})
      *
      */
     public function addConducteur(Request $request, Reservation $reservation): Response
@@ -675,7 +665,7 @@ class ReservationController extends AbstractController
 
     /**
      * from autocompletion input
-     *  @Route("/ajouter-conducteur-selection/", name="add_selected_conducteur", methods={"GET","POST"},requirements={"id":"\d+"})
+     *  @Route("/backoffice/reservation/ajouter-conducteur-selection/", name="add_selected_conducteur", methods={"GET","POST"},requirements={"id":"\d+"})
      *
      */
     public function addSelectedConducteur(Request $request)
@@ -699,7 +689,7 @@ class ReservationController extends AbstractController
 
 
     /**
-     *  @Route("/liste-conducteurs/", name="liste_conducteurs", methods={"GET","POST"},requirements={"id":"\d+"})
+     *  @Route("/backoffice/reservation/liste-conducteurs/", name="liste_conducteurs", methods={"GET","POST"},requirements={"id":"\d+"})
      *
      */
     public function listeConduteurs(Request $request): Response
@@ -724,7 +714,7 @@ class ReservationController extends AbstractController
 
 
     /**
-     * @Route("/modifier-conducteur/{id}/{reservation}", name="reservation_conducteur_edit", methods={"GET","POST"})
+     * @Route("/backoffice/reservation/modifier-conducteur/{id}/{reservation}", name="reservation_conducteur_edit", methods={"GET","POST"})
      */
     public function editConducteur(Request $request, Conducteur $conducteur, Reservation $reservation): Response
     {
@@ -748,7 +738,7 @@ class ReservationController extends AbstractController
 
 
     /**
-     * @Route("supprimer-conducteur/{id}/{reservation}", name="reservation_conducteur_delete", methods={"DELETE"},requirements={"id":"\d+"})
+     * @Route("/backoffice/reservation/supprimer-conducteur/{id}/{reservation}", name="reservation_conducteur_delete", methods={"DELETE"},requirements={"id":"\d+"})
      */
     public function deleteConducteur(Request $request, Conducteur $conducteur, Reservation $reservation): Response
     {
@@ -765,7 +755,7 @@ class ReservationController extends AbstractController
 
 
     /**
-     * @Route("effacer-paiement/{id}/{reservation}", name="reservation_paiement_delete", methods={"DELETE"})
+     * @Route("/backoffice/reservation/effacer-paiement/{id}/{reservation}", name="reservation_paiement_delete", methods={"DELETE"})
      */
     public function deletePaiement(Request $request, Paiement $paiement, Reservation $reservation): Response
     {
@@ -779,7 +769,7 @@ class ReservationController extends AbstractController
     }
 
     /**
-     * @Route("/retour-anticipe/{id}", name="reservation_retour_anticipe", methods={"GET", "POST"})
+     * @Route("/backoffice/reservation/retour-anticipe/{id}", name="reservation_retour_anticipe", methods={"GET", "POST"})
      */
     public function retourAnticipe(Request $request,  Reservation $reservation): Response
     {
@@ -795,7 +785,7 @@ class ReservationController extends AbstractController
     }
 
     /**
-     * @Route("/resas-non-solde", name="reserv_non_solde", methods={"GET"})
+     * @Route("/backoffice/reservation/resas-non-solde", name="reserv_non_solde", methods={"GET"})
      */
     public function resas_non_solde(): Response
     {
@@ -806,42 +796,21 @@ class ReservationController extends AbstractController
     }
 
     /**
-     * @Route("/envoyer-contrat-pdf/{id}", name="envoyer_contrat", methods={"GET","POST"},requirements={"id":"\d+"})
+     * @Route("/backoffice/reservation/envoyer-contrat-pdf/{id}", name="envoyer_contrat", methods={"GET","POST"},requirements={"id":"\d+"})
      */
     public function envoyerContrat(Request $request, Reservation $reservation, SymfonyMailerHelper $symfonyMailerHelper): Response
     {
-        // envoie de mail utilisant mailjet 
-        // $mail = $reservation->getClient()->getMail();
-        // $nom = $reservation->getClient()->getNom();
-
-        // $contratLink   = $this->generateUrl('contrat_pdf', ['id' => $reservation->getId()]);
-
-        // $url  = $site->getBaseUrl($request) . $contratLink;
-        //  $this->mailjet->sendContratLink($mail, $nom, "Contrat", $reservation->getReference(), $url);
-        // $this->flashy->success("L'url du contrat de la réservation N°" . $reservation->getReference() . " a été envoyé");
-        // fin envoie de mail utilisant mailjet 
 
         $symfonyMailerHelper->sendContrat($request, $reservation);
-
 
         return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
     }
 
     /**
-     * @Route("/envoyer-facture-pdf/{id}", name="envoyer_facture", methods={"GET","POST"},requirements={"id":"\d+"})
+     * @Route("/backoffice/reservation/envoyer-facture-pdf/{id}", name="envoyer_facture", methods={"GET","POST"},requirements={"id":"\d+"})
      */
     public function envoyerFacture(Request $request, Reservation $reservation, SymfonyMailerHelper $symfonyMailerHelper): Response
     {
-
-        // $mail = $reservation->getClient()->getMail();
-        // $nom = $reservation->getClient()->getNom();
-        // // a decommenter 
-        // $factureLink = $this->generateUrl('facture_pdf', ['id' => $reservation->getId()]);
-        // $url  = $site->getBaseUrl($request) . $factureLink;
-
-        // $this->mailjet->sendFactureLink($mail, $nom, "Facture", $reservation->getReference(), $url);
-
-        // $this->flashy->success("Url facture envoyé");
         $symfonyMailerHelper->sendFacture($request, $reservation);
 
         return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
@@ -850,11 +819,10 @@ class ReservationController extends AbstractController
 
 
     /**
-     * @Route("/reservations-par-vehicule/{id}", name="reservations_par_vehicule", methods={"GET","POST"},requirements={"id":"\d+"})
+     * @Route("/backoffice/reservation/reservations-par-vehicule/{id}", name="reservations_par_vehicule", methods={"GET","POST"},requirements={"id":"\d+"})
      */
     public function reservationsByVehicule(Vehicule $vehicule): Response
     {
-
 
         $reservations  = $this->reservationRepo->findBy(['vehicule' => $vehicule]);
 
@@ -864,9 +832,6 @@ class ReservationController extends AbstractController
 
         ]);
     }
-
-
-
 
     //return referer->route avant la rédirection (source)
     public function getReferer($request)

@@ -126,8 +126,18 @@ $(document).ready(function () {
     var optionsPrix = 0;
     var garantiesPrix = 0;
 
-    setDefaultGaranties();
-    setDefaultOptions();
+    if (subscribedOptions.length) {
+
+        setDefaultListOptions();
+    }
+    console.log("subscribedGaranties");
+    console.log(subscribedGaranties);
+    if (subscribedGaranties.length) {
+
+        setDefaultListGaranties();
+    }
+    checkDefaultGaranties();
+    checkDefaultOptions();
     setDefaultConducteur();
     calculSommeOptions();
     calculSommeGaranties();
@@ -142,13 +152,16 @@ $(document).ready(function () {
     }
 
     //check les checkes options
-    function setDefaultOptions() {
+    function setDefaultListOptions() {
         for (let i = 0; i < defaultSelectedOptions.length; i++) {
             let li = document.createElement('li');
             li.innerHTML = defaultSelectedOptions[i].appelation;
             optionsSubscribed.append(li);
 
         }
+
+    }
+    function checkDefaultOptions(params) {
         $("input[name='checkboxOptions[]']").each(function () {
 
             for (let i = 0; i < defaultSelectedOptions.length; i++) {
@@ -159,17 +172,22 @@ $(document).ready(function () {
                 }
             }
         });
+
     }
 
     //check les checkes garanties
 
-    function setDefaultGaranties() {
+    function setDefaultListGaranties() {
         for (let i = 0; i < defaultSelectedGaranties.length; i++) {
             let li = document.createElement('li');
             li.innerHTML = defaultSelectedGaranties[i].appelation;
             subscribedGaranties.append(li);
 
         }
+    }
+
+    function checkDefaultGaranties(params) {
+
         $("input[name='checkboxGaranties[]']").each(function () {
 
             for (let i = 0; i < defaultSelectedGaranties.length; i++) {

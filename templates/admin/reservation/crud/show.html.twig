@@ -403,10 +403,8 @@
 			<ul class="">
 				{% if reservation.conducteur ==1 %}
 					<li>Conducteur</li>
-
 				{% endif %}
 				{% for option in reservation.options %}
-
 					<li class="js-siege">{{ option }}</li>
 				{% endfor %}
 			</ul>
@@ -414,10 +412,11 @@
 			<p class="font-weight-bold label">
 				Garantie(s) souscrite(s):
 			</p>
-			{% for gar in reservation.garanties %}
-
-				<p class="js-garantie">{{ gar }}</p>
-			{% endfor %}
+			<ul class="">
+				{% for gar in reservation.garanties %}
+					<li class="js-garantie">{{ gar }}</li>
+				{% endfor %}
+			</ul>
 			{# <p class="font-italic">Aucune garantie souscrite.</p> #}
 			<p class="font-weight-bold label">
 				Taxes de dépassement horaire

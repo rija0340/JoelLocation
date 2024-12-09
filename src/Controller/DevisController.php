@@ -46,6 +46,7 @@ class DevisController extends AbstractController
     private $flashy;
     private $reserverDevis;
     private $symfonyMailerHelper;
+    private $reservationHelper;
 
 
 
@@ -61,7 +62,8 @@ class DevisController extends AbstractController
         OptionsRepository $optionsRepo,
         GarantieRepository $garantiesRepo,
         ReserverDevis $reserverDevis,
-        SymfonyMailerHelper $symfonyMailerHelper
+        SymfonyMailerHelper $symfonyMailerHelper,
+        ReservationHelper $reservationHelper
 
     ) {
 
@@ -77,6 +79,7 @@ class DevisController extends AbstractController
         $this->flashy = $flashy;
         $this->reserverDevis = $reserverDevis;
         $this->symfonyMailerHelper = $symfonyMailerHelper;
+        $this->reservationHelper = $reservationHelper;
     }
 
     /**
@@ -320,40 +323,11 @@ class DevisController extends AbstractController
         $options = $this->optionsRepo->findAll();
         $form->handleRequest($request);
         //serializer options et garanties de devis
-        $dataOptions = [];
-        foreach ($devis->getOptions() as $key => $option) {
-            $dataOptions[$key]['id'] =  $option->getId();
-            $dataOptions[$key]['appelation'] = $option->getAppelation();
-            $dataOptions[$key]['description'] = $option->getDescription();
-            $dataOptions[$key]['type'] = $option->getType();
-            $dataOptions[$key]['prix'] = $option->getPrix();
-        }
-
-        $dataGaranties = [];
-        foreach ($devis->getGaranties() as $key => $garantie) {
-            $dataGaranties[$key]['id'] =  $garantie->getId();
-            $dataGaranties[$key]['appelation'] = $garantie->getAppelation();
-            $dataGaranties[$key]['description'] = $garantie->getDescription();
-            $dataGaranties[$key]['prix'] = $garantie->getPrix();
-        }
-
-        $allOptions = [];
-        foreach ($this->optionsRepo->findAll() as $key => $option) {
-            $allOptions[$key]['id'] =  $option->getId();
-            $allOptions[$key]['appelation'] = $option->getAppelation();
-            $allOptions[$key]['description'] = $option->getDescription();
-            $allOptions[$key]['prix'] = $option->getPrix();
-            $allOptions[$key]['type'] = $option->getType();
-        }
-
-
-        $allGaranties = [];
-        foreach ($this->garantiesRepo->findAll() as $key => $garantie) {
-            $allGaranties[$key]['id'] =  $garantie->getId();
-            $allGaranties[$key]['appelation'] = $garantie->getAppelation();
-            $allGaranties[$key]['description'] = $garantie->getDescription();
-            $allGaranties[$key]['prix'] = $garantie->getPrix();
-        }
+        //serializer options et garanties de devis
+        $dataOptions =  $this->reservationHelper->getOptionsGarantiesAllAndData($devis)["dataOptions"];
+        $dataGaranties = $this->reservationHelper->getOptionsGarantiesAllAndData($devis)["dataGaranties"];
+        $allOptions = $this->reservationHelper->getOptionsGarantiesAllAndData($devis)["allOptions"];
+        $allGaranties = $this->reservationHelper->getOptionsGarantiesAllAndData($devis)["allGaranties"];
 
         if ($request->get('editedOptionsGaranties') == "true") {
 
@@ -422,7 +396,8 @@ class DevisController extends AbstractController
             'allOptions' => $allOptions,
             'allGaranties' => $allGaranties,
             'conducteur' => $devis->getConducteur(),
-            'type' => 'devis'
+            'type' => 'devis',
+            'prixConductSuppl' => $this->tarifsHelper->getPrixConducteurSupplementaire()
 
         ]);
     }

@@ -1,0 +1,74 @@
+<div class="x_panel">
+	<h3>Réservation en cours</h3>
+	<div class="clearfix"></div>
+	<div class="x_title"></div>
+	<div class="overflow-auto">
+		<table class="table" id="datatable_en_cours">
+			<thead>
+				<tr>
+					<th>Référence
+					</th>
+					<th>Date de création</th>
+					<th>Réservation/véhicule</th>
+					<th>Dates/Durée</th>
+					<th>Prix</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for reserv in reservation_en_cours %}
+					<tr>
+						<td>{{ reserv.reference }}</td>
+						<td>{{ reserv.dateReservation|date('d/m/Y - H:i') }}</td>
+						<td>{{ reserv.vehicule.marque }}
+							{{ reserv.vehicule.modele }}</td>
+						<td>{{ reserv.dateDebut|date('d/m/Y - H:i')}}
+							<br>
+							<span class="text-center font-italic">
+								{{ reserv.duree }}
+								jours</span>
+						</td>
+
+						<td>{{ reserv.prix|number_format(2,","," ") }}
+							€
+						</td>
+						<td>
+
+							{# dropdown #}
+							<div class="btn-group p-0" role="group">
+								<button id="btnGroupDrop1" class="btn btn-link-danger" type="button" class="btn btn-link p-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<i class="fa fa-bars"></i>
+								</button>
+								<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+									<div class="dropdown-item">
+										{% if reserv.prix > reserv.sommePaiements %}
+											<form action="{{ path('paiement_sold') }}" method="POST">
+												<input type="hidden" name="montantSolde" value="{{ (reserv.prix - reserv.sommePaiements)|number_format(2,","," ") }}">
+												<input type="hidden" name="reservation" value="{{ reserv.id }}">
+												<button class="btn btn-link-danger">Payer solde
+													{{ (reserv.prix - reserv.sommePaiements)|number_format(2,","," ") }}€
+												</button>
+											</form>
+										{% endif %}
+									</div>
+									<div class="dropdown-item">
+										<a href="{{ path('add_avis', {'id': reserv.id}) }}" class="btn btn-link-dark">Ajouter avis</a>
+									</div>
+									<div class="dropdown-item">
+										<a href="{{ path('client_reservation_show', {'id' : reserv.id}) }} " class="btn btn-link-dark">
+											Détails
+										</a>
+									</div>
+								</div>
+							</div>
+							{# fin dropdown #}
+							{% if reserv.prix > reserv.sommePaiements %}
+								<i class="fa fa-warning">Solde</i>
+							{% endif %}
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>

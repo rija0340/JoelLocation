@@ -1,33 +1,35 @@
-.divPrestation ul{
+.divPrestation ul {
     list-style: none;
 }
 
-.divOptions ul{
+.divOptions ul {
     list-style: none;
 }
 
-.divGaranties ul{
+.divGaranties ul {
     list-style: none;
 }
 
-.divTarifTotal{
+.divTarifTotal {
     background-color: #3c5163;
     color: white;
     padding: 10px;
 }
-.tarifTotal{
+
+.tarifTotal {
     font-size: 30px;
     font-weight: bold;
 }
 
-.votreVehicule{
-    background-color: red;
+.votreVehicule {
+    background-color: #dc3545;
     padding: 10px;
     margin-bottom: 0px;
     text-align: center;
     color: white;
 }
-.marque_modele{
+
+.marque_modele {
     font-size: 20px;
     color: black;
     text-align: center;
@@ -35,59 +37,59 @@
 }
 
 
-.divDepart{
+.divDepart {
     padding: 10px;
 }
 
-.divRetour{
-    
+.divRetour {
+
     padding: 10px;
 }
 
-.divPrestation{
-    
+.divPrestation {
+
     padding: 10px;
 }
 
-.divOptions{
-    
+.divOptions {
+
     padding: 10px;
 }
 
-.divGaranties{
-    
+.divGaranties {
+
     padding: 10px;
 }
 
-.divTarifTotal{
-    
+.divTarifTotal {
+
     padding: 10px;
 }
 
-.divTarifVehicule{
-    
+.divTarifVehicule {
+
     padding: 10px;
 }
 
 
-.divInformations{
+.divInformations {
     margin-bottom: 20px;
-    
+
 }
 
-.divModePaiement{
-    
+.divModePaiement {
+
     margin-bottom: 20px;
 }
 
-.divConditionGeneralVente{
-    
+.divConditionGeneralVente {
+
     margin-bottom: 20px;
 }
 
 
 /* section right */
-.divGaranties{
+.divGaranties {
     margin-bottom: 20px;
 }
 

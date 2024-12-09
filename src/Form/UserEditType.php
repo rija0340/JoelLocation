@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class UserEditType extends AbstractType
@@ -36,13 +37,22 @@ class UserEditType extends AbstractType
             ->add('prenom', TextType::class)
             ->add('adresse', TextType::class)
             ->add('mail', TextType::class)
-            ->add('telephone', TextType::class)
-            ->add('portable', TextType::class)
+            ->add('telephone', TelType::class, [
+                'required' => false,
+                'empty_data' => ""
+            ])
+            ->add('portable', TelType::class, [
+                'required' => false,  // Changed this to false
+                'empty_data' => ""    // Added this
+            ])
             ->add('dateNaissance', DateType::class, [
                 'widget' => 'single_text',
                 'required' => false
             ])
-            ->add('complementAdresse', TextType::class)
+            ->add('complementAdresse', TextType::class, [
+                'required' => false,  // Changed this to false
+                'empty_data' => ""    // Added this
+            ])
             ->add('ville', TextType::class)
             ->add('lieuNaissance', TextType::class)
             ->add('numeroPermis', TextType::class)

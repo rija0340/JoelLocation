@@ -112,58 +112,54 @@ class ReservationSession
     {
         return $this->session->get('reservation');
     }
-
-
-    public  function getDateDepart()
+    public function getDateDepart()
     {
-        if ($this->getReservation() != null) {
+        if (!is_null($this->getReservation()) && isset($this->getReservation()['dateDepart'])) {
             return $this->session->get('reservation')['dateDepart'];
-        } else {
-            return null;
         }
+        return null;
     }
-    public  function getAgenceDepart()
+
+    public function getAgenceDepart()
     {
-        if ($this->getReservation() != null) {
+        if (!is_null($this->getReservation()) && isset($this->getReservation()['agenceDepart'])) {
             return $this->session->get('reservation')['agenceDepart'];
-        } else {
-            return null;
         }
+        return null;
     }
 
-    public  function getAgenceRetour()
+    public function getAgenceRetour()
     {
-        if ($this->getReservation() != null) {
+        if (!is_null($this->getReservation()) && isset($this->getReservation()['agenceRetour'])) {
             return $this->session->get('reservation')['agenceRetour'];
-        } else {
-            return null;
         }
-    }
-    public  function getDateRetour()
-    {
-        if ($this->getReservation() != null) {
-            return $this->session->get('reservation')['dateRetour'];
-        } else {
-            return null;
-        }
+        return null;
     }
 
-    public  function getLieuSejour()
+    public function getDateRetour()
     {
-        if ($this->getReservation() != null) {
+        if (!is_null($this->getReservation()) && isset($this->getReservation()['dateRetour'])) {
+            return $this->session->get('reservation')['dateRetour'];
+        }
+        return null;
+    }
+
+    public function getLieuSejour()
+    {
+        if (!is_null($this->getReservation()) && isset($this->getReservation()['lieuSejour'])) {
             return $this->session->get('reservation')['lieuSejour'];
-        } else {
-            return null;
         }
+        return null;
     }
-    public  function getTypeVehiculle()
+
+    public function getTypeVehiculle()
     {
-        if ($this->getReservation() != null) {
+        if (!is_null($this->getReservation()) && isset($this->getReservation()['typeVehicule'])) {
             return $this->session->get('reservation')['typeVehicule'];
-        } else {
-            return null;
         }
+        return null;
     }
+
     public  function getGaranties()
     {
         if ($this->getReservation() != null && array_key_exists('garanties', $this->session->get('reservation'))) {
@@ -172,6 +168,7 @@ class ReservationSession
             return null;
         }
     }
+
     public  function getOptions()
     {
         //choix de options est optionnel
@@ -181,17 +178,17 @@ class ReservationSession
             return null;
         }
     }
-    public  function getVehicule()
+
+    public function getVehicule()
     {
-        if ($this->getReservation() != null) {
+        if (!is_null($this->getReservation()) && isset($this->getReservation()['vehicule'])) {
             return $this->session->get('reservation')['vehicule'];
-        } else {
-            return null;
         }
+        return null;
     }
     public  function getClient()
     {
-        if ($this->getReservation() != null) {
+        if (!is_null($this->getReservation()) && isset($this->getReservation()['client'])) {
             return $this->session->get('reservation')['client'];
         } else {
             return null;
@@ -200,7 +197,7 @@ class ReservationSession
     //tarif saisie par l'admin (optionel)
     public  function getTarifVehicule()
     {
-        if ($this->getReservation() != null) {
+        if (!is_null($this->getReservation()) && isset($this->getReservation()['tarifVehicule'])) {
             return $this->session->get('reservation')['tarifVehicule'];
         } else {
             return null;
@@ -209,7 +206,7 @@ class ReservationSession
 
     public  function getConducteur()
     {
-        if ($this->getReservation() != null) {
+        if (!is_null($this->getReservation()) && isset($this->getReservation()['conducteur'])) {
             return $this->session->get('reservation')['conducteur'];
         } else {
             return null;

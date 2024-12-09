@@ -1,0 +1,163 @@
+<div class="x_panel">
+	<div class="x_title">
+		<h3>
+			<i class="fa fa-chevron-right"></i>
+			Vos options
+		</h3>
+	</div>
+
+	<div class="row">
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-4">
+					<div class="alert alert-secondary h-100">
+						<img src="" alt="" style="width:100%;" id="vehicule_photo">
+
+					</div>
+				</div>
+				<div class="col-md-8">
+					<div class="x_title">
+						<h5>
+							Conducteur additionnel
+						</h5>
+
+					</div>
+					<p>
+						A Joel Location, nous savons que les longs trajets peuvent être fatigants, surtout après un bon bain de mer. C’est pour cela, que nous vous proposons l’ajout d’un deuxième conducteur gratuitement. De plus, les assurances responsabilités civiles et accidents causés aux tiers sont inclus dans votre forfait "location de voiture".
+					</p>
+					<div class="row">
+						<div class="col-auto">
+							<label class="label-conducteur">
+								<span class="font-weight-bold">Oui ({{prixConductSuppl}}€)</span>
+								<input type="radio" checked name="radio-conducteur" value="true" {% if devis.conducteur %} checked {% endif %}>
+								<span class="checkmark-conducteur"></span>
+							</label>
+						</div>
+						<div class="col-auto">
+							<label class="label-conducteur">
+								<span class="font-weight-bold">Non</span>
+								<input type="radio" name="radio-conducteur" value="false" {% if devis.conducteur == false %} checked {% endif %}>
+								<span class="checkmark-conducteur"></span>
+							</label>
+						</div>
+					</div>
+
+					{# fin incrementer #}
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-4">
+					<div class="alert alert-secondary btn-block h-100">
+						<img src="" alt="" style="width:100%;" id="vehicule_photo">
+					</div>
+				</div>
+				<div class="col-md-8">
+					<div class="x_title">
+						<h5>
+							Siège bébé / enfant
+						</h5>
+					</div>
+					<p>Nous mettons à votre disposition des sièges bébé et nourrissons, homologués NF, pour seulement 30 euros TTC. Les rehausseurs pour les enfants de + de 15kg sont totalement gratuits !</p>
+					{# test radio #}
+					{% for option in allOptions  %}
+						{% if option.type == "siège" %}
+							<label class="label-container">
+								{{option.appelation}}
+								{% if option.prix != 0  %}
+									:
+									{{option.prix}}€
+								{% endif %}
+								<input type="checkbox" name="checkboxOptions[]" value="{{option.id}}" {% if option.id in devis.options|map(item => item.id) %} checked {% endif %}>
+
+								<span class="checkmark"></span>
+							</label>
+
+						{% endif %}
+					{% endfor %}
+					{# fin incrementer #}
+				</div>
+			</div>
+		</div>
+
+		{% for option in allOptions  %}
+			{% if option.type != "siège" %}
+				{# refueling #}
+				<div class="col-md-6 p-2">
+					<div class="row">
+						<div class="col-md-4">
+							<div class="alert alert-secondary h-100">
+								<img src="" alt="" style="width:100%;">
+							</div>
+						</div>
+						<div class="col-md-8">
+							<div class="x_title">
+								<h5 class="">
+									{{option.appelation}}
+								</h5>
+							</div>
+							<p>
+								{{option.description|raw }}
+							</p>
+							<div class="col-auto">
+								<label class="label-container">{{option.appelation}}
+									:
+									{{option.prix}}
+									€
+									<input type="checkbox" name="checkboxOptions[]" value="{{option.id}}" {% if option.id in devis.options|map(item => item.id) %} checked {% endif %}>
+									<span class="checkmark"></span>
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			{% endif %}
+		{% endfor %}
+
+	</div>
+</div>
+
+<div class="x_panel">
+	<div class="x_title">
+		<h3>
+			<i class="fa fa-chevron-right"></i>
+
+			Vos garanties</h3>
+	</div>
+	<div class="row">
+		{% for garantie in allGaranties %}
+			<div class="col-md-6">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="alert alert-secondary h-100">
+							<img src="" alt="" style="width:100%;" id="vehicule_photo">
+
+						</div>
+					</div>
+					<div class="col-md-8">
+						<div class="x_title">
+							<h5>
+								{{garantie.appelation}}
+							</h5>
+						</div>
+						<p>
+							{{garantie.description}}
+						</p>
+						<div
+							class="row">
+							{# <div class="col-auto p-0"><label class="label-container">90€<input type="checkbox" checked="checked"><span class="checkmark"></span></label></div> #}
+
+							<label class="label-container">{{garantie.prix}}
+								€
+								<input type="checkbox" name="checkboxGaranties[]" value="{{garantie.id}}" {% if garantie.id in devis.garanties|map(item => item.id) %} checked {% endif %}>
+								<span class="checkmark"></span>
+							</label>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+</div>

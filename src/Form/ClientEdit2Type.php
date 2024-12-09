@@ -14,6 +14,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use App\Entity\InfosResa;
 use App\Form\InfosVolResaType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
 
 class ClientEdit2Type extends AbstractType
 {
@@ -23,12 +24,20 @@ class ClientEdit2Type extends AbstractType
             ->add('nom', TextType::class)
             ->add('prenom', TextType::class)
             ->add('adresse', TextType::class)
-            ->add('complementAdresse', TextType::class)
+            ->add('complementAdresse', TextType::class,[
+                'required' => false,
+            ])
             ->add('ville', TextType::class)
             ->add('codePostal', NumberType::class)
             ->add('mail', TextType::class)
-            ->add('telephone', TextType::class)
-            ->add('portable', TextType::class)
+            ->add('telephone', TelType::class, [
+                'required' => false,
+                'empty_data' => ""
+            ])
+            ->add('portable', TelType::class, [
+                'required' => false,  // Changed this to false
+                'empty_data' => ""    // Added this
+            ])
             ->add('dateNaissance', DateType::class, [
                 'widget' => 'single_text',
                 'required' => false

@@ -20,6 +20,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Classe\ReservationSession;
 use App\Entity\Reservation;
 use App\Service\ReservationHelper;
+use App\Service\SymfonyMailerHelper;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -37,6 +38,7 @@ class NouvelleReservationController extends AbstractController
     private $vehiculeRepo;
     private $reservationHelper;
     private $reservationSession;
+    private $symfonyMailerHelper;
 
     public function __construct(
 
@@ -49,7 +51,8 @@ class NouvelleReservationController extends AbstractController
         VehiculeRepository $vehiculeRepo,
         FlashyNotifier $flashy,
         ReservationHelper $reservationHelper,
-        ReservationSession $reservationSession
+        ReservationSession $reservationSession,
+        SymfonyMailerHelper $symfonyMailerHelper
 
     ) {
         $this->reservationRepo = $reservationRepo;
@@ -62,11 +65,12 @@ class NouvelleReservationController extends AbstractController
         $this->flashy = $flashy;
         $this->reservationHelper = $reservationHelper;
         $this->reservationSession = $reservationSession;
+        $this->symfonyMailerHelper = $symfonyMailerHelper;
     }
     //step1 choix des paramètres de la réservation
 
     /**
-     * @Route("/espaceclient/nouvelle-reservation/etape1", name="client_step1", methods={"GET","POST"})
+     * @Route("/espaceclient/nouvelle-reservation/etape12", name="client_step12", methods={"GET","POST"})
      *
      */
     public function step1(Request $request, SessionInterface $session): Response
@@ -219,6 +223,7 @@ class NouvelleReservationController extends AbstractController
             'dateDepart' => $this->reservationSession->getDateDepart(),
             'agenceRetour' => $this->reservationSession->getAgenceRetour(),
             'dateRetour' => $this->reservationSession->getDateRetour(),
+
 
         ]);
     }
@@ -384,7 +389,7 @@ class NouvelleReservationController extends AbstractController
 
         if ($type == 'devis') {
             $this->flashy->success('Le devis a été enregistré avec succés');
-            $this->reservationHelper->sendMailConfirmationDevis($devis, $request);
+            $this->symfonyMailerHelper->sendDevis($request, $devis);
             return $this->redirectToRoute('client_reservations');
         } elseif ($type == 'reservation') {
             return $this->redirectToRoute('validation_step3', ['id' => $devis->getId()]);
