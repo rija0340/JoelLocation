@@ -234,9 +234,15 @@
 					<li>Conducteur</li>
 
 				{% endif %}
-				{% for option in devis.options %}
+				{% for option in devis.devisOptions %}
 
-					<li class="js-siege">{{option}}</li>
+					<li class="js-siege">{{option.opt.appelation}}
+						{% if option.opt.appelation matches '/Siège/' %}
+							({{ 'nbr : '~  option.quantity}})
+						{% endif %}
+						-
+						{{(option.opt.prix * option.quantity)|number_format(2,","," ")}}€
+					</li>
 				{% endfor %}
 			</ul>
 			{# <p class="font-italic">Aucune option souscrite.</p> #}
@@ -246,7 +252,10 @@
 			<ul class="">
 				{% for garantie in devis.garanties %}
 
-					<li class="js-garantie">{{garantie}}</li>
+					<li class="js-garantie">{{garantie}}
+						-
+						{{(garantie.prix)|number_format(2,","," ")}}€
+					</li>
 				{% endfor %}
 			</ul>
 			{# <p class="font-italic">Aucune garantie souscrite.</p> #}

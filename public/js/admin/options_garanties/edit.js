@@ -162,6 +162,10 @@ $(document).ready(function () {
 
     }
     function checkDefaultOptions(params) {
+
+        console.log("reto le liste");
+        console.log($("input[name='checkboxOptions[]']"));
+
         $("input[name='checkboxOptions[]']").each(function () {
 
             for (let i = 0; i < defaultSelectedOptions.length; i++) {
@@ -215,6 +219,20 @@ $(document).ready(function () {
             }
         });
 
+        // Handle numeric input options
+        $("input[type='number'][name^='siege_']").each(function () {
+            const optionId = $(this).attr('name').split('_')[1];
+            const quantity = parseInt($(this).val());
+
+            if (quantity > 0) {
+                for (let i = 0; i < options.length; i++) {
+                    if (options[i].id == optionId) {
+                        optionsPrix += options[i].prix * quantity;
+                    }
+                }
+            }
+        });
+
         let conducteurPrix = $('input[name="radio-conducteur"]:checked').val() == "true" ? 50 : 0;
 
         //ajouter prix conducteur avec prix options
@@ -254,6 +272,38 @@ $(document).ready(function () {
         });
     });
 
+    //calcul somme options 
+    // Handle numeric input changes for siege options
+    // Handle numeric inputs and their buttons
+    // Handle numeric inputs and their buttons
+    $("[id^='number_']").each(function () {
+        const optionId = $(this).attr('id').split('_')[1];
+        const $input = $(this);
+
+        // Handle direct input changes
+        $input.on('change', function () {
+            calculSommeOptions();
+            clearOptions();
+            setSelectedOptions();
+        });
+
+        // Handle increment button
+        $(`#increment_${optionId}`).on('click', function (e) {
+            e.preventDefault();
+            calculSommeOptions();
+            clearOptions();
+            setSelectedOptions();
+        });
+
+        // Handle decrement button
+        $(`#decrement_${optionId}`).on('click', function (e) {
+            e.preventDefault();
+            calculSommeOptions();
+            clearOptions();
+            setSelectedOptions();
+        });
+    });
+
     // handle conducteur change 
 
     $("input[name='radio-conducteur']").change(function () {
@@ -278,11 +328,30 @@ $(document).ready(function () {
                 }
             }
         });
+
+        // Add numeric input handling
+        $("[id^='number_']").each(function () {
+            const optionId = $(this).attr('id').split('_')[1];
+            const quantity = parseInt($(this).val());
+
+            if (quantity > 0) {
+                for (let i = 0; i < options.length; i++) {
+                    if (options[i].id == optionId) {
+                        let li = document.createElement('li');
+                        li.innerHTML = `${options[i].appelation} (${quantity})`;
+                        subscribedOptions.append(li);
+                    }
+                }
+            }
+        });
+
         if ($('input[name="radio-conducteur"]:checked').val() == "true") {
             let li = document.createElement('li');
             li.innerHTML = conducteurLabel;
             subscribedOptions.append(li);
         }
+        //pour siège bebe et nourrisson 
+
 
     }
 

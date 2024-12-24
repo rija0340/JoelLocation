@@ -137,16 +137,25 @@ class TarifsHelper
     function sommeTarifsOptions($options, $hasConducteur)
     {
         $prixConductSuppl = ($hasConducteur  == true) ? $this->getPrixConducteurSupplementaire() : 0;
-        if ($options != null) {
-            $prix = 0;
-            foreach ($options as  $option) {
 
-                $prix = $prix  + $option->getPrix();
+        $price = 0;
+        if (is_array($options)) {
+            foreach ($options as  $opt) {
+                $price  = $price   + ($opt[0]->getPrix() * $opt[1]);
             }
-            return $prix + $prixConductSuppl;
-        } else {
-            return $prixConductSuppl;
         }
+        return $price + $prixConductSuppl;
+
+        // if ($options != null) {
+        //     $prix = 0;
+        //     foreach ($options as  $option) {
+
+        //         $prix = $prix  + $option->getPrix();
+        //     }
+        //     return $prix + $prixConductSuppl;
+        // } else {
+        //     return $prixConductSuppl;
+        // }
     }
 
 

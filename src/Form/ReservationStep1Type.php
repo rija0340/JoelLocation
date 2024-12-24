@@ -81,7 +81,7 @@ class ReservationStep1Type extends AbstractType
                 ]
             ])
             ->add('lieuSejour', TextType::class, [
-                'required' => true
+                'required' => false
             ]);
     }
 

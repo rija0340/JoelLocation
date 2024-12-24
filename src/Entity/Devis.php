@@ -59,7 +59,7 @@ class Devis implements OptionsGarantiesInterface
     private $agenceRetour;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable = true)
      */
     private $lieuSejour;
 
@@ -132,6 +132,11 @@ class Devis implements OptionsGarantiesInterface
      */
     private $payement_percentage;
 
+    /**
+     * @ORM\OneToMany(targetEntity=DevisOption::class, mappedBy="devis")
+     */
+    private $devisOptions;
+
     // public $serializedOptions;
     // public $serializer;
     // Tous les prix sont en ttc
@@ -140,6 +145,7 @@ class Devis implements OptionsGarantiesInterface
         $this->options = new ArrayCollection();
         $this->garanties = new ArrayCollection();
         // $this->serializer = $serializer;
+        $this->devisOptions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -224,7 +230,7 @@ class Devis implements OptionsGarantiesInterface
         return $this->lieuSejour;
     }
 
-    public function setLieuSejour(string $lieuSejour): self
+    public function setLieuSejour(?string $lieuSejour): self
     {
         $this->lieuSejour = $lieuSejour;
 
@@ -450,6 +456,36 @@ class Devis implements OptionsGarantiesInterface
     public function setPayementPercentage(?float $payement_percentage): self
     {
         $this->payement_percentage = $payement_percentage;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DevisOption>
+     */
+    public function getDevisOptions(): Collection
+    {
+        return $this->devisOptions;
+    }
+
+    public function addDevisOption(DevisOption $devisOption): self
+    {
+        if (!$this->devisOptions->contains($devisOption)) {
+            $this->devisOptions[] = $devisOption;
+            $devisOption->setDevis($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDevisOption(DevisOption $devisOption): self
+    {
+        if ($this->devisOptions->removeElement($devisOption)) {
+            // set the owning side to null (unless already changed)
+            if ($devisOption->getDevis() === $this) {
+                $devisOption->setDevis(null);
+            }
+        }
 
         return $this;
     }

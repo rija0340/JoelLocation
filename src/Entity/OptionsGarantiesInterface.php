@@ -12,4 +12,5 @@ interface OptionsGarantiesInterface
     public function getTarifVehicule();
     public function getPrixGaranties();
     public function getPrixOptions();
+    public function getDevisOptions();
 }

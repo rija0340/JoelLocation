@@ -2,25 +2,18 @@
 
 namespace App\Controller\Client;
 
-use App\Classe\Mailjet;
 use App\Classe\ReserverDevis;
 use App\Entity\Devis;
 use App\Service\DateHelper;
 use App\Form\ClientInfoType;
-use App\Service\ReservationHelper;
 use App\Service\TarifsHelper;
 use App\Repository\DevisRepository;
-use App\Repository\OptionsRepository;
-use App\Repository\GarantieRepository;
-use App\Repository\VehiculeRepository;
 use App\Repository\ReservationRepository;
-use App\Form\OptionsGarantiesType;
 use Symfony\Component\HttpFoundation\Request;
 use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Classe\ValidationReservationClientSession;
-use App\Entity\Reservation;
+use App\Service\SymfonyMailerHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -30,47 +23,32 @@ class ValidationDevisController extends AbstractController
     private $reservationRepo;
     private $flashy;
     private $devisRepo;
-    private $garantiesRepo;
-    private $optionsRepo;
     private $dateHelper;
     private $tarifsHelper;
-    private $vehiculeRepo;
-    private $validationSession;
     private $em;
-    private $reservationHelper;
     private $reserverDevis;
-    private $mailjet;
+    private $symfonyMailerHelper;
 
     public function __construct(
         ReservationRepository $reservationRepo,
         DevisRepository $devisRepo,
-        OptionsRepository $optionsRepo,
-        GarantieRepository $garantiesRepo,
         DateHelper $dateHelper,
         TarifsHelper $tarifsHelper,
-        VehiculeRepository $vehiculeRepo,
         FlashyNotifier $flashy,
-        ValidationReservationClientSession $validationSession,
         EntityManagerInterface $em,
-        ReservationHelper $reservationHelper,
         ReserverDevis $reserverDevis,
-        Mailjet $mailjet
+        SymfonyMailerHelper $symfonyMailerHelper
 
 
     ) {
         $this->reservationRepo = $reservationRepo;
         $this->devisRepo = $devisRepo;
-        $this->garantiesRepo = $garantiesRepo;
-        $this->optionsRepo = $optionsRepo;
         $this->dateHelper = $dateHelper;
         $this->tarifsHelper = $tarifsHelper;
-        $this->vehiculeRepo = $vehiculeRepo;
         $this->flashy = $flashy;
-        $this->validationSession = $validationSession;
         $this->em = $em;
-        $this->reservationHelper = $reservationHelper;
         $this->reserverDevis = $reserverDevis;
-        $this->mailjet = $mailjet;
+        $this->symfonyMailerHelper = $symfonyMailerHelper;
     }
 
     /**
@@ -109,31 +87,31 @@ class ValidationDevisController extends AbstractController
                 //redirection vers un autre controller pour le paiement
                 // return $this->redirectToRoute('paiementStripe', ['refDevis' => $refDevis]);
 
-                $reservation = new Reservation();
-                $reservation = $this->reserverDevis->reserver($devis);
+                $this->reserverDevis->reserver($devis, "null", true);
                 $this->flashy->success("Devis transformé en réservation");
 
-                //lien pour telechargement devis
-                $url = $this->generateUrl('devis_pdf', ['hashedId' => sha1($devis->getId())]);
-                $url = "https://joellocation.com" . $url;
-                $linkDevis = "<a style='text-decoration: none; color: inherit;' href='" . $url . "'>Télécharger mon devis</a>";
+                // //lien pour telechargement devis
+                // $url = $this->generateUrl('devis_pdf', ['hashedId' => sha1($devis->getId())]);
+                // $url = "https://joellocation.com" . $url;
+                // $linkDevis = "<a style='text-decoration: none; color: inherit;' href='" . $url . "'>Télécharger mon devis</a>";
 
-                // envoi de mail de confirmation de réservation au client
-                $this->mailjet->confirmationReservation(
-                    $reservation->getClient()->getPrenom() . ' ' . $reservation->getClient()->getNom(),
-                    $reservation->getClient()->getMail(),
-                    "Confirmation de réservation",
-                    $reservation->getDateReservation()->format('d/m/Y H:i'),
-                    $reservation->getReference(),
-                    $reservation->getVehicule()->getMarque() . ' ' . $reservation->getVehicule()->getModele(),
-                    $reservation->getDateDebut()->format('d/m/Y H:i'),
-                    $reservation->getDateFin()->format('d/m/Y H:i'),
-                    $reservation->getPrix(),
-                    $this->tarifsHelper->VingtCinqPourcent($reservation->getPrix()),
-                    $this->tarifsHelper->CinquantePourcent($reservation->getPrix()),
-                    $reservation->getPrix() - $this->tarifsHelper->VingtCinqPourcent($reservation->getPrix()),
-                    $linkDevis
-                );
+                // // envoi de mail de confirmation de réservation au client
+                // $this->mailjet->confirmationReservation(
+                //     $reservation->getClient()->getPrenom() . ' ' . $reservation->getClient()->getNom(),
+                //     $reservation->getClient()->getMail(),
+                //     "Confirmation de réservation",
+                //     $reservation->getDateReservation()->format('d/m/Y H:i'),
+                //     $reservation->getReference(),
+                //     $reservation->getVehicule()->getMarque() . ' ' . $reservation->getVehicule()->getModele(),
+                //     $reservation->getDateDebut()->format('d/m/Y H:i'),
+                //     $reservation->getDateFin()->format('d/m/Y H:i'),
+                //     $reservation->getPrix(),
+                //     $this->tarifsHelper->VingtCinqPourcent($reservation->getPrix()),
+                //     $this->tarifsHelper->CinquantePourcent($reservation->getPrix()),
+                //     $reservation->getPrix() - $this->tarifsHelper->VingtCinqPourcent($reservation->getPrix()),
+                //     $linkDevis
+                // );
+                $this->symfonyMailerHelper->sendDevis($request, $devis);
 
                 return $this->redirectToRoute('client_reservations');
             } else {

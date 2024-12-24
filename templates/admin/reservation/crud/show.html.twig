@@ -404,8 +404,19 @@
 				{% if reservation.conducteur ==1 %}
 					<li>Conducteur</li>
 				{% endif %}
-				{% for option in reservation.options %}
-					<li class="js-siege">{{ option }}</li>
+				{# {% for option in reservation.options %}
+																									<li class="js-siege">{{ option }}</li>
+																								{% endfor %} #}
+
+				{% for option in reservation.devisOptions %}
+
+					<li class="js-siege">{{option.opt.appelation}}
+						{% if option.opt.appelation matches '/Siège/' %}
+							({{ 'nbr : '~  option.quantity}})
+						{% endif %}
+						-
+						{{(option.opt.prix * option.quantity)|number_format(2,","," ")}}€
+					</li>
 				{% endfor %}
 			</ul>
 			{# <p class="font-italic">Aucune option souscrite.</p> #}
@@ -414,7 +425,9 @@
 			</p>
 			<ul class="">
 				{% for gar in reservation.garanties %}
-					<li class="js-garantie">{{ gar }}</li>
+					<li class="js-garantie">{{ gar }}
+						-
+						{{(gar.prix )|number_format(2,","," ")}}€</li>
 				{% endfor %}
 			</ul>
 			{# <p class="font-italic">Aucune garantie souscrite.</p> #}

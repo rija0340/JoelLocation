@@ -278,7 +278,7 @@ class DevisController extends AbstractController
     public function reserver(Request $request, Devis $devis)
     {
 
-        $this->reserverDevis->reserver($devis);
+        $this->reserverDevis->reserver($devis, "null", true);
 
         $this->flashy->success("Le devis" . $devis->getId() . " a été transformé en réservation");
         return $this->redirectToRoute('reservation_index');
@@ -312,95 +312,95 @@ class DevisController extends AbstractController
         ]);
     }
 
-    /**
-     *  @Route("devis/modifier-options-garanties/{id}", name="devis_optionsGaranties_edit", methods={"GET","POST"},requirements={"id":"\d+"})
-     */
-    public function editOptionsGaranties(Request $request, Devis $devis, SerializerInterface $serializerInterface): Response
-    {
+    // /**
+    //  *  @Route("devis/modifier-options-garanties/{id}", name="devis_optionsGaranties_edit", methods={"GET","POST"},requirements={"id":"\d+"})
+    //  */
+    // public function editOptionsGaranties(Request $request, Devis $devis, SerializerInterface $serializerInterface): Response
+    // {
 
-        $form = $this->createForm(OptionsGarantiesType::class, $devis);
-        $garanties = $this->garantiesRepo->findAll();
-        $options = $this->optionsRepo->findAll();
-        $form->handleRequest($request);
-        //serializer options et garanties de devis
-        //serializer options et garanties de devis
-        $dataOptions =  $this->reservationHelper->getOptionsGarantiesAllAndData($devis)["dataOptions"];
-        $dataGaranties = $this->reservationHelper->getOptionsGarantiesAllAndData($devis)["dataGaranties"];
-        $allOptions = $this->reservationHelper->getOptionsGarantiesAllAndData($devis)["allOptions"];
-        $allGaranties = $this->reservationHelper->getOptionsGarantiesAllAndData($devis)["allGaranties"];
+    //     $form = $this->createForm(OptionsGarantiesType::class, $devis);
+    //     $garanties = $this->garantiesRepo->findAll();
+    //     $options = $this->optionsRepo->findAll();
+    //     $form->handleRequest($request);
+    //     //serializer options et garanties de devis
+    //     //serializer options et garanties de devis
+    //     $dataOptions =  $this->reservationHelper->getOptionsGarantiesAllAndData($devis)["dataOptions"];
+    //     $dataGaranties = $this->reservationHelper->getOptionsGarantiesAllAndData($devis)["dataGaranties"];
+    //     $allOptions = $this->reservationHelper->getOptionsGarantiesAllAndData($devis)["allOptions"];
+    //     $allGaranties = $this->reservationHelper->getOptionsGarantiesAllAndData($devis)["allGaranties"];
 
-        if ($request->get('editedOptionsGaranties') == "true") {
+    //     if ($request->get('editedOptionsGaranties') == "true") {
 
-            $checkboxOptions = $request->get("checkboxOptions");
-            $checkboxGaranties = $request->get("checkboxGaranties");
-            $conduteur = $request->get('radio-conducteur');
+    //         $checkboxOptions = $request->get("checkboxOptions");
+    //         $checkboxGaranties = $request->get("checkboxGaranties");
+    //         $conduteur = $request->get('radio-conducteur');
 
-            //changement valeur conducteur
-            $conducteur = ($conduteur == "true") ? true : false;
-            $devis->setConducteur($conducteur);
-            $this->em->flush();
+    //         //changement valeur conducteur
+    //         $conducteur = ($conduteur == "true") ? true : false;
+    //         $devis->setConducteur($conducteur);
+    //         $this->em->flush();
 
-            if ($checkboxOptions != []) {
-                // tous enlever et puis entrer tous les options
-                foreach ($devis->getOptions() as $option) {
-                    $devis->removeOption($option);
-                }
-                for ($i = 0; $i < count($checkboxOptions); $i++) {
-                    $devis->addOption($this->optionsRepo->find($checkboxOptions[$i]));
-                }
-                $this->em->flush();
-            } else {
-                // si il y a des options, les enlever
-                if (count($devis->getOptions()) > 0) {
-                    foreach ($devis->getOptions() as $option) {
-                        $devis->removeOption($option);
-                    }
-                }
-                $this->em->flush();
-            }
+    //         if ($checkboxOptions != []) {
+    //             // tous enlever et puis entrer tous les options
+    //             foreach ($devis->getOptions() as $option) {
+    //                 $devis->removeOption($option);
+    //             }
+    //             for ($i = 0; $i < count($checkboxOptions); $i++) {
+    //                 $devis->addOption($this->optionsRepo->find($checkboxOptions[$i]));
+    //             }
+    //             $this->em->flush();
+    //         } else {
+    //             // si il y a des options, les enlever
+    //             if (count($devis->getOptions()) > 0) {
+    //                 foreach ($devis->getOptions() as $option) {
+    //                     $devis->removeOption($option);
+    //                 }
+    //             }
+    //             $this->em->flush();
+    //         }
 
-            if ($checkboxGaranties != []) {
-                // tous enlever et puis entrer tous les garanties
-                foreach ($devis->getGaranties() as $garantie) {
-                    $devis->removeGaranty($garantie);
-                }
-                for ($i = 0; $i < count($checkboxGaranties); $i++) {
-                    $devis->addGaranty($this->garantiesRepo->find($checkboxGaranties[$i]));
-                }
-                $this->em->flush();
-            } else {
-                // si il y a des garanties, les enlever
-                if (count($devis->getGaranties()) > 0) {
-                    foreach ($devis->getGaranties() as $garantie) {
-                        $devis->removeGaranty($garantie);
-                    }
-                }
-                $this->em->flush();
-            }
-            $devis->setPrixGaranties($this->tarifsHelper->sommeTarifsGaranties($devis->getGaranties()));
-            $devis->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($devis->getOptions(), $devis->getConducteur()));
-            $devis->setPrix($devis->getTarifVehicule() + $devis->getPrixOptions() + $devis->getPrixGaranties());
+    //         if ($checkboxGaranties != []) {
+    //             // tous enlever et puis entrer tous les garanties
+    //             foreach ($devis->getGaranties() as $garantie) {
+    //                 $devis->removeGaranty($garantie);
+    //             }
+    //             for ($i = 0; $i < count($checkboxGaranties); $i++) {
+    //                 $devis->addGaranty($this->garantiesRepo->find($checkboxGaranties[$i]));
+    //             }
+    //             $this->em->flush();
+    //         } else {
+    //             // si il y a des garanties, les enlever
+    //             if (count($devis->getGaranties()) > 0) {
+    //                 foreach ($devis->getGaranties() as $garantie) {
+    //                     $devis->removeGaranty($garantie);
+    //                 }
+    //             }
+    //             $this->em->flush();
+    //         }
+    //         $devis->setPrixGaranties($this->tarifsHelper->sommeTarifsGaranties($devis->getGaranties()));
+    //         $devis->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($devis->getOptions(), $devis->getConducteur()));
+    //         $devis->setPrix($devis->getTarifVehicule() + $devis->getPrixOptions() + $devis->getPrixGaranties());
 
-            $this->em->flush();
-            return $this->redirectToRoute('devis_show', ['id' => $devis->getId()]);
-        }
+    //         $this->em->flush();
+    //         return $this->redirectToRoute('devis_show', ['id' => $devis->getId()]);
+    //     }
 
-        return $this->render('admin/devis_reservation/options_garanties/edit.html.twig', [
-            'form' => $form->createView(),
-            'devis' => $devis,
-            'garanties' => $garanties,
-            'options' => $options,
-            'routeReferer' => 'reservation_show',
-            'dataOptions' => $dataOptions,
-            'dataGaranties' => $dataGaranties,
-            'allOptions' => $allOptions,
-            'allGaranties' => $allGaranties,
-            'conducteur' => $devis->getConducteur(),
-            'type' => 'devis',
-            'prixConductSuppl' => $this->tarifsHelper->getPrixConducteurSupplementaire()
+    //     return $this->render('admin/devis_reservation/options_garanties/edit.html.twig', [
+    //         'form' => $form->createView(),
+    //         'devis' => $devis,
+    //         'garanties' => $garanties,
+    //         'options' => $options,
+    //         'routeReferer' => 'reservation_show',
+    //         'dataOptions' => $dataOptions,
+    //         'dataGaranties' => $dataGaranties,
+    //         'allOptions' => $allOptions,
+    //         'allGaranties' => $allGaranties,
+    //         'conducteur' => $devis->getConducteur(),
+    //         'type' => 'devis',
+    //         'prixConductSuppl' => $this->tarifsHelper->getPrixConducteurSupplementaire()
 
-        ]);
-    }
+    //     ]);
+    // }
 
 
 

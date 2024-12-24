@@ -29,6 +29,7 @@ class Reservation implements OptionsGarantiesInterface
         $this->setReportedFalseValue();
         $this->conducteursClient = new ArrayCollection();
         $this->fraisSupplResas = new ArrayCollection();
+        $this->devisOptions = new ArrayCollection();
     }
 
     /**
@@ -233,6 +234,10 @@ class Reservation implements OptionsGarantiesInterface
      */
     private $saisisseurKm;
 
+    /**
+     * @ORM\OneToMany(targetEntity=DevisOption::class, mappedBy="reservation")
+     */
+    private $devisOptions;
 
     public function getId(): ?int
     {
@@ -809,6 +814,36 @@ class Reservation implements OptionsGarantiesInterface
     public function setSaisisseurKm(?User $saisisseurKm): self
     {
         $this->saisisseurKm = $saisisseurKm;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DevisOption>
+     */
+    public function getDevisOptions(): Collection
+    {
+        return $this->devisOptions;
+    }
+
+    public function addDevisOption(DevisOption $devisOption): self
+    {
+        if (!$this->devisOptions->contains($devisOption)) {
+            $this->devisOptions[] = $devisOption;
+            $devisOption->setReservation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDevisOption(DevisOption $devisOption): self
+    {
+        if ($this->devisOptions->removeElement($devisOption)) {
+            // set the owning side to null (unless already changed)
+            if ($devisOption->getReservation() === $this) {
+                $devisOption->setReservation(null);
+            }
+        }
 
         return $this;
     }

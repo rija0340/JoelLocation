@@ -3,12 +3,14 @@
 namespace App\Classe;
 
 use App\Entity\Devis;
+use App\Entity\DevisOption;
 use App\Entity\Reservation;
 use App\Service\DateHelper;
 use App\Service\TarifsHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ModeReservationRepository;
 use App\Repository\ReservationRepository;
+use App\Service\ReservationHelper;
 
 class ReserverDevis
 {
@@ -17,24 +19,34 @@ class ReserverDevis
     private $dateHelper;
     private $modeReservationRepo;
     private $reservRepo;
+    private $reservationHelper;
+    private $reservationSession;
 
     public function __construct(
         EntityManagerInterface $em,
         TarifsHelper $tarifsHelper,
         DateHelper $dateHelper,
         ModeReservationRepository $modeReservationRepo,
-        ReservationRepository $reservRepo
+        ReservationRepository $reservRepo,
+        ReservationHelper $reservationHelper,
+        ReservationSession $reservationSession
     ) {
         $this->em = $em;
         $this->tarifsHelper = $tarifsHelper;
         $this->dateHelper = $dateHelper;
         $this->modeReservationRepo = $modeReservationRepo;
         $this->reservRepo = $reservRepo;
+        $this->reservationHelper = $reservationHelper;
+        $this->reservationSession = $reservationSession;
     }
 
-    public function reserver(Devis $devis, $stripeSessionId = "null")
+    public function reserver(Devis $devis, $stripeSessionId = "null", $existingDevisBdd = false)
     {
+
+        $devisOptions = $devis->getDevisOptions();
+
         $reservation = new Reservation();
+
         $reservation->setVehicule($devis->getVehicule());
         $reservation->setStripeSessionId($stripeSessionId);
         $reservation->setClient($devis->getClient());
@@ -89,9 +101,24 @@ class ReserverDevis
         $devis->setTransformed(true);
 
         $this->em->persist($reservation);
-        $this->em->persist($devis);
+        if ($existingDevisBdd) {
+            $this->em->persist($devis);
+        }
         $this->em->flush();
 
+        if ($existingDevisBdd) {
+            foreach ($devisOptions as $key => $value) {
+                $devisOption = new DevisOption();
+                $devisOption->setOpt($value->getOpt());
+                $devisOption->setQuantity($value->getQuantity());
+                $devisOption->setReservation($reservation);
+                $this->em->persist($devisOption);
+            }
+            // flush le devis options
+            $this->em->flush();
+        } else {
+            $reservation = $this->reservationHelper->saveDevisOptions($reservation, $this->reservationSession->getOptions(), $this->em);
+        }
 
         return $reservation;
     }

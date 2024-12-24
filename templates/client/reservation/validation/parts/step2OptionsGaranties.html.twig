@@ -63,19 +63,33 @@
 					{# test radio #}
 					{% for option in allOptions  %}
 						{% if option.type == "siège" %}
-							<label class="label-container">
-								{{option.appelation}}
-								{% if option.prix != 0  %}
-									:
-									{{option.prix}}€
-								{% endif %}
-								<input type="checkbox" name="checkboxOptions[]" value="{{option.id}}" {% if option.id in devis.options|map(item => item.id) %} checked {% endif %}>
 
-								<span class="checkmark"></span>
-							</label>
+							{% if option.appelation matches '/Siège/' %}
+								<div class="d-flex">
+									<div class="numeric-input">
+										<button class="decrement" id="decrement_{{option.id}}">-</button>
+										<input class="number" name="siege_{{option.id}}" type="number" id="number_{{option.id}}" value="{% if option.id in devis.devisOptions|map(item => item.opt.id) %}{{ devis.devisOptions|filter(item => item.opt.id == option.id)|first.quantity }}{% else %}0{% endif %}" min="0" max="3">
+										<button class="decrement" id="increment_{{option.id}}">+</button>
+									</div>
+									<label class="label-container">
+										{{option.appelation}}
+									</label>
+								</div>
+							{% else %}
+								<label class="label-container">
+									{{option.appelation}}
+									{% if option.prix != 0  %}
+										:
+										{{option.prix}}€
+									{% endif %}
 
+									<input type="checkbox" name="checkboxOptions[]" value="{{option.id}}" {% if option.id in devis.devisOptions|map(item => item.opt.id) %} checked {% endif %}>
+									<span class="checkmark"></span>
+								</label>
+							{% endif %}
 						{% endif %}
 					{% endfor %}
+
 					{# fin incrementer #}
 				</div>
 			</div>
@@ -105,7 +119,7 @@
 									:
 									{{option.prix}}
 									€
-									<input type="checkbox" name="checkboxOptions[]" value="{{option.id}}" {% if option.id in devis.options|map(item => item.id) %} checked {% endif %}>
+									<input type="checkbox" name="checkboxOptions[]" value="{{option.id}}" {% if option.id in devis.devisOptions|map( item => item.opt.id) %} checked {% endif %}>
 									<span class="checkmark"></span>
 								</label>
 							</div>
@@ -118,7 +132,6 @@
 
 	</div>
 </div>
-
 <div class="x_panel">
 	<div class="x_title">
 		<h3>
@@ -161,3 +174,31 @@
 		{% endfor %}
 	</div>
 </div>
+<script>
+	// Find all number input groups and handle their increment/decrement
+document.querySelectorAll('[id^="number_"]').forEach((numberInput) => { // Get the unique suffix from the input ID (e.g., "2" or "3")
+const suffix = numberInput.id.split('_')[1];
+
+// Select related increment and decrement buttons
+const decrementButton = document.querySelector(`#decrement_${suffix}`);
+const incrementButton = document.querySelector(`#increment_${suffix}`);
+
+// Add event listener to decrement button
+decrementButton.addEventListener('click', (e) => {
+e.preventDefault();
+const currentValue = parseInt(numberInput.value, 10);
+if (currentValue > parseInt(numberInput.min, 10)) {
+numberInput.value = currentValue - 1;
+}
+});
+
+// Add event listener to increment button
+incrementButton.addEventListener('click', (e) => {
+e.preventDefault();
+const currentValue = parseInt(numberInput.value, 10);
+if (currentValue < parseInt(numberInput.max, 10)) {
+numberInput.value = currentValue + 1;
+}
+});
+});
+</script>

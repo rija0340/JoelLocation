@@ -50,6 +50,11 @@ class Options
      */
     private $description;
 
+    /**
+     * @ORM\OneToMany(targetEntity=DevisOption::class, mappedBy="opt")
+     */
+    private $devisOptions;
+
 
 
     public function __construct()
@@ -57,6 +62,7 @@ class Options
         $this->devis = new ArrayCollection();
         $this->reservations = new ArrayCollection();
         $this->y = new ArrayCollection();
+        $this->devisOptions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -174,6 +180,36 @@ class Options
     public function setDescription(?string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DevisOption>
+     */
+    public function getDevisOptions(): Collection
+    {
+        return $this->devisOptions;
+    }
+
+    public function addDevisOption(DevisOption $devisOption): self
+    {
+        if (!$this->devisOptions->contains($devisOption)) {
+            $this->devisOptions[] = $devisOption;
+            $devisOption->setOpt($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDevisOption(DevisOption $devisOption): self
+    {
+        if ($this->devisOptions->removeElement($devisOption)) {
+            // set the owning side to null (unless already changed)
+            if ($devisOption->getOpt() === $this) {
+                $devisOption->setOpt(null);
+            }
+        }
 
         return $this;
     }

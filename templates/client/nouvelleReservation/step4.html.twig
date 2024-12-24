@@ -145,6 +145,7 @@
 							</div>
 
 							<div class="col-md-12">
+
 								<div class="row">
 									<div class="col-md-6" id='listeOptions'>
 										<div class="options">
@@ -153,14 +154,17 @@
 												{% if devis.conducteur == "true" %}
 													<li>Conducteur additionnel : 50€</li>
 												{% endif %}
-												{% if devis.options != null   %}
-													{% for option in devis.options %}
-														<li>{{option.appelation}}
-															:
-															{{option.prix|number_format(2,","," ")}}
+												{% if devis.devisOptions != null   %}
+													{% for option in devis.devisOptions %}
+														{% set optionEntity = option.opt %}
+														<li>{{optionEntity.appelation}}
+															({{ 'nombre : '~  option.quantity}})
+																																																																																										:
+															{{(optionEntity.prix * option.quantity)|number_format(2,","," ")}}
 															€</li>
 													{% endfor %}
 												{% endif %}
+
 											</ul>
 
 										</div>

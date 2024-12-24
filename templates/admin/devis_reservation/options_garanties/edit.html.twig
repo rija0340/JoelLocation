@@ -83,6 +83,12 @@
 				{% include "client/reservation/validation/parts/step2OptionsGaranties.html.twig" %}
 			</div>
 		</div>
+		<div class="text-center mt-4">
+			<a href="{{path(routeReferer, {id : devis.id})}}" class="btn btn-dark">Annuler</a>
+			<button class="btn btn-danger" type="submit">
+				Enregistrer
+			</button>
+		</div>
 	</form>
 
 

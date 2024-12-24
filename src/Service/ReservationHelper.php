@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Classe\Mailjet;
 use App\Classe\ReservationSession;
 use App\Entity\Devis;
+use App\Entity\DevisOption;
 use App\Service\TarifsHelper;
 use App\Repository\DevisRepository;
 use App\Repository\TarifsRepository;
@@ -13,7 +14,9 @@ use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
 use App\Repository\ReservationRepository;
 use App\Entity\OptionsGarantiesInterface;
+use App\Repository\DevisOptionRepository;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ReservationHelper
@@ -207,6 +210,56 @@ class ReservationHelper
 
 
 
+    public function getOptionsFromRequest($request)
+    {
+        $optionsFromRequest = [];
+        if (!is_null($request->get('siege_2')) && $request->get('siege_2') != "0") {
+            $optionsFromRequest["2"] = [$this->optionsRepo->find(2), intval($request->get('siege_2'))];
+        }
+        if (!is_null($request->get('siege_3')) && $request->get('siege_3') != "0") {
+            $optionsFromRequest["3"] =  [$this->optionsRepo->find(3), intval($request->get('siege_3'))];
+        }
+        if ($request->get('checkboxOptions') != null) {
+            //rehausse gratuit id = 4  dans bdd 
+            foreach ($request->get('checkboxOptions') as  $value) {
+                $optionsFromRequest[$value] = [$this->optionsRepo->find(intval($value)), 1];
+            }
+        }
+
+        return $optionsFromRequest;
+    }
+    /**
+     * Sauvegarde les options sélectionnées pour un devis ou une réservation dans la base de données.
+     *
+     * @param OptionsGarantiesInterface $entity L'entité Devis ou Reservation à laquelle les options sont associées
+     * @param array $optionsFromRequest Tableau d'options sélectionnées, où chaque option est un tableau [Option, Quantité]
+     * @param EntityManagerInterface $em Le gestionnaire d'entités Doctrine
+     *
+     * @return OptionsGarantiesInterface L'entité mise à jour avec les options sauvegardées
+     */
+    public function saveDevisOptions($entity, $optionsArray, $em)
+    {
+        foreach ($optionsArray as $option) {
+            $optId = $option[0]->getId();
+            $optEntity =  $this->optionsRepo->find(intval($optId));
+            $devisOption = new DevisOption();
+            $devisOption->setOpt($optEntity);
+            // check if entity is instance of devis 
+            if ($entity instanceof Devis) {
+                $devisOption->setDevis($entity);
+            } else {
+                $devisOption->setReservation($entity);
+            }
+            $devisOption->setQuantity(intval($option[1]));
+            $em->persist($devisOption);
+            // Store entity to track later
+            $devisOptions[] = $devisOption;
+        }
+        $em->flush();
+
+        return $entity;
+    }
+
     // public function sendMailConfirmationDevis($devis, Request $request)
     // {
 
@@ -241,7 +294,9 @@ class ReservationHelper
     public function getOptionsGarantiesAllAndData(OptionsGarantiesInterface $entity)
     {
         $dataOptions = [];
-        foreach ($entity->getOptions() as $key => $option) {
+        // foreach ($entity->getOptions() as $key => $option) {
+        foreach ($entity->getDevisOptions() as $key => $opt) {
+            $option = $opt->getOpt();
             $dataOptions[$key]['id'] = $option->getId();
             $dataOptions[$key]['appelation'] = $option->getAppelation();
             $dataOptions[$key]['description'] = $option->getDescription();
@@ -287,24 +342,29 @@ class ReservationHelper
 
         $dateDepart = $resaSession->getDateDepart();
         $dateRetour = $resaSession->getDateRetour();
+
         $devis = new Devis();
         $devis->setDownloadId(uniqid());
-        $devis->setDateDepart($resaSession->getDateDepart());
-        $devis->setDateRetour($resaSession->getDateRetour());
-        $devis->setAgenceDepart($resaSession->getAgenceDepart());
-        $devis->setAgenceRetour($resaSession->getAgenceRetour());
+        if (!is_null($dateDepart)) {
+            $devis->setDateDepart($resaSession->getDateDepart());
+        }
+        if (!is_null($dateRetour)) {
+            $devis->setDateRetour($resaSession->getDateRetour());
+        }
+        if (!is_null($resaSession->getAgenceDepart())) {
+            $devis->setAgenceDepart($resaSession->getAgenceDepart());
+        }
+        if (!is_null($resaSession->getAgenceRetour())) {
+            $devis->setAgenceRetour($resaSession->getAgenceRetour());
+        }
         if (!is_null($resaSession->getVehicule())) {
             $vehicule = $this->vehiculeRepo->find($resaSession->getVehicule());
             $devis->setVehicule($vehicule);
         }
-        $devis->setDuree($this->dateHelper->calculDuree($dateDepart, $dateRetour));
-
-
-        if ($this->optionsObjectsFromSession($resaSession) != null) {
-            foreach ($this->optionsObjectsFromSession($resaSession) as $option) {
-                $devis->addOption($option);
-            }
+        if (!is_null($dateDepart) && !is_null($dateRetour)) {
+            $devis->setDuree($this->dateHelper->calculDuree($dateDepart, $dateRetour));
         }
+
         if ($this->garantiesObjectsFromSession($resaSession) != null) {
             foreach ($this->garantiesObjectsFromSession($resaSession) as $garantie) {
                 $devis->addGaranty($garantie);
@@ -317,38 +377,56 @@ class ReservationHelper
         if ($resaSession->getTarifVehicule()) {
             $tarifVehicule = $resaSession->getTarifVehicule();
         } else {
-            if (!is_null($resaSession->getVehicule())) {
+            if (!is_null($resaSession->getVehicule()) && !is_null($dateDepart) && !is_null($dateRetour)) {
                 $tarifVehicule  = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
             } else {
                 $tarifVehicule = 0;
             }
         }
+        $devis  = $this->setOptionsFromSessionToDevis($resaSession, $devis);
         $devis->setTarifVehicule($tarifVehicule);
+
+        $options = $resaSession->getOptions();
 
         $hasConducteur = $resaSession->getConducteur() == "true"  ? true : false;
         $devis->setConducteur($hasConducteur);
-        $tarifTotal = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $devis->getGaranties(), $devis->getOptions(), $hasConducteur);
+        $tarifTotal = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $options, $devis->getGaranties(), $hasConducteur);
         $devis->setPrix($tarifTotal);
         $devis->setTransformed(false);
-        $devis->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($this->optionsObjectsFromSession($resaSession), $devis->getConducteur()));
+        $devis->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($options, $devis->getConducteur()));
         $devis->setPrixGaranties($this->tarifsHelper->sommeTarifsGaranties($this->garantiesObjectsFromSession($resaSession)));
-
         return  $devis;
     }
 
     //return an array of objects of options or null
-    public function optionsObjectsFromSession($resaSession)
+    // public function optionsObjectsFromSession($resaSession)
+    // {
+    //     //on met dans un tableau les objets corresponans aux options cochés
+    //     $optionsObjects = [];
+    //     if ($resaSession->getOptions() != null) {
+    //         foreach ($resaSession->getOptions() as $opt) {
+    //             array_push($optionsObjects, $this->optionsRepo->find($opt));
+    //         }
+    //         return $optionsObjects;
+    //     } else {
+    //         return null;
+    //     }
+    // }
+
+
+    public function setOptionsFromSessionToDevis($resaSession, $devis)
     {
         //on met dans un tableau les objets corresponans aux options cochés
-        $optionsObjects = [];
-        if ($resaSession->getOptions() != null) {
-            foreach ($resaSession->getOptions() as $opt) {
-                array_push($optionsObjects, $this->optionsRepo->find($opt));
+        if (!empty($resaSession->getOptions())) {
+            foreach ($resaSession->getOptions() as $key => $opt) {
+
+                $devisOption = new DevisOption();
+                $devisOption->setOpt($opt[0]);
+                $devisOption->setQuantity($opt[1]);
+                $devis->addDevisOption($devisOption);
             }
-            return $optionsObjects;
-        } else {
-            return null;
         }
+        return $devis;
     }
 
     //return an array of objects of garanties

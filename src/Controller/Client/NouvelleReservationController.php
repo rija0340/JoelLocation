@@ -18,6 +18,7 @@ use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Classe\ReservationSession;
+use App\Entity\DevisOption;
 use App\Entity\Reservation;
 use App\Service\ReservationHelper;
 use App\Service\SymfonyMailerHelper;
@@ -69,215 +70,217 @@ class NouvelleReservationController extends AbstractController
     }
     //step1 choix des paramètres de la réservation
 
-    /**
-     * @Route("/espaceclient/nouvelle-reservation/etape12", name="client_step12", methods={"GET","POST"})
-     *
-     */
-    public function step1(Request $request, SessionInterface $session): Response
-    {
+    // /**
+    //  * @Route("/espaceclient/nouvelle-reservation/etape12", name="client_step12", methods={"GET","POST"})
+    //  *
+    //  */
+    // public function step1(Request $request, SessionInterface $session): Response
+    // {
 
-        //remove contenu session avant toute chose
-        $this->reservationSession->removeReservation();
+    //     //remove contenu session avant toute chose
+    //     $this->reservationSession->removeReservation();
 
-        $form = $this->createForm(ReservationStep1Type::class);
+    //     $form = $this->createForm(ReservationStep1Type::class);
 
-        $form->handleRequest($request);
+    //     $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+    //     if ($form->isSubmitted() && $form->isValid()) {
 
-            //recupération donnés envoyé par le formulaire
-            $dateDepart = $form->getData()['dateDepart'];
-            $dateRetour = $form->getData()['dateRetour'];
-            $agenceDepart = $form->getData()['agenceDepart'];
-            $agenceRetour = $form->getData()['agenceRetour'];
-            $typeVehicule = $form->getData()['typeVehicule'];
-            $lieuSejour = $form->getData()['lieuSejour'];
+    //         //recupération donnés envoyé par le formulaire
+    //         $dateDepart = $form->getData()['dateDepart'];
+    //         $dateRetour = $form->getData()['dateRetour'];
+    //         $agenceDepart = $form->getData()['agenceDepart'];
+    //         $agenceRetour = $form->getData()['agenceRetour'];
+    //         $typeVehicule = $form->getData()['typeVehicule'];
+    //         $lieuSejour = $form->getData()['lieuSejour'];
 
-            //stockage information dans session
-            $this->reservationSession->addAgenceDepart($agenceDepart);
-            $this->reservationSession->addAgenceRetour($agenceRetour);
-            $this->reservationSession->addDateDepart($dateDepart);
-            $this->reservationSession->addDateRetour($dateRetour);
-            $this->reservationSession->addTypeVehicule($typeVehicule);
-            $this->reservationSession->addLieuSejour($lieuSejour);
+    //         //stockage information dans session
+    //         $this->reservationSession->addAgenceDepart($agenceDepart);
+    //         $this->reservationSession->addAgenceRetour($agenceRetour);
+    //         $this->reservationSession->addDateDepart($dateDepart);
+    //         $this->reservationSession->addDateRetour($dateRetour);
+    //         $this->reservationSession->addTypeVehicule($typeVehicule);
+    //         $this->reservationSession->addLieuSejour($lieuSejour);
 
-            return $this->redirectToRoute('client_step2');
-        }
+    //         return $this->redirectToRoute('client_step2');
+    //     }
 
-        return $this->render('client/nouvelleReservation/step1.html.twig', [
-            'form' => $form->createView()
-        ]);
-    }
-
-
-    /**
-     * @Route("/espaceclient/nouvelle-reservation/etape2", name="client_step2", methods={"GET","POST"})
-     */
-    public function step2(Request $request, PaginatorInterface $paginator): Response
-    {
-        $dateDepart = $this->reservationSession->getDateDepart();
-        $dateRetour = $this->reservationSession->getDateRetour();
-
-        //un tableau contenant les véhicules utilisées dans les reservations se déroulant entre
-        //$dateDepart et $dateRetour choisis dans step1 de la réservation
-        $vehiculesReserves = [];
-        $reservations = $this->reservationRepo->findReservationIncludeDates($dateDepart, $dateRetour);
-        $vehicules = $this->vehiculeRepo->findAllVehiculesWithoutVendu();
-
-        //vehicule disponible en fonction des réservés
-        $vehiculesDisponible = $this->reservationHelper->getVehiculesDisponible($reservations);
-
-        //ajout id véhicule dans session, erreur si on stock directement l'objet véhicule dans session
-        //un objet vehicule dans session et ensuite on enregistre dans base de données
-        if ($request->request->get('vehicule') != null) {
-
-            $tarif = $request->request->get('tarif');
-            $id_vehicule = $request->request->get('vehicule');
-
-            //le tarif peut être null si n'est pas encore saisi par l'admin
-            if ($tarif != null) {
-                $this->reservationSession->addTarifVehicule($tarif);
-            }
-
-            $this->reservationSession->addVehicule($id_vehicule);
-
-            return $this->redirectToRoute('client_step3');
-        }
-
-        //tarifs des vehicules
-        $dateDepart = $this->reservationSession->getDateDepart();
-        $dateRetour = $this->reservationSession->getDateRetour();
-
-        $vehicules = $vehiculesDisponible;
-        //data contient les tarifs des vehicules disponibles
-        $data = [];
-        foreach ($vehicules as $key => $veh) {
-            $tarif = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $veh);
-            $data[$key]['vehicule'] = $veh;
-            $data[$key]['tarif'] = $tarif;
-        }
-
-        //utilisation de paginator pour liste véhicule disponible
-        //pagination
-        $vehiculesDisponiblePagination = $paginator->paginate(
-            $vehiculesDisponible, // Requête contenant les données à paginer (ici nos articles)
-            $request->query->getInt('page', 1), // Numéro de la page en cours, passé dans l'URL, 1 si aucune page
-            3 // Nombre de résultats par page
-        );
-
-        return $this->render('client/nouvelleReservation/step2.html.twig', [
-            'vehiculesDisponible' => $vehiculesDisponible,
-            'vehiculesDisponiblePagination' => $vehiculesDisponiblePagination,
-            'data' => $data,
-        ]);
-    }
-
-    /**
-     * @Route("/espaceclient/nouvelle-reservation/etape3", name="client_step3", methods={"GET","POST"})
-     */
-    public function step3(Request $request)
-    {
-        //recupérer liste options et  garanties dans base de données
-        $options = $this->optionsRepo->findAll();
-        $garanties = $this->garantiesRepo->findAll();
-
-        // recuperation donnée from formulaire options et garanties
-        if ($request->request->get('radio-conducteur') != null) {
-            //$optionsData et garantiesData sont des tableaux 
-            //(mettre un "[]" apres les noms des input type checkbox dans templates pour obtenir tous les  checkbox cochés)
-            $conducteur = $request->request->get('radio-conducteur');
-            //options peut être null
-            if ($request->get('checkboxOptions') != null) {
-                $optionsData = $request->request->get('checkboxOptions');
-            }
-
-            if ($request->get('checkboxGaranties') != null) {
-                $garantiesData = $request->request->get('checkboxGaranties');
-            }
-
-            //ajout options et garanties (tableau d'objets) dans session 
-            if ($request->get('checkboxOptions') != null) {
-                $this->reservationSession->addOptions($optionsData);
-            }
-            if ($request->get('checkboxGaranties') != null) {
-                $this->reservationSession->addGaranties($garantiesData);
-            }
-            //ajout conducteur dans session
-            $this->reservationSession->addConducteur($conducteur);
-
-            return $this->redirectToRoute('client_step4');
-        }
-
-        $dateDepart = $this->reservationSession->getDateDepart();
-        $dateRetour = $this->reservationSession->getDateRetour();
-        $vehicule = $this->vehiculeRepo->find($this->reservationSession->getVehicule());
-
-        return $this->render('client/nouvelleReservation/step3.html.twig', [
-
-            'options' => $options,
-            'garanties' => $garanties,
-            'vehicule' => $vehicule,
-            'tarifVehicule' => $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule),
-            'duree' => $this->dateHelper->calculDuree($this->reservationSession->getDateDepart(), $this->reservationSession->getDateRetour()),
-            'agenceDepart' => $this->reservationSession->getAgenceDepart(),
-            'dateDepart' => $this->reservationSession->getDateDepart(),
-            'agenceRetour' => $this->reservationSession->getAgenceRetour(),
-            'dateRetour' => $this->reservationSession->getDateRetour(),
+    //     return $this->render('client/nouvelleReservation/step1.html.twig', [
+    //         'form' => $form->createView()
+    //     ]);
+    // }
 
 
-        ]);
-    }
+    // /**
+    //  * @Route("/espaceclient/nouvelle-reservation/etape2", name="client_step2", methods={"GET","POST"})
+    //  */
+    // public function step2(Request $request, PaginatorInterface $paginator): Response
+    // {
+    //     $dateDepart = $this->reservationSession->getDateDepart();
+    //     $dateRetour = $this->reservationSession->getDateRetour();
 
-    /**
-     * @Route("/espaceclient/nouvelle-reservation/etape4", name="client_step4", methods={"GET","POST"})
-     */
-    public function step4(Request $request)
-    {
+    //     //un tableau contenant les véhicules utilisées dans les reservations se déroulant entre
+    //     //$dateDepart et $dateRetour choisis dans step1 de la réservation
+    //     $vehiculesReserves = [];
+    //     $reservations = $this->reservationRepo->findReservationIncludeDates($dateDepart, $dateRetour);
+    //     $vehicules = $this->vehiculeRepo->findAllVehiculesWithoutVendu();
 
-        //recupération des données venant de sessions pour être affichées dans la page step4
-        $dateDepart = $this->reservationSession->getDateDepart();
-        $dateRetour = $this->reservationSession->getDateRetour();
-        $vehicule = $this->vehiculeRepo->find($this->reservationSession->getVehicule());
-        $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
-        $optionsData = $this->reservationSession->getOptions();
-        $garantiesData = $this->reservationSession->getGaranties();
+    //     //vehicule disponible en fonction des réservés
+    //     $vehiculesDisponible = $this->reservationHelper->getVehiculesDisponible($reservations);
 
-        //on met dans un tableau les objets correspondants aux options cochés
-        $optionsObjects = [];
-        if ($optionsData != null) {
-            foreach ($optionsData as $opt) {
-                array_push($optionsObjects, $this->optionsRepo->find($opt));
-            }
-        }
+    //     //ajout id véhicule dans session, erreur si on stock directement l'objet véhicule dans session
+    //     //un objet vehicule dans session et ensuite on enregistre dans base de données
+    //     if ($request->request->get('vehicule') != null) {
 
-        //on met dans un tableau les objets correspondants aux garanties cochés
-        $garantiesObjects = [];
-        if ($garantiesData != null) {
-            foreach ($garantiesData as $gar) {
-                array_push($garantiesObjects, $this->garantiesRepo->find($gar));
-            }
-        }
+    //         $tarif = $request->request->get('tarif');
+    //         $id_vehicule = $request->request->get('vehicule');
 
-        $hasConducteur =  $this->reservationSession->getConducteur() == "true" ? true : false;
+    //         //le tarif peut être null si n'est pas encore saisi par l'admin
+    //         if ($tarif != null) {
+    //             $this->reservationSession->addTarifVehicule($tarif);
+    //         }
 
-        $tarifTotal = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $optionsObjects, $garantiesObjects, $hasConducteur);
+    //         $this->reservationSession->addVehicule($id_vehicule);
 
-        return $this->render('client/nouvelleReservation/step4.html.twig', [
+    //         return $this->redirectToRoute('client_step3');
+    //     }
 
-            'vehicule' => $vehicule,
-            'tarifVehicule' => $tarifVehicule,
-            'duree' => $this->dateHelper->calculDuree($dateDepart, $dateRetour),
-            'agenceDepart' => $this->reservationSession->getAgenceDepart(),
-            'dateDepart' => $this->reservationSession->getDateDepart(),
-            'agenceRetour' => $this->reservationSession->getAgenceRetour(),
-            'dateRetour' => $this->reservationSession->getDateRetour(),
-            'garanties' => $garantiesObjects,
-            'options' => $optionsObjects,
-            'conducteur' => $this->reservationSession->getConducteur(),
-            'tarifTotal' => $tarifTotal
+    //     //tarifs des vehicules
+    //     $dateDepart = $this->reservationSession->getDateDepart();
+    //     $dateRetour = $this->reservationSession->getDateRetour();
 
-        ]);
-    }
+    //     $vehicules = $vehiculesDisponible;
+    //     //data contient les tarifs des vehicules disponibles
+    //     $data = [];
+    //     foreach ($vehicules as $key => $veh) {
+    //         $tarif = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $veh);
+    //         $data[$key]['vehicule'] = $veh;
+    //         $data[$key]['tarif'] = $tarif;
+    //     }
+
+    //     //utilisation de paginator pour liste véhicule disponible
+    //     //pagination
+    //     $vehiculesDisponiblePagination = $paginator->paginate(
+    //         $vehiculesDisponible, // Requête contenant les données à paginer (ici nos articles)
+    //         $request->query->getInt('page', 1), // Numéro de la page en cours, passé dans l'URL, 1 si aucune page
+    //         3 // Nombre de résultats par page
+    //     );
+
+    //     return $this->render('client/nouvelleReservation/step2.html.twig', [
+    //         'vehiculesDisponible' => $vehiculesDisponible,
+    //         'vehiculesDisponiblePagination' => $vehiculesDisponiblePagination,
+    //         'data' => $data,
+    //     ]);
+    // }
+
+    // /**
+    //  * @Route("/espaceclient/nouvelle-reservation/etape3", name="client_step3", methods={"GET","POST"})
+    //  */
+    // public function step3(Request $request)
+    // {
+    //     //recupérer liste options et  garanties dans base de données
+    //     $options = $this->optionsRepo->findAll();
+    //     $garanties = $this->garantiesRepo->findAll();
+
+    //     // recuperation donnée from formulaire options et garanties
+    //     if ($request->request->get('radio-conducteur') != null) {
+    //         //$optionsData et garantiesData sont des tableaux 
+    //         //(mettre un "[]" apres les noms des input type checkbox dans templates pour obtenir tous les  checkbox cochés)
+    //         $conducteur = $request->request->get('radio-conducteur');
+    //         //options peut être null
+    //         if ($request->get('checkboxOptions') != null) {
+    //             $optionsData = $request->request->get('checkboxOptions');
+    //         }
+
+    //         if ($request->get('checkboxGaranties') != null) {
+    //             $garantiesData = $request->request->get('checkboxGaranties');
+    //         }
+
+    //         //ajout options et garanties (tableau d'objets) dans session 
+    //         if ($request->get('checkboxOptions') != null) {
+    //             $this->reservationSession->addOptions($optionsData);
+    //         }
+    //         if ($request->get('checkboxGaranties') != null) {
+    //             $this->reservationSession->addGaranties($garantiesData);
+    //         }
+    //         //ajout conducteur dans session
+    //         $this->reservationSession->addConducteur($conducteur);
+
+    //         return $this->redirectToRoute('client_step4');
+    //     }
+
+    //     $dateDepart = $this->reservationSession->getDateDepart();
+    //     $dateRetour = $this->reservationSession->getDateRetour();
+    //     $vehicule = $this->vehiculeRepo->find($this->reservationSession->getVehicule());
+
+    //     return $this->render('client/nouvelleReservation/step3.html.twig', [
+
+    //         'options' => $options,
+    //         'garanties' => $garanties,
+    //         'vehicule' => $vehicule,
+    //         'tarifVehicule' => $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule),
+    //         'duree' => $this->dateHelper->calculDuree($this->reservationSession->getDateDepart(), $this->reservationSession->getDateRetour()),
+    //         'agenceDepart' => $this->reservationSession->getAgenceDepart(),
+    //         'dateDepart' => $this->reservationSession->getDateDepart(),
+    //         'agenceRetour' => $this->reservationSession->getAgenceRetour(),
+    //         'dateRetour' => $this->reservationSession->getDateRetour(),
+
+
+    //     ]);
+    // }
+
+    // /**
+    //  * @Route("/espaceclient/nouvelle-reservation/etape4", name="client_step4", methods={"GET","POST"})
+    //  */
+    // public function step4(Request $request)
+    // {
+
+    //     $devis  = $this->reservationHelper->createDevisFromResaSession($this->reservationSession);
+    //     //recupération des données venant de sessions pour être affichées dans la page step4
+    //     // $dateDepart = $this->reservationSession->getDateDepart();
+    //     // $dateRetour = $this->reservationSession->getDateRetour();
+    //     // $vehicule = $this->vehiculeRepo->find($this->reservationSession->getVehicule());
+    //     // $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
+    //     // $optionsData = $this->reservationSession->getOptions();
+    //     // $garantiesData = $this->reservationSession->getGaranties();
+
+    //     // //on met dans un tableau les objets correspondants aux options cochés
+    //     // $optionsObjects = [];
+    //     // if ($optionsData != null) {
+    //     //     foreach ($optionsData as $opt) {
+    //     //         array_push($optionsObjects, $this->optionsRepo->find($opt));
+    //     //     }
+    //     // }
+
+    //     // //on met dans un tableau les objets correspondants aux garanties cochés
+    //     // $garantiesObjects = [];
+    //     // if ($garantiesData != null) {
+    //     //     foreach ($garantiesData as $gar) {
+    //     //         array_push($garantiesObjects, $this->garantiesRepo->find($gar));
+    //     //     }
+    //     // }
+
+    //     // $hasConducteur =  $this->reservationSession->getConducteur() == "true" ? true : false;
+
+    //     // $tarifTotal = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $optionsObjects, $garantiesObjects, $hasConducteur);
+
+    //     return $this->render('client/nouvelleReservation/step4.html.twig', [
+
+    //         // 'vehicule' => $vehicule,
+    //         // 'tarifVehicule' => $tarifVehicule,
+    //         // 'duree' => $this->dateHelper->calculDuree($dateDepart, $dateRetour),
+    //         // 'agenceDepart' => $this->reservationSession->getAgenceDepart(),
+    //         // 'dateDepart' => $this->reservationSession->getDateDepart(),
+    //         // 'agenceRetour' => $this->reservationSession->getAgenceRetour(),
+    //         // 'dateRetour' => $this->reservationSession->getDateRetour(),
+    //         // 'conducteur' => $this->reservationSession->getConducteur(),
+    //         // 'tarifTotal' => $tarifTotal
+    //         'devis' => $devis,
+    //         'garanties' => $garantiesObjects,
+    //         'options' => $optionsObjects,
+
+    //     ]);
+    // }
 
 
     /**
@@ -286,72 +289,75 @@ class NouvelleReservationController extends AbstractController
     public function saveDevis(Request $request, $type): Response
     {
 
-        $optionsData = $this->reservationSession->getOptions();
-        $garantiesData = $this->reservationSession->getGaranties();
+        // $optionsData = $this->reservationSession->getOptions();
+        // $garantiesData = $this->reservationSession->getGaranties();
 
-        //on met dans un tableau les objets corresponans aux options cochés
-        $optionsObjects = [];
-        if ($optionsData != null) {
-            foreach ($optionsData as $opt) {
-                array_push($optionsObjects, $this->optionsRepo->find($opt));
-            }
-        }
+        // //on met dans un tableau les objets corresponans aux options cochés
+        // $optionsObjects = [];
+        // if ($optionsData != null) {
+        //     foreach ($optionsData as $opt) {
+        //         array_push($optionsObjects, $this->optionsRepo->find($opt));
+        //     }
+        // }
 
-        //on met dans un tableau les objets corresponans aux garanties cochés
-        $garantiesObjects = [];
-        if ($garantiesData != null) {
-            foreach ($garantiesData as $gar) {
-                array_push($garantiesObjects, $this->garantiesRepo->find($gar));
-            }
-        }
+        // //on met dans un tableau les objets corresponans aux garanties cochés
+        // $garantiesObjects = [];
+        // if ($garantiesData != null) {
+        //     foreach ($garantiesData as $gar) {
+        //         array_push($garantiesObjects, $this->garantiesRepo->find($gar));
+        //     }
+        // }
 
-        //ajout client dans session
-        $this->reservationSession->addClient($this->getUser());
 
-        //enregistrement session dans devis
-        $devis = new Devis();
+        // //enregistrement session dans devis
+        // $devis = new Devis();
 
-        //utile pour eviter erreur new entity, cette erreur apparait lorsque on utilise directement objet véhicule dans session
-        $vehicule = $this->vehiculeRepo->find($this->reservationSession->getVehicule());
+        // //utile pour eviter erreur new entity, cette erreur apparait lorsque on utilise directement objet véhicule dans session
+        // $vehicule = $this->vehiculeRepo->find($this->reservationSession->getVehicule());
 
-        $devis->setAgenceDepart($this->reservationSession->getAgenceDepart());
-        $devis->setAgenceRetour($this->reservationSession->getAgenceRetour());
-        $devis->setDateDepart($this->reservationSession->getDateDepart());
-        $devis->setDateRetour($this->reservationSession->getDateRetour());
-        $devis->setVehicule($vehicule);
-        $devis->setLieuSejour($this->reservationSession->getLieuSejour());
-        $devis->setClient($this->reservationSession->getClient());
-        $devis->setDateCreation($this->dateHelper->dateNow());
-        //si l'heure de la date est égal à zero 
-        $devis->setDuree($this->dateHelper->calculDuree($this->reservationSession->getDateDepart(), $this->reservationSession->getDateRetour()));
+        // $devis->setAgenceDepart($this->reservationSession->getAgenceDepart());
+        // $devis->setAgenceRetour($this->reservationSession->getAgenceRetour());
+        // $devis->setDateDepart($this->reservationSession->getDateDepart());
+        // $devis->setDateRetour($this->reservationSession->getDateRetour());
+        // $devis->setVehicule($vehicule);
+        // $devis->setLieuSejour($this->reservationSession->getLieuSejour());
+        // $devis->setClient($this->reservationSession->getClient());
+        // $devis->setDateCreation($this->dateHelper->dateNow());
+        // //si l'heure de la date est égal à zero 
+        // $devis->setDuree($this->dateHelper->calculDuree($this->reservationSession->getDateDepart(), $this->reservationSession->getDateRetour()));
 
-        if ($this->reservationSession->getConducteur() == "false") {
-            $devis->setConducteur(false);
-        } else if ($this->reservationSession->getConducteur() == "true") {
-            $devis->setConducteur(true);
-        }
+        // if ($this->reservationSession->getConducteur() == "false") {
+        //     $devis->setConducteur(false);
+        // } else if ($this->reservationSession->getConducteur() == "true") {
+        //     $devis->setConducteur(true);
+        // }
 
-        $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($this->reservationSession->getDateDepart(), $this->reservationSession->getDateRetour(), $vehicule);
-        $devis->setTarifVehicule($tarifVehicule);
+        // $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($this->reservationSession->getDateDepart(), $this->reservationSession->getDateRetour(), $vehicule);
+        // $devis->setTarifVehicule($tarifVehicule);
 
-        $prixOptions = $this->tarifsHelper->sommeTarifsOptions($optionsObjects, $devis->getConducteur());
-        $devis->setPrixOptions($prixOptions);
-        $prixGaranties = $this->tarifsHelper->sommeTarifsGaranties($garantiesObjects);
-        $devis->setPrixGaranties($prixGaranties);
+        // $prixOptions = $this->tarifsHelper->sommeTarifsOptions($optionsObjects, $devis->getConducteur());
+        // $devis->setPrixOptions($prixOptions);
+        // $prixGaranties = $this->tarifsHelper->sommeTarifsGaranties($garantiesObjects);
+        // $devis->setPrixGaranties($prixGaranties);
 
-        $devis->setPrix($tarifVehicule + $prixGaranties + $prixOptions);
+        // $devis->setPrix($tarifVehicule + $prixGaranties + $prixOptions);
 
-        $devis->setTransformed(false);
-        //ajout de ID unique dans la base pour pouvoir telecharger par un lien envoyé au client par mail
-        $devis->setDownloadId(uniqid());
-        //options et garanties sont des tableaux d'objet dans session
-        foreach ($optionsObjects as $option) {
-            $devis->addOption($option);
-        }
-        foreach ($garantiesObjects as $garantie) {
-            $devis->addGaranty($garantie);
-        }
+        // $devis->setTransformed(false);
+        // //ajout de ID unique dans la base pour pouvoir telecharger par un lien envoyé au client par mail
+        // $devis->setDownloadId(uniqid());
+        // //options et garanties sont des tableaux d'objet dans session
+        // foreach ($optionsObjects as $option) {
+        //     $devis->addOption($option);
+        // }
+        // foreach ($garantiesObjects as $garantie) {
+        //     $devis->addGaranty($garantie);
+        // }
         // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
+
+        $this->reservationSession->addClient($this->getUser());
+        $devis  = $this->reservationHelper->createDevisFromResaSession($this->reservationSession);
+        $devis->setClient($this->getUser());
+
         $lastID = $this->devisRepo->findBy(array(), array('id' => 'DESC'), 1);
         if ($lastID == null) {
             $currentID = 1;
@@ -379,8 +385,27 @@ class NouvelleReservationController extends AbstractController
         }
 
         if ($devisExiste == false) {
+            foreach ($devis->getDevisOptions() as $devisOption) {
+                $devis->removeDevisOption($devisOption);
+            }
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($devis);
+            $entityManager->flush();
+
+            $devisOptions = [];
+            $entityManager = $this->getDoctrine()->getManager();
+            foreach ($this->reservationSession->getOptions() as $option) {
+                $optId = $option[0]->getId();
+                $optEntity =  $this->optionsRepo->find(intval($optId));
+                $devisOption = new DevisOption();
+                $devisOption->setOpt($optEntity);
+                $devisOption->setDevis($devis);
+                $devisOption->setQuantity(intval($option[1]));
+                $entityManager->persist($devisOption);
+                // Store entity to track later
+                $devisOptions[] = $devisOption;
+            }
             $entityManager->flush();
         } else {
             $this->flashy->error("Le devis existe déjà");

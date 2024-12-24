@@ -8,10 +8,12 @@ use App\Entity\Reservation;
 use App\Service\DateHelper;
 use App\Service\TarifsHelper;
 use App\Classe\ReservationSession;
+use App\Classe\ReserverDevis;
 use App\Form\ReservationStep1Type;
 use App\Repository\UserRepository;
 use App\Service\ReservationHelper;
 use App\Form\ClientNewComptoirType;
+use App\Repository\DevisOptionRepository;
 use App\Repository\DevisRepository;
 use App\Repository\OptionsRepository;
 use App\Repository\GarantieRepository;
@@ -48,6 +50,8 @@ class VenteComptoirController extends AbstractController
     private $reservationHelper;
     private $modeReservationRepo;
     private $symfonyMailerHelper;
+    private $devisOptionRepo;
+    private $reserverDevis;
 
     public function __construct(
         ModeReservationRepository $modeReservationRepo,
@@ -64,7 +68,9 @@ class VenteComptoirController extends AbstractController
         DevisRepository $devisRepo,
         ReservationSession $reservationSession,
         ReservationHelper $reservationHelper,
-        SymfonyMailerHelper $symfonyMailerHelper
+        SymfonyMailerHelper $symfonyMailerHelper,
+        DevisOptionRepository $devisOptionRepo,
+        ReserverDevis $reserverDevis
     ) {
 
         $this->reservationSession = $reservationSession;
@@ -82,6 +88,8 @@ class VenteComptoirController extends AbstractController
         $this->reservationHelper = $reservationHelper;
         $this->modeReservationRepo = $modeReservationRepo;
         $this->symfonyMailerHelper = $symfonyMailerHelper;
+        $this->devisOptionRepo = $devisOptionRepo;
+        $this->reserverDevis = $reserverDevis;
     }
 
     /**
@@ -93,9 +101,27 @@ class VenteComptoirController extends AbstractController
         //remove contenu session avant toute chose
         $routeName = $this->get('request_stack')->getCurrentRequest()->get('_route');
 
-        $this->reservationSession->removeReservation();
+        if (!str_contains($request->headers->get('referer'), 'step2')) {
+            $this->reservationSession->removeReservation();
+        }
 
         $form = $this->createForm(ReservationStep1Type::class);
+
+        $devis = $this->reservationHelper->createDevisFromResaSession($this->reservationSession);
+        //set data if exists in session 
+        $formData = [
+            'agenceDepart' => $devis->getAgenceDepart(),
+            'dateDepart' => $devis->getDateDepart(),
+            'typeVehicule' => 'classic',
+            'agenceRetour' => $devis->getAgenceRetour(),
+            'dateRetour' => $devis->getDateRetour(),
+            'lieuSejour' => $devis->getLieuSejour()
+        ];
+
+        if ($this->checkFormDataExists($formData)) {
+            $form->setData($formData);
+        }
+
         if ($this->reservationSession->getReservation() != null) {
             $form->get('lieuSejour')->setData('Mety sa tsia');
         }
@@ -133,6 +159,20 @@ class VenteComptoirController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+    private function checkFormDataExists(array $data): bool
+    {
+        $requiredFields = ['agenceDepart', 'dateDepart', 'typeVehicule', 'agenceRetour', 'dateRetour'];
+
+        foreach ($requiredFields as $field) {
+            if (!isset($data[$field]) || is_null($data[$field])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 
     /**
      * @Route("/backoffice/vente-comptoir/etape2", name="step2", methods={"GET","POST"})
@@ -238,17 +278,12 @@ class VenteComptoirController extends AbstractController
             //(mettre un "[]" apres les noms des input type checkbox dans templates pour obtenir tous les  checkbox cochés)
             $conducteur = $request->request->get('radio-conducteur');
             //options peut être null
-            if ($request->get('checkboxOptions') != null) {
-                $optionsData = $request->request->get('checkboxOptions');
-            }
+
+            //ajout options et garanties (tableau d'objets) dans session 
+            $this->reservationSession->addOptions($this->reservationHelper->getOptionsFromRequest($request));
 
             if ($request->get('checkboxGaranties') != null) {
                 $garantiesData = $request->request->get('checkboxGaranties');
-            }
-
-            //ajout options et garanties (tableau d'objets) dans session 
-            if ($request->get('checkboxOptions') != null) {
-                $this->reservationSession->addOptions($optionsData);
             }
 
             if ($request->get('checkboxGaranties') != null) {
@@ -256,6 +291,7 @@ class VenteComptoirController extends AbstractController
             }
             $this->reservationSession->addConducteur($conducteur);
 
+            $this->reservationHelper->getOptionsFromRequest($request);
 
             if ($routeName === 'client_step3') {
                 return $this->redirectToRoute('client_step4');
@@ -340,10 +376,12 @@ class VenteComptoirController extends AbstractController
             ? 'client/nouvelleReservation/step4.html.twig'
             : 'admin/vente_comptoir2/step4.html.twig';
 
+        $devis = $this->reservationHelper->createDevisFromResaSession($this->reservationSession);
+
         return $this->render($template, [
 
             'form' => $form->createView(),
-            'devis' => $this->reservationHelper->createDevisFromResaSession($this->reservationSession),
+            'devis' => $devis,
             'prixConductSuppl' => $this->tarifsHelper->getPrixConducteurSupplementaire(),
 
         ]);
@@ -436,9 +474,21 @@ class VenteComptoirController extends AbstractController
             }
             $devis->setNumeroDevis($currentID);
 
+            //----------------test---------------------
+            //supprimer les devisoptions avant enregistrement du devis dans le bdd 
+            foreach ($devis->getDevisOptions() as $option) {
+                $devis->removeDevisOption($option);
+            }
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($devis);
             $entityManager->flush();
+
+            //ajouter les options pour le devis enregistrer dans le bdd
+            if ($this->reservationSession->getOptions() != []) {
+                //save devis options
+                $devis = $this->reservationHelper->saveDevisOptions($devis, $this->reservationSession->getOptions(), $this->em);
+            }
             return $devis->getNumero();
         } else {
             return "devisExist";
@@ -539,83 +589,16 @@ class VenteComptoirController extends AbstractController
         $client = explode('(', $client);
         $mailClient = explode(')', $client[1]);
         $mailClient = $mailClient[0];
-
-        //recherche du client correspondant au mail
         $client = $this->userRepo->findOneBy(['mail' => $mailClient]);
 
-        $dateDepart = $this->reservationSession->getDateDepart();
-        $dateRetour = $this->reservationSession->getDateRetour();
-        $vehicule = $this->vehiculeRepo->find($this->reservationSession->getVehicule());
-
-        $reservation = new Reservation();
-        $reservation->setVehicule($vehicule);
-        $reservation->setClient($client);
-        $reservation->setDateDebut($dateDepart);
-        $reservation->setDateFin($dateRetour);
-        $reservation->setAgenceDepart($this->reservationSession->getAgenceDepart());
-        $reservation->setAgenceRetour($this->reservationSession->getAgenceRetour());
-        $reservation->setDuree($this->dateHelper->calculDuree($dateDepart, $dateRetour));
-        $reservation->setCanceled(false);
-        $reservation->setArchived(false);
-        //mode reservation
-        $reservation->setModeReservation($this->modeReservationRepo->findOneBy(['libelle' => 'CPT']));
-        //boucle pour ajout options 
-        if ($this->reservationHelper->optionsObjectsFromSession($this->reservationSession) != null) {
-            foreach ($this->reservationHelper->optionsObjectsFromSession($this->reservationSession) as $option) {
-                $reservation->addOption($option);
-            }
-        }
-
-        //boucle pour ajout garantie 
-        if ($this->reservationHelper->garantiesObjectsFromSession($this->reservationSession) != null) {
-            foreach ($this->reservationHelper->garantiesObjectsFromSession($this->reservationSession) as $garantie) {
-                $reservation->addGaranty($garantie);
-            }
-        }
-
-        //si l'admin a entrée un autre tarif dans étape 2, alors on considère ce tarif
-        if ($this->reservationSession->getTarifVehicule()) {
-            $tarifVehicule = $this->reservationSession->getTarifVehicule();
-        } else {
-            $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
-        }
-
-        if ($this->reservationSession->getConducteur() == "false") {
-            $reservation->setConducteur(false);
-        } else if ($this->reservationSession->getConducteur() == "true") {
-            $reservation->setConducteur(true);
-        }
-
-        $prixOptions = $this->tarifsHelper->sommeTarifsOptions($this->reservationHelper->optionsObjectsFromSession($this->reservationSession), $reservation->getConducteur());
-        $prixGaranties = $this->tarifsHelper->sommeTarifsGaranties($this->reservationHelper->garantiesObjectsFromSession($this->reservationSession));
-
-        $reservation->setTarifVehicule($tarifVehicule);
-        $reservation->setPrixOptions($prixOptions);
-        $reservation->setPrixGaranties($prixGaranties);
-        $reservation->setPrix($tarifVehicule + $prixOptions + $prixGaranties);
-        $reservation->setDateReservation($this->dateHelper->dateNow());
-        $reservation->setCodeReservation('devisTransformé');
-        // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
-        $lastID = $this->reservationRepo->findBy(array(), array('id' => 'DESC'), 1);
-        if ($lastID == null) {
-            $currentID = 1;
-        } else {
-            $currentID = $lastID[0]->getId() + 1;
-        }
-        //reference réservation CPT ou WEB + année en cours + mois + 0000+ id;
-        $reservation->setRefRes($reservation->getModeReservation()->getLibelle(), $currentID);
-
-        $this->em->persist($reservation);
-        $this->em->flush();
-
-        // $this->em->flush();
+        $devis = $this->reservationHelper->createDevisFromResaSession($this->reservationSession);
+        $devis->setClient($client);
+        $reservation = $this->reserverDevis->reserver($devis, "null", false);
         //on vide la session après reservation et paiement
         $this->reservationSession->removeReservation();
 
         $this->flashy->success("Réservation effectuée avec succès");
         //envoi de mail de confirmation de réservation
-
-
 
         return $this->redirectToRoute('reservation_index');
     }

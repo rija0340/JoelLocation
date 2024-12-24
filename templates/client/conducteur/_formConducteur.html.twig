@@ -17,11 +17,11 @@
 		<label for="">Ville de naissance :</label>
 		{{ form_widget(formConducteur.villeNaissance) }}
 	</div>
-	<div class="form-group col-md-6">
+	<div class="form-group col-md-3">
 		<label for="">Numéro de permis :</label>
 		{{ form_widget(formConducteur.numeroPermis) }}
 	</div>
-	<div class="form-group col-md-6">
+	<div class="form-group col-md-3">
 		<label for="">Date de délivrance :</label>
 		{{ form_widget(formConducteur.dateDelivrance) }}
 	</div>
@@ -33,13 +33,17 @@
 		<label for="">Ville de délivrance :</label>
 		{{ form_widget(formConducteur.villeDelivrance) }}
 	</div>
+	<div class="form-group col-md-6">
+		<label for="">Téléphone :</label>
+		{{ form_widget(formConducteur.telephone) }}
+	</div>
 	{# <div class="form-group col-md-6">
-						<label class="label-container">
-							est conducteur principal
-							<input type="checkbox" name="isPrincipal" class="ml-2">
-							<span class="checkmark"></span>
-						</label>
-					</div> #}
+									<label class="label-container">
+										est conducteur principal
+										<input type="checkbox" name="isPrincipal" class="ml-2">
+										<span class="checkmark"></span>
+									</label>
+								</div> #}
 
 </div>
 <div class="text-center mt-2 mb-2">

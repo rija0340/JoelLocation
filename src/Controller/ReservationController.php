@@ -24,6 +24,8 @@ use App\Repository\MarqueRepository;
 use App\Repository\ModeleRepository;
 use App\Repository\TarifsRepository;
 use App\Entity\AnnulationReservation;
+use App\Entity\Devis;
+use App\Entity\DevisOption;
 use App\Repository\OptionsRepository;
 use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
@@ -35,6 +37,7 @@ use App\Form\CollectionFraisSupplResaType;
 use App\Repository\AnnulationReservationRepository;
 use App\Repository\ModePaiementRepository;
 use App\Repository\AppelPaiementRepository;
+use App\Repository\DevisOptionRepository;
 use App\Repository\DevisRepository;
 use App\Service\Site;
 use App\Service\SymfonyMailerHelper;
@@ -59,11 +62,11 @@ class ReservationController extends AbstractController
     private $dateHelper;
     private $tarifsHelper;
     private $em;
-    private $mailjet;
     private $flashy;
     private $modePaiementRepo;
     private $appelPaiementRepository;
     private $reservationHelper;
+    private $devisOptionRepo;
 
     public function __construct(
         ModePaiementRepository $modePaiementRepo,
@@ -72,18 +75,15 @@ class ReservationController extends AbstractController
         FlashyNotifier $flashy,
         Mailjet $mailjet,
         EntityManagerInterface $em,
-        MarqueRepository $marqueRepo,
-        ModeleRepository $modeleRepo,
         TarifsHelper $tarifsHelper,
         DateHelper $dateHelper,
-        TarifsRepository $tarifsRepo,
         ReservationRepository $reservationRepo,
-        UserRepository $userRepo,
         VehiculeRepository $vehiculeRepo,
         OptionsRepository $optionsRepo,
         GarantieRepository $garantiesRepo,
         AppelPaiementRepository $appelPaiementRepository,
-        ReservationHelper $reservationHelper
+        ReservationHelper $reservationHelper,
+        DevisOptionRepository $devisOptionRepo
 
     ) {
 
@@ -94,13 +94,13 @@ class ReservationController extends AbstractController
         $this->dateHelper = $dateHelper;
         $this->tarifsHelper = $tarifsHelper;
         $this->em = $em;
-        $this->mailjet = $mailjet;
         $this->flashy = $flashy;
         $this->router = $router;
         $this->conducteurRepo = $conducteurRepo;
         $this->modePaiementRepo = $modePaiementRepo;
         $this->appelPaiementRepository = $appelPaiementRepository;
         $this->reservationHelper = $reservationHelper;
+        $this->devisOptionRepo = $devisOptionRepo;
     }
 
     /**
@@ -162,6 +162,40 @@ class ReservationController extends AbstractController
         ]);
     }
 
+    public function migrateOptionsToDevisOptions(): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $devisRepo = $this->getDoctrine()->getRepository(Devis::class);
+        $reservationRepo = $this->getDoctrine()->getRepository(Reservation::class);
+        $devisOptionRepo = $this->getDoctrine()->getRepository(DevisOption::class);
+
+        // Migrate Devis options
+        $allDevis = $devisRepo->findAll();
+        foreach ($allDevis as $devis) {
+            foreach ($devis->getOptions() as $option) {
+                $devisOption = new DevisOption();
+                $devisOption->setDevis($devis);
+                $devisOption->setOpt($option);
+                $devisOption->setQuantity(1);
+                $em->persist($devisOption);
+            }
+        }
+
+        // Migrate Reservation options 
+        $allReservations = $reservationRepo->findAll();
+        foreach ($allReservations as $reservation) {
+            foreach ($reservation->getOptions() as $option) {
+                $devisOption = new DevisOption();
+                $devisOption->setReservation($reservation);
+                $devisOption->setOpt($option);
+                $devisOption->setQuantity(1);
+                $em->persist($devisOption);
+            }
+        }
+
+        $em->flush();
+        return new Response("Migration completed successfully");
+    }
 
     /**
      * @Route("/backoffice/reservation/details/{id}", name="reservation_show", methods={"GET", "POST"},requirements={"id":"\d+"})
@@ -440,6 +474,7 @@ class ReservationController extends AbstractController
     /**
      * @Route("/espaceclient/validation/options-garanties/{id}", name="validation_step2", methods={"GET","POST"})
      * @Route("/backoffice/reservation/modifier/options-garanties/{id}", name="reservation_optionsGaranties_edit", methods={"GET","POST"},requirements={"id":"\d+"})
+     *  @Route("/backoffice/devis/modifier-options-garanties/{id}", name="devis_optionsGaranties_edit", methods={"GET","POST"},requirements={"id":"\d+"})
      */
     public function editOptionsGaranties(Request $request, $id, DevisRepository $devisRepo): Response
     {
@@ -465,8 +500,10 @@ class ReservationController extends AbstractController
                 $this->flashy->error("Le devis n'existe pas");
                 return $this->redirectToRoute('espaceClient_index');
             }
-        } else {
+        } else if ($routeName === 'reservation_optionsGaranties_edit') {
             $entity = $this->reservationRepo->find($id);
+        } else {
+            $entity = $devisRepo->find($id);
         }
 
         // Rest of your logic remains the same since both entities implement OptionsGarantiesInterface
@@ -482,9 +519,21 @@ class ReservationController extends AbstractController
         $allOptions = $this->reservationHelper->getOptionsGarantiesAllAndData($entity)["allOptions"];
         $allGaranties = $this->reservationHelper->getOptionsGarantiesAllAndData($entity)["allGaranties"];
 
+        $redirectRoute = "";
+        $type = "";
+        if ($routeName == "reservation_optionsGaranties_edit") {
+            $redirectRoute = "reservation_show";
+            $type = "reservation";
+        } else if ($routeName == "devis_optionsGaranties_edit") {
+            $redirectRoute = "devis_show";
+            $type = "devis";
+        } else if ($routeName == "validation_step2") {
+            $redirectRoute = "validation_step3";
+            $type = "devis";
+        }
+
         if ($request->get('editedOptionsGaranties') == "true") {
 
-            $checkboxOptions = $request->get("checkboxOptions");
             $checkboxGaranties = $request->get("checkboxGaranties");
             $conduteur = $request->get('radio-conducteur');
 
@@ -493,24 +542,34 @@ class ReservationController extends AbstractController
             $entity->setConducteur($conducteur);
             $this->em->flush();
 
-            if ($checkboxOptions != []) {
-                // tous enlever et puis entrer tous les options
-                foreach ($entity->getOptions() as $option) {
-                    $entity->removeOption($option);
-                }
-                for ($i = 0; $i < count($checkboxOptions); $i++) {
-                    $entity->addOption($this->optionsRepo->find($checkboxOptions[$i]));
-                }
-                $this->em->flush();
-            } else {
-                // si il y a des options, les enlever
-                if (count($entity->getOptions()) > 0) {
-                    foreach ($entity->getOptions() as $option) {
-                        $entity->removeOption($option);
-                    }
-                }
-                $this->em->flush();
+            foreach ($entity->getDevisOptions() as $option) {
+                $option->setDevis(null);
+                $this->devisOptionRepo->remove($option, true);
             }
+            if ($this->reservationHelper->getOptionsFromRequest($request) != []) {
+
+                //save devis options
+                $this->reservationHelper->saveDevisOptions($entity, $this->reservationHelper->getOptionsFromRequest($request), $this->em);
+            }
+
+            // if ($checkboxOptions != []) {
+            //     // tous enlever et puis entrer tous les options
+            //     foreach ($entity->getOptions() as $option) {
+            //         $entity->removeOption($option);
+            //     }
+            //     for ($i = 0; $i < count($checkboxOptions); $i++) {
+            //         $entity->addOption($this->optionsRepo->find($checkboxOptions[$i]));
+            //     }
+            //     $this->em->flush();
+            // } else {
+            //     // si il y a des options, les enlever
+            //     if (count($entity->getOptions()) > 0) {
+            //         foreach ($entity->getOptions() as $option) {
+            //             $entity->removeOption($option);
+            //         }
+            //     }
+            //     $this->em->flush();
+            // }
 
             if ($checkboxGaranties != []) {
                 // tous enlever et puis entrer tous les garanties
@@ -532,28 +591,27 @@ class ReservationController extends AbstractController
             }
 
             $entity->setPrixGaranties($this->tarifsHelper->sommeTarifsGaranties($entity->getGaranties()));
-            $entity->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($entity->getOptions(), $entity->getConducteur()));
+            $entity->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($this->reservationHelper->getOptionsFromRequest($request), $entity->getConducteur()));
             $entity->setPrix($entity->getTarifVehicule() + $entity->getPrixOptions() + $entity->getPrixGaranties());
 
             $this->em->flush();
 
-            $redirectRoute = $routeName == "validation_step2" ? 'validation_step3' : 'reservation_show';
-
             return $this->redirectToRoute($redirectRoute, ['id' => $entity->getId()]);
         }
+
 
         $template  = $routeName === 'validation_step2' ? 'client/reservation/validation/step2OptionsGaranties.html.twig' :  'admin/devis_reservation/options_garanties/edit.html.twig';
         return $this->render($template, [
             'form' => $form->createView(),
             'devis' => $entity,
-            'routeReferer' => 'reservation_show',
+            'routeReferer' => $redirectRoute,
             'dataOptions' => $dataOptions,
             'dataGaranties' => $dataGaranties,
             'allOptions' => $allOptions,
             'allGaranties' => $allGaranties,
             'conducteur' => $entity->getConducteur(),
             'cancelPath' => $this->getCancelPath($routeName, $entity->getId()),
-            'type' => 'reservation', //doit etre dnamique si devis aussi utilise cette fonction 
+            'type' => $type, //doit etre dnamique si devis aussi utilise cette fonction 
             //var pour validation
             'vehiculesAvailable' => $vehiculesAvailable,
             'vehiculeIsNotAvailable' => $vehiculeIsNotAvailable,
@@ -566,6 +624,9 @@ class ReservationController extends AbstractController
     {
         if ($routeName == "reservation_optionsGaranties_edit") {
             $route = "reservation_show";
+            return $this->generateUrl($route, ['id' => $entityId]);
+        } else if ($routeName == "devis_optionsGaranties_edit") {
+            $route  = "devis_show";
             return $this->generateUrl($route, ['id' => $entityId]);
         } else if ($routeName == "validation_step2") {
             $route  = "client_reservations";
