@@ -16,6 +16,7 @@ use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
 use App\Form\EditClientReservationType;
 use App\Form\Devis\OptionsGarantiesType;
+use App\Repository\ReservationRepository;
 use App\Service\SymfonyMailerHelper;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -47,6 +48,7 @@ class DevisController extends AbstractController
     private $reserverDevis;
     private $symfonyMailerHelper;
     private $reservationHelper;
+    private $reservationRepo;
 
 
 
@@ -63,7 +65,8 @@ class DevisController extends AbstractController
         GarantieRepository $garantiesRepo,
         ReserverDevis $reserverDevis,
         SymfonyMailerHelper $symfonyMailerHelper,
-        ReservationHelper $reservationHelper
+        ReservationHelper $reservationHelper,
+        ReservationRepository $reservationRepo
 
     ) {
 
@@ -80,6 +83,7 @@ class DevisController extends AbstractController
         $this->reserverDevis = $reserverDevis;
         $this->symfonyMailerHelper = $symfonyMailerHelper;
         $this->reservationHelper = $reservationHelper;
+        $this->reservationRepo = $reservationRepo;
     }
 
     /**
@@ -201,9 +205,20 @@ class DevisController extends AbstractController
     /**
      * @Route("devis/details/{id}", name="devis_show", methods={"GET"})
      */
-    public function show(Devis $devis): Response
+    public function show(Devis $devis, Request $request): Response
     {
+        //check si vehicule devis est déjà utilisé dans une reservation
+        $reservations = $this->reservationRepo->findReservationIncludeDates($devis->getDateDepart(), $devis->getDateRetour());
+        $vehiculeIsNotAvailable = $this->reservationHelper->vehiculeIsInvolved($reservations, $devis->getVehicule());
+        if ($vehiculeIsNotAvailable) {
+            $vehiculesAvailable = $this->reservationHelper->getVehiculesDisponible($reservations);
+        } else {
+            $vehiculesAvailable = null;
+        }
+        $fromReserver = $request->query->has('fromReserver');
         return $this->render('admin/devis/details.html.twig', [
+            'vehiculeIsNotAvailable' => $vehiculeIsNotAvailable,
+            'fromReserver' => $fromReserver,
             'devis' => $devis,
             'hashedId' => sha1($devis->getId())
         ]);
@@ -277,6 +292,15 @@ class DevisController extends AbstractController
      */
     public function reserver(Request $request, Devis $devis)
     {
+        //check si vehicule devis est déjà utilisé dans une reservation
+        $reservations = $this->reservationRepo->findReservationIncludeDates($devis->getDateDepart(), $devis->getDateRetour());
+        $vehiculeIsNotAvailable = $this->reservationHelper->vehiculeIsInvolved($reservations, $devis->getVehicule());
+        if ($vehiculeIsNotAvailable) {
+            return $this->redirectToRoute('devis_show', ['id' => $devis->getId(), 'fromReserver' => true]);
+            $vehiculesAvailable = $this->reservationHelper->getVehiculesDisponible($reservations);
+        } else {
+            $vehiculesAvailable = null;
+        }
 
         $this->reserverDevis->reserver($devis, "null", true);
 

@@ -101,7 +101,8 @@ class VenteComptoirController extends AbstractController
         //remove contenu session avant toute chose
         $routeName = $this->get('request_stack')->getCurrentRequest()->get('_route');
 
-        if (!str_contains($request->headers->get('referer'), 'step2')) {
+
+        if (!str_contains($request->headers->get('referer'), 'etape2')) {
             $this->reservationSession->removeReservation();
         }
 

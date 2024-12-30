@@ -34,8 +34,20 @@
 
 {% block content %}
 	<!-- top tiles -->
-	<div class="x_panel">
+	{% if vehiculeIsNotAvailable  %}
+		<div class="mt-2 mb-4">
+			<h3 class="text-danger text-center">
+				<i class="fa fa-warning"></i>
+				Cette véhicule n'est plus disponible pour une  réservation
 
+			</h3>
+			<div class="text-center">
+				<a href="{{path('step1')}}" class="btn btn-dark">
+					Nouvelle réservation</a>
+			</div>
+		</div>
+	{% endif %}
+	<div class="x_panel">
 		{% if devis.vehicule == null %}
 			<div class="alert alert-warning2  " role="alert">
 				<div class=" text-center">
@@ -86,9 +98,11 @@
 						<a href="{{ path('facture_devis_pdf', {'id': devis.id}) }}" type="button" class="btn btn-outline-info text-uppercase p-1">
 							<i class="fa fa-send (alias)"></i>
 							générer facture</a>
-						<a href="{{ path('devis_reserver', {'id': devis.id}) }}" type="button" class="btn btn-outline-success text-uppercase p-1">
-							<i class="fa fa-send (alias)"></i>
-							Réserver</a>
+						{% if not vehiculeIsNotAvailable %}
+							<a href="{{ path('devis_reserver', {'id': devis.id}) }}" type="button" class="btn btn-outline-success text-uppercase p-1">
+								<i class="fa fa-send (alias)"></i>
+								Réserver</a>
+						{% endif %}
 					</div>
 				</div>
 			</div>

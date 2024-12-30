@@ -1,3 +1,39 @@
+<style>
+	.numeric-input {
+		display: flex;
+		align-items: center;
+		border: 1px solid #ddd;
+		border-radius: 4px;
+		overflow: hidden;
+		width: fit-content;
+	}
+
+	.numeric-input button {
+		background: #f8f9fa;
+		border: none;
+		padding: 8px 12px;
+		cursor: pointer;
+		transition: background-color 0.2s;
+
+	}
+
+	.numeric-input button:hover {
+		background: #e9ecef;
+	}
+
+	.numeric-input .number {
+		border: none;
+		text-align: center;
+		padding: 8px 0;
+		-moz-appearance: textfield;
+	}
+
+	.numeric-input .number::-webkit-outer-spin-button,
+	.numeric-input .number::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+</style>
 <div class="x_panel">
 	<div class="x_title">
 		<h3>
@@ -66,12 +102,12 @@
 
 							{% if option.appelation matches '/Siège/' %}
 								<div class="d-flex">
-									<div class="numeric-input">
-										<button class="decrement" id="decrement_{{option.id}}">-</button>
+									<div class="numeric-input mb-2">
+										<button class="decrement mr-0 mb-0" id="decrement_{{option.id}}">-</button>
 										<input class="number" name="siege_{{option.id}}" type="number" id="number_{{option.id}}" value="{% if option.id in devis.devisOptions|map(item => item.opt.id) %}{{ devis.devisOptions|filter(item => item.opt.id == option.id)|first.quantity }}{% else %}0{% endif %}" min="0" max="3">
-										<button class="decrement" id="increment_{{option.id}}">+</button>
+										<button class="increment mr-0 mb-0" id="increment_{{option.id}}">+</button>
 									</div>
-									<label class="label-container">
+									<label class="label-container pl-1">
 										{{option.appelation}}
 									</label>
 								</div>

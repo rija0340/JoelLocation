@@ -486,8 +486,8 @@ class ReservationController extends AbstractController
             $entity = $devisRepo->find($id);
             //un tableau contenant les véhicules utilisées dans les reservations se déroulant entre
             //$dateDepart et $dateRetour
+            //check si vehicule devis est déjà utilisé dans une reservation
             $reservations = $this->reservationRepo->findReservationIncludeDates($entity->getDateDepart(), $entity->getDateRetour());
-
             $vehiculeIsNotAvailable = $this->reservationHelper->vehiculeIsInvolved($reservations, $entity->getVehicule());
 
             if ($vehiculeIsNotAvailable) {
