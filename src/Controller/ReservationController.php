@@ -203,12 +203,6 @@ class ReservationController extends AbstractController
     public function show(Reservation $reservation, Request $request, ReservationHelper $reservationHelper, AnnulationReservationRepository $annulationResaRepo): Response
     {
 
-        // Check if devis options table is empty
-        $devisOptions = $this->devisOptionRepo->findAll();
-        if (empty($devisOptions)) {
-            $this->migrateOptionsToDevisOptions();
-        }
-
         $reservations = $this->reservationRepo->findAll();
         foreach ($reservations as $resa) {
             $resa->setDuree($this->dateHelper->calculDuree($resa->getDateDebut(), $resa->getDateFin()));
