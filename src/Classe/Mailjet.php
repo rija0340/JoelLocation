@@ -196,7 +196,7 @@ class Mailjet
             'Messages' => [
                 [
                     'From' => [
-                        'Email' => "contact.joellocation@gmail.com",
+                        'Email' => "contact@joellocation.com",
                         'Name' => "JOEL LOCATION"
                     ],
                     'To' => [
@@ -224,7 +224,7 @@ class Mailjet
             ]
         ];
         $response = $mj->post(Resources::$Email, ['body' => $body]);
-        return $response->success();
+        return $response->success() && dd($response->getData());
     }
 
 
