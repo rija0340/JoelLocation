@@ -2,43 +2,19 @@
 
 namespace App\Controller;
 
-use DateTime;
-use App\Classe\Mail;
 use App\Entity\Tarifs;
-use App\Entity\Reservation;
 use App\Service\DateHelper;
-use App\Form\RechercheAVType;
-use App\Form\ReservationType;
-use App\Service\TarifsHelper;
-use App\Service\SymfonyMailer;
-use App\Service\VehiculeHelper;
-use GuzzleHttp\RetryMiddleware;
-use Symfony\Component\Mime\Email;
-use App\Form\ReservationStep1Type;
 use App\Repository\AvisRepository;
-use App\Repository\UserRepository;
 use App\Repository\DevisRepository;
-use App\Repository\MarqueRepository;
 use App\Repository\ModeleRepository;
 use App\Repository\TarifsRepository;
 use App\Repository\OptionsRepository;
 use App\Repository\GarantieRepository;
 use App\Repository\VehiculeRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ReservationRepository;
-use DoctrineExtensions\Query\Mysql\Format;
-use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Classe\Reservation as ClasseReservation;
-use App\Entity\Mail as EntityMail;
-use Proxies\__CG__\App\Entity\Mail as AppEntityMail;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Twig\Environment;
 
 /**
  * @Route("/backoffice")
@@ -46,56 +22,28 @@ use Twig\Environment;
 class AdminController extends AbstractController
 {
 
-  private $userRepo;
   private $reservationRepo;
-  private $dateTimestamp;
   private $vehiculeRepo;
   private $modeleRepo;
-  private $optionsRepo;
-  private $garantiesRepo;
-  private $tarifsRepo;
   private $dateHelper;
-  private $tarifsHelper;
-  private $marqueRepo;
-  private $em;
   private $devisRepo;
   private $avisRepo;
-  private $vehiculeHelper;
-  private $symfonyMailer;
 
   public function __construct(
     AvisRepository $avisRepo,
     DevisRepository $devisRepo,
-    EntityManagerInterface $em,
-    MarqueRepository $marqueRepo,
     ModeleRepository $modeleRepo,
-    TarifsHelper $tarifsHelper,
     DateHelper $dateHelper,
-    TarifsRepository $tarifsRepo,
     ReservationRepository $reservationRepo,
-    UserRepository $userRepo,
-    VehiculeRepository $vehiculeRepo,
-    OptionsRepository $optionsRepo,
-    GarantieRepository $garantiesRepo,
-    VehiculeHelper $vehiculeHelper,
-    SymfonyMailer $symfonyMailer
+    VehiculeRepository $vehiculeRepo
   ) {
 
     $this->reservationRepo = $reservationRepo;
     $this->vehiculeRepo = $vehiculeRepo;
-    $this->optionsRepo = $optionsRepo;
-    $this->garantiesRepo = $garantiesRepo;
-    $this->tarifsRepo = $tarifsRepo;
-    $this->userRepo = $userRepo;
     $this->dateHelper = $dateHelper;
-    $this->tarifsHelper = $tarifsHelper;
     $this->modeleRepo = $modeleRepo;
-    $this->marqueRepo = $marqueRepo;
-    $this->em = $em;
     $this->devisRepo = $devisRepo;
     $this->avisRepo = $avisRepo;
-    $this->vehiculeHelper = $vehiculeHelper;
-    $this->symfonyMailer = $symfonyMailer;
   }
 
 
