@@ -26,8 +26,9 @@ class Mailjet
     //new api key septembre 2022
     private $api_key = '1d6221cd1ca39b1bc345588aceeaf8b9';
     private $api_key_secret = 'cf50e0acf88905e421fc2711d94d7508';
-    private $email_from = "contact@joellocation@gmail.com";
-    private $email_joellocation = "contact@joellocation@gmail.com";
+    private $email_from = "contact.joellocation@gmail.com";
+    private $emailJoelGmail = "contact@joellocation@gmail.com";
+    private $emailJoel = "contact@joellocation.com";
 
 
     private $templateID = 3331640;
@@ -76,12 +77,12 @@ class Mailjet
             'Messages' => [
                 [
                     'From' => [
-                        'Email' => $this->email_joellocation,
+                        'Email' => $this->emailJoel,
                         'Name' => $nom
                     ],
                     'To' => [
                         [
-                            'Email' => $this->email_joellocation,
+                            'Email' => $this->emailJoelGmail,
                             'Name' => "JOEL LOCATION"
                         ]
                     ],
@@ -112,7 +113,7 @@ class Mailjet
             'Messages' => [
                 [
                     'From' => [
-                        'Email' => "contact.joellocation@gmail.com",
+                        'Email' => $this->emailJoel,
                         'Name' => "JOEL LOCATION"
                     ],
                     'To' => [
@@ -157,7 +158,7 @@ class Mailjet
             'Messages' => [
                 [
                     'From' => [
-                        'Email' => "contact.joellocation@gmail.com",
+                        'Email' => $this->emailJoel,
                         'Name' => "JOEL LOCATION"
                     ],
                     'To' => [
@@ -196,7 +197,7 @@ class Mailjet
             'Messages' => [
                 [
                     'From' => [
-                        'Email' => "contact@joellocation.com",
+                        'Email' => $this->emailJoel,
                         'Name' => "JOEL LOCATION"
                     ],
                     'To' => [
@@ -236,7 +237,7 @@ class Mailjet
             'Messages' => [
                 [
                     'From' => [
-                        'Email' => "contact.joellocation@gmail.com",
+                        'Email' => $this->emailJoel,
                         'Name' => "JOEL LOCATION"
                     ],
                     'To' => [
@@ -285,7 +286,7 @@ class Mailjet
             'Messages' => [
                 [
                     'From' => [
-                        'Email' => "contact.joellocation@gmail.com",
+                        'Email' => $this->emailJoel,
                         'Name' => "JOEL LOCATION"
                     ],
                     'To' => [
@@ -324,7 +325,7 @@ class Mailjet
             'Messages' => [
                 [
                     'From' => [
-                        'Email' => "contact.joellocation@gmail.com",
+                        'Email' => $this->emailJoel,
                         'Name' => "JOEL LOCATION"
                     ],
                     'To' => [
@@ -362,7 +363,7 @@ class Mailjet
             'Messages' => [
                 [
                     'From' => [
-                        'Email' => "contact.joellocation@gmail.com",
+                        'Email' => $this->emailJoel,
                         'Name' => "JOEL LOCATION"
                     ],
                     'To' => [
@@ -398,12 +399,12 @@ class Mailjet
             'Messages' => [
                 [
                     'From' => [
-                        'Email' => "contact@joellocation.com",
+                        'Email' => $this->emailJoel,
                         'Name' => "JOEL LOCATION"
                     ],
                     'To' => [
                         [
-                            'Email' => "contact@joellocation.com",
+                            'Email' => $this->emailJoel,
                             'Name' => $nom
                         ]
                     ],
@@ -435,7 +436,7 @@ class Mailjet
             'Messages' => [
                 [
                     'From' => [
-                        'Email' => "contact.joellocation@gmail.com",
+                        'Email' => $this->emailJoel,
                         'Name' => "JOEL LOCATION"
                     ],
                     'To' => [
@@ -466,7 +467,7 @@ class Mailjet
             'Messages' => [
                 [
                     'From' => [
-                        'Email' => "contact.joellocation@gmail.com",
+                        'Email' => $this->emailJoel,
                         'Name' => "JOEL LOCATION"
                     ],
                     'To' => [
@@ -496,7 +497,7 @@ class Mailjet
             'Messages' => [
                 [
                     'From' => [
-                        'Email' => "contact.joellocation@gmail.com",
+                        'Email' => $this->emailJoel,
                         'Name' => "JOEL LOCATION"
                     ],
                     'To' => [
@@ -528,4 +529,11 @@ class Mailjet
     //Catégorie du véhicule : ou similaire
     //Départ : {{var:dateHeureDepart:""}}
     //Retour : {{var:dateHeureRetour:""}}
+
+    public function sendWithMailjet($body)
+    {
+        $mj = new Client($this->api_key, $this->api_key_secret, true, ['version' => 'v3.1']);
+        $response = $mj->post(Resources::$Email, ['body' => $body]);
+        return $response->getData();
+    }
 }

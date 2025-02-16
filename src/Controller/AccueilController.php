@@ -73,26 +73,28 @@ class AccueilController extends AbstractController
             'controller_name' => 'QuiSommeNousController',
         ]);
     }
-    /**
-     * @Route("/sendmailtoyahoo", name="sendmailtoyahoo")
-     */
-    public function sendMailToYahoo(Request $request)
-    {
+    // /**
+    //  * @Route("/sendmailtoyahoo", name="sendmailtoyahoo")
+    //  */
+    // public function sendMailToYahoo(Request $request)
+    // {
 
-        $this->mailjet->confirmationDevis(
-            "Rakotoarinelina",
-            "rakotoarinelinarija@yahoo.com",
-            "Confirmation de demande de devis",
-            "07 Janvier 2025",
-            "DV2500206",
-            "RENAULT Clio 5",
-            "08 Janvier 2025 12:00",
-            "21 Janvier 2025 14:00",
-            "https://www.youtube.com/watch?v=-8llPMvdWag",
-            "https://www.youtube.com/watch?v=-8llPMvdWag"
-            //            $this->dateHelper->frenchDate($devis->getDateRetour()->modify('+3 days'))
-        );
-    }
+    //     // $this->mailjet->confirmationDevis(
+    //     //     "Rakotoarinelina",
+    //     //     "rakotoarinelinarija@hotmail.com",
+    //     //     "Confirmation de demande de devis",
+    //     //     "07 Janvier 2025",
+    //     //     "DV2500206",
+    //     //     "RENAULT Clio 5",
+    //     //     "08 Janvier 2025 12:00",
+    //     //     "21 Janvier 2025 14:00",
+    //     //     "https://www.youtube.com/watch?v=-8llPMvdWag",
+    //     //     "https://www.youtube.com/watch?v=-8llPMvdWag"
+    //     //     //            $this->dateHelper->frenchDate($devis->getDateRetour()->modify('+3 days'))
+    //     // );
+
+    //     $this->mailjet->sendCustomEmail("rakotoarinelinarija@yahoo.com", "rija", "envoi de devis", "bonjour ceci est un test");
+    // }
 
     /** 
      * cette fonction retourne unique modele de véhicule selon modeles voulu
