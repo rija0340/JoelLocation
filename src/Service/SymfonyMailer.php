@@ -80,7 +80,6 @@ class SymfonyMailer
 
     private function createBaseEmailAndSend(string $to, string $subject, string $template)
     {
-        $to = "rakotoarinelinarija@yahoo.com";
         if (strpos($to, '@yahoo.com') !== false) {
             // Render template content first
             $htmlContent = $this->twig->render($template, array_merge($this->context, [
