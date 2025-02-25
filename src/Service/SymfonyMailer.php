@@ -6,6 +6,7 @@ use App\Classe\Mailjet;
 use Symfony\Component\Mime\Email;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mailer\Transport\TransportInterface;
 use Twig\Environment;
 
 class SymfonyMailer
@@ -13,17 +14,23 @@ class SymfonyMailer
     private $mailer;
     private $context;
     private $twig;
+    private $mainTransport;
+    private $yahooTransport;
     private $mailjet;
     private const SENDER = "contact@joellocation.com";
 
     public function __construct(
         MailerInterface $mailer,
         Environment $twig,
-        Mailjet $mailjet
+        Mailjet $mailjet,
+        TransportInterface $mainTransport,
+        TransportInterface $yahooTransport
     ) {
         $this->mailer = $mailer;
         $this->twig = $twig;
         $this->mailjet = $mailjet;
+        $this->mainTransport = $mainTransport;
+        $this->yahooTransport = $yahooTransport;
         $this->context = [
             'phone_number1' => '06 90 73 76 74',
             'phone_number2' => '07 67 32 14 47',
@@ -73,66 +80,39 @@ class SymfonyMailer
 
     private function createBaseEmailAndSend(string $to, string $subject, string $template)
     {
-        $smtpMail =  (new TemplatedEmail())
-            ->from(self::SENDER)
-            ->to($to)
-            ->subject($subject)
-            ->htmlTemplate($template)
-            ->embedFromPath('images/Joel-Location-new.png', 'logo', 'image/png')
-            ->embedFromPath('images/logos/icons8-facebook-48.png', 'facebook-icon', 'image/png')
-            ->embedFromPath('images/logos/icons8-instagram-48.png', 'instagram-icon', 'image/png')
-            ->embedFromPath('images/logos/icons8-youtube-48.png', 'youtube-icon', 'image/png')
-            ->context($this->context);
-        $mailjetMail = $this->createMailjetEmail($to, $subject, $template);
-
-        //check if mail is yahoo
+        $to = "rakotoarinelinarija@yahoo.com";
         if (strpos($to, '@yahoo.com') !== false) {
-            $this->mailjet->sendWithMailjet($mailjetMail);
-        } else {
-            $this->mailer->send($smtpMail);
-        }
-    }
+            // Render template content first
+            $htmlContent = $this->twig->render($template, array_merge($this->context, [
+                'logo' => 'images/Joel-Location-new.png',
+                'facebook-icon' => 'images/logos/icons8-facebook-48.png',
+                'instagram-icon' => 'images/logos/icons8-instagram-48.png',
+                'youtube-icon' => 'images/logos/icons8-youtube-48.png'
+            ]));
+            $email = (new Email())
+                ->from('rakotoarinelinarija@yahoo.com')
+                ->to($to)
+                ->subject($subject)
+                ->html($htmlContent)
+                ->embed(fopen('images/Joel-Location-new.png', 'r'), 'logo')
+                ->embed(fopen('images/logos/icons8-facebook-48.png', 'r'), 'facebook-icon')
+                ->embed(fopen('images/logos/icons8-instagram-48.png', 'r'), 'instagram-icon')
+                ->embed(fopen('images/logos/icons8-youtube-48.png', 'r'), 'youtube-icon');
 
-    private function createMailjetEmail(string $to, string $subject, string $template): array
-    {
-        return [
-            'Messages' => [[
-                'From' => [
-                    'Email' => self::SENDER,
-                    'Name' => 'JOEL LOCATION'
-                ],
-                'To' => [[
-                    'Email' => $to
-                ]],
-                'Subject' => $subject,
-                'HTMLPart' => $this->twig->render($template, $this->context),
-                'InlinedAttachments' => [
-                    [
-                        'ContentType' => 'image/png',
-                        'Filename' => 'logo.png',
-                        'ContentID' => 'logo',
-                        'Base64Content' => base64_encode(file_get_contents('images/Joel-Location-new.png'))
-                    ],
-                    [
-                        'ContentType' => 'image/png',
-                        'Filename' => 'facebook-icon.png',
-                        'ContentID' => 'facebook-icon',
-                        'Base64Content' => base64_encode(file_get_contents('images/logos/icons8-facebook-48.png'))
-                    ],
-                    [
-                        'ContentType' => 'image/png',
-                        'Filename' => 'instagram-icon.png',
-                        'ContentID' => 'instagram-icon',
-                        'Base64Content' => base64_encode(file_get_contents('images/logos/icons8-instagram-48.png'))
-                    ],
-                    [
-                        'ContentType' => 'image/png',
-                        'Filename' => 'youtube-icon.png',
-                        'ContentID' => 'youtube-icon',
-                        'Base64Content' => base64_encode(file_get_contents('images/logos/icons8-youtube-48.png'))
-                    ]
-                ]
-            ]]
-        ];
+            $this->yahooTransport->send($email);
+        } else {
+            $smtpMail = (new TemplatedEmail())
+                ->from(self::SENDER)
+                ->to($to)
+                ->subject($subject)
+                ->htmlTemplate($template)
+                ->embedFromPath('images/Joel-Location-new.png', 'logo', 'image/png')
+                ->embedFromPath('images/logos/icons8-facebook-48.png', 'facebook-icon', 'image/png')
+                ->embedFromPath('images/logos/icons8-instagram-48.png', 'instagram-icon', 'image/png')
+                ->embedFromPath('images/logos/icons8-youtube-48.png', 'youtube-icon', 'image/png')
+                ->context($this->context);
+
+            $this->mainTransport->send($smtpMail);
+        }
     }
 }

@@ -1,3 +1,8 @@
+# framework:
+#     mailer:
+#         dsn: '%env(MAILER_DSN)%'
 framework:
     mailer:
-        dsn: '%env(MAILER_DSN)%'
+        transports:
+            main: '%env(MAIN_MAILER_DSN)%'
+            yahoo: '%env(YAHOO_MAILER_DSN)%'
