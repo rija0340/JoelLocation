@@ -239,6 +239,7 @@
 					{{ reservation.client.complementAdresse }}
 				{% endif %}
 				<br>
+				{{reservation.client.codePostal}}
 				{{ reservation.client.ville }}
 
 			</div>
@@ -298,8 +299,8 @@
 							<td class="text-right p-5">{{ (tarifVehiculeTTC)|number_format(2,","," ") }}</td>
 
 							{# <td class="text-right">{{ (prixUnitHT)|number_format(2,","," ") }}</td>
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																	<td class="text-right">{{ (prixHT)|number_format(2,","," ")}}</td>
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																	<td class="text-right">{{ (prixTTC)|number_format(2,","," ") }}</td> #}
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																															<td class="text-right">{{ (prixHT)|number_format(2,","," ")}}</td>
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																															<td class="text-right">{{ (prixTTC)|number_format(2,","," ") }}</td> #}
 						</tr>
 						{% for frais in frais %}
 							<tr class="bg-pink">
@@ -325,16 +326,16 @@
 							</tr>
 						{% endif %}
 						{# {% for option in reservation.options %}
-																			<tr class="bg-pink">
-																				<td class="p-5">
-																					{{ option.appelation }}
-																				</td>
-																				<td class="text-right p-5">1</td>
-																				<td class="text-right p-5">{{ (option.prix / taxMultiplier  )|number_format(2,","," ") }}</td>
-																				<td class="text-right p-5">{{ (option.prix / taxMultiplier  )|number_format(2,","," ") }}</td>
-																				<td class="text-right p-5">{{ (option.prix)|number_format(2,","," ") }}</td>
-																			</tr>
-																		{% endfor %} #}
+																															<tr class="bg-pink">
+																																<td class="p-5">
+																																	{{ option.appelation }}
+																																</td>
+																																<td class="text-right p-5">1</td>
+																																<td class="text-right p-5">{{ (option.prix / taxMultiplier  )|number_format(2,","," ") }}</td>
+																																<td class="text-right p-5">{{ (option.prix / taxMultiplier  )|number_format(2,","," ") }}</td>
+																																<td class="text-right p-5">{{ (option.prix)|number_format(2,","," ") }}</td>
+																															</tr>
+																														{% endfor %} #}
 
 						{% for option in reservation.devisOptions %}
 							<tr class="bg-pink">

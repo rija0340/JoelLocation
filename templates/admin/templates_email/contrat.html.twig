@@ -83,10 +83,19 @@
 				</p>
 				<p>Cordiales salutations.</p>
 				<div class="text-center">
-					<a rel="noopener" target="_blank" href="{{contratLink}}" style="background-color: #000; font-size: 12px; font-family: Helvetica, Arial, sans-serif; font-weight: bold; text-decoration: none; padding: 5px 10px; color: #ffffff; border-radius: 5px; display: inline-block; mso-padding-alt: 0;">
+					<a rel="noopener" target="_blank" href="{{contratLink}}" style="background-color: #ff0b09; font-size: 12px; font-family: Helvetica, Arial, sans-serif; font-weight: bold; text-decoration: none; padding: 5px 10px; color: #ffffff; border-radius: 5px; display: inline-block; mso-padding-alt: 0;">
 						<span style="mso-text-raise: 15pt;">Télécharger mon contrat</span>
 					</a>
 				</div>
+
+				{% if replyToEmail is defined %}
+					<p style="text-align: center; font-style: italic;">Pour nous répondre, veuillez utiliser le bouton ci-dessous</p>
+					<div class="text-center">
+						<a href="mailto:{{ replyToEmail }}" style="background-color: #ff0b09; font-size: 12px; font-family: Helvetica, Arial, sans-serif; font-weight: bold; text-decoration: none; padding: 5px 10px; color: #ffffff; border-radius: 5px; display: inline-block; mso-padding-alt: 0;">
+							<span style="mso-text-raise: 15pt;">Répondre par email</span>
+						</a>
+					</div>
+				{% endif %}
 
 			</div>
 

@@ -75,13 +75,21 @@
 					{{name}},</p>
 				<p>Veuillez cliquer sur le bouton suivant pour notre meilleure proposition que nous espérons attirer votre attention.</p>
 				<div class="text-center">
-					<a rel="noopener" target="_blank" href="{{devisLink}}" style="background-color: #000; font-size: 12px; font-family: Helvetica, Arial, sans-serif; font-weight: bold; text-decoration: none; padding: 5px 10px; color: #ffffff; border-radius: 5px; display: inline-block; mso-padding-alt: 0;">
+					<a rel="noopener" target="_blank" href="{{devisLink}}" style="background-color: #ff0b09; font-size: 12px; font-family: Helvetica, Arial, sans-serif; font-weight: bold; text-decoration: none; padding: 5px 10px; color: #ffffff; border-radius: 5px; display: inline-block; mso-padding-alt: 0;">
 						<span style="mso-text-raise: 15pt;">Télécharger mon devis</span>
 					</a>
 				</div>
 				<p class="text-validation" style="text-align: justify;line-height:1.5">
 					Pour valider ce devis et préparer votre contrat de location, vous devez nous retourner le devis signé, accompagné d'une copie de votre permis (et celui du second conducteur, si applicable), votre numéro de vol aller/retour, un justificatif de votre domicile et effectuer un acompte d'au moins 30%. Le RIB de l'agence vous sera fourni après confirmation de l'acceptation du devis. Nous vous remercions vivement de nous avoir consultés et restons à votre disposition pour répondre à toute question concernant ce devis.Merci de confirmer votre réservation avant la date d'expiration. Cordiales salutations.
 				</p>
+				{% if replyToEmail is defined %}
+					<p style="text-align: center; font-style: italic;">Pour nous répondre, veuillez utiliser le bouton ci-dessous</p>
+					<div class="text-center">
+						<a href="mailto:{{ replyToEmail }}" style="background-color: #ff0b09; font-size: 12px; font-family: Helvetica, Arial, sans-serif; font-weight: bold; text-decoration: none; padding: 5px 10px; color: #ffffff; border-radius: 5px; display: inline-block; mso-padding-alt: 0;">
+							<span style="mso-text-raise: 15pt;">Répondre par email</span>
+						</a>
+					</div>
+				{% endif %}
 			</div>
 
 			<div class="footer">

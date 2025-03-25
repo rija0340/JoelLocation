@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Classe\Mailjet;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
@@ -17,12 +18,14 @@ class SymfonyMailer
     private $mainTransport;
     private $yahooTransport;
     private $mailjet;
+    private $emailLogger;
     private const SENDER = "contact@joellocation.com";
 
     public function __construct(
         MailerInterface $mailer,
         Environment $twig,
         Mailjet $mailjet,
+        LoggerInterface $emailLogger,
         TransportInterface $mainTransport,
         TransportInterface $yahooTransport
     ) {
@@ -31,6 +34,7 @@ class SymfonyMailer
         $this->mailjet = $mailjet;
         $this->mainTransport = $mainTransport;
         $this->yahooTransport = $yahooTransport;
+        $this->emailLogger = $emailLogger;
         $this->context = [
             'phone_number1' => '06 90 73 76 74',
             'phone_number2' => '07 67 32 14 47',
@@ -81,6 +85,7 @@ class SymfonyMailer
     private function createBaseEmailAndSend(string $to, string $subject, string $template)
     {
         if (strpos($to, '@yahoo.com') !== false) {
+            $this->context['replyToEmail'] = 'contact@joellocation.com';
             // Render template content first
             $htmlContent = $this->twig->render($template, array_merge($this->context, [
                 'logo' => 'images/Joel-Location-new.png',
@@ -88,9 +93,11 @@ class SymfonyMailer
                 'instagram-icon' => 'images/logos/icons8-instagram-48.png',
                 'youtube-icon' => 'images/logos/icons8-youtube-48.png'
             ]));
+            // die('mandalo ato tsika');
             $email = (new Email())
-                ->from('rakotoarinelinarija@yahoo.com')
+                ->from('joel.mandret@yahoo.com')
                 ->to($to)
+                // ->replyTo('contact@joellocation.com')
                 ->subject($subject)
                 ->html($htmlContent)
                 ->embed(fopen('images/Joel-Location-new.png', 'r'), 'logo')
@@ -98,7 +105,16 @@ class SymfonyMailer
                 ->embed(fopen('images/logos/icons8-instagram-48.png', 'r'), 'instagram-icon')
                 ->embed(fopen('images/logos/icons8-youtube-48.png', 'r'), 'youtube-icon');
 
-            $this->yahooTransport->send($email);
+            try {
+                $this->yahooTransport->send($email);
+            } catch (\Exception $e) {
+                $this->emailLogger->error('Failed to send email via Yahoo transport: ' . $e->getMessage(), [
+                    'recipient' => $to,
+                    'subject' => $subject,
+                    'exception' => $e
+                ]);
+                // Optionally return false or throw a custom exception if needed
+            }
         } else {
             $smtpMail = (new TemplatedEmail())
                 ->from(self::SENDER)
@@ -111,7 +127,16 @@ class SymfonyMailer
                 ->embedFromPath('images/logos/icons8-youtube-48.png', 'youtube-icon', 'image/png')
                 ->context($this->context);
 
-            $this->mainTransport->send($smtpMail);
+            try {
+                $this->mainTransport->send($smtpMail);
+            } catch (\Exception $e) {
+                $this->emailLogger->error('Failed to send email via main transport: ' . $e->getMessage(), [
+                    'recipient' => $to,
+                    'subject' => $subject,
+                    'exception' => $e
+                ]);
+                // Optionally return false or throw a custom exception if needed
+            }
         }
     }
 }
