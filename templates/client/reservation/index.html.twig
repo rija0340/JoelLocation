@@ -4,26 +4,64 @@
 	page client
 {% endblock %}
 {% block stylesheets %}
-	<!-- Datatables -->
-	{% include "admin/_parts/datatables/css.html.twig" %}
-	<link href="{{ asset('css/client/datatables/pagination_style.css') }}" rel="stylesheet">
+	<!-- Font Awesome pour les icônes -->
+	<link
+	rel="stylesheet" href="{{ asset('admin/vendors/font-awesome/css/font-awesome.min.css') }}">
+	<!-- Styles de base -->
+	<link href="{{ asset('css/client/reservation/tabs.css') }}" rel="stylesheet">
+	<link href="{{ asset('css/client/reservation/modern-cards.css') }}" rel="stylesheet">
+	<link
+	href="{{ asset('css/client/reservation/advanced-filters.css') }}" rel="stylesheet">
+
+	<!-- Nouislider pour les sliders de prix et durée -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider@14.6.3/distribute/nouislider.min.css">
 {% endblock %}
 {% block body %}
-	{% include "client/reservation/resa_list_parts/resa_encours.html.twig" %}
-	{% include "client/reservation/resa_list_parts/devis.html.twig" %}
-	{% include "client/reservation/resa_list_parts/resa_a_venir.html.twig" %}
-	{% include "client/reservation/resa_list_parts/resa_termine.html.twig" %}
+	<div class="reservation-container">
+		<ul class="nav nav-tabs mb-4" id="reservationTabs" role="tablist">
+			<li class="nav-item">
+				<a class="nav-link active" id="encours-tab" data-toggle="tab" href="#encours" role="tab" aria-controls="encours" aria-selected="true">
+					<i class="fa fa-clock-o mr-2"></i>En cours
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" id="devis-tab" data-toggle="tab" href="#devis" role="tab" aria-controls="devis" aria-selected="true">
+					<i class="fa fa-file-text-o mr-2"></i>Devis
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" id="avenir-tab" data-toggle="tab" href="#avenir" role="tab" aria-controls="avenir" aria-selected="true">
+					<i class="fa fa-calendar mr-2"></i>À venir
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" id="termine-tab" data-toggle="tab" href="#termine" role="tab" aria-controls="termine" aria-selected="true">
+					<i class="fa fa-check-circle mr-2"></i>Terminées
+				</a>
+			</li>
+		</ul>
+
+		<div class="tab-content" id="reservationTabsContent">
+			<div class="tab-pane fade show active" id="encours" role="tabpanel" aria-labelledby="encours-tab">
+				{% include "client/reservation/resa_list_parts/resa_encours.html.twig" %}
+			</div>
+			<div class="tab-pane fade" id="devis" role="tabpanel" aria-labelledby="devis-tab">
+				{% include "client/reservation/resa_list_parts/devis.html.twig" %}
+			</div>
+			<div class="tab-pane fade" id="avenir" role="tabpanel" aria-labelledby="avenir-tab">
+				{% include "client/reservation/resa_list_parts/resa_a_venir.html.twig" %}
+			</div>
+			<div class="tab-pane fade" id="termine" role="tabpanel" aria-labelledby="termine-tab">
+				{% include "client/reservation/resa_list_parts/resa_termine.html.twig" %}
+			</div>
+		</div>
+	</div>
 {% endblock %}
 {% block javascripts %}
-	<script src="{{ asset( 'js/admin/jspdf.min.js') }}"></script>
-	<script src="{{ asset( 'js/admin/jspdf.plugin.autotable.js') }}"></script>
-	<script src="{{ asset( 'js/admin/devisJsPDF.js') }}"></script>
-
-	<!-- Datatables -->
-	{% include "admin/_parts/datatables/js.html.twig" %}<script src="{{ asset('js/admin/datatables/datatablesConfig.js') }}"></script>
-
-	<script src="{{ asset('js/client/reservation/index/en_cours.datatable.fr.js') }}"></script>
-	<script src="{{ asset('js/client/reservation/index/devis.datatable.fr.js') }}"></script>
-	<script src="{{ asset('js/client/reservation/index/a_venir.datatable.fr.js') }}"></script>
-	<script src="{{ asset('js/client/reservation/index/termine.datatable.fr.js') }}"></script>
+	{{ parent() }}
+	<script src="https://cdn.jsdelivr.net/npm/nouislider@14.6.3/distribute/nouislider.min.js"></script>
+	<script src="{{ asset('js/client/reservation/advanced-filters.js') }}" defer></script>
+	<script src="{{ asset('js/client/reservation/slider-filters.js') }}" defer></script>
+	<script src="{{ asset('js/client/reservation/modern-cards.js') }}" defer></script>
+	<script src="{{ asset('js/client/reservation/export-pdf.js') }}" defer></script>
 {% endblock %}

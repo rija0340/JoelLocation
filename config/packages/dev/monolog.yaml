@@ -1,4 +1,5 @@
 monolog:
+    channels: ['payment']
     handlers:
         main:
             type: stream
@@ -13,6 +14,13 @@ monolog:
         #chromephp:
         #    type: chromephp
         #    level: info
+        payment:
+            type: rotating_file
+            path: '%kernel.logs_dir%/payment.log'
+            level: info
+            channels: ['payment']
+            max_files: 10
+
         console:
             type: console
             process_psr_3_messages: false

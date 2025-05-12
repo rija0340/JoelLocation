@@ -394,20 +394,56 @@ class VenteComptoirController extends AbstractController
 
     /**
      * @Route("/backoffice/vente-comptoir/enregistrer-devis", name="save_only_devis", methods={"GET","POST"})
+     * @Route("/espaceclient/nouvelle-reservation/enregistrer-devis", name="client_saveDevis", methods={"GET","POST"})
      */
     public function saveOnlyDevis(Request $request): Response
     {
-        // check if a similar devis already exists
-        $result = $this->saveDevis($request);
 
+        $client = $this->getClient($request);
+        // check if a similar devis already exists
+        $result = $this->saveDevis($client);
         if ($result != "devisExist") {
             $numDevis = $result;
-            $this->flashy->success('Le devis numero ' . $numDevis . ' a été enregistré avec succés');
-            return $this->redirectToRoute('devis_index');
+            $client = null;
+
+            $routeName = $request->attributes->get('_route');
+
+            // dd($routeName);
+            if (strpos($routeName, 'client') !== false) {
+                // dd('ato izy madalo');
+                $devis = $this->devisRepo->findOneBy(['numero' => $numDevis]);
+                $this->flashy->success('Le devis a été enregistré avec succés');
+                $this->symfonyMailerHelper->sendDevis($request, $devis);
+                return $this->redirectToRoute('client_reservations');
+            } else {
+                $this->flashy->success('Le devis numero ' . $numDevis . ' a été enregistré avec succés');
+                return $this->redirectToRoute('devis_index');
+            }
         } else {
             $this->flashy->error("Un devis similaire existe déjà !");
             return $this->redirectToRoute('devis_index');
         }
+    }
+
+    public function getClient($request)
+    {
+        $routeName = $request->attributes->get('_route');
+        //is this condition correct  strpos($routeName, 'client')
+
+        if (strpos($routeName, 'client') !== false) {
+            $client = $this->getUser();
+        } else {
+            // //extracion mail from string format : "nom prenom (mail)"
+            $client = $request->request->get('client');
+            $client = explode('(', $client);
+            $mailClient = explode(')', $client[1]);
+            $mailClient = $mailClient[0];
+
+            //recherche du client correspondant au mail
+            $client = $this->userRepo->findOneBy(['mail' => $mailClient]);
+        }
+
+        return $client;
     }
 
     //enregistrement de devis dans base de données sans envoi mail au client
@@ -417,8 +453,8 @@ class VenteComptoirController extends AbstractController
      */
     public function saveDevisSendMail(Request $request): Response
     {
-
-        $result = $this->saveDevis($request);
+        $client  = $this->getClient($request);
+        $result = $this->saveDevis($client);
 
         if ($result != "devisExist") {
             $numDevis = $result;
@@ -434,17 +470,9 @@ class VenteComptoirController extends AbstractController
         }
     }
 
-    public function saveDevis($request)
+    public function saveDevis(User $client)
     {
 
-        //extracion mail from string format : "nom prenom (mail)"
-        $client = $request->request->get('client');
-        $client = explode('(', $client);
-        $mailClient = explode(')', $client[1]);
-        $mailClient = $mailClient[0];
-
-        //recherche du client correspondant au mail
-        $client = $this->userRepo->findOneBy(['mail' => $mailClient]);
         //ajout client dans session
         $this->reservationSession->addClient($client);
 
@@ -457,7 +485,6 @@ class VenteComptoirController extends AbstractController
             'client' => $client,
             'vehicule' => $vehicule
         ]);
-
         if ($isDevisExist == null) {
             //trouver les options et garanties à l'aide des ID 
             //ajout de ID unique dans la base pour pouvoir telecharger par un lien envoyé au client par mail
@@ -581,19 +608,24 @@ class VenteComptoirController extends AbstractController
 
     /**
      * @Route("/backoffice/vente-comptoir/reserver-devis", name="reserver_devis", methods={"GET","POST"})
+     * @Route("/espaceclient/nouvelle-reservation/reserver-devis", name="client_reserverDevis", methods={"GET","POST"})
      */
     public function reserverDevis(Request $request): Response
     {
-        //extracion mail from string format : "nom prenom (mail)"
-        $client = $request->request->get('client');
-        $montantPaiement = $request->request->get('montant');
-        $client = explode('(', $client);
-        $mailClient = explode(')', $client[1]);
-        $mailClient = $mailClient[0];
-        $client = $this->userRepo->findOneBy(['mail' => $mailClient]);
+        $routeName = $request->attributes->get('_route');
+        $client = null;
 
+        $client = $this->getClient($request);
         $devis = $this->reservationHelper->createDevisFromResaSession($this->reservationSession);
         $devis->setClient($client);
+        //si resrver directement depuis espace client, on flush le devis et on redirect vers payment
+        if ($routeName === 'client_reserverDevis') {
+
+            $numDevis = $this->saveDevis($client);
+            $devis = $this->devisRepo->findOneBy(['numero' => $numDevis]);
+
+            return $this->redirectToRoute('validation_step3', ['id' => $devis->getId()]);
+        }
         $reservation = $this->reserverDevis->reserver($devis, "null", false);
         //on vide la session après reservation et paiement
         $this->reservationSession->removeReservation();

@@ -81,6 +81,23 @@ class SymfonyMailer
         $email = $this->createBaseEmailAndSend($to, $subject, 'admin/templates_email/facture.html.twig');
         // $this->send($email, $type);
     }
+    //pour validation inscription
+    public function sendValidationEmail(string $to, string $name, string $token)
+    {
+        $this->context['name'] = $name;
+        $this->context['validationUrl'] = $this->generateValidationUrl($token);
+
+        $email = $this->createBaseEmailAndSend(
+            $to,
+            "Confirmation de votre inscription",
+            'admin/templates_email/validation_inscription.html.twig'
+        );
+    }
+
+    private function generateValidationUrl(string $token): string
+    {
+        return 'http://localhost:8000/validation-email/' . $token;
+    }
 
     private function createBaseEmailAndSend(string $to, string $subject, string $template)
     {

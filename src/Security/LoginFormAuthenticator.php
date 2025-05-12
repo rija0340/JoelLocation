@@ -30,6 +30,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     private $urlGenerator;
     private $csrfTokenManager;
     private $passwordEncoder;
+    private $request;
 
     public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
     {
@@ -47,8 +48,8 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 
     public function getCredentials(Request $request)
     {
-
-        // dd($request);
+        // Stocker la requête pour l'utiliser dans d'autres méthodes
+        $this->request = $request;
 
         $credentials = [
             'email' => $request->request->get('email'),
@@ -82,7 +83,20 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 
     public function checkCredentials($credentials, UserInterface $user)
     {
-        return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
+        // Vérifier d'abord si le mot de passe est valide
+        $passwordValid = $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
+
+        // Si le mot de passe est valide, vérifier aussi si le compte est activé
+        if ($passwordValid && $user instanceof User && !$user->getPresence()) {
+            // Le mot de passe est correct mais le compte n'est pas activé
+            $session = $this->request->getSession();
+            $session->set('account_not_activated', true);
+
+            $session->set('client_email', $user->getMail());
+            throw new CustomUserMessageAuthenticationException('Votre compte n\'est pas encore activé.');
+        }
+
+        return $passwordValid;
     }
 
     /**
@@ -109,5 +123,29 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     protected function getLoginUrl()
     {
         return $this->urlGenerator->generate(self::LOGIN_ROUTE);
+    }
+
+    public function onAuthenticationFailure(Request $request, \Symfony\Component\Security\Core\Exception\AuthenticationException $exception)
+    {
+        if ($request->hasSession()) {
+            $session = $request->getSession();
+
+            // Check if it's a credentials failure and replace with user-friendly message
+            if (
+                $exception instanceof \Symfony\Component\Security\Core\Exception\BadCredentialsException ||
+                strpos($exception->getMessage(), 'checkCredentials()') !== false
+            ) {
+                $customException = new \Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException(
+                    'Identifiants incorrects. Veuillez vérifier votre email ou mot de passe.'
+                );
+                $session->set(Security::AUTHENTICATION_ERROR, $customException);
+            } else {
+                // For other types of authentication errors, keep the original
+                $session->set(Security::AUTHENTICATION_ERROR, $exception);
+            }
+        }
+
+        // Rediriger vers la page de login
+        return new RedirectResponse($this->urlGenerator->generate('app_login'));
     }
 }

@@ -248,4 +248,20 @@ class ReservationController extends AbstractController
         }
         return $routeReferer;
     }
+
+    /**
+     * @Route("espaceclient/details-devis/{id}", name="client_devis_details", methods={"GET"})
+     */
+    public function detailsDevis(Devis $devis): Response
+    {
+        // Vérifier que le devis appartient bien au client connecté
+        if ($devis->getClient() !== $this->getUser()) {
+            $this->flashy->error('Vous n\'êtes pas autorisé à accéder à ce devis.');
+            return $this->redirectToRoute('client_reservations');
+        }
+
+        return $this->render('client/reservation/details/details_devis.html.twig', [
+            'devis' => $devis,
+        ]);
+    }
 }

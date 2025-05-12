@@ -1,0 +1,75 @@
+<div class="advanced-search-container">
+	<div class="search-actions">
+		<button class="btn btn-filter" id="toggleFilters_{{ section_id }}">
+			<i class="fa fa-filter"></i>
+			Filtres avancés
+		</button>
+	</div>
+
+	<div class="search-bar">
+		<input type="text" class="form-control search-input" id="searchInput_{{ section_id }}" placeholder="Recherche rapide...">
+		<i class="fa fa-search search-icon"></i>
+	</div>
+
+	<div class="advanced-filters" id="advancedFilters_{{ section_id }}" style="display: none;">
+		<div class="filter-header">
+			<h5>Filtres avancés</h5>
+			<button class="btn-close-filters" id="closeFilters_{{ section_id }}">
+				<i class="fa fa-times"></i>
+			</button>
+		</div>
+
+		<div class="filter-row">
+			<div class="filter-group">
+				<label>Période de réservation</label>
+				<div class="date-range">
+					<input type="date" class="form-control date-filter" data-filter="date-from" placeholder="Du">
+					<span class="date-separator">au</span>
+					<input type="date" class="form-control date-filter" data-filter="date-to" placeholder="Au">
+				</div>
+			</div>
+
+			<div class="filter-group">
+				<label>Véhicule</label>
+				<select class="form-control vehicle-filter" data-filter="vehicle">
+					<option value="">Tous les véhicules</option>
+					{% set vehicles = [] %}
+					{% for item in items %}
+						{% if item.vehicule.id is defined and item.vehicule.id not in vehicles %}
+							<option value="{{ item.vehicule.id }}">{{ item.vehicule.marque }}
+								{{ item.vehicule.modele }}</option>
+							{% set vehicles = vehicles|merge([item.vehicule.id]) %}
+						{% endif %}
+					{% endfor %}
+				</select>
+			</div>
+		</div>
+
+		<div class="filter-row">
+			<div class="filter-group">
+				<label>Prix</label>
+				<div class="price-range">
+					<input type="number" class="form-control price-filter" data-filter="price-min" placeholder="Min €">
+					<span class="price-separator">à</span>
+					<input type="number" class="form-control price-filter" data-filter="price-max" placeholder="Max €">
+				</div>
+			</div>
+
+			<div class="filter-group">
+				<label>Durée (jours)</label>
+				<div class="duration-range">
+					<input type="number" class="form-control duration-filter" data-filter="duration-min" placeholder="Min">
+					<span class="duration-separator">à</span>
+					<input type="number" class="form-control duration-filter" data-filter="duration-max" placeholder="Max">
+				</div>
+			</div>
+		</div>
+
+		<div class="filter-actions">
+			<button class="btn btn-apply-filters" id="applyFilters_{{ section_id }}">Appliquer les filtres</button>
+			<button class="btn btn-reset-filters" id="resetFilters_{{ section_id }}">Réinitialiser</button>
+		</div>
+	</div>
+</div>
+
+<div class="filter-tags" id="filterTags_{{ section_id }}"></div>

@@ -303,8 +303,6 @@ class AccueilController extends AbstractController
      */
     public function redirection()
     {
-
-        $user = new User();
         $user = $this->getUser();
         if (in_array("ROLE_CLIENT", $user->getRoles())) {
             $this->flashy->success("Vous êtes bien connecté");
@@ -327,5 +325,47 @@ class AccueilController extends AbstractController
         }
         return $this->redirectToRoute('app_logout');
         //return $this->render('accueil/contact.html.twig');
+    }
+
+    /**
+     * @Route("/login", name="login")
+     */
+    public function login(AuthenticationUtils $authenticationUtils, Request $request): Response
+    {
+        // Récupérer les informations de session
+        $session = $request->getSession();
+
+        // Récupérer les variables de session
+        $accountNotActivated = $session->get('account_not_activated', false);
+        $emailForActivation = $session->get('email_for_activation', null);
+        $tokenInvalid = $session->get('token_invalid', false);
+        $tokenExpired = $session->get('token_expired', false);
+
+        // Déterminer si on doit afficher le bouton de renvoi
+        $showResend = $accountNotActivated || $tokenInvalid || $tokenExpired;
+
+        // Récupérer les erreurs d'authentification
+        $error = $authenticationUtils->getLastAuthenticationError();
+
+        // Déterminer le nom d'utilisateur à afficher
+        $lastUsername = $emailForActivation ?: $authenticationUtils->getLastUsername();
+
+        $user = new User();
+        $form = $this->createForm(LoginType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Votre logique de traitement du formulaire
+        }
+
+        return $this->render('accueil/login.html.twig', [
+            'controller_name' => 'LoginController',
+            'user' => $user,
+            'form' => $form->createView(),
+            'last_username' => $lastUsername,
+            'error' => $error,
+            'show_resend' => $showResend,
+            'email_for_activation' => $emailForActivation ?: $lastUsername
+        ]);
     }
 }

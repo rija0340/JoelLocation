@@ -159,7 +159,7 @@
 														{% set optionEntity = option.opt %}
 														<li>{{optionEntity.appelation}}
 															({{ 'nombre : '~  option.quantity}})
-																																																																																										:
+																																																																																																																																																																																																			:
 															{{(optionEntity.prix * option.quantity)|number_format(2,","," ")}}
 															€</li>
 													{% endfor %}
@@ -200,13 +200,15 @@
 							</div>
 							<div class="col-auto">
 								<a href="{{ path('client_step3') }}" class="btn btn-dark">Revenir à l'étape précédente</a>
-								<a href="{{ path('client_saveDevis',{'type':'devis'}) }}" class="btn btn-danger" id="enregistrerDevis">
+								<a href="{{ path('client_saveDevis') }}" class="btn btn-danger">
 									<i class="fa fa-check"></i>
 									Enregistrer le devis</a>
-								{# <a href="{{ path('client_reserver') }}" class="btn btn-danger" id="reserver">	<i class="fa fa-check"></i>Réserver</a> #}
-								<a href="{{path('client_saveDevis',{'type':'reservation'})}}" class="btn btn-danger" id="enregistrerDevis">
-									<i class="fa fa-check"></i>
-									Valider la réservation</a>
+								<a href="{{ path('client_reserverDevis') }}" class="btn btn-danger" id="reserver">
+									<i class="fa fa-check"></i>Réserver</a>
+
+								{# <a href="{{path('client_saveDevis',{'type':'reservation'})}}" class="btn btn-danger" id="enregistrerDevis">
+																																																																	<i class="fa fa-check"></i>
+																																																																	Valider la réservation</a> #}
 							</div>
 						</div>
 

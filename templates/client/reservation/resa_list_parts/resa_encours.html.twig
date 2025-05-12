@@ -1,74 +1,60 @@
-<div class="x_panel">
-	<h3>Réservation en cours</h3>
-	<div class="clearfix"></div>
-	<div class="x_title"></div>
-	<div class="overflow-auto">
-		<table class="table" id="datatable_en_cours">
-			<thead>
-				<tr>
-					<th>Référence
-					</th>
-					<th>Date de création</th>
-					<th>Réservation/véhicule</th>
-					<th>Dates/Durée</th>
-					<th>Prix</th>
-					<th>Action</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for reserv in reservation_en_cours %}
-					<tr>
-						<td>{{ reserv.reference }}</td>
-						<td>{{ reserv.dateReservation|date('d/m/Y - H:i') }}</td>
-						<td>{{ reserv.vehicule.marque }}
-							{{ reserv.vehicule.modele }}</td>
-						<td>{{ reserv.dateDebut|date('d/m/Y - H:i')}}
-							<br>
-							<span class="text-center font-italic">
-								{{ reserv.duree }}
-								jours</span>
-						</td>
+<div class="reservation-section" id="encours">
+	<h3 class="section-title">
+		Réservations en cours
+		<span class="result-count" id="resultCount_encours">{{ reservation_en_cours|length }}</span>
+	</h3>
 
-						<td>{{ reserv.prix|number_format(2,","," ") }}
-							€
-						</td>
-						<td>
+	{% if reservation_en_cours|length > 0 %}
+		{% include 'client/reservation/resa_list_parts/_filters.html.twig' with {
+			'section_id': 'encours',
+			'items': reservation_en_cours
+		} %}
 
-							{# dropdown #}
-							<div class="btn-group p-0" role="group">
-								<button id="btnGroupDrop1" class="btn btn-link-danger" type="button" class="btn btn-link p-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<i class="fa fa-bars"></i>
-								</button>
-								<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-									<div class="dropdown-item">
-										{% if reserv.prix > reserv.sommePaiements %}
-											<form action="{{ path('paiement_sold') }}" method="POST">
-												<input type="hidden" name="montantSolde" value="{{ (reserv.prix - reserv.sommePaiements)|number_format(2,","," ") }}">
-												<input type="hidden" name="reservation" value="{{ reserv.id }}">
-												<button class="btn btn-link-danger">Payer solde
-													{{ (reserv.prix - reserv.sommePaiements)|number_format(2,","," ") }}€
-												</button>
-											</form>
-										{% endif %}
-									</div>
-									<div class="dropdown-item">
-										<a href="{{ path('add_avis', {'id': reserv.id}) }}" class="btn btn-link-dark">Ajouter avis</a>
-									</div>
-									<div class="dropdown-item">
-										<a href="{{ path('client_reservation_show', {'id' : reserv.id}) }} " class="btn btn-link-dark">
-											Détails
-										</a>
-									</div>
-								</div>
+		<div class="reservation-cards ultra-compact" id="reservationCards_encours">
+			{% for reserv in reservation_en_cours %}
+
+				<div class="reservation-card" data-reference="{{ reserv.reference }}" data-date="{{ reserv.dateDebut|date('Y-m-d') }}" data-vehicle="{{ reserv.vehicule.id }}" data-price="{{ reserv.prix }}" data-duration="{{ reserv.duree }}">
+					<div class="card-header">
+						<div class="reference">{{ reserv.reference }}</div>
+						<div class="date">{{ reserv.dateReservation|date('d/m/Y') }}</div>
+					</div>
+					<div class="card-body">
+						<div class="card-row">
+							<div class="vehicle">
+								<i class="fa fa-car"></i>
+								{{ reserv.vehicule.marque }}
+								{{ reserv.vehicule.modele }}
 							</div>
-							{# fin dropdown #}
-							{% if reserv.prix > reserv.sommePaiements %}
-								<i class="fa fa-warning">Solde</i>
-							{% endif %}
-						</td>
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-	</div>
+							<div class="price">
+								{{ reserv.prix|number_format(2,","," ") }}
+								€
+							</div>
+						</div>
+						<div class="card-row">
+							<div class="dates">
+								<i class="fa fa-calendar"></i>
+								{{ reserv.dateDebut|date('d/m/Y') }}
+								<span class="duration">{{ reserv.duree }}
+									j</span>
+							</div>
+							<a href="{{ path('client_reservation_show', {'id': reserv.id}) }}" class="btn-details">
+								<i class="fa fa-info-circle"></i>
+							</a>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+
+		<div class="no-results" id="noResults_encours" style="display: none;">
+			<i class="fa fa-search"></i>
+			<p>Aucune réservation ne correspond à vos critères</p>
+			<button class="btn btn-reset-search" id="resetSearch_encours">Réinitialiser la recherche</button>
+		</div>
+	{% else %}
+		<div class="empty-state">
+			<i class="fa fa-calendar-o"></i>
+			<p>Aucune réservation en cours</p>
+		</div>
+	{% endif %}
 </div>

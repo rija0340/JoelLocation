@@ -1,4 +1,5 @@
 monolog:
+    channels: ['payment']
     handlers:
         main:
             type: fingers_crossed
@@ -6,6 +7,12 @@ monolog:
             handler: nested
             excluded_http_codes: [404, 405]
             channels: ["!event"]
+        payment:
+            type: rotating_file
+            path: '%kernel.logs_dir%/payment.log'
+            level: info
+            channels: ['payment']
+            max_files: 10
         nested:
             type: stream
             path: "%kernel.logs_dir%/%kernel.environment%.log"

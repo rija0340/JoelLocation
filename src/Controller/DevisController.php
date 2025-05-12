@@ -29,9 +29,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-/**
- * @Route("/backoffice/")
- */
+
 class DevisController extends AbstractController
 {
 
@@ -87,7 +85,7 @@ class DevisController extends AbstractController
     }
 
     /**
-     * @Route("devis", name="devis_index")
+     * @Route("/backoffice/devis", name="devis_index")
      */
     public function index(): Response
     {
@@ -102,7 +100,7 @@ class DevisController extends AbstractController
 
 
     /**
-     * @Route("devis/new", name="devis_new", methods={"GET","POST"})
+     * @Route("/backoffice/devis/new", name="devis_new", methods={"GET","POST"})
      */
     public function newDevis(Request $request): Response
     {
@@ -203,7 +201,7 @@ class DevisController extends AbstractController
 
 
     /**
-     * @Route("devis/details/{id}", name="devis_show", methods={"GET"})
+     * @Route("/backoffice/devis/details/{id}", name="devis_show", methods={"GET"})
      */
     public function show(Devis $devis, Request $request): Response
     {
@@ -225,7 +223,7 @@ class DevisController extends AbstractController
     }
 
     /**
-     * @Route("devis/client/{id}", name="client_devis_show", methods={"GET"})
+     * @Route("/espaceclient/devis/{id}", name="client_devis_show", methods={"GET"})
      */
     public function client_devis_show(Devis $devis): Response
     {
@@ -237,7 +235,7 @@ class DevisController extends AbstractController
 
 
     /**
-     * @Route("devis/{id}/editVehicule", name="devis_edit_vehicule", methods={"GET","POST"})
+     * @Route("/backoffice/devis/{id}/editVehicule", name="devis_edit_vehicule", methods={"GET","POST"})
      */
     public function editVehicule(Request $request, Devis $devis): Response
     {
@@ -274,7 +272,7 @@ class DevisController extends AbstractController
     }
 
     /**
-     * @Route("devis/{id}", name="devis_delete", methods={"DELETE"})
+     * @Route("/backoffice/devis/{id}", name="devis_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Devis $devis): Response
     {
@@ -288,7 +286,7 @@ class DevisController extends AbstractController
     }
 
     /**
-     * @Route("devis/{id}/reserver", name="devis_reserver", methods={"GET","POST"})
+     * @Route("/backoffice/devis/{id}/reserver", name="devis_reserver", methods={"GET","POST"})
      */
     public function reserver(Request $request, Devis $devis)
     {
@@ -311,7 +309,7 @@ class DevisController extends AbstractController
     // fonction dans details devis -*/****************************** */
 
     /**
-     *  @Route("devis/modifier-infos-client/{id}", name="devis_infosClient_edit", methods={"GET","POST"},requirements={"id":"\d+"})
+     *  @Route("/backoffice/devis/modifier-infos-client/{id}", name="devis_infosClient_edit", methods={"GET","POST"},requirements={"id":"\d+"})
      *
      */
     public function editInfosClient(Request $request, Devis $devis): Response
@@ -430,7 +428,7 @@ class DevisController extends AbstractController
 
 
     /**
-     * @Route("devis/envoi-identification-connexion/{id}", name="devis_ident_connex", methods={"GET","POST"},requirements={"id":"\d+"})
+     * @Route("/backoffice/devis/envoi-identification-connexion/{id}", name="devis_ident_connex", methods={"GET","POST"},requirements={"id":"\d+"})
      */
     public function envoyerIdentConnex(Request $request, Devis $devis, UserPasswordEncoderInterface $passwordEncoder): Response
     {
@@ -452,7 +450,7 @@ class DevisController extends AbstractController
         return $this->redirectToRoute('devis_show', ['id' => $devis->getId()]);
     }
     /**
-     * @Route("devis/envoyer-devis/{id}", name="envoyer_devis", methods={"GET","POST"},requirements={"id":"\d+"})
+     * @Route("/backoffice/devis/envoyer-devis/{id}", name="envoyer_devis", methods={"GET","POST"},requirements={"id":"\d+"})
      */
     public function envoyerDevis(Request $request, Devis $devis): Response
     {

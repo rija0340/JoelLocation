@@ -283,141 +283,141 @@ class NouvelleReservationController extends AbstractController
     // }
 
 
-    /**
-     * @Route("/espaceclient/nouvelle-reservation/enregistrer-devis/{type}", name="client_saveDevis", methods={"GET","POST"})
-     */
-    public function saveDevis(Request $request, $type): Response
-    {
+    // /**
+    //  * @Route("/espaceclient/nouvelle-reservation/enregistrer-devis/{type}", name="client_saveDevis", methods={"GET","POST"})
+    //  */
+    // public function saveDevis(Request $request, $type): Response
+    // {
 
-        // $optionsData = $this->reservationSession->getOptions();
-        // $garantiesData = $this->reservationSession->getGaranties();
+    // $optionsData = $this->reservationSession->getOptions();
+    // $garantiesData = $this->reservationSession->getGaranties();
 
-        // //on met dans un tableau les objets corresponans aux options cochés
-        // $optionsObjects = [];
-        // if ($optionsData != null) {
-        //     foreach ($optionsData as $opt) {
-        //         array_push($optionsObjects, $this->optionsRepo->find($opt));
-        //     }
-        // }
+    // //on met dans un tableau les objets corresponans aux options cochés
+    // $optionsObjects = [];
+    // if ($optionsData != null) {
+    //     foreach ($optionsData as $opt) {
+    //         array_push($optionsObjects, $this->optionsRepo->find($opt));
+    //     }
+    // }
 
-        // //on met dans un tableau les objets corresponans aux garanties cochés
-        // $garantiesObjects = [];
-        // if ($garantiesData != null) {
-        //     foreach ($garantiesData as $gar) {
-        //         array_push($garantiesObjects, $this->garantiesRepo->find($gar));
-        //     }
-        // }
+    // //on met dans un tableau les objets corresponans aux garanties cochés
+    // $garantiesObjects = [];
+    // if ($garantiesData != null) {
+    //     foreach ($garantiesData as $gar) {
+    //         array_push($garantiesObjects, $this->garantiesRepo->find($gar));
+    //     }
+    // }
 
 
-        // //enregistrement session dans devis
-        // $devis = new Devis();
+    // //enregistrement session dans devis
+    // $devis = new Devis();
 
-        // //utile pour eviter erreur new entity, cette erreur apparait lorsque on utilise directement objet véhicule dans session
-        // $vehicule = $this->vehiculeRepo->find($this->reservationSession->getVehicule());
+    // //utile pour eviter erreur new entity, cette erreur apparait lorsque on utilise directement objet véhicule dans session
+    // $vehicule = $this->vehiculeRepo->find($this->reservationSession->getVehicule());
 
-        // $devis->setAgenceDepart($this->reservationSession->getAgenceDepart());
-        // $devis->setAgenceRetour($this->reservationSession->getAgenceRetour());
-        // $devis->setDateDepart($this->reservationSession->getDateDepart());
-        // $devis->setDateRetour($this->reservationSession->getDateRetour());
-        // $devis->setVehicule($vehicule);
-        // $devis->setLieuSejour($this->reservationSession->getLieuSejour());
-        // $devis->setClient($this->reservationSession->getClient());
-        // $devis->setDateCreation($this->dateHelper->dateNow());
-        // //si l'heure de la date est égal à zero 
-        // $devis->setDuree($this->dateHelper->calculDuree($this->reservationSession->getDateDepart(), $this->reservationSession->getDateRetour()));
+    // $devis->setAgenceDepart($this->reservationSession->getAgenceDepart());
+    // $devis->setAgenceRetour($this->reservationSession->getAgenceRetour());
+    // $devis->setDateDepart($this->reservationSession->getDateDepart());
+    // $devis->setDateRetour($this->reservationSession->getDateRetour());
+    // $devis->setVehicule($vehicule);
+    // $devis->setLieuSejour($this->reservationSession->getLieuSejour());
+    // $devis->setClient($this->reservationSession->getClient());
+    // $devis->setDateCreation($this->dateHelper->dateNow());
+    // //si l'heure de la date est égal à zero 
+    // $devis->setDuree($this->dateHelper->calculDuree($this->reservationSession->getDateDepart(), $this->reservationSession->getDateRetour()));
 
-        // if ($this->reservationSession->getConducteur() == "false") {
-        //     $devis->setConducteur(false);
-        // } else if ($this->reservationSession->getConducteur() == "true") {
-        //     $devis->setConducteur(true);
-        // }
+    // if ($this->reservationSession->getConducteur() == "false") {
+    //     $devis->setConducteur(false);
+    // } else if ($this->reservationSession->getConducteur() == "true") {
+    //     $devis->setConducteur(true);
+    // }
 
-        // $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($this->reservationSession->getDateDepart(), $this->reservationSession->getDateRetour(), $vehicule);
-        // $devis->setTarifVehicule($tarifVehicule);
+    // $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($this->reservationSession->getDateDepart(), $this->reservationSession->getDateRetour(), $vehicule);
+    // $devis->setTarifVehicule($tarifVehicule);
 
-        // $prixOptions = $this->tarifsHelper->sommeTarifsOptions($optionsObjects, $devis->getConducteur());
-        // $devis->setPrixOptions($prixOptions);
-        // $prixGaranties = $this->tarifsHelper->sommeTarifsGaranties($garantiesObjects);
-        // $devis->setPrixGaranties($prixGaranties);
+    // $prixOptions = $this->tarifsHelper->sommeTarifsOptions($optionsObjects, $devis->getConducteur());
+    // $devis->setPrixOptions($prixOptions);
+    // $prixGaranties = $this->tarifsHelper->sommeTarifsGaranties($garantiesObjects);
+    // $devis->setPrixGaranties($prixGaranties);
 
-        // $devis->setPrix($tarifVehicule + $prixGaranties + $prixOptions);
+    // $devis->setPrix($tarifVehicule + $prixGaranties + $prixOptions);
 
-        // $devis->setTransformed(false);
-        // //ajout de ID unique dans la base pour pouvoir telecharger par un lien envoyé au client par mail
-        // $devis->setDownloadId(uniqid());
-        // //options et garanties sont des tableaux d'objet dans session
-        // foreach ($optionsObjects as $option) {
-        //     $devis->addOption($option);
-        // }
-        // foreach ($garantiesObjects as $garantie) {
-        //     $devis->addGaranty($garantie);
-        // }
-        // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
+    // $devis->setTransformed(false);
+    // //ajout de ID unique dans la base pour pouvoir telecharger par un lien envoyé au client par mail
+    // $devis->setDownloadId(uniqid());
+    // //options et garanties sont des tableaux d'objet dans session
+    // foreach ($optionsObjects as $option) {
+    //     $devis->addOption($option);
+    // }
+    // foreach ($garantiesObjects as $garantie) {
+    //     $devis->addGaranty($garantie);
+    // }
+    // ajout reference dans Entity RESERVATION (CPTGP + year + month + ID)
 
-        $this->reservationSession->addClient($this->getUser());
-        $devis  = $this->reservationHelper->createDevisFromResaSession($this->reservationSession);
-        $devis->setClient($this->getUser());
+    //     $this->reservationSession->addClient($this->getUser());
+    //     $devis  = $this->reservationHelper->createDevisFromResaSession($this->reservationSession);
+    //     $devis->setClient($this->getUser());
 
-        $lastID = $this->devisRepo->findBy(array(), array('id' => 'DESC'), 1);
-        if ($lastID == null) {
-            $currentID = 1;
-        } else {
+    //     $lastID = $this->devisRepo->findBy(array(), array('id' => 'DESC'), 1);
+    //     if ($lastID == null) {
+    //         $currentID = 1;
+    //     } else {
 
-            $currentID = $lastID[0]->getId() + 1;
-        }
-        $devis->setNumeroDevis($currentID);
+    //         $currentID = $lastID[0]->getId() + 1;
+    //     }
+    //     $devis->setNumeroDevis($currentID);
 
-        //avant de sauve le devis , tester s'il existe déjà
-        //ceci est nécessaire au cas ou il y a un problème de connexion et que l'email de 
-        //confirmation ne peut être envoyer, au cas ou le client rafraichi la page, 
-        //le devis pourait être enregistré deux fois
-        $allDevis = $this->devisRepo->findAll();
-        $devisExiste = false;
-        foreach ($allDevis as $dev) {
-            if (
-                $dev->getClient() == $devis->getClient() &&
-                $dev->getDateDepart() == $devis->getDateDepart()
-                && $dev->getDateRetour() == $devis->getDateRetour()
-                && $dev->getVehicule() == $devis->getVehicule()
-            ) {
-                $devisExiste = true;
-            }
-        }
+    //     //avant de sauve le devis , tester s'il existe déjà
+    //     //ceci est nécessaire au cas ou il y a un problème de connexion et que l'email de 
+    //     //confirmation ne peut être envoyer, au cas ou le client rafraichi la page, 
+    //     //le devis pourait être enregistré deux fois
+    //     $allDevis = $this->devisRepo->findAll();
+    //     $devisExiste = false;
+    //     foreach ($allDevis as $dev) {
+    //         if (
+    //             $dev->getClient() == $devis->getClient() &&
+    //             $dev->getDateDepart() == $devis->getDateDepart()
+    //             && $dev->getDateRetour() == $devis->getDateRetour()
+    //             && $dev->getVehicule() == $devis->getVehicule()
+    //         ) {
+    //             $devisExiste = true;
+    //         }
+    //     }
 
-        if ($devisExiste == false) {
-            foreach ($devis->getDevisOptions() as $devisOption) {
-                $devis->removeDevisOption($devisOption);
-            }
+    //     if ($devisExiste == false) {
+    //         foreach ($devis->getDevisOptions() as $devisOption) {
+    //             $devis->removeDevisOption($devisOption);
+    //         }
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($devis);
-            $entityManager->flush();
+    //         $entityManager = $this->getDoctrine()->getManager();
+    //         $entityManager->persist($devis);
+    //         $entityManager->flush();
 
-            $devisOptions = [];
-            $entityManager = $this->getDoctrine()->getManager();
-            foreach ($this->reservationSession->getOptions() as $option) {
-                $optId = $option[0]->getId();
-                $optEntity =  $this->optionsRepo->find(intval($optId));
-                $devisOption = new DevisOption();
-                $devisOption->setOpt($optEntity);
-                $devisOption->setDevis($devis);
-                $devisOption->setQuantity(intval($option[1]));
-                $entityManager->persist($devisOption);
-                // Store entity to track later
-                $devisOptions[] = $devisOption;
-            }
-            $entityManager->flush();
-        } else {
-            $this->flashy->error("Le devis existe déjà");
-            return $this->redirectToRoute('client_reservations');
-        }
+    //         $devisOptions = [];
+    //         $entityManager = $this->getDoctrine()->getManager();
+    //         foreach ($this->reservationSession->getOptions() as $option) {
+    //             $optId = $option[0]->getId();
+    //             $optEntity =  $this->optionsRepo->find(intval($optId));
+    //             $devisOption = new DevisOption();
+    //             $devisOption->setOpt($optEntity);
+    //             $devisOption->setDevis($devis);
+    //             $devisOption->setQuantity(intval($option[1]));
+    //             $entityManager->persist($devisOption);
+    //             // Store entity to track later
+    //             $devisOptions[] = $devisOption;
+    //         }
+    //         $entityManager->flush();
+    //     } else {
+    //         $this->flashy->error("Le devis existe déjà");
+    //         return $this->redirectToRoute('client_reservations');
+    //     }
 
-        if ($type == 'devis') {
-            $this->flashy->success('Le devis a été enregistré avec succés');
-            $this->symfonyMailerHelper->sendDevis($request, $devis);
-            return $this->redirectToRoute('client_reservations');
-        } elseif ($type == 'reservation') {
-            return $this->redirectToRoute('validation_step3', ['id' => $devis->getId()]);
-        }
-    }
+    //     if ($type == 'devis') {
+    //         $this->flashy->success('Le devis a été enregistré avec succés');
+    //         $this->symfonyMailerHelper->sendDevis($request, $devis);
+    //         return $this->redirectToRoute('client_reservations');
+    //     } elseif ($type == 'reservation') {
+    //         return $this->redirectToRoute('validation_step3', ['id' => $devis->getId()]);
+    //     }
+    // }
 }

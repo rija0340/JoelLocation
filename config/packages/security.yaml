@@ -49,7 +49,7 @@ security:
         - { path: ^/client, roles: ROLE_CLIENT }
         - { path: ^/espaceclient, roles: ROLE_CLIENT }
         - { path: ^/carte, roles: ROLE_CLIENT }
-        - { path: ^/payement, roles: ROLE_CLIENT }
+        - { path: ^/payment, roles: ROLE_CLIENT }
         - { path: ^/vehicule, roles: ROLE_USER }
         - { path: ^/reservation, roles: ROLE_USER }
         - { path: ^/paiement, roles: ROLE_PERSONNEL }
@@ -66,8 +66,9 @@ security:
         - { path: ^/etat, roles: ROLE_ADMIN }
         - { path: ^/etat/reservation, roles: ROLE_ADMIN }        
         - { path: ^/faq, roles: ROLE_ADMIN }
-        # - { path: ^/payement/{id}/edit, roles: ROLE_ADMIN }
-        # - { path: ^/payement/, roles: ROLE_ADMIN }
+        - { path: ^/validation-email, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        # - { path: ^/payment/{id}/edit, roles: ROLE_ADMIN }
+        # - { path: ^/payment/, roles: ROLE_ADMIN }
         # - { path: ^/vehicule/{id}/edit, roles: ROLE_ADMIN }
         # - { path: ^/vehicule/, roles: ROLE_ADMIN }
         # - { path: ^/reservation/{id}/edit, roles: ROLE_ADMIN }

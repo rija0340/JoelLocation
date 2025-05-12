@@ -64,7 +64,7 @@ class ResetPasswordController extends AbstractController
 
         // s'il y a un user connecté rediriger vers home
         if ($this->getUser()) {
-            $this->redirectToRoute('acceuil');
+            $this->redirectToRoute('accueil');
         }
 
         if ($request->get('email')) {

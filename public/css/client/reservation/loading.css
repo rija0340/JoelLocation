@@ -1,0 +1,75 @@
+/* Styles améliorés pour l'indicateur de chargement */
+.loading-container {
+    text-align: center;
+    padding: 30px 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    margin: 15px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border: 1px solid #eee;
+}
+
+.loading-spinner {
+    display: inline-block;
+    position: relative;
+    width: 60px;
+    height: 60px;
+    margin-bottom: 15px;
+}
+
+.loading-spinner:before {
+    content: '';
+    display: block;
+    padding-top: 100%;
+}
+
+.loading-spinner .circular {
+    animation: rotate 2s linear infinite;
+    height: 100%;
+    transform-origin: center center;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+.loading-spinner .path {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+    animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
+    stroke-linecap: round;
+    stroke: #af0000;
+}
+
+@keyframes rotate {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes dash {
+    0% {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
+    }
+
+    50% {
+        stroke-dasharray: 89, 200;
+        stroke-dashoffset: -35px;
+    }
+
+    100% {
+        stroke-dasharray: 89, 200;
+        stroke-dashoffset: -124px;
+    }
+}
+
+.loading-container p {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 0;
+    font-weight: 500;
+}

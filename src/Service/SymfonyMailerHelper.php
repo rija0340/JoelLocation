@@ -8,6 +8,7 @@ use App\Entity\Mail;
 use App\Entity\Devis;
 use App\Service\Site;
 use App\Entity\Reservation;
+use App\Entity\User;
 use Psr\Log\LoggerInterface;
 use App\Service\SymfonyMailer;
 use Doctrine\ORM\EntityManagerInterface;
@@ -58,6 +59,45 @@ class SymfonyMailerHelper
     public function sendFacture(Request $request, Reservation $resa)
     {
         $this->sendDocument($request, $resa, 'facture');
+    }
+    public function sendValidationInscription(User $user, string $token)
+    {
+        try {
+            $this->symfonyMailer->sendValidationEmail(
+                $user->getMail(),
+                $user->getNom(),
+                $token
+            );
+
+            $this->saveMail(
+                [
+                    'nom' => $user->getNom(),
+                    'emailClient' => $user->getMail()
+                ],
+                'validation_inscription',
+                'success'
+            );
+
+            $this->flashy->success('Un email de confirmation vous a été envoyé. Veuillez vérifier votre boîte de réception.');
+        } catch (\Exception $e) {
+            $this->saveMail(
+                [
+                    'nom' => $user->getNom(),
+                    'emailClient' => $user->getMail()
+                ],
+                'validation_inscription',
+                'failed'
+            );
+
+            $this->emailLogger->error(sprintf(
+                'Failed to send validation email - Email: %s, Name: %s, Error: %s',
+                $user->getMail(),
+                $user->getNom(),
+                $e->getMessage()
+            ));
+
+            throw $e;
+        }
     }
 
     private function sendDocument($request, $entity, $type)

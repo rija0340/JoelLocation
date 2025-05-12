@@ -1,75 +1,72 @@
-<div class="x_panel">
-	<h3>Réservations réalisées</h3>
+<div class="reservation-section" id="termine">
+	<h3 class="section-title">
+		Réservations réalisées
+		<span class="result-count" id="resultCount_termine">{{ reservation_effectuers|length }}</span>
+	</h3>
 	<div class="clearfix"></div>
-	<div class="x_title"></div>
-	<div class="overflow-auto">
-		<table class="table " id="datatable_termine">
-			<thead>
-				<tr>
-					<th>Référence</th>
-					<th>Date de création</th>
-					<th>Réservation/véhicule</th>
-					<th>Dates/Durée</th>
-					<th>Prix</th>
-					<th>Action</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for reserv in reservation_effectuers %}
-					<tr>
-						<td>{{ reserv.reference }}</td>
-						<td>{{ reserv.dateReservation|date('d/m/Y - H:i') }}</td>
-						<td>{{ reserv.vehicule.marque }}
-							{{ reserv.vehicule.modele }}
-							{{ reserv.vehicule.immatriculation }}</td>
-						<td>{{ reserv.dateDebut|date('d/m/Y - H:i') }}
-							<br>
-							<span class="text-center font-italic">
-								{{ reserv.duree }}
-								jours
-							</span>
-						</td>
-						<td>{{ reserv.prix|number_format(2,","," ") }}
-							€
-						</td>
-						<td
-							class="text-center">
 
-							{# dropdown #}
-							<div class="btn-group p-0" role="group">
-								<button id="btnGroupDrop1" class="btn btn-link-danger" type="button" class="btn btn-link p-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<i class="fa fa-bars"></i>
-								</button>
-								<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-									<div class="dropdown-item">
-										{% if reserv.prix > reserv.sommePaiements %}
-											<form action="{{ path('paiement_sold') }}" method="POST">
-												<input type="hidden" name="montantSolde" value="{{ (reserv.prix - reserv.sommePaiements)|number_format(2,","," ") }}">
-												<input type="hidden" name="reservation" value="{{ reserv.id }}">
-												<button class="btn btn-link-danger">Payer solde
-													{{ (reserv.prix - reserv.sommePaiements)|number_format(2,","," ") }}€
-												</button>
-											</form>
-										{% endif %}
-									</div>
-									{% if reserv.avis == null %}
-										<div class="dropdown-item">
-											<a href="{{ path('add_avis', {'id': reserv.id}) }}" class="btn btn-link-dark">Ajouter
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																			                                                avis</a>
-										</div>
-									{% endif %}
-									<div class="dropdown-item">
-										<a href="{{ path('client_reservation_show', {'id' : reserv.id}) }} " class="btn btn-link-dark">
-											Détails
-										</a>
-									</div>
-								</div>
+	{% if reservation_effectuers|length > 0 %}
+		{% include 'client/reservation/resa_list_parts/_filters.html.twig' with {
+            'section_id': 'termine',
+            'items': reservation_effectuers
+        } %}
+
+		<div class="reservation-cards ultra-compact" id="reservationCards_termine">
+			{% for reserv in reservation_effectuers %}
+				<div class="reservation-card" data-reference="{{ reserv.reference }}" data-date="{{ reserv.dateDebut|date('Y-m-d') }}" data-vehicle="{{ reserv.vehicule.id }}" data-price="{{ reserv.prix }}" data-duration="{{ reserv.duree }}">
+					<div class="card-header">
+						<div class="reference">{{ reserv.reference }}</div>
+						<div class="date">{{ reserv.dateReservation|date('d/m/Y') }}</div>
+					</div>
+					<div class="card-body">
+						<div class="card-row">
+							<div class="vehicle">
+								<i class="fa fa-car"></i>
+								{{ reserv.vehicule.marque }}
+								{{ reserv.vehicule.modele }}
 							</div>
-							{# fin dropdown #}
-						</td>
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-	</div>
+							<div class="price">
+								{{ reserv.prix|number_format(2,","," ") }}
+								€
+							</div>
+						</div>
+						<div class="card-row">
+							<div class="dates">
+								<i class="fa fa-calendar"></i>
+								{{ reserv.dateDebut|date('d/m/Y') }}
+								<span class="duration">{{ reserv.duree }}
+									j</span>
+							</div>
+							<div class="action-buttons">
+								{% if reserv.prix > reserv.sommePaiements %}
+									<a href="#" class="btn-warning" title="Solde à payer">
+										<i class="fa fa-warning"></i>
+									</a>
+								{% endif %}
+								{% if reserv.avis == null %}
+									<a href="{{ path('add_avis', {'id': reserv.id}) }}" class="btn-review" title="Ajouter un avis">
+										<i class="fa fa-star"></i>
+									</a>
+								{% endif %}
+								<a href="{{ path('client_reservation_show', {'id': reserv.id}) }}" class="btn-details">
+									<i class="fa fa-info-circle"></i>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+
+		<div class="no-results" id="noResults_termine" style="display: none;">
+			<i class="fa fa-search"></i>
+			<p>Aucune réservation ne correspond à vos critères</p>
+			<button class="btn btn-reset-search" id="resetSearch_termine">Réinitialiser la recherche</button>
+		</div>
+	{% else %}
+		<div class="empty-state">
+			<i class="fa fa-calendar-check-o"></i>
+			<p>Aucune réservation réalisée</p>
+		</div>
+	{% endif %}
 </div>

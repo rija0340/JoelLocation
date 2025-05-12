@@ -1,8 +1,546 @@
+/*--------------------------------------------------------------
+# General Styles & Variables
+--------------------------------------------------------------*/
+:root {
+  --primary-color: #af0000;
+  --primary-color-dark: #8d0000;
+  --primary-color-light: #ff4444;
+  --gradient-primary: linear-gradient(45deg, var(--primary-color), #dd0000);
+  --gradient-primary-hover: linear-gradient(45deg, #cc0000, #ff2222);
+  --text-color: #333;
+  --label-color: #555;
+  --border-color: #dee2e6;
+  /* Lighter border */
+  --border-color-focus: var(--primary-color);
+  --input-bg: #fff;
+  --input-bg-focus: #fff;
+  --placeholder-color: #adb5bd;
+  --error-color: #dc3545;
+  --success-color: #28a745;
+  --warning-color: #ffc107;
+  --section-bg: #f8f9fa;
+  --section-border-color: #e9ecef;
+  --section-hover-bg: #fdfdfe;
+  --section-focus-bg: #fff;
+  --box-shadow-light: 0 4px 15px rgba(0, 0, 0, 0.06);
+  --box-shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.09);
+  --box-shadow-hover: 0 10px 35px rgba(175, 0, 0, 0.12);
+  --border-radius: 8px;
+  --border-radius-lg: 12px;
+  --border-radius-pill: 50px;
+  --transition-speed: 0.3s;
+}
+
+body {
+  background-color: #f4f7f6;
+  /* Light background for the page */
+  color: var(--text-color);
+  font-family: 'Poppins', sans-serif;
+  /* Example: Use a nice font */
+}
+
+/*--------------------------------------------------------------
+# Main Container & Title
+--------------------------------------------------------------*/
+.inscription-container {
+  background: var(--input-bg);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--box-shadow-medium);
+  padding: 50px 40px;
+  /* Increased padding */
+  margin-bottom: 80px;
+  /* Increased margin */
+  transition: all var(--transition-speed) ease;
+}
+
+.inscription-container:hover {
+  box-shadow: var(--box-shadow-hover);
+}
+
+.section-title {
+  position: relative;
+  margin-bottom: 60px;
+  /* Increased margin */
+  text-align: center;
+}
+
+.section-title h2 {
+  color: var(--text-color);
+  font-size: 2.5rem;
+  /* Slightly larger */
+  font-weight: 700;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 15px;
+  margin-bottom: 0;
+  /* Remove default margin if any */
+}
+
+.section-title h2:after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 90px;
+  /* Slightly wider */
+  height: 4px;
+  background: linear-gradient(to right, var(--primary-color), var(--primary-color-light));
+  transform: translateX(-50%);
+  border-radius: 2px;
+}
+
+/*--------------------------------------------------------------
+# Form Sections (.form-row-section)
+--------------------------------------------------------------*/
+.form-row-section {
+  margin-bottom: 45px;
+  /* Increased spacing between sections */
+  padding: 30px 25px;
+  /* Adjusted padding */
+  border-radius: var(--border-radius);
+  background-color: var(--section-bg);
+  border: 1px solid var(--section-border-color);
+  /* Subtle border */
+  transition: all var(--transition-speed) ease;
+  border-left: 5px solid transparent;
+  /* Initial transparent border */
+}
+
+.form-row-section:hover {
+  border-left-color: var(--primary-color-light);
+  background-color: var(--section-hover-bg);
+  box-shadow: var(--box-shadow-light);
+}
+
+/* Style when any input inside the section is focused */
+.form-row-section:focus-within {
+  border-left-color: var(--primary-color);
+  background-color: var(--section-focus-bg);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  border-color: #ddd;
+  /* Slightly darker border when focused */
+}
+
+.form-section-title {
+  color: var(--primary-color);
+  font-size: 1.4rem;
+  /* Slightly larger */
+  margin-bottom: 30px;
+  /* Increased spacing below title */
+  font-weight: 600;
+  border-bottom: 1px solid var(--section-border-color);
+  /* Lighter border */
+  padding-bottom: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.form-section-title i {
+  margin-right: 12px;
+  /* Increased icon spacing */
+  font-size: 1.5rem;
+  /* Slightly larger icon */
+  /* Keep the gradient text color */
+  background: -webkit-linear-gradient(45deg, var(--primary-color), var(--primary-color-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+  /* Ensure icon aligns well */
+}
+
+
+/*--------------------------------------------------------------
+# Form Fields (.form-group, .form-control, label)
+--------------------------------------------------------------*/
+.form-group {
+  margin-bottom: 1.75rem;
+  /* Default spacing (mb-4 equivalent: 1.5rem), slightly more */
+  position: relative;
+  /* Keep for potential absolute elements like toggles */
+}
+
+.bmd-label-floating {
+  color: var(--label-color);
+  font-size: 0.9rem;
+  /* Slightly smaller label */
+  font-weight: 600;
+  margin-bottom: 8px;
+  /* Space between label and input */
+  display: block;
+  transition: all var(--transition-speed) ease;
+}
+
+/* Style label when its corresponding input is focused */
+.form-control:focus~.bmd-label-floating,
+.form-group:focus-within .bmd-label-floating {
+  /* Added focus-within for broader cases */
+  color: var(--primary-color);
+}
+
+.form-control {
+  border: 1px solid var(--border-color);
+  /* Slightly thinner border */
+  border-radius: var(--border-radius);
+  padding: 14px 18px;
+  /* Vertical padding adjusted */
+  transition: all var(--transition-speed) ease;
+  background-color: var(--input-bg);
+  width: 100%;
+  height: auto;
+  /* Ensure height adjusts */
+  font-size: 1rem;
+  color: var(--text-color);
+  line-height: 1.5;
+  /* Improved text readability */
+}
+
 .form-control:focus {
-    border-color: #ffffff;
-    box-shadow: 0 0 0 0.2rem rgba(139, 0, 0, 0.25);
+  border-color: var(--border-color-focus);
+  box-shadow: 0 0 0 3px rgba(175, 0, 0, 0.15);
+  /* Slightly stronger focus shadow */
+  background-color: var(--input-bg-focus);
+  outline: none;
+}
+
+.form-control::placeholder {
+  color: var(--placeholder-color);
+  opacity: 0.8;
+  transition: all 0.2s ease;
+}
+
+.form-control:focus::placeholder {
+  opacity: 0.5;
+  transform: translateX(3px);
+  /* Subtle shift */
+}
+
+/* Specific styles for select */
+select.form-control {
+  appearance: none;
+  /* Remove default arrow */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%236c757d' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  /* Adjust position */
+  background-size: 1em;
+  /* Adjust size */
+  padding-right: 3rem;
+  /* Ensure space for arrow */
+}
+
+/* Specific styles for date */
+input[type="date"].form-control {
+  padding-right: 15px;
+  /* Keep default padding */
+  min-height: calc(1.5em + 0.75rem + 2px);
+  /* Ensure consistent height like Bootstrap */
+}
+
+/* Input field animation */
+.form-control {
+  transform-origin: center bottom;
+  /* Animate from bottom center */
+  animation: fadeInUp 0.6s ease-out forwards;
+  opacity: 0;
+  animation-delay: calc(var(--animation-order, 0) * 0.08s);
+  /* Slightly faster delay increment */
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
   }
 
-  .form-control,
-  .is-focused .form-control {
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
+}
+
+/*--------------------------------------------------------------
+# Error & Validation Styles
+--------------------------------------------------------------*/
+.form-error {
+  color: var(--error-color);
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-top: 8px;
+  /* Spacing below input */
+  min-height: 1.2em;
+  /* Prevent layout shifts when errors appear/disappear */
+  display: block;
+  /* Ensure it takes space */
+  animation: fadeIn 0.3s ease;
+  /* Keep fade in */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Bootstrap-like validation icons */
+.form-control.is-valid,
+.was-validated .form-control:valid {
+  /* Added selectors for better compatibility */
+  border-color: var(--success-color);
+  padding-right: calc(1.5em + 0.75rem);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%2328a745' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right calc(0.375em + 0.1875rem) center;
+  background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+.form-control.is-invalid,
+.was-validated .form-control:invalid {
+  /* Added selectors */
+  border-color: var(--error-color);
+  padding-right: calc(1.5em + 0.75rem);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right calc(0.375em + 0.1875rem) center;
+  background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+/* Ensure validation icons don't overlap select arrow */
+select.form-control.is-valid,
+select.form-control.is-invalid,
+.was-validated select.form-control:valid,
+.was-validated select.form-control:invalid {
+  background-position: right 2.25rem center, right 1rem center;
+  /* Position validation icon left of select arrow */
+  padding-right: 4rem;
+  /* More padding for both icons */
+}
+
+
+/*--------------------------------------------------------------
+# Submit Button
+--------------------------------------------------------------*/
+.btn-inscription {
+  background: var(--gradient-primary);
+  border: none;
+  color: white;
+  padding: 15px 45px;
+  /* Slightly larger padding */
+  border-radius: var(--border-radius-pill);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  /* Reduced letter spacing */
+  transition: all 0.3s ease;
+  /* Slightly faster transition */
+  box-shadow: 0 5px 15px rgba(175, 0, 0, 0.2);
+  text-transform: uppercase;
+  font-size: 1rem;
+  /* Adjusted size */
+  display: inline-flex;
+  /* Align icon and text */
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  /* Added margin top */
+  cursor: pointer;
+}
+
+.btn-inscription:hover {
+  transform: translateY(-4px);
+  /* More pronounced hover effect */
+  box-shadow: 0 10px 25px rgba(175, 0, 0, 0.3);
+  background: var(--gradient-primary-hover);
+  color: white;
+  /* Ensure text color stays white */
+}
+
+.btn-inscription:active {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(175, 0, 0, 0.25);
+}
+
+.btn-inscription i {
+  margin-right: 10px;
+  /* Space between icon and text */
+  font-size: 1.1em;
+  /* Slightly larger icon */
+  transition: transform 0.3s ease;
+}
+
+.btn-inscription:hover i {
+  transform: scale(1.1);
+  /* Scale icon on hover */
+}
+
+/*--------------------------------------------------------------
+# Password Strength & Toggle (Optional - Requires HTML/JS)
+--------------------------------------------------------------*/
+.password-strength {
+  height: 6px;
+  /* Slightly thicker */
+  margin-top: 10px;
+  border-radius: 3px;
+  transition: background-color 0.4s ease;
+  background: #e9ecef;
+  position: relative;
+  overflow: hidden;
+}
+
+.password-strength-indicator {
+  /* Use a separate element for the bar */
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: var(--strength-percent, 0%);
+  /* Use CSS variable for width */
+  border-radius: 3px;
+  transition: width 0.4s ease, background-color 0.4s ease;
+  background-color: var(--strength-color, #e9ecef);
+}
+
+/* Define strength colors and widths via CSS variables */
+.strength-weak {
+  --strength-percent: 33%;
+  --strength-color: var(--error-color);
+}
+
+.strength-medium {
+  --strength-percent: 66%;
+  --strength-color: var(--warning-color);
+}
+
+.strength-strong {
+  --strength-percent: 100%;
+  --strength-color: var(--success-color);
+}
+
+.js-password-toggle {
+  position: absolute;
+  right: 15px;
+  /* Adjust top based on input padding and line-height */
+  top: calc(50% + 4px);
+  /* Adjust this value if needed */
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: var(--placeholder-color);
+  transition: all 0.2s ease;
+  z-index: 3;
+  /* Ensure it's above input */
+}
+
+.js-password-toggle:hover {
+  color: var(--primary-color);
+}
+
+/* Adjust input padding if toggle is present */
+.form-control.has-toggle {
+  padding-right: 45px;
+  /* Make space for the icon */
+}
+
+
+/*--------------------------------------------------------------
+# Responsive Adjustments
+--------------------------------------------------------------*/
+@media (max-width: 992px) {
+  .form-section-title {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .inscription-container {
+    padding: 30px 20px;
+    /* Adjust padding */
+    margin-bottom: 60px;
+  }
+
+  .section-title h2 {
+    font-size: 2rem;
+    /* Adjust title size */
+  }
+
+  .section-title h2:after {
+    width: 70px;
+  }
+
+  .form-row-section {
+    padding: 25px 15px;
+    /* Adjust padding */
+    margin-bottom: 35px;
+  }
+
+  .form-section-title {
+    font-size: 1.2rem;
+    margin-bottom: 25px;
+  }
+
+  .form-section-title i {
+    font-size: 1.3rem;
+    margin-right: 10px;
+  }
+
+  .btn-inscription {
+    width: 100%;
+    /* Full width button */
+    padding: 14px 20px;
+    font-size: 0.95rem;
+  }
+
+  /* Ensure columns stack with some space */
+  .row>[class^="col-"] {
+    margin-bottom: 0;
+    /* Remove default column margin if any */
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+    /* Control spacing via form-group */
+  }
+
+}
+
+@media (max-width: 576px) {
+  .section-title h2 {
+    font-size: 1.8rem;
+  }
+
+  .form-control {
+    padding: 12px 15px;
+    font-size: 0.95rem;
+  }
+
+  .bmd-label-floating {
+    font-size: 0.85rem;
+  }
+
+  select.form-control {
+    padding-right: 2.5rem;
+    background-position: right 0.75rem center;
+  }
+
+  /* Adjust validation icon positions for smaller inputs */
+  .form-control.is-valid,
+  .was-validated .form-control:valid,
+  .form-control.is-invalid,
+  .was-validated .form-control:invalid {
+    padding-right: calc(1.5em + 0.5rem);
+    background-position: right calc(0.25em + 0.125rem) center;
+    background-size: calc(0.75em + 0.25rem) calc(0.75em + 0.25rem);
+  }
+
+  select.form-control.is-valid,
+  select.form-control.is-invalid,
+  .was-validated select.form-control:valid,
+  .was-validated select.form-control:invalid {
+    background-position: right 1.75rem center, right 0.75rem center;
+    padding-right: 3.5rem;
+  }
+}

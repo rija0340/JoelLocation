@@ -7,7 +7,7 @@
 
 	<link href="{{ asset( 'css/client/sidebarResaResume.css')}}" rel="stylesheet">
 	<link href="{{ asset( 'css/client/step3InfosClient.css')}}" rel="stylesheet">
-
+	<script src="https://www.paypal.com/sdk/js?client-id=AWDZI-LFPNgYnDIXkhBDGTlwkF5HaSDlSKCke0HowHz5xfBAqh4Vdw0_bm3A4JRN2pYgA6J1uZ3ueP12&locale=fr_FR&buyer-country=FR&currency=EUR&components=buttons&enable-funding=venmo,paylater" data-sdk-integration-source="developer-studio"></script>
 {% endblock %}
 {% block nav %}{% endblock %}
 {% block body %}
@@ -19,6 +19,10 @@
 		</div>
 		<div class="col-md-9 ">
 			{{ form_start(formClient) }}
+			{# Hidden fields for PayPal payment #}
+			<input type="hidden" id="montant" value="{{ devis.prix }}">
+			<input type="hidden" id="devisId" value="{{ devis.numero }}">
+
 			<div class="card mdl-shadow--2dp p-4 divInformations">
 				<div class="text-center">
 					<h3>Mes informations
@@ -64,7 +68,8 @@
 					</h3>
 				</div>
 				<div>
-					Mode de paiement par Virement uniquement. Pour valider votre réservation, vous devez effectuer un premier paiement. Si vous confirmez, un  email  vous  sera  envoyé  avec  le RIB et le montant que vous pouvez payer comme acompte.”
+					<p>Mode de paiement par PayPal. Pour valider votre réservation, vous devez effectuer un premier paiement. Une fois le paiement effectué, un email de confirmation vous sera envoyé.</p>
+					<div id='paypal-button-container' class='mt-4'></div>
 				</div>
 			</div>
 			<div class="card mdl-shadow--2dp p-4 divConditionGeneralVente">
@@ -73,7 +78,7 @@
 					</h3>
 				</div>
 				<label class="label-container">
-					Je reconnais avoir prix connaissance des
+					Je reconnais avoir pris connaissance des
 					<a href="/cgl/Joel location conditions générales de location_Version 1.0.pdf">
 						conditions générales de location
 					</a>
@@ -82,10 +87,10 @@
 					<span class="checkmark"></span>
 				</label>
 			</div>
-			<div class="text-center mt-3 mb-3">
-				<button class="btn btn-danger" id="validerPaiement">
-					Je confirme
-				</button>
+			<div
+				class="text-center mt-3 mb-3">{# <button type="button" class="btn btn-danger" id="validerPaiement">
+															Je confirme
+														</button> #}
 			</div>
 			{{ form_end(formClient) }}
 		</div>
@@ -93,5 +98,5 @@
 {% endblock %}
 {% block javascripts %}
 	<script src="{{ asset('js/client/reservation/validation_devis/step3infosClient.js')}}"></script>
-	{# // <script src="https://js.stripe.com/v3/"></script> #}
+	<script src="{{ asset('js/client/payement/paypal.js')}}"></script>
 {% endblock %}

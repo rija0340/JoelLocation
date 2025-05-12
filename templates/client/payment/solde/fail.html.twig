@@ -1,0 +1,29 @@
+{% extends 'baseClient.html.twig' %}
+
+{% block title %}Réservation
+{% endblock %}
+
+{% block stylesheets %}{% endblock %}
+
+{% block body %}
+	<div class="x_panel">
+		<div class="x_title">
+			<h3>Echec de paiement</h3>
+		</div>
+		Bonjour
+		{{reservation.client.nom}},
+		<br>
+		Il semblerait que le paiement de votre solde concernant la réservation N°
+		{{reservation.reference}}
+		est echoué.
+		<br>
+		Montant du paiement
+		{{reservation.prix - reservation.sommePaiements}}€
+		<form action="{{path('paiement_sold')}}" method="POST">
+			<input type="hidden" name="montantSolde" value="{{reservation.prix - reservation.sommePaiements}}">
+			<input type="hidden" name="reservation" value="{{reservation.id}}">
+			<button class="btn btn-link">Réessayer le paiement</button>
+		</form>
+	</div>
+{% endblock %}
+{% block javascripts %}{% endblock  %}

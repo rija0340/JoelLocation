@@ -49,3 +49,25 @@ services:
         arguments:
             $mainTransport: '@main.mailer.transport'
             $yahooTransport: '@yahoo.mailer.transport'
+
+        # Payment Provider Factory
+    App\Classe\Payment\PaymentProviderFactory:
+        arguments:
+            $providerConfigs: 
+                # stripe:
+                #     api_key: '%env(STRIPE_API_KEY)%'
+                paypal:
+                    client_id: '%env(PAYPAL_CLIENT_ID)%'
+                    client_secret: '%env(PAYPAL_CLIENT_SECRET)%' 
+                    sandbox: '%env(bool:PAYPAL_SANDBOX)%'
+            $logger: '@monolog.logger.payment'
+    
+    # Main Payment Service
+    App\Classe\Payment\PaymentService:
+        arguments:
+            $factory: '@App\Classe\Payment\PaymentProviderFactory'
+            $defaultProvider: '%env(DEFAULT_PAYMENT_PROVIDER)%'
+
+    App\EventSubscriber\PaymentSubscriber:
+        tags:
+            - { name: kernel.event_subscriber }

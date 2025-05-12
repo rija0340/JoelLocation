@@ -16,6 +16,8 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ClientRegisterType extends AbstractType
 {
@@ -33,7 +35,11 @@ class ClientRegisterType extends AbstractType
                 ],
             ])
             ->add('mail', EmailType::class, [
-                'invalid_message' => 'Cette adresse mail est déjà utilisée'
+                'invalid_message' => 'Cette adresse mail est déjà utilisée',
+                'constraints' => [
+                    new NotBlank(['message' => 'Veuillez entrer une adresse email']),
+                    new Email(['message' => 'L\'adresse email "{{ value }}" n\'est pas valide.'])
+                ]
             ])
             ->add('telephone', TelType::class, [
                 'required' => true,

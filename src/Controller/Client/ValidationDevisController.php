@@ -84,8 +84,8 @@ class ValidationDevisController extends AbstractController
 
             //si la reservation n'existe pas encore en passe au paiement
             if (count($this->reservationRepo->findBy(['numDevis' => $devis->getId()])) == 0) {
-                //redirection vers un autre controller pour le paiement
-                // return $this->redirectToRoute('paiementStripe', ['refDevis' => $refDevis]);
+                // redirection vers un autre controller pour le paiement
+                return $this->redirectToRoute('paiementStripe', ['refDevis' => $refDevis]);
 
                 $this->reserverDevis->reserver($devis, "null", true);
                 $this->flashy->success("Devis transformé en réservation");

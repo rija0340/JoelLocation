@@ -1,0 +1,307 @@
+/* Styles pour les filtres avancés */
+.advanced-search-container {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 25px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.search-actions {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.btn-filter {
+    background-color: #444;
+    color: white;
+    border-radius: 30px;
+    padding: 8px 20px;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.btn-filter:hover,
+.btn-filter.active {
+    background-color: #222;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.search-bar {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.search-input {
+    padding-left: 40px;
+    border-radius: 30px;
+    height: 45px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    border-color: #af0000;
+    box-shadow: 0 0 0 0.2rem rgba(175, 0, 0, 0.25);
+}
+
+.search-icon {
+    position: absolute;
+    left: 15px;
+    top: 14px;
+    color: #999;
+}
+
+.advanced-filters {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid #eee;
+}
+
+.filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.filter-header h5 {
+    margin: 0;
+    color: #333;
+    font-weight: 600;
+}
+
+.btn-close-filters {
+    background: none;
+    border: none;
+    color: #777;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 5px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+}
+
+.btn-close-filters:hover {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    gap: 20px;
+}
+
+.filter-group {
+    flex: 1;
+    min-width: 250px;
+}
+
+.filter-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #444;
+    font-size: 0.9rem;
+}
+
+.date-range,
+.price-range,
+.duration-range {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.date-separator,
+.price-separator,
+.duration-separator {
+    color: #777;
+}
+
+.filter-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.btn-apply-filters {
+    background-color: #af0000;
+    color: white;
+    border-radius: 5px;
+    padding: 8px 20px;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.btn-apply-filters:hover {
+    background-color: #900000;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-reset-filters {
+    background-color: #6c757d;
+    color: white;
+    border-radius: 5px;
+    padding: 8px 20px;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.btn-reset-filters:hover {
+    background-color: #5a6268;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Tags de filtre */
+.filter-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.filter-tag {
+    background-color: #f0f0f0;
+    border-radius: 20px;
+    padding: 5px 15px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.filter-tag:hover {
+    background-color: #e8e8e8;
+    transform: translateY(-1px);
+}
+
+.filter-tag-label {
+    font-weight: 600;
+    color: #444;
+}
+
+.filter-tag-value {
+    color: #666;
+}
+
+.filter-tag-remove {
+    color: #999;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.filter-tag-remove:hover {
+    color: #af0000;
+}
+
+/* Compteur de résultats */
+.result-count {
+    display: inline-block;
+    background-color: #af0000;
+    color: white;
+    border-radius: 20px;
+    padding: 2px 10px;
+    font-size: 0.8rem;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+/* Message pas de résultats */
+.no-results {
+    text-align: center;
+    padding: 40px 0;
+    color: #999;
+}
+
+.no-results i {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.btn-reset-search {
+    background-color: #af0000;
+    color: white;
+    border-radius: 30px;
+    padding: 8px 20px;
+    margin-top: 15px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-reset-search:hover {
+    background-color: #900000;
+}
+
+/* Styles pour les sliders */
+.slider-container {
+    margin-top: 15px;
+    padding: 0 10px;
+}
+
+.price-slider,
+.duration-slider {
+    height: 6px;
+    margin-bottom: 20px;
+}
+
+.slider-values {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Personnalisation des sliders noUiSlider */
+.noUi-connect {
+    background: #af0000;
+}
+
+.noUi-handle {
+    border-radius: 50%;
+    background-color: #af0000;
+    box-shadow: none;
+    border: 2px solid #fff;
+    width: 18px !important;
+    height: 18px !important;
+    right: -9px !important;
+    top: -7px !important;
+}
+
+.noUi-handle:before,
+.noUi-handle:after {
+    display: none;
+}
+
+.noUi-handle:hover {
+    cursor: pointer;
+    background-color: #900000;
+}
+
+.noUi-target {
+    border-radius: 3px;
+    border: none;
+    box-shadow: none;
+    background-color: #e0e0e0;
+}

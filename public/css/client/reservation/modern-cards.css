@@ -1,0 +1,465 @@
+/* Style moderne pour les réservations avec cartes */
+.reservation-section {
+    padding: 15px 0;
+}
+
+.section-title {
+    color: #333;
+    font-size: 1.8rem;
+    margin-bottom: 25px;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.section-title:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background-color: #af0000;
+}
+
+/* Barre de recherche */
+.reservation-search {
+    position: relative;
+}
+
+.search-input {
+    padding-left: 40px;
+    border-radius: 30px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.reservation-search:before {
+    content: '\f002';
+    font-family: 'FontAwesome';
+    position: absolute;
+    left: 15px;
+    top: 10px;
+    color: #999;
+}
+
+/* Grille de cartes */
+.reservation-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* Styles pour les cartes compactes */
+/* .reservation-cards.compact {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.compact .reservation-card {
+    background-color: white;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid #eee;
+} */
+
+.compact .reservation-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.compact .card-header {
+    background-color: #f8f9fa;
+    padding: 10px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+}
+
+.compact .reference {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.compact .date {
+    font-size: 0.75rem;
+    color: #777;
+}
+
+.compact .card-body {
+    padding: 10px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.compact .card-info {
+    flex: 1;
+}
+
+.compact .vehicle,
+.compact .dates {
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    font-size: 0.85rem;
+}
+
+.compact .vehicle i,
+.compact .dates i {
+    margin-right: 8px;
+    color: #af0000;
+    width: 15px;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.compact .duration {
+    margin-left: 6px;
+    background-color: #f0f0f0;
+    padding: 1px 6px;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    color: #666;
+}
+
+.compact .card-price {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.compact .price {
+    font-weight: 600;
+    color: #af0000;
+    font-size: 1rem;
+    margin-bottom: 8px;
+}
+
+.compact .btn-details {
+    background-color: #af0000;
+    color: white;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+}
+
+.compact .btn-details:hover {
+    background-color: #900000;
+    text-decoration: none;
+    color: white;
+}
+
+.compact .btn-details i {
+    font-size: 1rem;
+}
+
+/* Styles pour les cartes ultra-compactes */
+.reservation-cards.ultra-compact {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+    /* Augmentation de l'espace entre les cartes */
+    margin-top: 20px;
+}
+
+.ultra-compact .reservation-card {
+    background-color: white;
+    border-radius: 8px;
+    /* Bordure plus arrondie */
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* Ombre plus prononcée */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid #ddd;
+    /* Bordure plus visible */
+}
+
+.ultra-compact .reservation-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+.ultra-compact .card-header {
+    background-color: #e9ecef;
+    /* Gris plus prononcé */
+    padding: 10px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.ultra-compact .reference {
+    font-weight: 700;
+    /* Plus gras */
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.ultra-compact .date {
+    font-size: 0.8rem;
+    /* Plus grand */
+    font-weight: 600;
+    /* Plus gras */
+    color: #555;
+    /* Plus foncé */
+    background-color: #f0f0f0;
+    /* Fond léger */
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.ultra-compact .card-body {
+    padding: 10px 12px;
+}
+
+.ultra-compact .card-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    /* Plus d'espace */
+}
+
+.ultra-compact .card-row:last-child {
+    margin-bottom: 0;
+}
+
+.ultra-compact .vehicle,
+.ultra-compact .dates {
+    display: flex;
+    align-items: center;
+    font-size: 0.85rem;
+    /* Plus grand */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 70%;
+}
+
+.ultra-compact .vehicle i,
+.ultra-compact .dates i {
+    margin-right: 8px;
+    color: #af0000;
+    width: 14px;
+    text-align: center;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+
+.ultra-compact .duration {
+    margin-left: 6px;
+    background-color: #f0f0f0;
+    padding: 2px 6px;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    color: #555;
+    font-weight: 600;
+}
+
+.ultra-compact .price {
+    font-weight: 700;
+    /* Plus gras */
+    color: #af0000;
+    font-size: 1rem;
+    /* Plus grand */
+    text-align: right;
+}
+
+.ultra-compact .btn-details {
+    background-color: #af0000;
+    color: white;
+    border-radius: 50%;
+    width: 30px;
+    /* Plus grand */
+    height: 30px;
+    /* Plus grand */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+    flex-shrink: 0;
+}
+
+.ultra-compact .btn-details:hover {
+    background-color: #900000;
+    text-decoration: none;
+    color: white;
+}
+
+.ultra-compact .btn-details i {
+    font-size: 1rem;
+}
+
+/* Styles pour les boutons d'action */
+.ultra-compact .action-buttons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.ultra-compact .btn-download,
+.ultra-compact .btn-validate,
+.ultra-compact .btn-warning,
+.ultra-compact .btn-review,
+.ultra-compact .btn-details {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    color: white;
+    flex-shrink: 0;
+}
+
+.ultra-compact .btn-download {
+    background-color: #17a2b8;
+}
+
+.ultra-compact .btn-download:hover {
+    background-color: #138496;
+    text-decoration: none;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+.ultra-compact .btn-validate {
+    background-color: #28a745;
+}
+
+.ultra-compact .btn-validate:hover {
+    background-color: #218838;
+    text-decoration: none;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+.ultra-compact .btn-warning {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.ultra-compact .btn-warning:hover {
+    background-color: #e0a800;
+    text-decoration: none;
+    color: #212529;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+.ultra-compact .btn-review {
+    background-color: #fd7e14;
+}
+
+.ultra-compact .btn-review:hover {
+    background-color: #e36c0a;
+    text-decoration: none;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+.ultra-compact .btn-details {
+    background-color: #af0000;
+}
+
+.ultra-compact .btn-details:hover {
+    background-color: #900000;
+    text-decoration: none;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive pour les cartes ultra-compactes */
+@media (max-width: 576px) {
+    .reservation-cards.ultra-compact {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        /* Espace entre les cartes en mobile */
+    }
+}
+
+/* État vide */
+.empty-state {
+    text-align: center;
+    padding: 40px 0;
+    color: #999;
+}
+
+.empty-state i {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    display: block;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .reservation-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Badges pour différents statuts */
+.status-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.status-pending {
+    background-color: #ffc107;
+    color: #333;
+}
+
+.status-active {
+    background-color: #28a745;
+    color: white;
+}
+
+.status-completed {
+    background-color: #6c757d;
+    color: white;
+}
+
+/* Animation pour le chargement */
+.reservation-loading {
+    text-align: center;
+    padding: 30px 0;
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: #af0000;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

@@ -1,0 +1,25 @@
+{% extends 'baseClient.html.twig' %}
+
+{% block title %}Réservation
+{% endblock %}
+
+{% block stylesheets %}{% endblock %}
+
+{% block body %}
+	<div class="x_panel">
+		<div class="x_title">
+			<h3>Echec de paiement</h3>
+		</div>
+		Bonjour
+		{{devis.client.nom}},
+		<br>
+		Il semblerait que le paiement du devis numero
+		{{devis.numero}}
+		est echoué
+		<br>
+		Cliquer
+		<a href="{{ path('validation_step3', {'devisID': devis.id}) }}">ici</a>
+		pour reessayer le payement.
+	</div>
+{% endblock %}
+{% block javascripts %}{% endblock  %}
