@@ -6,6 +6,7 @@ use App\Classe\Mailjet;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mailer\Transport\TransportInterface;
 use Twig\Environment;
@@ -19,6 +20,8 @@ class SymfonyMailer
     private $yahooTransport;
     private $mailjet;
     private $emailLogger;
+    private $requestStack;
+    private $site;
     private const SENDER = "contact@joellocation.com";
 
     public function __construct(
@@ -27,7 +30,9 @@ class SymfonyMailer
         Mailjet $mailjet,
         LoggerInterface $emailLogger,
         TransportInterface $mainTransport,
-        TransportInterface $yahooTransport
+        TransportInterface $yahooTransport,
+        RequestStack $requestStack,
+        Site $site
     ) {
         $this->mailer = $mailer;
         $this->twig = $twig;
@@ -35,6 +40,8 @@ class SymfonyMailer
         $this->mainTransport = $mainTransport;
         $this->yahooTransport = $yahooTransport;
         $this->emailLogger = $emailLogger;
+        $this->requestStack = $requestStack;
+        $this->site = $site;
         $this->context = [
             'phone_number1' => '06 90 73 76 74',
             'phone_number2' => '07 67 32 14 47',
@@ -96,7 +103,9 @@ class SymfonyMailer
 
     private function generateValidationUrl(string $token): string
     {
-        return 'http://localhost:8000/validation-email/' . $token;
+        $request = $this->requestStack->getCurrentRequest();
+        $baseUrl = $this->site->getBaseUrl($request);
+        return $baseUrl . '/validation-email/' . $token;
     }
 
     private function createBaseEmailAndSend(string $to, string $subject, string $template)
