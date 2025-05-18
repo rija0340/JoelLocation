@@ -13,6 +13,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @UniqueEntity(
+ *     fields={"mail"},
+ *     message="Cette adresse email est déjà utilisée. Veuillez en choisir une autre ou vous connecter."
+ * )
  */
 class User implements UserInterface
 {
@@ -56,7 +60,10 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Assert\Email(message="L'adresse email '{{ value }}' n'est pas valide.")
+     * @Assert\Email(
+     *     message="L'adresse email '{{ value }}' n'est pas valide."
+     * )
+     * @Assert\NotBlank(message="L'adresse email est obligatoire")
      */
     private $mail;
 

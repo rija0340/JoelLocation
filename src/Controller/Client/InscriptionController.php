@@ -119,8 +119,12 @@ class InscriptionController extends AbstractController
                 $this->logger->error('Erreur lors de l\'envoi de l\'email de validation: ' . $e->getMessage());
 
                 // Rediriger avec un message d'erreur
-                return $this->redirectToRoute('app_login', [
-                    'error' => urlencode('Une erreur est survenue lors de l\'envoi de l\'email de validation. Veuillez contacter le support.')
+                // return $this->redirectToRoute('app_login', [
+                //     'error' => urlencode('Une erreur est survenue lors de l\'envoi de l\'email de validation. Veuillez contacter le support.')
+                // ]);
+                return $this->render('accueil/inscription.html.twig', [
+                    'user' => $user,
+                    'form' => $form->createView(),
                 ]);
             }
         }
