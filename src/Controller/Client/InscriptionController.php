@@ -2,20 +2,15 @@
 
 namespace App\Controller\Client;
 
-use App\Classe\Mailjet;
 use App\Entity\User;
 use App\Service\DateHelper;
 use App\Form\ClientRegisterType;
-use App\Form\UserType;
 use App\Repository\UserRepository;
 use App\Service\SymfonyMailer;
 use Symfony\Component\HttpFoundation\Request;
-use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Encoder\EncoderInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -25,9 +20,6 @@ class InscriptionController extends AbstractController
 
     private $passwordEncoder;
     private $dateHelper;
-    private $flashy;
-    private $encoder;
-    private $mail;
     private $userRepo;
     private $symfonyMailer;
     private $logger;
@@ -35,18 +27,12 @@ class InscriptionController extends AbstractController
     public function __construct(
         UserPasswordEncoderInterface $passwordEncoder,
         DateHelper $dateHelper,
-        FlashyNotifier $flashy,
-        EncoderFactoryInterface $encoder,
-        Mailjet $mail,
         UserRepository $userRepo,
         SymfonyMailer $symfonyMailer,
         LoggerInterface $logger
     ) {
         $this->passwordEncoder = $passwordEncoder;
         $this->dateHelper = $dateHelper;
-        $this->flashy = $flashy;
-        $this->encoder = $encoder;
-        $this->mail = $mail;
         $this->userRepo = $userRepo;
         $this->symfonyMailer = $symfonyMailer;
         $this->logger = $logger;
