@@ -2,66 +2,17 @@
 
 namespace App\Service;
 
-use App\Entity\Options;
 use App\Repository\TarifsRepository;
-use App\Repository\OptionsRepository;
-use App\Repository\GarantieRepository;
-use App\Repository\VehiculeRepository;
-
 
 class TarifsHelper
-/**
- * Helper class for calculating tariff prices.
- * 
- * Contains methods for:
- * - Calculating total tariff price based on vehicle, options, and warranties
- * - Getting vehicle tariff price based on rental dates 
- * - Summing option prices
- * - Summing warranty prices
- * - Calculating percentage discounts
- * - Converting between pre-tax and post-tax prices
- * 
- * Uses injected repositories and date helper to get necessary data.
- */
-/**
- * Helper class for calculating tariff prices.
- * 
- * Contains methods for:
- * - Calculating total tariff price based on vehicle, options, and warranties
- * - Getting vehicle tariff price based on rental dates 
- * - Summing option prices
- * - Summing warranty prices
- * - Calculating percentage discounts
- * - Converting between pre-tax and post-tax prices
- * 
- * Uses injected repositories and date helper to get necessary data.
- */
-/**
- * Helper class for calculating tariff prices.
- * 
- * Contains methods for:
- * - Getting vehicle, option, and warranty prices
- * - Calculating total price from components
- * - Applying percentage discounts
- * - Converting between pre-tax and post-tax prices
- * 
- * Uses injected repositories and date helper.
- */
 {
-
-    private $vehiculeRepo;
-    private $optionsRepo;
-    private $garantiesRepo;
     private $tarifsRepo;
     private $dateHelper;
     private $taxe;
 
-    public function __construct(DateHelper $dateHelper, TarifsRepository $tarifsRepo, VehiculeRepository $vehiculeRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
+    public function __construct(DateHelper $dateHelper, TarifsRepository $tarifsRepo)
     {
 
-        $this->vehiculeRepo = $vehiculeRepo;
-        $this->optionsRepo = $optionsRepo;
-        $this->garantiesRepo = $garantiesRepo;
         $this->tarifsRepo = $tarifsRepo;
         $this->dateHelper = $dateHelper;
         $this->taxe = 0.085; //TVA = 8.5%
@@ -85,27 +36,23 @@ class TarifsHelper
      */
     function calculTarifTotal($tarifVehicule, $options, $garanties, $hasConducteur)
     {
+        // Calcul du prix des options (avec ou sans conducteur supplémentaire)
+        $optionsPrix = $this->sommeTarifsOptions($options, $hasConducteur);
 
-        if ($options != []) {
-            $optionsPrix = $this->sommeTarifsOptions($options, $hasConducteur);
-        } else {
-            $optionsPrix = 0;
-        }
-        if ($garanties != []) {
-            $garantiesPrix = $this->sommeTarifsGaranties($garanties);
-        } else {
-            $garantiesPrix = 0;
+        // Calcul du prix des garanties
+        $garantiesPrix = $this->sommeTarifsGaranties($garanties);
+
+        // Calcul total : tarif véhicule + options + garanties
+        $tarifTotal = 0;
+        if ($tarifVehicule !== null) {
+            $tarifTotal += $tarifVehicule;
         }
 
-        $tarifTotal = 0; //initialisation de $tarif
-        if ($tarifVehicule != null) {
-            $tarifTotal = $tarifVehicule + $optionsPrix + $garantiesPrix;
-        } else {
-            $tarifTotal = $optionsPrix + $garantiesPrix;
-        }
+        $tarifTotal += $optionsPrix + $garantiesPrix;
 
         return $tarifTotal;
     }
+
 
     function calculTarifVehicule($dateDepart, $dateRetour, $vehicule)
     {
@@ -145,17 +92,6 @@ class TarifsHelper
             }
         }
         return $price + $prixConductSuppl;
-
-        // if ($options != null) {
-        //     $prix = 0;
-        //     foreach ($options as  $option) {
-
-        //         $prix = $prix  + $option->getPrix();
-        //     }
-        //     return $prix + $prixConductSuppl;
-        // } else {
-        //     return $prixConductSuppl;
-        // }
     }
 
 
