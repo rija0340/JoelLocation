@@ -1,92 +1,279 @@
-{# import css here #}
+{# Enhanced CSS styles #}
+<style>
+	.vehicle-card {
+		border: 2px solid #e9ecef;
+		border-radius: 5px;
+		transition: all 0.3s ease;
+		background: #fff;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+		margin-bottom: 20px;
+	}
+
+	.vehicle-card:hover {
+		border-color: gray;
+		box-shadow: 0 4px 16px rgba(0, 123, 255, 0.15);
+		transform: translateY(-2px);
+	}
+
+	.vehicle-card.selected {
+		border-color: red;
+		background: #f8fff9;
+		box-shadow: 0 4px 16px rgba(40, 167, 69, 0.2);
+	}
+
+	.vehicle-image {
+		border-radius: 8px;
+		max-width: 100%;
+		height: 200px;
+		object-fit: cover;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	}
+
+	.caracteristiques {
+		background: #f8f9fa;
+		border-radius: 8px;
+		padding: 15px;
+		height: 100%;
+	}
+
+	.vehicule-item {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 8px 0;
+		border-bottom: 1px solid #e9ecef;
+	}
+
+	.vehicule-item:last-child {
+		border-bottom: none;
+	}
+
+	.vehicule-item .label {
+		font-weight: bold; /* Made the text bolder */
+		color: #495057;
+		font-size: 1rem; /* Made the text a bit bigger */
+	}
+
+	.vehicule-item .value {
+		color: #212529;
+		font-weight: 500;
+	}
+
+	.selection-area {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		height: 100%;
+		padding: 20px;
+	}
+
+	.btn-select-vehicle {
+		background: transparent; /* Start with no background fill */
+		border: 2px solid #dc3545; /* Red outline */
+		border-radius: 5px;
+		padding: 12px 24px;
+		color: #dc3545; /* Red text color */
+		font-weight: 600;
+		transition: all 0.3s ease;
+		box-shadow: none; /* No initial shadow */
+	}
+
+	.btn-select-vehicle:hover {
+		background: rgba(220, 53, 69, 0.1); /* Light red fill on hover (10% opacity) */
+		color: #dc3545; /* Keep text red */
+		transform: translateY(-2px);
+		box-shadow: 0 4px 8px rgba(220, 53, 69, 0.2); /* Subtle red shadow on hover */
+	}
+
+	.btn-select-vehicle.selected {
+		background: #dc3545; /* Solid red fill when selected */
+		border-color: #dc3545; /* Ensure border is also solid red */
+		color: white; /* White text on selected red background */
+		box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3); /* Red shadow for selected state */
+	}
+
+	.tarif-badge {
+		background: black; /* changed from linear gradient to solid black */
+		color: white; /* keep text white */
+		padding: 8px 16px;
+		border-radius: 5px;
+		font-weight: 600;
+		font-size: 1.1rem;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); /* updated shadow to match black */
+	}
+
+
+	.custom-radio-wrapper {
+		position: relative;
+	}
+
+	.custom-radio-input {
+		position: absolute;
+		opacity: 0;
+		cursor: pointer;
+	}
+
+	.icon-feature {
+		color: #000000; /* Changed to black */
+		margin-right: 8px;
+		width: 16px;
+	}
+
+	.caracteristiques h6 {
+		font-size: 1.3rem; /* Increased font size for a more prominent title */
+		font-weight: 600; /* Made font a bit bolder */
+		/* The existing text-primary class will handle color, and mb-3 for margin */
+	}
+</style>
 
 {% set vehiculeInfo = [
-    {'icon': 'fa-road', 'label': 'Marque', 'value': vehicule.marque, 'id': 'vehicule_marque'},
-    {'icon': 'fa-wrench', 'label': 'Modele', 'value': vehicule.modele, 'id': 'vehicule_modele'},
-    {'icon': 'fa-plus-square', 'label': 'Immatriculation', 'value': vehicule.immatriculation, 'id': 'vehicule_immatriculation'},
-    {'icon': 'fa-battery-full', 'label': 'Carburant', 'value': vehicule.carburation, 'id': 'vehicule_carburation'},
-    {'icon': 'fa-sun-o', 'label': 'Boite de vitesse', 'value': vehicule.vitesse, 'id': 'vehicule_vitesse'}
+	{'icon': 'fa-road', 'label': 'Marque', 'value': vehicule.marque, 'id': 'vehicule_marque'},
+	{'icon': 'fa-wrench', 'label': 'Modèle', 'value': vehicule.modele, 'id': 'vehicule_modele'},
+	{'icon': 'fa-plus-square', 'label': 'Immatriculation', 'value': vehicule.immatriculation, 'id': 'vehicule_immatriculation'},
+	{'icon': 'fa-battery-full', 'label': 'Carburant', 'value': vehicule.carburation, 'id': 'vehicule_carburation'},
+	{'icon': 'fa-sun-o', 'label': 'Boîte de vitesse', 'value': vehicule.vitesse, 'id': 'vehicule_vitesse'}
 ] %}
+
 {% set vehiculeInfo2 = [
-    {'icon': 'fa-shopping-bag', 'label': 'Nombre max de bagages', 'value': vehicule.bagages, 'id': 'vehicule_bagage'},
-    {'icon': 'fa-car', 'label': 'Nombre de portes', 'value': vehicule.portes, 'id': 'vehicule_portes'},
-    {'icon': 'fa-users', 'label': 'Max passagers', 'value': vehicule.passagers, 'id': 'vehicule_passagers'},
-    {'icon': 'fa-rss', 'label': 'Atouts', 'value': vehicule.atouts, 'id': 'vehicule_atouts'},
-    {'icon': 'fa-rss', 'label': 'Caution', 'value': vehicule.caution, 'id': 'vehicule_caution'}
+	{'icon': 'fa-shopping-bag', 'label': 'Bagages max', 'value': vehicule.bagages, 'id': 'vehicule_bagage'},
+	{'icon': 'fa-car', 'label': 'Portes', 'value': vehicule.portes, 'id': 'vehicule_portes'},
+	{'icon': 'fa-users', 'label': 'Passagers max', 'value': vehicule.passagers, 'id': 'vehicule_passagers'},
+	{'icon': 'fa-star', 'label': 'Atouts', 'value': vehicule.atouts, 'id': 'vehicule_atouts'},
+	{'icon': 'fa-shield', 'label': 'Caution', 'value': vehicule.caution ~ ' €', 'id': 'vehicule_caution'}
 ] %}
 
+<div class="vehicle-card" data-vehicle-id="{{ vehicule.id }}">
+	<div class="card-body p-4">
+		<div
+			class="row align-items-start">
+			{# Vehicle Image Section with Button and Price #}
+			<div class="col-lg-3 col-md-4 text-center mb-3 mb-md-0">
+				<img
+				src="{{ vich_uploader_asset(vehicule, 'imageFile') }}" class="vehicle-image mb-3" id="vehicule_photo" alt="Photo {{ vehicule.marque }} {{ vehicule.modele }}">
 
-<div
-	class="row">
-
-	{# centrer image vehicule #}
-	<div class="col-md-3 col-sm-3 d-flex justify-content-center align-items-center">
-		<img src="{{vich_uploader_asset(vehicule, 'imageFile') }}" class="img-fluid" style="max-width: 80%;" id="vehicule_photo">
-	</div>
-	<div class="col-md-9 col-sm-9">
-		<div class="row">
-			<div class="col-md-4">
-				<div class="caracteristiques">
-					{% for item in vehiculeInfo %}
-						<div
-							class="vehicule-item">
-							{# <i class="fa {{ item.icon }}"></i> #}
-							<div class="mr-auto ">
-								<span class="badge badge-secondary ">{{ item.label }}:</span>
-							</div>
-							<div>
-								<span class="" id="{{ item.id }}">{{ item.value }}</span>
-							</div>
-						</div>
-					{% endfor %}
-				</div>
-			</div>
-			<div class="col-md-5">
-				<div class="caracteristiques">
-					{% for item in vehiculeInfo2 %}
-						<div class="vehicule-item d-flex ">
-							<div
-								class="mr-auto ">
-								{# <i class="fa {{ item.icon }}" aria-hidden="true"></i> #}
-								<span class="badge badge-secondary ">{{ item.label }}:</span>
-
-							</div>
-
-							<div>
-								<span class=" " id="{{ item.id }}">
-									{{ item.value }}
-								</span>
-							</div>
-						</div>
-					{% endfor %}
-				</div>
-			</div>
-			<div class="col-md-3 text-center">
-				<div class="custom-control custom-radio mt-3">
-					<input type="radio" id="vehicule{{ vehicule.id }}" name="vehicule" class="custom-control-input" {% if devis.vehicule is not null and devis.vehicule.id == vehicule.id %} checked {% endif %} value="{{ vehicule.id }}" required>
-					<label class="custom-control-label" for="vehicule{{ vehicule.id }}">
-						<span class="btn btn-outline-secondary">
-							<i class="fa fa-check-circle mr-2"></i>Choisir ce véhicule
+				{# Vehicle Selection Radio Button #}
+				<div class="custom-radio-wrapper mb-3">
+					<input type="radio" id="vehicule{{ vehicule.id }}" name="vehicule" class="custom-radio-input" {% if devis.vehicule is not null and devis.vehicule.id == vehicule.id %} checked {% endif %} value="{{ vehicule.id }}" required>
+					<label class="btn-select-vehicle {% if devis.vehicule is not null and devis.vehicule.id == vehicule.id %}selected{% endif %}" for="vehicule{{ vehicule.id }}">
+						<i class="fa fa-check-circle mr-2"></i>
+						<span class="selection-text">
+							{% if devis.vehicule is not null and devis.vehicule.id == vehicule.id %}
+								Véhicule sélectionné
+							{% else %}
+								Choisir ce véhicule
+							{% endif %}
 						</span>
 					</label>
 				</div>
-				<div class="tarif-info mt-2">
+
+				{# Pricing Information #}
+				<div class="tarif-info mb-3">
 					{% for data in data %}
 						{% if data['vehicule'] == vehicule %}
-							<span class="badge badge-success">
-								<i class="fa fa-tag mr-1"></i>Tarif:
+							<div class="tarif-badge">
+								<i class="fa fa-tag mr-2"></i>
 								{{ data['tarif'] }}
 								€
-							</span>
+							</div>
 						{% endif %}
 					{% endfor %}
 				</div>
-				<div class="tarifVehicule mt-2" style="display: none;">
-					<label>Autre tarif :
+
+				{# Custom Tariff Input #}
+				<div class="tarifVehicule" style="display: none;">
+					<label class="form-label text-muted mb-2">
+						<i class="fa fa-edit mr-1"></i>Tarif personnalisé
 					</label>
-					<input type="text" name="tarifVehicule" class="form-control inputTarif">
+					<div class="input-group">
+						<input type="text" name="tarifVehicule" class="form-control inputTarif" placeholder="0.00">
+						<div class="input-group-append">
+							<span class="input-group-text">€</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			{# Vehicle Information Section - Now takes more space #}
+			<div class="col-lg-9 col-md-8">
+				<div class="row">
+					<div class="col-md-6 mb-3">
+						<div class="caracteristiques">
+							<h6 class="text-danger mb-3">
+								<i class="fa fa-info-circle mr-2"></i>Informations générales
+							</h6>
+							{% for item in vehiculeInfo %}
+								<div class="vehicule-item">
+									<div class="label">
+										<i style="color:black;" class="fa {{ item.icon }} icon-feature"></i>
+										{{ item.label }}
+									</div>
+									<div class="value" id="{{ item.id }}">
+										{{ item.value }}
+									</div>
+								</div>
+							{% endfor %}
+						</div>
+					</div>
+
+					<div class="col-md-6 mb-3">
+						<div class="caracteristiques">
+							<h6 class="text-danger mb-3">
+								<i class="fa fa-cogs mr-2"></i>Caractéristiques
+							</h6>
+							{% for item in vehiculeInfo2 %}
+								<div class="vehicule-item">
+									<div class="label">
+										<i style="color:black;" class="fa {{ item.icon }} icon-feature"></i>
+										{{ item.label }}
+									</div>
+									<div class="value" id="{{ item.id }}">
+										{{ item.value }}
+									</div>
+								</div>
+							{% endfor %}
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
+
+<script>
+	document.addEventListener('DOMContentLoaded', function () { // Handle vehicle selection
+const radioInputs = document.querySelectorAll('input[name="vehicule"]');
+const vehicleCards = document.querySelectorAll('.vehicle-card');
+
+radioInputs.forEach(function (radio) {
+radio.addEventListener('change', function () { // Remove selected class from all cards and buttons
+vehicleCards.forEach(card => card.classList.remove('selected'));
+document.querySelectorAll('.btn-select-vehicle').forEach(btn => {
+btn.classList.remove('selected');
+btn.querySelector('.selection-text').textContent = 'Choisir ce véhicule';
+});
+
+// Add selected class to current card and button
+if (this.checked) {
+const currentCard = this.closest('.vehicle-card');
+const currentButton = this.nextElementSibling;
+
+currentCard.classList.add('selected');
+currentButton.classList.add('selected');
+currentButton.querySelector('.selection-text').textContent = 'Véhicule sélectionné';
+}
+});
+});
+
+// Handle label clicks
+document.querySelectorAll('.btn-select-vehicle').forEach(function (label) {
+label.addEventListener('click', function (e) {
+e.preventDefault();
+const radio = document.getElementById(this.getAttribute('for'));
+radio.checked = true;
+radio.dispatchEvent(new Event('change'));
+});
+});
+});
+</script>

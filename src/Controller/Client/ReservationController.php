@@ -91,21 +91,20 @@ class ReservationController extends AbstractController
         //récupération des réservations en cours
         $reservationEncours = $this->reservationRepo->findReservationEncours($client, $date);
 
-        $res_attente_dateDebut = $this->reservationRepo->findReservationsAttenteDateDebut($client, $date);
+        $reservationAvenir = $this->reservationRepo->findReservationsAttenteDateDebut($client, $date);
 
 
         //récupération des réservation en attente (devis envoyé et en attente de validation par client)
         // $reservationEnAttentes = $this->reservRepo->findReservationEnAttente($client, $date);
         $devis = $this->devisRepo->findBy(['client' => $client, 'transformed' => false], ['dateCreation' => 'DESC']);
 
-        return $this->render('client/reservation/index.html.twig', [
-            'reservation_effectuers' => $reservationEffectuers,
-            'reservation_en_cours' => $reservationEncours,
+        return $this->render('client/reservation/mes_reservations/index.html.twig', [
+            'reservationEffectuers' => $reservationEffectuers,
+            'reservationEncours' => $reservationEncours,
             'devis' => $devis,
-            'res_attente_dateDebut' => $res_attente_dateDebut,
+            'reservationAvenir' => $reservationAvenir,
         ]);
     }
-
 
     /**
      * @Route("espaceclient/details-reservation/{id}", name="client_reservation_show", methods={"GET", "POST"},requirements={"id":"\d+"})
@@ -118,7 +117,6 @@ class ReservationController extends AbstractController
             'conducteurs' => $conducteurs
         ]);
     }
-
 
     //*******************************conducteur dans details reservation****************************************
     /**
@@ -250,7 +248,7 @@ class ReservationController extends AbstractController
     }
 
     /**
-     * @Route("espaceclient/details-devis/{id}", name="client_devis_details", methods={"GET"})
+     * @Route("espaceclient/details-devis/{id}", name="client_devis_show", methods={"GET"})
      */
     public function detailsDevis(Devis $devis): Response
     {
@@ -261,7 +259,7 @@ class ReservationController extends AbstractController
         }
 
         return $this->render('client/reservation/details/details_devis.html.twig', [
-            'devis' => $devis,
+            'reservation' => $devis,
         ]);
     }
 }

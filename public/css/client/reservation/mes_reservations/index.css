@@ -1,0 +1,168 @@
+	@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700 &display=swap');
+
+		body {
+			font-family: 'Inter', sans-serif;
+			background-color: #f8f9fa;
+			min-height: 100vh;
+		}
+
+		.status-badge {
+			padding: 0.25rem 0.75rem;
+			border-radius: 9999px;
+			font-size: 0.75rem;
+			font-weight: 600;
+			text-transform: uppercase;
+			letter-spacing: 0.05em;
+		}
+
+		.status-confirmed {
+			background-color: rgba(16, 185, 129, 0.1);
+			color: #10b981;
+		}
+
+		.status-pending {
+			background-color: rgba(245, 158, 11, 0.1);
+			color: #f59e0b;
+		}
+
+		.status-cancelled {
+			background-color: rgba(239, 68, 68, 0.1);
+			color: #ef4444;
+		}
+
+		.booking-card {
+			transition: all 0.3s ease;
+		}
+
+		.booking-card:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+		}
+
+		.no-bookings {
+			background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+		}
+
+		.btn-primary {
+			background-color: #ef4444;
+			border-color: #ef4444;
+		}
+
+		.btn-primary:hover {
+			background-color: #dc3545;
+			border-color: #dc3545;
+		}
+
+		.btn-outline-primary {
+			color: #ef4444;
+			border-color: #ef4444;
+		}
+
+		.btn-outline-primary:hover {
+			background-color: #ef4444;
+			border-color: #ef4444;
+		}
+
+		.text-primary {
+			color: #ef4444 !important;
+		}
+
+		.text-primary:hover {
+			color: #dc3545 !important;
+		}
+
+		.card {
+			border-radius: 0.75rem;
+			overflow: hidden;
+		}
+
+		.pagination .page-item.active .page-link {
+			background-color: #ef4444;
+			border-color: #ef4444;
+		}
+
+		.pagination .page-link {
+			color: #ef4444;
+		}
+
+		.btn-link {
+			color: #ef4444;
+			text-decoration: none;
+		}
+
+		.btn-link:hover {
+			color: #dc3545;
+			text-decoration: none;
+		}
+
+		.btn-danger {
+			background-color: #ef4444;
+			border-color: #ef4444;
+		}
+
+		.btn-danger:hover {
+			background-color: #dc3545;
+			border-color: #dc3545;
+		}
+
+		.form-control:focus {
+			border-color: #ef4444;
+			box-shadow: 0 0 0 0.2rem rgba(239, 68, 68, 0.25);
+		}
+
+		.custom-select:focus {
+			border-color: #ef4444;
+			box-shadow: 0 0 0 0.2rem rgba(239, 68, 68, 0.25);
+		}
+
+		/* Tab styling */
+		.nav-tabs .nav-link {
+			color: #000000;
+			border-bottom: 2px solid transparent;
+		}
+
+		.nav-tabs .nav-link.active {
+			color: #ef4444;
+			border-bottom: 2px solid #ef4444;
+		}
+
+		/* Button styling */
+		.btn-primary {
+			color: #ef4444;
+			background-color: transparent;
+			border: 2px solid #ef4444;
+		}
+
+		.btn-primary:hover {
+			color: #ffffff;
+			background-color: #ef4444;
+			border-color: #ef4444;
+		}
+
+		.btn-success {
+			color: #10b981;
+			background-color: transparent;
+			border: 2px solid #10b981;
+		}
+
+		.btn-success:hover {
+			color: #ffffff;
+			background-color: #10b981;
+			border-color: #10b981;
+		}
+
+		.btn-danger {
+			color: #dc3545;
+			background-color: transparent;
+			border: 2px solid #dc3545;
+		}
+
+		.btn-danger:hover {
+			color: #ffffff;
+			background-color: #dc3545;
+			border-color: #dc3545;
+		}
+
+		.hidden {
+			display: none !important;
+		}

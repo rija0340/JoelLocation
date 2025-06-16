@@ -50,8 +50,11 @@
 {% endblock %}
 
 {% block body %}
-	<div class="d-flex justify-content-center mt-2">
-		<a href="{{path('client_step1')}}" class="btn btn-dark">
+	<div class="d-flex justify-content-center mt-2 mb-4">
+		<a
+			href="{{path('client_step1')}}" class="btn btn-dark mr-4">
+			{# add icon fleche left here #}
+			<i class="fa fa-arrow-left"></i>
 			Revenir à l'étape précédente
 		</a>
 		{% if vehiculesDisponible|length > 0 %}
@@ -65,11 +68,7 @@
 		{% if vehiculesDisponible|length > 0 %}
 			{% for vehicule in vehiculesDisponiblePagination %}
 				{% if vehicule is not null %}
-					<div class="card mb-3" style="height : auto;">
-						<div class="card-body">
-							{% include 'admin/vente_comptoir2/step2_vehicule.html.twig' %}
-						</div>
-					</div>
+					{% include 'admin/vente_comptoir2/step2_vehicule.html.twig' %}
 				{% endif %}
 			{% endfor %}
 		{% else %}
@@ -89,13 +88,18 @@
 			</div>
 		</div>
 		{% if vehiculesDisponible|length > 0 %}
-			<div class="d-flex justify-content-center mt-2 gap-3">
-				<a href="{{path('client_step1')}}" class="btn btn-dark">
+			<div class="d-flex justify-content-center mt-2 ">
+				<a
+					href="{{path('client_step1')}}" class="btn btn-dark mr-4">
+					{# add icon fleche left here #}
+					<i class="fa fa-arrow-left"></i>
 					Revenir à l'étape précédente
 				</a>
-				<button class="btn btn-danger" type="submit" form="formStep2">
-					Enregistrer
-				</button>
+				{% if vehiculesDisponible|length > 0 %}
+					<button class="btn btn-danger" type="submit" form="formStep2">
+						Enregistrer
+					</button>
+				{% endif %}
 			</div>
 		{% endif %}
 	</form>

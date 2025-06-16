@@ -225,13 +225,13 @@ class DevisController extends AbstractController
     /**
      * @Route("/espaceclient/devis/{id}", name="client_devis_show", methods={"GET"})
      */
-    public function client_devis_show(Devis $devis): Response
-    {
+    // public function client_devis_show(Devis $devis): Response
+    // {
 
-        return $this->render('client/reservation/details.html.twig', [
-            'devis' => $devis,
-        ]);
-    }
+    //     return $this->render('client/reservation/details.html.twig', [
+    //         'devis' => $devis,
+    //     ]);
+    // }
 
 
     /**

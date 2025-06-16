@@ -60,7 +60,7 @@
 {% block content %}
 
 
-	<div class="d-flex justify-content-center mt-2">
+	<div class="d-flex justify-content-center mt-2 mb-2">
 		<a href="{{path('step1')}}" class="btn btn-dark">
 			Revenir à l'étape précédente
 		</a>
@@ -74,10 +74,8 @@
 
 		{% if vehiculesDisponible|length > 0 %}
 			{% for vehicule in vehiculesDisponiblePagination %}
-				<div class="card mb-3" style="height : auto;">
-					<div class="card-body">
-						{% include 'admin/vente_comptoir2/step2_vehicule.html.twig' %}
-					</div>
+				<div>
+					{% include 'admin/vente_comptoir2/step2_vehicule.html.twig' %}
 				</div>
 			{% endfor %}
 		{% else %}

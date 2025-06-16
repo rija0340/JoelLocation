@@ -149,7 +149,7 @@
 								<div class="row">
 									<div class="col-md-6" id='listeOptions'>
 										<div class="options">
-											<h3 class="heading">{{(devis.options != null or devis.conducteur != "false") ? "Options" : "" }}</h3>
+											<h3 class="heading">{{(devis.options is not empty or devis.conducteur == true) ? "Options" : "" }}</h3>
 											<ul>
 												{% if devis.conducteur == "true" %}
 													<li>Conducteur additionnel : 50€</li>
@@ -158,8 +158,7 @@
 													{% for option in devis.devisOptions %}
 														{% set optionEntity = option.opt %}
 														<li>{{optionEntity.appelation}}
-															({{ 'nombre : '~  option.quantity}})
-																																																																																																																																																																																																			:
+															({{ 'nombre : '~  option.quantity}})																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																													:
 															{{(optionEntity.prix * option.quantity)|number_format(2,","," ")}}
 															€</li>
 													{% endfor %}
@@ -207,8 +206,8 @@
 									<i class="fa fa-check"></i>Réserver</a>
 
 								{# <a href="{{path('client_saveDevis',{'type':'reservation'})}}" class="btn btn-danger" id="enregistrerDevis">
-																																																																	<i class="fa fa-check"></i>
-																																																																	Valider la réservation</a> #}
+																																																																																																																																																																																																																																																																	<i class="fa fa-check"></i>
+																																																																																																																																																																																																																																																																	Valider la réservation</a> #}
 							</div>
 						</div>
 

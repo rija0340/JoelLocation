@@ -1,0 +1,386 @@
+{% extends 'baseClient.html.twig' %}
+
+{% block title %}Détails reservation
+{% endblock %}
+
+
+{% block stylesheets %}{% endblock %}
+
+
+{% block body %}
+
+	<div class="x_panel">
+		<div class="row">
+			<div class="col-md-6">
+				<h5>
+					<i class="fa fa-folder-open-o"></i>
+					RESERVATION -
+					{{reservation.reference}}
+				</h5>
+			</div>
+			<div class="col-md-6 text-right">
+				<a href="{{path('client_reservations')}}" class="btn btn-dark" title="Liste réservations">
+					<i class="fa fa-reply"></i>
+					Mes réservations</a>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-3">
+			<div class="x_panel">
+				<h6>
+					{{reservation.vehicule.marque}}
+					{{reservation.vehicule.modele}}</h6>
+
+				<img src="{{vich_uploader_asset(reservation.vehicule, 'imageFile') }}" alt="{{ reservation.vehicule.image }}" class="img-circle  " style="width : 250px;">
+			</div>
+		</div>
+		<div class="col-md-9">
+			<div class="x_panel">
+				<div class="infosClient">
+					<div class="x_title">
+						<h4 class="text-uppercase">
+							informations client</h4>
+					</div>
+					<div class="x_content">
+						<strong>Nom/Prénom :</strong>
+						<span>
+							{{reservation.client.nom}}
+							{{reservation.client.prenom}}
+						</span>
+						<br>
+						<strong>Téléphone :</strong>
+						<span>
+							{{reservation.client.telephone}}
+						</span>
+
+						<br>
+						<strong>Email :</strong>
+						<span>
+							{{reservation.client.mail}}
+						</span>
+
+					</div>
+
+				</div>
+			</div>
+			<div class="x_panel">
+				<div class="conducteurs">
+					<div class="x_title">
+						<h4 class="text-uppercase">Conducteur(s)</h4>
+					</div>
+
+					{% if reservation.conducteursClient|length < 2 %}
+						<button type="button" class="btn btn-danger " data-toggle="modal" data-target="#modalConducteur">
+							<i class="fa  fa-plus"></i>
+							Ajouter</button>
+					{% endif %}
+
+					<div class="x_content">
+
+						{% set somme = 0  %}
+						{% for conducteur in reservation.conducteursClient %}
+							{% if conducteur.isPrincipal %}
+								{% set somme = somme + 1  %}
+							{% endif %}
+						{% endfor %}
+
+						{% for conducteur in reservation.conducteursClient %}
+							<div class="mb-3 border-blue">
+								<div class="row ">
+									<div class="col-md-4">{{conducteur.nom}}
+										{{conducteur.prenom}}
+										<br>
+										{% if conducteur.isPrincipal %}
+											<span class="badge badge-danger">
+												conducteur principal
+											</span>
+										{% endif %}
+									</div>
+									<div class="col-md-4">
+										<strong>Numéro de permis :
+										</strong>
+										{{conducteur.numeroPermis}}
+										<br>
+										<strong>Date de délivrance :
+										</strong>
+										{{conducteur.dateDelivrance|date('d/m/Y')}}
+										<br>
+										<strong>Ville de délivrance :
+										</strong>
+										{{conducteur.villeDelivrance}}
+									</div>
+									<div class="col-md-1"></div>
+									<div class="col-md-3">
+										<div class="row">
+											{% if somme == 0  %}
+												<div class="col-md-4 col-sm-4 col-xs-4 text-right">
+													<a href="{{path('make_conducteur_principal', {'id': conducteur.id, 'id_resa': reservation.id})}}" class="btn btn-success" title="Rendre principal">
+														<i class="fa fa-check"></i>
+													</a>
+												</div>
+											{% elseif conducteur.isPrincipal %}
+												<div class="col-md-4 col-sm-4 col-xs-4 text-right">
+													<a href="{{path('remove_conducteur_principal', {'id': conducteur.id, 'id_resa': reservation.id})}}" class="btn btn-dark" title="Rendre non principal">
+														<i class="fa fa-edit"></i>
+													</a>
+												</div>
+											{% endif %}
+											<div class="col-md-4 col-sm-4 col-xs-4 text-right">
+												<a href="{{path('conducteur_edit', {'id': conducteur.id})}}" class="btn btn-warning" title="Modifier">
+													<i class="fa fa-reply"></i>
+												</a>
+											</div>
+											<div class="col-md-4 col-sm-4 col-xs-4">
+												<form method="post" action="{{ path('client_conducteur_remove_reservation', {'id': conducteur.id, 'id_resa' : reservation.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer ce conducteur ?');">
+													<input type="hidden" name="_method" value="DELETE">
+													<input type="hidden" name="reservation" value="{{reservation.id}}">
+
+													<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ conducteur.id) }}">
+													<button class="btn btn-danger" title="Supprimer">
+														<i class="fa fa-close (alias)" aria-hidden="true"></i>
+													</button>
+												</form>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+			<div class="x_panel">
+				<div class="periode_location">
+					<div class="x_title">
+						<h4 class="text-uppercase">période de location</h4>
+					</div>
+					<div class="row">
+						<div class="col-md-7">
+							<strong>Départ :
+							</strong>
+							{{reservation.agenceDepart}}
+							<br>
+							{{reservation.dateDebut|date('d/m/Y')}}-{{reservation.dateDebut|date('H:i')}}
+						</div>
+						<div class="col-md-7">
+							<strong>Rétour :
+							</strong>
+							{{reservation.agenceRetour}}
+							<br>
+							{{reservation.dateFin|date('d/m/Y')}}-{{reservation.dateFin|date('H:i')}}
+						</div>
+						<div class="col-md-6">
+							<strong>Jours de location :
+							</strong>
+							{{reservation.duree}}
+						</div>
+						<div class="col-md-6">
+							<strong>Nombre de personnes :
+							</strong><br>
+							<span class="font-italic">Adulte(s) :
+							</span>
+							{{reservation.client.infosResa ? reservation.client.infosResa.nbrAdultes : "non renseigné" }}
+							<br>
+							<span class="font-italic">Enfant(s) :
+							</span>
+							{{reservation.client.infosResa ? reservation.client.infosResa.nbrEnfants : "non renseigné"}}
+							<br>
+							<span class="font-italic">Bébé(s) :
+								{{ reservation.client.infosResa ? reservation.client.infosResa.nbrBebes : "non renseigné"}}
+							</span>
+
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="x_panel">
+				<div class="options_garanties">
+					<div class="x_title">
+						<h4 class="text-uppercase">options et garanties souscrites</h4>
+					</div>
+					<strong>Option(s) souscrite(s) :
+					</strong><br>
+					<ul>
+						{% if reservation.conducteur %}
+							<li>Conducteur</li>
+						{% endif %}
+
+						{# {% for option in reservation.options %}
+																																											<li>
+																																												{{option}}</li>
+																																										{% endfor %} #}
+
+						{% for option in reservation.devisOptions %}
+
+							<li class="js-siege">{{option.opt.appelation}}
+								{% if option.opt.appelation matches '/Siège/' %}
+									({{ 'nbr : '~  option.quantity}})
+								{% endif %}
+								-
+								{{(option.opt.prix * option.quantity)|number_format(2,","," ")}}€
+							</li>
+						{% endfor %}
+					</ul>
+					<strong>Garantie(s) souscrite(s) :
+					</strong><br>
+					<ul>
+						{% for garantie in reservation.garanties %}
+							<li>
+								{{garantie}}
+								-
+								{{(garantie.prix )|number_format(2,","," ")}}€</li>
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+		<div class="x_panel">
+			<div class="montant_reservation">
+				<div class="x_title">
+					<div class="row">
+						<div class="col-auto pl-2">
+							<h2>
+								<h4 class="text-uppercase">montant total de la réservation</h4>
+							</h2>
+						</div>
+						<div class="col-auto ml-auto d-flex align-items-center">
+							<div class="js-prix">
+								{{reservation.prix}}
+								€
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="x_content ">
+					<div class="row">
+						<div class="col-md-8 col-sm-8 col-xs-8">
+							<i class="fa fa-chevron-right"></i>Location NDMR
+							{{ reservation.duree }}
+							jours
+						</div>
+						<div class="col-md-4 col-sm-4 col-xs-4">
+							<div class="text-right">
+								{{reservation.tarifVehicule}}€
+							</div>
+						</div>
+
+						<div class="col-md-8 col-sm-8 col-xs-8">
+							<i class="fa fa-chevron-right"></i>Total dépassements horaires
+						</div>
+						<div class="col-md-4 col-sm-4 col-xs-4">
+							<div class="text-right">
+								0 €
+							</div>
+						</div>
+
+						<div class="col-md-8 col-sm-8 col-xs-8">
+							<i class="fa fa-chevron-right"></i>Total options souscrites
+						</div>
+						<div class="col-md-4 col-sm-4 col-xs-4">
+							<div class="text-right">{{reservation.prixGaranties}}€</div>
+						</div>
+
+						<div class="col-md-8 col-sm-8 col-xs-8">
+							<i class="fa fa-chevron-right"></i>Total garanties souscrites
+
+						</div>
+						<div class="col-md-4 col-sm-4 col-xs-4">
+							<div class="text-right">
+								{{reservation.prixOptions}}
+								€
+							</div>
+						</div>
+
+						<div class="col-md-8 col-sm-8 col-xs-8">
+							<i class="fa fa-chevron-right"></i>Montant de la remise
+						</div>
+						<div class="col-md-4 col-sm-4 col-xs-4">
+							<div class="text-right">
+								0 €
+							</div>
+						</div>
+
+						<div class="col-md-8 col-sm-8 col-xs-8">
+							<i class="fa fa-chevron-right"></i>Montant à régler
+						</div>
+						<div class="col-md-4 col-sm-4 col-xs-4">
+							<div class="text-right">
+								{{reservation.prix}}
+								€
+							</div>
+						</div>
+
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<div class="x_panel">
+			<div class="reglement">
+				<div class="x_title">
+					<h4 class="text-uppercase">réglement</h4>
+				</div>
+				<div class="x_content">
+					{% for paiement in reservation.paiements %}
+						<table class="table-bordered w-100 bg-dark">
+							<tr>
+								<td>
+									{{paiement.datePaiement|date('d/m/Y H:i')}}
+								</td>
+								<td class="text-center">
+									{{paiement.modePaiement.libelle}}
+								</td>
+								<td class="text-right">
+									{{paiement.montant}}€
+								</td>
+							</tr>
+						</table>
+
+					{% endfor %}
+					<div class="row">
+						<div class="col-md-6">-Total payé</div>
+						<div class="col-md-6 text-right">{{reservation.sommePaiements}}€</div>
+						<br>
+						<div class="col-md-6">-Solde</div>
+						<div class="col-md-6 text-right">{{reservation.prix - reservation.sommePaiements}}€</div>
+					</div>
+				</div>
+				<div class="text-right">
+					{% if reservation.prix > reservation.sommePaiements %}
+						<form action="{{ path('paiement_sold') }}" method="POST">
+							<input type="hidden" name="montantSolde" value="{{ reservation.prix - reservation.sommePaiements }}">
+							<input type="hidden" name="reservation" value="{{ reservation.id }}">
+							<button class="btn btn-danger">Payer solde
+								{{ reservation.prix - reservation.sommePaiements }}€
+							</button>
+						</form>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+{% include "client/reservation/modalConducteur.html.twig" %}{% endblock %}{% block javascripts %}
+<!-- Datatables -->
+<script src="../../admin/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="../../admin/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="../../admin/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+<script src="../../admin/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+<script src="../../admin/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+<script src="../../admin/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+<script src="../../admin/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+<script src="../../admin/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+<script src="../../admin/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+<script src="../../admin/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="../../admin/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script src="../../admin/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+<script src="../../admin/vendors/jszip/dist/jszip.min.js"></script>
+<script src="../../admin/vendors/pdfmake/build/pdfmake.min.js"></script>
+<script src="../../admin/vendors/pdfmake/build/vfs_fonts.js"></script>
+<script src="../../js/admin/jspdf.min.js"></script>
+<script src="../../js/admin/jspdf.plugin.autotable.js"></script>
+<script src="../../js/admin/factureJsPDF.js"></script>{% endblock  %}

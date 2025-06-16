@@ -1,0 +1,92 @@
+		@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700 &display=swap');
+
+		body {
+			font-family: 'Inter', sans-serif;
+			background-color: #f8f9fa;
+		}
+
+		.reservation-card {
+			transition: all 0.2s ease;
+			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+			border: none;
+		}
+
+		.reservation-card:hover {
+			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+		}
+
+		.section-divider {
+			border-top: 1px solid #e5e7eb;
+			margin: 0;
+		}
+
+		.text-gray-400 {
+			color: #9ca3af;
+		}
+		.text-gray-500 {
+			color: #6b7280;
+			font-size: 1rem;
+			font-weight: bold;
+			text-decoration: underline;
+		}
+		.text-gray-600 {
+			color: #4b5563;
+		}
+
+		.text-red-800 {
+			color: #dc3545 !important;
+		}
+		.bg-gray-50 {
+			background-color: #f9fafb;
+		}
+
+		.border-gray-200 {
+			border-color: #e5e7eb;
+		}
+
+		.conductor-card {
+			transition: all 0.2s ease;
+		}
+
+		.conductor-card:hover {
+			transform: translateY(-1px);
+		}
+
+		.payment-breakdown li {
+			padding: 0.5rem 0;
+		}
+
+		.payment-breakdown .border-top {
+			border-top: 1px solid #dee2e6 !important;
+			padding-top: 0.75rem !important;
+		}
+		/* Custom bullet point style */
+		.bullet-point {
+			display: inline-block;
+			width: 8px;
+			height: 8px;
+			border-radius: 50%;
+		}
+
+		/* Additional utility classes */
+		.text-red-400 {
+			color: #f56565;
+		}
+		.text-red-800 {
+			color: #9b2c2c;
+		}
+		.bg-red-400 {
+			background-color: #f56565;
+		}
+		. {
+			color: #2d3748;
+		}
+		.bg-gray-100 {
+			background-color: #f7fafc;
+		}
+		.border-gray-100 {
+			border-color: #f7fafc !important;
+		}
+		.border-gray-200 {
+			border-color: #edf2f7 !important;
+		}

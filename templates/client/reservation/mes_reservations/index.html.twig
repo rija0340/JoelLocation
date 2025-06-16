@@ -1,0 +1,118 @@
+{% extends 'baseClient.html.twig' %}
+
+{% block title %}
+	Mes Réservations
+{% endblock %}
+{% block stylesheets %}
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+	<link rel="stylesheet" href="{{ asset('css/client/reservation/mes_reservations/index.css') }}">
+
+{% endblock %}
+{% block body %}
+	<div
+		class="container py-4">
+		<!-- Header -->
+		<header class="mb-4">
+			<div class="row align-items-center">
+				<div class="col-md-8">
+					<h1 class="font-weight-bold">Mes Réservations</h1>
+					<p class="text-muted">Consultez et gérez vos locations de voitures</p>
+				</div>
+				<div class="col-md-4 text-md-right">
+					<a href="{{path('client_step1')}}" class="btn btn-primary">
+						<i class="fas fa-plus mr-2"></i>
+						Nouvelle Réservation
+					</a>
+				</div>
+			</div>
+		</header>
+
+		<!-- Search Bar -->
+		<div class="row mb-3">
+			<div class="col-md-8 mb-3 mb-md-0">
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text bg-white border-right-0">
+							<i class="fas fa-search text-muted"></i>
+						</span>
+					</div>
+					<input type="text" id="searchInput" class="form-control border-left-0" placeholder="Rechercher des réservations...">
+				</div>
+			</div>
+			<div class="col-md-4">
+				<select id="sortSelect" class="custom-select float-md-right w-md-auto">
+					<option value="date-desc">Trier par Date</option>
+					<option value="date-desc">Plus récent d'abord</option>
+					<option value="date-asc">Plus ancien d'abord</option>
+					<option value="price-desc">Prix décroissant</option>
+					<option value="price-asc">Prix croissant</option>
+				</select>
+			</div>
+		</div>
+
+		<!-- Tabs Navigation -->
+		<ul class="nav nav-tabs mb-4" id="bookingTabs" role="tablist">
+			<li class="nav-item">
+				<a class="nav-link active" id="devis-tab" data-toggle="tab" href="#devis" role="tab" aria-controls="devis" aria-selected="true">
+					<i class="fas fa-file-invoice mr-1"></i>
+					Devis
+					<span class="badge badge-pill badge-primary ml-1" id="devis-count">{{ devis|length }}</span>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" id="encours-tab" data-toggle="tab" href="#encours" role="tab" aria-controls="encours" aria-selected="false">
+					<i class="fas fa-spinner mr-1"></i>
+					En cours
+					<span class="badge badge-pill badge-primary ml-1" id="encours-count">{{ reservationEncours|length }}</span>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" id="avenir-tab" data-toggle="tab" href="#avenir" role="tab" aria-controls="avenir" aria-selected="false">
+					<i class="fas fa-calendar-alt mr-1"></i>
+					À venir
+					<span class="badge badge-pill badge-primary ml-1" id="avenir-count">{{ reservationAvenir|length }}</span>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" id="termine-tab" data-toggle="tab" href="#termine" role="tab" aria-controls="termine" aria-selected="false">
+					<i class="fas fa-check-circle mr-1"></i>
+					Terminé
+					<span class="badge badge-pill badge-primary ml-1" id="termine-count">{{ reservationEffectuers|length }}</span>
+				</a>
+			</li>
+		</ul>
+
+		<!-- Tab Content -->
+		<div
+			class="tab-content" id="bookingTabsContent">
+			<!-- Devis Tab -->
+			<div class="tab-pane fade show active" id="devis" role="tabpanel" aria-labelledby="devis-tab">
+				{% include 'client/reservation/mes_reservations/parts/devis.html.twig' %}
+			</div>
+
+			<!-- En cours Tab -->
+			<div class="tab-pane fade" id="encours" role="tabpanel" aria-labelledby="encours-tab">
+				{% include 'client/reservation/mes_reservations/parts/encours.html.twig' %}
+			</div>
+
+			<!-- À venir Tab -->
+			<div class="tab-pane fade" id="avenir" role="tabpanel" aria-labelledby="avenir-tab">
+				{% include 'client/reservation/mes_reservations/parts/avenir.html.twig' %}
+			</div>
+
+			<!-- Terminé Tab -->
+			<div class="tab-pane fade" id="termine" role="tabpanel" aria-labelledby="termine-tab">
+				{% include 'client/reservation/mes_reservations/parts/termines.html.twig' %}
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	<!-- Bootstrap 4 JS and dependencies -->
+
+
+	<script src="{{ asset('js/client/reservation/mes_reservations/index.js') }}"></script>
+{% endblock %}

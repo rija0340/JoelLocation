@@ -1,0 +1,79 @@
+<div class="booking-list">
+	{% if reservationEffectuers|length > 0 %}
+		{% for reserv in reservationEffectuers %}
+			<div class="card booking-card mb-4">
+				<div class="row no-gutters">
+					<div class="col-md-4">
+						<img
+						class="img-fluid h-100 w-100" style="object-fit: cover; max-height: 200px;" src="{{vich_uploader_asset(reserv.vehicule, 'imageFile') }}" alt="{{ reserv.vehicule.image }}">
+					{# <img src="{{vich_uploader_asset(reservation.vehicule, 'imageFile') }}" alt="{{ reservation.vehicule.image }}" class="img-circle  " style="width : 250px;"> #}
+					</div>
+					<div class="col-md-8">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-8">
+									<h5 class="card-title font-weight-bold">
+										{{reserv.reference}}
+										<span class="status-badge status-pending d-inline-block">Réservation</span>
+									</h5>
+
+									<div class="text-muted ">
+										<i class="fas fa-calendar-alt mr-2"></i>
+										<span>Date création  :
+											{{reserv.dateReservation|date('d/m/Y')}}</span>
+									</div>
+									<div class="text-muted">
+										<i class="fas fa-clock mr-2"></i>
+										<span>Période:
+											{{ reserv.dateDebut|date('d/m/Y') }}
+											-
+											{{ reserv.dateFin|date('d/m/Y') }}
+											({{ reserv.duree }}
+											jours)</span>
+									</div>
+									<div class="text-muted">
+										<i class="fas fa-car mr-2"></i>
+										<span>Voiture :
+											{{ reserv.vehicule.marque }}
+											{{ reserv.vehicule.modele }}
+										</span>
+									</div>
+								</div>
+								<div class="col-md-4 ">
+
+									<div class=" text-md-right text-white mb-2">
+										add white text here
+									</div>
+									<div class="text-muted text-md-left">
+										<i class="fas fa-money"></i>
+										<span>Prix options :
+											{{ reserv.prixOptions }}€
+										</span>
+									</div>
+									<div class="text-muted text-md-left">
+										<i class="fas fa-money"></i>
+										<span>Prix garanties :
+											{{ reserv.prixGaranties }}€
+										</span>
+									</div>
+									<div class="h5 font-weight-bold text-md-left">Prix total :
+										{{ reserv.prix }}€</div>
+								</div>
+							</div>
+							<div class="mt-3 pt-3 border-top text-right">
+
+								<a href="{{ path('client_reservation_show', {'id': reserv.id}) }}" class="btn btn-primary btn-sm" title="Détails">
+									<i class="fa fa-info-circle"></i>
+									Détails
+								</a>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+	{% endif %}
+
+
+</div>
