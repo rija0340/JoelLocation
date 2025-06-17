@@ -11,11 +11,13 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Validator\Constraints\GreaterThan;
+use App\Form\DataTransformer\DateTimeStringTransformer;
 
 class ReservationStep1Type extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $transformer = new DateTimeStringTransformer();
         $builder
             ->add('agenceDepart', ChoiceType::class, [
                 'choices'  => [
@@ -39,8 +41,8 @@ class ReservationStep1Type extends AbstractType
                 ],
                 'required' => true
             ])
-            ->add('dateDepart', DateTimeType::class, [
-                'widget' => 'single_text',
+            ->add('dateDepart', TextType::class, [
+                // 'widget' => 'single_text',
                 'required' => true,
 
             ])
@@ -73,16 +75,21 @@ class ReservationStep1Type extends AbstractType
                 ],
                 'required' => true
             ])
-            ->add('dateRetour', DateTimeType::class, [
-                'widget' => 'single_text',
-                'required' => true,
-                'constraints' => [
-                    new GreaterThan("+2 hours UTC+3")
+            ->add(
+                'dateRetour',
+                TextType::class,
+                [
+                    'required' => true
+                    // 'widget' => 'single_text',
+                    // 'constraints' => [
+                    //     new GreaterThan("+2 hours UTC+3")
                 ]
-            ])
+            )
             ->add('lieuSejour', TextType::class, [
                 'required' => false
             ]);
+        $builder->get('dateDepart')->addModelTransformer($transformer);
+        $builder->get('dateRetour')->addModelTransformer($transformer);
     }
 
     public function configureOptions(OptionsResolver $resolver)

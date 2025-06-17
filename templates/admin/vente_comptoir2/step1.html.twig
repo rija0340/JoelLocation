@@ -127,5 +127,36 @@
 
 {% endblock %}
 {% block javascripts %}
-	<script src="{{asset('js/admin/vente_comptoir/step1.js')}}"></script>
+	{# // <script src="{{asset('js/admin/vente_comptoir/step1.js')}}"></script> #}
+
+	{# // <script src="{{asset('js/admin/vente_comptoir/step1.js')}}"></script> #}
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script>
+	<script type="text/javascript">
+		const now = new Date();
+
+const dateDepartInput = document.getElementById("reservation_step1_dateDepart");
+const dateRetourInput = document.getElementById("reservation_step1_dateRetour");
+
+// Only apply defaultDate: now if input has no value
+const startPicker = flatpickr(dateDepartInput, {
+locale: 'fr',
+enableTime: true,
+minDate: now,
+defaultDate: dateDepartInput.value ? dateDepartInput.value : now,
+dateFormat: "d/m/Y H:i",
+onChange: function (selectedDates, dateStr) {
+endPicker.set('minDate', selectedDates[0]);
+endPicker.setDate(selectedDates[0]);
+}
+});
+
+const endPicker = flatpickr(dateRetourInput, {
+locale: 'fr',
+enableTime: true,
+minDate: now,
+defaultDate: dateRetourInput.value ? dateRetourInput.value : now,
+dateFormat: "d/m/Y H:i"
+});
+	</script>
 {% endblock  %}

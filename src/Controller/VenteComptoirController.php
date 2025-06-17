@@ -3,8 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Entity\Devis;
-use App\Entity\Reservation;
 use App\Service\DateHelper;
 use App\Service\TarifsHelper;
 use App\Classe\ReservationSession;
@@ -48,9 +46,7 @@ class VenteComptoirController extends AbstractController
     private $devisRepo;
     private $reservationSession;
     private $reservationHelper;
-    private $modeReservationRepo;
     private $symfonyMailerHelper;
-    private $devisOptionRepo;
     private $reserverDevis;
 
     public function __construct(
@@ -129,7 +125,6 @@ class VenteComptoirController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             //recupération donnés envoyé par le formulaire
             $dateDepart = $form->getData()['dateDepart'];
             $dateRetour = $form->getData()['dateRetour'];
@@ -137,7 +132,6 @@ class VenteComptoirController extends AbstractController
             $agenceRetour = $form->getData()['agenceRetour'];
             $typeVehicule = $form->getData()['typeVehicule'];
             $lieuSejour = $form->getData()['lieuSejour'];
-
             //stockage information dans session
             $this->reservationSession->addAgenceDepart($agenceDepart);
             $this->reservationSession->addAgenceRetour($agenceRetour);
