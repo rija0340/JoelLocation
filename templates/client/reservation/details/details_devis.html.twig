@@ -61,28 +61,28 @@
 									<div class="row">
 										<div class="col-6 mb-3">
 											<div class="d-flex align-items-center mb-1">
-												<i class="fas fa-tag text-red-400 mr-2"></i>
+												<i class="fas fa-tag  mr-2"></i>
 												<small class="text-gray-600 font-weight-bold">Vitesse</small>
 											</div>
 											<span class=" font-weight-medium ml-4">{{reservation.vehicule.vitesse}}</span>
 										</div>
 										<div class="col-6 mb-3">
 											<div class="d-flex align-items-center mb-1">
-												<i class="fas fa-gas-pump text-red-400 mr-2"></i>
+												<i class="fas fa-gas-pump  mr-2"></i>
 												<small class="text-gray-600">Carburant</small>
 											</div>
 											<span class=" font-weight-medium ml-4">{{reservation.vehicule.carburation}}</span>
 										</div>
 										<div class="col-6 mb-3">
 											<div class="d-flex align-items-center mb-1">
-												<i class="fas fa-users text-red-400 mr-2"></i>
+												<i class="fas fa-users  mr-2"></i>
 												<small class="text-gray-600">Places</small>
 											</div>
 											<span class=" font-weight-medium ml-4">{{reservation.vehicule.passagers}}</span>
 										</div>
 										<div class="col-6 mb-3">
 											<div class="d-flex align-items-center mb-1">
-												<i class="fas fa-door-open text-red-400 mr-2"></i>
+												<i class="fas fa-door-open  mr-2"></i>
 												<small class="text-gray-600">Portes</small>
 											</div>
 											<span class=" font-weight-medium ml-4">{{reservation.vehicule.portes}}</span>
@@ -105,7 +105,7 @@
 						<div class="bg-light rounded p-3">
 							<div class="mb-3">
 								<div class="d-flex align-items-center mb-1">
-									<i class="fas fa-id-card text-red-400 mr-2"></i>
+									<i class="fas fa-id-card  mr-2"></i>
 									<small class="text-gray-600">Nom complet</small>
 								</div>
 								<span class=" font-weight-medium ml-4">{{reservation.client.nom}}
@@ -113,14 +113,14 @@
 							</div>
 							<div class="mb-3">
 								<div class="d-flex align-items-center mb-1">
-									<i class="fas fa-envelope text-red-400 mr-2"></i>
+									<i class="fas fa-envelope  mr-2"></i>
 									<small class="text-gray-600">Email</small>
 								</div>
 								<span class=" font-weight-medium ml-4">{{reservation.client.mail}}</span>
 							</div>
 							<div class="mb-0">
 								<div class="d-flex align-items-center mb-1">
-									<i class="fas fa-phone text-red-400 mr-2"></i>
+									<i class="fas fa-phone  mr-2"></i>
 									<small class="text-gray-600">Téléphone</small>
 								</div>
 								<span class=" font-weight-medium ml-4">{{reservation.client.telephone}}</span>
@@ -154,13 +154,13 @@
 									</div>
 									<div class="ml-4 pl-3">
 										<p class="mb-2">
-											<i class="fas fa-calendar-alt text-red-400 mr-2"></i>
+											<i class="fas fa-calendar-alt  mr-2"></i>
 											<span class="font-weight-medium">{{reservation.dateDepart|date('d/m/Y')}}</span>
 											à
 											<span class="font-weight-medium">{{reservation.dateDepart|date('H:i')}}</span>
 										</p>
 										<p class="mb-0">
-											<i class="fas fa-map-marker-alt text-red-400 mr-2"></i>
+											<i class="fas fa-map-marker-alt  mr-2"></i>
 											<span>{{reservation.agenceDepart}}</span>
 										</p>
 									</div>
@@ -176,13 +176,13 @@
 									</div>
 									<div class="ml-4 pl-3">
 										<p class="mb-2">
-											<i class="fas fa-calendar-alt text-red-400 mr-2"></i>
+											<i class="fas fa-calendar-alt mr-2"></i>
 											<span class="font-weight-medium">{{reservation.dateRetour|date('d/m/Y')}}</span>
 											à
 											<span class="font-weight-medium">{{reservation.dateRetour|date('H:i')}}</span>
 										</p>
 										<p class="mb-0">
-											<i class="fas fa-map-marker-alt text-red-400 mr-2"></i>
+											<i class="fas fa-map-marker-alt  mr-2"></i>
 											<span>{{reservation.agenceRetour}}</span>
 										</p>
 									</div>
@@ -241,78 +241,78 @@
 				</div>
 
 				{# <div
-																																	class="card reservation-card mb-2">
-																																	<!-- Conductors Section -->
-																																	<div class="card-body p-4">
-																																		<div class="d-flex justify-content-between align-items-center mb-3">
-																																			<h5 class="card-title font-weight-bold text-red-800 d-flex align-items-center mb-0">
-																																				<i class="fas fa-id-card text-red-400 mr-2"></i>
-																																				Conducteurs
-																																			</h5>
-																																			{% if reservation.conducteursClient|length < 2 %}
-																																				<button type="button" class="btn btn-link text-primary p-0" data-toggle="modal" data-target="#modalConducteur">
-																																					<i class="fas fa-plus-circle mr-1"></i>
-																																					Ajouter Conducteur
-																																				</button>
-																																			{% endif %}
-																																		</div>
-																												
-																																		<div class="space-y-3">
-																																			{% set somme = 0  %}
-																																			{% for conducteur in reservation.conducteursClient %}
-																																				{% if conducteur.isPrincipal %}
-																																					{% set somme = somme + 1  %}
-																																				{% endif %}
-																																			{% endfor %}
-																												
-																																			{% for conducteur in reservation.conducteursClient %}
-																																				<div class="conductor-card p-3 rounded mb-3 {% if conducteur.isPrincipal %}bg-gray-50{% else %}border border-gray-200{% endif %}">
-																																					<div class="d-flex justify-content-between align-items-start">
-																																						<div>
-																																							<div class="d-flex align-items-center mb-1">
-																																								<span class="font-weight-medium  mr-2">{{conducteur.nom}}
-																																									{{conducteur.prenom}}</span>
-																																								{% if conducteur.isPrincipal %}
-																																									<span class="badge badge-warning">Principal</span>
-																																								{% endif %}
-																																							</div>
-																																							<small class="text-gray-600 d-block">Permis:
-																																								{{conducteur.numeroPermis}}</small>
-																																							<small class="text-gray-600 d-block">Délivré:
-																																								{{conducteur.dateDelivrance|date('m/Y')}}
-																																								à
-																																								{{conducteur.villeDelivrance}}</small>
-																																						</div>
-																																						<div class="d-flex align-items-center">
-																																							{% if somme == 0  %}
-																																								<a href="{{path('make_conducteur_principal', {'id': conducteur.id, 'id_resa': reservation.id})}}" class="btn btn-sm btn-outline-success mr-1">
-																																									<i class="fas fa-star mr-1"></i>
-																																									Rendre Principal
-																																								</a>
-																																							{% elseif conducteur.isPrincipal %}
-																																								<a href="{{path('remove_conducteur_principal', {'id': conducteur.id, 'id_resa': reservation.id})}}" class="btn btn-sm btn-outline-secondary mr-1">
-																																									<i class="fas fa-edit mr-1"></i>
-																																									Retirer Principal
-																																								</a>
-																																							{% endif %}
-																																							<a href="{{path('conducteur_edit', {'id': conducteur.id})}}" class="btn btn-sm btn-link text-gray-400 p-1" title="Modifier">
-																																								<i class="fas fa-edit"></i>
-																																							</a>
-																																							<form method="post" action="{{ path('client_conducteur_remove_reservation', {'id': conducteur.id, 'id_resa' : reservation.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer ce conducteur ?');" class="d-inline">
-																																								<input type="hidden" name="_method" value="DELETE">
-																																								<input type="hidden" name="reservation" value="{{reservation.id}}">
-																																								<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ conducteur.id) }}">
-																																								<button class="btn btn-sm btn-link text-gray-400 p-1" title="Supprimer">
-																																									<i class="fas fa-trash-alt"></i>
-																																								</button>
-																																							</form>
-																																						</div>
-																																					</div>
-																																				</div>
-																																			{% endfor %}
-																																		</div>
-																																	</div>
-																																</div> #}
+																																																													class="card reservation-card mb-2">
+																																																													<!-- Conductors Section -->
+																																																													<div class="card-body p-4">
+																																																														<div class="d-flex justify-content-between align-items-center mb-3">
+																																																															<h5 class="card-title font-weight-bold text-red-800 d-flex align-items-center mb-0">
+																																																																<i class="fas fa-id-card text-red-400 mr-2"></i>
+																																																																Conducteurs
+																																																															</h5>
+																																																															{% if reservation.conducteursClient|length < 2 %}
+																																																																<button type="button" class="btn btn-link text-primary p-0" data-toggle="modal" data-target="#modalConducteur">
+																																																																	<i class="fas fa-plus-circle mr-1"></i>
+																																																																	Ajouter Conducteur
+																																																																</button>
+																																																															{% endif %}
+																																																														</div>
+																																																								
+																																																														<div class="space-y-3">
+																																																															{% set somme = 0  %}
+																																																															{% for conducteur in reservation.conducteursClient %}
+																																																																{% if conducteur.isPrincipal %}
+																																																																	{% set somme = somme + 1  %}
+																																																																{% endif %}
+																																																															{% endfor %}
+																																																								
+																																																															{% for conducteur in reservation.conducteursClient %}
+																																																																<div class="conductor-card p-3 rounded mb-3 {% if conducteur.isPrincipal %}bg-gray-50{% else %}border border-gray-200{% endif %}">
+																																																																	<div class="d-flex justify-content-between align-items-start">
+																																																																		<div>
+																																																																			<div class="d-flex align-items-center mb-1">
+																																																																				<span class="font-weight-medium  mr-2">{{conducteur.nom}}
+																																																																					{{conducteur.prenom}}</span>
+																																																																				{% if conducteur.isPrincipal %}
+																																																																					<span class="badge badge-warning">Principal</span>
+																																																																				{% endif %}
+																																																																			</div>
+																																																																			<small class="text-gray-600 d-block">Permis:
+																																																																				{{conducteur.numeroPermis}}</small>
+																																																																			<small class="text-gray-600 d-block">Délivré:
+																																																																				{{conducteur.dateDelivrance|date('m/Y')}}
+																																																																				à
+																																																																				{{conducteur.villeDelivrance}}</small>
+																																																																		</div>
+																																																																		<div class="d-flex align-items-center">
+																																																																			{% if somme == 0  %}
+																																																																				<a href="{{path('make_conducteur_principal', {'id': conducteur.id, 'id_resa': reservation.id})}}" class="btn btn-sm btn-outline-success mr-1">
+																																																																					<i class="fas fa-star mr-1"></i>
+																																																																					Rendre Principal
+																																																																				</a>
+																																																																			{% elseif conducteur.isPrincipal %}
+																																																																				<a href="{{path('remove_conducteur_principal', {'id': conducteur.id, 'id_resa': reservation.id})}}" class="btn btn-sm btn-outline-secondary mr-1">
+																																																																					<i class="fas fa-edit mr-1"></i>
+																																																																					Retirer Principal
+																																																																				</a>
+																																																																			{% endif %}
+																																																																			<a href="{{path('conducteur_edit', {'id': conducteur.id})}}" class="btn btn-sm btn-link text-gray-400 p-1" title="Modifier">
+																																																																				<i class="fas fa-edit"></i>
+																																																																			</a>
+																																																																			<form method="post" action="{{ path('client_conducteur_remove_reservation', {'id': conducteur.id, 'id_resa' : reservation.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer ce conducteur ?');" class="d-inline">
+																																																																				<input type="hidden" name="_method" value="DELETE">
+																																																																				<input type="hidden" name="reservation" value="{{reservation.id}}">
+																																																																				<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ conducteur.id) }}">
+																																																																				<button class="btn btn-sm btn-link text-gray-400 p-1" title="Supprimer">
+																																																																					<i class="fas fa-trash-alt"></i>
+																																																																				</button>
+																																																																			</form>
+																																																																		</div>
+																																																																	</div>
+																																																																</div>
+																																																															{% endfor %}
+																																																														</div>
+																																																													</div>
+																																																												</div> #}
 
 				<div
 					class="card reservation-card mb-3 shadow-sm">
@@ -475,7 +475,7 @@
 				<!-- Action Buttons -->
 				<div class="d-flex flex-column flex-sm-row justify-content-end mb-4">
 					{% if date(reservation.dateDepart) > date("now") and reservation.transformed == false %}
-						<a href="{{ path('validation_step2', {'id': reserv.id}) }}" class="btn btn-success btn-sm" title="Valider">
+						<a href="{{ path('validation_step2', {'id': reservation.id}) }}" class="btn btn-success btn-xs" title="Valider">
 							<i class="fas fa-check mr-1"></i>
 							Valider
 						</a>
