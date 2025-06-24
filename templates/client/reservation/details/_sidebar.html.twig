@@ -1,0 +1,92 @@
+<div class="col-md-4">
+	<!-- Vehicle Information Card -->
+	<div class="card shadow-sm mb-3">
+		<div class="card-body p-4">
+			<div class="d-flex justify-content-between align-items-start mb-4">
+				<h5 class="card-title font-weight-bold text-red-800 d-flex align-items-center mb-0">
+					<i class="fas fa-car text-red-400 mr-2"></i>
+					Informations Véhicule
+				</h5>
+			</div>
+
+			<div class="vehicle-details">
+				<div class="mb-3">
+					<img src="{{ vich_uploader_asset(reservation.vehicule, 'imageFile') }}" alt="{{ reservation.vehicule.image }}" class="img-fluid rounded shadow-sm">
+				</div>
+
+				<div class="vehicle-info">
+					<h4 class="font-weight-bold mb-1">{{ reservation.vehicule.marque }}
+						{{ reservation.vehicule.modele }}</h4>
+
+					<div class="bg-light rounded p-3">
+						<div class="row">
+							<div class="col-6 mb-3">
+								<div class="d-flex align-items-center mb-1">
+									<i class="fas fa-tag mr-2"></i>
+									<small class="text-gray-600 font-weight-bold">Vitesse</small>
+								</div>
+								<span class="font-weight-medium ml-4">{{ reservation.vehicule.vitesse }}</span>
+							</div>
+							<div class="col-6 mb-3">
+								<div class="d-flex align-items-center mb-1">
+									<i class="fas fa-gas-pump mr-2"></i>
+									<small class="text-gray-600">Carburant</small>
+								</div>
+								<span class="font-weight-medium ml-4">{{ reservation.vehicule.carburation }}</span>
+							</div>
+							<div class="col-6 mb-3">
+								<div class="d-flex align-items-center mb-1">
+									<i class="fas fa-users mr-2"></i>
+									<small class="text-gray-600">Places</small>
+								</div>
+								<span class="font-weight-medium ml-4">{{ reservation.vehicule.passagers }}</span>
+							</div>
+							<div class="col-6 mb-3">
+								<div class="d-flex align-items-center mb-1">
+									<i class="fas fa-door-open mr-2"></i>
+									<small class="text-gray-600">Portes</small>
+								</div>
+								<span class="font-weight-medium ml-4">{{ reservation.vehicule.portes }}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Client Information Card -->
+	<div class="card shadow-sm mb-3">
+		<div class="card-body p-4">
+			<h5 class="card-title font-weight-bold text-red-800 d-flex align-items-center mb-4">
+				<i class="fas fa-user text-red-400 mr-2"></i>
+				Informations Client
+			</h5>
+
+			<div class="bg-light rounded p-3">
+				<div class="mb-3">
+					<div class="d-flex align-items-center mb-1">
+						<i class="fas fa-id-card mr-2"></i>
+						<small class="text-gray-600">Nom complet</small>
+					</div>
+					<span class="font-weight-medium ml-4">{{ reservation.client.nom }}
+						{{ reservation.client.prenom }}</span>
+				</div>
+				<div class="mb-3">
+					<div class="d-flex align-items-center mb-1">
+						<i class="fas fa-envelope mr-2"></i>
+						<small class="text-gray-600">Email</small>
+					</div>
+					<span class="font-weight-medium ml-4">{{ reservation.client.mail }}</span>
+				</div>
+				<div class="mb-0">
+					<div class="d-flex align-items-center mb-1">
+						<i class="fas fa-phone mr-2"></i>
+						<small class="text-gray-600">Téléphone</small>
+					</div>
+					<span class="font-weight-medium ml-4">{{ reservation.client.telephone }}</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

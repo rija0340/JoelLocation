@@ -1,0 +1,79 @@
+<div class="card reservation-card mb-3 shadow-sm">
+	<!-- Options & Guarantees Section -->
+	<div class="card-body p-4">
+		<h5 class="card-title font-weight-bold text-red-800 d-flex align-items-center mb-4">
+			<i class="fas fa-check-circle text-red-400 mr-2"></i>
+			Options & Garanties
+		</h5>
+
+		<div class="row">
+			<!-- Left Column: Selected Options -->
+			<div class="col-md-6 mb-3">
+				<div class="bg-light rounded p-3 h-100">
+					<h6 class="font-weight-bold mb-3 border-bottom border-gray-200 pb-2">
+						<i class="fas fa-plus-circle mr-2"></i>
+						Options Sélectionnées
+					</h6>
+
+					<ul class="list-unstyled mb-0">
+						{% if reservation.conducteur %}
+							<li class="d-flex justify-content-between align-items-center py-2 border-bottom border-gray-100">
+								<div class="d-flex align-items-center">
+									<span class="bullet-point bg-red-400 mr-2"></span>
+									<span>Conducteur Additionnel</span>
+								</div>
+								<span class="font-weight-medium">{{ prixConductSuppl }}€</span>
+							</li>
+						{% endif %}
+
+						{% for option in reservation.devisOptions %}
+							<li class="d-flex justify-content-between align-items-center py-2 {% if not loop.last %}border-bottom border-gray-100{% endif %}">
+								<div class="d-flex align-items-center">
+									<span class="bullet-point bg-red-400 mr-2"></span>
+									<span>{{ option.opt.appelation }}
+										{% if option.opt.appelation matches '/Siège/' %}
+											<span class="text-gray-600">(x{{ option.quantity }})</span>
+										{% endif %}
+									</span>
+								</div>
+								<span class="font-weight-medium">{{ (option.opt.prix * option.quantity)|number_format(2,","," ") }}€</span>
+							</li>
+						{% else %}
+							<li class="text-gray-600 py-2 text-center">
+								<i class="fas fa-info-circle mr-1"></i>
+								Aucune option sélectionnée
+							</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+
+			<!-- Right Column: Insurance Coverage -->
+			<div class="col-md-6">
+				<div class="bg-light rounded p-3 h-100">
+					<h6 class="font-weight-bold mb-3 border-bottom border-gray-200 pb-2">
+						<i class="fas fa-shield-alt mr-2"></i>
+						Couverture Assurance
+					</h6>
+
+					<ul class="list-unstyled mb-0">
+						{% for garantie in reservation.garanties %}
+							<li class="d-flex justify-content-between align-items-center py-2 {% if not loop.last %}border-bottom border-gray-100{% endif %}">
+								<div class="d-flex align-items-center">
+									<span class="bullet-point bg-red-400 mr-2"></span>
+									<span>{{ garantie }}</span>
+								</div>
+								<span class="font-weight-medium">{{ (garantie.prix)|number_format(2,","," ") }}€</span>
+							</li>
+						{% else %}
+							<li class="text-gray-600 py-2 text-center">
+								<i class="fas fa-info-circle mr-1"></i>
+								Aucune garantie sélectionnée
+							</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

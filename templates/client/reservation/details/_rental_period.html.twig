@@ -1,0 +1,117 @@
+<div class="card reservation-card mb-3 shadow-sm">
+	<!-- Rental Period Section -->
+	<div class="card-body p-4">
+		<h5 class="card-title font-weight-bold text-red-800 d-flex align-items-center mb-4">
+			<i class="fas fa-calendar-alt text-red-400 mr-2"></i>
+			Période de Location
+		</h5>
+
+		<div class="row">
+			<!-- Left Column: Departure and Return -->
+			<div class="col-md-6 pr-md-4">
+				<!-- Departure Information -->
+				<div class="mb-4 pb-3 border-bottom border-light">
+					<div class="d-flex align-items-center mb-2">
+						<div class="bg-light rounded-circle p-2 mr-3">
+							<i class="fas fa-plane-departure"></i>
+						</div>
+						<h6 class="font-weight-bold mb-0">Départ</h6>
+					</div>
+					<div class="ml-4 pl-3">
+						<p class="mb-2">
+							<i class="fas fa-calendar-alt mr-2"></i>
+							{% if type == 'devis' %}
+								<span class="font-weight-medium">{{ reservation.dateDepart|date('d/m/Y') }}</span>
+								à
+								<span class="font-weight-medium">{{ reservation.dateDepart|date('H:i') }}</span>
+							{% else %}
+								<span class="font-weight-medium">{{ reservation.dateDebut|date('d/m/Y') }}</span>
+								à
+								<span class="font-weight-medium">{{ reservation.dateDebut|date('H:i') }}</span>
+							{% endif %}
+						</p>
+						<p class="mb-0">
+							<i class="fas fa-map-marker-alt mr-2"></i>
+							<span>{{ reservation.agenceDepart }}</span>
+						</p>
+					</div>
+				</div>
+
+				<!-- Return Information -->
+				<div class="mb-3">
+					<div class="d-flex align-items-center mb-2">
+						<div class="bg-light rounded-circle p-2 mr-3">
+							<i class="fas fa-plane-arrival"></i>
+						</div>
+						<h6 class="font-weight-bold mb-0">Retour</h6>
+					</div>
+					<div class="ml-4 pl-3">
+						<p class="mb-2">
+							<i class="fas fa-calendar-alt mr-2"></i>
+							{% if type == 'devis' %}
+								<span class="font-weight-medium">{{ reservation.dateRetour|date('d/m/Y') }}</span>
+								à
+								<span class="font-weight-medium">{{ reservation.dateRetour|date('H:i') }}</span>
+							{% else %}
+								<span class="font-weight-medium">{{ reservation.dateFin|date('d/m/Y') }}</span>
+								à
+								<span class="font-weight-medium">{{ reservation.dateFin|date('H:i') }}</span>
+							{% endif %}
+						</p>
+						<p class="mb-0">
+							<i class="fas fa-map-marker-alt mr-2"></i>
+							<span>{{ reservation.agenceRetour }}</span>
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<!-- Right Column: Duration and Passengers -->
+			<div class="col-md-6 pl-md-4 mt-4 mt-md-0">
+				<div class="bg-light rounded p-3 h-100">
+					<!-- Duration Information -->
+					<div class="mb-4">
+						<div class="d-flex align-items-center mb-2">
+							<i class="fas fa-clock mr-2"></i>
+							<h6 class="font-weight-bold mb-0">Durée</h6>
+						</div>
+						<p class="ml-4 mb-0 font-weight-medium">
+							{{ reservation.duree }}
+							jours
+						</p>
+					</div>
+
+					<!-- Passenger Information -->
+					<div>
+						<div class="d-flex align-items-center mb-2">
+							<i class="fas fa-users mr-2"></i>
+							<h6 class="font-weight-bold mb-0">Nombre de personnes</h6>
+						</div>
+						<div class="ml-4">
+							<div class="row">
+								<div class="col-6">
+									<p class="mb-1">
+										<i class="fas fa-user text-gray-600 mr-1"></i>
+										<small class="text-gray-600">Adultes:</small>
+									</p>
+									<p class="ml-4 font-weight-medium">
+										{{ reservation.client.infosResa ? reservation.client.infosResa.nbrAdultes : "non renseigné" }}
+									</p>
+								</div>
+								<div class="col-6">
+									<p class="mb-1">
+										<i class="fas fa-child text-gray-600 mr-1"></i>
+										<small class="text-gray-600">Enfants:</small>
+									</p>
+									<p class="ml-4 font-weight-medium">
+										{{ reservation.client.infosResa ? reservation.client.infosResa.nbrEnfants : "non renseigné" }}
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

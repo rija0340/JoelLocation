@@ -1,0 +1,11 @@
+{% if type == 'devis' %}
+<!-- Action Buttons -->
+<div class="d-flex flex-column flex-sm-row justify-content-end mb-4">
+	{% if date(reservation.dateDepart) > date("now") and reservation.transformed == false %}
+		<a href="{{ path('validation_step2', {'id': reservation.id}) }}" class="btn btn-success btn-xs" title="Valider">
+			<i class="fas fa-check mr-1"></i>
+			Valider
+		</a>
+	{% endif %}
+</div>
+{% endif %}

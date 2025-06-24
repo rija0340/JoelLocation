@@ -1,0 +1,54 @@
+<!-- Bootstrap 4 JS and dependencies -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/js/bootstrap.min.js"></script>
+
+<script>
+	// Simple script to handle interactive elements
+	$(document).ready(function () {
+		// Tooltip functionality
+		$('[title]').tooltip();
+
+		// Hover effects for conductor cards
+		$('.conductor-card').hover(function () {
+			$(this).addClass('shadow-sm');
+		}, function () {
+			$(this).removeClass('shadow-sm');
+		});
+
+		// Confirmation for delete actions
+		$('form[onsubmit*="confirm"]').on('submit', function (e) {
+			if (!confirm('Êtes-vous sûre de vouloir supprimer ce conducteur ?')) {
+				e.preventDefault();
+				return false;
+			}
+		});
+
+		// Print functionality
+		$('.btn:contains("Imprimer")').on('click', function () {
+			window.print();
+		});
+	});
+</script>
+
+{% if type != 'devis' %}
+<!-- Datatables (if needed for other functionality) -->
+<script src="../../admin/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="../../admin/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="../../admin/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+<script src="../../admin/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+<script src="../../admin/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+<script src="../../admin/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+<script src="../../admin/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+<script src="../../admin/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+<script src="../../admin/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+<script src="../../admin/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="../../admin/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script src="../../admin/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+<script src="../../admin/vendors/jszip/dist/jszip.min.js"></script>
+<script src="../../admin/vendors/pdfmake/build/pdfmake.min.js"></script>
+<script src="../../admin/vendors/pdfmake/build/vfs_fonts.js"></script>
+<script src="../../js/admin/jspdf.min.js"></script>
+<script src="../../js/admin/jspdf.plugin.autotable.js"></script>
+<script src="../../js/admin/factureJsPDF.js"></script>
+{% endif %}
