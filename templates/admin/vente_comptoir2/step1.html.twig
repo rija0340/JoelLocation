@@ -138,24 +138,39 @@
 const dateDepartInput = document.getElementById("reservation_step1_dateDepart");
 const dateRetourInput = document.getElementById("reservation_step1_dateRetour");
 
-// Only apply defaultDate: now if input has no value
+// Fonction utilitaire pour ajouter un jour
+function addOneDay(date) {
+const result = new Date(date.getTime());
+result.setDate(result.getDate() + 1);
+return result;
+}
+
+// Initialisation du startPicker
 const startPicker = flatpickr(dateDepartInput, {
 locale: 'fr',
 enableTime: true,
 minDate: now,
-defaultDate: dateDepartInput.value ? dateDepartInput.value : now,
+defaultDate: dateDepartInput.value ? new Date(dateDepartInput.value) : now,
 dateFormat: "d/m/Y H:i",
-onChange: function (selectedDates, dateStr) {
-endPicker.set('minDate', selectedDates[0]);
-endPicker.setDate(selectedDates[0]);
+onChange: function (selectedDates) {
+const startDate = selectedDates[0];
+const endDate = addOneDay(startDate);
+
+endPicker.set('minDate', startDate);
+endPicker.setDate(endDate);
 }
 });
 
+// Déterminer la date de départ initiale
+const initialStartDate = startPicker.selectedDates[0] || now;
+const initialEndDate = addOneDay(initialStartDate);
+
+// Initialisation du endPicker
 const endPicker = flatpickr(dateRetourInput, {
 locale: 'fr',
 enableTime: true,
-minDate: now,
-defaultDate: dateRetourInput.value ? dateRetourInput.value : now,
+minDate: initialStartDate,
+defaultDate: dateRetourInput.value ? new Date(dateRetourInput.value) : initialEndDate,
 dateFormat: "d/m/Y H:i"
 });
 	</script>
