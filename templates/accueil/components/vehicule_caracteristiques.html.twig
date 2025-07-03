@@ -1,0 +1,14 @@
+{# Composant pour les caractéristiques de véhicule #}
+<div>
+    <h4>{{ title|default('Caractéristiques') }}</h4>
+</div>
+<div class="caracteristiques">
+    <ul>
+        {% for caracteristique in caracteristiques %}
+            <li>
+                <i class="{{ caracteristique.icon }}" aria-hidden="true"></i>
+                {{ caracteristique.text }}
+            </li>
+        {% endfor %}
+    </ul>
+</div>

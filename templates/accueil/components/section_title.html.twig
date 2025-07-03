@@ -1,0 +1,7 @@
+{# Composant pour les titres de section #}
+<div class="section-title {{ color_class|default('') }}">
+    <h1>{{ title }}</h1>
+    {% if subtitle is defined %}
+        <p>{{ subtitle }}</p>
+    {% endif %}
+</div>

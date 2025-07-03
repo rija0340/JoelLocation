@@ -1,0 +1,11 @@
+{# Composant pour les conditions de location #}
+<div>
+    <h4>{{ title|default('Conditions de location') }}</h4>
+</div>
+<div class="conditions">
+    <ul>
+        {% for condition in conditions %}
+            <li>{{ condition }}</li>
+        {% endfor %}
+    </ul>
+</div>

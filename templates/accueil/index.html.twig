@@ -69,7 +69,7 @@
 					<div class="texte_roulez d-flex align-items-center">
 						<div class="about-content roulez">
 							<p>Roulez en voiture de location en Guadeloupe en toute tranquillité à des prix
-																																																																                                imbattables.</p>
+																																																																								                                imbattables.</p>
 						</div>
 					</div>
 
@@ -83,10 +83,11 @@
 	<section>
 		<div class="service-area sp bg1 aproposdenous">
 			<div class="container">
-				<div class="section-title white">
-					<h1>A propos de nous</h1>
-					<p>Les services apportés à nos clients sont notre priorité. Votre satisfaction compte.</p>
-				</div>
+				{% include 'accueil/components/section_title.html.twig' with {
+					'title': 'A propos de nous',
+					'subtitle': 'Les services apportés à nos clients sont notre priorité. Votre satisfaction compte.',
+					'color_class': 'white'
+				} %}
 				<div class="row">
 					<div class="col-lg-6 col-md-12 col-sm-12 single-service bordered  d-flex justify-content-center">
 						<div class="d-flex align-items-center">
@@ -96,7 +97,7 @@
 								</div>
 								<div class=" content ">
 									<p class="m-0">Joel Location est une société de location de voitures en Guadeloupe.
-																																																																																                                        Notre oﬀre :
+																																																																																										                                        Notre oﬀre :
 									</p>
 									<div class="quisommesnous_ul">
 										<ul>

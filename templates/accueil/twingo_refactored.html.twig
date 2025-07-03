@@ -1,0 +1,27 @@
+{% extends 'accueil/layouts/vehicule_detail.html.twig' %}
+
+{% set vehicule_data = {
+    'marque': 'renault',
+    'modele': 'twingo',
+    'titre': 'Renault Twingo',
+    'image': 'images/TWINGO BLANC.png',
+    'description': [
+        'Découvrir les villes de la Guadeloupe n\'a jamais été aussi simple avec Renault Twingo. C\'est aussi une voiture à faible consommation de carburant qui peut vous emmener où vous voulez confortablement.',
+        'Cette petite voiture de fitness est proposée dans une gamme de prix pratique et abordable. Le fait de pouvoir facilement la garer n\'importe où dans la ville est un énorme bonus.'
+    ],
+    'conditions': [
+        'Kilométrage illimité',
+        'Âge minimum : 21 ans',
+        'Plus de 2 ans de permis de conduire',
+        'Possibilité de régler en plusieurs fois',
+        'Caution : 700 €'
+    ],
+    'caracteristiques': [
+        {'icon': 'fa fa-battery-full', 'text': 'Carburant : Essence'},
+        {'icon': 'fa fa-sun-o', 'text': 'Boite de vitesse : Manuelle'},
+        {'icon': 'fa fa-shopping-bag', 'text': 'Nombre de bagages : 1'},
+        {'icon': 'fa fa-car', 'text': 'Nombre de portes : 5'},
+        {'icon': 'fa fa-users', 'text': 'Max passagers: 4'},
+        {'icon': 'fa fa-rss', 'text': 'Atouts : autoradio, climatisation, fermeture centralisée'}
+    ]
+} %}

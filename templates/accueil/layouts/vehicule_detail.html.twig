@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ vehicule_data.marque|lower }}
+	{{ vehicule_data.modele|lower }}
+{% endblock %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{ asset('css/details_vehicules.css') }}">
+{% endblock %}
+
+{% block body %}
+	<div class="container">
+		{% include 'accueil/components/section_title.html.twig' with {
+        'title': vehicule_data.titre,
+        'color_class': 'red'
+    } %}
+
+		<div class="mb-3 {% if vehicule_data.modele|lower == 'twingo' %}testimonial-area{% endif %} d-flex">
+			<div class="{% if vehicule_data.modele|lower == 'twingo' %}image_voiture_twingo{% else %}image_voiture{% endif %}">
+				<img src="{{ vehicule_data.image }}" alt="{{ vehicule_data.titre }}">
+			</div>
+
+			<div class="texte">
+				{% if vehicule_data.description is iterable %}
+					{% for paragraph in vehicule_data.description %}
+						<p class="text-justify">{{ paragraph }}</p>
+					{% endfor %}
+				{% else %}
+					<p class="text-justify">{{ vehicule_data.description }}</p>
+				{% endif %}
+
+				{% include 'accueil/components/vehicule_conditions.html.twig' with {
+                'title': 'Conditions de location ' ~ vehicule_data.titre,
+                'conditions': vehicule_data.conditions
+            } %}
+
+				{% include 'accueil/components/vehicule_caracteristiques.html.twig' with {
+                'title': 'Caractéristiques de ' ~ vehicule_data.titre,
+                'caracteristiques': vehicule_data.caracteristiques
+            } %}
+			</div>
+		</div>
+
+		{% include 'accueil/components/cta_button.html.twig' with {
+        'url': path('formulaire-contact'),
+        'text': 'Demander un devis'
+    } %}
+	</div>
+{% endblock %}

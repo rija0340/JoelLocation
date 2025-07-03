@@ -31,10 +31,22 @@ body {
     border-color: #af0000 !important;
 }
 
-.c3, #menu ul ul li a:hover, .single-service.bordered .inner:hover .icon, .bordered.single-service-2 .inner:hover .icon, .bordered.single-service-3 .inner:hover .icon,
+.c3,
+#menu ul ul li a:hover,
+.single-service.bordered .inner:hover .icon,
+.bordered.single-service-2 .inner:hover .icon,
+.bordered.single-service-3 .inner:hover .icon,
 .single-service.bordered .inner:hover h4,
 .bordered.single-service-2 .inner:hover h4,
-.bordered.single-service-3 .inner:hover h4, .single-service-3 .inner:hover .title .icon, .isotope-menu li.active, .isotope-menu li:hover, .single-portfolio .inner .portfolio-img .hover-content .button, .single-portfolio .inner .portfolio-content h3:hover, .single-pricing .inner a.button:hover, .single-pricing-2 .inner a.button:hover, .single-pricing-2.active .inner a.button {
+.bordered.single-service-3 .inner:hover h4,
+.single-service-3 .inner:hover .title .icon,
+.isotope-menu li.active,
+.isotope-menu li:hover,
+.single-portfolio .inner .portfolio-img .hover-content .button,
+.single-portfolio .inner .portfolio-content h3:hover,
+.single-pricing .inner a.button:hover,
+.single-pricing-2 .inner a.button:hover,
+.single-pricing-2.active .inner a.button {
     color: #af0000;
 }
 
@@ -50,11 +62,31 @@ body {
     background-color: #f3f6fa;
 }
 
-.c3-bg, .bg1, .button, .hero-slider .owl-dots .owl-dot.active, .single-service-2:hover .inner, .faq .single-item.active, .single-faq h2 span, .footer_widget .nw_form button, .tabs-area .tabs-nav li a.active, .single-team .inner .team-img::after, .single-pricing.active .inner, .active.single-pricing-2 .inner, .single-pricing-2.active .inner .title .price {
+.c3-bg,
+.bg1,
+.button,
+.hero-slider .owl-dots .owl-dot.active,
+.single-service-2:hover .inner,
+.faq .single-item.active,
+.single-faq h2 span,
+.footer_widget .nw_form button,
+.tabs-area .tabs-nav li a.active,
+.single-team .inner .team-img::after,
+.single-pricing.active .inner,
+.active.single-pricing-2 .inner,
+.single-pricing-2.active .inner .title .price {
     background-color: #af0000;
 }
 
-.c3-bo, .button, .single-service.bordered .inner:hover, .bordered.single-service-2 .inner:hover, .bordered.single-service-3 .inner:hover, .testimonial-slider .single-slide, .tabs-area .tabs-nav li a::after, .tabs-area .tabs-nav li a.active, .contact-form input:not([type="submit"]):focus,
+.c3-bo,
+.button,
+.single-service.bordered .inner:hover,
+.bordered.single-service-2 .inner:hover,
+.bordered.single-service-3 .inner:hover,
+.testimonial-slider .single-slide,
+.tabs-area .tabs-nav li a::after,
+.tabs-area .tabs-nav li a.active,
+.contact-form input:not([type="submit"]):focus,
 .contact-form textarea:focus {
     border-color: #af0000 !important;
 }
@@ -95,9 +127,9 @@ body {
     background-color: #af0000;
 }
 
-footer {
+/* footer {
     margin-top: 20px;
-}
+} */
 
 /* utilités */
 
@@ -122,30 +154,19 @@ footer {
 /*media query pour responsive design*/
 
 /*extra large device*/
-@media (min-width: 1200px) {
-
-
-}
+@media (min-width: 1200px) {}
 
 
 /* larges devices */
 
-@media (min-width: 992px)and (max-width: 1199.98px) {
-
-}
+@media (min-width: 992px)and (max-width: 1199.98px) {}
 
 /*  medium device(tablets) */
-@media (min-width: 768px) and (max-width: 991.98px) {
-
-
-}
+@media (min-width: 768px) and (max-width: 991.98px) {}
 
 
 /* small device */
-@media (min-width: 576px) and (max-width: 767.98px) {
-
-
-}
+@media (min-width: 576px) and (max-width: 767.98px) {}
 
 /*extra small device */
 @media (max-width: 575.98px) {
@@ -218,6 +239,3 @@ footer {
 
 
 }
-
-
-

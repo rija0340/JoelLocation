@@ -1,0 +1,37 @@
+{# Composant pour la section "À propos de nous" #}
+<div class="row">
+    <div class="col-lg-6 col-md-12 col-sm-12 single-service bordered d-flex justify-content-center">
+        <div class="d-flex align-items-center">
+            <div class="inner p-4">
+                <div class="text-center">
+                    <h4>{{ title|default('Qui sommes-nous ?') }}</h4>
+                </div>
+                <div class="content">
+                    <p class="m-0">{{ description }}</p>
+                    {% if features is defined %}
+                        <div class="quisommesnous_ul">
+                            <ul>
+                                {% for feature in features %}
+                                    <li>{{ feature }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-6 col-md-12 col-sm-12 d-flex justify-content-center">
+        <div class="d-flex align-items-center">
+            <div class="pt-3">
+                {% if video_src is defined %}
+                    <video width="475" height="" controls autoplay loop id="video3d">
+                        <source src="{{ video_src }}" type="video/mp4">
+                        Your browser does not support HTML video.
+                    </video>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
