@@ -5,8 +5,9 @@
 	{{ vehicule.modele }}
 {% endblock %}
 {% block stylesheets %}
-	<link rel="stylesheet" href="css/vehicules.css">
 	<link rel="stylesheet" href="css/details_vehicules.css">
+	<link rel="stylesheet" href="{{asset('vitrine/css/mentionlegales.css')}}">
+
 {% endblock %}
 
 {% block body %}
@@ -103,7 +104,7 @@
 			</div>
 
 		</div>
-		<div class="d-flex justify-content-center">
+		<div class="d-flex justify-content-center mb-5">
 			<div>
 				<a href="{{ path('formulaire-contact') }}" class="button">Demander un devis</a>
 			</div>

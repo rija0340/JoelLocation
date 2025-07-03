@@ -1,73 +1,75 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}mention legal{% endblock %}
-	{% block stylesheets %}
-		<link rel="stylesheet" href="css/mentionlegales.css">
-	{% endblock %}
+{% block title %}mention legal
+{% endblock %}
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{asset('vitrine/css/mentionlegales.css')}}">
+{% endblock %}
 
-	{% block body %}
-		<div class="container">
+{% block body %}
+	<div
+		class="container">
 		{# 	<h3 align="center">MENTION LEGAL</h3>
+		
+					<p>JOEL LOCATION<br>
+						94 CHEMIN DE LA HACHE,97160 LE MOULE<br>
+						0690 73 76 74 /  07 67 32 14 47 <br>
+						JOEL@JOELLOCATION.COM<br>
+						SASU AU CAPTAL DE 1000€<br>
+						GERANT  JOEL MANDRET<br>
+						SIRET 87868990000016  RCS  POINTRE A PITRE<br>
+						N° INTRACOMMUNAUTAIRE  FR40878689900</p>
+						#}
 
-			<p>JOEL LOCATION<br>
-				94 CHEMIN DE LA HACHE,97160 LE MOULE<br>
-				0690 73 76 74 /  07 67 32 14 47 <br>
-				JOEL@JOELLOCATION.COM<br>
-				SASU AU CAPTAL DE 1000€<br>
-				GERANT  JOEL MANDRET<br>
-				SIRET 87868990000016  RCS  POINTRE A PITRE<br>
-				N° INTRACOMMUNAUTAIRE  FR40878689900</p>
-				#}
-
-				<div class="section-title red">
-					<h2>Les mentions légales</h2>
-				</div>
+		<div class="section-title red">
+			<h2>Les mentions légales</h2>
+		</div>
 
 
-				<p>
-					L'édition du site www.joellocation.com est assurée par la Société sasu
-					<span style="font-weight:bold;">Joel Location</span>
-					au capital de 1000 euros, immatriculée au RCS de Pointe-à-Pitre sous le numéro 87868990000016, dont le siège social est situé au :
-				</p>
-				<div class="text-center">
-					<p>
-						94 chemin de la hache
-					</p>
-					<p>
-						97160 Le Moule
-					</p>
-				</div>
-				<p>
-					Numéro de téléphone : 07 67 32 14 47
-				</p>
-				<p>
-					Courriel : joel@joellocation.com.
-				</p>
-				<p>
-					Le Directeur de la publication est : Mr Joel Mandret
-				</p>
-				<p>
-					Numéro de TVA intracommunautaire : FR40878689900
-				</p>
-				<p>
-					L'hébergeur du site www.joellocation.com est la société Planethoster, dont le siège social est situé au:
-				</p>
-				<div class="text-center">
+		<p>
+			L'édition du site www.joellocation.com est assurée par la Société sasu
+			<span style="font-weight:bold;">Joel Location</span>
+			au capital de 1000 euros, immatriculée au RCS de Pointe-à-Pitre sous le numéro 87868990000016, dont le siège social est situé au :
+		</p>
+		<div class="text-center">
+			<p>
+				94 chemin de la hache
+			</p>
+			<p>
+				97160 Le Moule
+			</p>
+		</div>
+		<p>
+			Numéro de téléphone : 07 67 32 14 47
+		</p>
+		<p>
+			Courriel : joel@joellocation.com.
+		</p>
+		<p>
+			Le Directeur de la publication est : Mr Joel Mandret
+		</p>
+		<p>
+			Numéro de TVA intracommunautaire : FR40878689900
+		</p>
+		<p>
+			L'hébergeur du site www.joellocation.com est la société Planethoster, dont le siège social est situé au:
+		</p>
+		<div class="text-center">
 
-					<p>
-						4416 Louis-B.-Mayer
-					</p>
-					<p>
-						Laval, Québec
-					</p>
-					<p>
-						Canada H7P0G1
-					</p>
-				</div>
-				<p>
-					avec le numéro de téléphone : 08 05 08 04 26 (appel gratuit depuis un poste fixe) ou +33 1 76 60 41 43.
-				</p>
-				<p></p>
-			</div> 
+			<p>
+				4416 Louis-B.-Mayer
+			</p>
+			<p>
+				Laval, Québec
+			</p>
+			<p>
+				Canada H7P0G1
+			</p>
+		</div>
+		<p>
+			avec le numéro de téléphone : 08 05 08 04 26 (appel gratuit depuis un poste fixe) ou +33 1 76 60 41 43.
+		</p>
+		<p></p>
+	</div>
 
-		{% endblock %}
+{% endblock %}

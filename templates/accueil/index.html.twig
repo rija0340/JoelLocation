@@ -7,7 +7,7 @@
 
 {% block stylesheets %}
 	<link rel="stylesheet" href="css/material/material-kit.css?v=2.0.7">
-	<link rel="stylesheet" href="css/style_index.css">
+	<link rel="stylesheet" href="{{ asset('vitrine/css/style_index.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -69,7 +69,7 @@
 					<div class="texte_roulez d-flex align-items-center">
 						<div class="about-content roulez">
 							<p>Roulez en voiture de location en Guadeloupe en toute tranquillité à des prix
-																																																																								                                imbattables.</p>
+																																																																																																																								                                imbattables.</p>
 						</div>
 					</div>
 
@@ -97,7 +97,7 @@
 								</div>
 								<div class=" content ">
 									<p class="m-0">Joel Location est une société de location de voitures en Guadeloupe.
-																																																																																										                                        Notre oﬀre :
+																																																																																																																																																						                                        Notre oﬀre :
 									</p>
 									<div class="quisommesnous_ul">
 										<ul>
@@ -119,9 +119,11 @@
 					<div class="col-lg-6 col-md-12 col-sm-12 d-flex justify-content-center  ">
 						<div class="d-flex align-items-center ">
 							<div class="pt-3">
-								<video width="475" height="" controls autoplay loop id="video3d">
+								<video
+									width="475" height="" controls autoplay loop id="video3d">
+									{# replace the source by using assets #}
 									<source
-									src="../../videos/voiture 3d JOELLOCATION 2.0.mp4" type="video/mp4">
+									src="{{ asset('vitrine/videos/voiture 3d JOELLOCATION 2.0.mp4') }}" type="video/mp4">
 									{# <source src="../../videos/voiture 3d JOELLOCATION 2.0.mp4" type="video/ogg"> #}
 									Your browser does not support HTML video.
 								</video>
