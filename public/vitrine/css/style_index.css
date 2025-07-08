@@ -1,3 +1,8 @@
+.container .logo-column span {
+	font-family: "Sofia", sans-serif;
+
+}
+
 /*nos véhicules*/
 
 .single-portfolio .inner .portfolio-img:hover .hover-content {
