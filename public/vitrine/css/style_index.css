@@ -7,7 +7,7 @@
 
 .single-portfolio .inner .portfolio-img:hover .hover-content {
 	opacity: 1;
-	background-color: #11ffee00;
+	/* background-color: #11ffee00; */
 	visibility: visible;
 	/* border: 1px solid black; */
 

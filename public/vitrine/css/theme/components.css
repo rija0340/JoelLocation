@@ -94,13 +94,13 @@
     margin: 0;
 }
 
-.conditions li,
+/* .conditions li,
 .caracteristiques li {
     padding: var(--spacing-sm) 0;
     border-bottom: 1px solid #eee;
     display: flex;
     align-items: center;
-}
+} */
 
 .conditions li:last-child,
 .caracteristiques li:last-child {
