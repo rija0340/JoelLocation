@@ -1,12 +1,22 @@
-$(function() { // voir configuration daterangepicker
+$(function () { // voir configuration daterangepicker
 
-
+    // Fonction utilitaire pour formater les montants
+    function formatMontant(montant) {
+        return parseFloat(montant).toLocaleString('fr-FR', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
 
     var start = moment().subtract(60, 'days');
     var end = moment();
 
     function cb(start, end) {
         $('#reportrange span').html(start.format('D MMMM YYYY') + ' - ' + end.format('D MMMM YYYY'));
+
+        // Mettre à jour aussi l'affichage des dates dans le titre
+        var dateRange = start.format('D MMMM YYYY') + ' AU ' + end.format('D MMMM YYYY');
+        $('#datesRange').text('DU ' + dateRange);
     }
 
     $('#reportrange').daterangepicker({
@@ -54,15 +64,12 @@ $(function() { // voir configuration daterangepicker
     cb(start, end);
 
     //on load du fenetre, initialisation
-
-    window.onload = function() {
-
-        calculChiffreAffaire(start._d.format('d-m-Y'), end._d.format('d-m-Y'));
-    };
+    // Charger les données immédiatement après l'initialisation du daterangepicker
+    calculChiffreAffaire(start.format('DD-MM-YYYY'), end.format('DD-MM-YYYY'));
 
 
     // fonction après evenement click bouton apply
-    $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
+    $('#reportrange').on('apply.daterangepicker', function (_, picker) {
         var dateDebut = picker.startDate.format('DD-MM-YYYY');
         var dateFin = picker.endDate.format('DD-MM-YYYY');
 
@@ -70,6 +77,9 @@ $(function() { // voir configuration daterangepicker
     });
 
     function calculChiffreAffaire(dateDebut, dateFin) {
+        // Afficher un indicateur de chargement
+        var tbody = document.getElementById('tbody');
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center"><i class="fa fa-spinner fa-spin"></i> Chargement des données...</td></tr>';
 
         $.ajax({
             type: 'GET',
@@ -79,13 +89,8 @@ $(function() { // voir configuration daterangepicker
                 'dateFin': dateFin
             },
             Type: "json",
-            success: function(data) {
-                // affichage des dates dans la page html
-
-                var range = document.getElementById('reportrange').firstElementChild.nextSibling.nextSibling;
-                var spanDates = document.getElementById('datesRange');
-                range = range.innerText.replace('-', 'AU');
-                spanDates.innerText = "DU " + range;
+            success: function (data) {
+                // Les dates sont déjà mises à jour par la fonction cb(), pas besoin de les redéfinir ici
 
                 var tbody = document.getElementById('tbody');
                 var table = document.getElementById('table');
@@ -99,30 +104,29 @@ $(function() { // voir configuration daterangepicker
                 if (data.length > 0) {
                     for (let i = 0; i < data.length; i++) {
                         var tr = document.createElement('tr');
-                        var line =
-                            `
-                    <td>${data[i].vehicule}</td>
-                    <td>${data[i].ca}€</td>
-						<td>${data[i].web}€</td>
-						<td>${data[i].cpt}€</td>
-						<td></td>
-						<td></td>
-						<td></td>
+                        var line = `
+                            <td class="font-weight-bold">${data[i].vehicule}</td>
+                            <td class="text-right">${formatMontant(data[i].ca)} €</td>
+                            <td class="text-right">${formatMontant(data[i].web)} €</td>
+                            <td class="text-right">${formatMontant(data[i].cpt)} €</td>
+                            <td class="text-center">-</td>
+                            <td class="text-center">-</td>
+                            <td class="text-center">-</td>
                         `
                         tr.innerHTML = line;
                         tbody.appendChild(tr);
                     }
                 } else {
                     var tr = document.createElement('tr');
-                    var line = `<td colspan="7">Aucune donnée à afficher</td>`
+                    var line = `<td colspan="7" class="text-center text-muted"><i class="fa fa-info-circle"></i> Aucune donnée à afficher pour cette période</td>`
                     tr.innerHTML = line;
-                    tr.classList.add('text-center');
                     tbody.appendChild(tr);
                 }
             },
-            error: function(erreur) {
-                // alert('La requête n\'a pas abouti' + erreur);
-                console.log(erreur.responseText);
+            error: function (erreur) {
+                console.error('Erreur lors du chargement des données:', erreur);
+                var tbody = document.getElementById('tbody');
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center text-danger"><i class="fa fa-exclamation-triangle"></i> Erreur lors du chargement des données</td></tr>';
             }
         });
 

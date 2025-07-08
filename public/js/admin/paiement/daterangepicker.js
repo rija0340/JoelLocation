@@ -1,64 +1,80 @@
 $(function () { // voir configuration daterangepicker
+
+    // Fonction utilitaire pour formater les montants
+    function formatMontant(montant) {
+        if (!montant || isNaN(montant)) return '0,00 €';
+        return parseFloat(montant).toLocaleString('fr-FR', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }) + ' €';
+    }
+
     var start = moment().subtract(60, 'days');
     var end = moment();
 
     function cb(start, end) {
         $('#reportrange span').html(start.format('D MMMM YYYY') + ' - ' + end.format('D MMMM YYYY'));
+
+        // Mettre à jour aussi l'affichage des dates dans le titre
+        $('.dateDebut').removeClass('loading-text').html(start.format('DD/MM/YYYY'));
+        $('.dateFin').removeClass('loading-text').html(end.format('DD/MM/YYYY'));
     }
 
     $('#reportrange').daterangepicker({
-        // changement de langue d'affichage des lables
-
+        // Configuration de la langue française
         "locale": {
-            "customRangeLabel": "Personnalisé",
+            "format": "DD/MM/YYYY",
+            "separator": " - ",
             "applyLabel": "Appliquer",
-            "cancelLabel": "Annuler"
+            "cancelLabel": "Annuler",
+            "fromLabel": "De",
+            "toLabel": "À",
+            "customRangeLabel": "Personnalisé",
+            "weekLabel": "S",
+            "daysOfWeek": ["Di", "Lu", "Ma", "Me", "Je", "Ve", "Sa"],
+            "monthNames": ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
+                "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"],
+            "firstDay": 1
         },
-        applyButtonClasses: 'btn-danger',
-        cancelButtonClasses: 'btn-dark',
+
+        // Styles des boutons
+        applyButtonClasses: 'btn-primary',
+        cancelButtonClasses: 'btn-secondary',
+
+        // Configuration des dates
         startDate: start,
         endDate: end,
+        maxDate: moment(),
         showDropdowns: true,
-        // esoria le oe 1 mois fona ny intervalle
+        showWeekNumbers: true,
+        showISOWeekNumbers: false,
         linkedCalendars: false,
+        autoUpdateInput: true,
+        alwaysShowCalendars: true,
 
+        // Plages prédéfinies
         ranges: {
-            "Aujourd'hui": [
-                moment(), moment()
-            ],
-            'Hier': [
-                moment().subtract(1, 'days'),
-                moment().subtract(1, 'days')
-            ],
-            'Les 7 derniers jours': [
-                moment().subtract(6, 'days'),
-                moment()
-            ],
-            'Les 30 derniers jours': [
-                moment().subtract(29, 'days'),
-                moment()
-            ],
-            'Ce mois': [
-                moment().startOf('month'), moment().endOf('month')
-            ],
-            'Le mois dernier': [
-                moment().subtract(1, 'month').startOf('month'),
-                moment().subtract(1, 'month').endOf('month')
-            ]
+            "Aujourd'hui": [moment(), moment()],
+            'Hier': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Cette semaine': [moment().startOf('week'), moment().endOf('week')],
+            'Semaine dernière': [moment().subtract(1, 'week').startOf('week'), moment().subtract(1, 'week').endOf('week')],
+            'Les 7 derniers jours': [moment().subtract(6, 'days'), moment()],
+            'Les 30 derniers jours': [moment().subtract(29, 'days'), moment()],
+            'Ce mois': [moment().startOf('month'), moment().endOf('month')],
+            'Le mois dernier': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+            'Ce trimestre': [moment().startOf('quarter'), moment().endOf('quarter')],
+            'Cette année': [moment().startOf('year'), moment().endOf('year')]
         }
     }, cb);
 
     cb(start, end);
 
     //on load du fenetre, initialisation
-
-    window.onload = function () {
-
-        calculChiffreAffaire(start._d.format('d-m-Y'), end._d.format('d-m-Y'));
-    };
+    // Charger les données immédiatement après l'initialisation du daterangepicker
+    calculChiffreAffaire(start.format('DD-MM-YYYY'), end.format('DD-MM-YYYY'));
 
     // fonction après evenement click bouton apply
-    $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
+    $('#reportrange').on('apply.daterangepicker', function (_, picker) {
         var dateDebut = picker.startDate.format('DD-MM-YYYY');
         var dateFin = picker.endDate.format('DD-MM-YYYY');
 
@@ -84,8 +100,10 @@ $(function () { // voir configuration daterangepicker
                 $('body').loadingModal('destroy');
             },
             error: function (erreur) {
-                // alert('La requête n\'a pas abouti' + erreur);
-                console.log(erreur.responseText);
+                console.error('Erreur lors du chargement des paiements:', erreur);
+                $('body').loadingModal('destroy');
+                // Afficher un message d'erreur à l'utilisateur
+                alert('Erreur lors du chargement des données. Veuillez réessayer.');
             }
         });
 
@@ -111,15 +129,34 @@ $(function () { // voir configuration daterangepicker
                 // ],
                 "data": data,
                 "columns": [
-                    { "data": "reservation" },
-                    { "data": "client" },
-                    { "data": "montant" },
-                    { "data": "type" },
-                    { "data": "date" },
+                    {
+                        "data": "reservation",
+                        "className": "font-weight-bold"
+                    },
+                    {
+                        "data": "client",
+                        "className": "text-nowrap"
+                    },
+                    {
+                        "data": "montant",
+                        "className": "text-right font-weight-bold",
+                        render: function (data) {
+                            return formatMontant(data);
+                        }
+                    },
+                    {
+                        "data": "type",
+                        "className": "text-center"
+                    },
+                    {
+                        "data": "date",
+                        "className": "text-center"
+                    },
                     {
                         "data": "reservationID",
-                        render: function (data, type, row, val) {
-                            return '<a href="(https://joellocation.com/backoffice/reservation/details/' + row.reservationID + '">  <i class=" fa fa-info-circle text-danger" style="font-size: 2em !important; "></i> </a>';
+                        "className": "text-center",
+                        render: function (_, __, row) {
+                            return '<a href="/backoffice/reservation/details/' + row.reservationID + '" title="Voir les détails de la réservation" class="btn btn-sm btn-outline-primary"><i class="fa fa-info-circle"></i></a>';
                         }
                     },
                 ],
@@ -358,15 +395,34 @@ $(function () { // voir configuration daterangepicker
                 //     'csv', 'excel', 'pdf'
                 // ],
                 "columns": [
-                    { "data": "reservation" },
-                    { "data": "client" },
-                    { "data": "montant" },
-                    { "data": "type" },
-                    { "data": "date" },
+                    {
+                        "data": "reservation",
+                        "className": "font-weight-bold"
+                    },
+                    {
+                        "data": "client",
+                        "className": "text-nowrap"
+                    },
+                    {
+                        "data": "montant",
+                        "className": "text-right font-weight-bold",
+                        render: function (data) {
+                            return formatMontant(data);
+                        }
+                    },
+                    {
+                        "data": "type",
+                        "className": "text-center"
+                    },
+                    {
+                        "data": "date",
+                        "className": "text-center"
+                    },
                     {
                         "data": "reservationID",
-                        render: function (data, type, row, val) {
-                            return '<a href="http://localhost:8000/backoffice/reservation/details/' + row.reservationID + '">  <i class=" fa fa-info-circle text-danger" style="font-size: 2em !important; "></i> </a>';
+                        "className": "text-center",
+                        render: function (_, __, row) {
+                            return '<a href="/backoffice/reservation/details/' + row.reservationID + '" title="Voir les détails de la réservation" class="btn btn-sm btn-outline-primary"><i class="fa fa-info-circle"></i></a>';
                         }
                     },
                     //     { "data": null, "defaultContent": `<a href="http://localhost:8000/backoffice/reservation/details/${data.reservationID}">
