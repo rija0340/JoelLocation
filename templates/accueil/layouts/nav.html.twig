@@ -3,7 +3,7 @@
 		<a href="{{ path('accueil') }}" class="logo">
 			<img src="images/Joel-Location-new.png" alt="JOEL LOCATION">
 		</a>
-		<span style="font-family:'Monotype corsiva'; font-size:20px;">Sa Ka Woulé</span>
+		<span style="font-family:'Monotype corsiva'; font-size:20px;color:#212529">Sa Ka Woulé</span>
 		{# <span>Sa Ka Woulé</span> #}
 	</div>
 	<div class="nav-column">
@@ -19,12 +19,12 @@
 					<a href="{{ path('nosvehicules') }}">Nos véhicules</a>
 				</li>
 				{# <li class="{% if app.request.attributes.get('_route') starts with 'app_login' %}current-menu-item{% endif %}">
-																					{% if is_granted("ROLE_CLIENT") %}
-																						<a href="{{ path('espaceClient_index') }}">Mon compte</a>
-																					{% else %}
-																						<a href="{{ path('admin_index') }}">Mon compte</a>
-																					{% endif %}
-																				</li> #}
+																													{% if is_granted("ROLE_CLIENT") %}
+																														<a href="{{ path('espaceClient_index') }}">Mon compte</a>
+																													{% else %}
+																														<a href="{{ path('admin_index') }}">Mon compte</a>
+																													{% endif %}
+																												</li> #}
 				<li class="{% if app.request.attributes.get('_route') starts with 'formulaire-contact' %}current-menu-item{% endif %}">
 					<a href="{{ path('formulaire-contact') }}">Contact</a>
 				</li>

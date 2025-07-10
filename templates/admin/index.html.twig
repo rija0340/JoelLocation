@@ -6,8 +6,9 @@
 {% block stylesheets %}
 
 	<link href="../../css/admin/owl.carousel.css" rel="stylesheet">
-	<link href="../../css/admin/accueil.css" rel="stylesheet">
-	<link href="{{asset('css/admin/flashy.css')}}" rel="stylesheet">
+	<link
+	href="../../css/admin/accueil.css" rel="stylesheet">
+	{# <link href="{{asset('css/admin/flashy.css')}}" rel="stylesheet"> #}
 	<link href="{{asset('css/admin/easypiechart.css')}}" rel="stylesheet">
 
 {% endblock %}
@@ -509,7 +510,6 @@
 {% block javascripts %}<!-- easy-pie-chart --><script src="../../plugins/jquery/jquery.min.js"></script>
 	<script src="../../admin/build/js/jquery.easypiechart.min.js"></script>
 	<script src="../../admin/vendors/jquery.easy-pie-chart/src/easypiechart2.js"></script>
-	<script src="{{asset('/js/admin/flashy.js')}}"></script>
 
 	<script>
 		$(function () {
@@ -536,5 +536,5 @@ $(this.el).find('.percent').text(Math.round(percent));
 	</script>
 	<script src="../../js/admin/owl.carousel.min.js"></script>
 	<script src="../../js/admin/accueil.js"></script>
-	<script src="../../chartjs/js/chart.js"></script>
+	{# // <script src="../../chartjs/js/chart.js"></script> #}
 {% endblock %}
