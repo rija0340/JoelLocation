@@ -6,9 +6,8 @@
 {% block stylesheets %}
 
 	<link href="../../css/admin/owl.carousel.css" rel="stylesheet">
-	<link
-	href="../../css/admin/accueil.css" rel="stylesheet">
-	{# <link href="{{asset('css/admin/flashy.css')}}" rel="stylesheet"> #}
+	<link href="../../css/admin/accueil.css" rel="stylesheet">
+	<link href="{{asset('/shared/css/flashy.css')}}" rel="stylesheet">
 	<link href="{{asset('css/admin/easypiechart.css')}}" rel="stylesheet">
 
 {% endblock %}
@@ -510,7 +509,7 @@
 {% block javascripts %}<!-- easy-pie-chart --><script src="../../plugins/jquery/jquery.min.js"></script>
 	<script src="../../admin/build/js/jquery.easypiechart.min.js"></script>
 	<script src="../../admin/vendors/jquery.easy-pie-chart/src/easypiechart2.js"></script>
-
+	<script src="{{asset('shared/js/flashy.js')}}"></script>
 	<script>
 		$(function () {
 $('.chart').easyPieChart({
