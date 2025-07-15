@@ -101,6 +101,22 @@ class SymfonyMailer
         );
     }
 
+    public function sendPaiementConfirmation(string $to, string $name, string $reference, float $montant, string $vehicule, \DateTime $dateDebut, \DateTime $dateFin)
+    {
+        $this->context['name'] = $name;
+        $this->context['reference'] = $reference;
+        $this->context['montant'] = number_format($montant, 2, ',', ' ') . ' €';
+        $this->context['vehicule'] = $vehicule;
+        $this->context['dateDebut'] = $dateDebut->format('d/m/Y H:i');
+        $this->context['dateFin'] = $dateFin->format('d/m/Y H:i');
+
+        $email = $this->createBaseEmailAndSend(
+            $to,
+            "Confirmation de votre paiement",
+            'admin/templates_email/confirmation_paiement.html.twig'
+        );
+    }
+
     private function generateValidationUrl(string $token): string
     {
         $request = $this->requestStack->getCurrentRequest();

@@ -151,4 +151,62 @@ class PaymentController extends AbstractController
             "reservation" => $reservation,
         ]);
     }
+
+    /**
+     * @Route("/debug-payment-flow", name="debug_payment_flow", methods={"GET"})
+     */
+    public function debugPaymentFlow(): Response
+    {
+        // Mock a devis to use for testing
+        $devis = $this->devisRepo->findOneBy([], ['id' => 'DESC']);
+
+        if (!$devis) {
+            return $this->json(['error' => 'No devis found for testing']);
+        }
+
+        // Create mock PayPal response data
+        $mockPaymentData = [
+            'paypalOrderId' => 'TEST_ORDER_' . uniqid(),
+            'transactionId' => 'TEST_TRANSACTION_' . uniqid(),
+            'paymentData' => [
+                'id' => 'TEST_PAYMENT_' . uniqid(),
+                'purchase_units' => [
+                    [
+                        'reference_id' => $devis->getNumero(),
+                        'payments' => [
+                            'captures' => [
+                                [
+                                    'amount' => [
+                                        'value' => $devis->getPrix()
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        // Create and dispatch the payment success event
+        $paymentSuccessEvent = new PaymentSuccessEvent($devis, $mockPaymentData);
+        $this->eventDispatcher->dispatch($paymentSuccessEvent, PaymentSuccessEvent::NAME);
+
+        // Get the reservation created by the event
+        $reservation = $paymentSuccessEvent->getReservation();
+
+        if (!$reservation) {
+            return $this->json(['error' => 'Reservation not created']);
+        }
+
+        // Return success with reservation details
+        return $this->json([
+            'success' => true,
+            'reservation' => [
+                'id' => $reservation->getId(),
+                'reference' => $reservation->getReference(),
+                'client' => $reservation->getClient()->getNom(),
+                'vehicule' => $reservation->getVehicule()->getMarque() . ' ' . $reservation->getVehicule()->getModele()
+            ]
+        ]);
+    }
 }

@@ -175,4 +175,35 @@ class SymfonyMailerHelper
         $this->em->persist($email);
         $this->em->flush();
     }
+
+    public function sendPaiementConfirmation(Reservation $reservation, float $montant)
+    {
+        try {
+            $client = $reservation->getClient();
+            $vehicule = $reservation->getVehicule()->getMarque() . " " . $reservation->getVehicule()->getModele();
+
+            $this->symfonyMailer->sendPaiementConfirmation(
+                $client->getMail(),
+                $client->getNom(),
+                $reservation->getReference(),
+                $montant,
+                $vehicule,
+                $reservation->getDateDebut(),
+                $reservation->getDateFin()
+            );
+
+            $this->saveMail($reservation, 'paiement', "success");
+            $this->flashy->success("La confirmation de paiement a été envoyée");
+        } catch (\Exception $e) {
+            $this->flashy->error("La confirmation de paiement n'a pas pu être envoyée");
+            $this->saveMail($reservation, 'paiement', "failed");
+            $this->emailLogger->error(sprintf(
+                'Failed to send payment confirmation - Code: %s, Email: %s, Amount: %s, Error: %s',
+                $reservation->getReference(),
+                $reservation->getClient()->getMail(),
+                $montant,
+                $e->getMessage()
+            ));
+        }
+    }
 }

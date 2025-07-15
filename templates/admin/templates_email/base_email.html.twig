@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Joël Location{% endblock %}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #777;
+        }
+        .details {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .social-links {
+            text-align: center;
+            margin-top: 15px;
+        }
+        .social-links a {
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="{{ email.image('@logo') }}" alt="Joël Location" width="200">
+        </div>
+        
+        {% block content %}{% endblock %}
+        
+        <div class="footer">
+            <p>Joël Location - Location de véhicules en Guadeloupe</p>
+            <p>Téléphone: {{ phone_number1 }} / {{ phone_number2 }}</p>
+            <div class="social-links">
+                <a href="{{ facebook_url }}"><img src="{{ email.image('@facebook-icon') }}" alt="Facebook" width="24"></a>
+                <a href="{{ instagram_url }}"><img src="{{ email.image('@instagram-icon') }}" alt="Instagram" width="24"></a>
+                <a href="{{ youtube_url }}"><img src="{{ email.image('@youtube-icon') }}" alt="YouTube" width="24"></a>
+            </div>
+            <p><a href="{{ website_url }}">{{ website_url }}</a></p>
+        </div>
+    </div>
+</body>
+</html>
