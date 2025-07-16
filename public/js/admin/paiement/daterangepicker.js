@@ -128,6 +128,7 @@ $(function () { // voir configuration daterangepicker
                 //     'csv', 'excel', 'pdf'
                 // ],
                 "data": data,
+                 "order": [[4, "desc"]], 
                 "columns": [
                     {
                         "data": "reservation",
@@ -150,7 +151,19 @@ $(function () { // voir configuration daterangepicker
                     },
                     {
                         "data": "date",
-                        "className": "text-center"
+                        "className": "text-center",
+                        render: function (data, type) {
+                            if (type === 'sort' || type === 'type') {
+                                // Parse the date in DD/MM/YYYY HH:mm format for sorting
+                                var dateParts = data.split(' ');
+                                var date = dateParts[0].split('/');
+                                var time = dateParts[1].split(':');
+                                // Create a Date object (month is 0-based in JavaScript, so subtract 1)
+                                var parsedDate = new Date(date[2], date[1] - 1, date[0], time[0], time[1]);
+                                return parsedDate.getTime(); // Return timestamp for sorting
+                            }
+                            return data; // Return original format for display
+                        }
                     },
                     {
                         "data": "reservationID",
@@ -390,6 +403,7 @@ $(function () { // voir configuration daterangepicker
             table.dataTable().fnDestroy();
             paiementDatatable = table.DataTable({
                 "data": data,
+                 "order": [[4, "desc"]], 
                 // dom: 'Blfrtip',
                 // buttons: [
                 //     'csv', 'excel', 'pdf'
@@ -416,7 +430,19 @@ $(function () { // voir configuration daterangepicker
                     },
                     {
                         "data": "date",
-                        "className": "text-center"
+                        "className": "text-center",
+                        render: function (data, type) {
+                            if (type === 'sort' || type === 'type') {
+                                // Parse the date in DD/MM/YYYY HH:mm format for sorting
+                                var dateParts = data.split(' ');
+                                var date = dateParts[0].split('/');
+                                var time = dateParts[1].split(':');
+                                // Create a Date object (month is 0-based in JavaScript, so subtract 1)
+                                var parsedDate = new Date(date[2], date[1] - 1, date[0], time[0], time[1]);
+                                return parsedDate.getTime(); // Return timestamp for sorting
+                            }
+                            return data; // Return original format for display
+                        }
                     },
                     {
                         "data": "reservationID",
