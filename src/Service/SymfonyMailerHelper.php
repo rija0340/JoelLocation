@@ -206,4 +206,38 @@ class SymfonyMailerHelper
             ));
         }
     }
+    public function sendAppelPaiement(Reservation $reservation)
+{
+    try {
+        $client = $reservation->getClient();
+        $vehicule = $reservation->getVehicule()->getMarque() . " " . $reservation->getVehicule()->getModele();
+
+        $this->symfonyMailer->sendAppelPaiement(
+            $client->getMail(),
+            $client->getNom(),
+            $reservation->getReference(),
+            $reservation->getPrix(),
+            $vehicule,
+            $reservation->getDateDebut(),
+            $reservation->getDateFin(),
+            $reservation->getDateReservation(),
+            $reservation->getPrix(),
+            $reservation->getSommePaiements()
+        );
+
+        $this->saveMail($reservation, 'appel_paiement', "success");
+        $this->flashy->success("L'appel à paiement a été envoyé");
+    } catch (\Exception $e) {
+        $this->flashy->error("L'appel à paiement n'a pas pu être envoyé");
+        $this->saveMail($reservation, 'appel_paiement', "failed");
+        $this->emailLogger->error(sprintf(
+            'Failed to send appel paiement - Code: %s, Email: %s, Amount: %s, Error: %s',
+            $reservation->getReference(),
+            $reservation->getClient()->getMail(),
+            $montant,
+            $e->getMessage()
+        ));
+        throw $e;
+    }
+}
 }

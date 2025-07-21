@@ -26,64 +26,101 @@
 					<div class="card-box table-responsive overflow-auto">
 
 						<table id="datatable" class="table table-striped table-bordered text-center" style="width:100%">
-							<thead class="text-uppercase">
-								<tr>
-									<th>réservation</th>
-									<th>Date de départ</th>
-									<th class="">montant</th>
-									<th>type</th>
-									<th class="">utilisateur</th>
-									<th>date demande</th>
-									<th>clic utilisateur</th>
-									<th>payé</th>
-									<th>date paiement</th>
-									<th>action</th>
-								</tr>
-							</thead>
+						    <thead class="text-uppercase">
+						        <tr>
+						            <th>Réservation</th>
+						            <th>Date de départ</th>
+						            <th>Montant total</th>
+						            <th>Montant payé</th>
+						            <th>Reste à payer</th>
+						            <th>Date demande</th>
+						            <th>État</th>
+						            <th>détails paiements</th>
+						            <th>Action</th>
+						        </tr>
+						    </thead>
+
+						    <tbody>
+						        {% for appelPaiement in appelPaiements %}
+						            {% set reservation = appelPaiement.reservation %}
+						            {% set total = reservation.prix %}
+						            {% set paid = reservation.sommePaiements %}
+						            {% set reste = total - paid %}
+
+						            <tr>
+						                <td>
+						                    <a href="{{ path('reservation_show', {'id': reservation.id}) }}">
+						                        {{ reservation.reference }}
+						                    </a> <br>
+						                    {{ reservation.client.nom }}
+						                </td>
 
 
-							<tbody>
-								{% for appelPaiement in appelPaiements %}
-									<tr>
-										<td>
-											<a href="{{path('reservation_show', {'id':appelPaiement.reservation.id})}}" class="">{{appelPaiement.reservation.reference}}</a>
+						                <td>{{ reservation.dateDebut|date('Y-m-d H:i') }}</td>
 
-										</td>
-										<td>{{appelPaiement.reservation.dateDebut|date('Y-m-d H:i:s')}}</td>
-										<td>{{appelPaiement.montant|number_format(2,","," ")}}€</td>
-										<td>{{appelPaiement.type}}</td>
+						                <td>{{ total|number_format(2, ",", " ") }} €</td>
 
-										<td>{{appelPaiement.reservation.client.nom}}</td>
-										<td>
-											{% if appelPaiement.dateDemande %}
-												{{appelPaiement.dateDemande|date('d/m/Y H:i')}}
+						                <td>{{ paid|number_format(2, ",", " ") }} €</td>
+
+						                <td>{{ reste|number_format(2, ",", " ") }} €</td>
+
+						                <td>
+							                 {% set dates = [] %}
+
+											{% if appelPaiement.dateDemande is not empty %}
+											    {% set dates = dates|merge([appelPaiement.dateDemande]) %}
 											{% endif %}
-										</td>
-										<td></td>
-										<td>
+								
+											{% if appelPaiement.sentDates is not empty %}
+											    {% set dates = dates|merge(appelPaiement.sentDates) %}
+											{% endif %}
+								
+											{% if dates is not empty %}
+											    {% for date in dates %}
+											        {{ date|date('d/m/Y H:i') }}{% if not loop.last %}<br>{% endif %}
+											    {% endfor %}
+											{% else %}
+											    <span>-</span>
+											{% endif %}
 
-											{% if appelPaiement.payed == true %}
-												<i class="fa fa-check" style="color : red"></i>
-											{% elseif (appelPaiement.payed == false or appelPaiement.payed == null)  %}
-												<i class="fa fa-close (alias)"></i>
-											{% endif %}
-										</td>
-										<td>
-											{% if appelPaiement.datePaiement %}
-												{{appelPaiement.datePaiement|date('d/m/Y H:i')}}
-											{% endif %}
-										</td>
-										<td class="text-center">
-											{% if appelPaiement.payed == false %}
-												<a href="{{path('envoi_email_appel_paiement_index', {'id': appelPaiement.id})}}" class="btn btn-danger">
-													envoyer
-												</a>
-											{% endif %}
-										</td>
-									</tr>
-								{% endfor %}
-							</tbody>
+						                </td>
+
+						                <td>
+						                    {% if paid == 0 %}
+						                        <div class="badge badge-danger">NOT</div>
+						                    {% elseif paid == total %}
+						                        <div class="badge badge-success">FULL</div>
+						                    {% elseif paid < total %}
+						                        <div class="badge badge-warning">ACCOUNT</div>
+						                    {% endif %}
+						                </td>
+
+						                <td>
+						                		
+						                	{% for paiement in appelPaiement.reservation.paiements %}
+						                	 <span>
+						                	 	  {{paiement.createdAt|date('d/m/Y H:i')}} - {{ paiement.montant|number_format(2, ",", " ") }} € <br>
+						                	 </span>
+						                    {% endfor %}
+						                    {% if appelPaiement.datePaiement %}
+						                        {{ appelPaiement.datePaiement|date('d/m/Y H:i') }}
+						                    {% endif %}
+						                </td>
+
+						                <td>
+						                    {% if  reste > 0   %}
+						                        <a href="{{ path('envoi_email_appel_paiement_index', {'id': appelPaiement.id}) }}" class="btn btn-sm btn-danger">
+						                            Envoyer
+						                        </a>
+						                    {% else %}
+						                        <span class="badge badge-success">Envoyé</span>
+						                    {% endif %}
+						                </td>
+						            </tr>
+						        {% endfor %}
+						    </tbody>
 						</table>
+
 					</div>
 				</div>
 			</div>

@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ModeReservationRepository;
 use App\Repository\ReservationRepository;
 use App\Service\ReservationHelper;
+use App\Entity\AppelPaiement;
 
 class ReserverDevis
 {
@@ -114,11 +115,21 @@ class ReserverDevis
                 $devisOption->setReservation($reservation);
                 $this->em->persist($devisOption);
             }
-            // flush le devis options
-            $this->em->flush();
+            // // flush le devis options
+            // $this->em->flush();
         } else {
             $reservation = $this->reservationHelper->saveDevisOptions($reservation, $this->reservationSession->getOptions(), $this->em);
         }
+
+        //creer un appel à paiement car n'est pas encore payé 
+
+        $appelPaiement = new AppelPaiement();
+
+        $appelPaiement->setReservation($reservation);
+        $appelPaiement->setMontant($reservation->getPrix());
+        $appelPaiement->setPayed(false);
+        $this->em->persist($appelPaiement);
+        $this->em->flush();
 
         return $reservation;
     }

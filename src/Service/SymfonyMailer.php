@@ -116,6 +116,25 @@ class SymfonyMailer
             'admin/templates_email/confirmation_paiement.html.twig'
         );
     }
+    public function sendAppelPaiement(string $to, string $name, string $reference, float $montant, string $vehicule, \DateTime $dateDebut, \DateTime $dateFin, \DateTime $dateReservation, float $prixTotal, float $sommePaiements)
+    {
+        $this->context['name'] = $name;
+        $this->context['reference'] = $reference;
+        $this->context['montant'] = number_format($montant, 2, ',', ' ') . ' €';
+        $this->context['vehicule'] = $vehicule;
+        $this->context['dateDebut'] = $dateDebut->format('d/m/Y H:i');
+        $this->context['dateFin'] = $dateFin->format('d/m/Y H:i');
+        $this->context['dateReservation'] = $dateReservation->format('d/m/Y H:i');
+        $this->context['prixTotal'] = number_format($prixTotal, 2, ',', ' ') . ' €';
+        $this->context['sommePaiements'] = number_format($sommePaiements, 2, ',', ' ') . ' €';
+        $this->context['montantRestant'] = number_format($prixTotal - $sommePaiements, 2, ',', ' ') . ' €';
+
+        $email = $this->createBaseEmailAndSend(
+            $to,
+            "Appel à paiement",
+            'admin/templates_email/appel_paiement.html.twig'
+        );
+    }
 
     private function generateValidationUrl(string $token): string
     {

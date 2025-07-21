@@ -18,7 +18,7 @@ class AppelPaiement
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity=Reservation::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Reservation::class)
      */
     private $reservation;
 
@@ -46,6 +46,13 @@ class AppelPaiement
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $type;
+
+    /**
+     * @ORM\Column(type="json", nullable=true)
+     * @var array|null
+     */
+    private $sentDates = [];
+
 
     public function getId(): ?int
     {
@@ -123,4 +130,23 @@ class AppelPaiement
 
         return $this;
     }
+
+   public function getSentDates(): array
+{
+    $dates = [];
+
+    foreach ($this->sentDates ?? [] as $d) {
+        $dates[] = new \DateTime($d);
+    }
+
+    return $dates;
+}
+
+    public function addSentDate(\DateTimeInterface $date): self
+    {
+        $this->sentDates[] = $date->format('Y-m-d H:i:s');
+        return $this;
+    }
+
+
 }
