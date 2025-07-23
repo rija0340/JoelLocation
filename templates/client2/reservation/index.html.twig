@@ -1,0 +1,78 @@
+{% extends 'baseClient2.html.twig' %}
+
+{% block title %}Mes Réservations{% endblock %}
+{% block stylesheets %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}
+
+{% block body %}
+<div class="container mx-auto py-6 space-y-6">
+  <!-- En-tête -->
+  <header class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+    <div>
+      <h1 class="text-3xl font-bold">Mes Réservations</h1>
+      <p class="text-gray-500">Consultez et gérez vos locations de voitures</p>
+    </div>
+    <a href="{{ path('client_step1') }}" class="btn btn-primary">
+      <i class="fas fa-plus mr-2"></i> Nouvelle Réservation
+    </a>
+  </header>
+
+  <!-- Barre de recherche & filtre -->
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+    <div class="flex items-center w-full md:w-2/3">
+      <div class="relative w-full">
+        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+          <i class="fas fa-search"></i>
+        </span>
+        <input id="searchInput" type="text" placeholder="Rechercher des réservations..."
+               class="input input-bordered pl-10 w-full" />
+      </div>
+    </div>
+    <div class="w-full md:w-auto">
+      <select id="sortSelect" class="select select-bordered w-full md:w-auto">
+        <option value="date-desc">Plus récent d'abord</option>
+        <option value="date-asc">Plus ancien d'abord</option>
+        <option value="price-desc">Prix décroissant</option>
+        <option value="price-asc">Prix croissant</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Onglets -->
+  <div class="tabs tabs-boxed">
+    <a href="#devis" class="tab tab-lg tab-active">
+      <i class="fas fa-file-invoice mr-1"></i> Devis <span class="badge badge-primary ml-1">{{ devis|length }}</span>
+    </a>
+    <a href="#encours" class="tab tab-lg">
+      <i class="fas fa-spinner mr-1"></i> En cours <span class="badge badge-primary ml-1">{{ reservationEncours|length }}</span>
+    </a>
+    <a href="#avenir" class="tab tab-lg">
+      <i class="fas fa-calendar-alt mr-1"></i> À venir <span class="badge badge-primary ml-1">{{ reservationAvenir|length }}</span>
+    </a>
+    <a href="#termine" class="tab tab-lg">
+      <i class="fas fa-check-circle mr-1"></i> Terminé <span class="badge badge-primary ml-1">{{ reservationEffectuers|length }}</span>
+    </a>
+  </div>
+
+  <!-- Contenu des onglets -->
+  <div class="space-y-6">
+    <div id="devis" class="tab-content">
+      <!-- {% include 'client2/reservation/parts/devis.html.twig' %} -->
+    </div>
+    <div id="encours" class="hidden tab-content">
+      <!-- {% include 'client2/reservation/parts/encours.html.twig' %} -->
+    </div>
+    <div id="avenir" class="hidden tab-content">
+      {% include 'client2/reservation/parts/avenir.html.twig' %}
+    </div>
+    <div id="termine" class="hidden tab-content">
+      <!-- {% include 'client2/reservation/parts/termines.html.twig' %} -->
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ asset('js/client/reservation/mes_reservations/index.js') }}"></script>
+{% endblock %}

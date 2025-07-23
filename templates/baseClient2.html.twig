@@ -1,43 +1,47 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<title>Espace client
-		</title>
-		<link
-		rel="icon" type="image/x-icon" href="../../images/Joel-Location-new.png"/>
-		<!-- Bootstrap -->
-		<link
-		href="{{ asset( 'admin/vendors/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet">
-		<!-- Font Awesome -->
-		<link href="{{ asset( 'admin/vendors/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet">
-		<link href="{{ asset( 'css/client/baseClient2.css')}}" rel="stylesheet">
-		<link rel="stylesheet" href="{{ asset('bundles/mercuryseriesflashy/css/flashy.css') }}"> {% block stylesheets %}{% endblock %}
-		</head>
-		<body>
-			<div class="preloader">
-				<span class="preloader-spin"></span>
-			</div>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>JoelLocation - Espace client</title>
+        <link rel="icon" href="{{ asset('images/Joel-Location-new.png') }}" type="image/png"/>
+<link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+        <link href="{{ asset('client2/css/app.css') }}" rel="stylesheet">
+        <link href="{{ asset('admin/vendors/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
+        {% block stylesheets %}{% endblock %}
+    </head>
+    <body class="bg-base-200">
+        <div class="preloader" id="preloader">
+            <span class="loading loading-spinner loading-lg text-primary"></span>
+        </div>
 
-			<div
-				class="site">
-				{# <header class="d-flex align-items-center"></header> #}
-				<div class="containerBody"> {% block body %}{% endblock %}
+        <div class="site min-h-screen">
+            <!-- Navigation -->
+            <div class="containerNav bg-base-100 shadow-lg">
+                {% include "client2/layouts/nav.html.twig" %}
+            </div>
 
-					<!--Required JS files-->
-					<!-- jQuery -->
+            <!-- Page Header -->
+            <div class="bg-base-200 p-4">
+                <div class="container mx-auto flex flex-col md:flex-row gap-4">
+                    <div class="md:w-5/12">
+                        {% block current_page %}{% endblock %}
+                    </div>
+                    <div class="md:w-7/12 md:ml-auto">
+                        {% block current_page_right %}{% endblock %}
+                    </div>
+                </div>
+            </div>
 
+            <!-- Main Content -->
+            <div class="containerBody container mx-auto py-8">
+                {% block body %}{% endblock %}
+            </div>
+        </div>
 
-					</div>
-				</div>
-				<script src="../../plugins/jquery/jquery.min.js"></script>
-				<script src="/assets/js/vendor/bootstrap.min.js"></script>
-
-				<!-- Load Flashy default JavaScript -->
-				<script src="{{ asset('bundles/mercuryseriesflashy/js/flashy.js') }}"></script>
-				{% block javascripts %}{% endblock %}
-			</body>
-		</html>
-	</body>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="{{ asset('client2/js/app.js') }}"></script>
+        {% block javascripts %}{% endblock %}
+    </body>
 </html>

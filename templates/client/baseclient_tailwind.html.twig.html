@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace Client</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@3.9.4/dist/full.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f5f5f5;
+        }
+        .active-tab {
+            border-bottom: 3px solid #ef4444;
+            font-weight: 600;
+        }
+        .reservation-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-black text-white shadow-lg">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span class="text-xl font-bold">Espace Client</span>
+                </div>
+                <div class="hidden md:flex space-x-6">
+                    <a href="#mes-infos" class="px-3 py-2 rounded hover:bg-gray-800 transition duration-300">Mes Informations</a>
+                    <a href="#mes-reservations" class="px-3 py-2 rounded hover:bg-gray-800 transition duration-300">Mes Réservations</a>
+                    <a href="#" class="px-3 py-2 rounded hover:bg-gray-800 transition duration-300">Autres</a>
+                </div>
+                <div class="md:hidden">
+                    <button class="btn btn-square btn-ghost">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="md:hidden bg-gray-900 text-white hidden" id="mobile-menu">
+        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            <a href="#mes-infos" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800">Mes Informations</a>
+            <a href="#mes-reservations" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800">Mes Réservations</a>
+            <a href="#" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800">Autres</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Mes Informations Section -->
+        <section id="mes-infos" class="mb-12">
+            <div class="flex items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Mes Informations</h2>
+                <div class="ml-4 w-12 h-1 bg-red-500"></div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="p-6">
+                    <div class="flex flex-col md:flex-row gap-8">
+                        <div class="flex-shrink-0">
+                            <div class="avatar">
+                                <div class="w-32 rounded-full ring ring-red-500 ring-offset-base-100 ring-offset-2">
+                                    <img src="https://randomuser.me/api/portraits/men/32.jpg" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-grow">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-700 mb-2">Informations Personnelles</h3>
+                                    <div class="space-y-2">
+                                        <p><span class="font-medium">Nom:</span> Dupont</p>
+                                        <p><span class="font-medium">Prénom:</span> Jean</p>
+                                        <p><span class="font-medium">Email:</span> jean.dupont@example.com</p>
+                                        <p><span class="font-medium">Téléphone:</span> +33 6 12 34 56 78</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-700 mb-2">Adresse</h3>
+                                    <div class="space-y-2">
+                                        <p>15 Rue de la République</p>
+                                        <p>75001 Paris</p>
+                                        <p>France</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6 pt-6 border-t border-gray-200">
+                                <button class="btn btn-outline btn-error">Modifier mes informations</button>
+                                <button class="btn btn-outline btn-error ml-4">Changer mon mot de passe</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mes Réservations Section -->
+        <section id="mes-reservations">
+            <div class="flex items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Mes Réservations</h2>
+                <div class="ml-4 w-12 h-1 bg-red-500"></div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <!-- Tabs -->
+                <div class="tabs tabs-boxed bg-gray-100">
+                    <a class="tab active-tab" data-tab="en-cours">En Cours</a> 
+                    <a class="tab" data-tab="passees">Passées</a> 
+                    <a class="tab" data-tab="annulees">Annulées</a>
+                </div>
+                
+                <!-- Tab Content -->
+                <div class="p-6">
+                    <!-- En Cours Tab -->
+                    <div id="en-cours" class="tab-content active">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <!-- Reservation Card 1 -->
+                            <div class="card bg-base-100 shadow-md reservation-card transition duration-300">
+                                <div class="card-body">
+                                    <div class="flex justify-between items-start">
+                                        <h3 class="card-title text-lg">Hôtel Luxe Paris</h3>
+                                        <span class="badge badge-success text-white">Confirmée</span>
+                                    </div>
+                                    <div class="flex items-center text-gray-600 mt-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                        <span>15-20 Juin 2023</span>
+                                    </div>
+                                    <div class="flex items-center text-gray-600 mt-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                        </svg>
+                                        <span>2 Adultes, 1 Chambre</span>
+                                    </div>
+                                    <div class="mt-4 pt-2 border-t border-gray-200">
+                                        <div class="flex justify-between items-center">
+                                            <span class="font-bold text-lg">€450</span>
+                                            <button class="btn btn-sm btn-error">Annuler</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Reservation Card 2 -->
+                            <div class="card bg-base-100 shadow-md reservation-card transition duration-300">
+                                <div class="card-body">
+                                    <div class="flex justify-between items-start">
+                                        <h3 class="card-title text-lg">Restaurant Étoile</h3>
+                                        <span class="badge badge-warning text-white">En attente</span>
+                                    </div>
+                                    <div class="flex items-center text-gray-600 mt-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                        <span>25 Juin 2023, 20:00</span>
+                                    </div>
+                                    <div class="flex items-center text-gray-600 mt-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                        </svg>
+                                        <span>4 Personnes</span>
+                                    </div>
+                                    <div class="mt-4 pt-2 border-t border-gray-200">
+                                        <div class="flex justify-between items-center">
+                                            <span class="font-bold text-lg">€120</span>
+                                            <button class="btn btn-sm btn-error">Annuler</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Passées Tab -->
+                    <div id="passees" class="tab-content hidden">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <!-- Past Reservation Card -->
+                            <div class="card bg-base-100 shadow-md reservation-card transition duration-300">
+                                <div class="card-body">
+                                    <div class="flex justify-between items-start">
+                                        <h3 class="card-title text-lg">Hôtel Méditerranée</h3>
+                                        <span class="badge badge-neutral text-white">Terminée</span>
+                                    </div>
+                                    <div class="flex items-center text-gray-600 mt-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                        <span>10-15 Mai 2023</span>
+                                    </div>
+                                    <div class="flex items-center text-gray-600 mt-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                        </svg>
+                                        <span>2 Adultes, 1 Chambre</span>
+                                    </div>
+                                    <div class="mt-4 pt-2 border-t border-gray-200">
+                                        <div class="flex justify-between items-center">
+                                            <span class="font-bold text-lg">€380</span>
+                                            <button class="btn btn-sm btn-outline">Réserver à nouveau</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Annulées Tab -->
+                    <div id="annulees" class="tab-content hidden">
+                        <div class="text-center py-8">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <h3 class="mt-4 text-lg font-medium text-gray-900">Aucune réservation annulée</h3>
+                            <p class="mt-1 text-sm text-gray-500">Vous n'avez annulé aucune réservation.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <div class="flex items-center space-x-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span class="text-xl font-bold">Espace Client</span>
+                    </div>
+                    <p class="mt-2 text-gray-400">Votre espace personnel pour gérer vos réservations.</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2 16h-2v-6h2v6zm-1-6.891c-.607 0-1.1-.496-1.1-1.109 0-.612.492-1.109 1.1-1.109s1.1.497 1.1 1.109c0 .613-.493 1.109-1.1 1.109zm8 6.891h-1.998v-2.861c0-1.881-2.002-1.722-2.002 0v2.861h-2v-6h2v1.093c.872-1.616 4-1.736 4 1.548v3.359z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6.066 9.645c.183 4.04-2.83 8.544-8.164 8.544-1.622 0-3.131-.476-4.402-1.291 1.524.18 3.045-.244 4.252-1.189-1.256-.023-2.317-.854-2.684-1.995.451.086.895.061 1.298-.049-1.381-.278-2.335-1.522-2.304-2.853.388.215.83.344 1.301.359-1.279-.855-1.641-2.544-.889-3.835 1.416 1.738 3.533 2.881 5.92 3.001-.419-1.796.944-3.527 2.799-3.527.825 0 1.572.349 2.096.907.654-.128 1.27-.368 1.824-.697-.215.671-.67 1.233-1.263 1.589.581-.07 1.135-.224 1.649-.453-.384.578-.87 1.084-1.433 1.489z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2 16h-2v-6h2v6zm-1-6.891c-.607 0-1.1-.496-1.1-1.109 0-.612.492-1.109 1.1-1.109s1.1.497 1.1 1.109c0 .613-.493 1.109-1.1 1.109zm8 6.891h-1.998v-2.861c0-1.881-2.002-1.722-2.002 0v2.861h-2v-6h2v1.093c.872-1.616 4-1.736 4 1.548v3.359z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-800 text-center text-gray-400 text-sm">
+                <p>© 2023 Espace Client. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.querySelector('nav button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Tab functionality
+        const tabs = document.querySelectorAll('.tabs a');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all tabs
+                tabs.forEach(t => t.classList.remove('active-tab'));
+                
+                // Add active class to clicked tab
+                this.classList.add('active-tab');
+                
+                // Hide all tab contents
+                tabContents.forEach(content => content.classList.add('hidden'));
+                
+                // Show the selected tab content
+                const tabId = this.getAttribute('data-tab');
+                document.getElementById(tabId).classList.remove('hidden');
+            });
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                // Close mobile menu if open
+                document.getElementById('mobile-menu').classList.add('hidden');
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

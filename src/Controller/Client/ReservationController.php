@@ -98,7 +98,7 @@ class ReservationController extends AbstractController
         // $reservationEnAttentes = $this->reservRepo->findReservationEnAttente($client, $date);
         $devis = $this->devisRepo->findBy(['client' => $client, 'transformed' => false], ['dateCreation' => 'DESC']);
 
-        return $this->render('client/reservation/mes_reservations/index.html.twig', [
+        return $this->render('client2/reservation/index.html.twig', [
             'reservationEffectuers' => $reservationEffectuers,
             'reservationEncours' => $reservationEncours,
             'devis' => $devis,

@@ -130,7 +130,7 @@ class ClientController extends AbstractController
         }
 
         // page client.html auparavant
-        return $this->render('client/index.html.twig', [
+        return $this->render('client2/index.html.twig', [
 
             'client' => $client->getUsername(),
             'id' => $client->getId(),

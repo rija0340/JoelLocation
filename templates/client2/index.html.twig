@@ -1,0 +1,83 @@
+{% extends 'baseClient2.html.twig' %}
+
+{% block title %}Page client{% endblock %}
+{% block stylesheets %}{% endblock %}
+
+{% block body %}
+  <div class="card bg-base-100 shadow-md p-6 space-y-6">
+    <h2 class="text-2xl font-bold">Mes informations</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-start">
+      {% for label, value in {
+        'Nom': client.nom,
+        'Prénom': client.prenom,
+        'Sexe': client.sexe,
+        'Adresse email': client.mail,
+        'Téléphone 1': client.telephone,
+        'Téléphone 2': client.portable,
+        'Adresse': client.adresse,
+        'Complément adresse': client.complementAdresse,
+        'Ville': client.ville,
+        'Code postal': client.codePostal,
+        'Date de naissance': client.dateNaissance|date('d/m/Y'),
+        'Lieu de naissance': client.lieuNaissance,
+        'Numéro permis': client.numeroPermis,
+        'Date permis': client.datePermis|date('d/m/Y'),
+        'Ville délivrance permis': client.villeDelivrancePermis
+      } %}
+        <div class="form-control">
+          <label class="label"><span class="label-text">{{ label }}</span></label>
+          <input type="text" class="input input-bordered w-full" readonly value="{{ value }}">
+        </div>
+      {% endfor %}
+    </div>
+    <div class="flex justify-center">
+      <a href="{{ path('infoclient_edit', {'id': id}) }}" class="btn btn-error">
+        <i class="fa fa-edit mr-2"></i> Modifier
+      </a>
+    </div>
+  </div>
+
+  <div class="card bg-base-100 shadow-md p-4 mt-8">
+    <h3 class="text-xl font-semibold mb-2">Mon compte</h3>
+    <!-- Accordéon radio : un seul volet ouvert -->
+    <div class="space-y-2">
+      <div class="collapse bg-base-100 border border-base-300 rounded-box">
+        <input type="radio" name="client-accordion" class="w-auto h-auto" checked />
+        <div class="collapse-title text-lg font-medium collapse-arrow">
+          <i class="fa fa-user mr-2"></i> Gérer mon compte
+        </div>
+        <div class="collapse-content p-4">
+          {{ form_start(formClientCompte) }}
+          <div class="space-y-6">
+            <div class="form-control">
+              {{ form_label(formClientCompte.mail) }}
+              {{ form_widget(formClientCompte.mail, {'attr': {'class': 'input input-bordered w-full'}}) }}
+            </div>
+            <div class="form-control">
+              {{ form_label(formClientCompte.old_password) }}
+              {{ form_widget(formClientCompte.old_password, {'attr': {'class': 'input input-bordered w-full'}}) }}
+            </div>
+            <div class="form-control">
+              {{ form_label(formClientCompte.new_password.first) }}
+              {{ form_widget(formClientCompte.new_password.first, {'attr': {'class': 'input input-bordered w-full'}}) }}
+            </div>
+            <div class="form-control">
+              {{ form_label(formClientCompte.new_password.second) }}
+              {{ form_widget(formClientCompte.new_password.second, {'attr': {'class': 'input input-bordered w-full'}}) }}
+            </div>
+            <div class="flex justify-center">
+              <button type="submit" class="btn btn-error mt-4">
+                <i class="fa fa-book mr-2"></i> {{ button_label|default('Valider') }}
+              </button>
+            </div>
+          </div>
+          {{ form_end(formClientCompte) }}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block javascripts %}
+  <script src="{{ asset('js/client/compteClient.js') }}"></script>
+{% endblock %}
