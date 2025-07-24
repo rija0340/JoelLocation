@@ -1,0 +1,75 @@
+{% extends 'baseClient2.html.twig' %}
+
+{% block title %}Mes conducteurs{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+<div class="container mx-auto py-4 max-w-6xl px-4">
+  <div class="card bg-base-100 shadow-sm rounded-lg">
+    <div class="card-body p-6">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
+        <h4 class="text-2xl font-bold text-base-content">Mes conducteurs</h4>
+        <a class="" href="{{ path('client_newConducteur') }}">
+          <i class="fa fa-plus"></i>
+          Ajouter</a>
+      </div>
+      {% if conducteurs|length > 0 %}
+        <div class="overflow-x-auto">
+          <table class="table table-sm w-full">
+            <thead class="bg-base-200 text-base-content uppercase">
+              <tr>
+                <th class="py-3 px-4">Nom</th>
+                <th class="py-3 px-4">Prénom</th>
+                <th class="py-3 px-4">Permis</th>
+                <th class="py-3 px-4">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for conducteur in conducteurs %}
+                <tr class="hover:bg-base-200 transition-colors duration-200">
+                  <td class="py-3 px-4">{{ conducteur.nom|default('N/A') }}</td>
+                  <td class="py-3 px-4">{{ conducteur.prenom|default('N/A') }}</td>
+                  <td class="py-3 px-4">
+                    <div class="space-y-1 text-sm">
+                      <p><span class="font-medium">Numéro :</span> {{ conducteur.numeroPermis|default('N/A') }}</p>
+                      <p><span class="font-medium">Délivré le :</span> {{ conducteur.dateDelivrance ? conducteur.dateDelivrance|date('d M Y') : 'N/A' }}</p>
+                      <p><span class="font-medium">Ville :</span> {{ conducteur.villeDelivrance|default('N/A') }}</p>
+                    </div>
+                  </td>
+                  <td class="py-3 px-4">
+                    <div class="flex items-center gap-2">
+                      <a href="{{ path('conducteur_edit', {'id': conducteur.id}) }}"
+                         class="btn btn-ghost btn-sm text-primary tooltip"
+                         data-tip="Modifier">
+                        <i class="fas fa-edit"></i>
+                      </a>
+                      <form method="post"
+                            action="{{ path('conducteur_delete', {'id': conducteur.id}) }}"
+                            onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer ce conducteur ?');"
+                            class="inline-block">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ conducteur.id) }}">
+                        <button class="btn btn-ghost btn-sm text-error tooltip" data-tip="Supprimer" type="submit">
+                          <i class="fas fa-trash-alt"></i>
+                        </button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        {% include 'client2/conducteur/parts/_empty_state.html.twig' %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+  <!-- <script src="{{ asset('js/client/pop-up/conducteur.js') }}"></script> -->
+{% endblock %}

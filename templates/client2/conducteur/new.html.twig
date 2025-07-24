@@ -1,0 +1,21 @@
+{% extends 'baseClient2.html.twig' %}
+
+{% block title %}page client
+{% endblock %}
+{% block stylesheets %}
+	<link href="{{asset('css/admin/vente_comptoir/vente_comptoir.css')}}" rel="stylesheet">
+
+{% endblock %}
+{% block body %}
+	<div class="x_panel">
+		<h4 class="mb-0 pb-0">
+			<i class="fa fa-plus"></i>
+			Ajout conducteur</h4>
+		<div class="clearfix"></div>
+		<div class="x_title"></div>
+
+		{% include "client2/conducteur/parts/_form_conducteur.html.twig" %}
+	</div>
+
+{% endblock %}
+{% block javascripts %}{% endblock %}

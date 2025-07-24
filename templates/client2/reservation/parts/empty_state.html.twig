@@ -1,0 +1,30 @@
+{% set empty_states = {
+  'devis': {
+    'icon': 'fas fa-file-invoice fa-3x text-gray-400 mb-4',
+    'title': 'Aucun devis trouvé',
+    'message': 'Vous n\'avez actuellement aucun devis en attente.'
+  },
+  'encours': {
+    'icon': 'fas fa-spinner fa-3x text-gray-400 mb-4 animate-spin',
+    'title': 'Aucune réservation en cours',
+    'message': 'Vous n\'avez actuellement aucune réservation en cours.'
+  },
+  'avenir': {
+    'icon': 'fas fa-file-invoice fa-3x text-gray-400 mb-4',
+    'title': 'Aucune réservation trouvée',
+    'message': 'Vous n\'avez actuellement aucune réservation en attente.'
+  },
+  'termine': {
+    'icon': 'fas fa-check-circle fa-3x text-gray-400 mb-4',
+    'title': 'Aucune réservation terminée',
+    'message': 'Vous n\'avez actuellement aucune réservation terminée.'
+  }
+} %}
+
+<div class="card bg-base-100 shadow-md text-center py-10">
+  <div class="flex flex-col items-center">
+    <i class="{{ empty_states[type].icon }}"></i>
+    <h5 class="text-lg font-semibold text-gray-600">{{ empty_states[type].title }}</h5>
+    <p class="text-sm text-gray-500 mt-1">{{ empty_states[type].message }}</p>
+  </div>
+</div>

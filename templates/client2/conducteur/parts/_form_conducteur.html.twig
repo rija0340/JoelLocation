@@ -1,0 +1,84 @@
+{{ form_start(formConducteur, {'attr': {'class': 'space-y-4 animate-fade-in'}}) }}
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+  <div class="form-control">
+    <label class="label" for="{{ formConducteur.nom.vars.id }}">
+      <span class="label-text">Nom</span>
+    </label>
+    {{ form_widget(formConducteur.nom, {'attr': {'class': 'input input-bordered w-full'}}) }}
+    {{ form_errors(formConducteur.nom) }}
+  </div>
+  <div class="form-control">
+    <label class="label" for="{{ formConducteur.prenom.vars.id }}">
+      <span class="label-text">Prénom</span>
+    </label>
+    {{ form_widget(formConducteur.prenom, {'attr': {'class': 'input input-bordered w-full'}}) }}
+    {{ form_errors(formConducteur.prenom) }}
+  </div>
+  <div class="form-control">
+    <label class="label" for="{{ formConducteur.dateNaissance.vars.id }}">
+      <span class="label-text">Date de naissance</span>
+    </label>
+    {{ form_widget(formConducteur.dateNaissance, {'attr': {'class': 'input input-bordered w-full'}}) }}
+    {{ form_errors(formConducteur.dateNaissance) }}
+  </div>
+  <div class="form-control">
+    <label class="label" for="{{ formConducteur.villeNaissance.vars.id }}">
+      <span class="label-text">Ville de naissance</span>
+    </label>
+    {{ form_widget(formConducteur.villeNaissance, {'attr': {'class': 'input input-bordered w-full'}}) }}
+    {{ form_errors(formConducteur.villeNaissance) }}
+  </div>
+  <div class="form-control">
+    <label class="label" for="{{ formConducteur.numeroPermis.vars.id }}">
+      <span class="label-text">Numéro de permis</span>
+    </label>
+    {{ form_widget(formConducteur.numeroPermis, {'attr': {'class': 'input input-bordered w-full'}}) }}
+    {{ form_errors(formConducteur.numeroPermis) }}
+  </div>
+  <div class="form-control">
+    <label class="label" for="{{ formConducteur.dateDelivrance.vars.id }}">
+      <span class="label-text">Date de délivrance</span>
+    </label>
+    {{ form_widget(formConducteur.dateDelivrance, {'attr': {'class': 'input input-bordered w-full'}}) }}
+    {{ form_errors(formConducteur.dateDelivrance) }}
+  </div>
+  <div class="form-control">
+    <label class="label" for="{{ formConducteur.dateExpiration.vars.id }}">
+      <span class="label-text">Date d'expiration</span>
+    </label>
+    {{ form_widget(formConducteur.dateExpiration, {'attr': {'class': 'input input-bordered w-full'}}) }}
+    {{ form_errors(formConducteur.dateExpiration) }}
+  </div>
+  <div class="form-control">
+    <label class="label" for="{{ formConducteur.villeDelivrance.vars.id }}">
+      <span class="label-text">Ville de délivrance</span>
+    </label>
+    {{ form_widget(formConducteur.villeDelivrance, {'attr': {'class': 'input input-bordered w-full'}}) }}
+    {{ form_errors(formConducteur.villeDelivrance) }}
+  </div>
+  <div class="form-control">
+    <label class="label" for="{{ formConducteur.telephone.vars.id }}">
+      <span class="label-text">Téléphone</span>
+    </label>
+    {{ form_widget(formConducteur.telephone, {'attr': {'class': 'input input-bordered w-full'}}) }}
+    {{ form_errors(formConducteur.telephone) }}
+  </div>
+  <div class="form-control">
+    <label class="label cursor-pointer">
+      <span class="label-text">Est conducteur principal</span>
+      <input type="checkbox" name="isPrincipal" class="checkbox checkbox-primary ml-2" {{ formConducteur.isPrincipal is defined and formConducteur.isPrincipal.vars.data ? 'checked' : '' }}>
+    </label>
+  </div>
+</div>
+<div class="flex justify-center gap-4 mt-6">
+  <a href="{{ path('client_mesConducteurs') }}"
+     class="btn btn-ghost btn-sm tooltip hover:scale-105 transition-transform duration-200"
+     data-tip="Annuler">
+    <i class="fas fa-arrow-left mr-1"></i> Annuler
+  </a>
+  <button type="submit" class="btn btn-primary btn-sm tooltip hover:scale-105 transition-transform duration-200"
+          data-tip="{{ button_label|default('Enregistrer') }}">
+    <i class="fas fa-save mr-1"></i> {{ button_label|default('Enregistrer') }}
+  </button>
+</div>
+{{ form_end(formConducteur) }}

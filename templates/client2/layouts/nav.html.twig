@@ -1,45 +1,101 @@
-<div class="navbar bg-base-100 shadow-sm">
+<div class="navbar bg-base-100 shadow-lg sticky top-0 z-50 backdrop-blur-sm bg-opacity-95">
   <div class="navbar-start">
     <div class="dropdown">
       <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" /> </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
+        </svg>
       </div>
-      <ul
-        tabindex="0"
-        class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-        <li><a>Item 1</a></li>
-        <li>
-          <a>Parent</a>
-          <ul class="p-2">
-            <li><a>Submenu 1</a></li>
-            <li><a>Submenu 2</a></li>
-          </ul>
+      <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-64 p-2 shadow-xl border">
+        <li {% if app.request.attributes.get('_route') starts with 'espaceClient_index' %} class="bordered" {% endif %}>
+          <a href="{{path('espaceClient_index')}}" class="flex items-center gap-2">
+            <i class="fas fa-user text-primary"></i>
+            Mes informations
+          </a>
         </li>
-        <li><a>Item 3</a></li>
+        <li {% if app.request.attributes.get('_route') starts with 'client_reservations' or app.request.attributes.get('_route') starts with 'validation' %} class="bordered" {% endif %}>
+          <a href="{{path('client_reservations')}}" class="flex items-center gap-2">
+            <i class="fas fa-calendar-check text-primary"></i>
+            Mes réservations
+          </a>
+        </li>
+        <li {% if app.request.attributes.get('_route') starts with 'client_step' %} class="bordered" {% endif %}>
+          <a href="{{path('client_step1')}}" class="flex items-center gap-2">
+            <i class="fas fa-plus-circle text-primary"></i>
+            Nouvelle réservation
+          </a>
+        </li>
+        <li {% if app.request.attributes.get('_route') starts with 'client_mesConducteurs' %} class="bordered" {% endif %}>
+          <a href="{{path('client_mesConducteurs')}}" class="flex items-center gap-2">
+            <i class="fas fa-users text-primary"></i>
+            Mes conducteurs
+          </a>
+        </li>
+        <div class="divider my-2"></div>
+        <li>
+          <a href="{{path('app_logout')}}" class="flex items-center gap-2 text-error hover:bg-error hover:text-white">
+            <i class="fas fa-sign-out-alt"></i>
+            Déconnexion
+          </a>
+        </li>
       </ul>
     </div>
-    <a class="btn btn-ghost text-xl">daisyUI</a>
+    <a href="{{path('accueil')}}" class="btn btn-ghost text-xl font-bold">
+      <img src="{{asset('images/Joel-Location-new.png')}}" width="40" height="40" class="mr-2" alt="Joel Location">
+      Joel Location
+    </a>
   </div>
+  
   <div class="navbar-center hidden lg:flex">
-    <ul class="menu menu-horizontal px-1">
-      <li><a>Mes informations</a></li>
-      <li {% if app.request.attributes.get('_route') starts with 'client_reservations' or app.request.attributes.get('_route') starts with 'validation' %} current {% endif %}">
-        <a class="nav-link" href="{{path('client_reservations')}}">
-          Mes réservations</a></li>
-      <li><a>Nouvelle réservation</a></li>
-      <li><a>Mes conducteurs</a></li>
-     <!--  <li>
-        <details>
-          <summary>Parent</summary>
-          <ul class="p-2">
-            <li><a>Submenu 1</a></li>
-            <li><a>Submenu 2</a></li>
-          </ul>
-        </details>
-      </li> -->
+    <ul class="menu menu-horizontal px-1 gap-2">
+      <li {% if app.request.attributes.get('_route') starts with 'espaceClient_index' %} class="bg-primary text-primary-content rounded-lg" {% endif %}>
+        <a href="{{path('espaceClient_index')}}" class="flex items-center gap-2 font-medium">
+          <i class="fas fa-user"></i>
+          Mes informations
+        </a>
+      </li>
+      <li {% if app.request.attributes.get('_route') starts with 'client_reservations' or app.request.attributes.get('_route') starts with 'validation' %} class="bg-primary text-primary-content rounded-lg" {% endif %}>
+        <a href="{{path('client_reservations')}}" class="flex items-center gap-2 font-medium">
+          <i class="fas fa-calendar-check"></i>
+          Mes réservations
+        </a>
+      </li>
+      <li {% if app.request.attributes.get('_route') starts with 'client_step' %} class="bg-primary text-primary-content rounded-lg" {% endif %}>
+        <a href="{{path('client_step1')}}" class="flex items-center gap-2 font-medium">
+          <i class="fas fa-plus-circle"></i>
+          Nouvelle réservation
+        </a>
+      </li>
+      <li {% if app.request.attributes.get('_route') starts with 'client_mesConducteurs' %} class="bg-primary text-primary-content rounded-lg" {% endif %}>
+        <a href="{{path('client_mesConducteurs')}}" class="flex items-center gap-2 font-medium">
+          <i class="fas fa-users"></i>
+          Mes conducteurs
+        </a>
+      </li>
     </ul>
   </div>
+  
   <div class="navbar-end">
-    <a class="btn">Button</a>
+    {% if app.user %}
+      <div class="dropdown dropdown-end">
+        <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+          <div class="w-10 rounded-full bg-primary text-primary-content flex items-center justify-center">
+            <i class="fas fa-user"></i>
+          </div>
+        </div>
+        <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow-xl border">
+          <li class="menu-title">
+            <span>{{app.user.getNom}}</span>
+          </li>
+          <div class="divider my-1"></div>
+          <li>
+            <a href="{{path('app_logout')}}" class="text-error hover:bg-error hover:text-white">
+              <i class="fas fa-sign-out-alt"></i>
+              Déconnexion
+            </a>
+          </li>
+        </ul>
+      </div>
+    {% endif %}
   </div>
 </div>

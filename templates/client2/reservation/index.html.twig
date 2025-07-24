@@ -2,7 +2,7 @@
 
 {% block title %}Mes Réservations{% endblock %}
 {% block stylesheets %}
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
 {% endblock %}
 
 {% block body %}
@@ -39,40 +39,41 @@
     </div>
   </div>
 
-  <!-- Onglets -->
-  <div class="tabs tabs-boxed">
-    <a href="#devis" class="tab tab-lg tab-active">
-      <i class="fas fa-file-invoice mr-1"></i> Devis <span class="badge badge-primary ml-1">{{ devis|length }}</span>
-    </a>
-    <a href="#encours" class="tab tab-lg">
-      <i class="fas fa-spinner mr-1"></i> En cours <span class="badge badge-primary ml-1">{{ reservationEncours|length }}</span>
-    </a>
-    <a href="#avenir" class="tab tab-lg">
-      <i class="fas fa-calendar-alt mr-1"></i> À venir <span class="badge badge-primary ml-1">{{ reservationAvenir|length }}</span>
-    </a>
-    <a href="#termine" class="tab tab-lg">
-      <i class="fas fa-check-circle mr-1"></i> Terminé <span class="badge badge-primary ml-1">{{ reservationEffectuers|length }}</span>
-    </a>
-  </div>
+  <!-- DaisyUI Tabs -->
+<div class="tabs tabs-boxed" id="reservationTabs">
+  <a class="tab tab-active" data-tab="devis">
+    <i class="fas fa-file-invoice mr-1"></i> Devis <span class="badge badge-primary ml-1">{{ devis|length }}</span>
+  </a>
+  <a class="tab" data-tab="encours">
+    <i class="fas fa-spinner mr-1"></i> En cours <span class="badge badge-primary ml-1">{{ reservationEncours|length }}</span>
+  </a>
+  <a class="tab" data-tab="avenir">
+    <i class="fas fa-calendar-alt mr-1"></i> À venir <span class="badge badge-primary ml-1">{{ reservationAvenir|length }}</span>
+  </a>
+  <a class="tab" data-tab="termine">
+    <i class="fas fa-check-circle mr-1"></i> Terminé <span class="badge badge-primary ml-1">{{ reservationEffectuers|length }}</span>
+  </a>
+</div>
 
-  <!-- Contenu des onglets -->
-  <div class="space-y-6">
-    <div id="devis" class="tab-content">
-      <!-- {% include 'client2/reservation/parts/devis.html.twig' %} -->
-    </div>
-    <div id="encours" class="hidden tab-content">
-      <!-- {% include 'client2/reservation/parts/encours.html.twig' %} -->
-    </div>
-    <div id="avenir" class="hidden tab-content">
-      {% include 'client2/reservation/parts/avenir.html.twig' %}
-    </div>
-    <div id="termine" class="hidden tab-content">
-      <!-- {% include 'client2/reservation/parts/termines.html.twig' %} -->
-    </div>
+<!-- Tab Panels -->
+<div class="mt-4" id="reservationPanels">
+  <div class="tab-panel" data-tab="devis">
+    {% include 'client2/reservation/parts/devis.html.twig' %}
   </div>
+  <div class="tab-panel hidden" data-tab="encours">
+    {% include 'client2/reservation/parts/encours.html.twig' %}
+  </div>
+  <div class="tab-panel hidden" data-tab="avenir">
+    {% include 'client2/reservation/parts/avenir.html.twig' %}
+  </div>
+  <div class="tab-panel hidden" data-tab="termine">
+    {% include 'client2/reservation/parts/termines.html.twig' %}
+  </div>
+</div>
+
 </div>
 {% endblock %}
 
 {% block javascripts %}
-<script src="{{ asset('js/client/reservation/mes_reservations/index.js') }}"></script>
+<script src="{{ asset('client2/js/reservation/tabsystem.js') }}"></script>
 {% endblock %}

@@ -1,0 +1,26 @@
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+  <div class="flex flex-col md:flex-row items-start md:items-center gap-4 mb-4 md:mb-0">
+    <h1 class="text-2xl font-bold flex flex-wrap items-center gap-2">
+      <span>{{ type|lower == 'devis' ? 'DEVIS' : 'RÉSERVATION' }} -</span>
+      <span class="badge badge-warning rounded-full px-4 py-1">
+        {% if type|lower == 'devis' and reservation.numero is defined %}
+          {{ reservation.numero }}
+        {% else %}
+          {{ reservation.reference }}
+        {% endif %}
+      </span>
+    </h1>
+    <small class="text-base font-medium text-base-content/70">
+      Créé le 
+      {% if type|lower == 'devis' %}
+        {{ reservation.dateCreation|date('d/m/Y') }}
+      {% else %}
+        {{ reservation.dateReservation|date('d/m/Y') }}
+      {% endif %}
+    </small>
+  </div>
+  <a href="{{ path('client_reservations') }}" class="btn btn-outline btn-error flex items-center gap-2">
+    <i class="fas fa-reply"></i>
+    Mes Réservations
+  </a>
+</div>

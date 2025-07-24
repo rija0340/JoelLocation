@@ -52,7 +52,7 @@ class ConducteurController extends AbstractController
 
         // $formClient = $this->createForm(ClientType::class, $client);
 
-        return $this->render('client/conducteur/index.html.twig', [
+        return $this->render('client2/conducteur/index.html.twig', [
 
             'client' => $client,
             'conducteurs' => $conducteurs
@@ -85,7 +85,7 @@ class ConducteurController extends AbstractController
             return $this->redirectToRoute('client_mesConducteurs');
         }
 
-        return $this->render('client/conducteur/new.html.twig', [
+        return $this->render('client2/conducteur/new.html.twig', [
 
             'formConducteur' => $formConducteur->createView()
 

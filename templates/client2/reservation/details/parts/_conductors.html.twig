@@ -1,59 +1,52 @@
-{% if type != 'devis' %}
-<div class="card reservation-card mb-2 bg-white shadow rounded">
-  <!-- Conductors Section -->
-  <div class="card-body p-4">
-    <div class="flex justify-between items-center mb-3">
-      <h5 class="card-title font-bold text-red-800 flex items-center mb-0">
-        <i class="fas fa-id-card text-red-400 mr-2"></i>
+<div class="card bg-white shadow-md rounded-lg">
+  <div class="card-content p-6">
+    <div class="flex justify-between items-center mb-4">
+      <h5 class="font-bold text-error flex items-center">
+        <i class="fas fa-id-card text-error-content mr-2"></i>
         Conducteurs
       </h5>
       {% if reservation.conducteursClient|length < 2 %}
-        <button type="button"
-                class="btn btn-link btn-xs text-primary p-0"
-                data-toggle="modal"
-                data-target="#modalConducteur">
+        <label for="modalConducteurToggle" class="btn btn-ghost btn-sm text-primary">
           <i class="fas fa-plus-circle mr-1"></i>
-          Ajouter Conducteur
-        </button>
+          Ajouter un conducteur
+        </label>
       {% endif %}
     </div>
-
-    <div class="space-y-3">
+    <div class="space-y-4">
       {% set somme = 0 %}
       {% for conducteur in reservation.conducteursClient %}
         {% if conducteur.isPrincipal %}
           {% set somme = somme + 1 %}
         {% endif %}
       {% endfor %}
-
       {% for conducteur in reservation.conducteursClient %}
-        <div class="conductor-card p-3 rounded mb-3 {% if conducteur.isPrincipal %}bg-gray-50{% else %}border border-gray-200{% endif %}">
+        <div class="conductor-card p-4 rounded-lg {% if conducteur.isPrincipal %}bg-base-200{% else %}border border-base-300{% endif %}">
           <div class="flex justify-between items-start">
             <div>
-              <div class="flex items-center mb-1">
-                <span class="font-medium mr-2">{{ conducteur.nom }} {{ conducteur.prenom }}</span>
+              <div class="flex items-center mb-2">
+                <span class="font-semibold mr-2">{{ conducteur.nom }} {{ conducteur.prenom }}</span>
                 {% if conducteur.isPrincipal %}
                   <span class="badge badge-warning">Principal</span>
                 {% endif %}
               </div>
-              <small class="text-gray-600 block">Permis: {{ conducteur.numeroPermis }}</small>
-              <small class="text-gray-600 block">Délivré: {{ conducteur.dateDelivrance|date('m/Y') }} à {{ conducteur.villeDelivrance }}</small>
+              <small class="text-base-content/70 block">Permis: {{ conducteur.numeroPermis }}</small>
+              <small class="text-base-content/70 block">Délivré: {{ conducteur.dateDelivrance|date('m/Y') }} à {{ conducteur.villeDelivrance }}</small>
             </div>
-            <div class="flex items-center space-x-1">
+            <div class="flex items-center space-x-2">
               {% if somme == 0 %}
                 <a href="{{ path('make_conducteur_principal', {'id': conducteur.id, 'id_resa': reservation.id}) }}"
-                   class="btn btn-outline btn-sm btn-success mr-1 flex items-center gap-1">
+                   class="btn btn-outline btn-sm btn-success flex items-center gap-1">
                   <i class="fas fa-star"></i> Rendre Principal
                 </a>
               {% elseif conducteur.isPrincipal %}
                 <a href="{{ path('remove_conducteur_principal', {'id': conducteur.id, 'id_resa': reservation.id}) }}"
-                   class="btn btn-outline btn-sm btn-secondary mr-1 flex items-center gap-1">
+                   class="btn btn-outline btn-sm btn-secondary flex items-center gap-1">
                   <i class="fas fa-edit"></i> Retirer Principal
                 </a>
               {% endif %}
               <a href="{{ path('conducteur_edit', {'id': conducteur.id}) }}"
-                 class="btn btn-link btn-sm text-gray-400 p-1"
-                 title="Modifier">
+                 class="btn btn-ghost btn-sm text-base-content/50 tooltip"
+                 data-tip="Modifier">
                 <i class="fas fa-edit"></i>
               </a>
               <form method="post"
@@ -63,7 +56,7 @@
                 <input type="hidden" name="_method" value="DELETE">
                 <input type="hidden" name="reservation" value="{{ reservation.id }}">
                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ conducteur.id) }}">
-                <button class="btn btn-link btn-sm text-gray-400 p-1" title="Supprimer" type="submit">
+                <button class="btn btn-ghost btn-sm text-base-content/50 tooltip" data-tip="Supprimer" type="submit">
                   <i class="fas fa-trash-alt"></i>
                 </button>
               </form>
@@ -74,4 +67,3 @@
     </div>
   </div>
 </div>
-{% endif %}

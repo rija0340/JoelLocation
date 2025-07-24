@@ -1,0 +1,53 @@
+<input type="checkbox" id="modalAddConducteur" class="modal-toggle" />
+<div class="modal" id="modalAddConducteur">
+  <div class="modal-box max-w-3xl">
+    <h5 class="text-xl font-bold flex items-center gap-2 mb-4">
+      <i class="fas fa-plus"></i>
+      Ajouter un conducteur
+    </h5>
+    {{ form_start(form) }}
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="form-control">
+          <label class="label" for="{{ form.nom.vars.id }}">Nom</label>
+          {{ form_widget(form.nom, {'attr': {'class': 'input input-bordered w-full'}}) }}
+        </div>
+        <div class="form-control">
+          <label class="label" for="{{ form.prenom.vars.id }}">Prénom</label>
+          {{ form_widget(form.prenom, {'attr': {'class': 'input input-bordered w-full'}}) }}
+        </div>
+        <div class="form-control">
+          <label class="label" for="{{ form.dateNaissance.vars.id }}">Date de naissance</label>
+          {{ form_widget(form.dateNaissance, {'attr': {'class': 'input input-bordered w-full'}}) }}
+        </div>
+        <div class="form-control">
+          <label class="label" for="{{ form.villeNaissance.vars.id }}">Ville de naissance</label>
+          {{ form_widget(form.villeNaissance, {'attr': {'class': 'input input-bordered w-full'}}) }}
+        </div>
+        <div class="form-control">
+          <label class="label" for="{{ form.numeroPermis.vars.id }}">Numéro de permis</label>
+          {{ form_widget(form.numeroPermis, {'attr': {'class': 'input input-bordered w-full'}}) }}
+        </div>
+        <div class="form-control">
+          <label class="label" for="{{ form.villeDelivrance.vars.id }}">Ville de délivrance</label>
+          {{ form_widget(form.villeDelivrance, {'attr': {'class': 'input input-bordered w-full'}}) }}
+        </div>
+        <div class="form-control">
+          <label class="label" for="{{ form.dateDelivrance.vars.id }}">Date de délivrance</label>
+          {{ form_widget(form.dateDelivrance, {'attr': {'class': 'input input-bordered w-full'}}) }}
+        </div>
+        <div class="form-control">
+          <label class="label" for="{{ form.telephone.vars.id }}">Téléphone</label>
+          {{ form_widget(form.telephone, {'attr': {'class': 'input input-bordered w-full'}}) }}
+        </div>
+        <div class="form-control">
+          <label class="label" for="{{ form.dateExpiration.vars.id }}">Date d'expiration</label>
+          {{ form_widget(form.dateExpiration, {'attr': {'class': 'input input-bordered w-full'}}) }}
+        </div>
+      </div>
+      <div class="modal-action mt-6">
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+        <label for="modalAddConducteur" class="btn btn-ghost">Annuler</label>
+      </div>
+    {{ form_end(form) }}
+  </div>
+</div>

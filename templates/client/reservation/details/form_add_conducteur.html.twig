@@ -1,29 +1,28 @@
 {% if avalaibleDrivers|length > 0 %}
     <form action="{{ path('client_add_conducteur', {'id': reservation.id}) }}" method="POST">
-        <div class="modal-body">
-            <label>Sélectionner un conducteur à ajouter à la réservation :</label>
-            <select id="monselect" class="form-control" name="conducteur">
+        <div class="modal-body space-y-4">
+            <label class="block font-medium">Sélectionner un conducteur à ajouter à la réservation :</label>
+            <select id="monselect" name="conducteur" class="select select-bordered w-full max-w-xs">
                 {% for conducteur in avalaibleDrivers %}
-                    <option value="{{ conducteur.id }}">{{ conducteur.nom }}
-                        {{ conducteur.prenom }}</option>
+                    <option value="{{ conducteur.id }}">{{ conducteur.nom }} {{ conducteur.prenom }}</option>
                 {% endfor %}
             </select>
-            Le conducteur recherché n'est pas dans la liste ci-desssus?
-            <a href="{{ path('client_newConducteur') }}">Cliquez-ici</a>
+            <p class="mt-2 text-sm">
+                Le conducteur recherché n'est pas dans la liste ci-dessus ?
+                <a href="{{ path('client_newConducteur') }}" class="text-primary hover:underline">Cliquez-ici</a>
+            </p>
         </div>
-        <div class="modal-footer">
-            <button class="btn btn-dark" data-dismiss="modal">
-                <i class="fa fa-close"></i>
-                Annuler
+        <div class="modal-footer flex justify-end gap-3 mt-4">
+            <button type="button" class="btn btn-outline" data-dismiss="modal">
+                <i class="fa fa-close mr-1"></i> Annuler
             </button>
-            <button class="btn btn-danger" type="submit">
-                <i class="fa fa-save"></i>
-                Valider
+            <button type="submit" class="btn btn-error">
+                <i class="fa fa-save mr-1"></i> Valider
             </button>
         </div>
     </form>
 {% else %}
     <div class="p-3 text-center">
-        <a href="{{ path('client_newConducteur') }}">Créer un nouveau conducteur</a>
+        <a href="{{ path('client_newConducteur') }}" class="text-primary hover:underline">Créer un nouveau conducteur</a>
     </div>
 {% endif %}

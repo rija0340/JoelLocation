@@ -1,0 +1,35 @@
+{% extends 'baseClient2.html.twig' %}
+
+{% set type = 'reservation' %}
+{% block title %}Détails réservation{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+<div class="container mx-auto py-4 max-w-6xl px-4">
+  {% include 'client2/reservation/details/parts/_header.html.twig' with {'reservation': reservation, 'type': type} %}
+  <div class="flex flex-col md:flex-row gap-6">
+    <div class="md:w-1/3 space-y-6">
+      {% include 'client2/reservation/details/parts/_vehicule_info.html.twig' with {'reservation': reservation} %}
+      {% include 'client2/reservation/details/parts/_client_info.html.twig' with {'reservation': reservation} %}
+    </div>
+    <div class="md:w-2/3 space-y-6">
+      {% include 'client2/reservation/details/parts/_rental_period.html.twig' with {'reservation': reservation, 'type': type} %}
+      {% if type != 'devis' %}
+        {% include 'client2/reservation/details/parts/_conductors.html.twig' with {'reservation': reservation} %}
+      {% endif %}
+      {% include 'client2/reservation/details/parts/_options_garanties.html.twig' with {'reservation': reservation, 'prixConductSuppl': prixConductSuppl} %}
+      {% include 'client2/reservation/details/parts/_payment_summary.html.twig' with {'reservation': reservation, 'type': type} %}
+      {% if type == 'devis' %}
+        {% include 'client2/reservation/details/parts/_action_buttons.html.twig' with {'reservation': reservation} %}
+      {% endif %}
+    </div>
+  </div>
+  {% include 'client2/reservation/details/parts/_modal_conducteur.html.twig' with {'reservation': reservation} %}
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ asset('client2/js/reservation/details.js') }}"></script>
+{% endblock %}

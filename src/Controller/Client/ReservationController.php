@@ -112,7 +112,7 @@ class ReservationController extends AbstractController
     public function detailsReservation(Reservation $reservation, Request $request): Response
     {
         $conducteurs =  $this->conducteurRepo->findBy(['client' => $this->getUser()]);
-        return $this->render('client/reservation/details/details_reservation.html.twig', [
+        return $this->render('client2/reservation/details/details_resa.html.twig', [
             'reservation' => $reservation,
             'conducteurs' => $conducteurs,
             'prixConductSuppl' => $this->tarifsHelper->getPrixConducteurSupplementaire()
@@ -259,7 +259,7 @@ class ReservationController extends AbstractController
             return $this->redirectToRoute('client_reservations');
         }
 
-        return $this->render('client/reservation/details/details_devis.html.twig', [
+        return $this->render('client2/reservation/details/details_devis.html.twig', [
             'reservation' => $devis,
             'prixConductSuppl' => $this->tarifsHelper->getPrixConducteurSupplementaire()
         ]);
