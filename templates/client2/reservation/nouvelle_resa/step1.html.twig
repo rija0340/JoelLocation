@@ -1,0 +1,138 @@
+{% extends 'baseClient2.html.twig' %}
+
+{% block title %}Réservation{% endblock %}
+
+{% block stylesheets %}
+	{# plus de fichiers CSS Bootstrap ou custom #}
+{% endblock %}
+
+
+
+{% block body %}
+
+<div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0 py-6">
+  <header class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+    <div>
+      <h1 class="text-3xl font-bold">Nouvelle réservation</h1>
+      <p class="text-gray-500">Suivez les étapes pour créer une nouvelle réservation</p>
+    </div>
+
+  </header>
+
+		<div class="grid grid-cols-2 md:grid-cols-4 gap-4 my-4">
+		<div class="text-center">
+			<div class="badge badge-primary w-10 h-10 rounded-full flex items-center justify-center mx-auto">
+				<i class="fa fa-check text-white"></i>
+			</div>
+			<p class="mt-2 text-sm">Agences & Dates</p>
+		</div>
+		<div class="text-center">
+			<div class="badge badge-outline w-10 h-10 rounded-full flex items-center justify-center mx-auto">
+				2
+			</div>
+			<p class="mt-2 text-sm">Véhicules</p>
+		</div>
+		<div class="text-center">
+			<div class="badge badge-outline w-10 h-10 rounded-full flex items-center justify-center mx-auto">
+				3
+			</div>
+			<p class="mt-2 text-sm">Options et garanties</p>
+		</div>
+		<div class="text-center">
+			<div class="badge badge-outline w-10 h-10 rounded-full flex items-center justify-center mx-auto">
+				4
+			</div>
+			<p class="mt-2 text-sm">Récapitulatif</p>
+		</div>
+	</div>
+
+</div>
+
+	{{ form_start(form) }}
+
+	<div class="bg-base-100 p-6 rounded-xl shadow mb-6">
+		<h2 class="text-error font-bold text-lg mb-4">Départ :</h2>
+		<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+			<div>
+				<label class="label">Agence de départ :</label>
+				{{ form_widget(form.agenceDepart, {'attr': {'class': 'input input-bordered w-full'}}) }}
+			</div>
+			<div>
+				<label class="label">Date de départ :</label>
+				{{ form_widget(form.dateDepart, {'attr': {'class': 'input input-bordered w-full'}}) }}
+			</div>
+			<div>
+				<label class="label">Type de véhicule :</label>
+				{{ form_widget(form.typeVehicule, {'attr': {'class': 'input input-bordered w-full'}}) }}
+			</div>
+		</div>
+	</div>
+
+	<div class="bg-base-100 p-6 rounded-xl shadow mb-6">
+		<h2 class="text-error font-bold text-lg mb-4">Retour :</h2>
+		<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+			<div>
+				<label class="label">Agence de retour :</label>
+				{{ form_widget(form.agenceRetour, {'attr': {'class': 'input input-bordered w-full'}}) }}
+			</div>
+			<div>
+				<label class="label">Date de retour :</label>
+				{{ form_widget(form.dateRetour, {'attr': {'class': 'input input-bordered w-full'}}) }}
+			</div>
+			<div>
+				<label class="label">Lieu de séjour :</label>
+				{{ form_widget(form.lieuSejour, {'attr': {'class': 'input input-bordered w-full'}}) }}
+			</div>
+		</div>
+	</div>
+
+	<div class="text-center mt-6">
+		<button class="btn btn-error" id="enregistrer">
+			<i class="fa fa-book mr-2"></i> Enregistrer
+		</button>
+	</div>
+
+	{{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script>
+	<script type="text/javascript">
+		const now = new Date();
+		const dateDepartInput = document.getElementById("reservation_step1_dateDepart");
+		const dateRetourInput = document.getElementById("reservation_step1_dateRetour");
+
+		function addOneDay(date) {
+			const result = new Date(date.getTime());
+			result.setDate(result.getDate() + 1);
+			return result;
+		}
+
+		const startPicker = flatpickr(dateDepartInput, {
+			locale: 'fr',
+			enableTime: true,
+			minDate: now,
+			defaultDate: dateDepartInput.value ? new Date(dateDepartInput.value) : now,
+			dateFormat: "d/m/Y H:i",
+			onChange: function (selectedDates) {
+				const startDate = selectedDates[0];
+				const endDate = addOneDay(startDate);
+				endPicker.set('minDate', startDate);
+				endPicker.setDate(endDate);
+			}
+		});
+
+		const initialStartDate = startPicker.selectedDates[0] || now;
+		const initialEndDate = addOneDay(initialStartDate);
+
+		const endPicker = flatpickr(dateRetourInput, {
+			locale: 'fr',
+			enableTime: true,
+			minDate: initialStartDate,
+			defaultDate: dateRetourInput.value ? new Date(dateRetourInput.value) : initialEndDate,
+			dateFormat: "d/m/Y H:i"
+		});
+	</script>
+{% endblock %}

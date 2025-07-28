@@ -4,9 +4,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
   tabs.forEach(tab => {
     tab.addEventListener('click', function () {
-      // Remove active tab class
-      tabs.forEach(t => t.classList.remove('tab-active'));
-      tab.classList.add('tab-active');
+      // Remove active tab class and reset font color
+      tabs.forEach(t => {
+        t.classList.remove('tab-active', 'text-red-500');
+        t.classList.add('text-gray-700');
+      });
+      // Add active tab class and set red font color
+      tab.classList.add('tab-active', 'text-red-500');
+      tab.classList.remove('text-gray-700');
 
       const selected = tab.getAttribute('data-tab');
 

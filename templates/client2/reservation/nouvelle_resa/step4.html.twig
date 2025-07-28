@@ -1,0 +1,195 @@
+{% extends 'baseClient2.html.twig' %}
+
+{% block title %}Réservation{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/client/steps.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/client/nouvelleReservation.css') }}">
+{% endblock %}
+
+{% block current_page_right %}
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 my-4">
+        <div class="text-center">
+            <div class="badge badge-success w-10 h-10 rounded-full flex items-center justify-center mx-auto">
+                <i class="fa fa-check text-white"></i>
+            </div>
+            <p class="mt-2 text-sm">Agences & Dates</p>
+        </div>
+        <div class="text-center">
+            <div class="badge badge-success w-10 h-10 rounded-full flex items-center justify-center mx-auto">
+                2
+            </div>
+            <p class="mt-2 text-sm">Véhicules</p>
+        </div>
+        <div class="text-center">
+            <div class="badge badge-success w-10 h-10 rounded-full flex items-center justify-center mx-auto">
+                3
+            </div>
+            <p class="mt-2 text-sm">Options et garanties</p>
+        </div>
+        <div class="text-center">
+            <div class="badge badge-primary w-10 h-10 rounded-full flex items-center justify-center mx-auto">
+                4
+            </div>
+            <p class="mt-2 text-sm">Récapitulatif</p>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+<div class="card bg-base-100 shadow-xl mb-8 rounded-box">
+        <div class="card-body p-6">
+            <h2 class="card-title text-2xl font-bold text-primary mb-4">
+                <i class="fas fa-chevron-right mr-3 text-primary"></i> 
+                Votre réservation
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Vehicle Image -->
+                <div class="aspect-video">
+                    <img src="{{ vich_uploader_asset(devis.vehicule, 'imageFile') }}" 
+                         alt="{{ devis.vehicule.marque }} {{ devis.vehicule.modele }}" 
+                         class="w-full h-full object-cover rounded-lg">
+                </div>
+                
+                <!-- Details Section -->
+                <div class="md:col-span-2 space-y-4">
+                    <!-- Agency Info -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-base-200 p-4 rounded-box">
+                            <h3 class="text-lg font-semibold mb-2">Agence départ</h3>
+                            <div class="flex items-start gap-2">
+                                <i class="fas fa-map-marker-alt mt-1 text-secondary"></i>
+                                <div>
+                                    <p class="font-medium">{{ devis.agenceDepart }}</p>
+                                    <p class="text-sm opacity-75">
+                                        {{ devis.dateDepart|date('m/d/Y') }} à {{ devis.dateDepart|date('H:i') }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-base-200 p-4 rounded-box">
+                            <h3 class="text-lg font-semibold mb-2">Agence retour</h3>
+                            <div class="flex items-start gap-2">
+                                <i class="fas fa-map-marker-alt mt-1 text-secondary"></i>
+                                <div>
+                                    <p class="font-medium">{{ devis.agenceRetour }}</p>
+                                    <p class="text-sm opacity-75">
+                                        {{ devis.dateRetour|date('m/d/Y') }} à {{ devis.dateRetour|date('H:i') }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pricing Info -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-base-200 p-4 rounded-box">
+                            <p class="mb-2">Soit <span class="font-semibold">{{ devis.duree }}</span> jours de location</p>
+                            <h3 class="text-lg font-semibold mb-2">Prix de base de location</h3>
+                            <p class="text-xl font-bold">{{ devis.tarifVehicule }} EUR</p>
+                            <p class="text-sm opacity-75">
+                                soit {{ (devis.tarifVehicule / devis.duree)|number_format(2,","," ") }} €/jour
+                            </p>
+                        </div>
+                        
+                        <div class="bg-base-200 p-4 rounded-box">
+                            <h3 class="text-lg font-semibold mb-2">Prestations incluses</h3>
+                            <ul class="space-y-1">
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check-circle text-success mt-1 text-sm"></i>
+                                    <span>Kilométrage Illimité</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check-circle text-success mt-1 text-sm"></i>
+                                    <span>Assurance accidents causés aux tiers</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check-circle text-success mt-1 text-sm"></i>
+                                    <span>Assurance responsabilité civile</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check-circle text-success mt-1 text-sm"></i>
+                                    <span>Assurance collision (CDW)</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check-circle text-success mt-1 text-sm"></i>
+                                    <span>TVA 8.5 %</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Options & Guarantees -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {% if devis.options is not empty or devis.conducteur == true %}
+                        <div class="bg-base-200 p-4 rounded-box">
+                            <h3 class="text-lg font-semibold mb-2">Options</h3>
+                            <ul class="space-y-1">
+                                {% if devis.conducteur == "true" %}
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-plus-circle text-info mt-1 text-sm"></i>
+                                    <span>Conducteur additionnel : 50€</span>
+                                </li>
+                                {% endif %}
+                                {% for option in devis.devisOptions %}
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-plus-circle text-info mt-1 text-sm"></i>
+                                    <span>
+                                        {{ option.opt.appelation }} (nombre : {{ option.quantity }}) : 
+                                        {{ (option.opt.prix * option.quantity)|number_format(2,","," ") }} €
+                                    </span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                        
+                        {% if devis.garanties|length > 0 %}
+                        <div class="bg-base-200 p-4 rounded-box">
+                            <h3 class="text-lg font-semibold mb-2">Garantie(s)</h3>
+                            <ul class="space-y-1">
+                                {% for garantie in devis.garanties %}
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-shield-alt text-warning mt-1 text-sm"></i>
+                                    <span>{{ garantie.appelation }} : {{ garantie.prix }} €</span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Divider -->
+                    <div class="divider"></div>
+                    
+                    <!-- Total & Actions -->
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div class="text-center md:text-left">
+                            <p class="text-lg font-semibold">Total à payer :</p>
+                            <p class="text-2xl font-bold text-primary">{{ devis.prix }}€</p>
+                        </div>
+                        
+                        <div class="flex flex-wrap justify-center gap-2">
+                            <a href="{{ path('client_step3') }}" class="btn btn-outline">
+                                <i class="fas fa-arrow-left mr-2"></i> 
+                                Revenir à l'étape précédente
+                            </a>
+                            <a href="{{ path('client_saveDevis') }}" class="btn btn-primary">
+                                <i class="fas fa-save mr-2"></i> 
+                                Enregistrer le devis
+                            </a>
+                            <a href="{{ path('client_reserverDevis') }}" class="btn btn-success">
+                                <i class="fas fa-check mr-2"></i> 
+                                Réserver
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}{% endblock %}

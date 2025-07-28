@@ -600,7 +600,7 @@ class ReservationController extends AbstractController
         }
 
 
-        $template  = $routeName === 'validation_step2' ? 'client/reservation/validation/step2OptionsGaranties.html.twig' :  'admin/devis_reservation/options_garanties/edit.html.twig';
+        $template  = $routeName === 'validation_step2' ? 'client2/reservation/nouvelle_resa/step3.html.twig' :  'admin/devis_reservation/options_garanties/edit.html.twig';
         return $this->render($template, [
             'form' => $form->createView(),
             'devis' => $entity,
@@ -617,7 +617,8 @@ class ReservationController extends AbstractController
             'vehiculeIsNotAvailable' => $vehiculeIsNotAvailable,
             'tarifVehicule' => $entity->getTarifVehicule(),
             'duree' => $entity->getDuree(),
-            'prixConductSuppl' => $this->tarifsHelper->getPrixConducteurSupplementaire()
+            'prixConductSuppl' => $this->tarifsHelper->getPrixConducteurSupplementaire(),
+            'step'=> 'validation'
         ]);
     }
     private function getCancelPath(string $routeName, $entityId): string

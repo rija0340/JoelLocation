@@ -1,0 +1,120 @@
+    {% extends 'baseClient2.html.twig' %}
+
+{% block title %}Réservation{% endblock %}
+
+
+{% block body %}
+
+
+{% if step is defined and step == 'validation' %}
+
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0 py-6">
+    <div>
+      <h1 class="text-3xl font-bold">Validation de devis </h1>
+      <p class="text-gray-500">Vous pouvez modifier vos choix</p>
+    </div>
+
+  </div>
+
+    {% if vehiculeIsNotAvailable %}
+        <div class="mt-2 mb-4">
+            <h3 class="text-danger text-center">
+                <i class="fa fa-warning"></i>
+                Cette véhicule n'est plus disponible, veuillez effectuer une autre réservation
+
+            </h3>
+            <div class="text-center">
+                <a href="{{path('client_step1')}}" class="btn btn-dark">
+                    Nouvelle réservation</a>
+            </div>
+        </div>
+    {% endif %}
+    <input type="hidden" id="options_garanties_data" data-vehiculeisnotavailable=" {{ vehiculeIsNotAvailable }}" data-selected-options="{{dataOptions|json_encode()}}" data-selected-garanties="{{dataGaranties|json_encode()}}" data-options="{{allOptions|json_encode()}}" data-garanties="{{allGaranties|json_encode()}}">
+
+{% else %}
+
+<div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0 py-0">
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+    <div>
+      <h1 class="text-3xl font-bold">Etape 2 </h1>
+      <p class="text-gray-500">Choix de véhicule</p>
+    </div>
+
+  </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 my-4">
+        <div class="text-center">
+            <div class="badge badge-primary w-10 h-10 rounded-full flex items-center justify-center mx-auto">
+                <i class="fa fa-check text-white"></i>
+            </div>
+            <p class="mt-2 text-sm">Agences & Dates</p>
+        </div>
+        <div class="text-center">
+            <div class="badge badge-outline w-10 h-10 rounded-full flex items-center justify-center mx-auto">
+                2
+            </div>
+            <p class="mt-2 text-sm">Véhicules</p>
+        </div>
+        <div class="text-center">
+            <div class="badge badge-outline w-10 h-10 rounded-full flex items-center justify-center mx-auto">
+                3
+            </div>
+            <p class="mt-2 text-sm">Options et garanties</p>
+        </div>
+        <div class="text-center">
+            <div class="badge badge-outline w-10 h-10 rounded-full flex items-center justify-center mx-auto">
+                4
+            </div>
+            <p class="mt-2 text-sm">Récapitulatif</p>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="text-center mb-2">
+    <a href="{{ path('client_step2') }}" class="btn btn-neutral mr-2">
+        Revenir à l'étape précédente
+    </a>
+    <button type="submit" class="btn btn-error" form="options_garanties" id="btnEnregistrer1">
+        Enregistrer
+    </button>
+</div>
+
+{% endif %} 
+
+<input type="hidden" id="options_garanties_data" 
+       data-selected-options="{{ dataOptions|json_encode() }}" 
+       data-selected-garanties="{{ dataGaranties|json_encode() }}" 
+       data-options="{{ allOptions|json_encode() }}" 
+       data-garanties="{{ allGaranties|json_encode() }}">
+
+<form 
+ {% if step is defined and step == 'validation' %}
+    action="{{path('validation_step2',{'id':devis.id})}}"
+{% else %}
+    action="{{ path('client_step3') }}"
+{% endif %}
+
+method="post" id="options_garanties">
+    <div class="flex flex-col md:flex-row gap-6">
+        <div class="w-full md:w-1/4">
+            {% include "client2/reservation/nouvelle_resa/parts/sidebarResaResume.html.twig" %}
+        </div>
+        <div class="w-full md:w-3/4">
+            {% include "client2/reservation/nouvelle_resa/parts/step2OptionsGaranties.html.twig" %}
+        </div>
+    </div>
+</form>
+
+<div class="text-center mt-5">
+    <a href="{{ path('client_step2') }}" class="btn btn-neutral mr-2">
+        Revenir à l'étape précédente
+    </a>
+    <button type="submit" class="btn btn-error" form="options_garanties" id="btnEnregistrer2">
+        Enregistrer
+    </button>
+</div>
+{% endblock %}
+
+{% block javascripts %}{% endblock %}

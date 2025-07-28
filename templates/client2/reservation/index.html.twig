@@ -40,18 +40,18 @@
   </div>
 
   <!-- DaisyUI Tabs -->
-<div class="tabs tabs-boxed" id="reservationTabs">
-  <a class="tab tab-active" data-tab="devis">
-    <i class="fas fa-file-invoice mr-1"></i> Devis <span class="badge badge-primary ml-1">{{ devis|length }}</span>
+<div class="tabs tabs-boxed flex flex-wrap gap-2 p-2" id="reservationTabs">
+  <a class="tab tab-active text-red-500 text-lg font-medium flex items-center" data-tab="devis">
+    <i class="fas fa-file-invoice mr-2"></i> Devis <span class="badge badge-neutral ml-2">{{ devis|length }}</span>
   </a>
-  <a class="tab" data-tab="encours">
-    <i class="fas fa-spinner mr-1"></i> En cours <span class="badge badge-primary ml-1">{{ reservationEncours|length }}</span>
+  <a class="tab text-gray-700 text-lg font-medium flex items-center" data-tab="encours">
+    <i class="fas fa-spinner mr-2"></i> En cours <span class="badge badge-neutral ml-2">{{ reservationEncours|length }}</span>
   </a>
-  <a class="tab" data-tab="avenir">
-    <i class="fas fa-calendar-alt mr-1"></i> À venir <span class="badge badge-primary ml-1">{{ reservationAvenir|length }}</span>
+  <a class="tab text-gray-700 text-lg font-medium flex items-center" data-tab="avenir">
+    <i class="fas fa-calendar-alt mr-2"></i> À venir <span class="badge badge-neutral ml-2">{{ reservationAvenir|length }}</span>
   </a>
-  <a class="tab" data-tab="termine">
-    <i class="fas fa-check-circle mr-1"></i> Terminé <span class="badge badge-primary ml-1">{{ reservationEffectuers|length }}</span>
+  <a class="tab text-gray-700 text-lg font-medium flex items-center" data-tab="termine">
+    <i class="fas fa-check-circle mr-2"></i> Terminé <span class="badge badge-neutral ml-2">{{ reservationEffectuers|length }}</span>
   </a>
 </div>
 

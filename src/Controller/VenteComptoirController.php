@@ -147,7 +147,7 @@ class VenteComptoirController extends AbstractController
         }
 
         $template = $routeName === 'client_step1'
-            ? 'client/nouvelleReservation/step1.html.twig'
+            ? 'client2/reservation/nouvelle_resa/step1.html.twig'
             : 'admin/vente_comptoir2/step1.html.twig';
 
         return $this->render($template, [
@@ -238,7 +238,7 @@ class VenteComptoirController extends AbstractController
         );
 
         $template = $routeName === 'client_step2'
-            ? 'client/nouvelleReservation/step2.html.twig'
+            ? 'client2/reservation/nouvelle_resa/step2.html.twig'
             : 'admin/vente_comptoir2/step2.html.twig';
 
         $devis = $this->reservationHelper->createDevisFromResaSession($this->reservationSession);
@@ -298,7 +298,7 @@ class VenteComptoirController extends AbstractController
         $devis = $this->reservationHelper->createDevisFromResaSession($this->reservationSession);
 
         $template = $routeName === 'client_step3'
-            ? 'client/nouvelleReservation/step3.html.twig'
+            ? 'client2/reservation/nouvelle_resa/step3.html.twig'
             : 'admin/vente_comptoir2/step3.html.twig';
 
         return $this->render($template, [
@@ -368,7 +368,7 @@ class VenteComptoirController extends AbstractController
         }
 
         $template = $routeName === 'client_step4'
-            ? 'client/nouvelleReservation/step4.html.twig'
+            ? 'client2/reservation/nouvelle_resa/step4.html.twig'
             : 'admin/vente_comptoir2/step4.html.twig';
 
         $devis = $this->reservationHelper->createDevisFromResaSession($this->reservationSession);

@@ -1,0 +1,142 @@
+{% extends 'baseClient2.html.twig' %}
+
+{% block title %}Réservation{% endblock %}
+
+{% block stylesheets %}
+	{# plus besoin de CSS custom ni Bootstrap ici #}
+{% endblock %}
+
+{% block body %}
+
+
+
+
+<div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0 py-0">
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+    <div>
+      <h1 class="text-3xl font-bold">Etape 2 </h1>
+      <p class="text-gray-500">Choix de véhicule</p>
+    </div>
+
+  </div>
+
+	<div class="grid grid-cols-2 md:grid-cols-4 gap-4 my-4">
+		<div class="text-center">
+			<div class="badge badge-primary w-10 h-10 rounded-full flex items-center justify-center mx-auto">
+				<i class="fa fa-check text-white"></i>
+			</div>
+			<p class="mt-2 text-sm">Agences & Dates</p>
+		</div>
+		<div class="text-center">
+			<div class="badge badge-outline w-10 h-10 rounded-full flex items-center justify-center mx-auto">
+				2
+			</div>
+			<p class="mt-2 text-sm">Véhicules</p>
+		</div>
+		<div class="text-center">
+			<div class="badge badge-outline w-10 h-10 rounded-full flex items-center justify-center mx-auto">
+				3
+			</div>
+			<p class="mt-2 text-sm">Options et garanties</p>
+		</div>
+		<div class="text-center">
+			<div class="badge badge-outline w-10 h-10 rounded-full flex items-center justify-center mx-auto">
+				4
+			</div>
+			<p class="mt-2 text-sm">Récapitulatif</p>
+		</div>
+	</div>
+
+</div>
+
+
+	<div class=" gap-4 my-4">
+		<a href="{{ path('client_step1') }}" class="btn btn-neutral">
+			<i class="fa fa-arrow-left mr-2"></i>
+			Revenir à l'étape précédente
+		</a>
+		{% if vehiculesDisponible|length > 0 %}
+			<button class="btn text-base" type="submit" form="formStep2">
+				<i class="fa fa-save mr-2"></i>
+				Enregistrer
+			</button>
+		{% endif %}
+	</div>
+
+	<form action="{{ path('client_step2') }}" method="post" id="formStep2" class="space-y-4">
+
+		{% if vehiculesDisponible|length > 0 %}
+			{% for vehicule in vehiculesDisponiblePagination %}
+				{% if vehicule is not null %}
+					{% include 'client2/reservation/nouvelle_resa/parts/step2_vehicule.html.twig' %}
+				{% endif %}
+			{% endfor %}
+		{% else %}
+			<div class="bg-base-100 shadow p-6 rounded-xl text-center">
+				<h3 class="text-lg">
+					Il n'y a pas de véhicules disponibles du
+					<span class="font-semibold">{{ dateDepart|date('d/m/Y') }}</span>
+					au
+					<span class="font-semibold">{{ dateRetour|date('d/m/Y') }}</span>
+				</h3>
+			</div>
+		{% endif %}
+
+		<div class="flex justify-center">
+			<div>
+				{{ knp_pagination_render(vehiculesDisponiblePagination) }}
+			</div>
+		</div>
+
+		{% if vehiculesDisponible|length > 0 %}
+			<div class="flex justify-center items-center gap-4 mt-4">
+				<a href="{{ path('client_step1') }}" class="btn btn-neutral">
+					<i class="fa fa-arrow-left mr-2"></i>
+					Revenir à l'étape précédente
+				</a>
+				<button class="btn btn-error" type="submit" form="formStep2">
+					<i class="fa fa-save mr-2"></i>
+					Enregistrer
+				</button>
+			</div>
+		{% endif %}
+	</form>
+{% endblock %}
+
+{% block javascripts %}
+
+<script>
+document.querySelectorAll('input[name="vehicule"]').forEach(input => {
+    const label = input.nextElementSibling;
+    const textSpan = label.querySelector('.js-btn-text');
+
+    // Initialize state on page load
+    if (input.checked) {
+        label.classList.remove('bg-transparent', 'text-success');
+        label.classList.add('bg-success', 'text-white', 'border-success');
+        textSpan.textContent = 'Sélectionné';
+        label.dataset.selected = 'true';
+    }
+
+    // Handle change event
+    input.addEventListener('change', () => {
+        // Reset all buttons
+        document.querySelectorAll('.js-vehicle-btn').forEach(otherLabel => {
+            otherLabel.classList.remove('bg-success', 'text-white', 'border-success');
+            otherLabel.classList.add('bg-transparent', 'text-success', 'border-success');
+            otherLabel.querySelector('.js-btn-text').textContent = 'Choisir';
+            otherLabel.dataset.selected = 'false';
+        });
+
+        // Update selected button
+        if (input.checked) {
+            label.classList.remove('bg-transparent', 'text-success');
+            label.classList.add('bg-success', 'text-white', 'border-success');
+            textSpan.textContent = 'Sélectionné';
+            label.dataset.selected = 'true';
+        }
+    });
+});
+</script>
+
+{% endblock %}
