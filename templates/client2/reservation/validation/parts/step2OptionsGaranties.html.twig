@@ -1,0 +1,240 @@
+<style>
+	.numeric-input {
+		display: flex;
+		align-items: center;
+		border: 1px solid #ddd;
+		border-radius: 4px;
+		overflow: hidden;
+		width: fit-content;
+	}
+
+	.numeric-input button {
+		background: #f8f9fa;
+		border: none;
+		padding: 8px 12px;
+		cursor: pointer;
+		transition: background-color 0.2s;
+
+	}
+
+	.numeric-input button:hover {
+		background: #e9ecef;
+	}
+
+	.numeric-input .number {
+		border: none;
+		text-align: center;
+		padding: 8px 0;
+		-moz-appearance: textfield;
+	}
+
+	.numeric-input .number::-webkit-outer-spin-button,
+	.numeric-input .number::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+</style>
+<div class="x_panel">
+	<div class="x_title">
+		<h3>
+			<i class="fa fa-chevron-right"></i>
+			Vos options
+		</h3>
+	</div>
+
+	<div class="row">
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-4">
+					<div class="alert alert-secondary h-100">
+						<img src="" alt="" style="width:100%;" id="vehicule_photo">
+
+					</div>
+				</div>
+				<div class="col-md-8">
+					<div class="x_title">
+						<h5>
+							Conducteur additionnel
+						</h5>
+
+					</div>
+					<p>
+						A Joel Location, nous savons que les longs trajets peuvent être fatigants, surtout après un bon bain de mer. C’est pour cela, que nous vous proposons l’ajout d’un deuxième conducteur gratuitement. De plus, les assurances responsabilités civiles et accidents causés aux tiers sont inclus dans votre forfait "location de voiture".
+					</p>
+					<div class="row">
+						<div class="col-auto">
+							<label class="label-conducteur">
+								<span class="font-weight-bold">Oui ({{prixConductSuppl}}€)</span>
+								<input type="radio" checked name="radio-conducteur" value="true" {% if devis.conducteur %} checked {% endif %}>
+								<span class="checkmark-conducteur"></span>
+							</label>
+						</div>
+						<div class="col-auto">
+							<label class="label-conducteur">
+								<span class="font-weight-bold">Non</span>
+								<input type="radio" name="radio-conducteur" value="false" {% if devis.conducteur == false %} checked {% endif %}>
+								<span class="checkmark-conducteur"></span>
+							</label>
+						</div>
+					</div>
+
+					{# fin incrementer #}
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-4">
+					<div class="alert alert-secondary btn-block h-100">
+						<img src="" alt="" style="width:100%;" id="vehicule_photo">
+					</div>
+				</div>
+				<div class="col-md-8">
+					<div class="x_title">
+						<h5>
+							Siège bébé / enfant
+						</h5>
+					</div>
+					<p>Nous mettons à votre disposition des sièges bébé et nourrissons, homologués NF, pour seulement 30 euros TTC. Les rehausseurs pour les enfants de + de 15kg sont totalement gratuits !</p>
+					{# test radio #}
+					{% for option in allOptions  %}
+						{% if option.type == "siège" %}
+
+							{% if option.appelation matches '/Siège/' %}
+								<div class="d-flex">
+									<div class="numeric-input mb-2">
+										<button class="decrement mr-0 mb-0" id="decrement_{{option.id}}">-</button>
+										<input class="number" name="siege_{{option.id}}" type="number" id="number_{{option.id}}" value="{% if option.id in devis.devisOptions|map(item => item.opt.id) %}{{ devis.devisOptions|filter(item => item.opt.id == option.id)|first.quantity }}{% else %}0{% endif %}" min="0" max="3">
+										<button class="increment mr-0 mb-0" id="increment_{{option.id}}">+</button>
+									</div>
+									<label class="label-container pl-1">
+										{{option.appelation}}
+									</label>
+								</div>
+							{% else %}
+								<label class="label-container">
+									{{option.appelation}}
+									{% if option.prix != 0  %}
+										:
+										{{option.prix}}€
+									{% endif %}
+
+									<input type="checkbox" name="checkboxOptions[]" value="{{option.id}}" {% if option.id in devis.devisOptions|map(item => item.opt.id) %} checked {% endif %}>
+									<span class="checkmark"></span>
+								</label>
+							{% endif %}
+						{% endif %}
+					{% endfor %}
+
+					{# fin incrementer #}
+				</div>
+			</div>
+		</div>
+
+		{% for option in allOptions  %}
+			{% if option.type != "siège" %}
+				{# refueling #}
+				<div class="col-md-6 p-2">
+					<div class="row">
+						<div class="col-md-4">
+							<div class="alert alert-secondary h-100">
+								<img src="" alt="" style="width:100%;">
+							</div>
+						</div>
+						<div class="col-md-8">
+							<div class="x_title">
+								<h5 class="">
+									{{option.appelation}}
+								</h5>
+							</div>
+							<p>
+								{{option.description|raw }}
+							</p>
+							<div class="col-auto">
+								<label class="label-container">{{option.appelation}}
+									:
+									{{option.prix}}
+									€
+									<input type="checkbox" name="checkboxOptions[]" value="{{option.id}}" {% if option.id in devis.devisOptions|map( item => item.opt.id) %} checked {% endif %}>
+									<span class="checkmark"></span>
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			{% endif %}
+		{% endfor %}
+
+	</div>
+</div>
+<div class="x_panel">
+	<div class="x_title">
+		<h3>
+			<i class="fa fa-chevron-right"></i>
+
+			Vos garanties</h3>
+	</div>
+	<div class="row">
+		{% for garantie in allGaranties %}
+			<div class="col-md-6">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="alert alert-secondary h-100">
+							<img src="" alt="" style="width:100%;" id="vehicule_photo">
+
+						</div>
+					</div>
+					<div class="col-md-8">
+						<div class="x_title">
+							<h5>
+								{{garantie.appelation}}
+							</h5>
+						</div>
+						<p>
+							{{garantie.description}}
+						</p>
+						<div
+							class="row">
+							{# <div class="col-auto p-0"><label class="label-container">90€<input type="checkbox" checked="checked"><span class="checkmark"></span></label></div> #}
+
+							<label class="label-container">{{garantie.prix}}
+								€
+								<input type="checkbox" name="checkboxGaranties[]" value="{{garantie.id}}" {% if garantie.id in devis.garanties|map(item => item.id) %} checked {% endif %}>
+								<span class="checkmark"></span>
+							</label>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+</div>
+<script>
+	// Find all number input groups and handle their increment/decrement
+document.querySelectorAll('[id^="number_"]').forEach((numberInput) => { // Get the unique suffix from the input ID (e.g., "2" or "3")
+const suffix = numberInput.id.split('_')[1];
+
+// Select related increment and decrement buttons
+const decrementButton = document.querySelector(`#decrement_${suffix}`);
+const incrementButton = document.querySelector(`#increment_${suffix}`);
+
+// Add event listener to decrement button
+decrementButton.addEventListener('click', (e) => {
+e.preventDefault();
+const currentValue = parseInt(numberInput.value, 10);
+if (currentValue > parseInt(numberInput.min, 10)) {
+numberInput.value = currentValue - 1;
+}
+});
+
+// Add event listener to increment button
+incrementButton.addEventListener('click', (e) => {
+e.preventDefault();
+const currentValue = parseInt(numberInput.value, 10);
+if (currentValue < parseInt(numberInput.max, 10)) {
+numberInput.value = currentValue + 1;
+}
+});
+});
+</script>

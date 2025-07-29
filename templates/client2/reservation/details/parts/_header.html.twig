@@ -19,8 +19,14 @@
       {% endif %}
     </small>
   </div>
-  <a href="{{ path('client_reservations') }}" class="btn btn-outline btn-error flex items-center gap-2">
-    <i class="fas fa-reply"></i>
-    Mes Réservations
-  </a>
+
+  <div class="flex flex-col md:flex-row gap-2 md:gap-4">
+    {% if type == 'devis' %}
+      {% include 'client2/reservation/details/parts/_action_buttons.html.twig' with {'reservation': reservation} %}
+    {% endif %}
+    <a href="{{ path('client_reservations') }}" class="btn btn-outline  flex items-center gap-2">
+      <i class="fas fa-reply"></i>
+      Mes Réservations
+    </a>
+  </div>
 </div>

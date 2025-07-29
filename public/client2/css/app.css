@@ -4,6 +4,7 @@
   --color-base-100: oklch(100% 0 0);
   --color-base-200: oklch(93% 0 0);
   --color-base-300: oklch(86% 0 0);
+  /*--color-base-100: oklch(60% 0.3 0);*/
   --color-base-content: oklch(35.519% 0.032 262.988);
   --color-primary: oklch(76.662% 0.135 153.45);
   --color-primary-content: oklch(33.387% 0.04 162.24);
@@ -19,8 +20,9 @@
   --color-success-content: oklch(0% 0 0);
   --color-warning: oklch(84.71% 0.199 83.87);
   --color-warning-content: oklch(0% 0 0);
-  --color-error: oklch(71.76% 0.221 22.18);
-  --color-error-content: oklch(58% 0.253 17.585);
+  --color-error: oklch(63.6% 0.329 19.6);
+  --color-error-content: oklch(100% 0 0); /* blanc pur */
+  --color-black: oklch(0% 0 0); /* noir */
   --rounded-box: 1rem;
   --rounded-btn: 0.5rem;
   --rounded-badge: 1rem;
@@ -42,3 +44,37 @@
   opacity: 0;
   pointer-events: none;
 }
+  :root {
+      --er: #fc0317;
+      --erc: #ffffff;
+    }
+
+/* app.css */
+
+.btn-red {
+  background-color: var(--color-error);
+  color: #ffffff;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: var(--rounded-btn);
+  transition: background-color 0.3s;
+}
+
+.btn-black {
+  background-color: var(--color-black);
+  color: #ffffff;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: var(--rounded-btn);
+  transition: background-color 0.3s;
+}
+
+.btn-red:hover {
+  background-color: #c30212;
+}
+
+.title-red {
+  color: #fc0317;
+  font-weight: 700;
+}
+

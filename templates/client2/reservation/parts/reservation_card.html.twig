@@ -109,7 +109,7 @@
               {% endif %}
               {% if 'validate' in config[type].actions and (date(attribute(reserv, config[type].date_debut_field)) > date("now") or reserv.transformed == true) %}
                 <a href="{{ path('validation_step2', {'id': reserv.id}) }}"
-                   class="btn btn-sm btn-success">
+                   class="btn-red btn btn-sm">
                   <i class="fas fa-check mr-1"></i> Valider
                 </a>
               {% endif %}

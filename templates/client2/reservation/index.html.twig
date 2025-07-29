@@ -10,16 +10,16 @@
   <!-- En-tête -->
   <header class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
     <div>
-      <h1 class="text-3xl font-bold">Mes Réservations</h1>
+      <h1 class="text-3xl title-red">Mes Réservations</h1>
       <p class="text-gray-500">Consultez et gérez vos locations de voitures</p>
     </div>
-    <a href="{{ path('client_step1') }}" class="btn btn-primary">
+    <a href="{{ path('client_step1') }}" class="btn btn-error">
       <i class="fas fa-plus mr-2"></i> Nouvelle Réservation
     </a>
   </header>
 
   <!-- Barre de recherche & filtre -->
-  <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+  <div class="hidden flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
     <div class="flex items-center w-full md:w-2/3">
       <div class="relative w-full">
         <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">

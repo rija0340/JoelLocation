@@ -1,0 +1,141 @@
+<div class="votreVehicule">
+	<h5 class="text-uppercase">
+		Votre réservation
+	</h5>
+</div>
+<div class="card p-2 btn-block card mdl-shadow--2dp">
+	<div class="vehicule border-bottom pb-2">
+
+		<div class="marque_modele">{{devis.vehicule.marque}}
+			{{devis.vehicule.modele}}</div>
+		<img src="/uploads/vehicules/{{ devis.vehicule.image }}" alt="{{ devis.vehicule.image }}" class="img-circle  " style="width : 100%;">
+	</div>
+	<div>
+		<div class="divDepart border-bottom">
+			<h5 class="heading">Agence départ
+			</h5>
+			<p>
+				<i class="fa fa-map-marker"></i>
+				<span id="agence_depart">{{devis.agenceDepart}}</span><br>
+				<span id="date_depart">{{devis.dateDepart | date('d-m-Y H:i')}}</span>
+				<span id="heure_depart"></span>
+			</p>
+		</div>
+		<div class="divRetour border-bottom">
+			<h5 class="heading">Agence retour
+			</h5>
+			<p>
+				<i class="fa fa-map-marker"></i>
+				<span id="agence_retour">{{devis.agenceRetour}}</span><br>
+				<span id="date_retour">{{devis.dateRetour| date('d-m-Y H:i')}}</span>
+				<span id="heure_retour"></span>
+			</p>
+		</div>
+		<div class="divPrestation border-bottom">
+			<h5 class="heading">Prestations incluses</h5>
+			<ul class="pl-2 ">
+				<li>
+					<i class="fa fa-check"></i>
+					Kilométrage Illimité
+				</li>
+				<li>
+					<i class="fa fa-check"></i>
+					Assurance accidents causés aux tiers
+				</li>
+				<li>
+					<i class="fa fa-check"></i>
+					Assurance responsabilité civile
+				</li>
+				<li>
+					<i class="fa fa-check"></i>
+					Assurance collision (CDW)
+				</li>
+				<li>
+					<i class="fa fa-check"></i>
+					TVA 8.5 %
+				</li>
+			</ul>
+		</div>
+		<div class="divTarifVehicule border-bottom">
+			<h5 class="heading">Prix de base de location</h5>
+			{{devis.tarifVehicule}}
+			eur
+			<br>
+			soit
+			{{ (devis.tarifVehicule / devis.duree)|number_format(2,'.')}}
+			eur / jour
+
+		</div>
+		{% if devis.devisOptions|length > 0 or devis.conducteur %}
+			<div class="divOptions border-bottom">
+				<h5 class="heading">Option(s)
+				</h5>
+				<ul class="pl-2 ">
+					{% if devis.conducteur %}
+						<li>
+							<div class="d-flex">
+								<div>
+									<i class="fa fa-check"></i>
+									Conducteur additionnel
+								</div>
+								<div class="ml-auto">
+									{{prixConductSuppl}}€
+								</div>
+							</div>
+
+						</li>
+					{% endif %}
+					{% for option in devis.devisOptions %}
+						{% set optionEntity = option.opt %}
+						<li>
+							<div class="d-flex">
+								<div>
+									<i class="fa fa-check"></i>
+									{{optionEntity.appelation}}
+									{% if optionEntity.appelation matches '/Siège/' %}
+										({{ 'nbr : '~  option.quantity}})
+									{% endif %}
+								</div>
+								<div class="ml-auto">
+									{{(optionEntity.prix * option.quantity)|number_format(2,","," ")}}€
+								</div>
+							</div>
+
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
+		{% endif %}
+		{% if devis.garanties|length > 0 %}
+			<div class="divGaranties">
+				<h5 class="heading">Garantie(s)
+				</h5>
+				<ul class="pl-2 ">
+					{% for garantie in devis.garanties %}
+						<li>
+							<div class="d-flex">
+								<div>
+									<i class="fa fa-check"></i>
+									{{garantie.appelation}}
+								</div>
+								<div class="ml-auto">
+									{{garantie.prix}}€
+
+								</div>
+							</div>
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
+		{% endif %}
+	</div>
+</div>
+<div class="divTarifTotal text-center">
+	<h5 class="heading">Prix total pour
+		{{(devis.duree)}}
+		jour(s)
+	</h5>
+	<span class="tarifTotal">{{devis.prix}}€</span><br>
+	<span class="tarifJournalier">Soit
+		{{(devis.prix / devis.duree)|number_format(2,'.') }}€ / jour</span>
+</div>

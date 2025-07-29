@@ -21,9 +21,7 @@
       {% endif %}
       {% include 'client2/reservation/details/parts/_options_garanties.html.twig' with {'reservation': reservation, 'prixConductSuppl': prixConductSuppl} %}
       {% include 'client2/reservation/details/parts/_payment_summary.html.twig' with {'reservation': reservation, 'type': type} %}
-      {% if type == 'devis' %}
-        {% include 'client2/reservation/details/parts/_action_buttons.html.twig' with {'reservation': reservation} %}
-      {% endif %}
+
     </div>
   </div>
   {% include 'client2/reservation/details/parts/_modal_conducteur.html.twig' with {'reservation': reservation} %}

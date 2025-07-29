@@ -618,7 +618,7 @@ class ReservationController extends AbstractController
             'tarifVehicule' => $entity->getTarifVehicule(),
             'duree' => $entity->getDuree(),
             'prixConductSuppl' => $this->tarifsHelper->getPrixConducteurSupplementaire(),
-            'step'=> 'validation'
+            'step'=>'validation'
         ]);
     }
     private function getCancelPath(string $routeName, $entityId): string

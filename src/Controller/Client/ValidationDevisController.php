@@ -90,27 +90,6 @@ class ValidationDevisController extends AbstractController
                 $this->reserverDevis->reserver($devis, "null", true);
                 $this->flashy->success("Devis transformé en réservation");
 
-                // //lien pour telechargement devis
-                // $url = $this->generateUrl('devis_pdf', ['hashedId' => sha1($devis->getId())]);
-                // $url = "https://joellocation.com" . $url;
-                // $linkDevis = "<a style='text-decoration: none; color: inherit;' href='" . $url . "'>Télécharger mon devis</a>";
-
-                // // envoi de mail de confirmation de réservation au client
-                // $this->mailjet->confirmationReservation(
-                //     $reservation->getClient()->getPrenom() . ' ' . $reservation->getClient()->getNom(),
-                //     $reservation->getClient()->getMail(),
-                //     "Confirmation de réservation",
-                //     $reservation->getDateReservation()->format('d/m/Y H:i'),
-                //     $reservation->getReference(),
-                //     $reservation->getVehicule()->getMarque() . ' ' . $reservation->getVehicule()->getModele(),
-                //     $reservation->getDateDebut()->format('d/m/Y H:i'),
-                //     $reservation->getDateFin()->format('d/m/Y H:i'),
-                //     $reservation->getPrix(),
-                //     $this->tarifsHelper->VingtCinqPourcent($reservation->getPrix()),
-                //     $this->tarifsHelper->CinquantePourcent($reservation->getPrix()),
-                //     $reservation->getPrix() - $this->tarifsHelper->VingtCinqPourcent($reservation->getPrix()),
-                //     $linkDevis
-                // );
                 $this->symfonyMailerHelper->sendDevis($request, $devis);
 
                 return $this->redirectToRoute('client_reservations');
@@ -122,7 +101,7 @@ class ValidationDevisController extends AbstractController
         $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($devis->getDateDepart(), $devis->getDateRetour(), $devis->getVehicule());
         $duree = $this->dateHelper->calculDuree($devis->getDateDepart(), $devis->getDateRetour());
         if ($devis->getClient() == $client) {
-            return $this->render('client/reservation/validation/step3infosClient.html.twig', [
+            return $this->render('client2/reservation/validation/step3infosClient.html.twig', [
                 'devis' => $devis,
                 'formClient' => $formClient->createView(),
                 'tarifVehicule' => $tarifVehicule,

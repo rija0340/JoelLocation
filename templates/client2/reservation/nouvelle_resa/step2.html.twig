@@ -22,13 +22,13 @@
 
 	<div class="grid grid-cols-2 md:grid-cols-4 gap-4 my-4">
 		<div class="text-center">
-			<div class="badge badge-primary w-10 h-10 rounded-full flex items-center justify-center mx-auto">
+			<div class="badge badge-success w-10 h-10 rounded-full flex items-center justify-center mx-auto">
 				<i class="fa fa-check text-white"></i>
 			</div>
 			<p class="mt-2 text-sm">Agences & Dates</p>
 		</div>
 		<div class="text-center">
-			<div class="badge badge-outline w-10 h-10 rounded-full flex items-center justify-center mx-auto">
+			<div class="badge badge-primary w-10 h-10 rounded-full flex items-center justify-center mx-auto">
 				2
 			</div>
 			<p class="mt-2 text-sm">Véhicules</p>
@@ -50,13 +50,13 @@
 </div>
 
 
-	<div class=" gap-4 my-4">
+	<div class="text-center gap-4 my-4">
 		<a href="{{ path('client_step1') }}" class="btn btn-neutral">
 			<i class="fa fa-arrow-left mr-2"></i>
 			Revenir à l'étape précédente
 		</a>
 		{% if vehiculesDisponible|length > 0 %}
-			<button class="btn text-base" type="submit" form="formStep2">
+			<button class="btn btn-error" type="submit" form="formStep2">
 				<i class="fa fa-save mr-2"></i>
 				Enregistrer
 			</button>

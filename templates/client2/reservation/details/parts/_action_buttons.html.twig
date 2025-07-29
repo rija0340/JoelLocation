@@ -1,9 +1,9 @@
 <div class="flex flex-col sm:flex-row justify-end mb-4 space-y-2 sm:space-y-0 sm:space-x-2">
   {% if date(reservation.dateDepart) > date("now") and reservation.transformed == false %}
     <a href="{{ path('validation_step2', {'id': reservation.id}) }}"
-       class="btn btn-success btn-sm tooltip"
+       class="btn-red "
        data-tip="Valider">
-      <i class="fas fa-check mr-1"></i> Valider
+      <i class="fas fa-check mr-1"></i> Valider le devis
     </a>
   {% endif %}
 </div>
