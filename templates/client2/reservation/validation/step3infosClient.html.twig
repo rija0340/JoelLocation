@@ -6,11 +6,26 @@
 {% block stylesheets %}
 
 	<link href="{{ asset( 'css/client/sidebarResaResume.css')}}" rel="stylesheet">
-	<link href="{{ asset( 'css/client/step3InfosClient.css')}}" rel="stylesheet">
+	<link href="{{ asset( 'css/client/step3InfosCtab-activelient.css')}}" rel="stylesheet">
+	<style>
+		#paypal-button-container {
+			display: flex;
+			justify-content: center;
+			align-items: center; /* optional, for vertical centering */
+			margin-top: 1rem;
+		}
+	</style>
 	<script src="https://www.paypal.com/sdk/js?client-id=AWDZI-LFPNgYnDIXkhBDGTlwkF5HaSDlSKCke0HowHz5xfBAqh4Vdw0_bm3A4JRN2pYgA6J1uZ3ueP12&locale=fr_FR&buyer-country=FR&currency=EUR&components=buttons&enable-funding=venmo,paylater" data-sdk-integration-source="developer-studio"></script>
 {% endblock %}
 {% block nav %}{% endblock %}
 {% block body %}
+
+	<header class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0 mb-8">
+		<div>
+			<h1 class="text-3xl title-red">Finalisation de la réservation</h1>
+			{# <p class="text-gray-500">Consultez et gérez vos locations de voitures</p> #}
+		</div>
+	</header>
 
 	<div class="flex flex-col md:flex-row gap-6">
 
@@ -20,77 +35,80 @@
 		<div class="w-full md:w-3/4 ">
 			{{ form_start(formClient) }}
 
-<!-- Champs cachés pour PayPal -->
-<input type="hidden" id="montant" value="{{ devis.prix }}">
-<input type="hidden" id="devisId" value="{{ devis.numero }}">
+			<!-- Champs cachés pour PayPal -->
+			<input type="hidden" id="montant" value="{{ devis.prix }}">
+			<input
+			type="hidden" id="devisId" value="{{ devis.numero }}">
 
-<!-- Informations client -->
-<div class="card shadow-md bg-base-100  p-6 space-y-6">
-  <h3 class="text-2xl font-bold text-center">Mes informations</h3>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <div>
-      <label class="label">
-        <span class="label-text">Nom *</span>
-      </label>
-      {{ form_widget(formClient.nom, {'attr': {'class': 'input input-bordered w-full'}}) }}
-    </div>
-    <div>
-      <label class="label">
-        <span class="label-text">Prénom *</span>
-      </label>
-      {{ form_widget(formClient.prenom, {'attr': {'class': 'input input-bordered w-full'}}) }}
-    </div>
-    <div>
-      <label class="label">
-        <span class="label-text">Sexe *</span>
-      </label>
-      {{ form_widget(formClient.sexe, {'attr': {'class': 'select select-bordered w-full'}}) }}
-    </div>
-    <div>
-      <label class="label">
-        <span class="label-text">Portable *</span>
-      </label>
-      {{ form_widget(formClient.portable, {'attr': {'class': 'input input-bordered w-full'}}) }}
-    </div>
-    <div class="md:col-span-2">
-      <label class="label">
-        <span class="label-text">Email *</span>
-      </label>
-      {{ form_widget(formClient.mail, {'attr': {'class': 'input input-bordered w-full'}}) }}
-    </div>
-  </div>
-</div>
+			<!-- Informations client -->
+			<div class="card shadow-md bg-base-100  p-6 space-y-6">
+				<h3 class="text-2xl font-bold text-center">Mes informations</h3>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+					<div>
+						<label class="label">
+							<span class="label-text">Nom *</span>
+						</label>
+						{{ form_widget(formClient.nom, {'attr': {'class': 'input input-bordered w-full'}}) }}
+					</div>
+					<div>
+						<label class="label">
+							<span class="label-text">Prénom *</span>
+						</label>
+						{{ form_widget(formClient.prenom, {'attr': {'class': 'input input-bordered w-full'}}) }}
+					</div>
+					<div>
+						<label class="label">
+							<span class="label-text">Sexe *</span>
+						</label>
+						{{ form_widget(formClient.sexe, {'attr': {'class': 'select select-bordered w-full'}}) }}
+					</div>
+					<div>
+						<label class="label">
+							<span class="label-text">Portable *</span>
+						</label>
+						{{ form_widget(formClient.portable, {'attr': {'class': 'input input-bordered w-full'}}) }}
+					</div>
+					<div class="md:col-span-2">
+						<label class="label">
+							<span class="label-text">Email *</span>
+						</label>
+						{{ form_widget(formClient.mail, {'attr': {'class': 'input input-bordered w-full'}}) }}
+					</div>
+				</div>
+			</div>
 
-<!-- Paiement -->
-<div class="card shadow-md  bg-base-100 p-6 mt-6 space-y-4">
-  <h3 class="text-2xl font-bold text-center">Mode de paiement</h3>
-  <p class="text-sm text-gray-600 text-center">
-    Mode de paiement par PayPal. Pour valider votre réservation, vous devez effectuer un premier paiement. Une fois le paiement effectué, un email de confirmation vous sera envoyé.
-  </p>
-  <div id="paypal-button-container" class="flex justify-center mt-4"></div>
-</div>
+			<!-- Paiement -->
+			<div class="card shadow-md  bg-base-100 p-6 mt-6 space-y-4">
+				<h3 class="text-2xl font-bold text-center">Mode de paiement</h3>
+				<p class="text-sm text-gray-600 text-center">
+					Mode de paiement par PayPal. Pour valider votre réservation, vous devez effectuer un premier paiement. Une fois le paiement effectué, un email de confirmation vous sera envoyé.
+				</p>
+				<div id="paypal-button-container" class="flex justify-center items-center mt-4" style="min-height: 60px;"></div>
 
-<!-- Conditions générales -->
-<div class="card shadow-md bg-base-100 p-6 mt-6 space-y-4">
-  <h3 class="text-2xl font-bold text-center">Conditions générales de location</h3>
-  <label class="flex items-start gap-2 cursor-pointer">
-    <input type="checkbox" name="conditionGeneralVente" id="conditionGeneralVente" class="checkbox mt-1">
-    <span class="text-sm">
-      Je reconnais avoir pris connaissance des
-      <a href="/cgl/Joel location conditions générales de location_Version 1.0.pdf" class="link link-primary underline">
-        conditions générales de location
-      </a>
-      que j'accepte sans réserve.
-    </span>
-  </label>
-</div>
+			</div>
 
-<!-- Bouton de validation -->
-<div class="text-center mt-6">
-  {# <button type="button" class="btn btn-primary" id="validerPaiement">Je confirme</button> #}
-</div>
+			<!-- Conditions générales -->
+			<div class="card shadow-md bg-base-100 p-6 mt-6 space-y-4">
+				<h3 class="text-2xl font-bold text-center">Conditions générales de location</h3>
+				<label class="flex items-start gap-2 cursor-pointer">
+					<input type="checkbox" name="conditionGeneralVente" id="conditionGeneralVente" class="checkbox">
+					<span class="text-sm">
+						Je reconnais avoir pris connaissance des
+						<a href="/cgl/Joel location conditions générales de location_Version 1.0.pdf" class="link link-primary underline">
+							conditions générales de location
+						</a>
+						que j'accepte sans réserve.
+					</span>
+				</label>
 
-{{ form_end(formClient) }}
+			</div>
+
+			<!-- Bouton de validation -->
+			<div
+				class="text-center mt-6">{# <button type="button" class="btn btn-primary" id="validerPaiement">Je confirme</button> #}
+			</div>
+
+			{{ form_end(formClient) }}
 
 		</div>
 	</div>
@@ -99,4 +117,3 @@
 	<script src="{{ asset('js/client/reservation/validation_devis/step3infosClient.js')}}"></script>
 	<script src="{{ asset('js/client/payement/paypal.js')}}"></script>
 {% endblock %}
-

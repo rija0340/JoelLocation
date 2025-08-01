@@ -1,16 +1,16 @@
 <div class="card bg-white shadow-md rounded-lg">
   <div class="card-content p-6">
     <div class="flex justify-between items-start mb-6">
-      <h5 class="font-bold text-error flex items-center gap-2">
+      <h4 class="font-bold text-error flex items-center gap-2">
         <i class="fas fa-car text-error-content"></i>
         Informations Véhicule
-      </h5>
+      </h4>
     </div>
     <div class="space-y-4">
       <div>
         <img src="{{ vich_uploader_asset(reservation.vehicule, 'imageFile') }}" 
              alt="{{ reservation.vehicule.image }}" 
-             class="w-full rounded-lg shadow-sm object-cover max-h-48" />
+             class="w-full rounded-lg shadow-sm object-cover" />
       </div>
       <div>
         <h4 class="font-bold mb-2 text-lg">{{ reservation.vehicule.marque }} {{ reservation.vehicule.modele }}</h4>

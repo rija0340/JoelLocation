@@ -1,79 +1,88 @@
 {% extends 'baseClient2.html.twig' %}
 
-{% block title %}Mes Réservations{% endblock %}
-{% block stylesheets %}
-  
+{% block title %}Mes Réservations
 {% endblock %}
+{% block stylesheets %}{% endblock %}
 
 {% block body %}
-<div class="container mx-auto py-6 space-y-6">
-  <!-- En-tête -->
-  <header class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
-    <div>
-      <h1 class="text-3xl title-red">Mes Réservations</h1>
-      <p class="text-gray-500">Consultez et gérez vos locations de voitures</p>
-    </div>
-    <a href="{{ path('client_step1') }}" class="btn btn-error">
-      <i class="fas fa-plus mr-2"></i> Nouvelle Réservation
-    </a>
-  </header>
+	<div
+		class="container mx-auto py-6 space-y-6">
+		<!-- En-tête -->
+		<header class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+			<div>
+				<h1 class="text-3xl title-red">Mes Réservations</h1>
+				<p class="text-gray-500">Consultez et gérez vos locations de voitures</p>
+			</div>
+			<a href="{{ path('client_step1') }}" class="btn btn-error">
+				<i class="fas fa-plus mr-2"></i>
+				Nouvelle Réservation
+			</a>
+		</header>
 
-  <!-- Barre de recherche & filtre -->
-  <div class="hidden flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
-    <div class="flex items-center w-full md:w-2/3">
-      <div class="relative w-full">
-        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
-          <i class="fas fa-search"></i>
-        </span>
-        <input id="searchInput" type="text" placeholder="Rechercher des réservations..."
-               class="input input-bordered pl-10 w-full" />
-      </div>
-    </div>
-    <div class="w-full md:w-auto">
-      <select id="sortSelect" class="select select-bordered w-full md:w-auto">
-        <option value="date-desc">Plus récent d'abord</option>
-        <option value="date-asc">Plus ancien d'abord</option>
-        <option value="price-desc">Prix décroissant</option>
-        <option value="price-asc">Prix croissant</option>
-      </select>
-    </div>
-  </div>
+		<!-- Barre de recherche & filtre -->
+		<div class="hidden flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+			<div class="flex items-center w-full md:w-2/3">
+				<div class="relative w-full">
+					<span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+						<i class="fas fa-search"></i>
+					</span>
+					<input id="searchInput" type="text" placeholder="Rechercher des réservations..." class="input input-bordered pl-10 w-full"/>
+				</div>
+			</div>
+			<div class="w-full md:w-auto">
+				<select id="sortSelect" class="select select-bordered w-full md:w-auto">
+					<option value="date-desc">Plus récent d'abord</option>
+					<option value="date-asc">Plus ancien d'abord</option>
+					<option value="price-desc">Prix décroissant</option>
+					<option value="price-asc">Prix croissant</option>
+				</select>
+			</div>
+		</div>
 
-  <!-- DaisyUI Tabs -->
-<div class="tabs tabs-boxed flex flex-wrap gap-2 p-2" id="reservationTabs">
-  <a class="tab tab-active text-red-500 text-lg font-medium flex items-center" data-tab="devis">
-    <i class="fas fa-file-invoice mr-2"></i> Devis <span class="badge badge-neutral ml-2">{{ devis|length }}</span>
-  </a>
-  <a class="tab text-gray-700 text-lg font-medium flex items-center" data-tab="encours">
-    <i class="fas fa-spinner mr-2"></i> En cours <span class="badge badge-neutral ml-2">{{ reservationEncours|length }}</span>
-  </a>
-  <a class="tab text-gray-700 text-lg font-medium flex items-center" data-tab="avenir">
-    <i class="fas fa-calendar-alt mr-2"></i> À venir <span class="badge badge-neutral ml-2">{{ reservationAvenir|length }}</span>
-  </a>
-  <a class="tab text-gray-700 text-lg font-medium flex items-center" data-tab="termine">
-    <i class="fas fa-check-circle mr-2"></i> Terminé <span class="badge badge-neutral ml-2">{{ reservationEffectuers|length }}</span>
-  </a>
-</div>
+		<!-- DaisyUI Tabs -->
+		<div class="tabs tabs-boxed flex flex-wrap gap-2 p-2" id="reservationTabs">
+			<a href="#devis" class="tab tab-active text-red-500 text-lg font-medium flex items-center" data-tab="devis">
+				<i class="fas fa-file-invoice mr-2"></i>
+				Devis
+				<span class="badge badge-neutral ml-2">{{ devis|length }}</span>
+			</a>
+			<a href="#encours" class="tab text-gray-700 text-lg font-medium flex items-center" data-tab="encours">
+				<i class="fas fa-spinner mr-2"></i>
+				En cours
+				<span class="badge badge-neutral ml-2">{{ reservationEncours|length }}</span>
+			</a>
+			<a href="#avenir" class="tab text-gray-700 text-lg font-medium flex items-center" data-tab="avenir">
+				<i class="fas fa-calendar-alt mr-2"></i>
+				À venir
+				<span class="badge badge-neutral ml-2">{{ reservationAvenir|length }}</span>
+			</a>
+			<a href="#termine" class="tab text-gray-700 text-lg font-medium flex items-center" data-tab="termine">
+				<i class="fas fa-check-circle mr-2"></i>
+				Terminé
+				<span class="badge badge-neutral ml-2">{{ reservationEffectuers|length }}</span>
+			</a>
+		</div>
 
-<!-- Tab Panels -->
-<div class="mt-4" id="reservationPanels">
-  <div class="tab-panel" data-tab="devis">
-    {% include 'client2/reservation/parts/devis.html.twig' %}
-  </div>
-  <div class="tab-panel hidden" data-tab="encours">
-    {% include 'client2/reservation/parts/encours.html.twig' %}
-  </div>
-  <div class="tab-panel hidden" data-tab="avenir">
-    {% include 'client2/reservation/parts/avenir.html.twig' %}
-  </div>
-  <div class="tab-panel hidden" data-tab="termine">
-    {% include 'client2/reservation/parts/termines.html.twig' %}
-  </div>
-</div>
 
-</div>
+		<!-- Tab Panels -->
+		<div class="mt-4" id="reservationPanels">
+			<div class="tab-panel" data-tab="devis">
+				{% include 'client2/reservation/parts/devis.html.twig' %}
+			</div>
+			<div class="tab-panel hidden" data-tab="encours">
+				{% include 'client2/reservation/parts/encours.html.twig' %}
+			</div>
+			<div class="tab-panel hidden" data-tab="avenir">
+				{% include 'client2/reservation/parts/avenir.html.twig' %}
+			</div>
+			<div class="tab-panel hidden" data-tab="termine">
+				{% include 'client2/reservation/parts/termines.html.twig' %}
+			</div>
+		</div>
+
+	</div>
 {% endblock %}
 
 {% block javascripts %}
-<script src="{{ asset('client2/js/reservation/tabsystem.js') }}"></script>
+	<script src="{{ asset('client2/js/reservation/tabsystem.js') }}"></script>
 {% endblock %}

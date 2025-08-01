@@ -1,0 +1,165 @@
+{{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <!-- Nom -->
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">Nom :</span>
+        </label>
+        <div class="form-error text-error text-sm">
+            {{ form_errors(form.nom) }}
+        </div>
+        {{ form_widget(form.nom, {'attr': {'class': 'input input-bordered w-full'}}) }}
+    </div>
+
+    <!-- Prénom -->
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">Prénom :</span>
+        </label>
+        <div class="form-error text-error text-sm">
+            {{ form_errors(form.prenom) }}
+        </div>
+        {{ form_widget(form.prenom, {'attr': {'class': 'input input-bordered w-full'}}) }}
+    </div>
+
+    <!-- Ville -->
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">Ville :</span>
+        </label>
+        <div class="form-error text-error text-sm">
+            {{ form_errors(form.ville) }}
+        </div>
+        {{ form_widget(form.ville, {'attr': {'class': 'input input-bordered w-full'}}) }}
+    </div>
+
+    <!-- Code Postal -->
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">Code postal :</span>
+        </label>
+        <div class="form-error text-error text-sm">
+            {{ form_errors(form.codePostal) }}
+        </div>
+        {{ form_widget(form.codePostal, {'attr': {'class': 'input input-bordered w-full'}}) }}
+    </div>
+
+    <!-- Adresse -->
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">Adresse :</span>
+        </label>
+        <div class="form-error text-error text-sm">
+            {{ form_errors(form.adresse) }}
+        </div>
+        {{ form_widget(form.adresse, {'attr': {'class': 'input input-bordered w-full'}}) }}
+    </div>
+
+    <!-- Complément Adresse -->
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">Complément adresse :</span>
+        </label>
+        <div class="form-error text-error text-sm">
+            {{ form_errors(form.complementAdresse) }}
+        </div>
+        {{ form_widget(form.complementAdresse, {'attr': {'class': 'input input-bordered w-full'}}) }}
+    </div>
+
+    <!-- Date de Naissance -->
+    <div class="form-control md:col-span-1">
+        <label class="label">
+            <span class="label-text">Date de naissance :</span>
+        </label>
+        <div class="form-error text-error text-sm">
+            {{ form_errors(form.dateNaissance) }}
+        </div>
+        {{ form_widget(form.dateNaissance, {'attr': {'class': 'input input-bordered w-full'}}) }}
+    </div>
+
+    <!-- Lieu de Naissance -->
+    <div class="form-control md:col-span-1">
+        <label class="label">
+            <span class="label-text">Lieu de naissance :</span>
+        </label>
+        <div class="form-error text-error text-sm">
+            {{ form_errors(form.lieuNaissance) }}
+        </div>
+        {{ form_widget(form.lieuNaissance, {'attr': {'class': 'input input-bordered w-full'}}) }}
+    </div>
+
+    <!-- Mail -->
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">Mail :</span>
+        </label>
+        <div class="form-error text-error text-sm">
+            {{ form_errors(form.mail) }}
+        </div>
+        {{ form_widget(form.mail, {'attr': {'class': 'input input-bordered w-full'}}) }}
+    </div>
+
+    <!-- Téléphone -->
+    <div class="form-control md:col-span-1">
+        <label class="label">
+            <span class="label-text">Téléphone :</span>
+        </label>
+        <div class="form-error text-error text-sm">
+            {{ form_errors(form.telephone) }}
+        </div>
+        {{ form_widget(form.telephone, {'attr': {'class': 'input input-bordered w-full'}}) }}
+    </div>
+
+    <!-- Portable -->
+    <div class="form-control md:col-span-1">
+        <label class="label">
+            <span class="label-text">Portable :</span>
+        </label>
+        <div class="form-error text-error text-sm">
+            {{ form_errors(form.portable) }}
+        </div>
+        {{ form_widget(form.portable, {'attr': {'class': 'input input-bordered w-full'}}) }}
+    </div>
+
+    <!-- Numéro de Permis -->
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">Numéro de permis :</span>
+        </label>
+        <div class="form-error text-error text-sm">
+            {{ form_errors(form.numeroPermis) }}
+        </div>
+        {{ form_widget(form.numeroPermis, {'attr': {'class': 'input input-bordered w-full'}}) }}
+    </div>
+
+    <!-- Date de Délivrance Permis -->
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">Date de délivrance permis :</span>
+        </label>
+        <div class="form-error text-error text-sm">
+            {{ form_errors(form.datePermis) }}
+        </div>
+        {{ form_widget(form.datePermis, {'attr': {'class': 'input input-bordered w-full'}}) }}
+    </div>
+
+    <!-- Ville de Délivrance Permis -->
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">Ville de délivrance permis :</span>
+        </label>
+        <div class="form-error text-error text-sm">
+            {{ form_errors(form.villeDelivrancePermis) }}
+        </div>
+        {{ form_widget(form.villeDelivrancePermis, {'attr': {'class': 'input input-bordered w-full'}}) }}
+    </div>
+</div>
+
+<div class="mt-6 text-center">
+    <button type="submit" class="btn btn-error w-full md:w-auto">
+        {{ button_label|default('Enregistrer') }}
+    </button>
+</div>
+
+{{ form_end(form) }}

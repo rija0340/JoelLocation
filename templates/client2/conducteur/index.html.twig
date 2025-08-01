@@ -7,71 +7,77 @@
 {% endblock %}
 
 {% block body %}
-<div class="container mx-auto max-w-6xl px-4 py-6">
-  <div class="card bg-base-100 shadow rounded-lg">
+
+  <header class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+    <div>
+      <h1 class="text-3xl title-red">Mes conducteurs</h1>
+      <p class="text-gray-500">Gérez vos conducteurs</p>
+    </div>
+    <a href="{{ path('client_newConducteur') }}" class="btn btn-error">
+      <i class="fas fa-plus mr-2"></i> Nouveau conducteur
+    </a>
+  </header>
+
+  <div class="card bg-base-100 shadow rounded-lg mt-8">
     <div class="card-body p-6">
       
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-        <h4 class="text-3xl font-bold text-base-content">Mes conducteurs</h4>
-        <a href="{{ path('client_newConducteur') }}" 
-           class="btn btn-primary gap-2 flex items-center">
-          <i class="fa fa-plus"></i>
-          <span>Ajouter</span>
-        </a>
-      </div>
-      
       {% if conducteurs|length > 0 %}
-        <div class="overflow-x-auto">
-          <table class="table table-zebra w-full">
-            <thead class="bg-base-200 text-base-content uppercase">
-              <tr>
-                <th class="py-3 px-4">Nom</th>
-                <th class="py-3 px-4">Prénom</th>
-                <th class="py-3 px-4">Permis</th>
-                <th class="py-3 px-4">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for conducteur in conducteurs %}
-                <tr class="hover:bg-base-200 transition-colors duration-200">
-                  <td class="py-3 px-4 font-medium">{{ conducteur.nom|default('N/A') }}</td>
-                  <td class="py-3 px-4">{{ conducteur.prenom|default('N/A') }}</td>
-                  <td class="py-3 px-4">
-                    <div class="space-y-1 text-sm">
-                      <p><span class="font-semibold">Numéro :</span> {{ conducteur.numeroPermis|default('N/A') }}</p>
-                      <p><span class="font-semibold">Délivré le :</span> {{ conducteur.dateDelivrance ? conducteur.dateDelivrance|date('d M Y') : 'N/A' }}</p>
-                      <p><span class="font-semibold">Ville :</span> {{ conducteur.villeDelivrance|default('N/A') }}</p>
-                    </div>
-                  </td>
-                  <td class="py-3 px-4">
-                    <div class="flex items-center gap-2">
-                      <a href="{{ path('conducteur_edit', {'id': conducteur.id}) }}"
-                         class="btn btn-ghost btn-sm text-primary tooltip" data-tip="Modifier">
-                        <i class="fas fa-edit"></i>
-                      </a>
-                      <form method="post"
-                            action="{{ path('conducteur_delete', {'id': conducteur.id}) }}"
-                            onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer ce conducteur ?');"
-                            class="inline-block">
-                        <input type="hidden" name="_method" value="DELETE" />
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ conducteur.id) }}" />
-                        <button class="btn btn-ghost btn-sm text-error tooltip" data-tip="Supprimer" type="submit">
-                          <i class="fas fa-trash-alt"></i>
-                        </button>
-                      </form>
-                    </div>
-                  </td>
+
+<div class="">
+    <table class="table w-full">
+        <!-- Table head -->
+        <thead>
+            <tr class="bg-gray-100 text-gray-700 uppercase text-sm">
+                <th class="py-4 px-6 rounded-tl-2xl">Nom</th>
+                <th class="py-4 px-6">Prénom</th>
+                <th class="py-4 px-6">Permis</th>
+                <th class="py-4 px-6 rounded-tr-2xl text-right">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for conducteur in conducteurs %}
+                <tr class="hover:bg-gray-50 border-b border-gray-200 transition-colors">
+                    <td class="py-4 px-6 font-medium">{{ conducteur.nom|default('N/A') }}</td>
+                    <td class="py-4 px-6">{{ conducteur.prenom|default('N/A') }}</td>
+                    <td class="py-4 px-6">
+                        <div class="space-y-1">
+                            <p class=""><span class="font-semibold">Numéro :</span> {{ conducteur.numeroPermis|default('N/A') }}</p>
+                            <p class=""><span class="font-semibold">Délivré le :</span> {{ conducteur.dateDelivrance ? conducteur.dateDelivrance|date('d M Y') : 'N/A' }}</p>
+                            <p class=""><span class="font-semibold">Ville :</span> {{ conducteur.villeDelivrance|default('N/A') }}</p>
+                        </div>
+                    </td>
+                    <td class="py-4 px-6">
+                        <div class="flex justify-end space-x-2">
+                            <a href="{{ path('conducteur_edit', {'id': conducteur.id}) }}"
+                               class="btn btn-square tooltip  btn-ghost text-primary hover:bg-primary/10"
+                               data-tip="Modifier">
+                                <i class="fas fa-edit"></i>
+                                
+                            </a>
+                            <form method="post"
+                                  action="{{ path('conducteur_delete', {'id': conducteur.id}) }}"
+                                  onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer ce conducteur ?');"
+                                  class="inline-block">
+                                <input type="hidden" name="_method" value="DELETE" />
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ conducteur.id) }}" />
+                                <button class="btn tooltip btn-square btn-ghost text-error hover:bg-error/10"
+                                        data-tip="Supprimer"
+                                        type="submit">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
                 </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
       {% else %}
         {% include 'client2/conducteur/parts/_empty_state.html.twig' %}
       {% endif %}
     </div>
   </div>
-</div>
 {% endblock %}
 
 {% block javascripts %}

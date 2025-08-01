@@ -108,7 +108,7 @@ class ConducteurController extends AbstractController
             return $this->redirectToRoute('client_mesConducteurs');
         }
 
-        return $this->render('client/conducteur/edit.html.twig', [
+        return $this->render('client2/conducteur/edit.html.twig', [
             'formConducteur' => $formConducteur->createView()
         ]);
     }

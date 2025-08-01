@@ -27,6 +27,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Classe\ValidationReservationClientSession;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class ReservationController extends AbstractController
 {

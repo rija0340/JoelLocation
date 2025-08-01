@@ -1,0 +1,36 @@
+{% extends 'baseClient2.html.twig' %}
+
+{% block title %}Réservation{% endblock %}
+
+{% block stylesheets %}{% endblock %}
+
+{% block body %}
+<div class="max-w-2xl mx-auto p-6">
+  <div class="card bg-base-100 shadow-xl">
+    <div class="card-body space-y-4">
+      <h3 class="text-2xl title-red">Confirmation de réservation</h3>
+
+      <p class="text-base-content">
+        Bonjour <span class="font-semibold">{{ reservation.client.nom }}</span>,
+      </p>
+
+      <p class="text-base-content">
+        Nous vous remercions pour votre réservation <span class="font-semibold">N°{{ reservation.reference }}</span>.
+      </p>
+
+      <p class="text-base-content">
+        Une confirmation vient de vous être envoyée par email à l'adresse : 
+        <span class="font-mono text-sm">{{ reservation.client.mail }}</span>.
+      </p>
+
+      <div>
+        <a href="{{ path('client_reservations') }}" class="btn btn-error btn-sm">
+          Consulter mes réservations
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}{% endblock %}

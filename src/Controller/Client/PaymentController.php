@@ -100,7 +100,7 @@ class PaymentController extends AbstractController
      */
     public function cancel(Request $request): Response
     {
-        return $this->render('payment/cancel.html.twig');
+        return $this->render('client2/payment/cancel.html.twig');
     }
 
     /**
@@ -147,7 +147,7 @@ class PaymentController extends AbstractController
         }
         //vider session validation paiement 
         $this->validationReservationClientSession->removeValidationSession();
-        return $this->render('client/payment/success.html.twig', [
+        return $this->render('client2/payment/success.html.twig', [
             "reservation" => $reservation,
         ]);
     }

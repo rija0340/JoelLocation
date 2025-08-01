@@ -10,7 +10,7 @@
   --color-primary-content: oklch(33.387% 0.04 162.24);
   --color-secondary: oklch(61.302% 0.202 261.294);
   --color-secondary-content: oklch(100% 0 0);
-  --color-accent: oklch(72.772% 0.149 33.2);
+  --color-accent: oklch(0% 0 0);
   --color-accent-content: oklch(0% 0 0);
   --color-neutral: oklch(35.519% 0.032 262.988);
   --color-neutral-content: oklch(98.462% 0.001 247.838);
@@ -21,8 +21,10 @@
   --color-warning: oklch(84.71% 0.199 83.87);
   --color-warning-content: oklch(0% 0 0);
   --color-error: oklch(63.6% 0.329 19.6);
-  --color-error-content: oklch(100% 0 0); /* blanc pur */
-  --color-black: oklch(0% 0 0); /* noir */
+  --color-error-content: oklch(100% 0 0);
+  /* blanc pur */
+  --color-black: oklch(0% 0 0);
+  /* noir */
   --rounded-box: 1rem;
   --rounded-btn: 0.5rem;
   --rounded-badge: 1rem;
@@ -40,14 +42,16 @@
   z-index: 50;
   transition: opacity 0.5s ease;
 }
+
 .preloader.hidden {
   opacity: 0;
   pointer-events: none;
 }
-  :root {
-      --er: #fc0317;
-      --erc: #ffffff;
-    }
+
+:root {
+  --er: #fc0317;
+  --erc: #ffffff;
+}
 
 /* app.css */
 
@@ -78,3 +82,19 @@
   font-weight: 700;
 }
 
+/* ensure flashy is positioned and above */
+.flashy {
+  position: relative;
+  /* or absolute/fixed depending on use */
+  z-index: 9999;
+}
+
+/* menu has lower stacking priority */
+.containerNav {
+  position: relative;
+  z-index: 1000;
+}
+
+.text-accent {
+  color: var(--color-accent);
+}

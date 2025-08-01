@@ -115,18 +115,19 @@ class ClientController extends AbstractController
             $old_pwd = $formClientCompte->get('old_password')->getData();
 
             if ($encoder->isPasswordValid($client, $old_pwd)) {
-
                 $new_pwd = $formClientCompte->get('new_password')->getData();
                 $password = $encoder->encodePassword($client, $new_pwd);
                 $client->setPassword($password);
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->flush();
-                $this->flashy->success("Votre mot de passe a été modifié avec succès");
 
-                return $this->redirectToRoute('espaceClient_index');
+                $this->flashy->success('Votre mot de passe a été modifié avec succès.');
+                
+                // return $this->redirectToRoute('app_logout');
             } else {
-                $this->flashy->error("Votre mot de passe actuel n'est pas le bon");
+                $this->flashy->error('Votre mot de passe actuel n\'est pas le bon.');
             }
+
         }
 
         // page client.html auparavant
@@ -253,7 +254,7 @@ class ClientController extends AbstractController
             return $this->redirectToRoute('espaceClient_index');
         }
 
-        return $this->render('client/information/edit.html.twig', [
+        return $this->render('client2/information/edit.html.twig', [
             'user' => $user,
             'form' => $form->createView(),
         ]);

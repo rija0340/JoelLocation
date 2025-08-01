@@ -401,16 +401,20 @@ class VenteComptoirController extends AbstractController
             $client = null;
 
             $routeName = $request->attributes->get('_route');
-
+            
             // dd($routeName);
             if (strpos($routeName, 'client') !== false) {
                 // dd('ato izy madalo');
                 $devis = $this->devisRepo->findOneBy(['numero' => $numDevis]);
                 $this->flashy->success('Le devis a été enregistré avec succés');
                 $this->symfonyMailerHelper->sendDevis($request, $devis);
-                return $this->redirectToRoute('client_reservations');
+
+                // redirect to client_reservations with fragment "#details"
+                $url = $this->generateUrl('client_reservations') . '#avenir';
+                return $this->redirect($url);
+                // return $this->redirectToRoute('client_reservations');
             } else {
-                $this->flashy->success('Le devis numero ' . $numDevis . ' a été enregistré avec succés');
+                $this->flashy->success('Le detailsdevis numero ' . $numDevis . ' a été enregistré avec succés');
                 return $this->redirectToRoute('devis_index');
             }
         } else {
