@@ -18,9 +18,9 @@ class ResetPasswordType extends AbstractType
             ->add('new_password', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'mapped' => false,
-                'invalid_message' => ' le mot de passe et la confirmation doivent être identique',
+                'invalid_message' => 'Le mot de passe et la confirmation doivent être identiques',
                 'first_options' => [
-                    'label' => 'Nouveau mot de passe ',
+                    'label' => 'Nouveau mot de passe',
                     'attr' => [
                         'placeholder' => 'Veuillez saisir votre nouveau mot de passe'
                     ]
@@ -33,18 +33,19 @@ class ResetPasswordType extends AbstractType
                 ]
             ])
             ->add('submit', SubmitType::class, [
-                'label' => "Mettre à jour mon mot de passe ",
-                'attr' => [
-
-                    'class' => 'btn btn-danger'
-                ]
+                'label' => "Mettre à jour mon mot de passe",
+                'attr' => array_merge(
+                    ['class' => $options['submit_class']],
+                    $options['submit_attr'] ?? []
+                ),
             ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            // Configure your form options here
+            'submit_class' => '',          // default can be empty; template can override
+            'submit_attr' => [],           // extra attrs
         ]);
     }
 }

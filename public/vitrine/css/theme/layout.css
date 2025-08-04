@@ -32,7 +32,6 @@ header {
     list-style: none;
     margin: 0;
     padding: 0;
-    gap: var(--spacing-lg);
 }
 
 .nav-column nav ul li a {

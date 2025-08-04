@@ -25,6 +25,9 @@
 				<li class="{% if app.request.attributes.get('_route') starts with 'foireauxquestion' %}current-menu-item{% endif %}">
 					<a href="{{ path('foireauxquestion') }}">FAQ</a>
 				</li>
+				<li class="{% if app.request.attributes.get('_route') starts with 'Mon' %}current-menu-item{% endif %}">
+					<a href="{{ path('espaceClient_index') }}">Mon compte</a>
+				</li>
 				{% if is_granted("ROLE_CLIENT") or is_granted("ROLE_PERSONNEL") %}
 					<li class="current-menu-item has-child profil_mobile">
 						<a href="#" class="d-flex align-items-center p-0">

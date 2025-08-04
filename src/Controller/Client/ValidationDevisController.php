@@ -16,6 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Service\SymfonyMailerHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class ValidationDevisController extends AbstractController
 {
@@ -54,7 +55,7 @@ class ValidationDevisController extends AbstractController
     /**
      * @Route("/espaceclient/validation/infos-client/{id}", name="validation_step3", methods={"GET","POST"})
      */
-    public function step3infosClient(Request $request, Devis $devis): Response
+    public function step3infosClient(Request $request, Devis $devis,ParameterBagInterface $params): Response
     {
         $garanties = $request->query->get('garanties');
         if ($devis->getClient() != $this->getUser()) {

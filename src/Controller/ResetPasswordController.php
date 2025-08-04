@@ -123,7 +123,10 @@ class ResetPasswordController extends AbstractController
         }
 
         //rndre une vue avec mot de passe et confirmez 
-        $form = $this->createForm(ResetPasswordType::class);
+       $form = $this->createForm(ResetPasswordType::class, null, [
+    'submit_class' => 'btn btn-primary w-full', // or Tailwind/DaisyUI classes like 'btn btn-primary'
+]);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

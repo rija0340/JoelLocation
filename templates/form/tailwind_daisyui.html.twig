@@ -1,0 +1,35 @@
+{# inherit the base so internal blocks like button_attributes exist #}
+{% extends "form_div_layout.html.twig" %}
+
+{# Row wrapper with DaisyUI/Tailwind styling #}
+{% block form_row %}
+	<div class="form-control mb-4">
+		{{ form_label(form) }}
+		{{ form_widget(form) }}
+		<p class="text-sm text-error mt-1">{{ form_errors(form) }}</p>
+	</div>
+{% endblock %}
+
+{# Label styling #}
+{% block form_label %}
+	{% if label is not same as(false) %}
+		<label {% if id %} for="{{ id }}" {% endif %} class="label">
+			<span class="label-text">{{ label|default(name|humanize) }}</span>
+		</label>
+	{% endif %}
+{% endblock %}
+
+{# Simple widget (inputs) styling #}
+{% block form_widget_simple %}
+	{% set type = type|default('text') %}
+	<input type="{{ type }}" {% if id %} id="{{ id }}" {% endif %} name="{{ full_name }}" value="{{ value }}" {{ block('widget_attributes') }} class="input input-bordered w-full {{ attr.class|default('') }}"/>
+{% endblock %}
+
+{# Button with DaisyUI/Tailwind classes; safely reuses internal attributes #}
+{% block button_widget %}
+	{# Merge default classes with any provided #}
+	{% set classes = ('btn btn-primary ' ~ (attr.class|default('')))|trim %}
+	<button type="{{ type|default('submit') }}" {{ block('button_attributes') }} class="{{ classes }}">
+		{{ label|default(value) }}
+	</button>
+{% endblock %}

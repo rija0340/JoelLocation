@@ -115,11 +115,14 @@
 
 	<div class="text-center mb-2">
 		{% if step is defined and step == 'validation' %}
-
-			{% else %}
-				<a href="{{ path('client_step2') }}" class="btn btn-neutral mr-2">
-					Revenir à l'étape précédente
-				</a>
+			<a href="{{ path('client_reservations') }}" class="btn btn-neutral mr-2">
+				<i class="fa fa-return mr-2"></i>
+				Revenir à mes réservations
+			</a>
+		{% else %}
+			<a href="{{ path('client_step2') }}" class="btn btn-neutral mr-2">
+				Revenir à l'étape précédente
+			</a>
 		{% endif %}
 
 		{% if vehiculeIsNotAvailable is not defined or not vehiculeIsNotAvailable %}
@@ -127,6 +130,7 @@
 				Enregistrer
 			</button>
 		{% endif %}
+
 	</div>
 
 
