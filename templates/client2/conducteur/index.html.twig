@@ -13,9 +13,11 @@
       <h1 class="text-3xl title-red">Mes conducteurs</h1>
       <p class="text-gray-500">Gérez vos conducteurs</p>
     </div>
+    {% if conducteurs|length < 2 %}
     <a href="{{ path('client_newConducteur') }}" class="btn btn-error">
       <i class="fas fa-plus mr-2"></i> Nouveau conducteur
     </a>
+    {% endif %}
   </header>
 
   <div class="card bg-base-100 shadow rounded-lg mt-8">
@@ -31,6 +33,7 @@
                 <th class="py-4 px-6 rounded-tl-2xl">Nom</th>
                 <th class="py-4 px-6">Prénom</th>
                 <th class="py-4 px-6">Permis</th>
+                <th class="py-4 px-6">Principal</th>
                 <th class="py-4 px-6 rounded-tr-2xl text-right">Actions</th>
             </tr>
         </thead>
@@ -45,6 +48,11 @@
                             <p class=""><span class="font-semibold">Délivré le :</span> {{ conducteur.dateDelivrance ? conducteur.dateDelivrance|date('d M Y') : 'N/A' }}</p>
                             <p class=""><span class="font-semibold">Ville :</span> {{ conducteur.villeDelivrance|default('N/A') }}</p>
                         </div>
+                    </td>
+                    <td class="py-4 px-6">
+                      {% if conducteur.isPrincipal %}
+                        <span class="badge badge-warning">Principal</span>
+                      {% endif %}
                     </td>
                     <td class="py-4 px-6">
                         <div class="flex justify-end space-x-2">

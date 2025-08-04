@@ -87,8 +87,8 @@ class ConducteurController extends AbstractController
 
         return $this->render('client2/conducteur/new.html.twig', [
 
-            'formConducteur' => $formConducteur->createView()
-
+            'formConducteur' => $formConducteur->createView(),
+            'hasPrincipal' => $this->hasConducteurPrincipal($client),
         ]);
     }
 
@@ -109,8 +109,22 @@ class ConducteurController extends AbstractController
         }
 
         return $this->render('client2/conducteur/edit.html.twig', [
-            'formConducteur' => $formConducteur->createView()
+            'formConducteur' => $formConducteur->createView(),
+            'hasPrincipal' => $this->hasConducteurPrincipal($conducteur->getClient()),
         ]);
+    }
+
+
+    //create a function that check if hascnodutcteur and return boolean 
+    public function hasConducteurPrincipal($client)
+    {
+        $conducteurs = $this->conducteurRepo->findBy(['client' => $client]);
+        foreach ($conducteurs as $conducteur) {
+            if ($conducteur->getIsPrincipal()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

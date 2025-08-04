@@ -18,13 +18,7 @@
 				<li class="{% if app.request.attributes.get('_route') starts with 'nosvehicules' %}current-menu-item{% endif %}">
 					<a href="{{ path('nosvehicules') }}">Nos véhicules</a>
 				</li>
-				{# <li class="{% if app.request.attributes.get('_route') starts with 'app_login' %}current-menu-item{% endif %}">
-																													{% if is_granted("ROLE_CLIENT") %}
-																														<a href="{{ path('espaceClient_index') }}">Mon compte</a>
-																													{% else %}
-																														<a href="{{ path('admin_index') }}">Mon compte</a>
-																													{% endif %}
-																												</li> #}
+
 				<li class="{% if app.request.attributes.get('_route') starts with 'formulaire-contact' %}current-menu-item{% endif %}">
 					<a href="{{ path('formulaire-contact') }}">Contact</a>
 				</li>
@@ -33,10 +27,17 @@
 				</li>
 				{% if is_granted("ROLE_CLIENT") or is_granted("ROLE_PERSONNEL") %}
 					<li class="current-menu-item has-child profil_mobile">
-						<a href="">
-							<img src="/images/blank_profile.png" alt="DGSR Logo" class="brand-image img-circle elevation-3" style="opacity: .8; height:30px; width:auto;">
+						<a href="#" class="d-flex align-items-center p-0">
+							<i class="fas fa-user-circle text-secondary" style="font-size:30px; opacity:.8;"></i>
 						</a>
 						<ul class="sub-menu">
+							<li class="{% if app.request.attributes.get('_route') starts with 'app_login' %}current-menu-item{% endif %}">
+								{% if is_granted("ROLE_CLIENT") %}
+									<a href="{{ path('espaceClient_index') }}">Mon compte</a>
+								{% else %}
+									<a href="{{ path('admin_index') }}">Mon compte</a>
+								{% endif %}
+							</li>
 							<li>
 								<a href="{{ path('app_logout') }}">Déconnecter</a>
 							</li>
@@ -58,15 +59,22 @@
 		<a href="https://www.instagram.com/joel.location/" class="fab fa-instagram" target="_blank" style="margin-right:4px;"></a>
 		<a href="https://youtube.com/channel/UCMZZRNgOmDBIghZwg4tTQJQ " class="fab fa-youtube" target="_blank" style="margin-right:4px;"></a>
 	</div>
-	<div class="profil_desktop ">
+	<div class="profil_desktop ml-3">
 		{% if is_granted("ROLE_CLIENT") or is_granted("ROLE_PERSONNEL") %}
 			<nav id="menu2">
 				<ul>
 					<li class="current-menu-item has-child">
-						<a href="">
-							<img src="/images/blank_profile.png" alt="DGSR Logo" class="brand-image img-circle elevation-3" style="opacity: .8; height:30px; width:auto;">
+						<a href="#" class="d-flex align-items-center p-0">
+							<i class="fas fa-user-circle text-secondary" style="font-size:30px; opacity:.8;"></i>
 						</a>
 						<ul class="sub-menu">
+							<li class="{% if app.request.attributes.get('_route') starts with 'app_login' %}current-menu-item{% endif %}">
+								{% if is_granted("ROLE_CLIENT") %}
+									<a href="{{ path('espaceClient_index') }}">Mon compte</a>
+								{% else %}
+									<a href="{{ path('admin_index') }}">Mon compte</a>
+								{% endif %}
+							</li>
 							<li>
 								<a href="{{ path('app_logout') }}">Déconnecter</a>
 							</li>

@@ -63,13 +63,18 @@
     {{ form_widget(formConducteur.telephone, {'attr': {'class': 'input input-bordered w-full'}}) }}
     {{ form_errors(formConducteur.telephone) }}
   </div>
+
+{% set isPrincipal = formConducteur.vars['value'].isPrincipal is defined and formConducteur.vars['value'].isPrincipal %}
+
+{% if (not hasPrincipal) or isPrincipal %}
   <div class="form-control">
     <label class="label cursor-pointer">
       <span class="label-text">Est conducteur principal</span>
-      <input type="checkbox" name="isPrincipal" class="checkbox checkbox-primary ml-2" {{ formConducteur.isPrincipal is defined and formConducteur.isPrincipal.vars.data ? 'checked' : '' }}>
+      <input type="checkbox" name="isPrincipal" class="checkbox checkbox-primary ml-2" {{ isPrincipal is defined and isPrincipal ? 'checked' : '' }}>
     </label>
   </div>
 </div>
+{% endif %}
 <div class="flex justify-center gap-4 mt-6">
   <a href="{{ path('client_mesConducteurs') }}"
      class="btn btn-ghost btn-sm  hover:scale-105 transition-transform duration-200"

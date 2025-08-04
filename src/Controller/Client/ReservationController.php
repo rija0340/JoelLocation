@@ -220,9 +220,10 @@ class ReservationController extends AbstractController
             $avalaibleDrivers = $allDrivers;
         }
 
-        return $this->render('client/reservation/details/form_add_conducteur.html.twig', [
+        return $this->render('client2/conducteur/form_add_conducteur.html.twig', [
             'reservation' => $reservation,
-            'avalaibleDrivers' => $avalaibleDrivers
+            'avalaibleDrivers' => $avalaibleDrivers,
+            'allDrivers' => $allDrivers
         ]);
     }
 

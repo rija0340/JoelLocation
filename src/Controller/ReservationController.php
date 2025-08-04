@@ -717,8 +717,23 @@ class ReservationController extends AbstractController
             $this->flashy->success('Le conducteur a bienc été ajouté');
             return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
         }
-        return $this->render('admin/reservation/crud/conducteur/new.html.twig', [
+        
+        $conducteurs = $this->conducteurRepo->findBy(['client' => $reservation->getClient()]);
+        $nbConducteurs = count($conducteurs);
 
+        //check if conducteur n'est pas lié à cetter resa
+        foreach ($conducteurs as $key => $conducteur) {
+            if ($conducteur->getReservations()->contains($reservation)) {
+                unset($conducteurs[$key]);
+            }
+        }
+
+        // i need the total number of conducteur and i need also those how are not yet added to a resa 
+
+
+        return $this->render('admin/reservation/crud/conducteur/new.html.twig', [
+            'conducteurs'=>$conducteurs,
+            'nbConducteurs'=>$nbConducteurs,
             'form' => $form->createView(),
             'reservation' => $reservation,
             'routeReferer' => 'reservation_show'
@@ -733,16 +748,17 @@ class ReservationController extends AbstractController
     public function addSelectedConducteur(Request $request)
     {
         //extracion mail from string format : "nom prenom (mail)"
-        $conducteur = $request->request->get('selectedConducteur');
-        $conducteur = explode('(', $conducteur);
-        $numPermis = explode(')', $conducteur[1]);
-        $numeroPermis = $numPermis[0];
+        $conducteurs = $request->request->get('selectedConducteurs');
+        
+        $conducteur =  $this->conducteurRepo->find(intval($conducteurs[0]));
 
-        $conducteur =  $this->conducteurRepo->findOneBy(['numeroPermis' => $numeroPermis]);
         $reservation = $this->reservationRepo->find($request->request->get('idReservation'));
 
+        foreach ($conducteurs as $key => $conducteur) {
+            $conducteur =  $this->conducteurRepo->find(intval($conducteur));
+            $reservation->addConducteursClient($conducteur);
+        }
 
-        $reservation->addConducteursClient($conducteur);
         $this->em->flush();
 
         $this->flashy->success("Le conducteur a été ajouté aved succès");

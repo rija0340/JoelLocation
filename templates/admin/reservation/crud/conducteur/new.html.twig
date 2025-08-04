@@ -26,127 +26,175 @@
 
 {% block content %}
 
+	{% if conducteurs|length > 0   %}
 
-	<div class="x_panel">
-		<div class="x_title">
-			chercher un conducteur :
+		<div class="x_panel">
+			<div class="x_title">
+
+				<h2>
+					<i class="fa fa-plus"></i>
+					Ajouter des conducteurs
+				</h2>
+
+				<div class="clearfix"></div>
+			</div>
+			<form action="{{ path('add_selected_conducteur') }}" name="selectedConducteur" method="POST">
+				<div class="mb-4">
+					<input type="hidden" name="idReservation" value="{{ reservation.id }}">
+
+					<div class="d-flex align-items-center mb-2 gap-2 flex-wrap">
+						<div class="btn-group btn-group-sm" role="group" aria-label="select all toggles">
+							<button type="button" class="btn btn-outline-primary" onclick="toggleAll(true)">Tout cocher</button>
+							<button type="button" class="btn btn-outline-secondary" onclick="toggleAll(false)">Tout décocher</button>
+						</div>
+						<div class="text-muted small ms-2 ml-3">
+							({{ conducteurs|length }}
+							conducteurs)
+						</div>
+					</div>
+
+					<div id="conducteur-list" class="row row-cols-1 row-cols-sm-2 g-3 border rounded p-2 overflow-auto" style="max-height:16rem;">
+						{% for c in conducteurs %}
+							<div class="col">
+								<div class="form-check d-flex align-items-start">
+									<input class="form-check-input me-2" type="checkbox" name="selectedConducteurs[]" value="{{ c.id }}" id="conducteur-{{ c.id }}" data-name="{{ c.nom | lower }}"/>
+									<label class="form-check-label flex-grow-1" for="conducteur-{{ c.id }}">
+										<div class="fw-medium">{{ c.prenom }}
+											{{ c.nom }}</div>
+									</label>
+								</div>
+							</div>
+						{% else %}
+							<div class="col-12 text-center small text-secondary">
+								Aucun conducteur disponible.
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+
+				<div class="text-center mt-3">
+					<button class="btn btn-danger" type="submit">
+						Enregistrer la sélection
+					</button>
+				</div>
+			</form>
+
+			<script>
+				function toggleAll(check) {
+const list = document.querySelectorAll('#conducteur-list input[type=checkbox]');
+list.forEach(cb => {
+cb.checked = check;
+});
+}
+			</script>
+
 		</div>
-		<form action="{{ path("add_selected_conducteur") }}" name="selectedConducteur" method="POST">
-			<div class="x_content">
-				<input type="hidden" value="{{reservation.id}}" id="idReservation" name="idReservation">
-				<input type="text" class="form-control" id="selectConducteur" name="selectedConducteur">
+	{% endif  %}
+	{% if nbConducteurs < 2   %}
+
+		{{form_start(form)}}
+		<input type="hidden" value="{{reservation.id}}" id="idReservation" name="idReservation">
+		<div class="x_panel">
+			<div class="x_title">
+
+				<h2>
+					<i class="fa fa-plus"></i>
+					Nouveau conducteur
+				</h2>
+
+				<div class="clearfix"></div>
 			</div>
 
-			<div class="text-center">
+			<div class="row">
+				<div class="col-md-6 form-group">
+					<label>
+						Nom :
+					</label>
+
+					{{form_widget(form.nom)}}
+				</div>
+				<div class="col-md-6 form-group">
+					<label>
+						Prénom :
+					</label>
+
+					{{form_widget(form.prenom)}}
+				</div>
+				<div class="col-md-6 ">
+					<label>
+						Date de naissance :
+					</label>
+
+					{{form_widget(form.dateNaissance)}}
+				</div>
+
+				<div class="col-md-3 form-group">
+					<label>
+						Ville naissance :
+					</label>
+
+					{{form_widget(form.villeNaissance)}}
+				</div>
+
+				<div class="col-md-3 form-group">
+					<label>
+						Numéro de téléphone :
+					</label>
+
+					{{form_widget(form.telephone)}}
+				</div>
+
+			</div>
+			<div class="x_title">
+
+				<h2>
+					<i class="fa fa-plus"></i>
+					Information permis
+				</h2>
+
+				<div class="clearfix"></div>
+			</div>
+			<div class="row mb-3">
+
+				<div class="col-md-3 form-group">
+					<label>
+						Numero permis :
+					</label>
+
+					{{form_widget(form.numeroPermis)}}
+				</div>
+				<div class="col-md-3 form-group">
+					<label>
+						Ville de délivrance :
+					</label>
+					{{form_widget(form.villeDelivrance)}}
+				</div>
+				<div class="col-md-3 ">
+					<label>
+						Date de délivrance :
+					</label>
+
+					{{form_widget(form.dateDelivrance)}}
+				</div>
+
+				<div class="col-md-3 ">
+					<label>
+						Date d'expiration :
+					</label>
+
+					{{form_widget(form.dateExpiration)}}
+				</div>
+
+			</div>
+			<div class="text-center mt-4">
+				<a href="{{path(routeReferer, {id : reservation.id})}}" class="btn btn-dark">Annuler</a>
 				<button class="btn btn-danger" type="submit">
 					Enregistrer
 				</button>
 			</div>
-		</form>
-	</div>
-
-	{{form_start(form)}}
-	<input type="hidden" value="{{reservation.id}}" id="idReservation" name="idReservation">
-	<div class="x_panel">
-		<div class="x_title">
-
-			<h2>
-				<i class="fa fa-plus"></i>
-				Information conducteur
-			</h2>
-
-			<div class="clearfix"></div>
 		</div>
-
-		<div class="row">
-			<div class="col-md-6 form-group">
-				<label>
-					Nom :
-				</label>
-
-				{{form_widget(form.nom)}}
-			</div>
-			<div class="col-md-6 form-group">
-				<label>
-					Prénom :
-				</label>
-
-				{{form_widget(form.prenom)}}
-			</div>
-			<div class="col-md-6 ">
-				<label>
-					Date de naissance :
-				</label>
-
-				{{form_widget(form.dateNaissance)}}
-			</div>
-
-			<div class="col-md-3 form-group">
-				<label>
-					Ville naissance :
-				</label>
-
-				{{form_widget(form.villeNaissance)}}
-			</div>
-
-			<div class="col-md-3 form-group">
-				<label>
-					Numéro de téléphone :
-				</label>
-
-				{{form_widget(form.telephone)}}
-			</div>
-
-		</div>
-		<div class="x_title">
-
-			<h2>
-				<i class="fa fa-plus"></i>
-				Information permis
-			</h2>
-
-			<div class="clearfix"></div>
-		</div>
-		<div class="row mb-3">
-
-			<div class="col-md-3 form-group">
-				<label>
-					Numero permis :
-				</label>
-
-				{{form_widget(form.numeroPermis)}}
-			</div>
-			<div class="col-md-3 form-group">
-				<label>
-					Ville de délivrance :
-				</label>
-				{{form_widget(form.villeDelivrance)}}
-			</div>
-			<div class="col-md-3 ">
-				<label>
-					Date de délivrance :
-				</label>
-
-				{{form_widget(form.dateDelivrance)}}
-			</div>
-
-			<div class="col-md-3 ">
-				<label>
-					Date d'expiration :
-				</label>
-
-				{{form_widget(form.dateExpiration)}}
-			</div>
-
-		</div>
-		<div class="text-center mt-4">
-			<a href="{{path(routeReferer, {id : reservation.id})}}" class="btn btn-dark">Annuler</a>
-			<button class="btn btn-danger" type="submit">
-				Enregistrer
-			</button>
-		</div>
-	</div>
-	{{form_end(form)}}
+		{{form_end(form)}}
+	{% endif  %}
 {% endblock %}
 {% block javascripts %}
 	<!-- Datatables -->

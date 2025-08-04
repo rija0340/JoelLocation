@@ -500,10 +500,19 @@ form.search-form button {
 }
 
 #menu ul li.has-child>a::after {
-  content: "";
-  font-family: "fontawesome";
-  margin-left: 4px;
+  content: "\f0d7";
+  /* Unicode for fa-caret-down */
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  /* required for solid icons */
+  display: inline-block;
+  margin-left: 6px;
+  vertical-align: middle;
+  cursor: default;
+  font-size: 0.75em;
+  color: currentColor;
 }
+
 
 #menu ul>li {
   display: inline-block;

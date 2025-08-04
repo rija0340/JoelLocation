@@ -103,11 +103,6 @@ header {
 	margin: 0;
 }
 
-#menu2 ul li.has-child>a::after {
-	content: "";
-	font-family: "fontawesome";
-	margin-left: 4px;
-}
 
 #menu2 ul>li {
 	display: inline-block;

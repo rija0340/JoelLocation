@@ -1,93 +1,3 @@
-// $(document).ready(function () {
-//     let hasError = true;
-//     window.paypal.Buttons({
-//         style: {
-//             shape: "rect",
-//             layout: "vertical"
-//         },
-//         createOrder: async function () {
-//             const response = await fetch('/espaceclient/payment/create-order', {
-//                 method: 'POST',
-//                 headers: {
-//                     'Content-Type': 'application/json'
-//                 },
-//                 body: JSON.stringify(
-//                     {
-//                         amount: 100, // Your amount variable
-//                         devisId: "devis001" // Your devis ID variable
-//                     }
-//                 )
-//             });
-
-//             const order = await response.json();
-//             return order.id;
-//         },
-//         // onApprove: async function (data, actions) {
-//         //     const response = await fetch(`/espaceclient/payment/capture/${data.orderID
-//         //         }`, { method: 'POST' });
-
-//         //     const captureData = await response.json();
-//         //     console.log("captureData");
-//         //     console.log(captureData);
-//         //     if (captureData.id) { // Payment successful - redirect or show success message
-//         //         // window.location.href = '/payment/success';
-//         //         window.location.href = '/';
-//         //     }
-//         // },
-//         onApprove: async function (data, actions) {
-//             try {
-//                 // 1. Capture le paiement
-//                 const captureResponse = await fetch(`/espaceclient/payment/capture/${data.orderID}`, {
-//                     method: 'POST'
-//                 });
-//                 const captureData = await captureResponse.json();
-
-//                 if (!captureData.id) {
-//                     throw new Error(captureData.error || 'Échec de la capture du paiement');
-//                 }
-
-//                 // 2. Envoie au contrôleur de succès avec les données nécessaires
-//                 const successResponse = await fetch('/espaceclient/payment/success', {
-//                     method: 'POST',
-//                     headers: {
-//                         'Content-Type': 'application/json',
-//                     },
-//                     body: JSON.stringify({
-//                         paypalOrderId: data.orderID,
-//                         transactionId: captureData.id,
-//                         paymentData: captureData.data
-//                     })
-//                 });
-
-//                 // 3. Redirige selon la réponse du contrôleur
-//                 if (successResponse.redirected) {
-//                     window.location.href = successResponse.url;
-//                 } else {
-//                     const result = await successResponse.json();
-//                     if (result.error) {
-//                         throw new Error(result.error);
-//                     }
-//                     // Fallback si pas de redirection
-//                     window.location.href = '/payment/success';
-//                 }
-//             } catch (error) {
-//                 console.error('Erreur lors du paiement:', error);
-//                 resultMessage('Une erreur est survenue lors du paiement. Veuillez réessayer.');
-//             }
-//         },
-//         onError: function (err) {
-//             console.error('PayPal error:', err);
-//             // Handle error appropriately
-//         }
-//     }).render("#paypal-button-container");
-
-//     function resultMessage(message) {
-//         const container = document.querySelector("#result-message");
-//         container.innerHTML = message;
-//     }
-// });
-
-
 $(document).ready(function () {
     // Get references to key elements
     const cgvCheckbox = $('#conditionGeneralVente');
@@ -150,6 +60,7 @@ $(document).ready(function () {
                 const captureResponse = await fetch(`/espaceclient/payment/capture/${data.orderID}`, {
                     method: 'POST'
                 });
+
                 const captureData = await captureResponse.json();
 
                 if (!captureData.id) {
