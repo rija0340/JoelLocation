@@ -42,7 +42,7 @@
 			</div>
 
 			<!-- Page Header -->
-			<div class="bg-base-200 p-4">
+			<div class="bg-base-200 ">
 				<div class="container mx-auto flex flex-col md:flex-row gap-4">
 					<div class="md:w-5/12"> {% block current_page %}{% endblock %}
 						</div>
@@ -52,17 +52,16 @@
 					</div>
 
 					<!-- Main Content -->
-					<div class="containerBody container mx-auto py-8"> {% block body %}{% endblock %}
+					<div class="containerBody container mx-auto py-8 px-4 md:px-0"> {% block body %}{% endblock %}
 						</div>
-					</div>
 
 
-					{# find toatst #}
+						{# find toatst #}
 
-					<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-					<script src="{{ asset('client2/js/app.js') }}"></script>
-					<script>
-						function flashy(message, link) {
+						<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+						<script src="{{ asset('client2/js/app.js') }}"></script>
+						<script>
+							function flashy(message, link) {
 var template = $($('#flashy-template').html())
 $('.flashy').remove()
 template.find('.flashy__body').html(message).attr('href', link || '#').end().appendTo('.content-header').hide().fadeIn(300).delay(3000).animate({
@@ -71,9 +70,9 @@ marginRight: '-200%'
 $(this).remove()
 })
 }
-					</script>
-					<script src="{{ asset('bundles/mercuryseriesflashy/js/flashy.js') }}"></script>
-					{% block javascripts %}{% endblock %}
-					{{ include('@MercurySeriesFlashy/flashy.html.twig') }}
+						</script>
+						<script src="{{ asset('bundles/mercuryseriesflashy/js/flashy.js') }}"></script>
+						{% block javascripts %}{% endblock %}
+						{{ include('@MercurySeriesFlashy/flashy.html.twig') }}</body>
 				</body>
 			</html>

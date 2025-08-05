@@ -410,7 +410,7 @@ class VenteComptoirController extends AbstractController
                 $this->symfonyMailerHelper->sendDevis($request, $devis);
 
                 // redirect to client_reservations with fragment "#details"
-                $url = $this->generateUrl('client_reservations') . '#avenir';
+                $url = $this->generateUrl('client_reservations') . '#devis';
                 return $this->redirect($url);
                 // return $this->redirectToRoute('client_reservations');
             } else {

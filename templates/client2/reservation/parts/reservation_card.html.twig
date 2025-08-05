@@ -47,7 +47,7 @@
 	{# flex wrap pour gérer plusieurs cartes en ligne #}
 	{% if reservations|length > 0 %}
 		{% for reserv in reservations %}
-			<div class="card md:card-side bg-base-100 border border-base-200 shadow-sm hover:shadow-md transition-shadow" style="flex: 0 0 48%;">
+			<div class="card md:card-side bg-base-100 border border-base-200 shadow-sm hover:shadow-md transition-shadow w-full md:basis-[48%]">
 				{# chaque carte prend environ 48% de largeur #}
 
 				<!-- Image -->
