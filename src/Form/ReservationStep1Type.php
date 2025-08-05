@@ -11,6 +11,9 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Validator\Constraints\GreaterThan;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Callback;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use App\Form\DataTransformer\DateTimeStringTransformer;
 
 class ReservationStep1Type extends AbstractType
@@ -18,6 +21,7 @@ class ReservationStep1Type extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $transformer = new DateTimeStringTransformer();
+        
         $builder
             ->add('agenceDepart', ChoiceType::class, [
                 'choices'  => [
@@ -42,15 +46,19 @@ class ReservationStep1Type extends AbstractType
                 'required' => true
             ])
             ->add('dateDepart', TextType::class, [
-                // 'widget' => 'single_text',
                 'required' => true,
-
+                'attr' => [
+                    'class' => 'form-control smart-datetime-input',
+                    'placeholder' => 'dd/mm/yyyy hh:mm'
+                ],
+                'constraints' => [
+                    new NotBlank(['message' => 'La date de départ est requise']),
+                ]
             ])
             ->add('typeVehicule', ChoiceType::class, [
                 'choices'  => [
                     'Classic' => 'Classic',
                 ],
-
                 'required' => true
             ])
             ->add('agenceRetour', ChoiceType::class, [
@@ -75,21 +83,37 @@ class ReservationStep1Type extends AbstractType
                 ],
                 'required' => true
             ])
-            ->add(
-                'dateRetour',
-                TextType::class,
-                [
-                    'required' => true
-                    // 'widget' => 'single_text',
-                    // 'constraints' => [
-                    //     new GreaterThan("+2 hours UTC+3")
+            ->add('dateRetour', TextType::class, [
+                'required' => true,
+                'attr' => [
+                    'class' => 'form-control smart-datetime-input',
+                    'placeholder' => 'dd/mm/yyyy hh:mm'
+                ],
+                'constraints' => [
+                    new NotBlank(['message' => 'La date de retour est requise']),
+                    new Callback([$this, 'validateReturnDate'])
                 ]
-            )
+            ])
             ->add('lieuSejour', TextType::class, [
                 'required' => false
             ]);
+
+        // Add transformers
         $builder->get('dateDepart')->addModelTransformer($transformer);
         $builder->get('dateRetour')->addModelTransformer($transformer);
+    }
+
+    public function validateReturnDate($value, ExecutionContextInterface $context)
+    {
+        $form = $context->getRoot();
+        $departDate = $form->get('dateDepart')->getData();
+        
+        if ($departDate && $value) {
+            if ($value <= $departDate) {
+                $context->buildViolation('La date de retour doit être postérieure à la date de départ')
+                    ->addViolation();
+            }
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver)
