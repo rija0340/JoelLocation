@@ -104,16 +104,31 @@ class SymfonyMailerHelper
     {
         $baseUrl = $this->site->getBaseUrl($request);
         $route = $type . '_pdf';
-        $documentLink = $baseUrl . $this->router->generate($route, ['hashedId' =>  sha1($entity->getId())]);
+        $documentLink = $baseUrl . $this->router->generate($route, ['hashedId' => sha1($entity->getId())]);
 
         $name = $entity->getClient()->getNom();
         $email = $entity->getClient()->getMail();
-        //check the entity type 
         $reference = ($entity instanceof Devis) ? $entity->getNumero() : $entity->getReference();
 
+        // Prepare photo attachments for contracts
+        $photos = [];
+        if ($type === 'contrat' && $entity instanceof Reservation) {
+            foreach ($entity->getPhotos() as $photo) {
+                // Vérifier que le fichier existe avant de l'ajouter
+                $photoPath = 'uploads/reservation_photos/' . $photo->getImage();
+                if ($photo->getImage() && file_exists($photoPath)) {
+                    $photos[] = $photoPath; // Juste le chemin
+                }
+            }
+        }
+
         try {
-            $method =  'send' . ucfirst($type);
-            $this->symfonyMailer->$method($email, $name, ucfirst($type), $documentLink);
+            $method = 'send' . ucfirst($type);
+            if ($type === 'contrat') {
+                $this->symfonyMailer->$method($email, $name, ucfirst($type), $documentLink, $photos);
+            } else {
+                $this->symfonyMailer->$method($email, $name, ucfirst($type), $documentLink);
+            }
 
             $this->saveMail($entity, $type, "success");
             $this->flashy->success("L'url de téléchargement du $type N°$reference a été envoyé");

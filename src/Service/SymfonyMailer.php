@@ -73,13 +73,13 @@ class SymfonyMailer
         // $this->mailer->send($email);
     }
 
-    public function sendContrat(string $to, string $name, string $subject, $contratLink)
+    public function sendContrat(string $to, string $name, string $subject, $contratLink, array $photos = [])
     {
         $this->context['contratLink'] = $contratLink;
         $this->context['name'] = $name;
-        $email = $this->createBaseEmailAndSend($to, $subject, 'admin/templates_email/contrat.html.twig');
-        // $this->mailer->send($email);
+        $email = $this->createBaseEmailAndSend($to, $subject, 'admin/templates_email/contrat.html.twig', $photos);
     }
+
 
     public function sendFacture(string $to, string $name, string $subject, $factureLink)
     {
@@ -143,28 +143,33 @@ class SymfonyMailer
         return $baseUrl . '/validation-email/' . $token;
     }
 
-    private function createBaseEmailAndSend(string $to, string $subject, string $template)
+    private function createBaseEmailAndSend(string $to, string $subject, string $template, array $attachments = [])
     {
         if (strpos($to, '@yahoo.com') !== false) {
             $this->context['replyToEmail'] = 'contact@joellocation.com';
-            // Render template content first
             $htmlContent = $this->twig->render($template, array_merge($this->context, [
                 'logo' => 'images/Joel-Location-new.png',
                 'facebook-icon' => 'images/logos/icons8-facebook-48.png',
                 'instagram-icon' => 'images/logos/icons8-instagram-48.png',
                 'youtube-icon' => 'images/logos/icons8-youtube-48.png'
             ]));
-            // die('mandalo ato tsika');
+
             $email = (new Email())
                 ->from('joel.mandret@yahoo.com')
                 ->to($to)
-                // ->replyTo('contact@joellocation.com')
                 ->subject($subject)
                 ->html($htmlContent)
                 ->embed(fopen('images/Joel-Location-new.png', 'r'), 'logo')
                 ->embed(fopen('images/logos/icons8-facebook-48.png', 'r'), 'facebook-icon')
                 ->embed(fopen('images/logos/icons8-instagram-48.png', 'r'), 'instagram-icon')
                 ->embed(fopen('images/logos/icons8-youtube-48.png', 'r'), 'youtube-icon');
+
+            // Ajouter les pièces jointes
+            foreach ($attachments as $attachmentPath) {
+                if (file_exists($attachmentPath)) {
+                    $email->attachFromPath($attachmentPath);
+                }
+            }
 
             try {
                 $this->yahooTransport->send($email);
@@ -174,7 +179,6 @@ class SymfonyMailer
                     'subject' => $subject,
                     'exception' => $e
                 ]);
-                // Optionally return false or throw a custom exception if needed
             }
         } else {
             $smtpMail = (new TemplatedEmail())
@@ -188,6 +192,13 @@ class SymfonyMailer
                 ->embedFromPath('images/logos/icons8-youtube-48.png', 'youtube-icon', 'image/png')
                 ->context($this->context);
 
+            // Ajouter les pièces jointes
+            foreach ($attachments as $attachmentPath) {
+                if (file_exists($attachmentPath)) {
+                    $smtpMail->attachFromPath($attachmentPath);
+                }
+            }
+
             try {
                 $this->mainTransport->send($smtpMail);
             } catch (\Exception $e) {
@@ -196,7 +207,6 @@ class SymfonyMailer
                     'subject' => $subject,
                     'exception' => $e
                 ]);
-                // Optionally return false or throw a custom exception if needed
             }
         }
     }

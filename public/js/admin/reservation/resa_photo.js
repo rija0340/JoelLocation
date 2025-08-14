@@ -51,7 +51,6 @@ class ReservationPhotoUploader {
     async uploadFiles(files) {
         if (files.length === 0) return;
 
-        // Filter only images
         const imageFiles = files.filter(file => file.type.startsWith('image/'));
 
         if (imageFiles.length === 0) {
@@ -79,7 +78,7 @@ class ReservationPhotoUploader {
 
             if (response.ok && result.success) {
                 this.showMessage(result.message, 'success');
-                this.loadExistingPhotos(); // Reload photos
+                this.loadExistingPhotos();
             } else {
                 this.showMessage(result.error || 'Erreur lors de l\'upload', 'error');
             }
@@ -88,7 +87,7 @@ class ReservationPhotoUploader {
             this.showMessage('Erreur de connexion', 'error');
         } finally {
             this.showProgress(false);
-            this.fileInput.value = ''; // Reset file input
+            this.fileInput.value = '';
         }
     }
 
@@ -97,6 +96,7 @@ class ReservationPhotoUploader {
             const response = await fetch(`/backoffice/reservation/${this.reservationId}/photos`);
             const result = await response.json();
 
+            // Assuming result.photos is an array of {id, url, name}
             this.displayPhotos(result.photos);
         } catch (error) {
             console.error('Error loading photos:', error);
@@ -119,47 +119,47 @@ class ReservationPhotoUploader {
 
     createPhotoElement(photo) {
         const colDiv = document.createElement('div');
-        colDiv.className = 'col-md-3 col-sm-4 col-6 mb-3';
+        colDiv.className = 'col-md-3 col-sm-4 col-6 mb-3 d-flex';
 
+        // MODIFIED: Added card-body for the name and adjusted structure
         colDiv.innerHTML = `
-            <div class="card photo-card h-100">
+            <div class="card photo-card h-100 w-100">
                 <div class="photo-wrapper position-relative">
-                    <img src="${photo.url}" alt="Photo réservation" 
+                    <img src="${photo.url}" alt="Photo de la réservation" 
                          class="card-img-top photo-thumbnail" 
-                         data-bs-toggle="modal" 
-                         data-bs-target="#imageModal"
-                         data-image-src="${photo.url}"
                          style="cursor: pointer;">
                     <div class="photo-overlay position-absolute w-100 h-100 d-flex align-items-center justify-content-center">
                         <button type="button" class="btn btn-danger btn-sm me-2 btn-delete" data-photo-id="${photo.id}">
                             <i class="fa fa-trash"></i>
                         </button>
-                        <button type="button" class="btn btn-primary btn-sm btn-fullscreen" data-image-src="${photo.url}">
+                        <button type="button" class="btn btn-primary btn-sm btn-fullscreen">
                             <i class="fa fa-expand"></i>
                         </button>
                     </div>
                 </div>
+                <div class="card-body p-2 text-center">
+                    <small class="card-text text-muted text-truncate d-block">${photo.image || 'Untitled'}</small>
+                </div>
             </div>
         `;
 
-        // Add delete event
         const deleteBtn = colDiv.querySelector('.btn-delete');
         deleteBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             this.deletePhoto(photo.id);
         });
 
-        // Add fullscreen event
+        // MODIFIED: Pass photo name to fullscreen function
         const fullscreenBtn = colDiv.querySelector('.btn-fullscreen');
         fullscreenBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            this.openFullscreen(photo.url);
+            this.openFullscreen(photo.url, photo.image);
         });
 
-        // Add click on image for fullscreen
+        // MODIFIED: Pass photo name to fullscreen function
         const img = colDiv.querySelector('.photo-thumbnail');
         img.addEventListener('click', () => {
-            this.openFullscreen(photo.url);
+            this.openFullscreen(photo.url, photo.image);
         });
 
         return colDiv;
@@ -182,7 +182,7 @@ class ReservationPhotoUploader {
 
             if (response.ok && result.success) {
                 this.showMessage(result.message, 'success');
-                this.loadExistingPhotos(); // Reload photos
+                this.loadExistingPhotos();
             } else {
                 this.showMessage(result.error || 'Erreur lors de la suppression', 'error');
             }
@@ -192,19 +192,21 @@ class ReservationPhotoUploader {
         }
     }
 
-    openFullscreen(imageUrl) {
-        // Create modal if it doesn't exist
+    // MODIFIED: Function now accepts imageName
+    openFullscreen(imageUrl, imageName) {
         let modal = document.getElementById('imageModal');
         if (!modal) {
             modal = document.createElement('div');
             modal.className = 'modal fade';
             modal.id = 'imageModal';
             modal.setAttribute('tabindex', '-1');
+            // MODIFIED: Added modal-title element
             modal.innerHTML = `
                 <div class="modal-dialog modal-xl modal-dialog-centered">
                     <div class="modal-content bg-transparent border-0">
-                        <div class="modal-header border-0 pb-0">
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        <div class="modal-header border-0 pb-2 text-white align-items-center">
+                            <h5 class="modal-title" id="modalImageTitle"></h5>
+                            <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body text-center p-0">
                             <img id="modalImage" class="img-fluid" style="max-height: 90vh;">
@@ -215,14 +217,18 @@ class ReservationPhotoUploader {
             document.body.appendChild(modal);
         }
 
-        // Set image source and show modal
+        // ADDED: Get references to modal elements
         const modalImage = document.getElementById('modalImage');
-        modalImage.src = imageUrl;
+        const modalTitle = document.getElementById('modalImageTitle');
 
-        // Use Bootstrap 5 modal
+        // ADDED: Set image source and title text
+        modalImage.src = imageUrl;
+        modalTitle.textContent = imageName || 'Untitled';
+
         const bsModal = new bootstrap.Modal(modal);
         bsModal.show();
     }
+
 
     showProgress(show) {
         if (this.progressBar) {
@@ -239,21 +245,8 @@ class ReservationPhotoUploader {
             </div>
         `;
 
-        // Auto hide after 5 seconds
         setTimeout(() => {
             this.messageContainer.innerHTML = '';
         }, 5000);
     }
 }
-
-// Usage example:
-// document.addEventListener('DOMContentLoaded', function() {
-//     const uploader = new ReservationPhotoUploader({
-//         reservationId: 123,
-//         dropZoneId: 'photo-drop-zone',
-//         fileInputId: 'photo-input',
-//         photosContainerId: 'photos-container',
-//         progressBarId: 'upload-progress',
-//         messageContainerId: 'upload-messages'
-//     });
-// });
