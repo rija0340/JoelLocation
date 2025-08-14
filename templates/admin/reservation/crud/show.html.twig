@@ -16,6 +16,130 @@
 	<link href="{{ asset('admin/vendors/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
 	<link href="{{ asset('css/admin/detail.css') }}" rel="stylesheet">
 
+
+	<style>
+		.photo-drop-zone {
+			border: 3px dashed #dee2e6;
+			border-radius: 15px;
+			padding: 60px 20px;
+			text-align: center;
+			background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+			cursor: pointer;
+			transition: all 0.3s ease;
+			min-height: 200px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.photo-drop-zone:hover,
+		.photo-drop-zone.dragover {
+			border-color: #007bff;
+			background: linear-gradient(135deg, #e7f3ff 0%, #cce7ff 100%);
+			transform: translateY(-2px);
+			box-shadow: 0 8px 25px rgba(0, 123, 255, 0.15);
+		}
+
+		.drop-zone-content {
+			color: #6c757d;
+		}
+
+		.photo-card {
+			transition: all 0.3s ease;
+			border: none;
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+			border-radius: 15px;
+			overflow: hidden;
+		}
+
+		.photo-card:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+		}
+
+		.photo-wrapper {
+			position: relative;
+			overflow: hidden;
+			background: #f8f9fa;
+		}
+
+		.photo-thumbnail {
+			width: 100%;
+			height: 200px;
+			object-fit: cover;
+			transition: transform 0.3s ease;
+		}
+
+		.photo-card:hover .photo-thumbnail {
+			transform: scale(1.05);
+		}
+
+		.photo-overlay {
+			top: 0;
+			left: 0;
+			background: rgba(0, 0, 0, 0.8);
+			opacity: 0;
+			transition: opacity 0.3s ease;
+		}
+
+		.photo-card:hover .photo-overlay {
+			opacity: 1;
+		}
+
+		.btn-delete {
+			--bs-btn-hover-bg: #dc3545;
+			--bs-btn-hover-border-color: #dc3545;
+		}
+
+		.progress {
+			border-radius: 10px;
+			overflow: hidden;
+		}
+
+		.alert {
+			border-radius: 10px;
+			border: none;
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+		}
+
+		/* Modal customization */
+		.modal-content {
+			background: rgba(0, 0, 0, 0.9) !important;
+		}
+
+		.btn-close-white {
+			background: transparent url("data:image/svg+xml, %3csvg xmlns='http://www.w3.org / 2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath d='m.94 8.56 5.66 5.66L8 12.82l-5.66-5.66L8 1.5l1.4 1.4L3.74 8.56l5.66 5.66L8 15.62l-5.66-5.66L8 4.3l1.4 1.4L3.74 11.36z'/%3e%3c/svg%3e") center/1em auto no-repeat;
+			border: 2px solid rgba(255, 255, 255, 0.3);
+			border-radius: 50%;
+			width: 40px;
+			height: 40px;
+			transition: all 0.3s ease;
+		}
+
+		.btn-close-white:hover {
+			background-color: rgba(255, 255, 255, 0.1);
+			border-color: rgba(255, 255, 255, 0.5);
+		}
+
+		@media(max-width: 768px) {
+			.photo-thumbnail {
+				height: 150px;
+			}
+
+			.photo-drop-zone {
+				padding: 40px 15px;
+				min-height: 150px;
+			}
+		}
+
+		@media(max-width: 576px) {
+			.photo-thumbnail {
+				height: 120px;
+			}
+		}
+	</style>
+
+
 {% endblock %}
 
 {% block current_page %}
@@ -302,6 +426,63 @@
 
 		</div>
 
+
+		<div class="x_title">
+			<h2>
+				<i class="fa fa-chevron-right"></i>PHOTOS VEHICULE
+			</h2>
+			<div class="clearfix"></div>
+		</div>
+		<div class="x_content">
+			<div class="container-fluid">
+				<div
+					class="reservation-photos-section">
+					<!-- Messages d'upload -->
+					<div class="row">
+						<div class="col-12">
+							<div id="upload-messages"></div>
+						</div>
+					</div>
+
+					<!-- Zone de drag & drop -->
+					<div class="row mb-4">
+						<div class="col-12">
+							<div id="photo-drop-zone" class="photo-drop-zone">
+								<div class="drop-zone-content">
+									<i class="fas fa-cloud-upload-alt fa-3x mb-3 text-primary"></i>
+									<h5 class="mb-2">Glissez-déposez vos photos ici</h5>
+									<p class="mb-2">ou
+										<strong>cliquez pour sélectionner</strong>
+									</p>
+									<small class="text-muted">Formats acceptés : JPG, PNG, GIF (max 5MB par photo)</small>
+								</div>
+								<input type="file" id="photo-input" multiple accept="image/*" style="display: none;">
+							</div>
+						</div>
+					</div>
+
+					<!-- Barre de progression -->
+					<div class="row">
+						<div class="col-12">
+							<div id="upload-progress" class="progress mb-4" style="display: none; height: 20px;">
+								<div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 100%">
+									<span class="fw-bold">Upload en cours...</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Container des photos -->
+					<div class="row">
+						<div class="col-12">
+							<div
+								id="photos-container" class="row g-3"><!-- Les photos seront chargées ici via JavaScript -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 		{# périod de location #}
 		<div class="x_title">
 			<h2>
@@ -405,8 +586,8 @@
 					<li>Conducteur</li>
 				{% endif %}
 				{# {% for option in reservation.options %}
-																																	<li class="js-siege">{{ option }}</li>
-																																{% endfor %} #}
+																																																																																									<li class="js-siege">{{ option }}</li>
+																																																																																								{% endfor %} #}
 
 				{% for option in reservation.devisOptions %}
 
@@ -818,4 +999,18 @@
 {# generer facture avec jsPDf mais doomPDF est plus pratique à cause des conditions à considerer #}
 {# // <script src="{{asset('js/admin/reservation/generer_facture.js')}}"></script> #}
 
-<script src="{{asset('js/admin/reservation/frais_suppl_resa.js')}}"></script>{% endblock %}
+<script src="{{asset('js/admin/reservation/frais_suppl_resa.js')}}"></script>
+<script src="{{asset('js/admin/reservation/resa_photo.js')}}"></script>
+
+<script>
+	document.addEventListener('DOMContentLoaded', function () { // Initialiser l'uploader avec l'ID de la réservation
+const uploader = new ReservationPhotoUploader({
+reservationId: {{ reservation.id }},
+dropZoneId: 'photo-drop-zone',
+fileInputId: 'photo-input',
+photosContainerId: 'photos-container',
+progressBarId: 'upload-progress',
+messageContainerId: 'upload-messages'
+});
+});
+</script>{% endblock %}

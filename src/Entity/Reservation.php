@@ -12,6 +12,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use App\Entity\OptionsGarantiesInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+//use resrvationphoto
+use App\Entity\ReservationPhoto;
 
 /**
  * @ORM\Entity(repositoryClass=ReservationRepository::class)
@@ -30,6 +32,7 @@ class Reservation implements OptionsGarantiesInterface
         $this->conducteursClient = new ArrayCollection();
         $this->fraisSupplResas = new ArrayCollection();
         $this->devisOptions = new ArrayCollection();
+        $this->photos = new ArrayCollection();
     }
 
     /**
@@ -238,6 +241,11 @@ class Reservation implements OptionsGarantiesInterface
      * @ORM\OneToMany(targetEntity=DevisOption::class, mappedBy="reservation")
      */
     private $devisOptions;
+
+        /**
+     * @ORM\OneToMany(targetEntity=ReservationPhoto::class, mappedBy="reservation", cascade={"persist", "remove"})
+     */
+    private $photos;
 
     public function getId(): ?int
     {
@@ -842,6 +850,36 @@ class Reservation implements OptionsGarantiesInterface
             // set the owning side to null (unless already changed)
             if ($devisOption->getReservation() === $this) {
                 $devisOption->setReservation(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * @return Collection|ReservationPhoto[]
+     */
+    public function getPhotos(): Collection
+    {
+        return $this->photos;
+    }
+
+    public function addPhoto(ReservationPhoto $photo): self
+    {
+        if (!$this->photos->contains($photo)) {
+            $this->photos[] = $photo;
+            $photo->setReservation($this);
+        }
+
+        return $this;
+    }
+
+    public function removePhoto(ReservationPhoto $photo): self
+    {
+        if ($this->photos->removeElement($photo)) {
+            if ($photo->getReservation() === $this) {
+                $photo->setReservation(null);
             }
         }
 
