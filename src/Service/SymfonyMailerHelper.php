@@ -124,7 +124,7 @@ class SymfonyMailerHelper
 
         try {
             $method = 'send' . ucfirst($type);
-            if ($type === 'contrat') {
+            if ($type === 'contrat' && !empty($photos)) {
                 $this->symfonyMailer->$method($email, $name, ucfirst($type), $documentLink, $photos);
             } else {
                 $this->symfonyMailer->$method($email, $name, ucfirst($type), $documentLink);

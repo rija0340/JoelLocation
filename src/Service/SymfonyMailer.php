@@ -165,9 +165,11 @@ class SymfonyMailer
                 ->embed(fopen('images/logos/icons8-youtube-48.png', 'r'), 'youtube-icon');
 
             // Ajouter les pièces jointes
-            foreach ($attachments as $attachmentPath) {
-                if (file_exists($attachmentPath)) {
-                    $email->attachFromPath($attachmentPath);
+            if (!empty($attachments)) {
+                foreach ($attachments as $attachmentPath) {
+                    if (file_exists($attachmentPath)) {
+                        $email->attachFromPath($attachmentPath);
+                    }
                 }
             }
 
