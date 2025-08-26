@@ -1,0 +1,241 @@
+body {
+    background-color: white;
+}
+
+/***************************** *****************************
+ *   00 - common & reset css changement de theme en Rouge
+ ***************************** *****************************
+ *
+ */
+.c1 {
+    color: #af0000;
+}
+
+.c1-bg {
+    background-color: #af0000;
+}
+
+.c1-bo {
+    border-color: #af0000 !important;
+}
+
+.c2 {
+    color: #af0000;
+}
+
+.c2-bg {
+    background-color: #af0000;
+}
+
+.c2-bo {
+    border-color: #af0000 !important;
+}
+
+.c3,
+#menu ul ul li a:hover,
+.single-service.bordered .inner:hover .icon,
+.bordered.single-service-2 .inner:hover .icon,
+.bordered.single-service-3 .inner:hover .icon,
+.single-service.bordered .inner:hover h4,
+.bordered.single-service-2 .inner:hover h4,
+.bordered.single-service-3 .inner:hover h4,
+.single-service-3 .inner:hover .title .icon,
+.isotope-menu li.active,
+.isotope-menu li:hover,
+.single-portfolio .inner .portfolio-img .hover-content .button,
+.single-portfolio .inner .portfolio-content h3:hover,
+.single-pricing .inner a.button:hover,
+.single-pricing-2 .inner a.button:hover,
+.single-pricing-2.active .inner a.button {
+    color: #af0000;
+}
+
+.faq-sidebar li a {
+    color: black;
+}
+
+.faq-sidebar li a:hover {
+    color: #af0000;
+}
+
+.faq .single-item {
+    background-color: #f3f6fa;
+}
+
+.c3-bg,
+.bg1,
+.button,
+.hero-slider .owl-dots .owl-dot.active,
+.single-service-2:hover .inner,
+.faq .single-item.active,
+.single-faq h2 span,
+.footer_widget .nw_form button,
+.tabs-area .tabs-nav li a.active,
+.single-team .inner .team-img::after,
+.single-pricing.active .inner,
+.active.single-pricing-2 .inner,
+.single-pricing-2.active .inner .title .price {
+    background-color: #af0000;
+}
+
+.c3-bo,
+.button,
+.single-service.bordered .inner:hover,
+.bordered.single-service-2 .inner:hover,
+.bordered.single-service-3 .inner:hover,
+.testimonial-slider .single-slide,
+.tabs-area .tabs-nav li a::after,
+.tabs-area .tabs-nav li a.active,
+.contact-form input:not([type="submit"]):focus,
+.contact-form textarea:focus {
+    border-color: #af0000 !important;
+}
+
+.bg2 {
+    background-color: #af0000;
+}
+
+.single-portfolio .inner .portfolio-img .hover-content {
+    background-color: #11ffee00;
+}
+
+
+.footer-bottom a:hover {
+    color: #af0000;
+}
+
+
+/*******************************/
+
+.section-title {
+    text-align: center;
+    color: #000000;
+    font-weight: 100;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.section-title h3 {
+    margin: 0 0 1px;
+    font-size: 20px;
+    font-weight: 500;
+    color: #000000;
+}
+
+/* style footer */
+.footer-top {
+    background-color: #af0000;
+}
+
+/* footer {
+    margin-top: 20px;
+} */
+
+/* utilités */
+
+.hidden {
+    display: none !important;
+}
+
+.visible {
+    display: block;
+}
+
+/* footer */
+.footer-top {
+    padding: 10px;
+}
+
+/* style table */
+
+/* fin style table */
+
+
+/*media query pour responsive design*/
+
+/*extra large device*/
+@media (min-width: 1200px) {}
+
+
+/* larges devices */
+
+@media (min-width: 992px)and (max-width: 1199.98px) {}
+
+/*  medium device(tablets) */
+@media (min-width: 768px) and (max-width: 991.98px) {}
+
+
+/* small device */
+@media (min-width: 576px) and (max-width: 767.98px) {}
+
+/*extra small device */
+@media (max-width: 575.98px) {
+
+    /* gestion espace */
+    .sp {
+        padding-top: 30px;
+        padding-bottom: 30px;
+    }
+
+    .spt {
+        padding-top: 30px;
+    }
+
+    .spb {
+        padding-bottom: 30px;
+    }
+
+    /* footer */
+    .footer-top {
+        padding: 5px;
+    }
+
+
+    /* section title */
+    .section-title {
+        text-align: center;
+        font-size: 12px;
+        color: #7d91aa;
+        font-weight: 100;
+        margin-bottom: 10px;
+        margin-top: 10px;
+    }
+
+    .section-title h2 {
+        margin: 0 0 1px;
+        font-size: 22px;
+        font-weight: 600;
+        color: #222538;
+    }
+
+    .section-title h1 {
+        margin: 0 0 1px;
+        font-size: 22px;
+        font-weight: 600;
+        color: #222538;
+    }
+
+    p {
+        font-size: 14px;
+    }
+
+    ul li {
+        font-size: 14px;
+
+    }
+
+    h4 {
+        font-size: 14px;
+    }
+
+    h3 {
+        font-size: 16px;
+    }
+
+    /* footer */
+    .footer-top {
+        padding: 5px;
+    }
+
+
+}

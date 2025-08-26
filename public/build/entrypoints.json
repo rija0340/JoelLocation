@@ -1,0 +1,13 @@
+{
+  "entrypoints": {
+    "vitrine": {
+      "js": [
+        "/build/runtime.5a65fa37.js",
+        "/build/vitrine.ac911e54.js"
+      ],
+      "css": [
+        "/build/vitrine.92f52109.css"
+      ]
+    }
+  }
+}

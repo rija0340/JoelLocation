@@ -1,0 +1,188 @@
+.pourquoi1{
+    height: 200px;
+}
+.apropos ul{
+    margin-left: 400px;
+}
+
+.avecbgimage .content p{
+    /* background-color: rgba(255, 255, 255, 0.2); */
+    line-height: 1.5em;
+    font-weight: 700;
+    text-align: justify;
+     /* text-shadow: 0 0px 10px #000; */
+     
+     /* color: black;/ */
+    }
+    
+.avecbgimage{
+    background-image: linear-gradient(
+						      rgba(0, 0, 0, 0.5),
+						      rgba(0, 0, 0, 0.5)
+                            ), url('../images/iStock-1209047751.jpg');
+                            background-size: cover; 
+
+}
+
+.avecbgimage .row-pourquoi{
+      
+        
+}    
+.avecbgimage .section-title h2{
+    /* text-shadow: 0 1px 3px #000; */
+    
+}
+
+.avecbgimage .title h4 {
+    text-shadow: 0 0px 5px #af0000;
+
+}
+.avecbgimage .inner .title .icon{
+    color: #af0000;
+    /* background-color: rgba(255, 255, 255, 0.7); */
+}
+
+.row-pourquoi .single-service-3:hover{
+    /* box-shadow: 0 0 0 0.2rem rgba(175, 0, 0, 0.25); */
+    /* background-color: red; */
+}
+
+/* notre mission */
+.mission .single-service-2 .inner .content {
+    font-size: 16px;
+    /* color: black; */
+    margin-top: 25px; }
+
+    .mission .single-service-2 .inner {
+        border: 1px solid #cad4de;
+        border-radius: 5px;
+        padding: 40px 20px;
+    }
+    .mission .single-service-2 .inner .title .icon {
+        font-size: 60px;
+        margin-bottom: 15px;
+    }
+    .mission .single-service-2 .inner:hover .icon {
+        color:#ffffff ;
+    }
+    .mission .single-service-2 .inner{
+        height: 260px;
+
+    }
+    .imbattable{
+        font-weight: 700;
+        font-weight: bold;
+    }
+/*media query pour responsive design*/
+
+/*extra large device*/
+@media (min-width: 1200px) {
+
+
+	
+}
+
+
+/* larges devices */
+
+@media  (min-width: 992px)and (max-width: 1199.98px) {
+    .pourquoi1{
+        height: auto;
+    }
+
+}
+
+/*  medium device(tablets) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .pourquoi1{
+        height: auto;
+    }
+    .mission .single-service-2 .inner {
+        padding: 20px 10px;
+    }
+    .mission .single-service-2 .inner .title .icon {
+        font-size: 40px;
+        margin-bottom: 5px;
+    }
+    .single-service .inner .title{
+        margin-bottom: 0;
+    }
+    .apropos ul{
+        margin-left: 20px;
+    }
+    
+	
+}
+
+
+/* small device */
+@media (min-width: 576px) and (max-width: 767.98px) {
+
+    .pourquoi1{
+        height: auto;
+    }
+    .mission .single-service-2 .inner {
+        padding: 20px 10px;
+    }
+    .mission .single-service-2 .inner .title .icon {
+        font-size: 40px;
+        margin-bottom: 10px;
+    }
+    .mission .single-service-2 .inner {
+        height: auto;
+    }
+    .apropos ul{
+        margin-left: 20px;
+    }
+
+}
+
+/*extra small device */
+@media (max-width: 575.98px) {
+    .pourquoi1{
+        height: auto;
+    }
+    .mission .single-service-2 .inner {
+        padding: 20px 10px;
+    }
+    .mission .single-service-2 .inner .title .icon {
+        font-size: 40px;
+        margin-bottom: 10px;
+    }
+    .mission .single-service-2 .inner {
+        height: auto;
+    }
+    /* icon */
+    .avecbgimage .inner .title .icon{
+        font-size: 25px;
+    }
+    .avecbgimage .inner .title .icon {
+        width: 50px;
+        height: 60px;
+     }
+      .single-service-3 .inner:hover .title .icon {
+        background-color: #fff; }
+
+        .single-service-3 .inner .content, .single-service-3 .inner .title h4 {
+            padding-left: 70px;
+        }
+        .single-service-3 .inner .title h4 {
+            font-size: 20px;
+        }
+        .single-service-3 {
+            margin: 10px 0;
+        }
+        .apropos_img{
+            margin-bottom: 10px;
+        }
+     
+        .apropos > ul > li{
+            font-size: 12px;
+        }
+        .apropos ul{
+            margin-left: 20px;
+        }
+}
+
+
+

@@ -1,0 +1,60 @@
+/* Classes utilitaires pour remplacer les styles inline */
+
+/* Couleurs de texte */
+.text-primary { color: var(--primary-color) !important; }
+.text-white { color: var(--text-white) !important; }
+.text-dark { color: var(--text-color) !important; }
+.text-light { color: var(--text-light) !important; }
+
+/* Couleurs de fond */
+.bg-primary { background-color: var(--primary-color) !important; }
+.bg-white { background-color: var(--bg-white) !important; }
+.bg-light { background-color: var(--bg-light) !important; }
+.bg-dark { background-color: var(--bg-dark) !important; }
+
+/* Espacements spécifiques */
+.mb-100 { margin-bottom: 100px !important; }
+.mr-4 { margin-right: 4px !important; }
+
+/* Hauteurs et largeurs */
+.h-30 { height: 30px !important; }
+.w-auto { width: auto !important; }
+
+/* Opacité */
+.opacity-8 { opacity: 0.8 !important; }
+
+/* Styles spécifiques pour les éléments existants */
+.hover-content-spacing {
+    margin-bottom: 100px;
+}
+
+.social-icon-spacing {
+    margin-right: 4px;
+}
+
+.profile-image {
+    opacity: 0.8;
+    height: 30px;
+    width: auto;
+}
+
+.video-container {
+    width: 475px;
+    max-width: 100%;
+}
+
+/* Styles pour les véhicules */
+.vehicule-title-color {
+    color: var(--primary-color);
+}
+
+/* Responsive utilities */
+@media (max-width: 768px) {
+    .video-container {
+        width: 100%;
+    }
+    
+    .hover-content-spacing {
+        margin-bottom: 50px;
+    }
+}
