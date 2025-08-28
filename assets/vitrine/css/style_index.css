@@ -101,7 +101,7 @@ figcaption h3 {
 }
 
 /* formulaire nous contacter */
-form {
+.form-contact {
 	background-image: linear-gradient(rgba(0, 0, 0, 0.5),
 			rgba(0, 0, 0, 0.5)), url('../images/iStock-177820652.jpg');
 	background-size: 100% 100%;
@@ -137,7 +137,7 @@ form {
 }
 
 .form-group label {
-	color: #ffffff;
+	/* color: #ffffff; */
 
 }
 

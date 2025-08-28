@@ -23,6 +23,11 @@ Encore
 
     // Recommended for Symfony apps
     .enableSingleRuntimeChunk()
+    .copyFiles({
+        from: './assets/vitrine/images',
+        to: 'images/[name].[hash:8].[ext]'
+    })
+
     ;
 
 module.exports = Encore.getWebpackConfig();

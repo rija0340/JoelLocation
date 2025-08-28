@@ -24,13 +24,14 @@
 
 		{{ encore_entry_link_tags('vitrine') }}
 
+
 		<link rel="stylesheet" href="{{ asset('vitrine/css/owl.carousel.css') }}">
 		{# <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet">
-																																																		<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet"> #}
+																																																																																								<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet"> #}
 
 		<!-- Notifications -->
 		{# <link rel="stylesheet" href="{{ asset('css/notif.css') }}">
-																																																				<link rel="stylesheet" href="{{ asset('bundles/mercuryseriesflashy/css/flashy.css') }}">  #}{% block stylesheets %}
+																																																																																										<link rel="stylesheet" href="{{ asset('bundles/mercuryseriesflashy/css/flashy.css') }}">  #}{% block stylesheets %}
 
 		{% endblock %}<style>
 	</style>
@@ -62,9 +63,10 @@
 
 		<!-- Site Core Scripts -->
 		<script src="{{ asset('vitrine/js/vendor/owl.carousel.min.js') }}"></script>
-		<script src="{{ asset('vitrine/js/active.js') }}"></script>
-		{{ encore_entry_script_tags('vitrine') }}
+		{# {{ encore_entry_script_tags('vitrine') }} #}
 
+		<script src="{{ asset('vitrine/js/vendor/jquery.slicknav.js') }}"></script>
+		<script src="{{ asset('vitrine/js/active.js') }}"></script>
 		<!-- Notifications -->
 		<script src="{{ asset('bundles/mercuryseriesflashy/js/flashy.js') }}"></script>
 		{% block javascripts %}{% endblock %}

@@ -13,7 +13,14 @@ import './css/nav.css';
 import './css/barfiller.css';
 import './css/slicknav.css';
 
+// per page
 
+import './css/cgu.css';
+import './css/details_vehicules.css';
+import './css/mentionlegales.css';
+import './css/style_index.css';
+import './css/quisommenous.css';
+import './css/faq.css';
 
 // js
 
