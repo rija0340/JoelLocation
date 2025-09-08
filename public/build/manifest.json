@@ -1,7 +1,12 @@
 {
   "build/vitrine.css": "/build/vitrine.1761bd3a.css",
-  "build/vitrine.js": "/build/vitrine.ac911e54.js",
-  "build/runtime.js": "/build/runtime.886bb0c5.js",
+  "build/vitrine.js": "/build/vitrine.c7835c3c.js",
+  "build/backoffice.css": "/build/backoffice.78f5de07.css",
+  "build/backoffice.js": "/build/backoffice.43710ce0.js",
+  "build/runtime.js": "/build/runtime.3d2d2f6d.js",
   "build/images/iStock-177820652.jpg": "/build/images/iStock-177820652.17652885.jpg",
-  "build/images/iStock-1209047751.jpg": "/build/images/iStock-1209047751.59bca675.jpg"
+  "build/images/iStock-1209047751.jpg": "/build/images/iStock-1209047751.59bca675.jpg",
+  "build/fonts/pxiByp8kv8JHgFVrLFj_Z11lFc-K.woff2": "/build/fonts/pxiByp8kv8JHgFVrLFj_Z11lFc-K.0bce9acf.woff2",
+  "build/fonts/pxiByp8kv8JHgFVrLFj_Z1xlFQ.woff2": "/build/fonts/pxiByp8kv8JHgFVrLFj_Z1xlFQ.7f0cadcc.woff2",
+  "build/fonts/pxiByp8kv8JHgFVrLFj_Z1JlFc-K.woff2": "/build/fonts/pxiByp8kv8JHgFVrLFj_Z1JlFc-K.6b623e61.woff2"
 }

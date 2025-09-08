@@ -2,11 +2,20 @@
   "entrypoints": {
     "vitrine": {
       "js": [
-        "/build/runtime.886bb0c5.js",
-        "/build/vitrine.ac911e54.js"
+        "/build/runtime.3d2d2f6d.js",
+        "/build/vitrine.c7835c3c.js"
       ],
       "css": [
         "/build/vitrine.1761bd3a.css"
+      ]
+    },
+    "backoffice": {
+      "js": [
+        "/build/runtime.3d2d2f6d.js",
+        "/build/backoffice.43710ce0.js"
+      ],
+      "css": [
+        "/build/backoffice.78f5de07.css"
       ]
     }
   }

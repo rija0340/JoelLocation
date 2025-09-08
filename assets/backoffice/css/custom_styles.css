@@ -1,0 +1,196 @@
+@import url("~@fonts/poppins/poppins_font.css");
+
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+
+/*couleur backgroud colonne droite*/
+
+body .container.body .right_col {
+    background: #d9d9d9;
+}
+
+
+/* taille de police pour les btn */
+
+.btn {
+    font-size: 13px;
+}
+
+.x_title {
+    padding-left: 0;
+    padding-bottom: 0;
+}
+
+.x_title h2 {
+    margin: 5px 0 6px;
+    float: left;
+    display: block;
+    /* text-overflow: ; */
+    overflow: hidden;
+    word-wrap: break-word;
+    width: auto;
+}
+
+h2 i {
+    margin-right: 5px;
+}
+
+h2 .fa-chevron-right {
+    color: rgb(255, 0, 0);
+    font-size: 22px;
+}
+
+
+/* custom button */
+
+.btn-violet {
+    color: #fff;
+    background-color: #5c4ac7;
+    border-color: #5c4ac7;
+}
+
+.btn-outline-violet {
+    color: #5c4ac7;
+    background-color: transparent;
+    background-image: none;
+    border-color: #5c4ac7;
+}
+
+.current_page h2 {
+    font-weight: bold;
+}
+
+.current_page div {
+    font-weight: bold;
+}
+
+
+/* custom elemets bootstrap */
+
+.bg-violet {
+    background-color: #5c4ac7 !important;
+}
+
+.bg-primary2 {
+    background-color: #29b6f6 !important;
+}
+
+.bg-success2 {
+    background-color: #26dad2 !important;
+}
+
+.bg-pink {
+    background-color: #fd9fa7 ! important;
+}
+
+.bg-red {
+    background-color: #ff0b09 ! important;
+}
+
+.bg-gray1 {
+    background-color: #2a3f54 ! important;
+}
+
+.bg-gray2 {
+    background-color: #A9A9A9 ! important;
+}
+
+.alert-rose {
+    background-color: #f8d7da ! important;
+}
+
+.alert-warning2 {
+    background-color: #fff3cd ! important;
+}
+
+.alert-danger {
+    background-color: #ff0b09 ! important;
+}
+
+.text-danger {
+    color: #ff0b09 !important;
+}
+
+.text-success {
+    color: #59b611 !important;
+}
+
+.badge-danger {
+    color: #fff;
+    background-color: #ff0000;
+    border-radius: 0%;
+}
+
+.btn-danger {
+    color: #fff;
+    background-color: #ff0000;
+}
+
+.btn-gray2 {
+    color: #fff;
+    background-color: #A9A9A9;
+}
+
+.btn-link {
+    font-weight: 400;
+    color: inherit;
+    text-decoration: none;
+}
+
+.btn-pink {
+    color: #fff;
+    background-color: #FFC0CB;
+}
+
+.hide {
+    display: none !important;
+}
+
+
+/* badge pour planning général */
+
+.badge-agence {
+    color: #fff;
+    background-color: #ff0000;
+    border-radius: 0%;
+}
+
+.badge-aeroport {
+    color: #fff;
+    background-color: #A9A9A9;
+    border-radius: 0%;
+}
+
+.badge-gareMaritime {
+    color: #fff;
+    background-color: #FFC0CB;
+    border-radius: 0%;
+}
+
+.badge-indisponible {
+    color: #fff;
+    background-color: #000000;
+    border-radius: 0%;
+}
+
+.badge-pointLivraison {
+    color: #fff;
+    background-color: #0d00ff;
+    border-radius: 0%;
+}
+
+
+/* couleur text dans btn dropdown */
+
+.dropdown-item {
+    color: #000000;
+}
+
+.dropdown-item.active,
+.dropdown-item:active {
+    color: #fff;
+    text-decoration: none;
+    background-color: #ff0000;
+}
