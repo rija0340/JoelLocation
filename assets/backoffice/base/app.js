@@ -21,6 +21,6 @@ import './js/icheck.min.js';
 import './js/skycons.js';
 import 'datejs'; // core
 import './js/fr-FR.js'; // locale example
-import './js/custom.js';
+// import './js/custom.js';
 import './js/nav.js';
 import './js/jquery-confirm.js';

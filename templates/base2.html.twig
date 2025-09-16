@@ -16,7 +16,7 @@
 			{% block title %}{% endblock %}
 		</title>
 
-		{{ encore_entry_link_tags('backoffice') }}
+		{{ encore_entry_link_tags('admin_base') }}
 		<link
 		href="{{ asset( 'admin/vendors/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet">
 		<!-- NProgress -->
@@ -67,7 +67,7 @@
 	</div>
 	<script src="{{asset('plugins/jquery/jquery.min.js')}}"></script>
 	<!-- /footer content -->
-	{{ encore_entry_script_tags('backoffice') }}
+	{{ encore_entry_script_tags('admin_base') }}
 
 	<!-- Load Flashy default JavaScript -->
 	<script src="{{ asset('bundles/mercuryseriesflashy/js/flashy.js') }}"></script>

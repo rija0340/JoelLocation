@@ -1,17 +1,12 @@
 const Encore = require('@symfony/webpack-encore');
-const path = require('path'); // 👈 you forgot this
+const path = require('path');
 
 Encore
     // directory where compiled assets will be stored
     .setOutputPath('public/build/')
     // public path used by the web server to access the output path
     .setPublicPath('/build')
-    // Rendre jQuery disponible globalement
-    .addPlugin(new (require('webpack')).ProvidePlugin({
-        $: 'jquery',
-        jQuery: 'jquery',
-        'window.jQuery': 'jquery'
-    }))
+
     .addExternals({
         jquery: 'jQuery',
         $: 'jQuery'
@@ -20,7 +15,9 @@ Encore
     // main entry for your JS
     .addEntry('vitrine', './assets/vitrine/app.js')
 
-    .addEntry('backoffice', './assets/backoffice/app.js')
+    .addEntry('admin_base', './assets/backoffice/base/app.js')
+    .addEntry('admin_dashboard', './assets/backoffice/dashboard/dashboard.js')
+    .addEntry('admin_plangen', './assets/backoffice/plangen/plangen.js')
 
     // enables Sass/SCSS support
     .enableSassLoader()

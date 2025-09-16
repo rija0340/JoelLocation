@@ -5,10 +5,12 @@
 {% endblock %}
 {% block stylesheets %}
 
-	<link href="../../css/admin/owl.carousel.css" rel="stylesheet">
-	<link href="../../css/admin/accueil.css" rel="stylesheet">
-	<link href="{{asset('/shared/css/flashy.css')}}" rel="stylesheet">
-	<link href="{{asset('css/admin/easypiechart.css')}}" rel="stylesheet">
+	{{ encore_entry_link_tags('admin_dashboard') }}
+
+	{#<link href="{{asset('css/admin/accueil.css')}}" rel="stylesheet">
+						<link href="../../css/admin/accueil.css" rel="stylesheet">
+						<link href="{{asset('/shared/css/flashy.css')}}" rel="stylesheet">
+						#}
 
 {% endblock %}
 {% block current_page %}
@@ -506,34 +508,8 @@
 			</div>
 		</div>{# fin modal #}</div>
 {% endblock %}
-{% block javascripts %}<!-- easy-pie-chart --><script src="../../plugins/jquery/jquery.min.js"></script>
-	<script src="../../admin/build/js/jquery.easypiechart.min.js"></script>
-	<script src="../../admin/vendors/jquery.easy-pie-chart/src/easypiechart2.js"></script>
-	<script src="{{asset('shared/js/flashy.js')}}"></script>
-	<script>
-		$(function () {
-$('.chart').easyPieChart({
-barColor: '#000',
-trackColor: '#949494',
-scaleColor: false,
-scaleLength: 0,
-lineCap: 'square',
-lineWidth: 15,
-// percent: 75,
-trackWidth: undefined,
-size: 100,
-rotate: 0,
-animate: {
-duration: 1000,
-enabled: true
-},
-onStep: function (from, to, percent) {
-$(this.el).find('.percent').text(Math.round(percent));
-}
-});
-});
-	</script>
-	<script src="../../js/admin/owl.carousel.min.js"></script>
-	<script src="../../js/admin/accueil.js"></script>
+{% block javascripts %}
+	{{ encore_entry_script_tags('admin_dashboard') }}
+<!-- easy-pie-chart -->
 	{# // <script src="../../chartjs/js/chart.js"></script> #}
 {% endblock %}

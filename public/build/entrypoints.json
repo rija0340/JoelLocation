@@ -3,19 +3,37 @@
     "vitrine": {
       "js": [
         "/build/runtime.3d2d2f6d.js",
-        "/build/vitrine.c7835c3c.js"
+        "/build/vitrine.5bae0caa.js"
       ],
       "css": [
         "/build/vitrine.1761bd3a.css"
       ]
     },
-    "backoffice": {
+    "admin_base": {
       "js": [
         "/build/runtime.3d2d2f6d.js",
-        "/build/backoffice.43710ce0.js"
+        "/build/admin_base.17f72cbf.js"
       ],
       "css": [
-        "/build/backoffice.78f5de07.css"
+        "/build/admin_base.78f5de07.css"
+      ]
+    },
+    "admin_dashboard": {
+      "js": [
+        "/build/runtime.3d2d2f6d.js",
+        "/build/admin_dashboard.19916145.js"
+      ],
+      "css": [
+        "/build/admin_dashboard.881f5ac2.css"
+      ]
+    },
+    "admin_plangen": {
+      "js": [
+        "/build/runtime.3d2d2f6d.js",
+        "/build/admin_plangen.46c5c796.js"
+      ],
+      "css": [
+        "/build/admin_plangen.432e208a.css"
       ]
     }
   }
