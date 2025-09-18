@@ -2,7 +2,7 @@
   "entrypoints": {
     "vitrine": {
       "js": [
-        "/build/runtime.3d2d2f6d.js",
+        "/build/runtime.da40a629.js",
         "/build/vitrine.5bae0caa.js"
       ],
       "css": [
@@ -11,7 +11,7 @@
     },
     "admin_base": {
       "js": [
-        "/build/runtime.3d2d2f6d.js",
+        "/build/runtime.da40a629.js",
         "/build/admin_base.17f72cbf.js"
       ],
       "css": [
@@ -20,7 +20,7 @@
     },
     "admin_dashboard": {
       "js": [
-        "/build/runtime.3d2d2f6d.js",
+        "/build/runtime.da40a629.js",
         "/build/admin_dashboard.19916145.js"
       ],
       "css": [
@@ -29,11 +29,20 @@
     },
     "admin_plangen": {
       "js": [
-        "/build/runtime.3d2d2f6d.js",
+        "/build/runtime.da40a629.js",
         "/build/admin_plangen.46c5c796.js"
       ],
       "css": [
         "/build/admin_plangen.432e208a.css"
+      ]
+    },
+    "admin_planjour": {
+      "js": [
+        "/build/runtime.da40a629.js",
+        "/build/admin_planjour.3d7af85a.js"
+      ],
+      "css": [
+        "/build/admin_planjour.cc3a5bc3.css"
       ]
     }
   }

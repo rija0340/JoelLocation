@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "datejs": "^1.0.0-rc3",
-    "jquery": "^3.7.1"
+    "jquery": "^3.7.1",
+    "moment": "^2.30.1"
   }
 }

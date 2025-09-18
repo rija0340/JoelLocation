@@ -15,7 +15,8 @@
 {% block stylesheets %}
 	<!-- Datatables -->
 	{% include "admin/_parts/datatables/css.html.twig" %}
-	<link rel="stylesheet" href="../../css/admin/planJour.css">
+	{# <link rel="stylesheet" href="../../css/admin/planJour.css"> #}
+	{{ encore_entry_link_tags('admin_planjour') }}
 
 {% endblock %}
 
@@ -98,5 +99,7 @@
 </div>{% endblock %}{% block javascripts %}
 <!-- Datatables -->
 {% include "admin/_parts/datatables/js.html.twig" %}
-<script src="{{ asset('js/admin/datatables/datatablesConfig.js') }}"></script>
-<script src="{{asset('js/admin/datatables/plan_jour.js')}}"></script>{% endblock  %}
+{# <script src="{{ asset('js/admin/datatables/datatablesConfig.js') }}"></script> #}
+{# <script src="{{asset('js/admin/datatables/plan_jour.js')}}"></script> #}
+{{ encore_entry_script_tags('admin_planjour') }}
+{% endblock  %}

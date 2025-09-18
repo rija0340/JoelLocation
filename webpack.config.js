@@ -18,6 +18,7 @@ Encore
     .addEntry('admin_base', './assets/backoffice/base/app.js')
     .addEntry('admin_dashboard', './assets/backoffice/dashboard/dashboard.js')
     .addEntry('admin_plangen', './assets/backoffice/plangen/plangen.js')
+    .addEntry('admin_planjour', './assets/backoffice/planjour/planjour.js')
 
     // enables Sass/SCSS support
     .enableSassLoader()
