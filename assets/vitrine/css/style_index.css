@@ -123,7 +123,7 @@ figcaption h3 {
 }
 
 .form-group .bmd-label-floating {
-	color: #ffffff;
+	/* color: #ffffff; */
 }
 
 .bmd-form-group .bmd-label-static {
@@ -133,7 +133,7 @@ figcaption h3 {
 
 /* couleur police après perte efocus */
 .form-control {
-	color: #ffffff;
+	/* color: #ffffff; */
 }
 
 .form-group label {
@@ -149,7 +149,7 @@ figcaption h3 {
 
 /* couleur police entrée */
 .form-control:focus {
-	color: #ffffff;
+	/* color: #ffffff; */
 	/* background-color: rgba(0, 0, 0, 0);
 	border-color: #d176e1;
 	outline: 0;

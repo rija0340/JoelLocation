@@ -6,7 +6,7 @@
         "/build/vitrine.5bae0caa.js"
       ],
       "css": [
-        "/build/vitrine.1761bd3a.css"
+        "/build/vitrine.555228eb.css"
       ]
     },
     "admin_base": {
@@ -48,10 +48,10 @@
     "admin_planning_modern": {
       "js": [
         "/build/runtime.da40a629.js",
-        "/build/admin_planning_modern.b97863c8.js"
+        "/build/admin_planning_modern.6c7d03ee.js"
       ],
       "css": [
-        "/build/admin_planning_modern.0fe54c90.css"
+        "/build/admin_planning_modern.6ca262ea.css"
       ]
     }
   }
