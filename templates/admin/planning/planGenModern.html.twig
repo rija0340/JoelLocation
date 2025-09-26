@@ -1,0 +1,252 @@
+{# {% extends 'base2.html.twig' %}
+
+{% block title %}Planning Général - Vue Moderne{% endblock %}
+
+{% block stylesheets %}
+    <link href="{{ asset('css/admin/planning/modern-planning.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="modern-planning-container">
+    <!-- Header Controls -->
+    <div class="planning-header">
+        <div class="header-controls">
+            <div class="date-control">
+                <label for="startDate">Date de début:</label>
+                <input type="date" id="startDate" class="form-control" value="{{ "now"|date('Y-m-d') }}">
+            </div>
+            
+            <div class="view-controls">
+                <button type="button" class="btn-view active" data-days="6">7 jours</button>
+                <button type="button" class="btn-view" data-days="13">14 jours</button>
+                <button type="button" class="btn-view" data-days="29">1 mois</button>
+                <button type="button" class="btn-view" data-days="59">2 mois</button>
+            </div>
+            
+            <button type="button" class="btn btn-outline-danger" id="resetPlanning">Réinitialiser</button>
+        </div>
+        
+        <div class="period-display">
+            <span id="periodText">Du {{ "now"|date('d/m/Y') }} au {{ "now"|date_modify('+6 days')|date('d/m/Y') }}</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="planning-content">
+        <!-- Vehicle Sidebar -->
+        <div class="vehicles-sidebar">
+            <div class="sidebar-header">
+                <h4>Véhicules</h4>
+                <input type="text" id="vehicleSearch" placeholder="Rechercher..." class="form-control">
+            </div>
+            
+            <div class="vehicle-filters">
+                <label class="filter-item">
+                    <input type="checkbox" id="selectAll" checked>
+                    <span>Tout sélectionner</span>
+                </label>
+            </div>
+            
+            <div class="vehicle-list" id="vehicleList">
+                <!-- Vehicles will be populated by JS -->
+            </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="timeline-container">
+            <div class="timeline-header" id="timelineHeader">
+                <!-- Days will be populated by JS -->
+            </div>
+            
+            <div class="timeline-body" id="timelineBody">
+                <!-- Vehicle rows and reservations will be populated by JS -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Reservation Modal -->
+<div class="modal fade" id="reservationModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Détails de la réservation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content populated by JS -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="editReservation">Modifier</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/admin/planning/modern-planning.js') }}"></script>
+{% endblock %} #}
+
+{% extends 'base2.html.twig' %}
+
+{% block title %}Planning Général - Vue Moderne{% endblock %}
+
+{% block stylesheets %}
+    <link href="{{ asset('css/admin/planning/modern-planning.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="modern-planning-container">
+    <!-- Header Controls -->
+    <div class="planning-header">
+        <div class="header-controls">
+            <div class="date-control">
+                <label for="startDate">Date de début:</label>
+                <input type="date" id="startDate" class="form-control" value="2025-09-26">
+            </div>
+            
+            <div class="view-controls">
+                <button type="button" class="btn-view active" data-days="6">7 jours</button>
+                <button type="button" class="btn-view" data-days="13">14 jours</button>
+                <button type="button" class="btn-view" data-days="29">1 mois</button>
+                <button type="button" class="btn-view" data-days="59">2 mois</button>
+            </div>
+            
+            <button type="button" class="btn btn-outline-danger" id="resetPlanning">Réinitialiser</button>
+        </div>
+        
+        <div class="period-display">
+            <span id="periodText">Du 26/09/2025 au 02/10/2025</span>
+        </div>
+    </div>
+
+    <!-- Search Filter -->
+    <div class="search-section">
+        <div class="search-controls">
+            <input type="text" id="vehicleSearch" placeholder="Rechercher un véhicule..." class="form-control">
+            <label class="filter-item">
+                <input type="checkbox" id="selectAll" checked>
+                <span>Tout sélectionner</span>
+            </label>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="planning-content">
+        <!-- Vehicle Sidebar -->
+        <div class="vehicles-sidebar">
+            <div class="sidebar-header">
+                <h4>Véhicules</h4>
+            </div>
+            
+            <div class="vehicle-list" id="vehicleList">
+                <!-- Vehicles will be populated by JS -->
+            </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="timeline-container">
+            <div class="timeline-header" id="timelineHeader">
+                <!-- Days will be populated by JS -->
+            </div>
+            
+            <div class="timeline-body" id="timelineBody">
+                <!-- Vehicle rows and reservations will be populated by JS -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Reservation Modal -->
+<div class="modal fade" id="reservationModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Détails de la réservation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content populated by JS -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="editReservation">Modifier</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Reservation Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form action="" method="GET" id="form-task" name="form-task">
+                    <input type="hidden" value="from_planning" name="type">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="reference">Référence</label>
+                            <input type="text" name="reference" id="reference" readonly class="form-control">
+                        </div>
+                        <div class="col-md-4 container-custom-tarif">
+                            <label for="dateRetour">Custom tarif</label>
+                            <input type="number" id="custom-tarif" name="custom-tarif" class="form-control">
+                        </div>
+                        <div class="col-md-4 container-tarif-vehicule">
+                            <label for="tarif-vehicule">Tarif véhicule</label>
+                            <input type="text" id="tarif-vehicule" class="form-control" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="reference">Tarifs Options Garanties</label>
+                            <input type="text" id="tarifs-options-garanties" readonly class="form-control">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="reference">Tarif Resa</label>
+                            <input type="text" id="tarif-resa" readonly class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="dateDepart">Date départ</label>
+                            <input type="datetime-local" required name="dateDepart" id="dateDepart" class="form-control" min="" max="">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="dateRetour">Date retour</label>
+                            <input type="datetime-local" required name="dateRetour" id="dateRetour" class="form-control" min="" max="">
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <label for="dateRetour">Vehicule</label>
+                            <select name="vehicule" class="form-control" id="vehicule" required></select>
+                        </div>
+                        <div class="col-md-6 d-flex align-items-center">
+                            <label for="test"></label>
+                            <label class="label-container">
+                                <input type="checkbox" id="has-custom-tarif" name="has-custom-tarif" value="true">
+                                <span class="checkmark"></span>
+                                Custom tarif
+                            </label>
+                        </div>
+                    </div>
+                    <div class="buttons p-2">
+                        <button type="submit" class="btn btn-success">Enregistrer</button>
+                        <button class="btn btn-danger" id="cancelButton">Annuler</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Hidden button to trigger the modal -->
+<button type="button" class="d-none" data-target="#exampleModal" data-toggle="modal" id="hiddenModalTrigger">Open Modal</button>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/admin/planning/edit_resa.js') }}"></script>
+    <script src="{{ asset('js/admin/planning/modern-planning.js') }}"></script>
+{% endblock %}

@@ -43,6 +43,14 @@ class PlanningController extends AbstractController
         return $this->render('admin/planning/planGen.html.twig');
     }
 
+    /**
+     * @Route("/backoffice/planning-general-modern", name="planGenModern", methods={"GET","POST"})
+     */
+    public function planGenModern(): Response
+    {
+        return $this->render('admin/planning/planGenModern.html.twig');
+    }
+
 
     /**
      * @Route("/planningGeneralData", name="planningGeneralData", methods={"GET","POST"})

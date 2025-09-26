@@ -73,8 +73,6 @@ class VehiculeDataController extends AbstractController
 
         $listeUnique = array_unique($data, SORT_REGULAR);
 
-        dd($listeUnique, $data);
-
         //data2 => liste véhicule sans immatriculation
         $data2 = array();
         foreach ($listeUnique as $key =>  $v) {

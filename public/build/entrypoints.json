@@ -44,6 +44,15 @@
       "css": [
         "/build/admin_planjour.cc3a5bc3.css"
       ]
+    },
+    "admin_planning_modern": {
+      "js": [
+        "/build/runtime.da40a629.js",
+        "/build/admin_planning_modern.b97863c8.js"
+      ],
+      "css": [
+        "/build/admin_planning_modern.0fe54c90.css"
+      ]
     }
   }
 }
