@@ -15,7 +15,8 @@
 			margin-top: 1rem;
 		}
 	</style>
-	<script src="https://www.paypal.com/sdk/js?client-id={{ paypal_client_id|url_encode }}&locale=fr_FR&buyer-country=FR&currency=EUR&components=buttons&enable-funding=venmo,paylater&disable-funding=card" data-sdk-integration-source="developer-studio"></script>
+	{# &buyer-country=FR add this if dev credentials, remove if prod #}
+	<script src="https://www.paypal.com/sdk/js?client-id={{ paypal_client_id|url_encode }}&locale=fr_FR&currency=EUR&components=buttons&enable-funding=venmo,paylater&disable-funding=card" data-sdk-integration-source="developer-studio"></script>
 {% endblock %}
 {% block nav %}{% endblock %}
 {% block body %}
