@@ -16,13 +16,48 @@
 			{% block title %}{% endblock %}
 		</title>
 
-		{{ encore_entry_link_tags('admin_base') }}
+		<!-- Bootstrap -->
+		<link
+		href="{{ asset( 'admin/vendors/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet">
+		<!-- Font Awesome -->
 		<link
 		href="{{ asset( 'admin/vendors/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet">
 		<!-- NProgress -->
+		<link
+		href="{{ asset( 'admin/vendors/nprogress/nprogress.css')}}" rel="stylesheet">
+		<!-- bootstrap-progressbar -->
+		<link
+		href="{{ asset( 'admin/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css')}}" rel="stylesheet">
+		<!-- JQVMap -->
+		<link
+		href="{{ asset( 'admin/vendors/jqvmap/dist/jqvmap.min.css')}}" rel="stylesheet"/>
+		<!-- bootstrap-daterangepicker -->
+		<link
+		href="{{ asset( 'admin/vendors/bootstrap-daterangepicker/daterangepicker.css')}}" rel="stylesheet">
 
+		<!--  Theme Style -->
+		<link
+		href="{{ asset( 'admin/build/css/custom.css')}}" rel="stylesheet">
+
+		{# override custom style  #}
+		<link
+		href="{{ asset( 'css/admin/custom_styles.css')}}" rel="stylesheet">
+
+		<!-- Custom header dynamic table -->
+		<link href="{{ asset( 'css/admin/custom_datatable.css')}}" rel="stylesheet">
+
+		<link href="{{ asset( 'css/admin/nav.css')}}" rel="stylesheet">
+		<link
+		href="{{ asset( 'css/admin/easypiechart.css')}}" rel="stylesheet">
+		{# Flashy #}
 		<link
 		rel="stylesheet" href="{{ asset('bundles/mercuryseriesflashy/css/flashy.css') }}">
+		{# jquery confirm modal alert ... #}
+		<link
+		rel="stylesheet" href="{{ asset('jquery-confirm/jquery-confirm.min.css') }}">
+		{# style pour pop-up #}
+		<link
+		rel="stylesheet" href="{{ asset('css/pop-up/pop-up.css') }}">
 		{# star rating #}
 		<link rel="stylesheet" href="{{asset('kartik-v-bootstrap-star-rating/css/star-rating.min.css')}}">
 		<link rel="stylesheet" href="{{asset('kartik-v-bootstrap-star-rating/themes/krajee-fa/theme.css')}}" media="all" type="text/css"/>
@@ -65,12 +100,29 @@
 			</html>
 		</div>
 	</div>
-	<script src="{{asset('plugins/jquery/jquery.min.js')}}"></script>
 	<!-- /footer content -->
-	{{ encore_entry_script_tags('admin_base') }}
-
+	<!-- jQuery -->
+	<script src="{{asset('plugins/jquery/jquery.min.js')}}"></script>
+	{# D:\projets informatiques\dev_symfony\joellocation\public\plugins\jquery\jquery.min.js #}
+	<!-- Bootstrap -->
+	<script src="{{asset('admin/vendors/bootstrap/dist/js/bootstrap.bundle.min.js')}}"></script>
+	<!-- bootstrap-progressbar -->
+	<script src="{{asset('admin/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js')}}"></script>
+	<!-- iCheck -->
+	<script src="{{asset('admin/vendors/iCheck/icheck.min.js')}}"></script>
+	<!-- Skycons -->
+	<script src="{{asset('admin/vendors/skycons/skycons.js')}}"></script>
+	<!-- DateJS -->
+	<script src="{{asset('admin/vendors/DateJS/build/date.js')}}"></script>
+	<!-- Custom Theme Scripts -->
+	<script src="{{asset('admin/build/js/custom.min.js')}}"></script>
+	<script src="{{asset('js/admin/nav.js')}}"></script>
 	<!-- Load Flashy default JavaScript -->
 	<script src="{{ asset('bundles/mercuryseriesflashy/js/flashy.js') }}"></script>
+
+	{# jquery confirm, alert, modal ... #}
+	<script src="{{ asset('jquery-confirm/jquery-confirm.js') }}"></script>
+	{# js pour pop-up ... #}
 
 	{# star rating #}
 	<script src="{{asset('kartik-v-bootstrap-star-rating/js/star-rating.min.js')}}"></script>
