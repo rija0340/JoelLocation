@@ -1,0 +1,24 @@
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 my-4">
+    {% set steps = [
+        { number: 1, label: 'Agences & Dates' },
+        { number: 2, label: 'Véhicules' },
+        { number: 3, label: 'Options et garanties' },
+        { number: 4, label: 'Récapitulatif' }
+    ] %}
+
+    {% for step in steps %}
+        <div class="text-center">
+            <div class="
+                badge
+                {{ step.number == currentStep ? 'badge-danger border border-red-500 text-red-500' : 'badge-outline' }}
+                w-10 h-10 rounded-full flex items-center justify-center mx-auto
+            ">
+                {{ step.number }}
+            </div>
+            <p class="mt-2 text-sm">{{ step.label }}</p>
+        </div>
+    {% endfor %}
+</div>
+
+
+		

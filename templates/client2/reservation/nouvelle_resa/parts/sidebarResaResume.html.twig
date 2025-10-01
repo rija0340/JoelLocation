@@ -22,7 +22,7 @@
 				<div class="border-b pb-4">
 					<h5 class="text-lg font-semibold text-accent">Agence départ</h5>
 					<p class="text-sm text-base-content mt-2">
-						<i class="fas fa-map-marker-alt text-success mr-2"></i>
+						<i class="fas fa-map-marker-alt text-error mr-2"></i>
 						<span id="agence_depart">{{ devis.agenceDepart }}</span><br>
 						<span id="date_depart">{{ devis.dateDepart | date('d-m-Y H:i') }}</span>
 					</p>
@@ -32,7 +32,7 @@
 				<div class="border-b pb-4">
 					<h5 class="text-lg font-semibold text-accent">Agence retour</h5>
 					<p class="text-sm text-base-content mt-2">
-						<i class="fas fa-map-marker-alt text-success mr-2"></i>
+						<i class="fas fa-map-marker-alt text-error mr-2"></i>
 						<span id="agence_retour">{{ devis.agenceRetour }}</span><br>
 						<span id="date_retour">{{ devis.dateRetour | date('d-m-Y H:i') }}</span>
 					</p>
@@ -43,23 +43,23 @@
 					<h5 class="text-lg font-semibold text-accent">Prestations incluses</h5>
 					<ul class="mt-2 space-y-2 text-sm text-base-content">
 						<li class="flex items-start">
-							<i class="fas fa-check text-success mr-2 mt-1"></i>
+							<i class="fas fa-check text-error mr-2 mt-1"></i>
 							<span>Kilométrage Illimité</span>
 						</li>
 						<li class="flex items-start">
-							<i class="fas fa-check text-success mr-2 mt-1"></i>
+							<i class="fas fa-check text-error mr-2 mt-1"></i>
 							<span>Assurance accidents causés aux tiers</span>
 						</li>
 						<li class="flex items-start">
-							<i class="fas fa-check text-success mr-2 mt-1"></i>
+							<i class="fas fa-check text-error mr-2 mt-1"></i>
 							<span>Assurance responsabilité civile</span>
 						</li>
 						<li class="flex items-start">
-							<i class="fas fa-check text-success mr-2 mt-1"></i>
+							<i class="fas fa-check text-error mr-2 mt-1"></i>
 							<span>Assurance collision (CDW)</span>
 						</li>
 						<li class="flex items-start">
-							<i class="fas fa-check text-success mr-2 mt-1"></i>
+							<i class="fas fa-check text-error mr-2 mt-1"></i>
 							<span>TVA 8.5 %</span>
 						</li>
 					</ul>
@@ -87,7 +87,7 @@
 							{% if devis.conducteur %}
 								<li class="flex justify-between">
 									<div class="flex items-start">
-										<i class="fas fa-check text-success mr-2 mt-1"></i>
+										<i class="fas fa-check text-error mr-2 mt-1"></i>
 										<span>Conducteur additionnel</span>
 									</div>
 									<div>{{ prixConductSuppl }}
@@ -97,7 +97,7 @@
 							{% for option in devis.devisOptions %}
 								<li class="flex justify-between">
 									<div class="flex items-start">
-										<i class="fas fa-check text-success mr-2 mt-1"></i>
+										<i class="fas fa-check text-error mr-2 mt-1"></i>
 										<span>
 											{{ option.opt.appelation }}
 											{% if option.opt.appelation matches '/Siège/' %}
@@ -122,7 +122,7 @@
 							{% for garantie in devis.garanties %}
 								<li class="flex justify-between">
 									<div class="flex items-start">
-										<i class="fas fa-check text-success mr-2 mt-1"></i>
+										<i class="fas fa-check text-error mr-2 mt-1"></i>
 										<span>{{ garantie.appelation }}</span>
 									</div>
 									<div>{{ garantie.prix }}
