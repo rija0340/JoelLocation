@@ -19,7 +19,7 @@ use App\Repository\ModeReservationRepository;
 use App\Repository\VehiculeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ReservationRepository;
-use App\Service\SymfonyMailerHelper;
+use App\Service\EmailManagerService;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use MercurySeries\FlashyBundle\FlashyNotifier;
@@ -46,7 +46,7 @@ class VenteComptoirController extends AbstractController
     private $devisRepo;
     private $reservationSession;
     private $reservationHelper;
-    private $symfonyMailerHelper;
+    private $emailManagerService;
     private $reserverDevis;
 
     public function __construct(
@@ -64,7 +64,7 @@ class VenteComptoirController extends AbstractController
         DevisRepository $devisRepo,
         ReservationSession $reservationSession,
         ReservationHelper $reservationHelper,
-        SymfonyMailerHelper $symfonyMailerHelper,
+        EmailManagerService $emailManagerService,
         DevisOptionRepository $devisOptionRepo,
         ReserverDevis $reserverDevis
     ) {
@@ -83,7 +83,7 @@ class VenteComptoirController extends AbstractController
         $this->devisRepo = $devisRepo;
         $this->reservationHelper = $reservationHelper;
         $this->modeReservationRepo = $modeReservationRepo;
-        $this->symfonyMailerHelper = $symfonyMailerHelper;
+        $this->emailManagerService = $emailManagerService;
         $this->devisOptionRepo = $devisOptionRepo;
         $this->reserverDevis = $reserverDevis;
     }
@@ -407,7 +407,7 @@ class VenteComptoirController extends AbstractController
                 // dd('ato izy madalo');
                 $devis = $this->devisRepo->findOneBy(['numero' => $numDevis]);
                 $this->flashy->success('Le devis a été enregistré avec succés');
-                $this->symfonyMailerHelper->sendDevis($request, $devis);
+                $this->emailManagerService->sendDevis($request, $devis);
 
                 // redirect to client_reservations with fragment "#details"
                 $url = $this->generateUrl('client_reservations') . '#devis';
@@ -459,7 +459,7 @@ class VenteComptoirController extends AbstractController
             //url de téléchargement du devis
             $devis = $this->devisRepo->findOneBy(['numero' => $numDevis]);
             // $this->reservationHelper->sendMailConfirmationDevis($devis, $request);
-            $this->symfonyMailerHelper->sendDevis($request, $devis);
+            $this->emailManagerService->sendDevis($request, $devis);
             // $this->flashy->success('Le devis a été enregistré avec succés et un mail a été envoyé au client');
             return $this->redirectToRoute('devis_index');
         } else {

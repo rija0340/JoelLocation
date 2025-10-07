@@ -40,7 +40,7 @@ use App\Repository\AppelPaiementRepository;
 use App\Repository\DevisOptionRepository;
 use App\Repository\DevisRepository;
 use App\Service\Site;
-use App\Service\SymfonyMailerHelper;
+use App\Service\EmailManagerService;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use MercurySeries\FlashyBundle\FlashyNotifier;
@@ -67,6 +67,7 @@ class ReservationController extends AbstractController
     private $appelPaiementRepository;
     private $reservationHelper;
     private $devisOptionRepo;
+    private $emailManagerService;
 
     public function __construct(
         ModePaiementRepository $modePaiementRepo,
@@ -83,7 +84,8 @@ class ReservationController extends AbstractController
         GarantieRepository $garantiesRepo,
         AppelPaiementRepository $appelPaiementRepository,
         ReservationHelper $reservationHelper,
-        DevisOptionRepository $devisOptionRepo
+        DevisOptionRepository $devisOptionRepo,
+        EmailManagerService $emailManagerService
 
     ) {
 
@@ -101,6 +103,7 @@ class ReservationController extends AbstractController
         $this->appelPaiementRepository = $appelPaiementRepository;
         $this->reservationHelper = $reservationHelper;
         $this->devisOptionRepo = $devisOptionRepo;
+        $this->emailManagerService = $emailManagerService;
     }
 
     /**
@@ -876,10 +879,10 @@ class ReservationController extends AbstractController
     /**
      * @Route("/backoffice/reservation/envoyer-contrat-pdf/{id}", name="envoyer_contrat", methods={"GET","POST"},requirements={"id":"\d+"})
      */
-    public function envoyerContrat(Request $request, Reservation $reservation, SymfonyMailerHelper $symfonyMailerHelper): Response
+    public function envoyerContrat(Request $request, Reservation $reservation): Response
     {
 
-        $symfonyMailerHelper->sendContrat($request, $reservation);
+        $this->emailManagerService->sendContrat($request, $reservation);
 
         return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
     }
@@ -887,9 +890,9 @@ class ReservationController extends AbstractController
     /**
      * @Route("/backoffice/reservation/envoyer-facture-pdf/{id}", name="envoyer_facture", methods={"GET","POST"},requirements={"id":"\d+"})
      */
-    public function envoyerFacture(Request $request, Reservation $reservation, SymfonyMailerHelper $symfonyMailerHelper): Response
+    public function envoyerFacture(Request $request, Reservation $reservation): Response
     {
-        $symfonyMailerHelper->sendFacture($request, $reservation);
+        $this->emailManagerService->sendFacture($request, $reservation);
 
         return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
     }

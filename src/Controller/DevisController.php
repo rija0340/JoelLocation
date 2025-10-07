@@ -17,7 +17,7 @@ use App\Repository\VehiculeRepository;
 use App\Form\EditClientReservationType;
 use App\Form\Devis\OptionsGarantiesType;
 use App\Repository\ReservationRepository;
-use App\Service\SymfonyMailerHelper;
+use App\Service\EmailManagerService;
 use Doctrine\ORM\EntityManagerInterface;
 
 // Include Dompdf required namespaces
@@ -44,7 +44,7 @@ class DevisController extends AbstractController
     private $mailjet;
     private $flashy;
     private $reserverDevis;
-    private $symfonyMailerHelper;
+    private $emailManagerService;
     private $reservationHelper;
     private $reservationRepo;
 
@@ -62,7 +62,7 @@ class DevisController extends AbstractController
         OptionsRepository $optionsRepo,
         GarantieRepository $garantiesRepo,
         ReserverDevis $reserverDevis,
-        SymfonyMailerHelper $symfonyMailerHelper,
+        EmailManagerService $emailManagerService,
         ReservationHelper $reservationHelper,
         ReservationRepository $reservationRepo
 
@@ -79,7 +79,7 @@ class DevisController extends AbstractController
         $this->mailjet = $mailjet;
         $this->flashy = $flashy;
         $this->reserverDevis = $reserverDevis;
-        $this->symfonyMailerHelper = $symfonyMailerHelper;
+        $this->emailManagerService = $emailManagerService;
         $this->reservationHelper = $reservationHelper;
         $this->reservationRepo = $reservationRepo;
     }
@@ -454,7 +454,7 @@ class DevisController extends AbstractController
      */
     public function envoyerDevis(Request $request, Devis $devis): Response
     {
-        $this->symfonyMailerHelper->sendDevis($request, $devis);
+        $this->emailManagerService->sendDevis($request, $devis);
         return $this->redirectToRoute('devis_show', ['id' => $devis->getId()]);
     }
 }

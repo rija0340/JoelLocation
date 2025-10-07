@@ -14,7 +14,7 @@ use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Service\SymfonyMailerHelper;
+use App\Service\EmailManagerService;
 use App\Entity\Reservation;
 
 class AppelPaiementController extends AbstractController
@@ -27,6 +27,7 @@ class AppelPaiementController extends AbstractController
     private $mailjet;
     private $flashy;
     private $dateHelper;
+    private $emailManagerService;
 
     public function __construct(
         DateHelper $dateHelper,
@@ -35,7 +36,8 @@ class AppelPaiementController extends AbstractController
         EntityManagerInterface $em,
         AppelPaiementRepository $appelPaiementRepo,
         PaiementRepository $paiementRepo,
-        ReservationRepository $reservationRepo
+        ReservationRepository $reservationRepo,
+        EmailManagerService $emailManagerService
     ) {
         $this->paiementRepo = $paiementRepo;
         $this->reservationRepo = $reservationRepo;
@@ -44,6 +46,7 @@ class AppelPaiementController extends AbstractController
         $this->mailjet = $mailjet;
         $this->flashy = $flashy;
         $this->dateHelper = $dateHelper;
+        $this->emailManagerService = $emailManagerService;
     }
 
     /**
@@ -63,14 +66,12 @@ class AppelPaiementController extends AbstractController
     /**
      * @Route("backoffice/envoi-email-appel-paiement/{id}", name="envoi_email_appel_paiement_index")
      */
-    public function sendMailAppelPaiement(Request $request, AppelPaiement $appelPaiement, SymfonyMailerHelper $symfonyMailerHelper)
+    public function sendMailAppelPaiement(Request $request, AppelPaiement $appelPaiement, EmailManagerService $emailManagerService)
     {
 
-        $symfonyMailerHelper->sendAppelPaiement(
+        $emailManagerService->sendAppelPaiement(
             $appelPaiement->getReservation()
         );
-
-        $this->flashy->success("Votre mail a été envoyé");
 
         // $appelPaiement->setDateDemande($this->dateHelper->dateNow());
         $appelPaiement->addSentDate(new \DateTimeImmutable());

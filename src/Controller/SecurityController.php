@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
-use App\Service\SymfonyMailerHelper;
 use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,13 +15,14 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use App\Service\EmailManagerService;
 
 class SecurityController extends AbstractController
 {
     private $flashy;
     private $session;
     private $entityManager;
-    private $mailerHelper;
+    private $emailManagerService;
     private $eventDispatcher;
     private $userRepo;
 
@@ -30,14 +30,14 @@ class SecurityController extends AbstractController
         SessionInterface $session,
         FlashyNotifier $flashy,
         EntityManagerInterface $entityManager,
-        SymfonyMailerHelper $mailerHelper,
+        EmailManagerService $emailManagerService,
         EventDispatcherInterface $eventDispatcher,
         UserRepository $userRepo
     ) {
         $this->flashy = $flashy;
         $this->session = $session;
         $this->entityManager = $entityManager;
-        $this->mailerHelper = $mailerHelper;
+        $this->emailManagerService = $emailManagerService;
         $this->eventDispatcher = $eventDispatcher;
         $this->userRepo = $userRepo;
     }
@@ -199,7 +199,7 @@ class SecurityController extends AbstractController
             $this->eventDispatcher->addListener(KernelEvents::TERMINATE, function () use ($userId, $userToken) {
                 $user = $this->entityManager->getRepository(User::class)->find($userId);
                 if ($user) {
-                    $this->mailerHelper->sendValidationInscription($user, $userToken);
+                    $this->emailManagerService->sendValidationInscription($user, $userToken);
                 }
             });
 

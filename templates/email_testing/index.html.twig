@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Email Testing Interface{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1>Email Testing Interface</h1>
+    
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+    
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">
+            {{ message }}
+        </div>
+    {% endfor %}
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Document Emails</h5>
+                </div>
+                <div class="card-body">
+                    <p>Test emails for sending documents to clients.</p>
+                    <a href="{{ path('email_testing_devis') }}" class="btn btn-primary mb-2">Test Devis Email</a>
+                    <a href="{{ path('email_testing_contrat') }}" class="btn btn-primary mb-2">Test Contrat Email</a>
+                    <a href="{{ path('email_testing_facture') }}" class="btn btn-primary mb-2">Test Facture Email</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Account & Contact Emails</h5>
+                </div>
+                <div class="card-body">
+                    <p>Test emails for account management and contact forms.</p>
+                    <a href="{{ path('email_testing_validation_inscription') }}" class="btn btn-secondary mb-2">Test Validation Inscription</a>
+                    <a href="{{ path('email_testing_contact') }}" class="btn btn-secondary mb-2">Test Contact Email</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Payment Related Emails</h5>
+                </div>
+                <div class="card-body">
+                    <p>Test emails for payment notifications.</p>
+                    <a href="{{ path('email_testing_paiement_confirmation') }}" class="btn btn-info mb-2">Test Paiement Confirmation</a>
+                    <a href="{{ path('email_testing_appel_paiement') }}" class="btn btn-info mb-2">Test Appel Paiement</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>All Emails</h5>
+                </div>
+                <div class="card-body">
+                    <p>Test all email types at once.</p>
+                    <a href="{{ path('email_testing_all') }}" class="btn btn-warning">Test All Emails</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header">
+            <h5>Instructions</h5>
+        </div>
+        <div class="card-body">
+            <ol>
+                <li>Click on any button above to send a test email of that type</li>
+                <li>Check your email inbox (or spam folder) for the test email</li>
+                <li>Look at the flash messages to see if the email was sent successfully</li>
+                <li>If an email fails, check the error message for debugging information</li>
+            </ol>
+            <p><strong>Note:</strong> These emails use mock data for testing purposes only.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -21,7 +21,7 @@ use App\Classe\ReservationSession;
 use App\Entity\DevisOption;
 use App\Entity\Reservation;
 use App\Service\ReservationHelper;
-use App\Service\SymfonyMailerHelper;
+use App\Service\EmailManagerService;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -39,7 +39,7 @@ class NouvelleReservationController extends AbstractController
     private $vehiculeRepo;
     private $reservationHelper;
     private $reservationSession;
-    private $symfonyMailerHelper;
+    private $emailManagerService;
 
     public function __construct(
 
@@ -53,7 +53,7 @@ class NouvelleReservationController extends AbstractController
         FlashyNotifier $flashy,
         ReservationHelper $reservationHelper,
         ReservationSession $reservationSession,
-        SymfonyMailerHelper $symfonyMailerHelper
+        EmailManagerService $emailManagerService
 
     ) {
         $this->reservationRepo = $reservationRepo;
@@ -66,7 +66,7 @@ class NouvelleReservationController extends AbstractController
         $this->flashy = $flashy;
         $this->reservationHelper = $reservationHelper;
         $this->reservationSession = $reservationSession;
-        $this->symfonyMailerHelper = $symfonyMailerHelper;
+        $this->emailManagerService = $emailManagerService;
     }
     //step1 choix des paramètres de la réservation
 

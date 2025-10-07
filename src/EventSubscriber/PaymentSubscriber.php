@@ -6,7 +6,7 @@ use App\Entity\Paiement;
 use App\Classe\ReserverDevis;
 use App\Classe\Payment\Event\PaymentSuccessEvent;
 use App\Repository\ModePaiementRepository;
-use App\Service\SymfonyMailerHelper;
+use App\Service\EmailManagerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -15,18 +15,18 @@ class PaymentSubscriber implements EventSubscriberInterface
     private $em;
     private $modePaiementRepo;
     private $reserverDevis;
-    private $symfonyMailerHelper;
+    private $emailManagerService;
 
     public function __construct(
         EntityManagerInterface $em,
         ModePaiementRepository $modePaiementRepo,
         ReserverDevis $reserverDevis,
-        SymfonyMailerHelper $symfonyMailerHelper
+        EmailManagerService $emailManagerService
     ) {
         $this->em = $em;
         $this->modePaiementRepo = $modePaiementRepo;
         $this->reserverDevis = $reserverDevis;
-        $this->symfonyMailerHelper = $symfonyMailerHelper;
+        $this->emailManagerService = $emailManagerService;
     }
 
     public static function getSubscribedEvents(): array
@@ -89,7 +89,7 @@ class PaymentSubscriber implements EventSubscriberInterface
 
             // 3. Envoyer l'email de confirmation de paiement
 
-            $this->symfonyMailerHelper->sendPaiementConfirmation(
+            $this->emailManagerService->sendPaiementConfirmation(
                 $reservation,
                 floatval($montant)
             );

@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Service\SymfonyMailerHelper;
+use App\Service\EmailManagerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -28,7 +28,7 @@ class ValidationDevisController extends AbstractController
     private $tarifsHelper;
     private $em;
     private $reserverDevis;
-    private $symfonyMailerHelper;
+    private $emailManagerService;
 
     public function __construct(
         ReservationRepository $reservationRepo,
@@ -38,7 +38,7 @@ class ValidationDevisController extends AbstractController
         FlashyNotifier $flashy,
         EntityManagerInterface $em,
         ReserverDevis $reserverDevis,
-        SymfonyMailerHelper $symfonyMailerHelper
+        EmailManagerService $emailManagerService
 
 
     ) {
@@ -49,7 +49,7 @@ class ValidationDevisController extends AbstractController
         $this->flashy = $flashy;
         $this->em = $em;
         $this->reserverDevis = $reserverDevis;
-        $this->symfonyMailerHelper = $symfonyMailerHelper;
+        $this->emailManagerService = $emailManagerService;
     }
 
     /**
@@ -91,7 +91,7 @@ class ValidationDevisController extends AbstractController
                 $this->reserverDevis->reserver($devis, "null", true);
                 $this->flashy->success("Devis transformé en réservation");
 
-                $this->symfonyMailerHelper->sendDevis($request, $devis);
+                $this->emailManagerService->sendDevis($request, $devis);
 
                 return $this->redirectToRoute('client_reservations');
             } else {
