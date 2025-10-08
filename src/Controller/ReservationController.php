@@ -41,6 +41,9 @@ use App\Repository\DevisOptionRepository;
 use App\Repository\DevisRepository;
 use App\Service\Site;
 use App\Service\EmailManagerService;
+use App\Service\ReservationStateService;
+use App\Service\PaymentProcessingService;
+use App\Service\VehicleAvailabilityService;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use MercurySeries\FlashyBundle\FlashyNotifier;
@@ -68,6 +71,9 @@ class ReservationController extends AbstractController
     private $reservationHelper;
     private $devisOptionRepo;
     private $emailManagerService;
+    private $reservationStateService;
+    private $paymentProcessingService;
+    private $vehicleAvailabilityService;
 
     public function __construct(
         ModePaiementRepository $modePaiementRepo,
@@ -85,7 +91,10 @@ class ReservationController extends AbstractController
         AppelPaiementRepository $appelPaiementRepository,
         ReservationHelper $reservationHelper,
         DevisOptionRepository $devisOptionRepo,
-        EmailManagerService $emailManagerService
+        EmailManagerService $emailManagerService,
+        ReservationStateService $reservationStateService,
+        PaymentProcessingService $paymentProcessingService,
+        VehicleAvailabilityService $vehicleAvailabilityService
 
     ) {
 
@@ -104,6 +113,9 @@ class ReservationController extends AbstractController
         $this->reservationHelper = $reservationHelper;
         $this->devisOptionRepo = $devisOptionRepo;
         $this->emailManagerService = $emailManagerService;
+        $this->reservationStateService = $reservationStateService;
+        $this->paymentProcessingService = $paymentProcessingService;
+        $this->vehicleAvailabilityService = $vehicleAvailabilityService;
     }
 
     /**
@@ -239,31 +251,23 @@ class ReservationController extends AbstractController
 
         if ($formAjoutPaiement->isSubmitted() && $formAjoutPaiement->isValid()) {
 
-            // tester si la somme des paiements dépasse le prix
-            if ($reservation->getSommePaiements()  + $formAjoutPaiement->getData()['montant'] > $reservationHelper->getTotalResaFraisTTC($reservation)) {
+            $montant = floatval($formAjoutPaiement->getData()['montant']);
+            $datePaiement = $formAjoutPaiement->getData()['datePaiement'];
+            $modePaiementId = $formAjoutPaiement->getData()['modePaiement'];
 
-                $this->flashy->error("Erreur sur l'ajout de paiement car le total du paiement est supérieur au due");
+            // dd($montant, $datePaiement, $modePaiementId);
+            // Use the payment processing service to handle the payment
+            $paymentSuccess = $this->paymentProcessingService->addPaymentToReservation(
+                $reservation,
+                $montant,
+                $datePaiement,
+                $modePaiementId->getid()
+            );
+
+            if (!$paymentSuccess) {
+                $this->flashy->error("Erreur sur l'ajout de paiement car le total du paiement est supérieur au dû");
                 return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
             } else {
-
-
-                $datePaiement = $formAjoutPaiement->getData()['datePaiement'];
-                $dateObject = new DateTime($datePaiement->format('Y-m-d H:i:s'), new DateTimeZone('UTC'));
-
-                // enregistrement montant et reservation dans table paiement 
-                $paiement  = new Paiement();
-                $paiement->setClient($reservation->getClient());
-                $paiement->setDatePaiement($dateObject);
-                $paiement->setMontant(floatval($formAjoutPaiement->getData()['montant']));
-                $paiement->setReservation($reservation);
-                $paiement->setModePaiement($this->modePaiementRepo->find($formAjoutPaiement->getData()['modePaiement']));
-                $paiement->setMotif("Réservation");
-                $paiement->setCreatedAt($this->dateHelper->dateNow());
-
-
-                $this->em->persist($paiement);
-                $this->em->flush();
-
                 // notification pour réussite enregistrement
                 $this->flashy->success("L'ajout du paiement a été effectué avec succès");
                 return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
@@ -287,19 +291,15 @@ class ReservationController extends AbstractController
         //gestion form report reservation
         if ($formReportResa->isSubmitted() && $formReportResa->isValid()) {
 
-            $dateDepart = $reservation->getDateDebut();
-            $dateRetour = $reservation->getDateFin();
-            $duree = $this->dateHelper->calculDuree($dateDepart, $dateRetour);
-            $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $reservation->getVehicule());
+            $reportSuccess = $this->reservationStateService->reportReservation($reservation);
 
-            $reservation->setReported(true);
-            $reservation->setDuree($duree);
-            $reservation->setTarifVehicule($tarifVehicule);
-            $reservation->setPrix($tarifVehicule + $reservation->getPrixGaranties() + $reservation->getPrixOptions());
-
-            $this->flashy->success("La réservation a été reportée");
-            $this->em->flush();
-            return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
+            if ($reportSuccess) {
+                $this->flashy->success("La réservation a été reportée");
+                return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
+            } else {
+                $this->flashy->error("Erreur lors du report de la réservation");
+                return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
+            }
         }
 
         //form pour annulation reservation
@@ -309,20 +309,14 @@ class ReservationController extends AbstractController
 
         //gestion annulation reservation
         if ($formAnnulation->isSubmitted() && $formAnnulation->isValid()) {
+            $annulationEntity = $formAnnulation->getData();
+            $cancellationSuccess = $this->reservationStateService->cancelReservation($reservation,$annulationEntity);
 
-            $annulResa =  $annulationResaRepo->findOneBy(['reservation' => $reservation]);
-
-            if ($annulResa != null) {
+            if (!$cancellationSuccess) {
                 $this->flashy->success('Cette réservation est déjà annulée');
                 return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
             } else {
-                $annulation->setReservation($reservation);
-                $annulation->setCreatedAt($this->dateHelper->dateNow());
-                $this->em->persist($annulation);
-                $reservation->setCanceled(true);
-
-                $this->flashy->success("L'annulation dela réservation N°" . $reservation->getReference() . "a été effectué avec succès");
-                $this->em->flush();
+                $this->flashy->success("L'annulation de la réservation N°" . $reservation->getReference() . " a été effectué avec succès");
                 return $this->redirectToRoute('reservation_cancel_index');
             }
         }
@@ -467,8 +461,7 @@ class ReservationController extends AbstractController
      */
     public function archiver(Request $request, Reservation $reservation): Response
     {
-        $reservation->setArchived(true);
-        $this->em->flush();
+        $this->reservationStateService->archiveReservation($reservation);
 
         $this->flashy->success("La réservation N° " . $reservation->getReference() . " a été archivée");
         return $this->redirectToRoute('reservation_index');
@@ -487,14 +480,18 @@ class ReservationController extends AbstractController
         $vehiculeIsNotAvailable = null;
         if ($routeName === 'validation_step2') {
             $entity = $devisRepo->find($id);
-            //un tableau contenant les véhicules utilisées dans les reservations se déroulant entre
-            //$dateDepart et $dateRetour
             //check si vehicule devis est déjà utilisé dans une reservation
-            $reservations = $this->reservationRepo->findReservationIncludeDates($entity->getDateDepart(), $entity->getDateRetour());
-            $vehiculeIsNotAvailable = $this->reservationHelper->vehiculeIsInvolved($reservations, $entity->getVehicule());
+            $vehiculeIsNotAvailable = $this->vehicleAvailabilityService->isVehicleInvolvedInReservations(
+                $entity->getVehicule(),
+                $entity->getDateDepart(),
+                $entity->getDateRetour()
+            );
 
             if ($vehiculeIsNotAvailable) {
-                $vehiculesAvailable = $this->reservationHelper->getVehiculesDisponible($reservations);
+                $vehiculesAvailable = $this->vehicleAvailabilityService->getAvailableVehicles(
+                    $entity->getDateDepart(),
+                    $entity->getDateRetour()
+                );
             } else {
                 $vehiculesAvailable = null;
             }
@@ -854,11 +851,7 @@ class ReservationController extends AbstractController
      */
     public function retourAnticipe(Request $request,  Reservation $reservation): Response
     {
-
-        //changement de date de fin et de durée
-        $reservation->setDateFin($this->dateHelper->dateNow());
-        $reservation->setDuree($this->dateHelper->calculDuree($reservation->getDateDebut(), $reservation->getDateFin()));
-        $this->em->flush();
+        $this->reservationStateService->processEarlyReturn($reservation);
 
         $this->flashy->success("Le retour anticipé a été éfféctué avec succès");
 

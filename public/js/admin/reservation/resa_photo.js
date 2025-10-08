@@ -203,7 +203,7 @@ class ReservationPhotoUploader {
             // MODIFIED: Added modal-title element
             modal.innerHTML = `
                 <div class="modal-dialog modal-xl modal-dialog-centered">
-                    <div class="modal-content bg-transparent border-0">
+                    <div class="modal-content photo bg-transparent border-0">
                         <div class="modal-header border-0 pb-2 text-white align-items-center">
                             <h5 class="modal-title" id="modalImageTitle"></h5>
                             <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
