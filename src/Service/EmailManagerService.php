@@ -49,6 +49,11 @@ class EmailManagerService
         $this->sendDocument($request, $resa, 'facture');
     }
 
+    public function sendAvoir(Request $request, Reservation $resa, float $montant = null)
+    {
+        $this->sendDocument($request, $resa, 'avoir', $montant);
+    }
+
     public function sendValidationInscription(User $user, string $token)
     {
         try {
@@ -74,7 +79,7 @@ class EmailManagerService
         }
     }
 
-    private function sendDocument(Request $request, $entity, string $type)
+    private function sendDocument(Request $request, $entity, string $type, float $montant = null)
     {
         $baseUrl = $this->site->getBaseUrl($request);
         $route = $type . '_pdf';
@@ -102,6 +107,8 @@ class EmailManagerService
             
             if ($type === 'contrat' && !empty($photos)) {
                 $emailSent = $this->emailService->$method($email, $name, ucfirst($type), $documentLink, $photos);
+            } elseif ($type === 'avoir' && $montant !== null) {
+                $emailSent = $this->emailService->$method($email, $name, ucfirst($type), $documentLink, $montant);
             } else {
                 $emailSent = $this->emailService->$method($email, $name, ucfirst($type), $documentLink);
             }

@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PDF Templates{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Available PDF Templates</h1>
+        
+        <div class="row">
+            {% for key, template in templates %}
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ template.name }}</h5>
+                            <p class="card-text">{{ template.description }}</p>
+                            <a href="{{ path(template.route) }}" class="btn btn-primary">Preview Template</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <div class="mt-4">
+            <a href="{{ path('email_testing_index') }}" class="btn btn-secondary">Back to Email Testing</a>
+        </div>
+    </div>
+{% endblock %}

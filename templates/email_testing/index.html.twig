@@ -29,6 +29,7 @@
                     <a href="{{ path('email_testing_devis') }}" class="btn btn-primary mb-2">Test Devis Email</a>
                     <a href="{{ path('email_testing_contrat') }}" class="btn btn-primary mb-2">Test Contrat Email</a>
                     <a href="{{ path('email_testing_facture') }}" class="btn btn-primary mb-2">Test Facture Email</a>
+                    <a href="{{ path('email_testing_avoir') }}" class="btn btn-primary mb-2">Test Avoir Email</a>
                 </div>
             </div>
         </div>
@@ -74,7 +75,7 @@
         </div>
     </div>
     
-    <div class="card">
+    <div class="card mb-4">
         <div class="card-header">
             <h5>Instructions</h5>
         </div>
@@ -86,6 +87,17 @@
                 <li>If an email fails, check the error message for debugging information</li>
             </ol>
             <p><strong>Note:</strong> These emails use mock data for testing purposes only.</p>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header">
+            <h5>Template Preview</h5>
+        </div>
+        <div class="card-body">
+            <p>Preview templates without generating files:</p>
+            <a href="{{ path('email_testing_templates_list') }}" class="btn btn-success me-2">View Email Templates</a>
+            <a href="{{ path('preview_pdf_templates_list') }}" class="btn btn-info">View PDF Templates</a>
         </div>
     </div>
 </div>

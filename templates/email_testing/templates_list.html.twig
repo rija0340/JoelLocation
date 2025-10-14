@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Email Templates{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Available Email Templates</h1>
+        
+        <div class="row">
+            {% for key, label in templates %}
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ label }}</h5>
+                            <a href="{{ path('email_testing_view_template', {'type': key}) }}" class="btn btn-primary">View Template</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <div class="mt-4">
+            <a href="{{ path('email_testing_index') }}" class="btn btn-secondary">Back to Email Testing</a>
+        </div>
+    </div>
+{% endblock %}

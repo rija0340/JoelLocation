@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType; // Changed from FloatType to NumberType
 
 class AnnulationType extends AbstractType
 {
@@ -19,6 +20,14 @@ class AnnulationType extends AbstractType
                 'choices' => [
                     'Avec avoir' => "avec_avoir",
                     'Sans avoir' => "sans_avoir",
+                ],
+            ])
+            ->add('montant', NumberType::class, [ // Changed from FloatType to NumberType
+                'mapped' => false,
+                'required' => false,
+                'scale' => 2, // Optional: number of decimal places
+                'attr' => [
+                    'step' => '0.01', // HTML5 step attribute for float input
                 ],
             ]);
     }

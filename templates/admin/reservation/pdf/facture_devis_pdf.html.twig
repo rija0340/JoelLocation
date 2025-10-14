@@ -9,6 +9,27 @@
 		<!-- Font Awesome -->
 		<link href="{{ asset( 'admin/vendors/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
 		<style>
+			{% if isPreview %}
+			/* A4 preview styling */
+			body {
+				background: #f0f0f0;
+				padding: 20px;
+				display: flex;
+				justify-content: center;
+				align-items: flex-start;
+				min-height: 100vh;
+			}
+			
+			.a4-paper {
+				width: 210mm;
+				min-height: 297mm;
+				background: white;
+				box-shadow: 0 0 20px rgba(0,0,0,0.1);
+				padding: 10mm;
+				margin: 10px auto;
+				position: relative;
+			}
+			{% endif %}
 
 			* {
 				padding: 0;
@@ -190,6 +211,9 @@
 		</style>
 	</head>
 	<body>
+		{% if isPreview %}
+		<div class="a4-paper">
+		{% endif %}
 		<section>
 			<div class="entete"><img src="{{ entete }}" alt="entete" width="800px" height="40px" type="images/png"></div>
 		</section>
@@ -409,5 +433,8 @@
 				</div>
 			</div>
 		</section>
+		{% if isPreview %}
+		</div>
+		{% endif %}
 	</body>
 </html>

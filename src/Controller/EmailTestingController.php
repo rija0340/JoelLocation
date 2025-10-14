@@ -87,6 +87,24 @@ class EmailTestingController extends AbstractController
     }
 
     /**
+     * @Route("/test-avoir", name="email_testing_avoir")
+     */
+    public function testAvoir(Request $request): Response
+    {
+        // Create a mock reservation for testing
+        $reservation = $this->createMockReservation();
+        
+        try {
+            $this->emailManagerService->sendAvoir($request, $reservation,200);
+            $this->addFlash('success', 'Email facture sent successfully!');
+        } catch (\Exception $e) {
+            $this->addFlash('error', 'Failed to send facture email: ' . $e->getMessage());
+        }
+
+        return $this->redirectToRoute('email_testing_index');
+    }
+
+    /**
      * @Route("/test-validation-inscription", name="email_testing_validation_inscription")
      */
     public function testValidationInscription(): Response
@@ -164,6 +182,65 @@ class EmailTestingController extends AbstractController
         }
 
         return $this->redirectToRoute('email_testing_index');
+    }
+
+    /**
+     * @Route("/view-templates", name="email_testing_templates_list")
+     */
+    public function listEmailTemplates(): Response
+    {
+        $templates = [
+            'devis' => 'Devis',
+            'contrat' => 'Contrat',
+            'facture' => 'Facture',
+            'avoir' => 'Avoir',
+            'validation_inscription' => 'Validation Inscription',
+            'formulaire_contact' => 'Formulaire Contact',
+            'confirmation_paiement' => 'Confirmation Paiement',
+            'appel_paiement' => 'Appel Paiement',
+            'base_email' => 'Base Email'
+        ];
+
+        return $this->render('email_testing/templates_list.html.twig', [
+            'templates' => $templates
+        ]);
+    }
+
+    /**
+     * @Route("/view-template/{type}", name="email_testing_view_template")
+     */
+    public function viewTemplate(string $type): Response
+    {
+        $templateMap = [
+            'devis' => 'admin/templates_email/devis.html.twig',
+            'contrat' => 'admin/templates_email/contrat.html.twig',
+            'facture' => 'admin/templates_email/facture.html.twig',
+            'avoir' => 'admin/templates_email/avoir.html.twig',
+            'validation_inscription' => 'admin/templates_email/validation_inscription.html.twig',
+            'formulaire_contact' => 'admin/templates_email/formulaire_contact.html.twig',
+            'confirmation_paiement' => 'admin/templates_email/confirmation_paiement.html.twig',
+            'appel_paiement' => 'admin/templates_email/appel_paiement.html.twig',
+            'base_email' => 'admin/templates_email/base_email.html.twig'
+        ];
+
+        if (!isset($templateMap[$type])) {
+            throw $this->createNotFoundException('Email template not found.');
+        }
+
+        // Mock data for each template type
+        $mockData = $this->getMockTemplateData($type);
+
+        return $this->render($templateMap[$type], array_merge([
+            'name' => 'Test Client',
+            'email' => 'test@client.com',
+            'phone' => '0123456789',
+            'phone_number1' => '0123456788',
+            'phone_number2' => '0123456789',
+            'website_url' => 'https://joellocation.com',
+            'facebook_url' => 'https://facebook.com/joellocation',
+            'instagram_url' => 'https://instagram.com/joellocation',
+            'youtube_url' => 'https://youtube.com/joellocation'
+        ], $mockData));
     }
 
     /**
@@ -250,6 +327,87 @@ class EmailTestingController extends AbstractController
         ]);
     }
 
+    private function getMockTemplateData(string $type): array
+    {
+        $mockData = [];
+        $reservation = $this->createMockReservation();
+        $devis = $this->createMockDevis();
+        $user = $this->createMockUser();
+
+        switch ($type) {
+            case 'devis':
+                $mockData = [
+                    'devis' => $devis,
+                    'devisLink' => 'https://example.com/devis',
+                    'details_client' => 'Client: John Doe<br>Adresse: 123 Rue Exemple, 75000 Paris<br>Téléphone: 0123456789<br>Email: client@example.com',
+                    'details_facture' => 'Numéro: DEV-001<br>Date: ' . date('d/m/Y') . '<br>Total: 250.00 €'
+                ];
+                break;
+            case 'contrat':
+                $mockData = [
+                    'reservation' => $reservation,
+                    'contratLink' => 'https://example.com/contrat',
+                    'details_client' => 'Client: John Doe<br>Adresse: 123 Rue Exemple, 75000 Paris<br>Téléphone: 0123456789<br>Email: client@example.com',
+                    'details_facture' => 'Numéro: RES-001<br>Date: ' . date('d/m/Y') . '<br>Total: 500.00 €'
+                ];
+                break;
+            case 'facture':
+                $mockData = [
+                    'reservation' => $reservation,
+                    'factureLink' => 'https://example.com/facture',
+                    'details_client' => 'Client: John Doe<br>Adresse: 123 Rue Exemple, 75000 Paris<br>Téléphone: 0123456789<br>Email: client@example.com',
+                    'details_facture' => 'Numéro: FA-2400001<br>Date: ' . date('d/m/Y') . '<br>Total: 500.00 €',
+                    'montant' => 500.00
+                ];
+                break;
+            case 'avoir':
+                $mockData = [
+                    'reservation' => $reservation,
+                    'avoirLink' => 'https://example.com/avoir',
+                    'details_client' => 'Client: John Doe<br>Adresse: 123 Rue Exemple, 75000 Paris<br>Téléphone: 0123456789<br>Email: client@example.com',
+                    'details_facture' => 'Numéro: AV-2400001<br>Date: ' . date('d/m/Y') . '<br>Total: 200.00 €',
+                    'montant' => 200.00,
+                    'annulation' => $this->createMockAnnulationReservation($reservation)
+                ];
+                break;
+            case 'validation_inscription':
+                $mockData = [
+                    'user' => $user,
+                    'token' => 'validation-token-123',
+                    'validationLink' => 'https://example.com/validate-account',
+                ];
+                break;
+            case 'formulaire_contact':
+                $mockData = [
+                    'data' => [
+                        'nom' => 'Test User',
+                        'emailClient' => 'test@client.com',
+                        'telephone' => '0123456789',
+                        'message' => 'This is a test message',
+                        'sujet' => 'Test Subject'
+                    ]
+                ];
+                break;
+            case 'confirmation_paiement':
+                $mockData = [
+                    'reservation' => $reservation,
+                    'montant' => 150.50,
+                    'referencePaiement' => 'PMT-001-2024',
+                    'datePaiement' => date('d/m/Y H:i:s')
+                ];
+                break;
+            case 'appel_paiement':
+                $mockData = [
+                    'reservation' => $reservation,
+                    'montantRestant' => 300.00,
+                    'factureLink' => 'https://example.com/facture'
+                ];
+                break;
+        }
+
+        return $mockData;
+    }
+
     // /**
     //  * Creates a mock Reservation entity for testing
     //  */
@@ -308,7 +466,13 @@ class EmailTestingController extends AbstractController
         $modele = new \App\Entity\Modele();
         $marque->setLibelle('Peugeot');
         $modele->setLibelle('208');
-        // $vehicule->setId(1);
+        
+        // Use reflection to set ID for the vehicle since it doesn't have a setId method
+        $reflection = new \ReflectionClass($vehicule);
+        $property = $reflection->getProperty('id');
+        $property->setAccessible(true);
+        $property->setValue($vehicule, 1);
+        
         $vehicule->setMarque($marque);
         $vehicule->setModele($modele);
         return $vehicule;
@@ -322,7 +486,12 @@ class EmailTestingController extends AbstractController
         $devis = new Devis();
         
         // Set basic properties
-        // $devis->setId(1);
+        // Use reflection to set ID for the devis since it doesn't have a setId method
+        $reflection = new \ReflectionClass($devis);
+        $property = $reflection->getProperty('id');
+        $property->setAccessible(true);
+        $property->setValue($devis, 1);
+        
         $devis->setNumero('TEST-001');
         $devis->setDateDepart(new \DateTime());
         $devis->setDateRetour((new \DateTime())->modify('+3 days'));
@@ -346,13 +515,19 @@ class EmailTestingController extends AbstractController
         $reservation = new Reservation();
         
         // Set basic properties
-        // $reservation->setId(1);
+        // Use reflection to set ID for the reservation since it doesn't have a setId method
+        $reflection = new \ReflectionClass($reservation);
+        $property = $reflection->getProperty('id');
+        $property->setAccessible(true);
+        $property->setValue($reservation, 1);
+        
         $reservation->setReference('TEST-RESA-001');
         $reservation->setDateDebut(new \DateTime());
         $reservation->setDateFin((new \DateTime())->modify('+3 days'));
         $reservation->setDateReservation(new \DateTime());
         $reservation->setPrix(500.00);
-        $reservation->setSommePaiements(200.00);
+        $reservation->setDuree(3);
+        // $reservation->setSommePaiements(200.00);
         
         // Create mock client
         $client = $this->createMockClient();
@@ -363,6 +538,31 @@ class EmailTestingController extends AbstractController
         $reservation->setVehicule($vehicule);
         
         return $reservation;
+    }
+
+    /**
+     * Creates a mock AnnulationReservation entity for testing
+     */
+    private function createMockAnnulationReservation(?Reservation $reservation = null): \App\Entity\AnnulationReservation
+    {
+        $annulation = new \App\Entity\AnnulationReservation();
+        
+        // Use reflection to set ID for the annulation since it doesn't have a setId method
+        $reflection = new \ReflectionClass($annulation);
+        $property = $reflection->getProperty('id');
+        $property->setAccessible(true);
+        $property->setValue($annulation, 1);
+        
+        $annulation->setCreatedAt(new \DateTime());
+        $annulation->setMotif('Test annulation motif');
+        $annulation->setType('avoir');
+        $annulation->setMontantAvoir(200.00);
+        
+        if ($reservation) {
+            $annulation->setReservation($reservation);
+        }
+        
+        return $annulation;
     }
 
 }

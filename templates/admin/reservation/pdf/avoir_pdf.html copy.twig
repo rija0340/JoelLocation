@@ -2,34 +2,13 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>Facture</title>
+		<title>Avoir</title>
 		<!-- Bootstrap -->
 		<link
 		href="{{ asset( 'admin/vendors/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
 		<!-- Font Awesome -->
 		<link href="{{ asset( 'admin/vendors/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
 		<style>
-			{% if isPreview %}
-			/* A4 preview styling */
-			body {
-				background: #f0f0f0;
-				padding: 20px;
-				display: flex;
-				justify-content: center;
-				align-items: flex-start;
-				min-height: 100vh;
-			}
-			
-			.a4-paper {
-				width: 210mm;
-				min-height: 297mm;
-				background: white;
-				box-shadow: 0 0 20px rgba(0,0,0,0.1);
-				padding: 10mm;
-				margin: 10px auto;
-				position: relative;
-			}
-			{% endif %}
 
 			* {
 				padding: 0;
@@ -211,9 +190,6 @@
 		</style>
 	</head>
 	<body>
-		{% if isPreview %}
-		<div class="a4-paper">
-		{% endif %}
 		<section>
 			<div class="entete"><img src="{{ entete }}" alt="entete" width="800px" height="40px" type="images/png"></div>
 		</section>
@@ -235,7 +211,7 @@
 			</div>
 			<br>
 			<div class="details_facture">
-				<strong>Facture N°
+				<strong>Avoir N°
 					{{numeroFacture}}</strong><br>
 				Date de création :
 				{{createdAt|date('d/m/Y')}}
@@ -322,9 +298,6 @@
 							<td class="text-right p-5">{{ (tarifVehiculeTTC / taxMultiplier)|number_format(2,","," ") }}</td>
 							<td class="text-right p-5">{{ (tarifVehiculeTTC)|number_format(2,","," ") }}</td>
 
-							{# <td class="text-right">{{ (prixUnitHT)|number_format(2,","," ") }}</td>
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																															<td class="text-right">{{ (prixHT)|number_format(2,","," ")}}</td>
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																															<td class="text-right">{{ (prixTTC)|number_format(2,","," ") }}</td> #}
 						</tr>
 						{% for frais in frais %}
 							<tr class="bg-pink">
@@ -349,17 +322,6 @@
 								<td class="text-right p-5">{{ (prixConductTTC)|number_format(2,","," ") }}</td>
 							</tr>
 						{% endif %}
-						{# {% for option in reservation.options %}
-																															<tr class="bg-pink">
-																																<td class="p-5">
-																																	{{ option.appelation }}
-																																</td>
-																																<td class="text-right p-5">1</td>
-																																<td class="text-right p-5">{{ (option.prix / taxMultiplier  )|number_format(2,","," ") }}</td>
-																																<td class="text-right p-5">{{ (option.prix / taxMultiplier  )|number_format(2,","," ") }}</td>
-																																<td class="text-right p-5">{{ (option.prix)|number_format(2,","," ") }}</td>
-																															</tr>
-																														{% endfor %} #}
 
 						{% for option in reservation.devisOptions %}
 							<tr class="bg-pink">
@@ -440,9 +402,9 @@
 							</tr>
 						{% endfor %}
 						<tr class="bg-danger text-white">
-							<td>Reste à payer</td>
+							<td>Montant de l'avoir</td>
 							<td class="text-right">
-								{{ ((prixTotalTTC) - reservation.sommePaiements)|number_format(2,","," ") }}€
+								{{ (montantAvoir)|number_format(2,","," ") }}€
 							</td>
 						</tr>
 					</table>
@@ -472,8 +434,5 @@
 				</div>
 			</div>
 		</section>
-		{% if isPreview %}
-		</div>
-		{% endif %}
 	</body>
 </html>

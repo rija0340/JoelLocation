@@ -310,7 +310,8 @@ class ReservationController extends AbstractController
         //gestion annulation reservation
         if ($formAnnulation->isSubmitted() && $formAnnulation->isValid()) {
             $annulationEntity = $formAnnulation->getData();
-            $cancellationSuccess = $this->reservationStateService->cancelReservation($reservation,$annulationEntity);
+            $montant = $formAnnulation->get('montant')->getData();  
+            $cancellationSuccess = $this->reservationStateService->cancelReservation($request, $reservation,$annulationEntity,$montant);
 
             if (!$cancellationSuccess) {
                 $this->flashy->success('Cette réservation est déjà annulée');
@@ -889,7 +890,6 @@ class ReservationController extends AbstractController
 
         return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
     }
-
 
 
     /**

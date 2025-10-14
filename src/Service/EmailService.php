@@ -84,7 +84,15 @@ class EmailService
         ];
         return $this->send($to, $subject, 'admin/templates_email/facture.html.twig', $context, $attachments);
     }
-
+    public function sendAvoir(string $to, string $name, string $subject, $avoirLink, $montant ,array $attachments = [])
+    {
+        $context = [
+            'avoirLink' => $avoirLink,
+            'name' => $name,
+            'montant'=> $montant
+        ];
+        return $this->send($to, $subject, 'admin/templates_email/avoir.html.twig', $context, $attachments);
+    }
     public function sendValidationEmail(string $to, string $name, string $token)
     {
         $validationUrl = $this->generateValidationUrl($token);

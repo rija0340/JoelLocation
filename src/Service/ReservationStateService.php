@@ -7,6 +7,7 @@ use App\Entity\Reservation;
 use App\Repository\AnnulationReservationRepository;
 use App\Repository\ReservationRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class ReservationStateService
 {
@@ -15,25 +16,28 @@ class ReservationStateService
     private $em;
     private $dateHelper;
     private $tarifsHelper;
+    private $emailManagerService;
 
     public function __construct(
         ReservationRepository $reservationRepo,
         AnnulationReservationRepository $annulationResaRepo,
         EntityManagerInterface $em,
         DateHelper $dateHelper,
-        TarifsHelper $tarifsHelper
+        TarifsHelper $tarifsHelper,
+        EmailManagerService $emailManagerService
     ) {
         $this->reservationRepo = $reservationRepo;
         $this->annulationResaRepo = $annulationResaRepo;
         $this->em = $em;
         $this->dateHelper = $dateHelper;
         $this->tarifsHelper = $tarifsHelper;
+        $this->emailManagerService = $emailManagerService;
     }
 
     /**
      * Cancel a reservation
      */
-    public function cancelReservation(Reservation $reservation, AnnulationReservation $annulation): bool
+    public function cancelReservation(Request $request,Reservation $reservation, AnnulationReservation $annulation, ?float $montant = null): bool
     {
         // Check if reservation is already cancelled
         $annulResa = $this->annulationResaRepo->findOneBy(['reservation' => $reservation]);
@@ -41,13 +45,17 @@ class ReservationStateService
         if ($annulResa !== null) {
             return false; // Already cancelled
         }
-
+        
         $annulation->setReservation($reservation);
         $annulation->setCreatedAt($this->dateHelper->dateNow());
+        $annulation->setMontantAvoir($montant);
         $this->em->persist($annulation);
         $reservation->setCanceled(true);
         $this->em->flush();
-
+        if(!is_null($montant)){
+            $this->emailManagerService->sendAvoir($request, $reservation, $montant);
+        }
+        
         return true;
     }
 

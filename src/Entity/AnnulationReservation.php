@@ -38,6 +38,11 @@ class AnnulationReservation
      */
     private $type;
 
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $montantAvoir;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -87,6 +92,18 @@ class AnnulationReservation
     public function setType(string $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getMontantAvoir(): ?float
+    {
+        return $this->montantAvoir;
+    }
+
+    public function setMontantAvoir(?float $montantAvoir): self
+    {
+        $this->montantAvoir = $montantAvoir;
 
         return $this;
     }
