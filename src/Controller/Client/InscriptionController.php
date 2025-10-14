@@ -6,7 +6,7 @@ use App\Entity\User;
 use App\Service\DateHelper;
 use App\Form\ClientRegisterType;
 use App\Repository\UserRepository;
-use App\Service\SymfonyMailer;
+use App\Service\EmailManagerService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,20 +21,20 @@ class InscriptionController extends AbstractController
     private $passwordEncoder;
     private $dateHelper;
     private $userRepo;
-    private $symfonyMailer;
+    private $emailManagerService;
     private $logger;
 
     public function __construct(
         UserPasswordEncoderInterface $passwordEncoder,
         DateHelper $dateHelper,
         UserRepository $userRepo,
-        SymfonyMailer $symfonyMailer,
+        EmailManagerService $emailManagerService,
         LoggerInterface $logger
     ) {
         $this->passwordEncoder = $passwordEncoder;
         $this->dateHelper = $dateHelper;
         $this->userRepo = $userRepo;
-        $this->symfonyMailer = $symfonyMailer;
+        $this->emailManagerService = $emailManagerService;
         $this->logger = $logger;
     }
 
@@ -91,7 +91,7 @@ class InscriptionController extends AbstractController
 
             try {
                 // Envoyer l'email de validation
-                $this->symfonyMailer->sendValidationEmail(
+                $this->emailManagerService->sendValidationEmail(
                     $user->getMail(),
                     $user->getNom(),
                     $token
