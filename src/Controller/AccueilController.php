@@ -13,7 +13,6 @@ use App\Form\ClientType;
 use App\Entity\Reservation;
 use App\Service\DateHelper;
 use App\Entity\ModePaiement;
-use App\Service\SymfonyMailer;
 use App\Entity\EtatReservation;
 use App\Entity\ModeReservation;
 use App\Repository\UserRepository;
@@ -229,7 +228,7 @@ class AccueilController extends AbstractController
     /**
      * @Route("/formulaire-contact", name="formulaire-contact")
      */
-    public function formcontact(Request $request, SymfonyMailer $mailer): Response
+    public function formcontact(Request $request): Response
     {
         $form = $this->createForm(FormulaireContactType::class);
         $form->handleRequest($request);

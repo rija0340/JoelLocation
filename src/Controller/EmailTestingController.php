@@ -18,6 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class EmailTestingController extends AbstractController
 {
     private $emailManagerService;
+    private $recepient_mail = 'joel@joellocation.com';
 
     public function __construct(EmailManagerService $emailManagerService)
     {
@@ -131,7 +132,7 @@ class EmailTestingController extends AbstractController
         // Create mock contact data for testing
         $data = [
             'nom' => 'Test User',
-            'emailClient' => 'rakotoarinelinarija@gmail.com',
+            'emailClient' => $this->recepient_mail,
             'telephone' => '0123456789',
             'message' => 'This is a test message from email testing controller.',
             'sujet' => 'Test Contact Email'
@@ -292,7 +293,7 @@ class EmailTestingController extends AbstractController
             // Test contact email
             $data = [
                 'nom' => 'Test User',
-                'emailClient' => 'rakotoarinelinarija@gmail.com',
+                'emailClient' => $this->recepient_mail,
                 'telephone' => '0123456789',
                 'message' => 'This is a test message from email testing controller.',
                 'sujet' => 'Test Contact Email'
@@ -444,7 +445,7 @@ class EmailTestingController extends AbstractController
         $user->setId(1);
         $user->setNom('Test');
         $user->setPrenom('User');
-        $user->setMail('rakotoarinelinarija@gmail.com');
+        $user->setMail($this->recepient_mail);
         return $user;
     }
 
