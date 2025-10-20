@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Devis;
 use App\Entity\Reservation;
 use App\Entity\User;
+use App\Service\EmailService;
 use App\Service\EmailManagerService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,11 +19,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class EmailTestingController extends AbstractController
 {
     private $emailManagerService;
-    private $recepient_mail = 'joel@joellocation.com';
+    private $emailService;
+    private $recepient_mail = 'rakotoarinelinarija@gmail.com';
 
-    public function __construct(EmailManagerService $emailManagerService)
+    public function __construct(EmailManagerService $emailManagerService,EmailService $emailService)
     {
         $this->emailManagerService = $emailManagerService;
+        $this->emailService = $emailService;
     }
 
     /**
@@ -139,13 +142,60 @@ class EmailTestingController extends AbstractController
         ];
         
         try {
-            $this->emailManagerService->sendContact($data);
+            $response = $this->emailService->send(
+                $this->recepient_mail, // to
+                $objet, // subject
+                'admin/templates_email/formulaire_contact.html.twig', // template
+                $data // context
+            );
             $this->addFlash('success', 'Email contact sent successfully!');
         } catch (\Exception $e) {
             $this->addFlash('error', 'Failed to send contact email: ' . $e->getMessage());
         }
 
         return $this->redirectToRoute('email_testing_index');
+    }
+
+    /**
+     * @Route("/test-contact-form", name="email_testing_contact_form")
+     */
+    public function testContactForm(Request $request): Response
+    {
+        if ($request->isMethod('POST')) {
+            // Get form data
+            $nom = $request->request->get('nom', 'Test User');
+            $email = $request->request->get('email', $this->recepient_mail);
+            $telephone = $request->request->get('telephone', '0123456789');
+            $adresse = $request->request->get('adresse', '123 Rue de la Paix, 75000 Paris');
+            $objet = $request->request->get('objet', 'Test Contact Email');
+            $message = $request->request->get('message', 'This is a test message from email testing controller.');
+
+            // Prepare contact data
+            $data = [
+                'nom' => $nom,
+                'emailClient' => $email,
+                'telephone' => $telephone,
+                'adresse' => $adresse,
+                'objet' => $objet,
+                'message' => $message
+            ];
+
+            try {
+                $response = $this->emailService->send(
+                    $this->recepient_mail, // to
+                    $objet, // subject
+                    'admin/templates_email/formulaire_contact.html.twig', // template
+                    $data // context
+                );
+                $this->addFlash('success', 'Contact form email sent successfully!');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Failed to send contact form email: ' . $e->getMessage());
+            }
+
+            return $this->redirectToRoute('email_testing_contact_form');
+        }
+
+        return $this->render('email_testing/contact_form.html.twig');
     }
 
     /**

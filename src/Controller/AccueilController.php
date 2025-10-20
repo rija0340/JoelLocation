@@ -19,6 +19,7 @@ use App\Repository\UserRepository;
 use App\Form\FormulaireContactType;
 use App\Form\ReservationclientType;
 use App\Repository\VehiculeRepository;
+use App\Service\EmailService;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ReservationRepository;
 use App\Repository\EtatReservationRepository;
@@ -40,8 +41,9 @@ class AccueilController extends AbstractController
     private $em;
     private $dateHelper;
     private $mailjet;
+    private $emailService;
 
-    public function __construct(Mailjet $mailjet, DateHelper $dateHelper, EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder, VehiculeRepository $vehiculeRepository, FlashyNotifier $flashy)
+    public function __construct(Mailjet $mailjet, DateHelper $dateHelper, EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder, VehiculeRepository $vehiculeRepository, FlashyNotifier $flashy, EmailService $emailService)
     {
         $this->passwordEncoder = $passwordEncoder;
         $this->vehiculeRepo = $vehiculeRepository;
@@ -49,6 +51,7 @@ class AccueilController extends AbstractController
         $this->em = $em;
         $this->dateHelper = $dateHelper;
         $this->mailjet = $mailjet;
+        $this->emailService = $emailService;
     }
 
     /**
@@ -116,6 +119,24 @@ class AccueilController extends AbstractController
             }
         }
         return $vehiculesToDisplay;
+    }
+
+    /**
+     * Alternative method to send contact form emails using EmailService instead of Mailjet
+     */
+    public function sendContactEmailAlternative($nom, $email, $telephone, $adresse, $objet, $message)
+    {
+        $data = [
+            'nom' => $nom,
+            'email' => $email,
+            'telephone' => $telephone,
+            'adresse' => $adresse,
+            'objet' => $objet,
+            'message' => $message,
+        ];
+
+        // Use EmailService to send the contact form data
+        return $this->emailService->sendContact($data);
     }
 
     /**
@@ -256,12 +277,8 @@ class AccueilController extends AbstractController
                     if (substr($email, 0, 7) == "noreply" || substr($email, 0, 7) == "no-repl") {
                         $status = false;
                     } else {
-                        // envoyer le mail
-                        // $status = $this->mailjet->sendToMe($nom, $email, $telephone, $adresse, $objet, $message);
-                        // $this->mailjet->sendToMe($nom, $email, $telephone, $adresse, $objet, $message);
-
+                        // Option 1: Use existing Mailjet implementation
                         // concatenation du bouton avec un url 
-
                         $btnRepondre = '<a href="mailto:' . $email . ' " style="
                         background-color: red;
                         border: none;
@@ -273,9 +290,26 @@ class AccueilController extends AbstractController
                         font-size: 16px;
                         ">Répondre</a>';
 
-                        $response =  $this->mailjet->sendToContacJoelLocation($nom, $email, $telephone, $adresse, $objet, $message, $btnRepondre);
-                        //  $template = "accueil/cgu.html.twig";
-                        //  $mailer->send($objet, "contact@joellocation@gmail.com", $email, $template, []);
+                        // Try Mailjet first
+                        // $response = $this->mailjet->sendToContacJoelLocation($nom, $email, $telephone, $adresse, $objet, $message, $btnRepondre);
+                        
+                        $emailData = [
+                            'nom' => $nom,
+                            'emailClient' => $email,
+                            'telephone' => $telephone,
+                            'adresse' => $adresse,
+                            'objet' => $objet,
+                            'message' => $message,
+                            'btnRepondre' => $btnRepondre
+                        ];
+                            
+                        $response = $this->emailService->send(
+                            'contact@joellocation.com', // to
+                            $objet, // subject
+                            'admin/templates_email/formulaire_contact.html.twig', // template
+                            $emailData // context
+                        );
+
                         $this->flashy->success("Votre email a bien été envoyé");
                     }
                 } else {

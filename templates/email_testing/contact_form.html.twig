@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Test Contact Form Email{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1>Test Contact Form Email</h1>
+    
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+    
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">
+            {{ message }}
+        </div>
+    {% endfor %}
+    
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Send Test Contact Email</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <div class="mb-3">
+                            <label for="nom" class="form-label">Nom</label>
+                            <input type="text" class="form-control" id="nom" name="nom" value="Test User" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" value="joel@joellocation.com" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="telephone" class="form-label">Téléphone</label>
+                            <input type="text" class="form-control" id="telephone" name="telephone" value="0123456789" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="adresse" class="form-label">Adresse</label>
+                            <input type="text" class="form-control" id="adresse" name="adresse" value="123 Rue de la Paix, 75000 Paris" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="objet" class="form-label">Objet</label>
+                            <input type="text" class="form-control" id="objet" name="objet" value="Test Contact Email" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea class="form-control" id="message" name="message" rows="5" required>Test message from contact form email testing interface.</textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">Send Contact Email</button>
+                        <a href="{{ path('email_testing_index') }}" class="btn btn-secondary">Back to Email Testing</a>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5>Instructions</h5>
+                </div>
+                <div class="card-body">
+                    <ol>
+                        <li>Fill in the contact form fields with your desired test data</li>
+                        <li>Click "Send Contact Email" to send a test email using the contact form template</li>
+                        <li>Check the success/error messages for results</li>
+                        <li>Verify the email was received in the specified email address</li>
+                    </ol>
+                    <p><strong>Note:</strong> This form simulates the actual contact form functionality but uses the EmailService instead of Mailjet for sending.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
