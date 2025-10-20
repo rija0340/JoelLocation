@@ -268,14 +268,12 @@ class AccueilController extends AbstractController
             //tester aussi longueur message et envoyer si < 255
             //tester aussi adresse mail no-reply, be pas envoyer si présence 
             if (stristr($message, 'http://') || stristr($message, 'https://')) {
-                $status = false;
-                $this->flashy->error("Veuillez contacter le service client par téléphone ou WhatsApp si vous avez besoin d'envoyer plus d'éléments dans ce message");
+                $this->addFlash('error', "Veuillez contacter le service client par téléphone ou WhatsApp si vous avez besoin d'envoyer plus d'éléments dans ce message");
             } else {
                 //si inférieur envoyer le message
                 if (strlen($message) < 255) {
 
                     if (substr($email, 0, 7) == "noreply" || substr($email, 0, 7) == "no-repl") {
-                        $status = false;
                     } else {
                         // Option 1: Use existing Mailjet implementation
                         // concatenation du bouton avec un url 
@@ -310,11 +308,14 @@ class AccueilController extends AbstractController
                             $emailData // context
                         );
 
-                        $this->flashy->success("Votre email a bien été envoyé");
+                        if ($response) {
+                            $this->addFlash('success', 'Votre message a bien été envoyé.');
+                        } else {
+                            $this->addFlash('error', 'Une erreur s\'est produite lors de l\'envoi de votre message.');
+                        }
                     }
                 } else {
-                    $status = false;
-                    $this->flashy->error("Ne pas dépasser 250 caractères pour le message");
+                    $this->addFlash('error', "Ne pas dépasser 250 caractères pour le message");
                 }
             }
 
@@ -325,8 +326,19 @@ class AccueilController extends AbstractController
             // }
             return $this->redirectToRoute('formulaire-contact');
         }
+        
+        // Check for success flash message to display in the template
+        $successMessage = null;
+        foreach ($request->getSession()->getFlashBag()->get('success', []) as $message) {
+            if (strpos($message, 'message a bien été envoyé') !== false) {
+                $successMessage = $message;
+                break;
+            }
+        }
+        
         return $this->render('accueil/contact.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'success_message' => $successMessage
         ]);
     }
 
