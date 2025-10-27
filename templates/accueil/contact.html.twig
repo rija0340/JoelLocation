@@ -34,14 +34,14 @@
 					<div class="col-lg-6">
 						<div class="form-group">
 							<label for="inputUsername" class="bmd-label-floating" style="color:white;font-weight:500">Nom :</label>
-							{{form_widget(form.nom)}}
+							{{form_widget(form.nom, {'attr': {'class': 'text-white'}})}}
 							{# <input type="text" class="form-control" name="nom" required> #}
 						</div>
 					</div>
 					<div class="col-lg-6">
 						<div class="form-group">
 							<label for="email" class="bmd-label-floating" style="color:white;font-weight:500">Email :</label>
-							{{form_widget(form.email)}}
+							{{form_widget(form.email, {'attr': {'class': 'text-white'}})}}
 
 							{# <input type="email" class="form-control" name="email" required> #}
 						</div>
@@ -49,7 +49,7 @@
 					<div class="col-lg-6">
 						<div class="form-group">
 							<label for="telephone" class="bmd-label-floating" style="color:white;font-weight:500">Téléphone :</label>
-							{{form_widget(form.telephone)}}
+							{{form_widget(form.telephone, {'attr': {'class': 'text-white'}})}}
 
 							{# <input type="text" class="form-control" name="telephone" required> #}
 						</div>
@@ -57,7 +57,7 @@
 					<div class="col-lg-6">
 						<div class="form-group">
 							<label for="adresse" class="bmd-label-floating" style="color:white;font-weight:500">Adresse :</label>
-							{{form_widget(form.adresse)}}
+							{{form_widget(form.adresse, {'attr': {'class': 'text-white'}})}}
 
 						</div>
 					</div>
@@ -67,7 +67,7 @@
 							<label for="Objet" class="labelObjet">Objet* :
 							</label>
 							<div class="col-3">
-								{{form_widget(form.objet)}}
+								{{form_widget(form.objet, {'attr': {'class': 'text-white'}})}}
 							</div>
 
 						</div>
@@ -75,13 +75,13 @@
 					<div class="col-lg-12">
 						<div class="form-group">
 							<label for="exampleMessage" class="">Message :</label>
-							{{form_widget(form.message, {'attr': {'placeholder': 'Pour une demande de devis, veuillez préciser vos dates de retrait et de retour ainsi que le lieu (Aéroport ou autre).', "rows":"4"}})}}
+							{{form_widget(form.message, {'attr': {'class': 'text-white', 'placeholder': 'Pour une demande de devis, veuillez préciser vos dates de retrait et de retour ainsi que le lieu (Aéroport ou autre).', "rows":"4"}})}}
 
 						</div>
 					</div>
 
 					<div class="col-lg-12">
-						<input class="button" type="submit" value="Envoyer Message">
+						<input class="button text-white" type="submit" value="Envoyer Message">
 					</div>
 				</div>
 			</div>
