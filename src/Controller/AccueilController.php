@@ -65,6 +65,26 @@ class AccueilController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/accueil-moderne", name="accueil_moderne")
+     */
+    public function indexModerne(): Response
+    {
+        return $this->render('vitrine/index.html.twig', [
+            'vehicules' => $this->getUniqueModeleNosVehicules()
+        ]);
+    }
+
+    /**
+     * @Route("/vitrine", name="accueil_vitrine")
+     */
+    public function indexVitrine(): Response
+    {
+        return $this->render('vitrine/index.html.twig', [
+            'vehicules' => $this->getUniqueModeleNosVehicules()
+        ]);
+    }
+
 
     /**
      * @Route("/quisommenous", name="quisommenous")

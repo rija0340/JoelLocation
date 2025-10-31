@@ -1,0 +1,236 @@
+{% set route = app.request.attributes.get('_route') %}
+<nav class="bg-white text-black shadow-lg sticky top-0 z-50">
+    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+        <!-- Logo Section -->
+        {# <a href="{{ path('accueil_moderne') }}" class="text-3xl font-bold text-white">
+            Joel<span class="text-joel-red">Location</span>
+        </a> #}
+        <div class="flex items-center space-x-4">
+            <a href="{{ path('accueil_moderne') }}" class="flex items-center space-x-3 group">
+                <div class="relative bg-white rounded-full p-2 shadow-md group-hover:shadow-xl transition-all duration-300 transform group-hover:scale-105">
+                    <img src="{{ asset('images/Joel-Location-new.png') }}"
+                         alt="JOEL LOCATION"
+                         class="h-12 w-auto object-contain">
+                </div>
+                <div class="hidden lg:block">
+                    <div class="flex flex-col">
+                        <span class="font-sofia text-sm text-joel-red italic tracking-wide">Sa Ka Woulé</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex space-x-8">
+            <a href="{{ path('accueil_moderne') }}"
+               class="hover:text-joel-red transition-colors duration-300 {{ route starts with 'accueil_moderne' ? 'text-joel-red' : '' }}">
+                Accueil
+            </a>
+            <a href="{{ path('quisommenous') }}"
+               class="hover:text-joel-red transition-colors duration-300 {{ route starts with 'quisommenous' ? 'text-joel-red' : '' }}">
+                À propos
+            </a>
+            <a href="{{ path('nosvehicules') }}"
+               class="hover:text-joel-red transition-colors duration-300 {{ route starts with 'nosvehicules' ? 'text-joel-red' : '' }}">
+                Nos véhicules
+            </a>
+            <a href="{{ path('formulaire-contact') }}"
+               class="hover:text-joel-red transition-colors duration-300 {{ route starts with 'formulaire-contact' ? 'text-joel-red' : '' }}">
+                Contact
+            </a>
+            <a href="{{ path('foireauxquestion') }}"
+               class="hover:text-joel-red transition-colors duration-300 {{ route starts with 'foireauxquestion' ? 'text-joel-red' : '' }}">
+                FAQ
+            </a>
+        </div>
+
+        <!-- Droite : Réseaux + CTA -->
+        <div class="hidden md:flex items-center space-x-5">
+            <!-- Liens Réseaux Sociaux -->
+            <div class="flex space-x-4">
+                <a href="https://www.facebook.com/joellocation"
+                   target="_blank"
+                   class="hover:text-joel-red transition-colors duration-300"
+                   aria-label="Facebook">
+                    <i class="fab fa-facebook-f fa-lg"></i>
+                </a>
+                <a href="https://www.instagram.com/joel.location/"
+                   target="_blank"
+                   class="hover:text-joel-red transition-colors duration-300"
+                   aria-label="Instagram">
+                    <i class="fab fa-instagram fa-lg"></i>
+                </a>
+                <a href="https://wa.me/+330767321447"
+                   target="_blank"
+                   class="hover:text-joel-red transition-colors duration-300"
+                   aria-label="WhatsApp">
+                    <i class="fab fa-whatsapp fa-lg"></i>
+                </a>
+                <a href="https://youtube.com/channel/UCMZZRNgOmDBIghZwg4tTQJQ"
+                   target="_blank"
+                   class="hover:text-joel-red transition-colors duration-300"
+                   aria-label="YouTube">
+                    <i class="fab fa-youtube fa-lg"></i>
+                </a>
+            </div>
+
+            <!-- Séparateur visuel vertical -->
+            <div class="h-6 w-px bg-gray-600"></div>
+
+            <!-- Bouton Call-to-Action -->
+            {% if is_granted("ROLE_CLIENT") or is_granted("ROLE_PERSONNEL") %}
+                <div class="relative group">
+                    <button class="bg-joel-red text-white font-bold px-5 py-2 rounded-md hover:bg-joel-red-dark transition-all duration-300 uppercase text-sm shadow-md hover:shadow-lg transform hover:-translate-y-0.5 focus:outline-none">
+                        Mon Compte
+                    </button>
+                    <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                        <div class="py-2">
+                            <a href="{% if is_granted('ROLE_CLIENT') %}{{ path('espaceClient_index') }}{% else %}{{ path('admin_index') }}{% endif %}"
+                               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200">
+                                Mon compte
+                            </a>
+                            <a href="{{ path('app_logout') }}"
+                               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200">
+                                Déconnexion
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <a href="{{ path('espaceClient_index') }}"
+                   class="bg-joel-red text-white font-bold px-5 py-2 rounded-md hover:bg-joel-red-dark transition-all duration-300 uppercase text-sm shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                    Mon Compte
+                </a>
+            {% endif %}
+        </div>
+
+        <!-- Bouton Menu Mobile -->
+        <div class="md:hidden">
+            <button id="mobile-menu-button" class="text-white focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Menu Mobile -->
+    <div id="mobile-menu" class="md:hidden hidden bg-black">
+        <!-- Liens de navigation mobiles -->
+        <a href="{{ path('accueil_moderne') }}"
+           class="block px-6 py-3 text-sm text-gray-200 hover:bg-gray-800 transition-colors duration-300 {{ route starts with 'accueil_moderne' ? 'text-joel-red bg-gray-800' : '' }}">
+            Accueil
+        </a>
+        <a href="{{ path('quisommenous') }}"
+           class="block px-6 py-3 text-sm text-gray-200 hover:bg-gray-800 transition-colors duration-300 {{ route starts with 'quisommenous' ? 'text-joel-red bg-gray-800' : '' }}">
+            À propos
+        </a>
+        <a href="{{ path('nosvehicules') }}"
+           class="block px-6 py-3 text-sm text-gray-200 hover:bg-gray-800 transition-colors duration-300 {{ route starts with 'nosvehicules' ? 'text-joel-red bg-gray-800' : '' }}">
+            Nos véhicules
+        </a>
+        <a href="{{ path('formulaire-contact') }}"
+           class="block px-6 py-3 text-sm text-gray-200 hover:bg-gray-800 transition-colors duration-300 {{ route starts with 'formulaire-contact' ? 'text-joel-red bg-gray-800' : '' }}">
+            Contact
+        </a>
+        <a href="{{ path('foireauxquestion') }}"
+           class="block px-6 py-3 text-sm text-gray-200 hover:bg-gray-800 transition-colors duration-300 {{ route starts with 'foireauxquestion' ? 'text-joel-red bg-gray-800' : '' }}">
+            FAQ
+        </a>
+
+        <!-- CTA dans le menu mobile -->
+        <div class="px-6 py-4">
+            {% if is_granted("ROLE_CLIENT") or is_granted("ROLE_PERSONNEL") %}
+                <a href="{% if is_granted('ROLE_CLIENT') %}{{ path('espaceClient_index') }}{% else %}{{ path('admin_index') }}{% endif %}"
+                   class="block w-full text-center bg-joel-red text-white font-bold px-5 py-2 rounded-md hover:bg-joel-red-dark transition-colors duration-300 uppercase text-sm mb-2">
+                    Mon Compte
+                </a>
+                <a href="{{ path('app_logout') }}"
+                   class="block w-full text-center bg-gray-600 text-white font-bold px-5 py-2 rounded-md hover:bg-gray-700 transition-colors duration-300 uppercase text-sm">
+                    Déconnexion
+                </a>
+            {% else %}
+                <a href="{{ path('espaceClient_index') }}"
+                   class="block w-full text-center bg-joel-red text-white font-bold px-5 py-2 rounded-md hover:bg-joel-red-dark transition-colors duration-300 uppercase text-sm">
+                    Mon Compte
+                </a>
+            {% endif %}
+        </div>
+
+        <!-- Réseaux sociaux dans le menu mobile -->
+        <div class="flex justify-center space-x-6 pt-2 pb-4">
+            <a href="https://www.facebook.com/joellocation"
+               target="_blank"
+               class="text-gray-300 hover:text-joel-red transition-colors duration-300"
+               aria-label="Facebook">
+                <i class="fab fa-facebook-f fa-lg"></i>
+            </a>
+            <a href="https://www.instagram.com/joel.location/"
+               target="_blank"
+               class="text-gray-300 hover:text-joel-red transition-colors duration-300"
+               aria-label="Instagram">
+                <i class="fab fa-instagram fa-lg"></i>
+            </a>
+            <a href="https://wa.me/+330767321447"
+               target="_blank"
+               class="text-gray-300 hover:text-joel-red transition-colors duration-300"
+               aria-label="WhatsApp">
+                <i class="fab fa-whatsapp fa-lg"></i>
+            </a>
+            <a href="https://youtube.com/channel/UCMZZRNgOmDBIghZwg4tTQJQ"
+               target="_blank"
+               class="text-gray-300 hover:text-joel-red transition-colors duration-300"
+               aria-label="YouTube">
+                <i class="fab fa-youtube fa-lg"></i>
+            </a>
+        </div>
+    </div>
+</nav>
+
+<!-- Script pour le menu mobile -->
+<script>
+    // Attend que le document soit entièrement chargé
+    document.addEventListener('DOMContentLoaded', () => {
+        // Sélectionne le bouton et le menu
+        const menuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        // Ajoute un écouteur d'événement au clic sur le bouton
+        menuButton.addEventListener('click', () => {
+            // Alterne (ajoute/retire) la classe 'hidden' sur le menu
+            // C'est ce qui le fait apparaître et disparaître
+            mobileMenu.classList.toggle('hidden');
+        });
+    });
+</script>
+
+<script>
+    // Mobile menu toggle
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenuClose = document.getElementById('mobile-menu-close');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    mobileMenuButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
+
+    mobileMenuClose.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+    });
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!mobileMenu.contains(e.target) && !mobileMenuButton.contains(e.target) && !mobileMenu.classList.contains('hidden')) {
+            mobileMenu.classList.add('hidden');
+        }
+    });
+
+    // Ensure smooth transitions for mobile menu
+    mobileMenu.addEventListener('transitionend', () => {
+        if (mobileMenu.classList.contains('hidden')) {
+            mobileMenu.style.visibility = 'hidden';
+        } else {
+            mobileMenu.style.visibility = 'visible';
+        }
+    });
+</script>

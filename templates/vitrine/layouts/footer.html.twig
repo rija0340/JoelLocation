@@ -1,0 +1,192 @@
+<footer class="bg-gradient-to-br from-joel-dark to-black text-white">
+    <!-- Main Footer Content -->
+    <div class="container mx-auto px-4 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Company Info -->
+            <div class="lg:col-span-2">
+                <div class="mb-6">
+                    <img src="{{ asset('images/Joel-Location-new.png') }}" 
+                         alt="JOEL LOCATION" 
+                         class="h-16 w-auto mb-4">
+                    <h3 class="text-xl font-semibold text-white mb-2">JOEL LOCATION</h3>
+                    <p class="text-gray-300 leading-relaxed">
+                        Votre partenaire de confiance pour la location de véhicules en Guadeloupe. 
+                        Roulez en toute tranquillité à des prix imbattables.
+                    </p>
+                </div>
+                
+                <!-- Contact Info -->
+                <div class="space-y-3">
+                    <div class="flex items-start space-x-3">
+                        <i class="fas fa-map-marker-alt text-joel-red mt-1 flex-shrink-0"></i>
+                        <div>
+                            <p class="text-white font-medium">Adresse</p>
+                            <p class="text-gray-300">
+                                94 Chemin De La Hache<br>
+                                97160 Le Moule (Guadeloupe)
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-3">
+                        <i class="fas fa-phone text-joel-red flex-shrink-0"></i>
+                        <div>
+                            <p class="text-white font-medium">Téléphone</p>
+                            <div class="text-gray-300">
+                                <a href="tel:+590690737674" class="hover:text-white transition-colors duration-200">06 90 73 76 74</a>
+                                <span class="mx-1">/</span>
+                                <a href="tel:+33767321447" class="hover:text-white transition-colors duration-200">07 67 32 14 47</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-3">
+                        <i class="fas fa-envelope text-joel-red flex-shrink-0"></i>
+                        <div>
+                            <p class="text-white font-medium">Email</p>
+                            <a href="mailto:joel@joellocation.com" 
+                               class="text-gray-300 hover:text-white transition-colors duration-200">
+                                joel@joellocation.com
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-3">
+                        <i class="fab fa-whatsapp text-joel-red flex-shrink-0"></i>
+                        <div>
+                            <p class="text-white font-medium">WhatsApp</p>
+                            <a href="https://wa.me/+33767321447" 
+                               target="_blank"
+                               class="text-gray-300 hover:text-white transition-colors duration-200">
+                                +33 07 67 32 14 47
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Links -->
+            <div>
+                <h4 class="text-lg font-semibold text-white mb-6">Navigation</h4>
+                <ul class="space-y-3">
+                    <li>
+                        <a href="{{ path('accueil_moderne') }}"
+                           class="footer-link {% if app.request.attributes.get('_route') starts with 'accueil_moderne' %}active{% endif %}">
+                            Accueil
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('quisommenous') }}" 
+                           class="footer-link">
+                            À propos
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('nosvehicules') }}" 
+                           class="footer-link">
+                            Nos véhicules
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('formulaire-contact') }}" 
+                           class="footer-link">
+                            Contact
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('foireauxquestion') }}" 
+                           class="footer-link">
+                            FAQ
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Legal Links -->
+            <div>
+                <h4 class="text-lg font-semibold text-white mb-6">Informations légales</h4>
+                <ul class="space-y-3">
+                    <li>
+                        <a href="{{ path('mentionlegale') }}" 
+                           class="footer-link">
+                            Mentions Légales
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('cgu') }}" 
+                           class="footer-link">
+                            CGU
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/cgl/Joel location conditions générales de location_Version 1.0.pdf" 
+                           target="_blank"
+                           class="footer-link">
+                            CGL
+                        </a>
+                    </li>
+                </ul>
+                
+                <!-- Social Media -->
+                <div class="mt-8">
+                    <h4 class="text-lg font-semibold text-white mb-4">Suivez-nous</h4>
+                    <div class="flex space-x-4">
+                        <a href="https://www.facebook.com/joellocation" 
+                           target="_blank" 
+                           class="footer-social-link">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://wa.me/+330767321447" 
+                           target="_blank" 
+                           class="footer-social-link">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="https://www.instagram.com/joel.location/" 
+                           target="_blank" 
+                           class="footer-social-link">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://youtube.com/channel/UCMZZRNgOmDBIghZwg4tTQJQ" 
+                           target="_blank" 
+                           class="footer-social-link">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer Bottom -->
+    <div class="border-t border-gray-700">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+                <div class="text-center md:text-left">
+                    <p class="text-gray-300">
+                        © {{ "now"|date("Y") }} Joel Location. Tous droits réservés.
+                    </p>
+                </div>
+                
+                <div class="flex items-center space-x-2 text-gray-300">
+                    <span>Fait avec</span>
+                    <i class="fas fa-heart text-joel-red animate-pulse"></i>
+                    <span>en Guadeloupe</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<style>
+    .footer-link {
+        @apply text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-200 inline-block;
+    }
+    
+    .footer-link.active {
+        @apply text-joel-red;
+    }
+    
+    .footer-social-link {
+        @apply w-10 h-10 flex items-center justify-center rounded-full bg-gray-700 text-gray-300 hover:bg-joel-red hover:text-white transition-all duration-300 hover:scale-110;
+    }
+</style>
