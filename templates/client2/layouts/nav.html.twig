@@ -6,6 +6,7 @@
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16"/>
 				</svg>
 			</div>
+			{% if app.user %}
 			<ul tabindex="0" class="menu menu-md dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-64 p-2 shadow-xl border">
 				<li {% if app.request.attributes.get('_route') starts with 'espaceClient_index' %} class="bordered" {% endif %}>
 					<a href="{{path('espaceClient_index')}}" class="flex items-center gap-2">
@@ -39,6 +40,8 @@
 					</a>
 				</li>
 			</ul>
+			
+			{% endif %}
 		</div>
 		<a href="{{path('accueil')}}" class="btn btn-ghost text-xl font-bold">
 			<img src="{{asset('images/Joel-Location-new.png')}}" width="40" height="40" class="mr-2" alt="Joel Location">
@@ -47,6 +50,7 @@
 	</div>
 
 	<div class="navbar-center hidden lg:flex">
+		{% if app.user %}
 		<ul class="menu menu-horizontal px-1 gap-2">
 			<li {% if app.request.attributes.get('_route') starts with 'espaceClient_index' %} class="bg-error text-error-content rounded-lg" {% endif %}>
 				<a href="{{path('espaceClient_index')}}" class="flex items-center gap-2 font-medium">
@@ -73,6 +77,8 @@
 				</a>
 			</li>
 		</ul>
+		
+		{% endif %}
 	</div>
 
 	<div class="navbar-end">
@@ -96,6 +102,10 @@
 					</li>
 				</ul>
 			</div>
+		{% else %}
+			<a href="{{ path('app_login') }}" class="btn btn-ghost">
+				<i class="fas fa-sign-in-alt"></i> Connexion
+			</a>
 		{% endif %}
 	</div>
 </div>

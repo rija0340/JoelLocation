@@ -54,7 +54,7 @@ class EmailManagerService
         $this->sendDocument($request, $resa, 'avoir', $montant);
     }
 
-    public function sendValidationInscription(User $user, string $token)
+    public function sendValidationInscription(User $user, string $token, bool $sendNotification = true)
     {
         try {
             $emailSent = $this->emailService->sendValidationEmail(
@@ -65,14 +65,20 @@ class EmailManagerService
 
             if ($emailSent) {
                 $this->emailLoggerService->logValidationEmail($user, 'success');
-                $this->emailNotifierService->notifyValidationSent();
+                if ($sendNotification) {
+                    $this->emailNotifierService->notifyValidationSent();
+                }
             } else {
                 $this->emailLoggerService->logValidationEmail($user, 'failed');
-                $this->emailNotifierService->notifyValidationNotSent();
+                if ($sendNotification) {
+                    $this->emailNotifierService->notifyValidationNotSent();
+                }
             }
         } catch (\Exception $e) {
             $this->emailLoggerService->logValidationEmail($user, 'failed', $e->getMessage());
-            $this->emailNotifierService->notifyValidationNotSent();
+            if ($sendNotification) {
+                $this->emailNotifierService->notifyValidationNotSent();
+            }
             
             // Re-throw if needed for further handling by caller
             throw $e;

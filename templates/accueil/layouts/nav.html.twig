@@ -6,6 +6,7 @@
 		<span style="font-family:'Monotype corsiva'; font-size:20px;color:#212529">Sa Ka Woulé</span>
 		{# <span>Sa Ka Woulé</span> #}
 	</div>
+	{% if app.user or (not (app.request.attributes.get('_route') starts with 'client_step' or app.request.attributes.get('_route') starts with 'validation_step' or app.request.attributes.get('_route') == 'step4paiement' or app.request.attributes.get('_route') == 'paiementStripe' or app.request.attributes.get('_route') == 'client_reserverDevis' or app.request.attributes.get('_route') == 'client_saveDevis')) %}
 	<div class="nav-column">
 		<nav id="menu" class="d-none d-lg-block ">
 			<ul>
@@ -49,6 +50,14 @@
 				{% endif %}
 			</ul>
 		</nav>
+	</div>
+	{% endif %}
+	<div class="header-button mr-3">
+		<a href="{{ path('reserver_maintenant') }}"
+		   class="bg-joel-red text-white font-bold px-4 py-2 rounded-md hover:bg-joel-red-dark transition-all duration-300 uppercase text-sm shadow-md hover:shadow-lg transform hover:-translate-y-0.5 focus:outline-none"
+		   style="background-color: #af0000; color: white; font-weight: bold; text-decoration: none; display: inline-block;">
+			Réserver
+		</a>
 	</div>
 	<div class="header-social">
 		<a href="https://www.facebook.com/joellocation" class="fab fa-facebook" target="_blank"></a>

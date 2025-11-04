@@ -59,6 +59,10 @@ class SecurityController extends AbstractController
         $fromNotActivatedAccount = $session->get('account_not_activated');
         $fromActivatedAccount = $session->get('form_validated_account');
         $fromInscriptionSession = $session->get('from_inscription_session');
+        
+        // Check if there's an ongoing reservation in session
+        $reservationData = $session->get('reservation');
+        $hasOngoingReservation = $reservationData && !empty($reservationData);
 
         //check si sessiondata n'est pas null ?
         if ($fromNotActivatedAccount) {
@@ -110,6 +114,14 @@ class SecurityController extends AbstractController
                 'Votre compte a été activé avec succès. Veuillez vous connecter.'
             );
             $session->remove('form_validated_account');
+        }
+        
+        // Add flash message if there's an ongoing reservation
+        if ($hasOngoingReservation) {
+            $this->addFlash(
+                'info',
+                'Vous avez une réservation en cours. Connectez-vous ou créez un compte pour finaliser votre réservation.'
+            );
         }
 
         // account_not_activated

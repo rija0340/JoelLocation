@@ -17,7 +17,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class InscriptionController extends AbstractController
 {
-
     private $passwordEncoder;
     private $dateHelper;
     private $userRepo;
@@ -46,21 +45,21 @@ class InscriptionController extends AbstractController
         $user = new User();
 
         // Pré-remplir avec des données de test
-        if ($request->query->get('test') === '1') {
-            $user->setNom('Dupont');
-            $user->setPrenom('Jean');
-            $user->setAdresse('123 Rue Test');
-            $user->setSexe('masculin');
-            $user->setTelephone('0123456789');
-            $user->setPortable('0612345678');
-            $user->setDateNaissance(new \DateTime('1990-01-01'));
-            $user->setLieuNaissance('Paris');
-            $user->setComplementAdresse('Apt 42');
-            $user->setVille('Paris');
-            $user->setCodePostal('75001');
-            $user->setNumeroPermis('12345678');
-            $user->setDatePermis(new \DateTime('2010-01-01'));
-            $user->setVilleDelivrancePermis('Paris');
+        if ($request->query->get("test") === "1") {
+            $user->setNom("Dupont");
+            $user->setPrenom("Jean");
+            $user->setAdresse("123 Rue Test");
+            $user->setSexe("masculin");
+            $user->setTelephone("0123456789");
+            $user->setPortable("0612345678");
+            $user->setDateNaissance(new \DateTime("1990-01-01"));
+            $user->setLieuNaissance("Paris");
+            $user->setComplementAdresse("Apt 42");
+            $user->setVille("Paris");
+            $user->setCodePostal("75001");
+            $user->setNumeroPermis("12345678");
+            $user->setDatePermis(new \DateTime("2010-01-01"));
+            $user->setVilleDelivrancePermis("Paris");
             // Ne pas pré-remplir l'email et le mot de passe
         }
 
@@ -71,7 +70,10 @@ class InscriptionController extends AbstractController
             $user = $form->getData();
 
             // Encoder le mot de passe
-            $password = $this->passwordEncoder->encodePassword($user, $user->getPassword());
+            $password = $this->passwordEncoder->encodePassword(
+                $user,
+                $user->getPassword(),
+            );
             $user->setPassword($password);
 
             // Générer et définir le token APRÈS avoir récupéré les données du formulaire
@@ -79,7 +81,7 @@ class InscriptionController extends AbstractController
             $user->setRecupass($token);
 
             // Définir les autres propriétés
-            $user->setRoles(['ROLE_CLIENT']);
+            $user->setRoles(["ROLE_CLIENT"]);
             $user->setUsername($user->getNom());
             $user->setPresence(0);
             $user->setDateInscription($this->dateHelper->dateNow());
@@ -90,34 +92,37 @@ class InscriptionController extends AbstractController
             $entityManager->flush();
 
             try {
-                // Envoyer l'email de validation
-                $this->emailManagerService->sendValidationEmail(
-                    $user->getMail(),
-                    $user->getNom(),
-                    $token
+                // Envoyer l'email de validation - disable notification since we handle it in SecurityController
+                $this->emailManagerService->sendValidationInscription(
+                    $user,
+                    $token,
+                    false
                 );
 
                 $session = $request->getSession();
-                $session->set('from_inscription_session', true);
-                return $this->redirectToRoute('app_login');
+                $session->set("from_inscription_session", true);
+                return $this->redirectToRoute("app_login");
             } catch (\Exception $e) {
                 // Log l'erreur
-                $this->logger->error('Erreur lors de l\'envoi de l\'email de validation: ' . $e->getMessage());
+                $this->logger->error(
+                    'Erreur lors de l\'envoi de l\'email de validation: ' .
+                        $e->getMessage(),
+                );
 
                 // Rediriger avec un message d'erreur
                 // return $this->redirectToRoute('app_login', [
                 //     'error' => urlencode('Une erreur est survenue lors de l\'envoi de l\'email de validation. Veuillez contacter le support.')
                 // ]);
-                return $this->render('accueil/inscription.html.twig', [
-                    'user' => $user,
-                    'form' => $form->createView(),
+                return $this->render("accueil/inscription.html.twig", [
+                    "user" => $user,
+                    "form" => $form->createView(),
                 ]);
             }
         }
 
-        return $this->render('accueil/inscription.html.twig', [
-            'user' => $user,
-            'form' => $form->createView(),
+        return $this->render("accueil/inscription.html.twig", [
+            "user" => $user,
+            "form" => $form->createView(),
         ]);
     }
 
@@ -126,15 +131,15 @@ class InscriptionController extends AbstractController
      */
     public function validateEmail(string $token, Request $request): Response
     {
-        $user = $this->userRepo->findOneBy(['recupass' => $token]);
+        $user = $this->userRepo->findOneBy(["recupass" => $token]);
 
         if (!$user) {
-            $this->logger->error('Token invalide ou non trouvé: ' . $token);
+            $this->logger->error("Token invalide ou non trouvé: " . $token);
 
             $session = $request->getSession();
-            $session->set('token_invalid', true);
+            $session->set("token_invalid", true);
 
-            return $this->redirectToRoute('app_login');
+            return $this->redirectToRoute("app_login");
         }
 
         // Vérifier si le token n'est pas expiré (par exemple, valide pendant 24h)
@@ -144,15 +149,16 @@ class InscriptionController extends AbstractController
 
         // Si le token a plus de 24 heures
         if ($interval->days >= 1) {
-            $this->logger->error('Token expiré pour l\'utilisateur: ' . $user->getMail());
+            $this->logger->error(
+                'Token expiré pour l\'utilisateur: ' . $user->getMail(),
+            );
 
             // Stocker l'email en session pour pré-remplir le formulaire de login
             $session = $request->getSession();
-            $session->set('client_email', $user->getMail());
-            $session->set('token_expired', true);
+            $session->set("client_email", $user->getMail());
+            $session->set("token_expired", true);
 
-
-            return $this->redirectToRoute('app_login');
+            return $this->redirectToRoute("app_login");
         }
 
         // Activer le compte
@@ -165,8 +171,99 @@ class InscriptionController extends AbstractController
 
         // Rediriger vers la page de connexion avec un paramètre indiquant que le compte vient d'être validé
         $session = $request->getSession();
-        $session->set('client_email', $user->getMail());
-        $session->set('form_validated_account', true);
-        return $this->redirectToRoute('app_login');
+        $session->set("client_email", $user->getMail());
+        $session->set("form_validated_account", true);
+        return $this->redirectToRoute("app_login");
+    }
+
+    /**
+     * @Route("/inscription-guest/{devis_id}", name="app_register_guest", methods={"GET","POST"})
+     */
+    public function registerGuest(Request $request, int $devis_id): Response
+    {
+        $user = new User();
+
+        // Get guest data from session if available
+        $session = $request->getSession();
+        $guestData = $session->get("guest_reservation_data", []);
+
+        if (!empty($guestData)) {
+            $user->setNom($guestData["nom"] ?? "");
+            $user->setPrenom($guestData["prenom"] ?? "");
+            $user->setTelephone($guestData["telephone"] ?? "");
+            $user->setMail($guestData["mail"] ?? "");
+            $user->setAdresse($guestData["adresse"] ?? "");
+            $user->setCodePostal($guestData["codePostal"] ?? "");
+            $user->setVille($guestData["ville"] ?? "");
+        }
+
+        $form = $this->createForm(ClientRegisterType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Encoder le mot de passe
+            $password = $this->passwordEncoder->encodePassword(
+                $user,
+                $user->getPassword(),
+            );
+            $user->setPassword($password);
+
+            // Générer et définir le token APRÈS avoir récupéré les données du formulaire
+            $token = bin2hex(random_bytes(32));
+            $user->setRecupass($token);
+
+            // Définir les autres propriétés
+            $user->setRoles(["ROLE_CLIENT"]);
+            $user->setUsername($user->getNom());
+            $user->setPresence(0);
+            $user->setDateInscription($this->dateHelper->dateNow());
+
+            // Persister l'utilisateur
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            // Associate the devis with the new user
+            $devis = $this->getDoctrine()
+                ->getRepository(\App\Entity\Devis::class)
+                ->find($devis_id);
+            if ($devis) {
+                $devis->setClient($user);
+                $entityManager->flush();
+            }
+
+            try {
+                // Envoyer l'email de validation - disable notification since we handle it in SecurityController
+                $this->emailManagerService->sendValidationInscription(
+                    $user,
+                    $token,
+                    false
+                );
+
+                $session = $request->getSession();
+                $session->set("from_inscription_session", true);
+
+                // Clear the guest reservation data from session
+                $session->remove("guest_reservation_data");
+
+                return $this->redirectToRoute("app_login");
+            } catch (\Exception $e) {
+                // Log l'erreur
+                $this->logger->error(
+                    'Erreur lors de l\'envoi de l\'email de validation: ' .
+                        $e->getMessage(),
+                );
+
+                return $this->render("accueil/inscription.html.twig", [
+                    "user" => $user,
+                    "form" => $form->createView(),
+                ]);
+            }
+        }
+
+        return $this->render("accueil/inscription.html.twig", [
+            "user" => $user,
+            "form" => $form->createView(),
+        ]);
     }
 }

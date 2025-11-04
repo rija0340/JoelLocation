@@ -76,6 +76,17 @@ class AccueilController extends AbstractController
     }
 
     /**
+     * @Route("/reserver-maintenant", name="reserver_maintenant")
+     */
+    public function reserverMaintenant(): Response
+    {
+        // This will start the reservation process for guests
+        // We need to redirect to the first step of the reservation process
+        // which should work without authentication
+        return $this->redirectToRoute('client_step1');
+    }
+
+    /**
      * @Route("/vitrine", name="accueil_vitrine")
      */
     public function indexVitrine(): Response

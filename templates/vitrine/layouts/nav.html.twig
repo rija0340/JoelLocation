@@ -1,20 +1,24 @@
 {% set route = app.request.attributes.get('_route') %}
 <nav class="bg-white text-black shadow-lg sticky top-0 z-50">
-    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+    <div class="container mx-auto px-6 py-2 flex justify-between items-center h-16">
         <!-- Logo Section -->
         {# <a href="{{ path('accueil_moderne') }}" class="text-3xl font-bold text-white">
             Joel<span class="text-joel-red">Location</span>
         </a> #}
-        <div class="flex items-center space-x-4">
-            <a href="{{ path('accueil_moderne') }}" class="flex items-center space-x-3 group">
-                <div class="relative bg-white rounded-full p-2 shadow-md group-hover:shadow-xl transition-all duration-300 transform group-hover:scale-105">
-                    <img src="{{ asset('images/Joel-Location-new.png') }}"
-                         alt="JOEL LOCATION"
-                         class="h-12 w-auto object-contain">
+        <!-- Logo Section -->
+        <div class="flex items-center space-x-4 relative">
+            <a href="{{ path('accueil_moderne') }}" class="flex items-center group relative">
+                <!-- Absolute Logo -->
+                <div class="absolute left-0  p-1 group-hover:shadow-xl transition-all duration-300">
+                    <img src="{{ asset('images/Joel-Location-new.png') }}" alt="JOEL LOCATION" style="height: 110px;">
                 </div>
-                <div class="hidden lg:block">
-                    <div class="flex flex-col">
-                        <span class="font-sofia text-sm text-joel-red italic tracking-wide">Sa Ka Woulé</span>
+
+                <!-- Text next to Logo -->
+                <div class="hidden lg:block ml-28">
+                    <div class="flex flex-col justify-center h-full">
+                        <span class="text-gray-700 text-lg italic" style="font-family:'Monotype Corsiva'; font-size:18px;">
+                            Sa Ka Woulé
+                        </span>
                     </div>
                 </div>
             </a>
@@ -78,30 +82,36 @@
             <div class="h-6 w-px bg-gray-600"></div>
 
             <!-- Bouton Call-to-Action -->
-            {% if is_granted("ROLE_CLIENT") or is_granted("ROLE_PERSONNEL") %}
-                <div class="relative group">
-                    <button class="bg-joel-red text-white font-bold px-5 py-2 rounded-md hover:bg-joel-red-dark transition-all duration-300 uppercase text-sm shadow-md hover:shadow-lg transform hover:-translate-y-0.5 focus:outline-none">
-                        Mon Compte
-                    </button>
-                    <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                        <div class="py-2">
-                            <a href="{% if is_granted('ROLE_CLIENT') %}{{ path('espaceClient_index') }}{% else %}{{ path('admin_index') }}{% endif %}"
-                               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200">
-                                Mon compte
-                            </a>
-                            <a href="{{ path('app_logout') }}"
-                               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200">
-                                Déconnexion
-                            </a>
+            <div class="flex items-center space-x-3">
+                <a href="{{ path('reserver_maintenant') }}"
+                   class="bg-joel-red text-white font-bold px-5 py-2 rounded-md hover:bg-joel-red-dark transition-all duration-300 uppercase text-sm shadow-md hover:shadow-lg transform hover:-translate-y-0.5 focus:outline-none">
+                    Réserver
+                </a>
+                {% if is_granted("ROLE_CLIENT") or is_granted("ROLE_PERSONNEL") %}
+                    <div class="relative group">
+                        <button class="bg-gray-300 text-gray-700 font-bold px-5 py-2 rounded-md hover:bg-gray-400 transition-all duration-300 uppercase text-sm">
+                            Mon Compte
+                        </button>
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                            <div class="py-2">
+                                <a href="{% if is_granted('ROLE_CLIENT') %}{{ path('espaceClient_index') }}{% else %}{{ path('admin_index') }}{% endif %}"
+                                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200">
+                                    Mon compte
+                                </a>
+                                <a href="{{ path('app_logout') }}"
+                                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200">
+                                    Déconnexion
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            {% else %}
-                <a href="{{ path('espaceClient_index') }}"
-                   class="bg-joel-red text-white font-bold px-5 py-2 rounded-md hover:bg-joel-red-dark transition-all duration-300 uppercase text-sm shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
-                    Mon Compte
-                </a>
-            {% endif %}
+                {% else %}
+                    <a href="{{ path('espaceClient_index') }}"
+                       class="bg-gray-300 text-gray-700 font-bold px-5 py-2 rounded-md hover:bg-gray-400 transition-all duration-300 uppercase text-sm">
+                        Mon Compte
+                    </a>
+                {% endif %}
+            </div>
         </div>
 
         <!-- Bouton Menu Mobile -->
@@ -139,10 +149,14 @@
         </a>
 
         <!-- CTA dans le menu mobile -->
-        <div class="px-6 py-4">
+        <div class="px-6 py-4 space-y-3">
+            <a href="{{ path('reserver_maintenant') }}"
+               class="block w-full text-center bg-joel-red text-white font-bold px-5 py-2 rounded-md hover:bg-joel-red-dark transition-colors duration-300 uppercase text-sm">
+                Réserver
+            </a>
             {% if is_granted("ROLE_CLIENT") or is_granted("ROLE_PERSONNEL") %}
                 <a href="{% if is_granted('ROLE_CLIENT') %}{{ path('espaceClient_index') }}{% else %}{{ path('admin_index') }}{% endif %}"
-                   class="block w-full text-center bg-joel-red text-white font-bold px-5 py-2 rounded-md hover:bg-joel-red-dark transition-colors duration-300 uppercase text-sm mb-2">
+                   class="block w-full text-center bg-gray-300 text-gray-700 font-bold px-5 py-2 rounded-md hover:bg-gray-400 transition-colors duration-300 uppercase text-sm">
                     Mon Compte
                 </a>
                 <a href="{{ path('app_logout') }}"
@@ -151,7 +165,7 @@
                 </a>
             {% else %}
                 <a href="{{ path('espaceClient_index') }}"
-                   class="block w-full text-center bg-joel-red text-white font-bold px-5 py-2 rounded-md hover:bg-joel-red-dark transition-colors duration-300 uppercase text-sm">
+                   class="block w-full text-center bg-gray-300 text-gray-700 font-bold px-5 py-2 rounded-md hover:bg-gray-400 transition-colors duration-300 uppercase text-sm">
                     Mon Compte
                 </a>
             {% endif %}

@@ -46,6 +46,16 @@ security:
         - { path: ^/admin, roles: [ROLE_ADMIN, ROLE_SUPER_ADMIN, ROLE_PERSONNEL] }
         - { path: ^/connexion$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         # - { path: ^/profile, roles: ROLE_USER }
+        # Allow guest booking flow
+        - { path: ^/espaceclient/nouvelle-reservation/etape1, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/espaceclient/nouvelle-reservation/etape2, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/espaceclient/nouvelle-reservation/etape3, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/espaceclient/nouvelle-reservation/etape4, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/espaceclient/validation/infos-client, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/espaceclient/paiement, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        # Allow guest registration
+        - { path: ^/inscription-guest, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        # Default espaceclient access still requires ROLE_CLIENT
         - { path: ^/client, roles: ROLE_CLIENT }
         - { path: ^/espaceclient, roles: ROLE_CLIENT }
         - { path: ^/carte, roles: ROLE_CLIENT }
