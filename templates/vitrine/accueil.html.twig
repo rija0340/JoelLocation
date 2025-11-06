@@ -1,0 +1,278 @@
+{% extends 'vitrine/base.html.twig' %}
+
+{% block title %}Location de voitures en Guadeloupe{% endblock %}
+
+{% block body %}
+    <!-- Hero Section with Modern Slider -->
+    <section class="relative h-[70vh] overflow-hidden">
+        <div class="hero-slider relative h-full">
+            <!-- Slide 1 -->
+            <div class="hero-slide active absolute inset-0 bg-cover bg-center bg-no-repeat"
+                 style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('{{ asset('images/JOELLOCATION1.jpg') }}')">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="container mx-auto px-4 text-center text-white">
+                        <div class="max-w-3xl mx-auto animate-fade-in">
+                            <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+                                <span class="text-joel-red">JOEL</span> LOCATION
+                            </h1>
+                            <p class="text-lg md:text-xl mb-8 text-gray-200">
+                                Votre partenaire de confiance pour la location de véhicules en Guadeloupe
+                            </p>
+                            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                                <a href="{{ path('nosvehicules') }}"
+                                   class="bg-joel-red hover:bg-joel-red-dark text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                                    Découvrir nos véhicules
+                                </a>
+                                <a href="{{ path('reserver_maintenant') }}"
+                                   class="bg-joel-red hover:bg-joel-red-dark text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                                    Réserver maintenant
+                                </a>
+                                <a href="{{ path('formulaire-contact') }}"
+                                   class="border-2 border-white text-white hover:bg-white hover:text-joel-dark px-6 py-3 rounded-full font-semibold transition-all duration-300">
+                                    Nous contacter
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 2 -->
+            <div class="hero-slide absolute inset-0 bg-cover bg-center bg-no-repeat opacity-0"
+                 style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('{{ asset('images/JOELLOCATION2.jpg') }}')">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="container mx-auto px-4 text-center text-white">
+                        <div class="max-w-3xl mx-auto animate-fade-in">
+                            <h2 class="text-3xl md:text-5xl font-bold mb-6 leading-tight">
+                                Roulez en toute <span class="text-joel-red">tranquillité</span>
+                            </h2>
+                            <p class="text-lg md:text-xl mb-8 text-gray-200">
+                                Des prix imbattables pour une expérience de qualité
+                            </p>
+                            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                                <a href="{{ path('nosvehicules') }}"
+                                   class="bg-joel-red hover:bg-joel-red-dark text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                                    Découvrir nos véhicules
+                                </a>
+                                <a href="{{ path('reserver_maintenant') }}"
+                                   class="bg-joel-red hover:bg-joel-red-dark text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                                    Réserver maintenant
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 3 -->
+            <div class="hero-slide absolute inset-0 bg-cover bg-center bg-no-repeat opacity-0"
+                 style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('{{ asset('images/JOELLOCATION3.jpg') }}')">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="container mx-auto px-4 text-center text-white">
+                        <div class="max-w-3xl mx-auto animate-fade-in">
+                            <h2 class="text-3xl md:text-5xl font-bold mb-6 leading-tight">
+                                Découvrez la <span class="text-joel-red">Guadeloupe</span>
+                            </h2>
+                            <p class="text-lg md:text-xl mb-8 text-gray-200">
+                                Avec notre flotte de véhicules en parfait état
+                            </p>
+                            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                                <a href="{{ path('nosvehicules') }}"
+                                   class="bg-joel-red hover:bg-joel-red-dark text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                                    Découvrir nos véhicules
+                                </a>
+                                <a href="{{ path('quisommenous') }}"
+                                   class="border-2 border-white text-white hover:bg-white hover:text-joel-dark px-6 py-3 rounded-full font-semibold transition-all duration-300">
+                                    En savoir plus
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slider Navigation -->
+        <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-10">
+            <div class="flex space-x-2">
+                <button class="slider-dot active w-4 h-4 rounded-full bg-white bg-opacity-50 hover:bg-opacity-75 transition-all duration-300"></button>
+                <button class="slider-dot w-4 h-4 rounded-full bg-white bg-opacity-50 hover:bg-opacity-75 transition-all duration-300"></button>
+                <button class="slider-dot w-4 h-4 rounded-full bg-white bg-opacity-50 hover:bg-opacity-75 transition-all duration-300"></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-joel-red mb-4">Pourquoi nous choisir ?</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    Nous nous engageons à vous offrir des services de location de qualité à des tarifs compétitifs
+                </p>
+                <div class="w-24 h-1 bg-joel-red mx-auto mt-4"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="text-center p-6 hover-lift transition-all duration-300">
+                    <div class="w-16 h-16 bg-joel-red rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-car text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-joel-red mb-2">Véhicules en parfait état</h3>
+                    <p class="text-gray-700">
+                        Chaque véhicule est inspecté avant chaque location pour votre sécurité
+                    </p>
+                </div>
+                
+                <div class="text-center p-6 hover-lift transition-all duration-300">
+                    <div class="w-16 h-16 bg-joel-red rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-tag text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-joel-red mb-2">Prix imbattables</h3>
+                    <p class="text-gray-700">
+                        Des tarifs compétitifs toute l'année pour des vacances sans souci
+                    </p>
+                </div>
+                
+                <div class="text-center p-6 hover-lift transition-all duration-300">
+                    <div class="w-16 h-16 bg-joel-red rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-headset text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-joel-red mb-2">Service client</h3>
+                    <p class="text-gray-700">
+                        Une équipe disponible pour répondre à toutes vos questions
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vehicles Preview -->
+    <section class="py-16 bg-joel-beige">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-joel-red mb-4">Nos véhicules populaires</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    Découvrez nos véhicules les plus demandés par nos clients
+                </p>
+                <div class="w-24 h-1 bg-joel-red mx-auto mt-4"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover-lift transition-all duration-300">
+                    <img src="{{ asset('images/clio rouge.png') }}" 
+                         alt="Renault Clio" 
+                         class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-joel-red mb-2">Renault Clio</h3>
+                        <p class="text-gray-700 mb-4">
+                            Une voiture compacte idéale pour les déplacements en ville et les balades touristiques
+                        </p>
+                        <a href="{{ path('notrevehicule', {'id': 1}) }}" 
+                           class="text-joel-red font-semibold hover:underline inline-flex items-center">
+                            En savoir plus
+                            <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover-lift transition-all duration-300">
+                    <img src="{{ asset('images/TWINGO BLANC.png') }}" 
+                         alt="Renault Twingo" 
+                         class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-joel-red mb-2">Renault Twingo</h3>
+                        <p class="text-gray-700 mb-4">
+                            Parfaite pour se déplacer dans les ruelles étroites et se garer facilement
+                        </p>
+                        <a href="{{ path('notrevehicule', {'id': 2}) }}" 
+                           class="text-joel-red font-semibold hover:underline inline-flex items-center">
+                            En savoir plus
+                            <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover-lift transition-all duration-300">
+                    <img src="{{ asset('images/vehicle_sample.jpg') }}" 
+                         alt="Véhicule de tourisme" 
+                         class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-joel-red mb-2">Nos autres modèles</h3>
+                        <p class="text-gray-700 mb-4">
+                            Découvrez notre gamme complète de véhicules adaptés à tous vos besoins
+                        </p>
+                        <a href="{{ path('nosvehicules') }}" 
+                           class="text-joel-red font-semibold hover:underline inline-flex items-center">
+                            Voir tous les véhicules
+                            <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 bg-joel-red text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-2xl md:text-3xl font-bold mb-6">Prêt à découvrir la Guadeloupe ?</h2>
+            <p class="text-lg mb-8 max-w-2xl mx-auto">
+                Réservez votre véhicule dès maintenant et profitez de la liberté de découvrir les merveilles de l'archipel.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="{{ path('nosvehicules') }}"
+                   class="bg-white text-joel-red px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:bg-gray-100 hover:scale-105">
+                    Découvrir nos véhicules
+                </a>
+                <a href="{{ path('formulaire-contact') }}"
+                   class="border-2 border-white text-white hover:bg-white hover:text-joel-red px-8 py-3 rounded-full font-semibold transition-all duration-300">
+                    Nous contacter
+                </a>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        // Slider functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const slides = document.querySelectorAll('.hero-slide');
+            const dots = document.querySelectorAll('.slider-dot');
+            let currentSlide = 0;
+            
+            function showSlide(index) {
+                // Hide all slides
+                slides.forEach(slide => {
+                    slide.classList.remove('active');
+                    slide.style.opacity = '0';
+                });
+                
+                // Remove active class from all dots
+                dots.forEach(dot => dot.classList.remove('active'));
+                
+                // Show selected slide
+                slides[index].classList.add('active');
+                slides[index].style.opacity = '1';
+                dots[index].classList.add('active');
+            }
+            
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % slides.length;
+                showSlide(currentSlide);
+            }
+            
+            // Auto slide every 5 seconds
+            setInterval(nextSlide, 5000);
+            
+            // Add click event to dots
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    currentSlide = index;
+                    showSlide(currentSlide);
+                });
+            });
+        });
+    </script>
+{% endblock %}

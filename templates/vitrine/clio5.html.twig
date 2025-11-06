@@ -1,0 +1,24 @@
+{% extends 'vitrine/layouts/vehicule_detail.html.twig' %}
+
+{% set vehicule_data = {
+    'marque': 'renault',
+    'modele': 'clio5',
+    'titre': 'Renault Clio 5',
+    'image': asset('images/clio rouge.png'),
+    'description': 'Découvrez le parfait équilibre entre confort, style et performance avec la Renault Clio 5, désormais disponible avec une transmission automatique pour une expérience de conduite encore plus agréable. Que ce soit pour une escapade en ville ou un voyage sur de longues distances, la Clio 5 offre une conduite fluide et une maniabilité exceptionnelle, tout en offrant un design élégant et moderne.',
+    'conditions': [
+        'Kilométrage illimité',
+        'Âge minimum : 21 ans',
+        'Plus de 2 ans de permis de conduire',
+        'Possibilité de régler en plusieurs fois',
+        'Caution : 800 €'
+    ],
+    'caracteristiques': [
+        {'icon': 'fa fa-battery-full', 'text': 'Carburant : Essence'},
+        {'icon': 'fa fa-sun-o', 'text': 'Boite de vitesse : Automatique'},
+        {'icon': 'fa fa-shopping-bag', 'text': 'Nombre max de bagages : 3'},
+        {'icon': 'fa fa-car', 'text': 'Nombre de portes : 5'},
+        {'icon': 'fa fa-users', 'text': 'Max passagers: 5'},
+        {'icon': 'fa fa-rss', 'text': 'Atouts : Carplay, climatisation, fermeture centralisée, aide à la conduite'}
+    ]
+} %}

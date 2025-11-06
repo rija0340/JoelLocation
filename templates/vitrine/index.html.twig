@@ -2,17 +2,62 @@
 
 {% block title %}Location de voitures en Guadeloupe{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        /* ─────── MOBILE : titre + bouton toujours visibles ─────── */
+        .mobile-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 70%, transparent 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 1rem;
+            text-align: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .3s;
+        }
+        @media (max-width: 767px) {
+            .mobile-overlay {
+                opacity: 1;
+                pointer-events: auto;
+            }
+        }
+
+        /* ─────── DESKTOP : overlay au hover uniquement ─────── */
+        .desktop-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(220,38,38,0.95) 0%, rgba(220,38,38,0.6) 60%, transparent 100%);
+            opacity: 0;
+            transition: opacity .3s ease;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+        .group:hover .desktop-overlay {
+            opacity: 1;
+        }
+        @media (max-width: 767px) {
+            .desktop-overlay { display: none; }
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
-    <!-- Hero Section with Modern Slider -->
+    <!-- ==================== HERO SLIDER ==================== -->
     <section class="relative h-[70vh] overflow-hidden">
         <div class="hero-slider relative h-full">
             <!-- Slide 1 -->
             <div class="hero-slide active absolute inset-0 bg-cover bg-center bg-no-repeat"
-                 style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('{{ asset('images/JOELLOCATION1.jpg') }}')">
+                 style="background-image:  url('{{ asset('images/JOELLOCATION1.jpg') }}')">
                 <div class="absolute inset-0 flex items-center justify-center">
                     <div class="container mx-auto px-4 text-center text-white">
                         <div class="max-w-3xl mx-auto animate-fade-in">
-                            <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+                            {# <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">
                                 <span class="text-joel-red">JOEL</span> LOCATION
                             </h1>
                             <p class="text-lg md:text-xl mb-8 text-gray-200">
@@ -30,20 +75,20 @@
                                 <a href="{{ path('formulaire-contact') }}"
                                    class="border-2 border-white text-white hover:bg-white hover:text-joel-dark px-6 py-3 rounded-full font-semibold transition-all duration-300">
                                     Nous contacter
-                                </a>
-                            </div>
+                                </a> 
+                            </div>#}
                         </div>
                     </div>
                 </div>
             </div>
-            
+
             <!-- Slide 2 -->
             <div class="hero-slide absolute inset-0 bg-cover bg-center bg-no-repeat opacity-0"
-                 style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('{{ asset('images/JOELLOCATION2.jpg') }}')">
+                 style="background-image:  url('{{ asset('images/JOELLOCATION2.jpg') }}')">
                 <div class="absolute inset-0 flex items-center justify-center">
                     <div class="container mx-auto px-4 text-center text-white">
                         <div class="max-w-3xl mx-auto animate-fade-in">
-                            <h2 class="text-3xl md:text-5xl font-bold mb-6 leading-tight">
+                            {# <h2 class="text-3xl md:text-5xl font-bold mb-6 leading-tight">
                                 Roulez en toute <span class="text-joel-red">tranquillité</span>
                             </h2>
                             <p class="text-lg md:text-xl mb-8 text-gray-200">
@@ -58,7 +103,7 @@
                                    class="bg-joel-red hover:bg-joel-red-dark text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg">
                                     Réserver maintenant
                                 </a>
-                            </div>
+                            </div> #}
                         </div>
                     </div>
                 </div>
@@ -66,11 +111,11 @@
 
             <!-- Slide 3 -->
             <div class="hero-slide absolute inset-0 bg-cover bg-center bg-no-repeat opacity-0"
-                 style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('{{ asset('images/JOELLOCATION3.jpg') }}')">
+                 style="background-image:  url('{{ asset('images/JOELLOCATION3.jpg') }}')">
                 <div class="absolute inset-0 flex items-center justify-center">
                     <div class="container mx-auto px-4 text-center text-white">
                         <div class="max-w-3xl mx-auto animate-fade-in">
-                            <h2 class="text-3xl md:text-5xl font-bold mb-6 leading-tight">
+                            {# <h2 class="text-3xl md:text-5xl font-bold mb-6 leading-tight">
                                 <span class="text-joel-red">Sa Ka Woulé</span> en Guadeloupe
                             </h2>
                             <p class="text-lg md:text-xl mb-8 text-gray-200">
@@ -85,34 +130,34 @@
                                    class="bg-joel-red hover:bg-joel-red-dark text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg">
                                     Réserver maintenant
                                 </a>
-                            </div>
+                            </div> #}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        
-        <!-- Slider Navigation -->
+
+        <!-- Slider dots -->
         <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-3">
             <button class="slider-dot active w-3 h-3 rounded-full bg-white opacity-50 hover:opacity-100 transition-opacity duration-200" data-slide="0"></button>
             <button class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 hover:opacity-100 transition-opacity duration-200" data-slide="1"></button>
             <button class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 hover:opacity-100 transition-opacity duration-200" data-slide="2"></button>
         </div>
-        
-        <!-- Scroll Indicator -->
+
+        <!-- Scroll indicator -->
         <div class="absolute bottom-8 right-8 animate-bounce-gentle">
             <i class="fas fa-chevron-down text-white text-2xl"></i>
         </div>
     </section>
 
-    <!-- Brand Section -->
+    <!-- ==================== BRAND SECTION ==================== -->
     <section class="py-16 bg-gradient-beige">
         <div class="container mx-auto px-4">
             <div class="flex flex-col lg:flex-row items-center justify-center gap-12">
                 <div class="flex-shrink-0 animate-slide-up">
                     <div class="w-32 h-32 lg:w-40 lg:h-40 rounded-full bg-white shadow-lg flex items-center justify-center hover-lift">
-                        <img src="{{ asset('images/Joel-Location-new.png') }}" 
-                             alt="JOEL LOCATION" 
+                        <img src="{{ asset('images/Joel-Location-new.png') }}"
+                             alt="JOEL LOCATION"
                              class="w-24 h-24 lg:w-32 lg:h-32 object-contain">
                     </div>
                 </div>
@@ -128,10 +173,9 @@
         </div>
     </section>
 
-    <!-- Vehicles Section -->
+    <!-- ==================== VEHICLES SECTION ==================== -->
     <section class="py-20 bg-white" id="vehicules">
         <div class="container mx-auto px-4">
-            <!-- Section Title -->
             <div class="text-center mb-16 animate-slide-up">
                 <h2 class="text-4xl lg:text-5xl font-bold text-joel-dark mb-6">
                     Nos <span class="text-joel-red">Véhicules</span>
@@ -142,23 +186,34 @@
                 <div class="w-24 h-1 bg-joel-red mx-auto mt-6 rounded-full"></div>
             </div>
 
-            <!-- Vehicles Grid - Style Original Modernisé -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {% for vehicule in vehicules %}
                     <div class="vehicle-item group animate-slide-up">
                         <div class="relative overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300">
+
                             <img src="{{ asset('uploads/vehicules/' ~ vehicule.image) }}"
                                  alt="{{ vehicule.marque }} {{ vehicule.modele }}"
                                  class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105">
 
-                            <!-- Hover Overlay -->
-                            <div class="absolute inset-0 bg-gradient-to-t from-joel-red/90 via-joel-red/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-end justify-center">
+                            {# ────── MOBILE OVERLAY (toujours visible) ────── #}
+                            <div class="mobile-overlay">
+                                <h3 class="text-lg font-bold text-white drop-shadow-lg">
+                                    {{ vehicule.marque }} {{ vehicule.modele }}
+                                </h3>
+                                <a href="{{ path('notrevehicule', {'id': vehicule.id}) }}"
+                                   class="mt-2 inline-block bg-white text-joel-red px-4 py-2 rounded-full text-sm font-semibold hover:bg-joel-beige transition">
+                                    Voir détails
+                                </a>
+                            </div>
+
+                            {# ────── DESKTOP OVERLAY (hover only) ────── #}
+                            <div class="desktop-overlay">
                                 <div class="text-center p-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
                                     <h3 class="text-xl font-bold text-white mb-4">
                                         {{ vehicule.marque }} {{ vehicule.modele }}
                                     </h3>
                                     <a href="{{ path('notrevehicule', {'id': vehicule.id}) }}"
-                                       class="inline-block bg-white text-joel-red px-6 py-2 rounded-full font-semibold hover:bg-joel-beige transition-colors duration-200">
+                                       class="inline-block bg-white text-joel-red px-6 py-2 rounded-full font-semibold hover:bg-joel-beige transition">
                                         Voir plus de détails
                                     </a>
                                 </div>
@@ -168,7 +223,6 @@
                 {% endfor %}
             </div>
 
-            <!-- View All Button -->
             <div class="text-center mt-12">
                 <a href="{{ path('nosvehicules') }}"
                    class="inline-flex items-center bg-joel-red hover:bg-joel-red-dark text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:scale-105 hover:shadow-lg">
@@ -179,11 +233,10 @@
         </div>
     </section>
 
-    <!-- About Section -->
+    <!-- ==================== ABOUT SECTION ==================== -->
     <section class="py-20 gradient-red text-white">
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <!-- Content -->
                 <div class="animate-slide-up">
                     <div class="text-center lg:text-left mb-8">
                         <h2 class="text-4xl lg:text-5xl font-bold mb-6">
@@ -193,7 +246,6 @@
                             Les services apportés à nos clients sont notre priorité. Votre satisfaction compte.
                         </p>
                     </div>
-                    
                     <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-8 glass">
                         <h3 class="text-2xl font-bold mb-6 text-center">Qui sommes-nous ?</h3>
                         <p class="text-gray-200 mb-6 leading-relaxed">
@@ -210,13 +262,11 @@
                             </li>
                             <li class="flex items-start space-x-3">
                                 <i class="fas fa-check-circle text-joel-beige mt-1 flex-shrink-0"></i>
-                                <span>Véhicules bien entretenus, soumis à des inspections d'experts</span>
+                                <span>Véhicules bien entretenus, soumis à des inspections d’experts</span>
                             </li>
                         </ul>
                     </div>
                 </div>
-                
-                <!-- Video -->
                 <div class="animate-slide-up">
                     <div class="relative rounded-2xl overflow-hidden shadow-2xl hover-lift">
                         <video width="100%" height="auto" controls autoplay loop muted class="rounded-2xl">
@@ -232,56 +282,36 @@
 
 {% block javascripts %}
     <script>
-        // Hero Slider
+        // ────── HERO SLIDER ──────
         let currentSlide = 0;
         const slides = document.querySelectorAll('.hero-slide');
         const dots = document.querySelectorAll('.slider-dot');
-        
-        function showSlide(index) {
-            slides.forEach((slide, i) => {
-                slide.style.opacity = i === index ? '1' : '0';
-            });
-            dots.forEach((dot, i) => {
-                dot.classList.toggle('active', i === index);
-            });
-        }
-        
-        function nextSlide() {
+
+        const showSlide = (i) => {
+            slides.forEach((s,j) => s.style.opacity = j===i ? '1' : '0');
+            dots.forEach((d,j) => d.classList.toggle('active', j===i));
+        };
+        const nextSlide = () => {
             currentSlide = (currentSlide + 1) % slides.length;
             showSlide(currentSlide);
-        }
-        
-        // Auto-advance slides
-        setInterval(nextSlide, 5000);
-        
-        // Dot navigation
-        dots.forEach((dot, index) => {
-            dot.addEventListener('click', () => {
-                currentSlide = index;
-                showSlide(currentSlide);
-            });
-        });
-        
-        // Intersection Observer for animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
         };
-        
-        const observer = new IntersectionObserver((entries) => {
+        setInterval(nextSlide, 5000);
+        dots.forEach((d,i) => d.addEventListener('click', () => { currentSlide=i; showSlide(i); }));
+
+        // ────── ANIMATIONS AU SCROLL ──────
+        const observer = new IntersectionObserver(entries => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.style.opacity = '1';
                     entry.target.style.transform = 'translateY(0)';
                 }
             });
-        }, observerOptions);
-        
-        // Observe all animated elements
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
         document.querySelectorAll('.animate-slide-up').forEach(el => {
             el.style.opacity = '0';
             el.style.transform = 'translateY(30px)';
-            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            el.style.transition = 'opacity .6s ease, transform .6s ease';
             observer.observe(el);
         });
     </script>

@@ -59,17 +59,7 @@ class AccueilController extends AbstractController
      */
     public function index(): Response
     {
-
-        return $this->render('accueil/index.html.twig', [
-            'vehicules' => $this->getUniqueModeleNosVehicules()
-        ]);
-    }
-
-    /**
-     * @Route("/accueil-moderne", name="accueil_moderne")
-     */
-    public function indexModerne(): Response
-    {
+        // ancien  : accueil/index.html.twig
         return $this->render('vitrine/index.html.twig', [
             'vehicules' => $this->getUniqueModeleNosVehicules()
         ]);
@@ -102,7 +92,7 @@ class AccueilController extends AbstractController
      */
     public function quiSommeNous(): Response
     {
-        return $this->render('accueil/quisommenous.html.twig', [
+        return $this->render('vitrine/quisommenous.html.twig', [ // Ancien template: 'accueil/quisommenous.html.twig'
             'controller_name' => 'QuiSommeNousController',
         ]);
     }
@@ -186,7 +176,7 @@ class AccueilController extends AbstractController
      */
     public function clio(): Response
     {
-        return $this->render('accueil/clio.html.twig', [
+        return $this->render('vitrine/clio.html.twig', [ // Ancien template: 'accueil/clio.html.twig'
             'controller_name' => 'ClioController',
         ]);
     }
@@ -197,7 +187,7 @@ class AccueilController extends AbstractController
      */
     public function twingo(): Response
     {
-        return $this->render('accueil/twingo.html.twig', [
+        return $this->render('vitrine/twingo.html.twig', [ // Ancien template: 'accueil/twingo.html.twig'
             'controller_name' => 'TwingoController',
         ]);
     }
@@ -208,7 +198,7 @@ class AccueilController extends AbstractController
      */
     public function mentionLegale(): Response
     {
-        return $this->render('accueil/mentionlegale.html.twig', [
+        return $this->render('vitrine/mentionlegale.html.twig', [ // Ancien template: 'accueil/mentionlegale.html.twig'
             'controller_name' => 'MentionLegaleController',
         ]);
     }
@@ -221,7 +211,7 @@ class AccueilController extends AbstractController
     public function noVehicules(): Response
     {
 
-        return $this->render('accueil/nosvehicule.html.twig', [
+        return $this->render('vitrine/nosvehicule.html.twig', [ // Ancien template: 'accueil/nosvehicule.html.twig'
             'controller_name' => 'AccueilController',
             'vehicules' => $this->getUniqueModeleNosVehicules(),
         ]);
@@ -233,11 +223,13 @@ class AccueilController extends AbstractController
      */
     public function notreVehicule(int $id): Response
     {
-
         $vehicule = $this->getDoctrine()->getRepository(Vehicule::class)->findOneBy(['id' => $id]);
-        return $this->render('accueil/notrevehicule.html.twig', [
+        $vehicules = $this->getDoctrine()->getRepository(Vehicule::class)->findAll();
+        
+        return $this->render('vitrine/notrevehicule.html.twig', [ // Ancien template: 'accueil/notrevehicule.html.twig'
             'controller_name' => 'AccueilController',
             'vehicule' => $vehicule,
+            'vehicules' => $vehicules,
         ]);
     }
 
@@ -261,7 +253,7 @@ class AccueilController extends AbstractController
     public function foireauxquestion(): Response
     {
         $faqs = $this->getDoctrine()->getRepository(Faq::class)->findAll();
-        return $this->render('accueil/faq.html.twig', [
+        return $this->render('vitrine/faq.html.twig', [ // Ancien template: 'accueil/faq.html.twig'
             'controller_name' => 'FoireAuxQuestions',
             'faqs' => $faqs,
         ]);
@@ -273,7 +265,7 @@ class AccueilController extends AbstractController
      */
     public function cgu(): Response
     {
-        return $this->render('accueil/cgu.html.twig');
+        return $this->render('vitrine/cgu.html.twig'); // Ancien template: 'accueil/cgu.html.twig'
     }
 
 
@@ -367,7 +359,7 @@ class AccueilController extends AbstractController
             }
         }
         
-        return $this->render('accueil/contact.html.twig', [
+        return $this->render('vitrine/contact.html.twig', [ // Ancien template: 'accueil/contact.html.twig'
             'form' => $form->createView(),
             'success_message' => $successMessage
         ]);
@@ -434,7 +426,7 @@ class AccueilController extends AbstractController
             // Votre logique de traitement du formulaire
         }
 
-        return $this->render('accueil/login.html.twig', [
+        return $this->render('vitrine/login.html.twig', [ // Ancien template: 'accueil/login.html.twig'
             'controller_name' => 'LoginController',
             'user' => $user,
             'form' => $form->createView(),

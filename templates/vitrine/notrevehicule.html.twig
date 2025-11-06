@@ -1,0 +1,107 @@
+{% extends 'vitrine/base.html.twig' %}
+
+{% block title %}
+	{{ vehicule.marque }}
+	{{ vehicule.modele }}
+{% endblock %}
+
+{% block body %}
+<div class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+            <h1 class="text-3xl md:text-4xl font-bold text-joel-red mb-4">{{ vehicule.marque }} {{ vehicule.modele }}</h1>
+            <div class="w-24 h-1 bg-joel-red mx-auto"></div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="flex justify-center">
+                <div class="image_voiture">
+                    <img src="{{ asset('uploads/vehicules/' ~ vehicule.image) }}" 
+                         alt="{{ vehicule.modele }}" 
+                         class="max-w-full h-auto rounded-xl shadow-xl">
+                </div>
+            </div>
+            
+            <div class="texte">
+                <p class="mb-6 text-gray-700 leading-relaxed text-justify">
+                    {{ vehicule.details }}
+                </p>
+                
+                <div class="mb-6">
+                    <h4 class="text-xl font-bold text-joel-red mb-4">
+                        Conditions de location {{ vehicule.marque }} {{ vehicule.modele }}
+                    </h4>
+                    
+                    <div class="conditions bg-gray-50 p-6 rounded-xl">
+                        <ul class="space-y-2">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-joel-red mt-1 mr-2 flex-shrink-0"></i>
+                                <span>Kilométrage illimité</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-joel-red mt-1 mr-2 flex-shrink-0"></i>
+                                <span>Âge minimum : 21 ans</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-joel-red mt-1 mr-2 flex-shrink-0"></i>
+                                <span>Plus de 2 ans de permis de conduire</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-joel-red mt-1 mr-2 flex-shrink-0"></i>
+                                <span>Possibilité de régler en plusieurs fois</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-joel-red mt-1 mr-2 flex-shrink-0"></i>
+                                <span>Caution : {{ vehicule.caution }} €</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h4 class="text-xl font-bold text-joel-red mb-4">
+                        Caractéristiques de {{ vehicule.marque }} {{ vehicule.modele }}
+                    </h4>
+                    
+                    <div class="caracteristiques bg-gray-50 p-6 rounded-xl">
+                        <ul class="space-y-2">
+                            <li class="flex items-start">
+                                <i class="fas fa-gas-pump text-joel-red mt-1 mr-2 flex-shrink-0"></i>
+                                <span>Carburant : {{ vehicule.carburation }}</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-cogs text-joel-red mt-1 mr-2 flex-shrink-0"></i>
+                                <span>Boite de vitesse : {{ vehicule.vitesse }}</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-suitcase-rolling text-joel-red mt-1 mr-2 flex-shrink-0"></i>
+                                <span>Nombre max de bagages : {{ vehicule.bagages }}</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-car text-joel-red mt-1 mr-2 flex-shrink-0"></i>
+                                <span>Nombre de portes : {{ vehicule.portes }}</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-user-friends text-joel-red mt-1 mr-2 flex-shrink-0"></i>
+                                <span>Max passagers: {{ vehicule.passagers }}</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-star text-joel-red mt-1 mr-2 flex-shrink-0"></i>
+                                <span>Atouts : {{ vehicule.atouts }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flex justify-center mt-12">
+            <a href="{{ path('reserver_maintenant') }}" 
+               class="inline-flex items-center bg-joel-red hover:bg-joel-red-dark text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                Réserver maintenant
+                <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

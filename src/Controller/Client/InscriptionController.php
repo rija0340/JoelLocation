@@ -113,21 +113,21 @@ class InscriptionController extends AbstractController
                 // return $this->redirectToRoute('app_login', [
                 //     'error' => urlencode('Une erreur est survenue lors de l\'envoi de l\'email de validation. Veuillez contacter le support.')
                 // ]);
-                return $this->render("accueil/inscription.html.twig", [
+                return $this->render("vitrine/inscription.html.twig", [ // Ancien template: "accueil/inscription.html.twig"
                     "user" => $user,
                     "form" => $form->createView(),
                 ]);
             }
         }
 
-        return $this->render("accueil/inscription.html.twig", [
+        return $this->render("vitrine/inscription.html.twig", [ // Ancien template: "accueil/inscription.html.twig"
             "user" => $user,
             "form" => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/validation-email/{token}", name="validate_email")
+     * @Route("/validation-email/{token", name="validate_email")
      */
     public function validateEmail(string $token, Request $request): Response
     {
@@ -254,14 +254,14 @@ class InscriptionController extends AbstractController
                         $e->getMessage(),
                 );
 
-                return $this->render("accueil/inscription.html.twig", [
+                return $this->render("vitrine/inscription.html.twig", [ // Ancien template: "accueil/inscription.html.twig"
                     "user" => $user,
                     "form" => $form->createView(),
                 ]);
             }
         }
 
-        return $this->render("accueil/inscription.html.twig", [
+        return $this->render("vitrine/inscription.html.twig", [ // Ancien template: "accueil/inscription.html.twig"
             "user" => $user,
             "form" => $form->createView(),
         ]);

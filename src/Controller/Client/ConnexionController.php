@@ -91,6 +91,19 @@ class ConnexionController extends AbstractController
         $form = $this->createForm(LoginType::class, $user);
         $form->handleRequest($request);
 
+        // Récupérer les erreurs d'authentification
+        $error = $authenticationUtils->getLastAuthenticationError();
+        // Déterminer le nom d'utilisateur à afficher
+        $lastUsername = $authenticationUtils->getLastUsername();
+        
+        // Déterminer si on doit afficher le bouton de renvoi (for account activation)
+        $session = $request->getSession();
+        $accountNotActivated = $session->get('account_not_activated', false);
+        $emailForActivation = $session->get('email_for_activation', null);
+        $tokenInvalid = $session->get('token_invalid', false);
+        $tokenExpired = $session->get('token_expired', false);
+        $showResend = $accountNotActivated || $tokenInvalid || $tokenExpired;
+
         if ($form->isSubmitted() && $form->isValid()) {
             //$entityManager = $this->getDoctrine()->getManager();
             //$entityManager->persist($user);
@@ -105,10 +118,14 @@ class ConnexionController extends AbstractController
                 //}
             }
         }
-        return $this->render('accueil/login.html.twig', [
+        return $this->render('vitrine/login.html.twig', [ // Ancien template: 'accueil/login.html.twig'
             'controller_name' => 'LoginController',
             'user' => $user,
             'form' => $form->createView(),
+            'last_username' => $lastUsername,
+            'error' => $error,
+            'show_resend' => $showResend,
+            'email_for_activation' => $emailForActivation ?: $lastUsername,
         ]);
     }
 }

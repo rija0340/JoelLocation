@@ -1,0 +1,24 @@
+{% extends 'vitrine/layouts/vehicule_detail.html.twig' %}
+
+{% set vehicule_data = {
+    'marque': 'renault',
+    'modele': 'clio',
+    'titre': 'Renault Clio IV',
+    'image': asset('images/clio rouge.png'),
+    'description': 'Si vous recherchez une voiture qui offre un rapport qualité / prix incroyable, alors la Clio IV, avec sa grande polyvalence, est faite pour vous. Cette voiture de tourisme vous garantit un super confort aussi bien sur les petites rues que sur les grandes routes. Elle a une consommation de carburant raisonnable, et est fiable.',
+    'conditions': [
+        'Kilométrage illimité',
+        'Âge minimum : 21 ans',
+        'Plus de 2 ans de permis de conduire',
+        'Possibilité de régler en plusieurs fois',
+        'Caution : 700 €'
+    ],
+    'caracteristiques': [
+        {'icon': 'fa fa-battery-full', 'text': 'Carburant : Essence'},
+        {'icon': 'fa fa-sun-o', 'text': 'Boite de vitesse : Manuelle'},
+        {'icon': 'fa fa-shopping-bag', 'text': 'Nombre max de bagages : 3'},
+        {'icon': 'fa fa-car', 'text': 'Nombre de portes : 5'},
+        {'icon': 'fa fa-users', 'text': 'Max passagers: 5'},
+        {'icon': 'fa fa-rss', 'text': 'Atouts : autoradio, climatisation, fermeture centralisée'}
+    ]
+} %}

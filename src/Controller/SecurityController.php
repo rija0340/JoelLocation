@@ -16,6 +16,26 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use App\Service\EmailManagerService;
+use App\Form\LoginType;
+
+/*
+ * Ancien template: @templates/accueil/login.html.twig
+ *
+ * {% extends 'base.html.twig' %}
+ *
+ * {% block title %}login
+ * {% endblock %}
+ *
+ * {% block body %}
+ * 	<div class="container">
+ * 		{{ form_start(form) }}
+ * 		{{ form_widget(form) }}
+ * 		<button class="button">{{ button_label|default('Connecter') }}</button>&nbsp;&nbsp;&nbsp;<a href="{{ path('inscription') }}" class="button">S'inscrire</a>
+ * 		{{ form_end(form) }}
+ * 		<br>
+ * 	</div>
+ * {% endblock %}
+ */
 
 class SecurityController extends AbstractController
 {
@@ -134,6 +154,10 @@ class SecurityController extends AbstractController
                 $error->getMessage()
             );
         }
+        
+        // User instance for template context
+        $user = new User();
+        
         //si le compte n'est pas encore activé 
         // if ($lastUsername == !"") {
         //     $user  = $this->userRepo->findOneBy(['mail' => $lastUsername]);
@@ -145,11 +169,15 @@ class SecurityController extends AbstractController
         //         );
         //     }
         // }
+        
         // Afficher la page de login
-        return $this->render('security/login.html.twig', [
+        return $this->render('vitrine/login.html.twig', [ // Ancien template: 'security/login.html.twig'
             'last_username' => $lastUsername,
             'error' => $error,
             'show_resend' => $show_resend,
+            'user' => $user,
+            'email_for_activation' => $lastUsername,
+            'controller_name' => 'SecurityController',
         ]);
     }
 

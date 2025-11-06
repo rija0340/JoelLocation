@@ -1,0 +1,234 @@
+{% extends 'vitrine/base.html.twig' %}
+
+{% block title %}A propos - Location de voitures en Guadeloupe{% endblock %}
+
+{% block body %}
+    <!-- First Section: À propos de Joel Location -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16 animate-slide-up">
+                <h1 class="text-3xl md:text-4xl font-bold text-joel-red mb-4">À propos de Joel Location</h1>
+                <div class="w-24 h-1 bg-joel-red mx-auto"></div>
+            </div>
+
+            <div class="animate-slide-up">
+                <div class="float-left mr-6 apropos_img">
+                    <img style="width:auto; height:300px;" 
+                         src="images/iStock-1065238562.jpg" 
+                         alt="JOEL LOCATION" 
+                         title="JOEL LOCATION"
+                         class="rounded-2xl shadow-2xl hover-lift transition-all duration-300">
+                </div>
+                
+                <div class="text-justify apropos">
+                    <p class="mb-4 text-gray-700 leading-relaxed text-justify">
+                        <span class="font-bold text-joel-red">JOEL LOCATION</span>
+                        est une société de location de voitures en Guadeloupe. Nous nous dédions à vous oﬀrir des services de location de voiture de qualité à des tarifs très abordables. Cette jeune entreprise indépendante s'est forgée une bonne réputation grâce à sa diligence et son dévouement.
+                    </p>
+                    <p class="mb-4 text-gray-700 leading-relaxed text-justify">
+                        Chez Joel Location, notre objectif premier est de faire en sorte que les visiteurs de la Guadeloupe bénéﬁcient du meilleur de leurs vacances grâce à notre ﬁabilité et notre réactivité sans pareil.
+                    </p>
+                    <p class="mb-4 text-gray-700 leading-relaxed text-justify">
+                        <span class="font-bold underline text-joel-red">La société propose plusieurs types différents de voitures à louer comme par exemple :</span>
+                    </p>
+                    <ul class="list-none mb-6 space-y-2 text-gray-700">
+                        <li class="flex items-start space-x-3">
+                            <i class="fas fa-check-circle text-joel-red mt-1 flex-shrink-0"></i>
+                            <span>Des voitures qui peuvent convenir à une famille complète</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <i class="fas fa-check-circle text-joel-red mt-1 flex-shrink-0"></i>
+                            <span>Une mini-voiture pour se promener dans la ville</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <i class="fas fa-check-circle text-joel-red mt-1 flex-shrink-0"></i>
+                            <span>Un véhicule tout chemin pour s'aventurer à travers plusieurs sites et proﬁter du tourisme</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <i class="fas fa-check-circle text-joel-red mt-1 flex-shrink-0"></i>
+                            <span>Et plus encore</span>
+                        </li>
+                    </ul>
+
+                    <p class="mb-4 text-gray-700 leading-relaxed text-justify">
+                        L'entreprise s'assure de mener des inspections d'experts sur tous ses véhicules avant et après la location aﬁn d'assurer la sécurité continue de ses clients.
+                        <span class="font-bold text-joel-red">L'entretien irréprochable des véhicules est important pour nous.</span>
+                    </p>
+
+                    <p class="mb-4 text-gray-700 leading-relaxed text-justify">
+                        Joel Location met à votre disposition une large gamme de voitures en parfait état, adaptées aux terrains et aux itinéraires de la Guadeloupe. Ces voitures sont livrées à des
+                        <span class="font-bold text-joel-red">prix imbattables</span>, et peuvent facilement être mises à votre disposition à l'aéroport à tout moment de la journée ou même être livrées sur votre lieu de résidence s'il est situé sur la Grande-Terre.
+                    </p>
+
+                    <p class="mb-4 text-gray-700 leading-relaxed text-justify">
+                        Être une agence locale nous permet de
+                        <span class="font-bold text-joel-red">mieux nous connecter avec nos clients et nos résidents de la Guadeloupe</span>, apportant ainsi un degré d'excellence à nos services.
+                    </p>
+
+                    <p class="mb-4 text-gray-700 leading-relaxed text-justify">
+                        Joel Location dispose d'une page Web de réservation avancée sur laquelle les clients peuvent facilement réserver les voitures de leur choix, à des tarifs vraiment abordables.
+                    </p>
+
+                    <p class="text-gray-700 leading-relaxed text-justify">
+                        La transparence est l'un des mots d'ordre de notre agence et à ce titre, les prix sont clairement indiqués sur les pages de réservation avec les détails et les conditions de location. La société dispose d'un cadre et d'un personnel dévoués au service client. Le personnel est formé pour être tolérant, respectueux et particulièrement serviable envers les clients de tout horizons, y compris les non-francophones.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Bouton centré -->
+            <div class="text-center mt-12 animate-slide-up clear-both">
+                <a href="{{ path('nosvehicules') }}#vehicule"
+                   class="inline-flex items-center bg-joel-red hover:bg-joel-red-dark text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                    Nos véhicules
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Second Section: Pourquoi louer une voiture avec Joel Location -->
+    <section class="relative bg-cover bg-center bg-no-repeat text-white overflow-hidden"
+             style="background-image: url('{{ asset('vitrine/images/iStock-1209047751.jpg') }}');">
+        <!-- Overlay to improve text readability -->
+        <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+        
+        <div class="container mx-auto px-4 relative z-10 py-20">
+            <div class="text-center mb-16 animate-slide-up">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Pourquoi louer une voiture avec Joel Location ?</h2>
+                <div class="w-24 h-1 bg-joel-beige mx-auto"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white/60 backdrop-blur-sm rounded-2xl p-8 text-center glass hover-lift transition-all duration-300 animate-slide-up border border-white/20">
+                    <div class="w-20 h-20 bg-joel-red rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fa fa-map-marker text-white text-3xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-joel-red mb-4">Agence de location locale</h4>
+                    <p class="text-gray-800 leading-relaxed">
+                        Joel Location est une société à taille humaine, indépendante, locale. Pendant votre séjour, Joel Location reste toujours à votre service. Vous ne serez pas face à une plateforme téléphonique quand vous contactez Joel Location.
+                    </p>
+                </div>
+
+                <div class="bg-white/60 backdrop-blur-sm rounded-2xl p-8 text-center glass hover-lift transition-all duration-300 animate-slide-up border border-white/20">
+                    <div class="w-20 h-20 bg-joel-red rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fa fa-key text-white text-3xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-joel-red mb-4">Livraison</h4>
+                    <p class="text-gray-800 leading-relaxed">
+                        Votre véhicule sera livré dès votre arrivée à l'aéroport aﬁn de vous faire gagner un temps précieux sur votre séjour. Il est aussi tout à fait possible de récupérer votre voiture sur votre lieu de résidence s'il est situé sur la Grande-Terre. Merci de préciser lors de la réservation.
+                    </p>
+                </div>
+
+                <div class="bg-white/60 backdrop-blur-sm rounded-2xl p-8 text-center glass hover-lift transition-all duration-300 animate-slide-up border border-white/20">
+                    <div class="w-20 h-20 bg-joel-red rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fa fa-users text-white text-3xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-joel-red mb-4">Conducteur additionnel</h4>
+                    <p class="text-gray-800 leading-relaxed">
+                        A Joel Location, nous savons que les longs trajets peuvent être fatigants, surtout après un bon bain de mer. C'est pour cela, que nous vous proposons l'ajout d'un deuxième conducteur gratuitement. De plus, les assurances responsabilités civiles et accidents causés aux tiers sont inclus dans votre forfait "location de voiture".
+                    </p>
+                </div>
+
+                <div class="bg-white/60 backdrop-blur-sm rounded-2xl p-8 text-center glass hover-lift transition-all duration-300 animate-slide-up border border-white/20">
+                    <div class="w-20 h-20 bg-joel-red rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fa fa-road text-white text-3xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-joel-red mb-4">Kilométrages illimités</h4>
+                    <p class="text-gray-800 leading-relaxed">
+                        Chez Joel Location, le kilométrage est illimité !
+                    </p>
+                </div>
+
+                <div class="bg-white/60 backdrop-blur-sm rounded-2xl p-8 text-center glass hover-lift transition-all duration-300 animate-slide-up border border-white/20">
+                    <div class="w-20 h-20 bg-joel-red rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-baby text-white text-3xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-joel-red mb-4">Siège bébé / enfant</h4>
+                    <p class="text-gray-800 leading-relaxed">
+                        Nous mettons à votre disposition des sièges bébé et nourrissons, homologués NF, pour seulement 30 euros TTC. Les rehausseurs pour les enfants de + de 15kg sont totalement gratuits !
+                    </p>
+                </div>
+            </div>
+
+            <div class="text-center mt-12 animate-slide-up">
+                <a href="{{ path('formulaire-contact') }}#contact"
+                   class="inline-flex items-center bg-joel-beige hover:bg-joel-beige-dark text-joel-dark px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                    Réserver maintenant
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Third Section: Notre mission -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16 animate-slide-up">
+                <h2 class="text-3xl md:text-4xl font-bold text-joel-red mb-4">Notre mission</h2>
+                <div class="w-24 h-1 bg-joel-red mx-auto"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-gradient-to-br from-white to-joel-beige/20 rounded-2xl shadow-xl p-8 text-center hover-lift transition-all duration-300 animate-slide-up border border-joel-beige/40 hover:border-joel-red/50">
+                    <div class="w-20 h-20 bg-joel-red rounded-full flex items-center justify-center mx-auto mb-6 hover:bg-joel-red-dark transition-colors duration-300">
+                        <i class="fa fa-smile text-white text-3xl"></i>
+                    </div>
+                    <div class="content">
+                        <p class="text-gray-700 leading-relaxed">
+                            Satisfaire nos clients grâce à notre professionnalisme et notre savoir faire
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-white to-joel-beige/20 rounded-2xl shadow-xl p-8 text-center hover-lift transition-all duration-300 animate-slide-up border border-joel-beige/40 hover:border-joel-red/50">
+                    <div class="w-20 h-20 bg-joel-red rounded-full flex items-center justify-center mx-auto mb-6 hover:bg-joel-red-dark transition-colors duration-300">
+                        <i class="fa fa-wallet text-white text-3xl"></i>
+                    </div>
+                    <div class="content">
+                        <p class="text-gray-700 leading-relaxed">
+                            Offrir des <span class="font-bold text-joel-red">prix imbattables</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-white to-joel-beige/20 rounded-2xl shadow-xl p-8 text-center hover-lift transition-all duration-300 animate-slide-up border border-joel-beige/40 hover:border-joel-red/50">
+                    <div class="w-20 h-20 bg-joel-red rounded-full flex items-center justify-center mx-auto mb-6 hover:bg-joel-red-dark transition-colors duration-300">
+                        <i class="fa fa-road text-white text-3xl"></i>
+                    </div>
+                    <div class="content">
+                        <p class="text-gray-700 leading-relaxed">
+                            Assurer la sécurité et le confort de nos clients en proposant des services de location de voitures hors-pair
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all animated elements
+        document.querySelectorAll('.animate-slide-up').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+{% endblock %}

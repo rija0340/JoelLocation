@@ -1,0 +1,173 @@
+{% extends 'vitrine/layouts/page_layout.html.twig' %}
+
+{% block title %}Foire aux questions - Location de véhicule en Guadeloupe{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto py-12">
+    <div class="text-center mb-12">
+        <h1 class="text-3xl md:text-4xl font-bold text-joel-red mb-4">Foire aux questions</h1>
+        <div class="w-24 h-1 bg-joel-red mx-auto"></div>
+    </div>
+
+    <!-- Main FAQ Accordion -->
+    <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 mb-8">
+        {% if faqs %}
+            <div class="space-y-4" id="faqAccordion">
+                {% for faq in faqs %}
+                    <div class="border border-gray-200 rounded-lg overflow-hidden">
+                        <h4 class="mb-0">
+                            <button
+                                type="button"
+                                class="faq-toggle flex items-center justify-between w-full p-5 text-left font-bold text-joel-red bg-joel-beige/20 hover:bg-joel-beige/40 transition-colors duration-300 focus:outline-none"
+                            >
+                                <span>{{ faq.question }}</span>
+                                <span class="transform transition-transform duration-300 rotate-icon">
+                                    <i class="fas fa-chevron-down"></i>
+                                </span>
+                            </button>
+                        </h4>
+                        <div class="faq-content hidden p-5 bg-white text-gray-700 leading-relaxed">
+                            {{ faq.reponse }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center py-12">
+                <i class="fas fa-info-circle text-joel-red text-4xl mb-4"></i>
+                <p class="text-gray-700">Aucune question fréquemment posée n'a été trouvée.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Additional FAQ Section -->
+    <div>
+        <h2 class="text-2xl font-bold text-joel-red mb-6">Questions fréquentes supplémentaires</h2>
+
+        <div class="space-y-4" id="additionalFaqAccordion">
+            <div class="border border-gray-200 rounded-lg overflow-hidden">
+                <h4 class="mb-0">
+                    <button
+                        type="button"
+                        class="faq-toggle flex items-center justify-between w-full p-5 text-left font-bold text-joel-red bg-joel-beige/20 hover:bg-joel-beige/40 transition-colors duration-300 focus:outline-none"
+                    >
+                        <span>Quels documents sont nécessaires pour louer un véhicule ?</span>
+                        <span class="transform transition-transform duration-300 rotate-icon">
+                            <i class="fas fa-chevron-down"></i>
+                        </span>
+                    </button>
+                </h4>
+                <div class="faq-content hidden p-5 bg-white text-gray-700 leading-relaxed">
+                    Pour louer un véhicule, vous devez présenter une pièce d'identité valide, un permis de conduire en cours de validité datant de plus de 2 ans, et un justificatif de domicile récent. Un moyen de paiement valide est également requis.
+                </div>
+            </div>
+
+            <div class="border border-gray-200 rounded-lg overflow-hidden">
+                <h4 class="mb-0">
+                    <button
+                        type="button"
+                        class="faq-toggle flex items-center justify-between w-full p-5 text-left font-bold text-joel-red bg-joel-beige/20 hover:bg-joel-beige/40 transition-colors duration-300 focus:outline-none"
+                    >
+                        <span>Puis-je louer un véhicule si j'ai moins de 21 ans ?</span>
+                        <span class="transform transition-transform duration-300 rotate-icon">
+                            <i class="fas fa-chevron-down"></i>
+                        </span>
+                    </button>
+                </h4>
+                <div class="faq-content hidden p-5 bg-white text-gray-700 leading-relaxed">
+                    L'âge minimum pour louer un véhicule est de 21 ans. En outre, vous devez être titulaire d'un permis de conduire valide depuis au moins 2 ans.
+                </div>
+            </div>
+
+            <div class="border border-gray-200 rounded-lg overflow-hidden">
+                <h4 class="mb-0">
+                    <button
+                        type="button"
+                        class="faq-toggle flex items-center justify-between w-full p-5 text-left font-bold text-joel-red bg-joel-beige/20 hover:bg-joel-beige/40 transition-colors duration-300 focus:outline-none"
+                    >
+                        <span>Quelle est la politique d'annulation ?</span>
+                        <span class="transform transition-transform duration-300 rotate-icon">
+                            <i class="fas fa-chevron-down"></i>
+                        </span>
+                    </button>
+                </h4>
+                <div class="faq-content hidden p-5 bg-white text-gray-700 leading-relaxed">
+                    Vous pouvez annuler votre réservation sans frais en cas d'événement exceptionnel et inévitable sur le lieu de destination. Pour les annulations effectuées plus de 48 heures avant la date prévue, une déduction de 60% sera appliquée.
+                </div>
+            </div>
+
+            <div class="border border-gray-200 rounded-lg overflow-hidden">
+                <h4 class="mb-0">
+                    <button
+                        type="button"
+                        class="faq-toggle flex items-center justify-between w-full p-5 text-left font-bold text-joel-red bg-joel-beige/20 hover:bg-joel-beige/40 transition-colors duration-300 focus:outline-none"
+                    >
+                        <span>Y a-t-il des frais supplémentaires pour la restitution en dehors des heures d'ouverture ?</span>
+                        <span class="transform transition-transform duration-300 rotate-icon">
+                            <i class="fas fa-chevron-down"></i>
+                        </span>
+                    </button>
+                </h4>
+                <div class="faq-content hidden p-5 bg-white text-gray-700 leading-relaxed">
+                    Nous acceptons les restitutions en dehors des heures d'ouverture sous certaines conditions, mais vous restez responsable du véhicule jusqu'à ce que notre personnel le reprenne. Des frais peuvent s'appliquer selon les circonstances.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Accordion JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Wrap in try-catch to prevent errors from interfering with other scripts
+            try {
+                const accordionButtons = document.querySelectorAll('.faq-toggle');
+
+                accordionButtons.forEach(button => {
+                    button.addEventListener('click', function(e) {
+                        e.preventDefault(); // Prevent any default behavior
+
+                        // Find the content div: it's the next sibling of the h4
+                        const content = this.closest('h4').nextElementSibling;
+                        const iconWrapper = this.querySelector('.rotate-icon');
+
+                        // Toggle the content visibility
+                        if (content && content.classList.contains('hidden')) {
+                            content.classList.remove('hidden');
+                            iconWrapper.classList.add('rotate-180');
+
+                            // Close other open items in the same accordion group
+                            const parent = this.closest('[id]');
+                            if (parent) {
+                                const allContents = parent.querySelectorAll('.faq-content');
+                                allContents.forEach(otherContent => {
+                                    if (otherContent !== content && !otherContent.classList.contains('hidden')) {
+                                        otherContent.classList.add('hidden');
+                                        const otherButton = otherContent.previousElementSibling.querySelector('.faq-toggle');
+                                        if (otherButton) {
+                                            const otherIconWrapper = otherButton.querySelector('.rotate-icon');
+                                            if (otherIconWrapper) {
+                                                otherIconWrapper.classList.remove('rotate-180');
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                        } else if (content) {
+                            content.classList.add('hidden');
+                            iconWrapper.classList.remove('rotate-180');
+                        }
+                    });
+                });
+            } catch (error) {
+                console.error('Error initializing FAQ accordion:', error);
+            }
+        });
+    </script>
+
+    <style>
+        .rotate-180 {
+            transform: rotate(180deg) !important;
+        }
+    </style>
+</div>
+{% endblock %}

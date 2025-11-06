@@ -1,0 +1,155 @@
+{% extends 'vitrine/base.html.twig' %}
+
+{% block title %}Nos véhicules de location en Guadeloupe{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        /* ────── MOBILE : overlay toujours visible ────── */
+        .mobile-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.5) 60%, transparent 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 1rem;
+            text-align: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .3s ease;
+        }
+        @media (max-width: 767px) {
+            .mobile-overlay {
+                opacity: 1;
+                pointer-events: auto;
+            }
+        }
+
+        /* ────── DESKTOP : hover seulement ────── */
+        .desktop-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(220,38,38,0.95) 0%, rgba(220,38,38,0.6) 60%, transparent 100%);
+            opacity: 0;
+            transition: opacity .3s ease;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+        .group:hover .desktop-overlay { opacity: 1; }
+
+        /* Masquer desktop overlay sur mobile */
+        @media (max-width: 767px) {
+            .desktop-overlay { display: none; }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<!-- ==================== VÉHICULES ==================== -->
+<section class="py-20 bg-white" id="vehicules">
+<div class="container mx-auto px-4">
+
+    <!-- Titre -->
+    <div class="text-center mb-16 animate-slide-up">
+        <h1 class="text-4xl lg:text-5xl font-bold text-joel-dark mb-6">
+            Nos <span class="text-joel-red">Véhicules</span>
+        </h1>
+        <p class="text-xl text-joel-gray max-w-2xl mx-auto">
+            Vous pouvez choisir parmi les véhicules que nous offrons
+        </p>
+        <div class="w-24 h-1 bg-joel-red mx-auto mt-6 rounded-full"></div>
+    </div>
+
+    <!-- Grille -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {% for vehicule in vehicules %}
+        <div class="vehicle-item group animate-slide-up">
+            <div class="relative overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300">
+
+                <!-- Image -->
+                <img src="{{ asset('uploads/vehicules/' ~ vehicule.image) }}"
+                     alt="{{ vehicule.marque }} {{ vehicule.modele }}"
+                     class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105">
+
+                <!-- MOBILE : toujours visible -->
+                <div class="mobile-overlay">
+                    <h3 class="text-lg font-bold text-white drop-shadow-lg">
+                        {{ vehicule.marque }} {{ vehicule.modele }}
+                    </h3>
+                    <a href="{{ path('notrevehicule', {'id': vehicule.id}) }}"
+                       class="mt-2 inline-block bg-white text-joel-red px-5 py-2 rounded-full text-sm font-semibold hover:bg-joel-beige transition">
+                        Voir détails
+                    </a>
+                </div>
+
+                <!-- DESKTOP : hover -->
+                <div class="desktop-overlay">
+                    <div class="text-center p-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                        <h3 class="text-xl font-bold text-white mb-4">
+                            {{ vehicule.marque }} {{ vehicule.modele }}
+                        </h3>
+                        <a href="{{ path('notrevehicule', {'id': vehicule.id}) }}"
+                           class="inline-block bg-white text-joel-red px-6 py-2 rounded-full font-semibold hover:bg-joel-beige transition">
+                            Voir plus de détails
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+</section>
+
+<!-- ==================== CALL TO ACTION ==================== -->
+<section class="py-20 gradient-red text-white">
+<div class="container mx-auto px-4">
+    <div class="text-center animate-slide-up">
+        <h2 class="text-4xl lg:text-5xl font-bold mb-6">
+            Prêt à réserver votre <span class="text-joel-beige">véhicule</span> ?
+        </h2>
+        <p class="text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
+            Découvrez notre flotte de véhicules en parfait état et réservez en ligne en quelques clics.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="{{ path('reserver_maintenant') }}"
+               class="inline-flex items-center bg-white text-joel-red px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-joel-beige hover:scale-105 hover:shadow-lg">
+                Réserver maintenant
+                <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+            <a href="{{ path('formulaire-contact') }}"
+               class="inline-flex items-center border-2 border-white text-white hover:bg-white hover:text-joel-red px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300">
+                Nous contacter
+                <i class="fas fa-phone ml-2"></i>
+            </a>
+        </div>
+    </div>
+</div>
+</section>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    // Animations au scroll (inchangé)
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+    document.querySelectorAll('.animate-slide-up').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'opacity .6s ease, transform .6s ease';
+        observer.observe(el);
+    });
+</script>
+{% endblock %}

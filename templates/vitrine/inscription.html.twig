@@ -1,0 +1,288 @@
+{% extends 'vitrine/base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+<div class="container mx-auto px-4 py-16">
+    <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-12">
+            <h1 class="text-3xl font-bold text-joel-red mb-4">Créez votre compte</h1>
+            <div class="w-16 h-1 bg-joel-red mx-auto"></div>
+        </div>
+
+        <!-- Flash Messages -->
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="mb-4 p-4 rounded-lg {% if label == 'success' %}bg-green-100 text-green-800 border border-green-200{% elseif label == 'danger' %}bg-red-100 text-red-800 border border-red-200{% elseif label == 'warning' %}bg-yellow-100 text-yellow-800 border border-yellow-200{% else %}bg-blue-100 text-blue-800 border border-blue-200{% endif %}">
+                    {% if label == 'success' %}
+                        <i class="fas fa-check-circle mr-2"></i>
+                    {% elseif label == 'danger' %}
+                        <i class="fas fa-exclamation-circle mr-2"></i>
+                    {% elseif label == 'warning' %}
+                        <i class="fas fa-exclamation-triangle mr-2"></i>
+                    {% elseif label == 'info' %}
+                        <i class="fas fa-info-circle mr-2"></i>
+                    {% endif %}
+                    {% if message is iterable %}
+                        {{ message|join(', ') }}
+                    {% else %}
+                        {{ message }}
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <div class="bg-white rounded-lg shadow-xl p-8">
+            {{ form_start(form, {'attr': {'id': 'inscription-form', 'class': 'space-y-8'}}) }}
+
+            <!-- Informations personnelles -->
+            <div class="border-b border-gray-200 pb-8">
+                <h2 class="text-xl font-bold text-joel-red mb-6 flex items-center">
+                    <i class="fas fa-user mr-3"></i> Informations personnelles
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        {{ form_label(form.nom, 'Nom', {'label_attr': {'class': 'block text-gray-700 font-medium mb-2'}}) }}
+                        {{ form_widget(form.nom, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-joel-red focus:border-transparent transition-all duration-200'}}) }}
+                        {{ form_errors(form.nom) }}
+                    </div>
+                    
+                    <div>
+                        {{ form_label(form.prenom, 'Prénom', {'label_attr': {'class': 'block text-gray-700 font-medium mb-2'}}) }}
+                        {{ form_widget(form.prenom, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-joel-red focus:border-transparent transition-all duration-200'}}) }}
+                        {{ form_errors(form.prenom) }}
+                    </div>
+                    
+                    <div>
+                        {{ form_label(form.sexe, 'Sexe', {'label_attr': {'class': 'block text-gray-700 font-medium mb-2'}}) }}
+                        {{ form_widget(form.sexe, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-joel-red focus:border-transparent transition-all duration-200'}}) }}
+                        {{ form_errors(form.sexe) }}
+                    </div>
+                    
+                    <div>
+                        {{ form_label(form.dateNaissance, 'Date de naissance', {'label_attr': {'class': 'block text-gray-700 font-medium mb-2'}}) }}
+                        {{ form_widget(form.dateNaissance, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-joel-red focus:border-transparent transition-all duration-200'}}) }}
+                        {{ form_errors(form.dateNaissance) }}
+                    </div>
+                    
+                    <div>
+                        {{ form_label(form.lieuNaissance, 'Lieu de naissance', {'label_attr': {'class': 'block text-gray-700 font-medium mb-2'}}) }}
+                        {{ form_widget(form.lieuNaissance, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-joel-red focus:border-transparent transition-all duration-200'}}) }}
+                        {{ form_errors(form.lieuNaissance) }}
+                    </div>
+                    
+                    <div>
+                        {{ form_label(form.telephone, 'Téléphone', {'label_attr': {'class': 'block text-gray-700 font-medium mb-2'}}) }}
+                        {{ form_widget(form.telephone, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-joel-red focus:border-transparent transition-all duration-200'}}) }}
+                        {{ form_errors(form.telephone) }}
+                    </div>
+                    
+                    <div>
+                        {{ form_label(form.portable, 'Téléphone portable', {'label_attr': {'class': 'block text-gray-700 font-medium mb-2'}}) }}
+                        {{ form_widget(form.portable, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-joel-red focus:border-transparent transition-all duration-200'}}) }}
+                        {{ form_errors(form.portable) }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Adresse -->
+            <div class="border-b border-gray-200 pb-8">
+                <h2 class="text-xl font-bold text-joel-red mb-6 flex items-center">
+                    <i class="fas fa-home mr-3"></i> Adresse
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="md:col-span-2">
+                        {{ form_label(form.adresse, 'Adresse', {'label_attr': {'class': 'block text-gray-700 font-medium mb-2'}}) }}
+                        {{ form_widget(form.adresse, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-joel-red focus:border-transparent transition-all duration-200'}}) }}
+                        {{ form_errors(form.adresse) }}
+                    </div>
+                    
+                    <div>
+                        {{ form_label(form.complementAdresse, 'Complément d\'adresse', {'label_attr': {'class': 'block text-gray-700 font-medium mb-2'}}) }}
+                        {{ form_widget(form.complementAdresse, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-joel-red focus:border-transparent transition-all duration-200'}}) }}
+                        {{ form_errors(form.complementAdresse) }}
+                    </div>
+                    
+                    <div>
+                        {{ form_label(form.codePostal, 'Code postal', {'label_attr': {'class': 'block text-gray-700 font-medium mb-2'}}) }}
+                        {{ form_widget(form.codePostal, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-joel-red focus:border-transparent transition-all duration-200'}}) }}
+                        {{ form_errors(form.codePostal) }}
+                    </div>
+                    
+                    <div>
+                        {{ form_label(form.ville, 'Ville', {'label_attr': {'class': 'block text-gray-700 font-medium mb-2'}}) }}
+                        {{ form_widget(form.ville, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-joel-red focus:border-transparent transition-all duration-200'}}) }}
+                        {{ form_errors(form.ville) }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact -->
+            <div class="border-b border-gray-200 pb-8">
+                <h2 class="text-xl font-bold text-joel-red mb-6 flex items-center">
+                    <i class="fas fa-envelope mr-3"></i> Contact
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="md:col-span-2">
+                        {{ form_label(form.mail, 'Email', {'label_attr': {'class': 'block text-gray-700 font-medium mb-2'}}) }}
+                        {{ form_widget(form.mail, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-joel-red focus:border-transparent transition-all duration-200'}}) }}
+                        {{ form_errors(form.mail) }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Permis de conduire -->
+            <div class="border-b border-gray-200 pb-8">
+                <h2 class="text-xl font-bold text-joel-red mb-6 flex items-center">
+                    <i class="fas fa-id-card mr-3"></i> Permis de conduire
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="md:col-span-2">
+                        {{ form_label(form.numeroPermis, 'Numéro de permis', {'label_attr': {'class': 'block text-gray-700 font-medium mb-2'}}) }}
+                        {{ form_widget(form.numeroPermis, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-joel-red focus:border-transparent transition-all duration-200'}}) }}
+                        {{ form_errors(form.numeroPermis) }}
+                    </div>
+                    
+                    <div>
+                        {{ form_label(form.datePermis, 'Date de délivrance', {'label_attr': {'class': 'block text-gray-700 font-medium mb-2'}}) }}
+                        {{ form_widget(form.datePermis, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-joel-red focus:border-transparent transition-all duration-200'}}) }}
+                        {{ form_errors(form.datePermis) }}
+                    </div>
+                    
+                    <div class="md:col-span-2">
+                        {{ form_label(form.villeDelivrancePermis, 'Ville de délivrance', {'label_attr': {'class': 'block text-gray-700 font-medium mb-2'}}) }}
+                        {{ form_widget(form.villeDelivrancePermis, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-joel-red focus:border-transparent transition-all duration-200'}}) }}
+                        {{ form_errors(form.villeDelivrancePermis) }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Informations de connexion -->
+            <div class="border-b border-gray-200 pb-8">
+                <h2 class="text-xl font-bold text-joel-red mb-6 flex items-center">
+                    <i class="fas fa-lock mr-3"></i> Sécurité
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="relative">
+                        {{ form_label(form.password.first, 'Mot de passe', {'label_attr': {'class': 'block text-gray-700 font-medium mb-2'}}) }}
+                        {{ form_widget(form.password.first, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-joel-red focus:border-transparent transition-all duration-200'}}) }}
+                        <i class="fas fa-eye js-password-toggle absolute right-3 top-10 cursor-pointer text-gray-500"></i>
+                        {{ form_errors(form.password.first) }}
+                    </div>
+                    
+                    <div class="relative">
+                        {{ form_label(form.password.second, 'Confirmation du mot de passe', {'label_attr': {'class': 'block text-gray-700 font-medium mb-2'}}) }}
+                        {{ form_widget(form.password.second, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-joel-red focus:border-transparent transition-all duration-200'}}) }}
+                        <i class="fas fa-eye js-password-toggle absolute right-3 top-10 cursor-pointer text-gray-500"></i>
+                        {{ form_errors(form.password.second) }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Terms and conditions -->
+            {% if form.agreeTerms is defined %}
+            <div class="border-b border-gray-200 pb-8">
+                <div class="flex items-start">
+                    <div class="flex items-center h-5">
+                        {{ form_widget(form.agreeTerms, {'attr': {'class': 'h-4 w-4 text-joel-red border-gray-300 rounded focus:ring-joel-red'}}) }}
+                    </div>
+                    <div class="ml-3 text-sm">
+                        {{ form_label(form.agreeTerms, 'J\'accepte les conditions générales', {'label_attr': {'class': 'font-medium text-gray-700'}}) }}
+                        <div class="form-error mt-1">
+                            {{ form_errors(form.agreeTerms) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Submit button -->
+            <div class="pt-6">
+                <button type="submit" 
+                        class="bg-joel-red hover:bg-joel-red-dark text-white font-bold px-8 py-4 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg w-full md:w-auto">
+                    <i class="fas fa-user-plus mr-2"></i>
+                    Créer mon compte
+                </button>
+                
+                <div class="text-center mt-4">
+                    <a href="{{ path('app_login') }}" class="text-sm text-gray-600 hover:text-joel-red">
+                        <i class="fas fa-sign-in-alt mr-1"></i>
+                        Déjà inscrit ? Connectez-vous
+                    </a>
+                </div>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .form-error {
+            color: #dc3545;
+            font-size: 0.875em;
+            margin-top: 0.25rem;
+        }
+        
+        .form-control:focus {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        }
+        
+        .form-section-title {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: #495057;
+            border-bottom: 1px solid #e9ecef;
+            padding-bottom: 0.5rem;
+        }
+
+        .form-section-title i {
+            margin-right: 0.5rem;
+            color: #dc3545;
+        }
+
+        .form-row-section {
+            margin-bottom: 2rem;
+        }
+
+        .js-password-toggle {
+            position: absolute;
+            right: 10px;
+            top: 38px;
+            cursor: pointer;
+            color: #6c757d;
+        }
+
+        .js-password-toggle:hover {
+            color: #dc3545;
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Toggle password visibility
+            var toggleButtons = document.querySelectorAll('.js-password-toggle');
+            toggleButtons.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    var input = this.previousElementSibling;
+                    var type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                    input.setAttribute('type', type);
+                    this.classList.toggle('fa-eye');
+                    this.classList.toggle('fa-eye-slash');
+                });
+            });
+        });
+    </script>
+{% endblock %}

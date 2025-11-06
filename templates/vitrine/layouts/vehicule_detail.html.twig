@@ -1,0 +1,71 @@
+{% extends 'vitrine/base.html.twig' %}
+
+{% block title %}
+    {{ vehicule_data.marque|lower }} {{ vehicule_data.modele|lower }}
+{% endblock %}
+
+{% block body %}
+<div class="container mx-auto px-4 py-12">
+    <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-12">
+            <h1 class="text-3xl md:text-4xl font-bold text-joel-red">{{ vehicule_data.titre }}</h1>
+            <div class="w-24 h-1 bg-joel-red mx-auto mt-4"></div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+            <!-- Vehicle Image -->
+            <div class="bg-white rounded-lg shadow-lg p-4">
+                <img src="{{ vehicule_data.image }}" alt="{{ vehicule_data.titre }}" class="w-full h-auto rounded-lg">
+            </div>
+
+            <!-- Vehicle Details -->
+            <div class="space-y-8">
+                <!-- Description -->
+                <div>
+                    {% if vehicule_data.description is iterable %}
+                        {% for paragraph in vehicule_data.description %}
+                            <p class="text-gray-700 leading-relaxed mb-4">{{ paragraph }}</p>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-gray-700 leading-relaxed">{{ vehicule_data.description }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Conditions -->
+                <div class="bg-joel-beige rounded-lg p-6">
+                    <h2 class="text-xl font-bold text-joel-red mb-4">Conditions de location {{ vehicule_data.titre }}</h2>
+                    <ul class="space-y-1">
+                        {% for condition in vehicule_data.conditions %}
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-joel-red mt-1 mr-2"></i>
+                                <span class="text-gray-700">{{ condition }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <!-- Characteristics -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-xl font-bold text-joel-red mb-4">Caractéristiques de {{ vehicule_data.titre }}</h2>
+                    <ul class="space-y-2">
+                        {% for caracteristique in vehicule_data.caracteristiques %}
+                            <li class="flex items-start">
+                                <i class="{{ caracteristique.icon }} text-joel-red mt-1 mr-2"></i>
+                                <span class="text-gray-700">{{ caracteristique.text }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <!-- CTA -->
+                <div class="text-center">
+                    <a href="{{ path('formulaire-contact') }}"
+                       class="bg-joel-red hover:bg-joel-red-dark text-white font-bold px-8 py-3 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg inline-block">
+                        Réserver maintenant
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
