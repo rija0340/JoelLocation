@@ -11,6 +11,24 @@
         </div>
 
         <div class="bg-white rounded-lg shadow-xl p-8">
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    {% set flashClass = '' %}
+                    {% if label == 'success' %}
+                        {% set flashClass = 'bg-green-100 border-green-400 text-green-700' %}
+                    {% elseif label == 'warning' %}
+                        {% set flashClass = 'bg-yellow-100 border-yellow-400 text-yellow-700' %}
+                    {% elseif label == 'danger' or label == 'error' %}
+                        {% set flashClass = 'bg-red-100 border-red-400 text-red-700' %}
+                    {% else %}
+                        {% set flashClass = 'bg-blue-100 border-blue-400 text-blue-700' %}
+                    {% endif %}
+                    <div class="border {{ flashClass }} px-4 py-3 rounded mb-4">
+                        <p>{{ message }}</p>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            
             <form method="post">
                 <div class="space-y-6">
                     {% if error %}
@@ -49,6 +67,19 @@
                     </a>
                 </p>
             </div>
+            
+            <!-- Reservation-specific section -->
+            {% if app.session.get('reservation') %}
+            <div class="mt-6 text-center">
+                <p class="text-gray-600">
+                    Vous avez une réservation en cours sans compte ? 
+                    <a href="{{ path('inscription') }}" 
+                       class="text-joel-red font-bold hover:text-joel-red-dark transition-colors duration-200 inline-block mt-2">
+                        Créer un compte maintenant pour finaliser votre réservation
+                    </a>
+                </p>
+            </div>
+            {% endif %}
             
             <div class="text-center mt-3">
                 <a href="{{ path('reset_password') }}" class="text-gray-600 hover:text-joel-red text-sm">Mot de passe oublié ?</a>

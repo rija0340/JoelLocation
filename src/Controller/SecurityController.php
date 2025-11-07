@@ -137,7 +137,8 @@ class SecurityController extends AbstractController
         }
         
         // Add flash message if there's an ongoing reservation
-        if ($hasOngoingReservation) {
+        // Only show this if the user is not coming from inscription session to avoid duplicate messages
+        if ($hasOngoingReservation && !$fromInscriptionSession) {
             $this->addFlash(
                 'info',
                 'Vous avez une réservation en cours. Connectez-vous ou créez un compte pour finaliser votre réservation.'

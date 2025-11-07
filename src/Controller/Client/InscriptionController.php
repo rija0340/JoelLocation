@@ -127,7 +127,7 @@ class InscriptionController extends AbstractController
     }
 
     /**
-     * @Route("/validation-email/{token", name="validate_email")
+     * @Route("/validation-email/{token}", name="validate_email")
      */
     public function validateEmail(string $token, Request $request): Response
     {
