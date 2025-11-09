@@ -1,13 +1,13 @@
 <input type="checkbox" id="modalConducteurToggle" class="modal-toggle" />
-<div class="modal" id="modalConducteur">
-  <div class="modal-box max-w-3xl">
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden" id="modalConducteur">
+  <div class="bg-white rounded-lg max-w-3xl w-full mx-4 p-6">
     <h5 class="text-xl font-bold flex items-center gap-2 mb-4">
       <i class="fa fa-plus"></i>
       Ajouter un conducteur à la réservation
     </h5>
     {{ render(controller('App\\Controller\\Client\\ReservationController::listeConducteurs',{'id' : reservation.id})) }}
-    <div class="modal-action">
-      <label for="modalConducteurToggle" class="btn btn-ghost">Fermer</label>
+    <div class="flex justify-end mt-6">
+      <label for="modalConducteurToggle" class="border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-lg transition-all duration-300">Fermer</label>
     </div>
   </div>
 </div>

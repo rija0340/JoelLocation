@@ -1,17 +1,17 @@
 <!-- 🟦 Bloc: Vos options -->
-<div class="card shadow-lg bg-base-100 mb-8 rounded-xl">
-	<div class="card-body p-6">
-		<h3 class="text-2xl title-red mb-4 flex items-center">
-			<i class="fas fa-chevron-right mr-3 text-error"></i>
+<div class="shadow-lg bg-white mb-8 rounded-xl overflow-hidden">
+	<div class="p-6">
+		<h3 class="text-2xl text-joel-red font-bold mb-4 flex items-center">
+			<i class="fas fa-chevron-right mr-3 text-red-500"></i>
 			Vos options
 		</h3>
 
 		<div
 			class="grid grid-cols-1 md:grid-cols-2 gap-6">
 			<!-- 🟩 Conducteur additionnel -->
-			<div class="flex flex-col md:flex-row gap-4 bg-base-50 p-4 rounded-lg group hover:shadow-md transition-all duration-300 transform hover:-translate-y-1">
+			<div class="flex flex-col md:flex-row gap-4 bg-gray-50 p-4 rounded-lg group hover:shadow-md transition-all duration-300 transform hover:-translate-y-1">
 				<div class="w-full md:w-1/3">
-					<div class="card bg-base-200 shadow-sm rounded-xl overflow-hidden">
+					<div class="shadow-sm rounded-xl overflow-hidden">
 						<div class="relative w-full h-32 bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
 							<img src="{{asset('images/options_garanties/CONDUCTEUR_ADDITIONNEL.png')}}" alt="Conducteur additionnel" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-300" onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
 							<div class="hidden absolute inset-0 flex items-center justify-center">
@@ -22,28 +22,28 @@
 					</div>
 				</div>
 				<div class="w-full md:w-2/3">
-					<h5 class="text-lg font-semibold text-accent mb-2">Conducteur additionnel</h5>
-					<p class="text-sm text-base-content mb-3">
+					<h5 class="text-lg font-semibold text-joel-red mb-2">Conducteur additionnel</h5>
+					<p class="text-sm text-gray-800 mb-3">
 						À Joel Location, nous savons que les longs trajets peuvent être fatigants. Ajoutez un conducteur supplémentaire pour plus de confort.
 					</p>
 					<div class="flex gap-4">
 						<label class="flex items-center gap-2 cursor-pointer">
-							<input type="radio" name="radio-conducteur" value="true" class="radio radio-danger checked:bg-danger" {% if devis.conducteur %} checked {% endif %}>
-							<span class="font-semibold text-base-content">Oui ({{ prixConductSuppl }}
+							<input type="radio" name="radio-conducteur" value="true" class="border border-gray-300 rounded text-red-500 focus:ring-red-500" {% if devis.conducteur %} checked {% endif %}>
+							<span class="font-semibold text-gray-800">Oui ({{ prixConductSuppl }}
 								€)</span>
 						</label>
 						<label class="flex items-center gap-2 cursor-pointer">
-							<input type="radio" name="radio-conducteur" value="false" class="radio radio-danger checked:bg-danger" {% if devis.conducteur == false %} checked {% endif %}>
-							<span class="font-semibold text-base-content">Non</span>
+							<input type="radio" name="radio-conducteur" value="false" class="border border-gray-300 rounded text-red-500 focus:ring-red-500" {% if devis.conducteur == false %} checked {% endif %}>
+							<span class="font-semibold text-gray-800">Non</span>
 						</label>
 					</div>
 				</div>
 			</div>
 
 			<!-- 🟨 Siège enfant / bébé -->
-			<div class="flex flex-col md:flex-row gap-4 bg-base-50 p-4 rounded-lg group hover:shadow-md transition-all duration-300 transform hover:-translate-y-1">
+			<div class="flex flex-col md:flex-row gap-4 bg-gray-50 p-4 rounded-lg group hover:shadow-md transition-all duration-300 transform hover:-translate-y-1">
 				<div class="w-full md:w-1/3">
-					<div class="card bg-base-200 shadow-sm rounded-xl overflow-hidden">
+					<div class="shadow-sm rounded-xl overflow-hidden">
 						<div class="relative w-full h-32 bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
 							<img src="{{asset('images/options_garanties/SIEGE.jpg')}}" alt="Siège bébé / enfant" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-300" onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
 							<div class="hidden absolute inset-0 flex items-center justify-center">
@@ -54,28 +54,28 @@
 					</div>
 				</div>
 				<div class="w-full md:w-2/3">
-					<h5 class="text-lg font-semibold text-accent mb-2">Siège bébé / enfant</h5>
-					<p class="text-sm text-base-content mb-3">Nous mettons à disposition des sièges homologués NF pour la sécurité de vos enfants.</p>
+					<h5 class="text-lg font-semibold text-joel-red mb-2">Siège bébé / enfant</h5>
+					<p class="text-sm text-gray-800 mb-3">Nous mettons à disposition des sièges homologués NF pour la sécurité de vos enfants.</p>
 					<div class="space-y-3">
 						{% for option in allOptions %}
 							{% if option.type == "siège" %}
 								{% if option.appelation matches '/Siège/' %}
 									<div class="flex items-center gap-3">
 
-										<div class="flex items-center border border-base-200 rounded-lg shadow-sm hover:border-primary/50 transition-colors duration-200">
-											<button class="btn btn-sm btn-square btn-ghost text-base-content hover:bg-primary/10 hover:text-primary font-bold p-1.5 transition-colors duration-200" id="decrement_{{ option.id }}" aria-label="Decrement quantity">-</button>
+										<div class="flex items-center border border-gray-200 rounded-lg shadow-sm hover:border-red-500/50 transition-colors duration-200">
+											<button class="text-gray-700 hover:bg-red-50 hover:text-red-500 font-bold px-2 transition-colors duration-200" id="decrement_{{ option.id }}" aria-label="Decrement quantity" type="button">-</button>
 
-											<input type="number" class="w-14 text-base text-center bg-transparent text-base-content border-x border-base-200 px-2 hover:bg-base-50 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all duration-200" name="siege_{{ option.id }}" id="number_{{ option.id }}" value="{% if option.id in devis.devisOptions|map(item => item.opt.id) %}{{ devis.devisOptions|filter(item => item.opt.id == option.id)|first.quantity }}{% else %}0{% endif %}" min="0" max="3" placeholder="0">
+											<input type="number" class="w-14 text-base text-center bg-transparent text-gray-800 border-x border-gray-200 px-2 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500/50 transition-all duration-200" name="siege_{{ option.id }}" id="number_{{ option.id }}" value="{% if option.id in devis.devisOptions|map(item => item.opt.id) %}{{ devis.devisOptions|filter(item => item.opt.id == option.id)|first.quantity }}{% else %}0{% endif %}" min="0" max="3" placeholder="0">
 
-											<button class="btn btn-sm btn-square btn-ghost text-base-content hover:bg-primary/10 hover:text-primary font-bold p-1.5 transition-colors duration-200" id="increment_{{ option.id }}" aria-label="Increment quantity">+</button>
+											<button class="text-gray-700 hover:bg-red-50 hover:text-red-500 font-bold px-2 transition-colors duration-200" id="increment_{{ option.id }}" aria-label="Increment quantity" type="button">+</button>
 										</div>
 
-										<span class="text-sm font-medium text-base-content">{{ option.appelation }}</span>
+										<span class="text-sm font-medium text-gray-800">{{ option.appelation }}</span>
 									</div>
 								{% else %}
 									<label class="flex items-center gap-2 cursor-pointer">
-										<input type="checkbox" name="checkboxOptions[]" value="{{ option.id }}" class="checkbox checkbox-danger checked:bg-danger" {% if option.id in devis.devisOptions|map(item => item.opt.id) %} checked {% endif %}>
-										<span class="text-sm font-medium text-base-content">
+										<input type="checkbox" name="checkboxOptions[]" value="{{ option.id }}" class="border border-gray-300 rounded text-red-500 focus:ring-red-500" {% if option.id in devis.devisOptions|map(item => item.opt.id) %} checked {% endif %}>
+										<span class="text-sm font-medium text-gray-800">
 											{{ option.appelation }}
 											{% if option.prix != 0 %}:
 												{{ option.prix }}
@@ -97,9 +97,9 @@
 			{% set image_url = 'images/options_garanties/' ~ image_url ~ '.png'  %}
 
 				{% if option.type != "siège" %}
-					<div class="flex flex-col md:flex-row gap-4 bg-base-50 p-4 rounded-lg group hover:shadow-md transition-all duration-300 transform hover:-translate-y-1">
+					<div class="flex flex-col md:flex-row gap-4 bg-gray-50 p-4 rounded-lg group hover:shadow-md transition-all duration-300 transform hover:-translate-y-1">
 						<div class="w-full md:w-1/3">
-							<div class="card bg-base-200 shadow-sm rounded-xl overflow-hidden">
+							<div class="shadow-sm rounded-xl overflow-hidden">
 								<div class="relative w-full h-32 bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
 									<img src="{{asset(image_url)}}" alt="{{ option.appelation }}" class="w-full h-full object-cover  group-hover:opacity-100 transition-opacity duration-300" onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
 									<div class="hidden absolute inset-0 flex items-center justify-center">
@@ -110,11 +110,11 @@
 							</div>
 						</div>
 						<div class="w-full md:w-2/3">
-							<h5 class="text-lg font-semibold text-accent mb-2">{{ option.appelation }}</h5>
-							<p class="text-sm text-base-content mb-3">{{ option.description|raw }}</p>
+							<h5 class="text-lg font-semibold text-joel-red mb-2">{{ option.appelation }}</h5>
+							<p class="text-sm text-gray-800 mb-3">{{ option.description|raw }}</p>
 							<label class="flex items-center gap-2 cursor-pointer">
-								<input type="checkbox" name="checkboxOptions[]" value="{{ option.id }}" class="checkbox checkbox-danger checked:bg-danger" {% if option.id in devis.devisOptions|map(item => item.opt.id) %} checked {% endif %}>
-								<span class="text-sm font-medium text-base-content">{{ option.appelation }}:
+								<input type="checkbox" name="checkboxOptions[]" value="{{ option.id }}" class="border border-gray-300 rounded text-red-500 focus:ring-red-500" {% if option.id in devis.devisOptions|map(item => item.opt.id) %} checked {% endif %}>
+								<span class="text-sm font-medium text-gray-800">{{ option.appelation }}:
 									{{ option.prix }}
 									€</span>
 							</label>
@@ -127,10 +127,10 @@
 </div>
 
 <!-- 🟥 Bloc: Vos garanties -->
-<div class="card shadow-lg bg-base-100 mb-8 rounded-xl">
-	<div class="card-body p-6">
-		<h3 class="text-2xl title-red mb-4 flex items-center">
-			<i class="fas fa-chevron-right mr-3 text-error"></i>
+<div class="shadow-lg bg-white mb-8 rounded-xl overflow-hidden">
+	<div class="p-6">
+		<h3 class="text-2xl text-joel-red font-bold mb-4 flex items-center">
+			<i class="fas fa-chevron-right mr-3 text-red-500"></i>
 			Vos garanties
 		</h3>
 
@@ -146,9 +146,9 @@
 			 	{% set image_url = 'images/options_garanties/' ~ image_url ~ '.png'  %}
 			{% endif %}
 
-				<div class="flex flex-col md:flex-row gap-4 bg-base-50 p-4 rounded-lg group hover:shadow-md transition-all duration-300 transform hover:-translate-y-1">
+				<div class="flex flex-col md:flex-row gap-4 bg-gray-50 p-4 rounded-lg group hover:shadow-md transition-all duration-300 transform hover:-translate-y-1">
 					<div class="w-full md:w-1/3">
-						<div class="card bg-base-200 shadow-sm rounded-xl overflow-hidden">
+						<div class="shadow-sm rounded-xl overflow-hidden">
 							<div class="relative w-full h-32 bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
 								<img src="{{asset(image_url)}}" alt="{{ garantie.appelation }}" class="w-full h-full object-cover  group-hover:opacity-100 transition-opacity duration-300" onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
 								<div class="hidden absolute inset-0 flex items-center justify-center">
@@ -159,11 +159,11 @@
 						</div>
 					</div>
 					<div class="w-full md:w-2/3">
-						<h5 class="text-lg font-semibold text-accent mb-2">{{ garantie.appelation }}</h5>
-						<p class="text-sm text-base-content mb-3">{{ garantie.description }}</p>
+						<h5 class="text-lg font-semibold text-joel-red mb-2">{{ garantie.appelation }}</h5>
+						<p class="text-sm text-gray-800 mb-3">{{ garantie.description }}</p>
 						<label class="flex items-center gap-2 cursor-pointer">
-							<input type="checkbox" name="checkboxGaranties[]" value="{{ garantie.id }}" class="checkbox checkbox-danger checked:bg-danger" {% if garantie.id in devis.garanties|map(item => item.id) %} checked {% endif %}>
-							<span class="text-sm font-medium text-base-content">{{ garantie.prix }}
+							<input type="checkbox" name="checkboxGaranties[]" value="{{ garantie.id }}" class="border border-gray-300 rounded text-red-500 focus:ring-red-500" {% if garantie.id in devis.garanties|map(item => item.id) %} checked {% endif %}>
+							<span class="text-sm font-medium text-gray-800">{{ garantie.prix }}
 								€</span>
 						</label>
 					</div>

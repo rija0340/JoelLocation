@@ -1,0 +1,20 @@
+/*!*******************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[1].oneOf[1].use[2]!./assets/backoffice/planjour/css/planJour.css ***!
+  \*******************************************************************************************************************************************************************************************************************/
+table.dataTable thead th.sorting:after,
+table.dataTable thead th.sorting_asc:after,
+table.dataTable thead th.sorting_desc:after {
+    top: 30px !important;
+}
+/*!****************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[1].oneOf[1].use[2]!./assets/backoffice/planjour/css/datatables/styles.css ***!
+  \****************************************************************************************************************************************************************************************************************************/
+/* div.dataTables_length label {
+    display: flex;
+    align-items: center;
+}
+
+select[name="datatable_length"] {
+    margin-left: 5px;
+    margin-right: 5px;
+} */

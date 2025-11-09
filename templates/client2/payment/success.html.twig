@@ -6,35 +6,43 @@
 {% block stylesheets %}{% endblock %}
 
 {% block body %}
-	<div class="max-w-2xl mx-auto p-6">
-		<div class="card bg-base-100 shadow-xl">
-			<div class="card-body space-y-4">
-				<h3 class="text-2xl title-red">Confirmation de réservation</h3>
-
-				<p class="text-base-content">
-					Bonjour
-					<span class="font-semibold">{{ reservation.client.nom }}</span>,
-				</p>
-
-				<p class="text-base-content">
-					Nous vous remercions pour votre réservation
-					<span class="font-semibold">N°{{ reservation.reference }}</span>.
-				</p>
-
-				<p class="text-base-content">
-					Une confirmation vient de vous être envoyée par email à l'adresse :
-					<span class="font-mono text-sm">{{ reservation.client.mail }}</span>.
-				</p>
-
-				<p class="text-base-content">
-					Cette réservation se trouve dans l'onglet "à venir" dans le menu mes réservations
-				</p>
-
-				<div>
-					<a href="{{ path('client_reservations') ~ '#avenir' }}" class="btn btn-error btn-sm">
-						Consulter mes réservations
-					</a>
+	<div class="max-w-2xl mx-auto">
+		<div class="bg-white rounded-lg shadow-lg p-8 hover-lift">
+			<!-- Success Icon -->
+			<div class="text-center mb-6">
+				<div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+					<i class="fas fa-check-circle text-3xl text-green-600"></i>
 				</div>
+				<h3 class="text-2xl font-bold title-red">Confirmation de réservation</h3>
+			</div>
+
+			<div class="space-y-4 text-gray-700">
+				<p class="text-lg">
+					Bonjour
+					<span class="font-semibold text-joel-red">{{ reservation.client.nom }}</span>,
+				</p>
+
+				<p>
+					Nous vous remercions pour votre réservation
+					<span class="font-semibold text-joel-red">N°{{ reservation.reference }}</span>.
+				</p>
+
+				<p>
+					Une confirmation vient de vous être envoyée par email à l'adresse :
+					<span class="font-mono text-sm bg-gray-100 px-2 py-1 rounded">{{ reservation.client.mail }}</span>.
+				</p>
+
+				<p>
+					Cette réservation se trouve dans l'onglet "à venir" dans le menu mes réservations.
+				</p>
+			</div>
+
+			<div class="text-center mt-8">
+				<a href="{{ path('client_reservations') ~ '#avenir' }}"
+				   class="inline-flex items-center px-6 py-3 bg-joel-red text-white font-semibold rounded-lg hover:bg-joel-red-dark transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+					<i class="fas fa-calendar-check mr-2"></i>
+					Consulter mes réservations
+				</a>
 			</div>
 		</div>
 	</div>

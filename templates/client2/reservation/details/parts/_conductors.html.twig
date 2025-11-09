@@ -1,11 +1,11 @@
-<div class="card bg-white shadow-md rounded-lg">
-	<div class="card-content p-6">
+<div class="bg-white rounded-lg shadow-md overflow-hidden">
+	<div class="p-6">
 		<div class="flex justify-between items-center mb-4">
-			<h4 class="text-2xl md:text-2xl font-bold text-accent flex items-center mb-4">
+			<h4 class="text-2xl md:text-2xl font-bold text-joel-red flex items-center mb-4">
 				Conducteurs
 			</h4>
 			{% if reservation.conducteursClient|length < 2 %}
-				<label for="modalConducteurToggle" class="btn btn-ghost btn-sm text-primary">
+				<label for="modalConducteurToggle" class="text-joel-red hover:text-joel-red-dark font-medium cursor-pointer">
 					<i class="fas fa-plus-circle mr-1"></i>
 					Ajouter un conducteur
 				</label>
@@ -19,43 +19,43 @@
 				{% endif %}
 			{% endfor %}
 			{% for conducteur in reservation.conducteursClient %}
-				<div class="conductor-card p-4 rounded-lg {% if conducteur.isPrincipal %}bg-base-200{% else %}border border-base-300{% endif %}">
+				<div class="p-4 rounded-lg {% if conducteur.isPrincipal %}bg-gray-100{% else %}border border-gray-300{% endif %}">
 					<div class="flex justify-between items-start">
 						<div>
 							<div class="flex items-center mb-2">
 								<span class="font-semibold mr-2">{{ conducteur.nom }}
 									{{ conducteur.prenom }}</span>
 								{% if conducteur.isPrincipal %}
-									<span class="badge badge-warning">Principal</span>
+									<span class="bg-yellow-500 text-white text-xs px-2 py-1 rounded">Principal</span>
 								{% endif %}
 							</div>
-							<small class="text-base-content/70 block">Permis:
+							<small class="text-gray-600 block">Permis:
 								{{ conducteur.numeroPermis }}</small>
-							<small class="text-base-content/70 block">Délivré:
+							<small class="text-gray-600 block">Délivré:
 								{{ conducteur.dateDelivrance|date('m/Y') }}
 								à
 								{{ conducteur.villeDelivrance }}</small>
 						</div>
 						<div class="flex items-center space-x-2">
 							{% if somme == 0 %}
-								<a href="{{ path('make_conducteur_principal', {'id': conducteur.id, 'id_resa': reservation.id}) }}" class="btn btn-outline btn-sm btn-success flex items-center gap-1">
+								<a href="{{ path('make_conducteur_principal', {'id': conducteur.id, 'id_resa': reservation.id}) }}" class="text-green-600 hover:text-green-800 text-sm font-medium flex items-center gap-1 mr-2">
 									<i class="fas fa-star"></i>
 									Rendre Principal
 								</a>
 							{% elseif conducteur.isPrincipal %}
-								<a href="{{ path('remove_conducteur_principal', {'id': conducteur.id, 'id_resa': reservation.id}) }}" class="btn btn-outline btn-sm btn-secondary flex items-center gap-1">
+								<a href="{{ path('remove_conducteur_principal', {'id': conducteur.id, 'id_resa': reservation.id}) }}" class="text-gray-600 hover:text-gray-800 text-sm font-medium flex items-center gap-1 mr-2">
 									<i class="fas fa-edit"></i>
 									Retirer Principal
 								</a>
 							{% endif %}
-							<a href="{{ path('conducteur_edit', {'id': conducteur.id}) }}" class="btn btn-ghost btn-sm text-base-content/50 tooltip" data-tip="Modifier">
+							<a href="{{ path('conducteur_edit', {'id': conducteur.id}) }}" class="text-gray-500 hover:text-gray-700 mr-2" title="Modifier">
 								<i class="fas fa-edit"></i>
 							</a>
 							<form method="post" action="{{ path('client_conducteur_remove_reservation', {'id': conducteur.id, 'id_resa' : reservation.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer ce conducteur ?');" class="inline-block">
 								<input type="hidden" name="_method" value="DELETE">
 								<input type="hidden" name="reservation" value="{{ reservation.id }}">
 								<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ conducteur.id) }}">
-								<button class="btn btn-ghost btn-sm text-base-content/50 tooltip" data-tip="Supprimer" type="submit">
+								<button class="text-gray-500 hover:text-red-600" title="Supprimer" type="submit">
 									<i class="fas fa-trash-alt"></i>
 								</button>
 							</form>

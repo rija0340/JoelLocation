@@ -7,20 +7,24 @@
 
 {% endblock %}
 {% block body %}
+  <div class="space-y-8">
+    <header class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+      <div>
+        <div class="flex items-center mb-2">
+          <h1 class="text-3xl font-bold title-red">Modifier mes informations</h1>
+          <div class="ml-4 w-12 h-1 bg-joel-red"></div>
+        </div>
+        <p class="text-gray-600">Mettez à jour vos informations personnelles</p>
+      </div>
+      <a href="{{ path('espaceClient_index') }}"
+         class="inline-flex items-center px-6 py-3 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition-all duration-300 shadow-md hover:shadow-lg">
+        <i class="fas fa-arrow-left mr-2"></i>
+        Annuler modifications
+      </a>
+    </header>
 
-  <header class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
-    <div>
-      <h1 class="text-3xl title-red">Modifier mes informations</h1>
-      {# <p class="text-gray-500">Gérez vos conducteurs</p> #}
+    <div class="bg-white rounded-lg shadow-lg p-6 hover-lift">
+      {{ include('client2/information/_formEditClient.html.twig', {'button_label': 'Modifier'}) }}
     </div>
-    	<a href="{{ path('espaceClient_index') }}" class="btn btn-dark">
-			<i class="fa fa-arrow-left" aria-hidden="true"></i>
-			Annuler modifications</a>
-  </header>
-
-	<div class="card bg-base-100 shadow-md p-4 mt-8">
-
-		{{ include('client2/information/_formEditClient.html.twig', {'button_label': 'Modifier'}) }}
-
-	</div>
+  </div>
 {% endblock %}

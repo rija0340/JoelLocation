@@ -11,101 +11,95 @@
 {% endblock %}
 {% block nav %}{% endblock %}
 {% block body %}
-	<div class="row">
-		<div class="col-md-3">
-			<div class="votreVehicule">
-				<h5 class="text-uppercase">
+	<div class="flex flex-col md:flex-row gap-6">
+		<div class="md:w-1/4">
+			<div class="mb-4">
+				<h5 class="text-uppercase text-lg font-semibold">
 					Votre véhicule
 				</h5>
 			</div>
-			<div class="card p-2 btn-block card mdl-shadow--2dp">
-				<div class="vehicule border-bottom pb-2">
-					<div class="marque_modele">{{devis.vehicule.marque}}
+			<div class="bg-white p-2 shadow-md rounded-lg">
+				<div class="border-b border-gray-200 pb-2">
+					<div class="text-lg font-semibold">{{devis.vehicule.marque}}
 						{{devis.vehicule.modele}}</div>
-					<img src="/uploads/vehicules/{{ devis.vehicule.image }}" alt="{{ devis.vehicule.image }}" class="img-circle  " style="width : 100%;">
+					<img src="/uploads/vehicules/{{ devis.vehicule.image }}" alt="{{ devis.vehicule.image }}" class="rounded-lg" style="width : 100%;">
 
 				</div>
 				<div>
-					<div class="divDepart border-bottom ">
-						<h5 class="heading">Agence départ
+					<div class="border-b border-gray-200 pb-4">
+						<h5 class="font-semibold mb-2">Agence départ
 						</h5>
 						<p>
-							<i class="fa fa-map-marker"></i>
+							<i class="fa fa-map-marker mr-2"></i>
 							<span id="agence_depart">{{devis.agenceDepart}}</span><br>
 							<span id="date_depart">{{devis.dateDepart | date('d-m-Y H:i')}}</span>
 							<span id="heure_depart"></span>
 						</p>
 					</div>
-					<div class="divRetour border-bottom">
-						<h5 class="heading">Agence retour
+					<div class="border-b border-gray-200 pb-4">
+						<h5 class="font-semibold mb-2">Agence retour
 						</h5>
 						<p>
-							<i class="fa fa-map-marker"></i>
+							<i class="fa fa-map-marker mr-2"></i>
 							<span id="agence_retour">{{devis.agenceRetour}}</span><br>
 							<span id="date_retour">{{devis.dateRetour| date('d-m-Y H:i')}}</span>
 							<span id="heure_retour"></span>
 						</p>
 					</div>
-					<div class="divPrestation border-bottom">
-						<h5 class="heading">Prestations incluses</h5>
+					<div class="border-b border-gray-200 pb-4">
+						<h5 class="font-semibold mb-2">Prestations incluses</h5>
 						<ul class="pl-2 ">
-							<li>
-								<i class="fa fa-check"></i>
+							<li class="flex items-center mb-1">
+								<i class="fa fa-check mr-2"></i>
 								Kilométrage Illimité
 							</li>
-							<li>
-								<i class="fa fa-check"></i>
+							<li class="flex items-center mb-1">
+								<i class="fa fa-check mr-2"></i>
 								Assurance accidents causés aux tiers
 							</li>
-							<li>
-								<i class="fa fa-check"></i>
+							<li class="flex items-center mb-1">
+								<i class="fa fa-check mr-2"></i>
 								Assurance responsabilité civile
 							</li>
-							<li>
-								<i class="fa fa-check"></i>
+							<li class="flex items-center mb-1">
+								<i class="fa fa-check mr-2"></i>
 								Assurance collision (CDW)
 							</li>
-							<li>
-								<i class="fa fa-check"></i>
+							<li class="flex items-center mb-1">
+								<i class="fa fa-check mr-2"></i>
 								TVA 8.5 %
 							</li>
 						</ul>
 					</div>
-					<div class="divOptions border-bottom">
-						<h5 class="heading">Option(s)
+					<div class="border-b border-gray-200 pb-4">
+						<h5 class="font-semibold mb-2">Option(s)
 						</h5>
 						<ul class="pl-2 ">
 							{% for option in devis.options %}
-								<li>
-									<div class="d-flex">
-										<div>
-											<i class="fa fa-check"></i>
-											{{option.appelation}}
-										</div>
-										<div class="ml-auto">
-											{{option.prix}}€
-										</div>
+								<li class="flex justify-between mb-1">
+									<div class="flex items-center">
+										<i class="fa fa-check mr-2"></i>
+										{{option.appelation}}
 									</div>
-
+									<div>
+										{{option.prix}}€
+									</div>
 								</li>
 							{% endfor %}
 						</ul>
 					</div>
-					<div class="divGaranties">
-						<h5 class="heading">Garantie(s)
+					<div class="pb-4">
+						<h5 class="font-semibold mb-2">Garantie(s)
 						</h5>
 						<ul class="pl-2 ">
 							{% for garantie in devis.garanties %}
-								<li>
-									<div class="d-flex">
-										<div>
-											<i class="fa fa-check"></i>
-											{{garantie.appelation}}
-										</div>
-										<div class="ml-auto">
-											{{garantie.prix}}€
-
-										</div>
+								<li class="flex justify-between mb-1">
+									<div class="flex items-center">
+										<i class="fa fa-check mr-2"></i>
+										{{garantie.appelation}}
+									</div>
+									<div>
+										{{garantie.prix}}€
 									</div>
 								</li>
 							{% endfor %}
@@ -114,43 +108,48 @@
 
 				</div>
 			</div>
-			<div class="divTarifTotal text-center">
-				<h5 class="heading">Prix total pour
+			<div class="text-center mt-4">
+				<h5 class="font-semibold">Prix total pour
 					{{devis.duree}}
 					jours
 				</h5>
-				<span class="tarifTotal">{{devis.prix}}€</span><br>
-				<span class="tarifJournalier">Soit
+				<span class="text-xl font-bold">{{devis.prix}}€</span><br>
+				<span>Soit
 					{{(devis.prix / devis.duree)|number_format(2,'.') }}€ / jour</span>
 			</div>
 		</div>
-		<div class="col-md-9 ">
-			<div class="card mdl-shadow--2dp p-2">
-				<div align="center" style="width:400px;align:center;text-align:center;margin-left:auto;margin-right:auto">
-					<form action="/payement" method="post" id="payment-form" class="d-block">
-						<div>
-							<label for="card-element" style="font-family:Arial;color:#960018;">
+		<div class="md:w-3/4">
+			<div class="bg-white shadow-md p-2 rounded-lg">
+				<div class="w-full max-w-xs mx-auto text-center">
+					<form action="/payement" method="post" id="payment-form" class="block">
+						<div class="mb-6">
+							<label for="card-element" class="block text-left text-red-700 font-medium mb-2">
 								les informations de la carte
 							</label>
 							<div
-								id="card-element"><!-- A Stripe Element will be inserted here. -->
+								id="card-element" class="border border-gray-300 rounded-lg p-3">
+								<!-- A Stripe Element will be inserted here. -->
 							</div>
 							<!-- Used to display Element errors. -->
-							<div id="card-errors" role="alert"></div>
+							<div id="card-errors" role="alert" class="text-red-500 mt-2"></div>
 						</div>
-						<br>
-						<div>
+						<div class="mb-4">
 							<input type="hidden" name="montant" id="montant" value="{{ sommePaiement }}">
 						</div>
-						<div>
+						<div class="mb-4">
 							<input type="hidden" name="id" id="devis" value="{{ devis.id }}">
 						</div>
-						<br>
-						<button class="btn btn-danger">Accepter</button>
-						<button class="btn btn-dark" onclick="window.location.href = '/';" value="Annuler"/>Annuler</button>
-				</form>
+						<div class="space-y-2">
+							<button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-all duration-300 w-full">
+								Accepter
+							</button>
+							<button type="button" class="border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-lg transition-all duration-300 w-full" onclick="window.location.href = '/';">
+								Annuler
+							</button>
+						</div>
+					</form>
+				</div>
 			</div>
 		</div>
 
-	</div>
-</div></div>{% endblock %}{% block javascripts %}<script src="https://js.stripe.com/v3/"></script><script src="{{ asset('/js/client.js')}}"></script><script src="{{ asset('js/client/reservation/step2OptionsGaranties.js')}}"></script>{% endblock %}
+	</div>{% endblock %}{% block javascripts %}<script src="https://js.stripe.com/v3/"></script><script src="{{ asset('/js/client.js')}}"></script><script src="{{ asset('js/client/reservation/step2OptionsGaranties.js')}}"></script>{% endblock %}

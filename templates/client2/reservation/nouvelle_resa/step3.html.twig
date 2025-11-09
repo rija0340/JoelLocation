@@ -34,12 +34,12 @@
 	{% endif %}
 	{% if vehiculeIsNotAvailable is defined and vehiculeIsNotAvailable %}
 		<div aria-live="assertive" role="alert" class="mx-4 my-6 flex justify-center">
-			<div class="alert alert-error shadow-lg w-full max-w-2xl rounded-lg relative">
+			<div class="bg-red-100 text-red-800 border border-red-300 shadow-lg w-full max-w-2xl rounded-lg relative p-4">
 				<div
 					class="flex gap-4 items-start flex-col sm:flex-row">
 					<!-- Icon -->
 					<div class="flex-shrink-0">
-						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 stroke-current" fill="none" viewbox="0 0 24 24">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewbox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
 						</svg>
 					</div>
@@ -54,7 +54,7 @@
 						<!-- Actions -->
 						<div class="mt-3 flex flex-wrap gap-2">
 							<a
-								href="{{ path('client_step1') }}" class="btn btn-sm btn-primary flex items-center gap-1">
+								href="{{ path('client_step1') }}" class="border border-blue-500 text-blue-500 hover:bg-blue-50 px-3 py-1.5 rounded-lg text-sm transition-all duration-300 flex items-center gap-1">
 								<!-- Restart icon -->
 								<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewbox="0 0 24 24" stroke="currentColor">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582M19.4 15A9 9 0 115 6.6M20 20l-4-4"/>
@@ -62,7 +62,7 @@
 								Nouvelle réservation
 							</a>
 							<a
-								href="{{ path('client_reservations') }}" class="btn btn-sm btn-outline flex items-center gap-1">
+								href="{{ path('client_reservations') }}" class="border border-gray-300 text-gray-700 hover:bg-gray-100 px-3 py-1.5 rounded-lg text-sm transition-all duration-300 flex items-center gap-1">
 								<!-- List / calendar icon -->
 								<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewbox="0 0 24 24" stroke="currentColor">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h8M8 11h8M8 15h5M4 6h16v12H4z"/>
@@ -74,7 +74,7 @@
 				</div>
 
 				<!-- Dismiss button -->
-				<button aria-label="Fermer" type="button" class="btn btn-xs btn-ghost absolute top-2 right-2" onclick="this.closest('[role=alert]').style.display='none'">
+				<button aria-label="Fermer" type="button" class="border border-gray-300 text-gray-700 hover:bg-gray-100 px-2 py-1 rounded-lg text-xs absolute top-2 right-2" onclick="this.closest('[role=alert]').style.display='none'">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewbox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
 					</svg>
@@ -90,19 +90,19 @@
 
 	<div class="text-center mb-2">
 		{% if step is defined and step == 'validation' %}
-			<a href="{{ path('client_reservations') }}" class="btn btn-neutral mr-2 mb-2 sm:mb-0">
+			<a href="{{ path('client_reservations') }}" class="border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-lg transition-all duration-300 mr-2 mb-2 sm:mb-0 inline-block">
 				<i class="fa fa-arrow-left mr-2"></i>
 				Revenir à mes réservations
 			</a>
 		{% else %}
-			<a href="{{ path('client_step2') }}" class="btn btn-neutral mr-2 mb-2 sm:mb-0">
+			<a href="{{ path('client_step2') }}" class="border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-lg transition-all duration-300 mr-2 mb-2 sm:mb-0 inline-block">
 				<i class="fa fa-arrow-left mr-2"></i>
 				Revenir à l'étape précédente
 			</a>
 		{% endif %}
 
 		{% if vehiculeIsNotAvailable is not defined or not vehiculeIsNotAvailable %}
-			<button type="submit" class="btn btn-error" form="options_garanties" id="btnEnregistrer1">
+			<button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-all duration-300" form="options_garanties" id="btnEnregistrer1">
 				<i class="fa fa-save mr-2"></i>
 				Enregistrer
 			</button>
@@ -130,19 +130,19 @@
 
 	<div class="text-center mb-2">
 		{% if step is defined and step == 'validation' %}
-			<a href="{{ path('client_reservations') }}" class="btn btn-neutral mr-2 mb-2 sm:mb-0">
+			<a href="{{ path('client_reservations') }}" class="border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-lg transition-all duration-300 mr-2 mb-2 sm:mb-0 inline-block">
 				<i class="fa fa-arrow-left mr-2"></i>
 				Revenir à mes réservations
 			</a>
 		{% else %}
-			<a href="{{ path('client_step2') }}" class="btn btn-neutral mr-2 mb-2 sm:mb-0">
+			<a href="{{ path('client_step2') }}" class="border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-lg transition-all duration-300 mr-2 mb-2 sm:mb-0 inline-block">
 				<i class="fa fa-arrow-left mr-2"></i>
 				Revenir à l'étape précédente
 			</a>
 		{% endif %}
 
 		{% if vehiculeIsNotAvailable is not defined or not vehiculeIsNotAvailable %}
-			<button type="submit" class="btn btn-error" form="options_garanties" id="btnEnregistrer1">
+			<button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-all duration-300" form="options_garanties" id="btnEnregistrer1">
 				<i class="fa fa-save mr-2"></i>
 				Enregistrer
 			</button>

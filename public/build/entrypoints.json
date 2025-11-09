@@ -9,6 +9,15 @@
         "/build/vitrine.bf9e491b.css"
       ]
     },
+    "vitrine_styles": {
+      "js": [
+        "/build/runtime.da40a629.js",
+        "/build/vitrine_styles.bea30e98.js"
+      ],
+      "css": [
+        "/build/vitrine_styles.7598d920.css"
+      ]
+    },
     "admin_base": {
       "js": [
         "/build/runtime.da40a629.js",
@@ -52,14 +61,6 @@
       ],
       "css": [
         "/build/admin_planning_modern.6ca262ea.css"
-      ]
-    },
-    "vitrine_styles": {
-      "js": [
-        "/build/runtime.da40a629.js"
-      ],
-      "css": [
-        "/build/vitrine_styles.c9665f35.css"
       ]
     }
   }

@@ -1,111 +1,154 @@
-<div class="navbar bg-base-100 shadow-lg sticky top-0 z-50 backdrop-blur-sm bg-opacity-95">
-	<div class="navbar-start">
-		<div class="dropdown">
-			<div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
-				<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewbox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16"/>
-				</svg>
-			</div>
-			{% if app.user %}
-			<ul tabindex="0" class="menu menu-md dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-64 p-2 shadow-xl border">
-				<li {% if app.request.attributes.get('_route') starts with 'espaceClient_index' %} class="bordered" {% endif %}>
-					<a href="{{path('espaceClient_index')}}" class="flex items-center gap-2">
-						<i class="fas fa-user text-accent"></i>
-						Mes informations
-					</a>
-				</li>
-				<li {% if app.request.attributes.get('_route') starts with 'client_reservations' or app.request.attributes.get('_route') starts with 'validation' %} class="bordered" {% endif %}>
-					<a href="{{path('client_reservations')}}" class="flex items-center gap-2">
-						<i class="fas fa-calendar-check text-accent"></i>
-						Mes réservations
-					</a>
-				</li>
-				<li {% if app.request.attributes.get('_route') starts with 'client_step' %} class="bordered" {% endif %}>
-					<a href="{{path('client_step1')}}" class="flex items-center gap-2">
-						<i class="fas fa-plus-circle text-accent"></i>
-						Nouvelle réservation
-					</a>
-				</li>
-				<li {% if app.request.attributes.get('_route') starts with 'client_mesConducteurs' %} class="bordered" {% endif %}>
-					<a href="{{path('client_mesConducteurs')}}" class="flex items-center gap-2">
-						<i class="fas fa-users text-accent"></i>
-						Mes conducteurs
-					</a>
-				</li>
-				<div class="divider my-2"></div>
-				<li>
-					<a href="{{path('app_logout')}}" class="flex items-center gap-2 text-error hover:bg-error hover:text-white">
-						<i class="fas fa-sign-out-alt"></i>
-						Déconnexion
-					</a>
-				</li>
-			</ul>
-			
-			{% endif %}
-		</div>
-		<a href="{{path('accueil')}}" class="btn btn-ghost text-xl font-bold">
-			<img src="{{asset('images/Joel-Location-new.png')}}" width="40" height="40" class="mr-2" alt="Joel Location">
-			Joel Location
-		</a>
-	</div>
+{% set route = app.request.attributes.get('_route') %}
+<nav class="bg-white text-black shadow-lg">
+    <div class="container mx-auto px-6 py-2 flex justify-between items-center h-16">
+        <!-- Logo Section -->
+        <div class="flex items-center space-x-4">
+            <a href="{{ path('accueil') }}" class="flex items-center">
+                <img src="{{ asset('images/Joel-Location-new.png') }}" alt="JOEL LOCATION" style="height: 60px;">
+                <div class="ml-3 hidden lg:block">
+                    <div class="flex flex-col">
+                        <span class="text-joel-red text-xl font-bold">JOEL LOCATION</span>
+                        <span class="text-gray-600 text-sm">Espace Client</span>
+                    </div>
+                </div>
+            </a>
+        </div>
 
-	<div class="navbar-center hidden lg:flex">
-		{% if app.user %}
-		<ul class="menu menu-horizontal px-1 gap-2">
-			<li {% if app.request.attributes.get('_route') starts with 'espaceClient_index' %} class="bg-error text-error-content rounded-lg" {% endif %}>
-				<a href="{{path('espaceClient_index')}}" class="flex items-center gap-2 font-medium">
-					<i class="fas fa-user"></i>
-					Mes informations
-				</a>
-			</li>
-			<li {% if app.request.attributes.get('_route') starts with 'client_reservations' or app.request.attributes.get('_route') starts with 'validation' %} class="bg-error text-error-content rounded-lg" {% endif %}>
-				<a href="{{path('client_reservations')}}" class="flex items-center gap-2 font-medium">
-					<i class="fas fa-calendar-check"></i>
-					Mes réservations
-				</a>
-			</li>
-			<li {% if app.request.attributes.get('_route') starts with 'client_step' %} class="bg-error text-error-content rounded-lg" {% endif %}>
-				<a href="{{path('client_step1')}}" class="flex items-center gap-2 font-medium">
-					<i class="fas fa-plus-circle"></i>
-					Nouvelle réservation
-				</a>
-			</li>
-			<li {% if app.request.attributes.get('_route') starts with 'client_mesConducteurs' %} class="bg-error text-error-content rounded-lg" {% endif %}>
-				<a href="{{path('client_mesConducteurs')}}" class="flex items-center gap-2 font-medium">
-					<i class="fas fa-users"></i>
-					Mes conducteurs
-				</a>
-			</li>
-		</ul>
-		
-		{% endif %}
-	</div>
+        <!-- Desktop Navigation -->
+        {% if app.user %}
+        <div class="hidden md:flex space-x-6">
+            <a href="{{ path('espaceClient_index') }}"
+               class="flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 {{ route starts with 'espaceClient_index' ? 'bg-joel-red text-white' : 'hover:bg-joel-beige hover:text-joel-red' }}">
+                <i class="fas fa-user"></i>
+                <span class="font-medium">Mes informations</span>
+            </a>
+            <a href="{{ path('client_reservations') }}"
+               class="flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 {{ (route starts with 'client_reservations' or route starts with 'validation') ? 'bg-joel-red text-white' : 'hover:bg-joel-beige hover:text-joel-red' }}">
+                <i class="fas fa-calendar-check"></i>
+                <span class="font-medium">Mes réservations</span>
+            </a>
+            <a href="{{ path('client_step1') }}"
+               class="flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 {{ route starts with 'client_step' ? 'bg-joel-red text-white' : 'hover:bg-joel-beige hover:text-joel-red' }}">
+                <i class="fas fa-plus-circle"></i>
+                <span class="font-medium">Nouvelle réservation</span>
+            </a>
+            <a href="{{ path('client_mesConducteurs') }}"
+               class="flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 {{ route starts with 'client_mesConducteurs' ? 'bg-joel-red text-white' : 'hover:bg-joel-beige hover:text-joel-red' }}">
+                <i class="fas fa-users"></i>
+                <span class="font-medium">Mes conducteurs</span>
+            </a>
+        </div>
+        {% endif %}
 
-	<div class="navbar-end">
-		{% if app.user %}
-			<div class="dropdown dropdown-end">
-				<div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
-					<div class="w-10 rounded-full bg-error text-error-content flex items-center justify-center">
-						<i class="fas fa-user"></i>
-					</div>
-				</div>
-				<ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow-xl border">
-					<li class="menu-title">
-						<span>{{app.user.getNom}}</span>
-					</li>
-					<div class="divider my-1"></div>
-					<li>
-						<a href="{{path('app_logout')}}" class="text-error hover:bg-error hover:text-white">
-							<i class="fas fa-sign-out-alt"></i>
-							Déconnexion
-						</a>
-					</li>
-				</ul>
-			</div>
-		{% else %}
-			<a href="{{ path('app_login') }}" class="btn btn-ghost">
-				<i class="fas fa-sign-in-alt"></i> Connexion
-			</a>
-		{% endif %}
-	</div>
-</div>
+        <!-- Right Side: User Menu -->
+        <div class="flex items-center space-x-4">
+            {% if app.user %}
+                <!-- User Dropdown -->
+                <div class="relative group">
+                    <button class="flex items-center space-x-2 bg-joel-red text-white px-4 py-2 rounded-lg hover:bg-joel-red-dark transition-all duration-300 focus:outline-none">
+                        <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                            <i class="fas fa-user text-sm"></i>
+                        </div>
+                        <span class="font-medium">{{ app.user.getNom }}</span>
+                        <i class="fas fa-chevron-down text-sm"></i>
+                    </button>
+                    <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 border border-gray-200">
+                        <div class="py-2">
+                            <div class="px-4 py-2 text-sm text-gray-500 border-b border-gray-100">
+                                Connecté en tant que
+                            </div>
+                            <a href="{{ path('app_logout') }}"
+                               class="flex items-center gap-2 px-4 py-2 text-sm text-joel-red hover:bg-joel-beige transition-colors duration-200">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Déconnexion
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <a href="{{ path('app_login') }}"
+                   class="flex items-center gap-2 bg-joel-red text-white px-4 py-2 rounded-lg hover:bg-joel-red-dark transition-all duration-300">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span class="font-medium">Connexion</span>
+                </a>
+            {% endif %}
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <div class="md:hidden flex items-center">
+            <button id="mobile-menu-button" class="text-gray-700 focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    {% if app.user %}
+    <div id="mobile-menu" class="md:hidden hidden bg-white shadow-xl border-t border-gray-200">
+        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            <a href="{{ path('espaceClient_index') }}"
+               class="flex items-center gap-3 px-6 py-3 text-base transition-colors duration-300 {{ route starts with 'espaceClient_index' ? 'text-joel-red bg-joel-beige' : 'text-gray-700 hover:bg-gray-100' }}">
+                <i class="fas fa-user"></i>
+                Mes informations
+            </a>
+            <a href="{{ path('client_reservations') }}"
+               class="flex items-center gap-3 px-6 py-3 text-base transition-colors duration-300 {{ (route starts with 'client_reservations' or route starts with 'validation') ? 'text-joel-red bg-joel-beige' : 'text-gray-700 hover:bg-gray-100' }}">
+                <i class="fas fa-calendar-check"></i>
+                Mes réservations
+            </a>
+            <a href="{{ path('client_step1') }}"
+               class="flex items-center gap-3 px-6 py-3 text-base transition-colors duration-300 {{ route starts with 'client_step' ? 'text-joel-red bg-joel-beige' : 'text-gray-700 hover:bg-gray-100' }}">
+                <i class="fas fa-plus-circle"></i>
+                Nouvelle réservation
+            </a>
+            <a href="{{ path('client_mesConducteurs') }}"
+               class="flex items-center gap-3 px-6 py-3 text-base transition-colors duration-300 {{ route starts with 'client_mesConducteurs' ? 'text-joel-red bg-joel-beige' : 'text-gray-700 hover:bg-gray-100' }}">
+                <i class="fas fa-users"></i>
+                Mes conducteurs
+            </a>
+
+            <!-- Mobile User Section -->
+            <div class="px-6 py-4 border-t border-gray-200">
+                <div class="flex items-center space-x-3 mb-3">
+                    <div class="w-10 h-10 rounded-full bg-joel-red text-white flex items-center justify-center">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <p class="font-medium text-gray-900">{{ app.user.getNom }}</p>
+                        <p class="text-sm text-gray-500">Client</p>
+                    </div>
+                </div>
+                <a href="{{ path('app_logout') }}"
+                   class="flex items-center gap-2 w-full text-center bg-joel-red text-white px-4 py-2 rounded-lg hover:bg-joel-red-dark transition-colors duration-300">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Déconnexion
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</nav>
+
+<script>
+    // Mobile menu toggle
+    document.addEventListener('DOMContentLoaded', () => {
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (mobileMenu && !mobileMenu.contains(e.target) && mobileMenuButton && !mobileMenuButton.contains(e.target) && !mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+            }
+        });
+    });
+</script>

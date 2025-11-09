@@ -12,9 +12,11 @@ Encore
         $: 'jQuery'
     })
 
-    // main entry for your JS
+    // main entry for your JS (for old Bootstrap templates)
     .addEntry('vitrine', './assets/vitrine/app.js')
-    .addStyleEntry('vitrine_styles', './assets/vitrine/css/tailwind.tailwind.css')
+
+    // CSS-only entry for new Tailwind-based templates
+    .addEntry('vitrine_styles', './assets/vitrine/vitrine-tailwind.js')
 
     .addEntry('admin_base', './assets/backoffice/base/app.js')
     .addEntry('admin_dashboard', './assets/backoffice/dashboard/dashboard.js')

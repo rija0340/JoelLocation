@@ -1,15 +1,15 @@
-<div class="bg-base-200 ">
+<div class="bg-gray-100">
 	<div
 		class="max-w-md mx-auto">
 
 		<!-- Carte véhicule -->
-		<div class="card p-6 shadow-md bg-base-100">
-			<h3 class="text-2xl title-red mb-4 flex items-center">
-				<i class="fas fa-chevron-right mr-3 text-error"></i>
+		<div class="p-6 shadow-md bg-white rounded-lg">
+			<h3 class="text-2xl text-joel-red font-bold mb-4 flex items-center">
+				<i class="fas fa-chevron-right mr-3 text-red-500"></i>
 				Votre réservation
 			</h3>
-			<div class="border-b pb-4">
-				<div class="text-lg font-semibold text-base-content">
+			<div class="border-b border-gray-200 pb-4">
+				<div class="text-lg font-semibold text-gray-800">
 					{{ devis.vehicule.marque }}
 					{{ devis.vehicule.modele }}
 				</div>
@@ -19,56 +19,56 @@
 			<div
 				class="space-y-4">
 				<!-- Agence départ -->
-				<div class="border-b pb-4">
-					<h5 class="text-lg font-semibold text-accent">Agence départ</h5>
-					<p class="text-sm text-base-content mt-2">
-						<i class="fas fa-map-marker-alt text-error mr-2"></i>
+				<div class="border-b border-gray-200 pb-4">
+					<h5 class="text-lg font-semibold text-joel-red">Agence départ</h5>
+					<p class="text-sm text-gray-800 mt-2">
+						<i class="fas fa-map-marker-alt text-red-500 mr-2"></i>
 						<span id="agence_depart">{{ devis.agenceDepart }}</span><br>
 						<span id="date_depart">{{ devis.dateDepart | date('d-m-Y H:i') }}</span>
 					</p>
 				</div>
 
 				<!-- Agence retour -->
-				<div class="border-b pb-4">
-					<h5 class="text-lg font-semibold text-accent">Agence retour</h5>
-					<p class="text-sm text-base-content mt-2">
-						<i class="fas fa-map-marker-alt text-error mr-2"></i>
+				<div class="border-b border-gray-200 pb-4">
+					<h5 class="text-lg font-semibold text-joel-red">Agence retour</h5>
+					<p class="text-sm text-gray-800 mt-2">
+						<i class="fas fa-map-marker-alt text-red-500 mr-2"></i>
 						<span id="agence_retour">{{ devis.agenceRetour }}</span><br>
 						<span id="date_retour">{{ devis.dateRetour | date('d-m-Y H:i') }}</span>
 					</p>
 				</div>
 
 				<!-- Prestations incluses -->
-				<div class="border-b pb-4">
-					<h5 class="text-lg font-semibold text-accent">Prestations incluses</h5>
-					<ul class="mt-2 space-y-2 text-sm text-base-content">
+				<div class="border-b border-gray-200 pb-4">
+					<h5 class="text-lg font-semibold text-joel-red">Prestations incluses</h5>
+					<ul class="mt-2 space-y-2 text-sm text-gray-800">
 						<li class="flex items-start">
-							<i class="fas fa-check text-error mr-2 mt-1"></i>
+							<i class="fas fa-check text-red-500 mr-2 mt-1"></i>
 							<span>Kilométrage Illimité</span>
 						</li>
 						<li class="flex items-start">
-							<i class="fas fa-check text-error mr-2 mt-1"></i>
+							<i class="fas fa-check text-red-500 mr-2 mt-1"></i>
 							<span>Assurance accidents causés aux tiers</span>
 						</li>
 						<li class="flex items-start">
-							<i class="fas fa-check text-error mr-2 mt-1"></i>
+							<i class="fas fa-check text-red-500 mr-2 mt-1"></i>
 							<span>Assurance responsabilité civile</span>
 						</li>
 						<li class="flex items-start">
-							<i class="fas fa-check text-error mr-2 mt-1"></i>
+							<i class="fas fa-check text-red-500 mr-2 mt-1"></i>
 							<span>Assurance collision (CDW)</span>
 						</li>
 						<li class="flex items-start">
-							<i class="fas fa-check text-error mr-2 mt-1"></i>
+							<i class="fas fa-check text-red-500 mr-2 mt-1"></i>
 							<span>TVA 8.5 %</span>
 						</li>
 					</ul>
 				</div>
 
 				<!-- Prix de base -->
-				<div class="border-b pb-4">
-					<h5 class="text-lg font-semibold text-accent">Prix de base de location</h5>
-					<p class="text-base-content mt-2">
+				<div class="border-b border-gray-200 pb-4">
+					<h5 class="text-lg font-semibold text-joel-red">Prix de base de location</h5>
+					<p class="text-gray-800 mt-2">
 						{{ devis.tarifVehicule }}
 						€<br>
 						<span class="text-gray-600 text-sm">
@@ -81,13 +81,13 @@
 
 				<!-- Options -->
 				{% if devis.devisOptions|length > 0 or devis.conducteur %}
-					<div class="border-b pb-4">
-						<h5 class="text-lg font-semibold text-accent">Option(s)</h5>
-						<ul class="mt-2 space-y-3 text-sm text-base-content">
+					<div class="border-b border-gray-200 pb-4">
+						<h5 class="text-lg font-semibold text-joel-red">Option(s)</h5>
+						<ul class="mt-2 space-y-3 text-sm text-gray-800">
 							{% if devis.conducteur %}
 								<li class="flex justify-between">
 									<div class="flex items-start">
-										<i class="fas fa-check text-error mr-2 mt-1"></i>
+										<i class="fas fa-check text-red-500 mr-2 mt-1"></i>
 										<span>Conducteur additionnel</span>
 									</div>
 									<div>{{ prixConductSuppl }}
@@ -97,7 +97,7 @@
 							{% for option in devis.devisOptions %}
 								<li class="flex justify-between">
 									<div class="flex items-start">
-										<i class="fas fa-check text-error mr-2 mt-1"></i>
+										<i class="fas fa-check text-red-500 mr-2 mt-1"></i>
 										<span>
 											{{ option.opt.appelation }}
 											{% if option.opt.appelation matches '/Siège/' %}
@@ -117,12 +117,12 @@
 				<!-- Garanties -->
 				{% if devis.garanties|length > 0 %}
 					<div class="pb-4">
-						<h5 class="text-lg font-semibold text-accent">Garantie(s)</h5>
-						<ul class="mt-2 space-y-3 text-sm text-base-content">
+						<h5 class="text-lg font-semibold text-joel-red">Garantie(s)</h5>
+						<ul class="mt-2 space-y-3 text-sm text-gray-800">
 							{% for garantie in devis.garanties %}
 								<li class="flex justify-between">
 									<div class="flex items-start">
-										<i class="fas fa-check text-error mr-2 mt-1"></i>
+										<i class="fas fa-check text-red-500 mr-2 mt-1"></i>
 										<span>{{ garantie.appelation }}</span>
 									</div>
 									<div>{{ garantie.prix }}
@@ -136,11 +136,11 @@
 		</div>
 
 		<!-- Prix total -->
-		<div class="text-center mt-6 p-4 bg-base-100 rounded-lg shadow-sm">
-			<h5 class="text-lg font-semibold text-accent">Prix total pour
+		<div class="text-center mt-6 p-4 bg-white rounded-lg shadow-sm">
+			<h5 class="text-lg font-semibold text-joel-red">Prix total pour
 				{{ devis.duree }}
 				jour(s)</h5>
-			<span class="text-2xl font-bold text-base-content">{{ devis.prix }}
+			<span class="text-2xl font-bold text-gray-800">{{ devis.prix }}
 				€</span><br>
 			<span class="text-gray-600 text-sm">
 				Soit

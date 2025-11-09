@@ -26,10 +26,10 @@
 	</div>
 
 
-	<div class="card bg-base-100 shadow-xl mb-8 rounded-box">
-		<div class="card-body p-6">
-			<h2 class="card-title text-2xl font-bold  mb-4">
-				<i class="fas fa-chevron-right mr-3 "></i>
+	<div class="bg-white shadow-xl mb-8 rounded-lg overflow-hidden">
+		<div class="p-6">
+			<h2 class="text-2xl font-bold mb-4 flex items-center">
+				<i class="fas fa-chevron-right mr-3"></i>
 				Votre réservation
 			</h2>
 
@@ -45,13 +45,13 @@
 					class="md:col-span-2 space-y-4">
 					<!-- Agency Info -->
 					<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-						<div class="bg-base-200 p-4 rounded-box">
+						<div class="bg-gray-100 p-4 rounded-lg">
 							<h3 class="text-lg font-semibold mb-2">Agence départ</h3>
 							<div class="flex items-start gap-2">
-								<i class="fas fa-map-marker-alt mt-1 text-error"></i>
+								<i class="fas fa-map-marker-alt mt-1 text-red-500"></i>
 								<div>
 									<p class="font-medium">{{ devis.agenceDepart }}</p>
-									<p class="text-sm opacity-75">
+									<p class="text-sm text-gray-600">
 										{{ devis.dateDepart|date('m/d/Y') }}
 										à
 										{{ devis.dateDepart|date('H:i') }}
@@ -60,13 +60,13 @@
 							</div>
 						</div>
 
-						<div class="bg-base-200 p-4 rounded-box">
+						<div class="bg-gray-100 p-4 rounded-lg">
 							<h3 class="text-lg font-semibold mb-2">Agence retour</h3>
 							<div class="flex items-start gap-2">
-								<i class="fas fa-map-marker-alt mt-1 text-error"></i>
+								<i class="fas fa-map-marker-alt mt-1 text-red-500"></i>
 								<div>
 									<p class="font-medium">{{ devis.agenceRetour }}</p>
-									<p class="text-sm opacity-75">
+									<p class="text-sm text-gray-600">
 										{{ devis.dateRetour|date('m/d/Y') }}
 										à
 										{{ devis.dateRetour|date('H:i') }}
@@ -78,41 +78,41 @@
 
 					<!-- Pricing Info -->
 					<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-						<div class="bg-base-200 p-4 rounded-box">
+						<div class="bg-gray-100 p-4 rounded-lg">
 							<p class="mb-2">Soit
 								<span class="font-semibold">{{ devis.duree }}</span>
 								jours de location</p>
 							<h3 class="text-lg font-semibold mb-2">Prix de base de location</h3>
 							<p class="text-xl font-bold">{{ devis.tarifVehicule }}
 								EUR</p>
-							<p class="text-sm opacity-75">
+							<p class="text-sm text-gray-600">
 								soit
 								{{ (devis.tarifVehicule / devis.duree)|number_format(2,","," ") }}
 								€/jour
 							</p>
 						</div>
 
-						<div class="bg-base-200 p-4 rounded-box">
+						<div class="bg-gray-100 p-4 rounded-lg">
 							<h3 class="text-lg font-semibold mb-2">Prestations incluses</h3>
 							<ul class="space-y-1">
 								<li class="flex items-start gap-2">
-									<i class="fas fa-check-circle text-error mt-1 text-sm"></i>
+									<i class="fas fa-check-circle text-red-500 mt-1 text-sm"></i>
 									<span>Kilométrage Illimité</span>
 								</li>
 								<li class="flex items-start gap-2">
-									<i class="fas fa-check-circle text-error mt-1 text-sm"></i>
+									<i class="fas fa-check-circle text-red-500 mt-1 text-sm"></i>
 									<span>Assurance accidents causés aux tiers</span>
 								</li>
 								<li class="flex items-start gap-2">
-									<i class="fas fa-check-circle text-error mt-1 text-sm"></i>
+									<i class="fas fa-check-circle text-red-500 mt-1 text-sm"></i>
 									<span>Assurance responsabilité civile</span>
 								</li>
 								<li class="flex items-start gap-2">
-									<i class="fas fa-check-circle text-error mt-1 text-sm"></i>
+									<i class="fas fa-check-circle text-red-500 mt-1 text-sm"></i>
 									<span>Assurance collision (CDW)</span>
 								</li>
 								<li class="flex items-start gap-2">
-									<i class="fas fa-check-circle text-error mt-1 text-sm"></i>
+									<i class="fas fa-check-circle text-red-500 mt-1 text-sm"></i>
 									<span>TVA 8.5 %</span>
 								</li>
 							</ul>
@@ -122,18 +122,18 @@
 					<!-- Options & Guarantees -->
 					<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 						{% if devis.options is not empty or devis.conducteur == true %}
-							<div class="bg-base-200 p-4 rounded-box">
+							<div class="bg-gray-100 p-4 rounded-lg">
 								<h3 class="text-lg font-semibold mb-2">Options</h3>
 								<ul class="space-y-1">
 									{% if devis.conducteur == "true" %}
 										<li class="flex items-start gap-2">
-											<i class="fas fa-plus-circle text-info mt-1 text-sm"></i>
+											<i class="fas fa-plus-circle text-blue-500 mt-1 text-sm"></i>
 											<span>Conducteur additionnel : 50€</span>
 										</li>
 									{% endif %}
 									{% for option in devis.devisOptions %}
 										<li class="flex items-start gap-2">
-											<i class="fas fa-plus-circle text-info mt-1 text-sm"></i>
+											<i class="fas fa-plus-circle text-blue-500 mt-1 text-sm"></i>
 											<span>
 												{{ option.opt.appelation }}
 												(nombre :
@@ -148,12 +148,12 @@
 						{% endif %}
 
 						{% if devis.garanties|length > 0 %}
-							<div class="bg-base-200 p-4 rounded-box">
+							<div class="bg-gray-100 p-4 rounded-lg">
 								<h3 class="text-lg font-semibold mb-2">Garantie(s)</h3>
 								<ul class="space-y-1">
 									{% for garantie in devis.garanties %}
 										<li class="flex items-start gap-2">
-											<i class="fas fa-shield-alt text-warning mt-1 text-sm"></i>
+											<i class="fas fa-shield-alt text-yellow-500 mt-1 text-sm"></i>
 											<span>{{ garantie.appelation }}
 												:
 												{{ garantie.prix }}
@@ -166,25 +166,25 @@
 					</div>
 
 					<!-- Divider -->
-					<div class="divider"></div>
+					<div class="border-t border-gray-300 my-4"></div>
 
 					<!-- Total & Actions -->
 					<div class="flex flex-col md:flex-row justify-between items-center gap-4">
 						<div class="text-center md:text-left">
 							<p class="text-lg font-semibold">Total à payer :</p>
-							<p class="text-3xl font-bold text-error">{{ devis.prix }}€</p>
+							<p class="text-3xl font-bold text-red-500">{{ devis.prix }}€</p>
 						</div>
 
 						<div class="flex flex-wrap justify-center gap-2">
-							<a href="{{ path('client_step3') }}" class="btn btn-outline">
+							<a href="{{ path('client_step3') }}" class="border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-lg transition-all duration-300">
 								<i class="fas fa-arrow-left mr-2"></i>
 								Revenir à l'étape précédente
 							</a>
-							<a href="{{ path('client_saveDevis') }}" class="btn btn-primary">
+							<a href="{{ path('client_saveDevis') }}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-all duration-300">
 								<i class="fas fa-save mr-2"></i>
 								Enregistrer le devis
 							</a>
-							<a href="{{ path('client_reserverDevis') }}" class="btn btn-error">
+							<a href="{{ path('client_reserverDevis') }}" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-all duration-300">
 								<i class="fas fa-check mr-2"></i>
 								Réserver
 							</a>

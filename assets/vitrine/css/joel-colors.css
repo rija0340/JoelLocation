@@ -1,0 +1,34 @@
+/* Joel Location Custom Colors */
+.text-joel-red { color: #af0000 !important; }
+.text-joel-red-dark { color: #8b0000 !important; }
+.text-joel-red-light { color: #d32f2f !important; }
+.text-joel-beige { color: #EFE7DB !important; }
+.text-joel-dark { color: #333333 !important; }
+.text-joel-gray { color: #666666 !important; }
+
+.bg-joel-red { background-color: #af0000 !important; }
+.bg-joel-red-dark { background-color: #8b0000 !important; }
+.bg-joel-red-light { background-color: #d32f2f !important; }
+.bg-joel-beige { background-color: #EFE7DB !important; }
+.bg-joel-dark { background-color: #333333 !important; }
+.bg-joel-gray { background-color: #666666 !important; }
+
+/* Hover variants for Joel colors */
+.hover\:bg-joel-red-dark:hover { background-color: #8b0000 !important; }
+.hover\:bg-joel-red:hover { background-color: #af0000 !important; }
+.hover\:text-joel-red:hover { color: #af0000 !important; }
+.hover\:text-joel-dark:hover { color: #333333 !important; }
+
+/* Border colors */
+.border-joel-red { border-color: #af0000 !important; }
+.border-joel-beige { border-color: #EFE7DB !important; }
+
+/* Additional color utilities */
+.text-white { color: rgb(255 255 255) !important; }
+.text-gray-200 { color: rgb(229 231 235) !important; }
+.text-gray-600 { color: rgb(75 85 99) !important; }
+.text-gray-700 { color: rgb(55 65 81) !important; }
+.bg-white { background-color: rgb(255 255 255) !important; }
+.bg-gray-100 { background-color: rgb(243 244 246) !important; }
+.hover\:bg-white:hover { background-color: rgb(255 255 255) !important; }
+.hover\:bg-gray-100:hover { background-color: rgb(243 244 246) !important; }

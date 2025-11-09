@@ -26,12 +26,12 @@
 
 
 	<div class="text-center mb-2">
-		<a href="{{ path('client_step1') }}" class="btn btn-neutral mb-2 sm:mb-0">
+		<a href="{{ path('client_step1') }}" class="border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-lg transition-all duration-300 mb-2 sm:mb-0">
 			<i class="fa fa-arrow-left mr-2"></i>
 			Revenir à l'étape précédente
 		</a>
 		{% if vehiculesDisponible|length > 0 %}
-			<button class="btn btn-error" type="submit" form="formStep2">
+			<button class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-all duration-300" type="submit" form="formStep2">
 				<i class="fa fa-save mr-2"></i>
 				Enregistrer
 			</button>
@@ -48,7 +48,7 @@
 				{% endif %}
 			{% endfor %}
 		{% else %}
-			<div class="bg-base-100 shadow p-6 rounded-xl text-center">
+			<div class="bg-white shadow p-6 rounded-xl text-center">
 				<h3 class="text-lg">
 					Il n'y a pas de véhicules disponibles du
 					<span class="font-semibold">{{ dateDepart|date('d/m/Y') }}</span>
@@ -65,12 +65,12 @@
 																						</div> #}
 
 		{% if vehiculesDisponible|length > 0 %}
-			<div class="flex justify-center items-center gap-4 mt-4">
-				<a href="{{ path('client_step1') }}" class="btn btn-neutral">
+			<div class="flex flex-col sm:flex-row justify-center items-center gap-4 mt-4">
+				<a href="{{ path('client_step1') }}" class="border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-lg transition-all duration-300">
 					<i class="fa fa-arrow-left mr-2"></i>
 					Revenir à l'étape précédente
 				</a>
-				<button class="btn btn-error" type="submit" form="formStep2">
+				<button class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-all duration-300" type="submit" form="formStep2">
 					<i class="fa fa-save mr-2"></i>
 					Enregistrer
 				</button>

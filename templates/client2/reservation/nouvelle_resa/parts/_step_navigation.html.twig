@@ -9,9 +9,8 @@
     {% for step in steps %}
         <div class="text-center">
             <div class="
-                badge
-                {{ step.number == currentStep ? 'badge-danger border border-red-500 text-red-500' : 'badge-outline' }}
-                w-10 h-10 rounded-full flex items-center justify-center mx-auto
+                {{ step.number == currentStep ? 'border-2 border-red-500 text-red-500' : 'border border-gray-300 text-gray-600' }}
+                w-10 h-10 rounded-full flex items-center justify-center mx-auto bg-white
             ">
                 {{ step.number }}
             </div>

@@ -4,9 +4,14 @@
 {% block stylesheets %}{% endblock %}
 
 {% block body %}
-  <div class="card bg-base-100 shadow-md p-6 space-y-6">
-    <h2 class="text-2xl title-red">Mes informations</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-start">
+  <!-- Mes informations Section -->
+  <div class="bg-white rounded-lg shadow-lg p-6 mb-8 hover-lift">
+    <div class="flex items-center mb-6">
+      <h2 class="text-2xl font-bold title-red">Mes informations</h2>
+      <div class="ml-4 w-12 h-1 bg-joel-red"></div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {% for label, value in {
         'Nom': client.nom,
         'Prénom': client.prenom,
@@ -24,50 +29,67 @@
         'Date permis': client.datePermis|date('d/m/Y'),
         'Ville délivrance permis': client.villeDelivrancePermis
       } %}
-        <div class="form-control">
-          <label class="label"><span class="label-text">{{ label }}</span></label>
-          <input type="text" class="input input-bordered w-full" readonly value="{{ value }}">
+        <div class="space-y-2">
+          <label class="block text-sm font-medium text-gray-700">{{ label }}</label>
+          <input type="text"
+                 class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-joel-red focus:border-transparent"
+                 readonly
+                 value="{{ value }}">
         </div>
       {% endfor %}
     </div>
-    <div class="flex justify-center">
-      <a href="{{ path('infoclient_edit', {'id': id}) }}" class=" btn btn-error">
-        <i class="fa fa-edit mr-2"></i> Modifier
+
+    <div class="flex justify-center mt-8">
+      <a href="{{ path('infoclient_edit', {'id': id}) }}"
+         class="inline-flex items-center px-6 py-3 bg-joel-red text-white font-semibold rounded-lg hover:bg-joel-red-dark transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+        <i class="fas fa-edit mr-2"></i>
+        Modifier mes informations
       </a>
     </div>
   </div>
 
-  <div class="card bg-base-100 shadow-md p-4 mt-8">
-    <h3 class="text-xl title-red  mb-2">Mon compte</h3>
-    <!-- Accordéon radio : un seul volet ouvert -->
-    <div class="space-y-2">
-      <div class="collapse bg-base-100 border border-base-300 rounded-box">
-        <input type="radio" name="client-accordion" class="w-auto h-auto" checked />
-        <div class="collapse-title text-lg font-medium collapse-arrow">
-          <i class="fa fa-user mr-2"></i> Gérer mon compte
-        </div>
-        <div class="collapse-content p-4">
+  <!-- Mon compte Section -->
+  <div class="bg-white rounded-lg shadow-lg p-6 hover-lift">
+    <div class="flex items-center mb-6">
+      <h3 class="text-xl font-bold title-red">Mon compte</h3>
+      <div class="ml-4 w-12 h-1 bg-joel-red"></div>
+    </div>
+
+    <!-- Accordion for account management -->
+    <div class="border border-gray-200 rounded-lg">
+      <div class="border-b border-gray-200 last:border-b-0">
+        <button class="w-full px-6 py-4 text-left bg-gray-50 hover:bg-gray-100 transition-colors duration-200 flex items-center justify-between focus:outline-none focus:bg-gray-100"
+                onclick="toggleAccordion('account-section')">
+          <div class="flex items-center">
+            <i class="fas fa-user text-joel-red mr-3"></i>
+            <span class="text-lg font-medium text-gray-900">Gérer mon compte</span>
+          </div>
+          <i class="fas fa-chevron-down text-gray-500 transform transition-transform duration-200" id="account-section-icon"></i>
+        </button>
+        <div id="account-section" class="px-6 py-6 bg-white">
           {{ form_start(formClientCompte) }}
           <div class="space-y-6">
-            <div class="form-control">
-              {{ form_label(formClientCompte.mail) }}
-              {{ form_widget(formClientCompte.mail, {'attr': {'class': 'input input-bordered w-full'}}) }}
+            <div class="space-y-2">
+              {{ form_label(formClientCompte.mail, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+              {{ form_widget(formClientCompte.mail, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-joel-red focus:border-transparent'}}) }}
             </div>
-            <div class="form-control">
-              {{ form_label(formClientCompte.old_password) }}
-              {{ form_widget(formClientCompte.old_password, {'attr': {'class': 'input input-bordered w-full'}}) }}
+            <div class="space-y-2">
+              {{ form_label(formClientCompte.old_password, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+              {{ form_widget(formClientCompte.old_password, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-joel-red focus:border-transparent'}}) }}
             </div>
-            <div class="form-control">
-              {{ form_label(formClientCompte.new_password.first) }}
-              {{ form_widget(formClientCompte.new_password.first, {'attr': {'class': 'input input-bordered w-full'}}) }}
+            <div class="space-y-2">
+              {{ form_label(formClientCompte.new_password.first, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+              {{ form_widget(formClientCompte.new_password.first, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-joel-red focus:border-transparent'}}) }}
             </div>
-            <div class="form-control">
-              {{ form_label(formClientCompte.new_password.second) }}
-              {{ form_widget(formClientCompte.new_password.second, {'attr': {'class': 'input input-bordered w-full'}}) }}
+            <div class="space-y-2">
+              {{ form_label(formClientCompte.new_password.second, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+              {{ form_widget(formClientCompte.new_password.second, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-joel-red focus:border-transparent'}}) }}
             </div>
-            <div class="flex justify-center">
-              <button type="submit" class=" btn btn-error mt-4">
-                <i class="fa fa-book mr-2"></i> {{ button_label|default('Valider') }}
+            <div class="flex justify-center pt-4">
+              <button type="submit"
+                      class="inline-flex items-center px-6 py-3 bg-joel-red text-white font-semibold rounded-lg hover:bg-joel-red-dark transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                <i class="fas fa-save mr-2"></i>
+                {{ button_label|default('Valider les modifications') }}
               </button>
             </div>
           </div>
@@ -80,4 +102,28 @@
 
 {% block javascripts %}
   <script src="{{ asset('js/client/compteClient.js') }}"></script>
+  <script>
+    function toggleAccordion(sectionId) {
+      const section = document.getElementById(sectionId);
+      const icon = document.getElementById(sectionId + '-icon');
+
+      if (section.style.display === 'none' || section.style.display === '') {
+        section.style.display = 'block';
+        icon.classList.add('rotate-180');
+      } else {
+        section.style.display = 'none';
+        icon.classList.remove('rotate-180');
+      }
+    }
+
+    // Initialize accordion - show first section by default
+    document.addEventListener('DOMContentLoaded', function() {
+      const firstSection = document.getElementById('account-section');
+      const firstIcon = document.getElementById('account-section-icon');
+      if (firstSection) {
+        firstSection.style.display = 'block';
+        firstIcon.classList.add('rotate-180');
+      }
+    });
+  </script>
 {% endblock %}

@@ -1,8 +1,8 @@
 {% if avalaibleDrivers|length > 0 %}
 	<form action="{{ path('client_add_conducteur', {'id': reservation.id}) }}" method="POST">
-		<div class="modal-body space-y-4">
+		<div class="space-y-4">
 			<label class="block font-medium">Sélectionner un conducteur à ajouter à la réservation :</label>
-			<select id="monselect" name="conducteur" class="select select-bordered w-full max-w-xs">
+			<select id="monselect" name="conducteur" class="w-full max-w-xs px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-joel-red focus:border-transparent">
 				{% for conducteur in avalaibleDrivers %}
 					<option value="{{ conducteur.id }}">{{ conducteur.nom }}
 						{{ conducteur.prenom }}</option>
@@ -11,17 +11,17 @@
 			{% if allDrivers|length < 2 %}
 				<p class="mt-2 text-sm">
 					Le conducteur recherché n'est pas dans la liste ci-dessus  fsdfsd?
-					<a href="{{ path('client_newConducteur') }}" class="text-primary hover:underline">Cliquez-ici</a>
+					<a href="{{ path('client_newConducteur') }}" class="text-joel-red hover:underline">Cliquez-ici</a>
 				</p>
 			{% endif %}
 		</div>
 		<div
-			class="modal-footer flex justify-end gap-3 mt-4">
+			class="flex justify-end gap-3 mt-4">
 			{# <button type="button" class="btn btn-outline" data-dismiss="modal">
 										<i class="fa fa-close mr-1"></i>
 										Annuler
 									</button> #}
-			<button type="submit" class="btn btn-error">
+			<button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-all duration-300">
 				<i class="fa fa-save mr-1"></i>
 				Valider
 			</button>
@@ -29,6 +29,6 @@
 	</form>
 {% else %}
 	<div class="p-3 text-center">
-		<a href="{{ path('client_newConducteur') }}" class="text-primary hover:underline">Créer un nouveau conducteur</a>
+		<a href="{{ path('client_newConducteur') }}" class="text-joel-red hover:underline">Créer un nouveau conducteur</a>
 	</div>
 {% endif %}
