@@ -14,6 +14,7 @@ Encore
 
     // main entry for your JS
     .addEntry('vitrine', './assets/vitrine/app.js')
+    .addStyleEntry('vitrine_styles', './assets/vitrine/css/tailwind.tailwind.css')
 
     .addEntry('admin_base', './assets/backoffice/base/app.js')
     .addEntry('admin_dashboard', './assets/backoffice/dashboard/dashboard.js')
@@ -30,7 +31,7 @@ Encore
     // enables Symfony UX/Stimulus (if you use it)
     // .enableStimulusBridge('./assets/controllers.json')
 
-    // enables PostCSS (autoprefixer)
+    // enables PostCSS (autoprefixer) but with custom configuration for Tailwind
     .enablePostCssLoader()
 
     // Recommended for Symfony apps
@@ -44,4 +45,10 @@ Encore
     })
     ;
 
-module.exports = Encore.getWebpackConfig();
+// Get the final webpack config
+const config = Encore.getWebpackConfig();
+
+// Tailwind CSS v4 uses PostCSS configuration automatically
+// The postcss.config.js file already has the Tailwind configuration
+
+module.exports = config;

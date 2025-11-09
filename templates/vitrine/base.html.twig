@@ -14,48 +14,7 @@
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('images/Joel-Location-new.png') }}"/>
     
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'joel-red': '#af0000',
-                        'joel-red-dark': '#8b0000',
-                        'joel-red-light': '#d32f2f',
-                        'joel-beige': '#EFE7DB',
-                        'joel-dark': '#333333',
-                        'joel-gray': '#666666',
-                    },
-                    fontFamily: {
-                        'source': ['Source Sans Pro', 'sans-serif'],
-                        'sofia': ['Sofia Sans', 'sans-serif'],
-                    },
-                    animation: {
-                        'fade-in': 'fadeIn 0.5s ease-in-out',
-                        'slide-up': 'slideUp 0.6s ease-out',
-                        'bounce-gentle': 'bounceGentle 2s infinite',
-                    },
-                    keyframes: {
-                        fadeIn: {
-                            '0%': { opacity: '0' },
-                            '100%': { opacity: '1' },
-                        },
-                        slideUp: {
-                            '0%': { transform: 'translateY(30px)', opacity: '0' },
-                            '100%': { transform: 'translateY(0)', opacity: '1' },
-                        },
-                        bounceGentle: {
-                            '0%, 20%, 50%, 80%, 100%': { transform: 'translateY(0)' },
-                            '40%': { transform: 'translateY(-10px)' },
-                            '60%': { transform: 'translateY(-5px)' },
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    {{ encore_entry_link_tags('vitrine_styles') }}
     
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">

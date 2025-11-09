@@ -6,7 +6,7 @@
         "/build/vitrine.5bae0caa.js"
       ],
       "css": [
-        "/build/vitrine.555228eb.css"
+        "/build/vitrine.bf9e491b.css"
       ]
     },
     "admin_base": {
@@ -15,7 +15,7 @@
         "/build/admin_base.17f72cbf.js"
       ],
       "css": [
-        "/build/admin_base.78f5de07.css"
+        "/build/admin_base.bd9b4bbd.css"
       ]
     },
     "admin_dashboard": {
@@ -24,7 +24,7 @@
         "/build/admin_dashboard.19916145.js"
       ],
       "css": [
-        "/build/admin_dashboard.881f5ac2.css"
+        "/build/admin_dashboard.7a4eb592.css"
       ]
     },
     "admin_plangen": {
@@ -33,7 +33,7 @@
         "/build/admin_plangen.46c5c796.js"
       ],
       "css": [
-        "/build/admin_plangen.432e208a.css"
+        "/build/admin_plangen.15457b04.css"
       ]
     },
     "admin_planjour": {
@@ -52,6 +52,14 @@
       ],
       "css": [
         "/build/admin_planning_modern.6ca262ea.css"
+      ]
+    },
+    "vitrine_styles": {
+      "js": [
+        "/build/runtime.da40a629.js"
+      ],
+      "css": [
+        "/build/vitrine_styles.c9665f35.css"
       ]
     }
   }
