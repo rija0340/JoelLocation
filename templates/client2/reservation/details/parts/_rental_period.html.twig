@@ -1,95 +1,88 @@
-<div class="bg-white rounded-lg shadow-md overflow-hidden">
-	<div class="p-6">
-		<h4 class="text-2xl md:text-2xl font-bold text-joel-red flex items-center mb-4">
-			Période de Location
+<div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+	<div class="p-4">
+		<h4 class="text-xl font-semibold text-joel-red flex items-center mb-3">
+			<i class="fa fa-calendar-alt mr-2"></i> Période de Location
 		</h4>
-		<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-			<div class="space-y-6">
-				<div class="pb-3 border-b border-gray-300">
+		<div class="space-y-4">
+			<div class="flex flex-col md:flex-row gap-4">
+				<!-- Departure -->
+				<div class="flex-1 bg-gray-50 rounded-lg p-3">
 					<div class="flex items-center mb-2">
-						<div class="bg-gray-100 rounded-full p-2 mr-3">
-							<i class="fas fa-plane-departure"></i>
-						</div>
-						<h6 class="font-bold mb-0">Départ</h6>
+						<i class="fa fa-plane-departure text-joel-red mr-2"></i>
+						<h6 class="font-semibold text-base">Départ</h6>
 					</div>
-					<div class="ml-8 pl-3">
-						<p class="mb-2 flex items-center gap-2">
-							<i class="fas fa-calendar-alt mr-2"></i>
-							{% if type == 'devis' %}
-								<span class="font-medium">{{ reservation.dateDepart|date('d/m/Y') }}</span>
-								à
-								<span class="font-medium">{{ reservation.dateDepart|date('H:i') }}</span>
-							{% else %}
-								<span class="font-medium">{{ reservation.dateDebut|date('d/m/Y') }}</span>
-								à
-								<span class="font-medium">{{ reservation.dateDebut|date('H:i') }}</span>
-							{% endif %}
-						</p>
-						<p class="mb-0 flex items-center gap-2">
-							<i class="fas fa-map-marker-alt mr-2"></i>
+					<div class="text-base space-y-1 ml-6">
+						<div class="flex">
+							<i class="fa fa-calendar text-joel-red mr-2 w-4"></i>
+							<span>
+								{% if type == 'devis' %}
+									{{ reservation.dateDepart|date('d/m/Y') }} à {{ reservation.dateDepart|date('H:i') }}
+								{% else %}
+									{{ reservation.dateDebut|date('d/m/Y') }} à {{ reservation.dateDebut|date('H:i') }}
+								{% endif %}
+							</span>
+						</div>
+						<div class="flex">
+							<i class="fa fa-map-marker text-joel-red mr-2 w-4"></i>
 							<span>{{ reservation.agenceDepart }}</span>
-						</p>
+						</div>
 					</div>
 				</div>
-				<div>
+				
+				<!-- Return -->
+				<div class="flex-1 bg-gray-50 rounded-lg p-3">
 					<div class="flex items-center mb-2">
-						<div class="bg-gray-100 rounded-full p-2 mr-3">
-							<i class="fas fa-plane-arrival"></i>
-						</div>
-						<h6 class="font-bold mb-0">Retour</h6>
+						<i class="fa fa-plane-arrival text-joel-red mr-2"></i>
+						<h6 class="font-semibold text-base">Retour</h6>
 					</div>
-					<div class="ml-8 pl-3">
-						<p class="mb-2 flex items-center gap-2">
-							<i class="fas fa-calendar-alt mr-2"></i>
-							{% if type == 'devis' %}
-								<span class="font-medium">{{ reservation.dateRetour|date('d/m/Y') }}</span>
-								à
-								<span class="font-medium">{{ reservation.dateRetour|date('H:i') }}</span>
-							{% else %}
-								<span class="font-medium">{{ reservation.dateFin|date('d/m/Y') }}</span>
-								à
-								<span class="font-medium">{{ reservation.dateFin|date('H:i') }}</span>
-							{% endif %}
-						</p>
-						<p class="mb-0 flex items-center gap-2">
-							<i class="fas fa-map-marker-alt mr-2"></i>
+					<div class="text-base space-y-1 ml-6">
+						<div class="flex">
+							<i class="fa fa-calendar text-joel-red mr-2 w-4"></i>
+							<span>
+								{% if type == 'devis' %}
+									{{ reservation.dateRetour|date('d/m/Y') }} à {{ reservation.dateRetour|date('H:i') }}
+								{% else %}
+									{{ reservation.dateFin|date('d/m/Y') }} à {{ reservation.dateFin|date('H:i') }}
+								{% endif %}
+							</span>
+						</div>
+						<div class="flex">
+							<i class="fa fa-map-marker text-joel-red mr-2 w-4"></i>
 							<span>{{ reservation.agenceRetour }}</span>
-						</p>
+						</div>
 					</div>
 				</div>
 			</div>
-			<div class="bg-gray-100 rounded-lg p-4 space-y-6">
-				<div>
-					<div class="flex items-center mb-2">
-						<i class="fas fa-clock mr-2"></i>
-						<h6 class="font-bold mb-0">Durée</h6>
-					</div>
-					<p class="ml-6 font-medium">{{ reservation.duree }}
-						jours</p>
-				</div>
-				<div>
-					<div class="flex items-center mb-2">
-						<i class="fas fa-users mr-2"></i>
-						<h6 class="font-bold mb-0">Nombre de personnes</h6>
-					</div>
-					<div class="grid grid-cols-2 gap-4 ml-6">
-						<div>
-							<p class="mb-1 flex items-center gap-1 text-gray-600">
-								<i class="fas fa-user"></i>
-								<small>Adultes:</small>
-							</p>
-							<p class="font-medium">
-								{{ reservation.client.infosResa ? reservation.client.infosResa.nbrAdultes : "non renseigné" }}
-							</p>
+			
+			<div class="bg-gray-50 rounded-lg p-3">
+				<div class="flex flex-col md:flex-row gap-4">
+					<div class="flex-1">
+						<div class="flex items-center mb-1">
+							<i class="fa fa-clock text-joel-red mr-2"></i>
+							<h6 class="font-semibold text-base">Durée</h6>
 						</div>
-						<div>
-							<p class="mb-1 flex items-center gap-1 text-gray-600">
-								<i class="fas fa-child"></i>
-								<small>Enfants:</small>
-							</p>
-							<p class="font-medium">
-								{{ reservation.client.infosResa ? reservation.client.infosResa.nbrEnfants : "non renseigné" }}
-							</p>
+						<p class="text-base ml-6 font-medium">{{ reservation.duree }} jours</p>
+					</div>
+					<div class="flex-1">
+						<div class="flex items-center mb-1">
+							<i class="fa fa-users text-joel-red mr-2"></i>
+							<h6 class="font-semibold text-base">Nombre de personnes</h6>
+						</div>
+						<div class="text-base ml-6">
+							<div class="flex flex-col space-y-1">
+								<div class="flex items-center">
+									<i class="fa fa-user mr-1"></i>
+									<span class="font-medium">
+										Adultes: {{ reservation.client.infosResa ? reservation.client.infosResa.nbrAdultes : "non renseigné" }}
+									</span>
+								</div>
+								<div class="flex items-center">
+									<i class="fa fa-child mr-1"></i>
+									<span class="font-medium">
+										Enfants: {{ reservation.client.infosResa ? reservation.client.infosResa.nbrEnfants : "non renseigné" }}
+									</span>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>

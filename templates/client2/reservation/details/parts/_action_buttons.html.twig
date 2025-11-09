@@ -1,8 +1,8 @@
-<div class="flex flex-col sm:flex-row justify-end mb-4 space-y-2 sm:space-y-0 sm:space-x-2">
+<div class="flex justify-end mb-2">
   {% if date(reservation.dateDepart) > date("now") and reservation.transformed == false %}
     <a href="{{ path('validation_step2', {'id': reservation.id}) }}"
-       class="bg-joel-red hover:bg-joel-red-dark text-white px-4 py-2 rounded-lg transition-all duration-300 flex items-center">
-      <i class="fas fa-check mr-1"></i> Valider le devis
+       class="bg-joel-red hover:bg-joel-red-dark text-white px-3 py-1.5 rounded-lg transition-all duration-300 flex items-center text-base">
+      <i class="fas fa-check mr-1 text-sm"></i> <span>Valider</span>
     </a>
   {% endif %}
 </div>

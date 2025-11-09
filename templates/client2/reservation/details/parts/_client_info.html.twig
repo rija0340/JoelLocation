@@ -1,30 +1,21 @@
-<div class="bg-white rounded-lg shadow-md overflow-hidden">
-	<div class="p-6">
-		<h4 class="text-2xl md:text-2xl font-bold text-joel-red flex items-center gap-2 mb-4">
-			Informations Client
+<div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+	<div class="p-4">
+		<h4 class="text-xl font-semibold text-joel-red flex items-center mb-3">
+			<i class="fa fa-user mr-2"></i> Client
 		</h4>
-		<div class="bg-gray-100 rounded-lg p-4 space-y-6">
-			<div>
-				<div class="flex items-center mb-1 gap-2">
-					<i class="fas fa-id-card"></i>
-					<small class="text-gray-600">Nom complet</small>
-				</div>
-				<span class="font-medium ml-4">{{ reservation.client.nom }}
+		<div class="bg-gray-50 rounded-lg p-3 space-y-2">
+			<div class="flex">
+				<i class="fa fa-id-card text-joel-red mr-2 w-4"></i>
+				<span class="text-xl">{{ reservation.client.nom }}
 					{{ reservation.client.prenom }}</span>
 			</div>
-			<div>
-				<div class="flex items-center mb-1 gap-2">
-					<i class="fas fa-envelope"></i>
-					<small class="text-gray-600">Email</small>
-				</div>
-				<span class="font-medium ml-4">{{ reservation.client.mail }}</span>
+			<div class="flex">
+				<i class="fa fa-envelope text-joel-red mr-2 w-4"></i>
+				<span class="text-xl">{{ reservation.client.mail }}</span>
 			</div>
-			<div>
-				<div class="flex items-center mb-1 gap-2">
-					<i class="fas fa-phone"></i>
-					<small class="text-gray-600">Téléphone</small>
-				</div>
-				<span class="font-medium ml-4">{{ reservation.client.telephone }}</span>
+			<div class="flex">
+				<i class="fa fa-phone text-joel-red mr-2 w-4"></i>
+				<span class="text-xl">{{ reservation.client.telephone }}</span>
 			</div>
 		</div>
 	</div>

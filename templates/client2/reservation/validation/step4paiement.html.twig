@@ -14,22 +14,22 @@
 	<div class="flex flex-col md:flex-row gap-6">
 		<div class="md:w-1/4">
 			<div class="mb-4">
-				<h5 class="text-uppercase text-lg font-semibold">
+				<h5 class="text-uppercase text-xl font-semibold">
 					Votre véhicule
 				</h5>
 			</div>
 			<div class="bg-white p-2 shadow-md rounded-lg">
 				<div class="border-b border-gray-200 pb-2">
-					<div class="text-lg font-semibold">{{devis.vehicule.marque}}
+					<div class="text-xl font-semibold">{{devis.vehicule.marque}}
 						{{devis.vehicule.modele}}</div>
 					<img src="/uploads/vehicules/{{ devis.vehicule.image }}" alt="{{ devis.vehicule.image }}" class="rounded-lg" style="width : 100%;">
 
 				</div>
 				<div>
 					<div class="border-b border-gray-200 pb-4">
-						<h5 class="font-semibold mb-2">Agence départ
+						<h5 class="font-semibold text-lg mb-2">Agence départ
 						</h5>
-						<p>
+						<p class="text-base">
 							<i class="fa fa-map-marker mr-2"></i>
 							<span id="agence_depart">{{devis.agenceDepart}}</span><br>
 							<span id="date_depart">{{devis.dateDepart | date('d-m-Y H:i')}}</span>
@@ -37,9 +37,9 @@
 						</p>
 					</div>
 					<div class="border-b border-gray-200 pb-4">
-						<h5 class="font-semibold mb-2">Agence retour
+						<h5 class="font-semibold text-lg mb-2">Agence retour
 						</h5>
-						<p>
+						<p class="text-base">
 							<i class="fa fa-map-marker mr-2"></i>
 							<span id="agence_retour">{{devis.agenceRetour}}</span><br>
 							<span id="date_retour">{{devis.dateRetour| date('d-m-Y H:i')}}</span>
@@ -47,8 +47,8 @@
 						</p>
 					</div>
 					<div class="border-b border-gray-200 pb-4">
-						<h5 class="font-semibold mb-2">Prestations incluses</h5>
-						<ul class="pl-2 ">
+						<h5 class="font-semibold text-lg mb-2">Prestations incluses</h5>
+						<ul class="pl-2 text-base">
 							<li class="flex items-center mb-1">
 								<i class="fa fa-check mr-2"></i>
 								Kilométrage Illimité
@@ -72,7 +72,7 @@
 						</ul>
 					</div>
 					<div class="border-b border-gray-200 pb-4">
-						<h5 class="font-semibold mb-2">Option(s)
+						<h5 class="font-semibold text-lg mb-2">Option(s)
 						</h5>
 						<ul class="pl-2 ">
 							{% for option in devis.options %}
@@ -89,9 +89,9 @@
 						</ul>
 					</div>
 					<div class="pb-4">
-						<h5 class="font-semibold mb-2">Garantie(s)
+						<h5 class="font-semibold text-lg mb-2">Garantie(s)
 						</h5>
-						<ul class="pl-2 ">
+						<ul class="pl-2 text-base">
 							{% for garantie in devis.garanties %}
 								<li class="flex justify-between mb-1">
 									<div class="flex items-center">
@@ -109,12 +109,12 @@
 				</div>
 			</div>
 			<div class="text-center mt-4">
-				<h5 class="font-semibold">Prix total pour
+				<h5 class="font-semibold text-lg">Prix total pour
 					{{devis.duree}}
 					jours
 				</h5>
-				<span class="text-xl font-bold">{{devis.prix}}€</span><br>
-				<span>Soit
+				<span class="text-2xl font-bold">{{devis.prix}}€</span><br>
+				<span class="text-lg">Soit
 					{{(devis.prix / devis.duree)|number_format(2,'.') }}€ / jour</span>
 			</div>
 		</div>
@@ -123,7 +123,7 @@
 				<div class="w-full max-w-xs mx-auto text-center">
 					<form action="/payement" method="post" id="payment-form" class="block">
 						<div class="mb-6">
-							<label for="card-element" class="block text-left text-red-700 font-medium mb-2">
+							<label for="card-element" class="block text-left text-red-700 font-medium text-base mb-2">
 								les informations de la carte
 							</label>
 							<div

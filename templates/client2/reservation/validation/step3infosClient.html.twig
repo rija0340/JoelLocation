@@ -43,34 +43,34 @@
 
 			<!-- Informations client -->
 			<div class="bg-white shadow-md p-6 space-y-6">
-				<h3 class="text-2xl font-bold text-center">Mes informations</h3>
+				<h3 class="text-3xl font-bold text-center">Mes informations</h3>
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 					<div>
-						<label class="block text-sm font-medium text-gray-700">
+						<label class="block text-base font-medium text-gray-700">
 							<span>Nom *</span>
 						</label>
 						{{ form_widget(formClient.nom, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-joel-red focus:border-transparent'}}) }}
 					</div>
 					<div>
-						<label class="block text-sm font-medium text-gray-700">
+						<label class="block text-base font-medium text-gray-700">
 							<span>Prénom *</span>
 						</label>
 						{{ form_widget(formClient.prenom, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-joel-red focus:border-transparent'}}) }}
 					</div>
 					<div>
-						<label class="block text-sm font-medium text-gray-700">
+						<label class="block text-base font-medium text-gray-700">
 							<span>Sexe *</span>
 						</label>
 						{{ form_widget(formClient.sexe, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-joel-red focus:border-transparent'}}) }}
 					</div>
 					<div>
-						<label class="block text-sm font-medium text-gray-700">
+						<label class="block text-base font-medium text-gray-700">
 							<span>Portable *</span>
 						</label>
 						{{ form_widget(formClient.portable, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-joel-red focus:border-transparent'}}) }}
 					</div>
 					<div class="md:col-span-2">
-						<label class="block text-sm font-medium text-gray-700">
+						<label class="block text-base font-medium text-gray-700">
 							<span>Email *</span>
 						</label>
 						{{ form_widget(formClient.mail, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-joel-red focus:border-transparent'}}) }}
@@ -80,8 +80,8 @@
 
 			<!-- Paiement -->
 			<div class="bg-white shadow-md p-6 mt-6 space-y-4">
-				<h3 class="text-2xl font-bold text-center">Mode de paiement</h3>
-				<p class="text-sm text-gray-600 text-center">
+				<h3 class="text-3xl font-bold text-center">Mode de paiement</h3>
+				<p class="text-base text-gray-600 text-center">
 					Mode de paiement par PayPal. Pour valider votre réservation, vous devez effectuer un premier paiement. Une fois le paiement effectué, un email de confirmation vous sera envoyé.
 				</p>
 				<div id="paypal-button-container" class="flex justify-center items-center mt-4" style="min-height: 60px;"></div>
@@ -90,10 +90,10 @@
 
 			<!-- Conditions générales -->
 			<div class="bg-white shadow-md p-6 mt-6 space-y-4">
-				<h3 class="text-2xl font-bold text-center">Conditions générales de location</h3>
+				<h3 class="text-3xl font-bold text-center">Conditions générales de location</h3>
 				<label class="flex items-start gap-2 cursor-pointer">
 					<input type="checkbox" name="conditionGeneralVente" id="conditionGeneralVente" class="border border-gray-300 rounded text-joel-red focus:ring-joel-red">
-					<span class="text-sm">
+					<span class="text-base">
 						Je reconnais avoir pris connaissance des
 						<a href="/cgl/Joel location conditions générales de location_Version 1.0.pdf" class="text-joel-red hover:underline">
 							conditions générales de location

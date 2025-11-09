@@ -88,66 +88,94 @@
 	{# <input type="hidden" id="options_garanties_data" data-vehiculeisnotavailable=" {{ vehiculeIsNotAvailable }}" data-selected-options="{{dataOptions|json_encode()}}" data-selected-garanties="{{dataGaranties|json_encode()}}" data-options="{{allOptions|json_encode()}}" data-garanties="{{allGaranties|json_encode()}}"> #}
 
 
-	<div class="text-center mb-2">
-		{% if step is defined and step == 'validation' %}
-			<a href="{{ path('client_reservations') }}" class="border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-lg transition-all duration-300 mr-2 mb-2 sm:mb-0 inline-block">
-				<i class="fa fa-arrow-left mr-2"></i>
-				Revenir à mes réservations
-			</a>
-		{% else %}
-			<a href="{{ path('client_step2') }}" class="border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-lg transition-all duration-300 mr-2 mb-2 sm:mb-0 inline-block">
-				<i class="fa fa-arrow-left mr-2"></i>
-				Revenir à l'étape précédente
-			</a>
-		{% endif %}
+	<!-- Action Buttons - Top -->
+	<div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 mb-6">
+		<div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+			{% if step is defined and step == 'validation' %}
+				<a href="{{ path('client_reservations') }}"
+				   class="inline-flex items-center justify-center px-6 py-3 border-2 border-joel-dark text-joel-dark hover:bg-joel-dark hover:text-white rounded-lg transition-colors duration-200 text-base font-medium min-w-[200px]">
+					<i class="fa fa-arrow-left mr-2"></i>
+					Revenir à mes réservations
+				</a>
+			{% else %}
+				<a href="{{ path('client_step2') }}"
+				   class="inline-flex items-center justify-center px-6 py-3 border-2 border-joel-dark text-joel-dark hover:bg-joel-dark hover:text-white rounded-lg transition-colors duration-200 text-base font-medium min-w-[200px]">
+					<i class="fa fa-arrow-left mr-2"></i>
+					Revenir à l'étape précédente
+				</a>
+			{% endif %}
 
-		{% if vehiculeIsNotAvailable is not defined or not vehiculeIsNotAvailable %}
-			<button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-all duration-300" form="options_garanties" id="btnEnregistrer1">
-				<i class="fa fa-save mr-2"></i>
-				Enregistrer
-			</button>
-		{% endif %}
-
+			{% if vehiculeIsNotAvailable is not defined or not vehiculeIsNotAvailable %}
+				<button type="submit"
+						class="inline-flex items-center justify-center px-6 py-3 bg-joel-red hover:bg-joel-red-dark text-white rounded-lg transition-colors duration-200 text-base font-medium min-w-[200px]"
+						form="options_garanties"
+						id="btnEnregistrer1">
+					<i class="fa fa-save mr-2"></i>
+					Enregistrer
+				</button>
+			{% endif %}
+		</div>
 	</div>
 
 
 	<input type="hidden" id="options_garanties_data" data-selected-options="{{ dataOptions|json_encode() }}" data-selected-garanties="{{ dataGaranties|json_encode() }}" data-options="{{ allOptions|json_encode() }}" data-garanties="{{ allGaranties|json_encode() }}">
 
-	<form {% if step is defined and step == 'validation' %} action="{{path('validation_step2',{'id':devis.id})}}" {% else %} action="{{ path('client_step3') }}" {% endif %} method="post" id="options_garanties">
+	<!-- Main Content Container -->
+	<div class="bg-gray-50 min-h-screen py-6">
+		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+			<form {% if step is defined and step == 'validation' %} action="{{path('validation_step2',{'id':devis.id})}}" {% else %} action="{{ path('client_step3') }}" {% endif %} method="post" id="options_garanties">
 
-		{% if step is defined and step == 'validation' %}
-			<input type="hidden" name="editedOptionsGaranties" value="true">
-		{% endif %}
-		<div class="flex flex-col md:flex-row gap-6">
-			<div class="w-full md:w-1/4">
-				{% include "client2/reservation/nouvelle_resa/parts/sidebarResaResume.html.twig" %}
-			</div>
-			<div class="w-full md:w-3/4">
-				{% include "client2/reservation/nouvelle_resa/parts/step2OptionsGaranties.html.twig" %}
-			</div>
+				{% if step is defined and step == 'validation' %}
+					<input type="hidden" name="editedOptionsGaranties" value="true">
+				{% endif %}
+
+<!-- Two Column Layout -->
+<div class="flex flex-col lg:flex-row gap-8">
+    <!-- Sidebar - Reservation Summary (larger) -->
+    <div class=" lg:w-2/5 xl:w-2/5">
+        <div class="sticky top-6">
+            {% include "client2/reservation/nouvelle_resa/parts/sidebarResaResume.html.twig" %}
+        </div>
+    </div>
+    
+    <!-- Main Content - Options & Guarantees -->
+    <div class="w-full lg:w-3/5 xl:w-3/5">
+        <div class="space-y-6">
+            {% include "client2/reservation/nouvelle_resa/parts/step2OptionsGaranties.html.twig" %}
+        </div>
+    </div>
+</div>
+			</form>
 		</div>
-	</form>
+	</div>
 
-	<div class="text-center mb-2">
-		{% if step is defined and step == 'validation' %}
-			<a href="{{ path('client_reservations') }}" class="border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-lg transition-all duration-300 mr-2 mb-2 sm:mb-0 inline-block">
-				<i class="fa fa-arrow-left mr-2"></i>
-				Revenir à mes réservations
-			</a>
-		{% else %}
-			<a href="{{ path('client_step2') }}" class="border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-lg transition-all duration-300 mr-2 mb-2 sm:mb-0 inline-block">
-				<i class="fa fa-arrow-left mr-2"></i>
-				Revenir à l'étape précédente
-			</a>
-		{% endif %}
+	<!-- Action Buttons - Bottom -->
+	<div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 mt-6">
+		<div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+			{% if step is defined and step == 'validation' %}
+				<a href="{{ path('client_reservations') }}"
+				   class="inline-flex items-center justify-center px-6 py-3 border-2 border-joel-dark text-joel-dark hover:bg-joel-dark hover:text-white rounded-lg transition-colors duration-200 text-base font-medium min-w-[200px]">
+					<i class="fa fa-arrow-left mr-2"></i>
+					Revenir à mes réservations
+				</a>
+			{% else %}
+				<a href="{{ path('client_step2') }}"
+				   class="inline-flex items-center justify-center px-6 py-3 border-2 border-joel-dark text-joel-dark hover:bg-joel-dark hover:text-white rounded-lg transition-colors duration-200 text-base font-medium min-w-[200px]">
+					<i class="fa fa-arrow-left mr-2"></i>
+					Revenir à l'étape précédente
+				</a>
+			{% endif %}
 
-		{% if vehiculeIsNotAvailable is not defined or not vehiculeIsNotAvailable %}
-			<button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-all duration-300" form="options_garanties" id="btnEnregistrer1">
-				<i class="fa fa-save mr-2"></i>
-				Enregistrer
-			</button>
-		{% endif %}
-
+			{% if vehiculeIsNotAvailable is not defined or not vehiculeIsNotAvailable %}
+				<button type="submit"
+						class="inline-flex items-center justify-center px-6 py-3 bg-joel-red hover:bg-joel-red-dark text-white rounded-lg transition-colors duration-200 text-base font-medium min-w-[200px]"
+						form="options_garanties"
+						id="btnEnregistrer2">
+					<i class="fa fa-save mr-2"></i>
+					Enregistrer
+				</button>
+			{% endif %}
+		</div>
 	</div>
 
 {% endblock %}

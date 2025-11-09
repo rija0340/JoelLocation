@@ -25,18 +25,25 @@
 	</div>
 
 
-	<div class="text-center mb-2">
-		<a href="{{ path('client_step1') }}" class="border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-lg transition-all duration-300 mb-2 sm:mb-0">
-			<i class="fa fa-arrow-left mr-2"></i>
-			Revenir à l'étape précédente
-		</a>
-		{% if vehiculesDisponible|length > 0 %}
-			<button class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-all duration-300" type="submit" form="formStep2">
-				<i class="fa fa-save mr-2"></i>
-				Enregistrer
-			</button>
-		{% endif %}
-	</div>
+<!-- Action Buttons - Top -->
+<div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 mb-6">
+    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <a href="{{ path('client_step1') }}"
+           class="inline-flex items-center justify-center px-6 py-3 border-2 border-joel-dark text-joel-dark hover:bg-joel-dark hover:text-white rounded-lg transition-colors duration-200 text-base font-medium min-w-[200px]">
+            <i class="fa fa-arrow-left mr-2"></i>
+            Revenir à l'étape précédente
+        </a>
+
+        {% if vehiculesDisponible|length > 0 %}
+            <button type="submit"
+                    class="inline-flex items-center justify-center px-6 py-3 bg-joel-red hover:bg-joel-red-dark text-white rounded-lg transition-colors duration-200 text-base font-medium min-w-[200px]"
+                    form="formStep2">
+                <i class="fa fa-save mr-2"></i>
+                Enregistrer
+            </button>
+        {% endif %}
+    </div>
+</div>
 
 
 	<form action="{{ path('client_step2') }}" method="post" id="formStep2" class="space-y-4">
@@ -64,18 +71,25 @@
 																							</div>
 																						</div> #}
 
-		{% if vehiculesDisponible|length > 0 %}
-			<div class="flex flex-col sm:flex-row justify-center items-center gap-4 mt-4">
-				<a href="{{ path('client_step1') }}" class="border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-lg transition-all duration-300">
-					<i class="fa fa-arrow-left mr-2"></i>
-					Revenir à l'étape précédente
-				</a>
-				<button class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-all duration-300" type="submit" form="formStep2">
+	<!-- Action Buttons - Top -->
+	<div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 mb-6">
+		<div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+			<a href="{{ path('client_step1') }}"
+			class="inline-flex items-center justify-center px-6 py-3 border-2 border-joel-dark text-joel-dark hover:bg-joel-dark hover:text-white rounded-lg transition-colors duration-200 text-base font-medium min-w-[200px]">
+				<i class="fa fa-arrow-left mr-2"></i>
+				Revenir à l'étape précédente
+			</a>
+
+			{% if vehiculesDisponible|length > 0 %}
+				<button type="submit"
+						class="inline-flex items-center justify-center px-6 py-3 bg-joel-red hover:bg-joel-red-dark text-white rounded-lg transition-colors duration-200 text-base font-medium min-w-[200px]"
+						form="formStep2">
 					<i class="fa fa-save mr-2"></i>
 					Enregistrer
 				</button>
-			</div>
-		{% endif %}
+			{% endif %}
+		</div>
+	</div>
 	</form>
 {% endblock %}
 
@@ -83,35 +97,36 @@
 
 	<script>
 		document.querySelectorAll('input[name="vehicule"]').forEach(input => {
-const label = input.nextElementSibling;
-const textSpan = label.querySelector('.js-btn-text');
+			const label = input.nextElementSibling;
+			const textSpan = label.querySelector('.js-btn-text');
 
-// Initialize state on page load
-if (input.checked) {
-label.classList.remove('bg-transparent', 'text-success');
-label.classList.add('bg-success', 'text-white', 'border-success');
-textSpan.textContent = 'Sélectionné';
-label.dataset.selected = 'true';
-}
+			// Initialize state on page load
+			if (input.checked) {
+				label.classList.remove('border-joel-red', 'text-joel-red');
+				label.classList.add('bg-joel-red', 'text-white');
+				textSpan.textContent = 'Sélectionné';
+				label.dataset.selected = 'true';
+			}
 
-// Handle change event
-input.addEventListener('change', () => { // Reset all buttons
-document.querySelectorAll('.js-vehicle-btn').forEach(otherLabel => {
-otherLabel.classList.remove('bg-success', 'text-white', 'border-success');
-otherLabel.classList.add('bg-transparent', 'text-success', 'border-success');
-otherLabel.querySelector('.js-btn-text').textContent = 'Choisir';
-otherLabel.dataset.selected = 'false';
-});
+			// Handle change event
+			input.addEventListener('change', () => {
+				// Reset all buttons
+				document.querySelectorAll('.js-vehicle-btn').forEach(otherLabel => {
+					otherLabel.classList.remove('bg-joel-red', 'text-white');
+					otherLabel.classList.add('border-joel-red', 'text-joel-red');
+					otherLabel.querySelector('.js-btn-text').textContent = 'Choisir';
+					otherLabel.dataset.selected = 'false';
+				});
 
-// Update selected button
-if (input.checked) {
-label.classList.remove('bg-transparent', 'text-success');
-label.classList.add('bg-success', 'text-white', 'border-success');
-textSpan.textContent = 'Sélectionné';
-label.dataset.selected = 'true';
-}
-});
-});
+				// Update selected button
+				if (input.checked) {
+					label.classList.remove('border-joel-red', 'text-joel-red');
+					label.classList.add('bg-joel-red', 'text-white');
+					textSpan.textContent = 'Sélectionné';
+					label.dataset.selected = 'true';
+				}
+			});
+		});
 	</script>
 
 {% endblock %}

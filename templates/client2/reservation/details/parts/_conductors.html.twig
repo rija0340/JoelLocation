@@ -1,17 +1,17 @@
-<div class="bg-white rounded-lg shadow-md overflow-hidden">
-	<div class="p-6">
-		<div class="flex justify-between items-center mb-4">
-			<h4 class="text-2xl md:text-2xl font-bold text-joel-red flex items-center mb-4">
-				Conducteurs
+<div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+	<div class="p-4">
+		<div class="flex justify-between items-center mb-3">
+			<h4 class="text-xl font-semibold text-joel-red flex items-center">
+				<i class="fa fa-users mr-2"></i> Conducteurs
 			</h4>
 			{% if reservation.conducteursClient|length < 2 %}
-				<label for="modalConducteurToggle" class="text-joel-red hover:text-joel-red-dark font-medium cursor-pointer">
-					<i class="fas fa-plus-circle mr-1"></i>
-					Ajouter un conducteur
+				<label for="modalConducteurToggle" class="text-joel-red text-base cursor-pointer">
+					<i class="fa fa-plus-circle mr-1"></i>
+					Ajouter
 				</label>
 			{% endif %}
 		</div>
-		<div class="space-y-4">
+		<div class="space-y-3">
 			{% set somme = 0 %}
 			{% for conducteur in reservation.conducteursClient %}
 				{% if conducteur.isPrincipal %}
@@ -19,44 +19,46 @@
 				{% endif %}
 			{% endfor %}
 			{% for conducteur in reservation.conducteursClient %}
-				<div class="p-4 rounded-lg {% if conducteur.isPrincipal %}bg-gray-100{% else %}border border-gray-300{% endif %}">
+				<div class="p-3 rounded-lg {% if conducteur.isPrincipal %}bg-gray-50 border border-gray-300{% else %}bg-white border border-gray-200{% endif %}">
 					<div class="flex justify-between items-start">
-						<div>
-							<div class="flex items-center mb-2">
-								<span class="font-semibold mr-2">{{ conducteur.nom }}
+						<div class="flex-1">
+							<div class="flex items-center mb-1">
+								<span class="font-medium text-base mr-2">{{ conducteur.nom }}
 									{{ conducteur.prenom }}</span>
 								{% if conducteur.isPrincipal %}
-									<span class="bg-yellow-500 text-white text-xs px-2 py-1 rounded">Principal</span>
+									<span class="bg-joel-red text-white text-sm px-2 py-0.5 rounded">Principal</span>
 								{% endif %}
 							</div>
-							<small class="text-gray-600 block">Permis:
-								{{ conducteur.numeroPermis }}</small>
-							<small class="text-gray-600 block">Délivré:
-								{{ conducteur.dateDelivrance|date('m/Y') }}
-								à
-								{{ conducteur.villeDelivrance }}</small>
+							<div class="text-sm text-gray-700 space-y-0.5">
+								<div class="flex items-center">
+									<i class="fa fa-id-card text-joel-red mr-1 w-3"></i>
+									<span>Permis: {{ conducteur.numeroPermis }}</span>
+								</div>
+								<div class="flex items-center">
+									<i class="fa fa-calendar text-joel-red mr-1 w-3"></i>
+									<span>Délivré: {{ conducteur.dateDelivrance|date('m/Y') }} à {{ conducteur.villeDelivrance }}</span>
+								</div>
+							</div>
 						</div>
-						<div class="flex items-center space-x-2">
+						<div class="flex items-center space-x-1 ml-2">
 							{% if somme == 0 %}
-								<a href="{{ path('make_conducteur_principal', {'id': conducteur.id, 'id_resa': reservation.id}) }}" class="text-green-600 hover:text-green-800 text-sm font-medium flex items-center gap-1 mr-2">
-									<i class="fas fa-star"></i>
-									Rendre Principal
+								<a href="{{ path('make_conducteur_principal', {'id': conducteur.id, 'id_resa': reservation.id}) }}" class="text-joel-red text-sm" title="Rendre Principal">
+									<i class="fa fa-star"></i>
 								</a>
 							{% elseif conducteur.isPrincipal %}
-								<a href="{{ path('remove_conducteur_principal', {'id': conducteur.id, 'id_resa': reservation.id}) }}" class="text-gray-600 hover:text-gray-800 text-sm font-medium flex items-center gap-1 mr-2">
-									<i class="fas fa-edit"></i>
-									Retirer Principal
+								<a href="{{ path('remove_conducteur_principal', {'id': conducteur.id, 'id_resa': reservation.id}) }}" class="text-gray-500 text-sm" title="Retirer Principal">
+									<i class="fa fa-edit"></i>
 								</a>
 							{% endif %}
-							<a href="{{ path('conducteur_edit', {'id': conducteur.id}) }}" class="text-gray-500 hover:text-gray-700 mr-2" title="Modifier">
-								<i class="fas fa-edit"></i>
+							<a href="{{ path('conducteur_edit', {'id': conducteur.id}) }}" class="text-gray-500 text-sm" title="Modifier">
+								<i class="fa fa-edit"></i>
 							</a>
 							<form method="post" action="{{ path('client_conducteur_remove_reservation', {'id': conducteur.id, 'id_resa' : reservation.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer ce conducteur ?');" class="inline-block">
 								<input type="hidden" name="_method" value="DELETE">
 								<input type="hidden" name="reservation" value="{{ reservation.id }}">
 								<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ conducteur.id) }}">
-								<button class="text-gray-500 hover:text-red-600" title="Supprimer" type="submit">
-									<i class="fas fa-trash-alt"></i>
+								<button class="text-gray-500 text-sm" title="Supprimer" type="submit">
+									<i class="fa fa-trash"></i>
 								</button>
 							</form>
 						</div>

@@ -10,7 +10,7 @@
 
 {% block body %}
 
-	<div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0 py-6">
+	<div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0 ">
 		<header class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
 			<div>
 				<h1 class="text-3xl title-red">Nouvelle réservation</h1>
@@ -26,43 +26,43 @@
 	{{ form_start(form) }}
 
 	<div class="bg-white p-6 rounded-xl shadow mb-6">
-		<h2 class="text-red-500 font-bold text-lg mb-4">Départ :</h2>
+		<h2 class="text-joel-red font-bold text-lg mb-4">Départ :</h2>
 		<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 			<div>
-				<label class="block text-sm font-medium text-gray-700">Agence de départ :</label>
+				<label class="block text-sm font-medium text-joel-red">Agence de départ :</label>
 				{{ form_widget(form.agenceDepart, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-joel-red focus:border-transparent'}}) }}
 			</div>
 			<div>
-				<label class="block text-sm font-medium text-gray-700">Date de départ :</label>
+				<label class="block text-sm font-medium text-joel-red">Date de départ :</label>
 				{{ form_widget(form.dateDepart, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-joel-red focus:border-transparent'}}) }}
 			</div>
 			<div>
-				<label class="block text-sm font-medium text-gray-700">Type de véhicule :</label>
+				<label class="block text-sm font-medium text-joel-red">Type de véhicule :</label>
 				{{ form_widget(form.typeVehicule, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-joel-red focus:border-transparent'}}) }}
 			</div>
 		</div>
 	</div>
 
 	<div class="bg-white p-6 rounded-xl shadow mb-6">
-		<h2 class="text-red-500 font-bold text-lg mb-4">Retour :</h2>
+		<h2 class="text-joel-red font-bold text-lg mb-4">Retour :</h2>
 		<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 			<div>
-				<label class="block text-sm font-medium text-gray-700">Agence de retour :</label>
+				<label class="block text-sm font-medium text-joel-red">Agence de retour :</label>
 				{{ form_widget(form.agenceRetour, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-joel-red focus:border-transparent'}}) }}
 			</div>
 			<div>
-				<label class="block text-sm font-medium text-gray-700">Date de retour :</label>
+				<label class="block text-sm font-medium text-joel-red">Date de retour :</label>
 				{{ form_widget(form.dateRetour, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-joel-red focus:border-transparent'}}) }}
 			</div>
 			<div>
-				<label class="block text-sm font-medium text-gray-700">Lieu de séjour :</label>
+				<label class="block text-sm font-medium text-joel-red">Lieu de séjour :</label>
 				{{ form_widget(form.lieuSejour, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-joel-red focus:border-transparent'}}) }}
 			</div>
 		</div>
 	</div>
 
 	<div class="text-center mt-6">
-		<button class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-all duration-300" id="enregistrer">
+		<button class="bg-joel-red hover:bg-joel-red-dark text-white px-4 py-2 rounded-lg transition-all duration-300" id="enregistrer">
 			<i class="fa fa-book mr-2"></i>
 			Enregistrer
 		</button>

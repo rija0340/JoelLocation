@@ -1,9 +1,9 @@
-<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-	<div class="flex flex-col md:flex-row items-start md:items-center gap-4 mb-4 md:mb-0">
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
+	<div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 mb-2 sm:mb-0">
 		<h1 class="text-2xl text-joel-red font-bold flex flex-wrap items-center gap-2">
-			<span>{{ type|lower == 'devis' ? 'DEVIS' : 'RÉSERVATION' }}
+			<span class="text-lg">{{ type|lower == 'devis' ? 'DEVIS' : 'RÉSERVATION' }}
 				-</span>
-			<span class="bg-yellow-500 text-white rounded-full px-4 py-1 text-sm">
+			<span class="bg-joel-red text-white rounded-full px-3 py-0.5 text-sm font-medium">
 				{% if type|lower == 'devis' and reservation.numero is defined %}
 					{{ reservation.numero }}
 				{% else %}
@@ -11,7 +11,7 @@
 				{% endif %}
 			</span>
 		</h1>
-		<small class="text-base font-medium text-gray-600">
+		<small class="text-sm font-medium text-gray-600">
 			Créé le
 			{% if type|lower == 'devis' %}
 				{{ reservation.dateCreation|date('d/m/Y') }}
@@ -21,13 +21,13 @@
 		</small>
 	</div>
 
-	<div class="flex flex-col md:flex-row gap-2 md:gap-4">
+	<div class="flex flex-col sm:flex-row gap-1 sm:gap-2">
 		{% if type == 'devis' %}
 			{% include 'client2/reservation/details/parts/_action_buttons.html.twig' with {'reservation': reservation} %}
 		{% endif %}
-		<a href="{{ path('client_reservations') }}" class="border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-lg flex items-center gap-2">
-			<i class="fas fa-reply"></i>
-			Mes Réservations
+		<a href="{{ path('client_reservations') }}" class="border border-gray-300 text-gray-700 text-base hover:bg-gray-100 px-3 py-1.5 rounded-lg flex items-center gap-1">
+			<i class="fas fa-reply text-sm"></i>
+			<span class="text-base">Retour</span>
 		</a>
 	</div>
 </div>

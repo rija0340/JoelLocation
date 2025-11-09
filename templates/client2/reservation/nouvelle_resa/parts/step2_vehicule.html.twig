@@ -1,7 +1,6 @@
 {% set vehiculeInfo = [
 	{'icon': 'fa-road', 'label': 'Marque', 'value': vehicule.marque, 'id': 'vehicule_marque'},
 	{'icon': 'fa-wrench', 'label': 'Modèle', 'value': vehicule.modele, 'id': 'vehicule_modele'},
-	{'icon': 'fa-plus-square', 'label': 'Immatriculation', 'value': vehicule.immatriculation, 'id': 'vehicule_immatriculation'},
 	{'icon': 'fa-battery-full', 'label': 'Carburant', 'value': vehicule.carburation, 'id': 'vehicule_carburation'},
 	{'icon': 'fa-sun-o', 'label': 'Boîte de vitesse', 'value': vehicule.vitesse, 'id': 'vehicule_vitesse'}
 ] %}
@@ -13,41 +12,41 @@
 	{'icon': 'fa-star', 'label': 'Atouts', 'value': vehicule.atouts, 'id': 'vehicule_atouts'},
 	{'icon': 'fa-shield', 'label': 'Caution', 'value': vehicule.caution ~ ' €', 'id': 'vehicule_caution'}
 ] %}
-<div class="border-2 border-gray-300 rounded-xl transition hover:border-gray-400 hover:shadow-xl shadow-md bg-white mb-8" data-vehicle-id="{{ vehicule.id }}">
+<div class="border border-gray-200 rounded-xl transition-shadow duration-200 hover:shadow-lg shadow bg-white mb-8" data-vehicle-id="{{ vehicule.id }}">
     <div class="p-6">
         <div class="flex flex-col lg:flex-row gap-6">
             {# Image véhicule #}
             <div class="lg:w-1/4 text-center">
                 <img src="{{ vich_uploader_asset(vehicule, 'imageFile') }}" alt="Photo {{ vehicule.marque }} {{ vehicule.modele }}"
-                     class="rounded-lg shadow-md w-full h-56 object-cover mb-4 lg:mb-0">
+                     class="rounded-lg shadow w-full h-56 object-cover mb-4 lg:mb-0">
             </div>
 
             {# Informations véhicule #}
             <div class="lg:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-gray-100 rounded-lg p-5 shadow-sm">
-                    <h6 class="text-red-500 font-semibold text-lg mb-4">
+                <div class="bg-gray-50 rounded-lg p-5">
+                    <h6 class="text-joel-red font-semibold text-lg mb-4">
                         <i class="fa fa-info-circle mr-2"></i> Informations générales
                     </h6>
                     {% for item in vehiculeInfo %}
                         <div class="flex justify-between items-center border-b border-gray-200 py-2 last:border-b-0">
-                            <div class="font-semibold text-sm flex items-center text-gray-600">
-                                <i class="fa {{ item.icon }} mr-2 text-gray-800 w-5"></i> {{ item.label }}
+                            <div class="font-semibold text-sm flex items-center text-gray-700">
+                                <i class="fa {{ item.icon }} mr-2 text-joel-dark w-5"></i> {{ item.label }}
                             </div>
-                            <div class="text-gray-800 font-medium text-sm" id="{{ item.id }}">{{ item.value }}</div>
+                            <div class="text-joel-dark font-medium text-sm" id="{{ item.id }}">{{ item.value }}</div>
                         </div>
                     {% endfor %}
                 </div>
 
-                <div class="bg-gray-100 rounded-lg p-5 shadow-sm">
-                    <h6 class="text-red-500 font-semibold text-lg mb-4">
+                <div class="bg-gray-50 rounded-lg p-5">
+                    <h6 class="text-joel-red font-semibold text-lg mb-4">
                         <i class="fa fa-cogs mr-2"></i> Caractéristiques
                     </h6>
                     {% for item in vehiculeInfo2 %}
                         <div class="flex justify-between items-center border-b border-gray-200 py-2 last:border-b-0">
-                            <div class="font-semibold text-sm flex items-center text-gray-600">
-                                <i class="fa {{ item.icon }} mr-2 text-gray-800 w-5"></i> {{ item.label }}
+                            <div class="font-semibold text-sm flex items-center text-gray-700">
+                                <i class="fa {{ item.icon }} mr-2 text-joel-dark w-5"></i> {{ item.label }}
                             </div>
-                            <div class="text-gray-800 font-medium text-sm" id="{{ item.id }}">{{ item.value }}</div>
+                            <div class="text-joel-dark font-medium text-sm" id="{{ item.id }}">{{ item.value }}</div>
                         </div>
                     {% endfor %}
                 </div>
@@ -56,14 +55,14 @@
             {# Colonne droite: tarif + bouton #}
             <div class="lg:w-1/4 flex flex-col justify-between items-center gap-6">
                 {# Tarif #}
-                <div class="bg-gray-200 p-4 rounded-lg shadow w-full text-center">
+                <div class="bg-white border border-gray-200 p-4 rounded-lg w-full text-center">
                     <div class="flex justify-between items-center">
-                        <span class="font-semibold text-sm">
+                        <span class="font-semibold text-sm text-gray-700">
                             <i class="fa fa-calculator mr-2"></i>Tarif
                         </span>
                         {% for data in data %}
                             {% if data['vehicule'] == vehicule %}
-                                <span class="font-bold text-lg text-gray-800">{{ data['tarif'] }}€</span>
+                                <span class="font-bold text-lg text-joel-red">{{ data['tarif'] }}€</span>
                             {% endif %}
                         {% endfor %}
                     </div>
@@ -75,10 +74,10 @@
                         class="hidden" {% if devis.vehicule is defined and devis.vehicule is not null and devis.vehicule.id == vehicule.id %}checked{% endif %}
                         aria-label="Select vehicle {{ vehicule.marque }} {{ vehicule.modele }}">
                     <label for="vehicule{{ vehicule.id }}"
-                        class="border border-green-500 text-green-500 w-full font-semibold transition rounded-lg
-                                hover:bg-green-50 hover:shadow-md js-vehicle-btn"
+                        class="border-2 border-joel-red text-joel-red w-full font-semibold transition-colors duration-200 rounded-lg
+                                hover:bg-joel-red hover:text-white cursor-pointer py-2 px-4 inline-block js-vehicle-btn"
                         data-selected="false">
-                        <span class="inline-flex items-center text-base">
+                        <span class="inline-flex items-center justify-center text-base">
                             <i class="fa fa-check-circle mr-2"></i>
                             <span class="js-btn-text">Choisir</span>
                         </span>
