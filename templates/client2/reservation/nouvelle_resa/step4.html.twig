@@ -37,7 +37,7 @@
 				class="grid grid-cols-1 md:grid-cols-3 gap-6">
 				<!-- Vehicle Image -->
 				<div class="aspect-video">
-					<img src="{{ vich_uploader_asset(devis.vehicule, 'imageFile') }}" alt="{{ devis.vehicule.marque }} {{ devis.vehicule.modele }}" class="w-full h-full object-cover rounded-lg">
+					<img src="{{ vich_uploader_asset(devis.vehicule, 'imageFile') }}" alt="{{ devis.vehicule.marque }} {{ devis.vehicule.modele }}" loading="lazy" class="w-full h-full object-cover rounded-lg">
 				</div>
 
 				<!-- Details Section -->
@@ -121,11 +121,11 @@
 
 					<!-- Options & Guarantees -->
 					<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-						{% if devis.options is not empty or devis.conducteur == true %}
+						{% if devis.devisOptions is not empty or devis.conducteur == true %}
 							<div class="bg-gray-100 p-4 rounded-lg">
 								<h3 class="text-lg font-semibold mb-2">Options</h3>
 								<ul class="space-y-1">
-									{% if devis.conducteur == "true" %}
+									{% if devis.conducteur == true %}
 										<li class="flex items-start gap-2">
 											<i class="fas fa-plus-circle text-blue-500 mt-1 text-sm"></i>
 											<span>Conducteur additionnel : 50€</span>

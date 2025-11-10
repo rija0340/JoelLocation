@@ -5,7 +5,7 @@
 		</h4>
 		<div class="space-y-3">
 			<div class="flex justify-center">
-				<img src="{{ vich_uploader_asset(reservation.vehicule, 'imageFile') }}" alt="{{ reservation.vehicule.image }}" class="h-40 w-auto object-contain max-h-40"/>
+				<img src="{{ vich_uploader_asset(reservation.vehicule, 'imageFile') }}" alt="{{ reservation.vehicule.image }}" loading="lazy" class="h-40 w-auto object-contain max-h-40"/>
 			</div>
 			<div>
 				<h5 class="font-bold mb-2 text-lg">{{ reservation.vehicule.marque }}
