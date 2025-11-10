@@ -8,7 +8,10 @@
         <!-- Logo Section -->
         <div class="flex items-center space-x-4">
             <a href="{{ path('accueil') }}" class="flex items-center">
-                <img src="{{ asset('images/Joel-Location-new.png') }}" alt="JOEL LOCATION" loading="lazy" style="height: 110px;">
+                <picture>
+                    <source srcset="{{ asset('images/vitrine/Joel-Location-new.webp') }}" type="image/webp">
+                    <img src="{{ asset('images/vitrine/Joel-Location-new.png') }}" alt="JOEL LOCATION" loading="lazy" style="height: 110px;">
+                </picture>
                 <div class="ml-3 hidden lg:block">
                     <div class="flex flex-col">
                         <span class="text-gray-700 text-lg italic" style="font-family:'Monotype Corsiva'; font-size:18px;">

@@ -52,8 +52,20 @@
     <section class="relative h-[70vh] overflow-hidden">
         <div class="hero-slider relative h-full">
             <!-- Slide 1 -->
-            <div class="hero-slide active absolute inset-0 bg-cover bg-center bg-no-repeat"
-                 style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),  url('{{ asset('images/JOELLOCATION1.webp') }}')">
+            <div class="hero-slide active absolute inset-0">
+                <picture class="block h-full w-full">
+                    <source media="(max-width: 768px)" srcset="{{ asset('images/vitrine/JOELLOCATION1-mobile.webp') }}" type="image/webp">
+                    <source media="(max-width: 768px)" srcset="{{ asset('images/vitrine/JOELLOCATION1-mobile.jpg') }}" type="image/jpeg">
+                    <source media="(max-width: 1200px)" srcset="{{ asset('images/vitrine/JOELLOCATION1-tablet.webp') }}" type="image/webp">
+                    <source media="(max-width: 1200px)" srcset="{{ asset('images/vitrine/JOELLOCATION1-tablet.jpg') }}" type="image/jpeg">
+                    <source srcset="{{ asset('images/vitrine/JOELLOCATION1.webp') }}" type="image/webp">
+                    <img src="{{ asset('images/vitrine/JOELLOCATION1.jpg') }}"
+                         alt="Joel Location - Véhicule de location en Guadeloupe"
+                         loading="lazy"
+                         width="1920"
+                         height="1080"
+                         class="object-cover w-full h-full">
+                </picture>
                 <div class="absolute inset-0 flex items-center justify-center">
                     <div class="container mx-auto px-4 text-center text-white">
                         <div class="max-w-3xl mx-auto animate-fade-in">
@@ -75,7 +87,7 @@
                                 <a href="{{ path('formulaire-contact') }}"
                                    class="border-2 border-white text-white hover:bg-white hover:text-joel-dark px-6 py-3 rounded-full font-semibold transition-all duration-300">
                                     Nous contacter
-                                </a> 
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -83,8 +95,20 @@
             </div>
 
             <!-- Slide 2 -->
-            <div class="hero-slide absolute inset-0 bg-cover bg-center bg-no-repeat opacity-0"
-                 style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('{{ asset('images/JOELLOCATION2.webp') }}')">
+            <div class="hero-slide absolute inset-0 opacity-0">
+                <picture class="block h-full w-full">
+                    <source media="(max-width: 768px)" srcset="{{ asset('images/vitrine/JOELLOCATION2-mobile.webp') }}" type="image/webp">
+                    <source media="(max-width: 768px)" srcset="{{ asset('images/vitrine/JOELLOCATION2-mobile.jpg') }}" type="image/jpeg">
+                    <source media="(max-width: 1200px)" srcset="{{ asset('images/vitrine/JOELLOCATION2-tablet.webp') }}" type="image/webp">
+                    <source media="(max-width: 1200px)" srcset="{{ asset('images/vitrine/JOELLOCATION2-tablet.jpg') }}" type="image/jpeg">
+                    <source srcset="{{ asset('images/vitrine/JOELLOCATION2.webp') }}" type="image/webp">
+                    <img src="{{ asset('images/vitrine/JOELLOCATION2.jpg') }}"
+                         alt="Roulez en toute tranquillité avec Joel Location"
+                         loading="lazy"
+                         width="1920"
+                         height="1080"
+                         class="object-cover w-full h-full">
+                </picture>
                 <div class="absolute inset-0 flex items-center justify-center">
                     <div class="container mx-auto px-4 text-center text-white">
                         <div class="max-w-3xl mx-auto animate-fade-in">
@@ -110,8 +134,20 @@
             </div>
 
             <!-- Slide 3 -->
-            <div class="hero-slide absolute inset-0 bg-cover bg-center bg-no-repeat opacity-0"
-                 style="background-image:  linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('{{ asset('images/JOELLOCATION3.webp') }}')">
+            <div class="hero-slide absolute inset-0 opacity-0">
+                <picture class="block h-full w-full">
+                    <source media="(max-width: 768px)" srcset="{{ asset('images/vitrine/JOELLOCATION3-mobile.webp') }}" type="image/webp">
+                    <source media="(max-width: 768px)" srcset="{{ asset('images/vitrine/JOELLOCATION3-mobile.jpg') }}" type="image/jpeg">
+                    <source media="(max-width: 1200px)" srcset="{{ asset('images/vitrine/JOELLOCATION3-tablet.webp') }}" type="image/webp">
+                    <source media="(max-width: 1200px)" srcset="{{ asset('images/vitrine/JOELLOCATION3-tablet.jpg') }}" type="image/jpeg">
+                    <source srcset="{{ asset('images/vitrine/JOELLOCATION3.webp') }}" type="image/webp">
+                    <img src="{{ asset('images/vitrine/JOELLOCATION3.jpg') }}"
+                         alt="Explorez la Guadeloupe avec nos véhicules de qualité"
+                         loading="lazy"
+                         width="1920"
+                         height="1080"
+                         class="object-cover w-full h-full">
+                </picture>
                 <div class="absolute inset-0 flex items-center justify-center">
                     <div class="container mx-auto px-4 text-center text-white">
                         <div class="max-w-3xl mx-auto animate-fade-in">
@@ -156,10 +192,15 @@
             <div class="flex flex-col lg:flex-row items-center justify-center gap-12">
                 <div class="flex-shrink-0 animate-slide-up">
                     <div class="w-32 h-32 lg:w-40 lg:h-40 rounded-full bg-white shadow-lg flex items-center justify-center hover-lift">
-                        <img src="{{ asset('images/Joel-Location-new.png') }}"
-                             alt="JOEL LOCATION"
-                             loading="lazy"
-                             class="w-24 h-24 lg:w-32 lg:h-32 object-contain">
+                        <picture>
+                            <source srcset="{{ asset('images/vitrine/Joel-Location-new.webp') }}" type="image/webp">
+                            <img src="{{ asset('images/vitrine/Joel-Location-new.png') }}"
+                                 alt="JOEL LOCATION"
+                                 loading="lazy"
+                                 width="128"
+                                 height="128"
+                                 class="w-24 h-24 lg:w-32 lg:h-32 object-contain">
+                        </picture>
                     </div>
                 </div>
                 <div class="text-center lg:text-left animate-slide-up">
@@ -192,10 +233,15 @@
                     <div class="vehicle-item group animate-slide-up">
                         <div class="relative overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300">
 
-                            <img src="{{ asset('uploads/vehicules/' ~ vehicule.image) }}"
-                                 alt="{{ vehicule.marque }} {{ vehicule.modele }}"
-                                 loading="lazy"
-                                 class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105">
+                            <picture>
+                                <source srcset="{{ asset('uploads/vehicules/' ~ vehicule.image|replace({'.png': '.webp', '.jpg': '.webp', '.jpeg': '.webp'})) }}" type="image/webp">
+                                <img src="{{ asset('uploads/vehicules/' ~ vehicule.image) }}"
+                                     alt="{{ vehicule.marque }} {{ vehicule.modele }}"
+                                     loading="lazy"
+                                     width="400"
+                                     height="300"
+                                     class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105">
+                            </picture>
 
                             {# ────── MOBILE OVERLAY (toujours visible) ────── #}
                             <div class="mobile-overlay">
@@ -271,7 +317,7 @@
                 </div>
                 <div class="animate-slide-up">
                     <div class="relative rounded-2xl overflow-hidden shadow-2xl hover-lift">
-                        <video width="100%" height="auto" controls autoplay loop muted class="rounded-2xl">
+                        <video width="100%" height="auto" controls autoplay loop muted class="rounded-2xl" preload="metadata">
                             <source src="{{ asset('vitrine/videos/voiture 3d JOELLOCATION 2.0.mp4') }}" type="video/mp4">
                             Votre navigateur ne supporte pas la vidéo HTML5.
                         </video>
