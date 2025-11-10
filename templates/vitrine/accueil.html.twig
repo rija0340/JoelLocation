@@ -8,7 +8,7 @@
         <div class="hero-slider relative h-full">
             <!-- Slide 1 -->
             <div class="hero-slide active absolute inset-0 bg-cover bg-center bg-no-repeat"
-                 style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('{{ asset('images/JOELLOCATION1.jpg') }}')">
+                 style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('{{ asset('images/vitrine/JOELLOCATION1.webp') }}')">
                 <div class="absolute inset-0 flex items-center justify-center">
                     <div class="container mx-auto px-4 text-center text-white">
                         <div class="max-w-3xl mx-auto animate-fade-in">
@@ -39,7 +39,7 @@
             
             <!-- Slide 2 -->
             <div class="hero-slide absolute inset-0 bg-cover bg-center bg-no-repeat opacity-0"
-                 style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('{{ asset('images/JOELLOCATION2.jpg') }}')">
+                 style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('{{ asset('images/vitrine/JOELLOCATION2.webp') }}')">
                 <div class="absolute inset-0 flex items-center justify-center">
                     <div class="container mx-auto px-4 text-center text-white">
                         <div class="max-w-3xl mx-auto animate-fade-in">
@@ -66,7 +66,7 @@
             
             <!-- Slide 3 -->
             <div class="hero-slide absolute inset-0 bg-cover bg-center bg-no-repeat opacity-0"
-                 style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('{{ asset('images/JOELLOCATION3.jpg') }}')">
+                 style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('{{ asset('images/vitrine/JOELLOCATION3.webp') }}')">
                 <div class="absolute inset-0 flex items-center justify-center">
                     <div class="container mx-auto px-4 text-center text-white">
                         <div class="max-w-3xl mx-auto animate-fade-in">
@@ -160,10 +160,13 @@
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <div class="bg-white rounded-lg shadow-lg overflow-hidden hover-lift transition-all duration-300">
-                    <img src="{{ asset('images/clio rouge.png') }}" 
-                         alt="Renault Clio" 
-                         loading="lazy"
-                         class="w-full h-48 object-cover">
+                    <picture>
+                        <source srcset="{{ asset('images/clio rouge.webp') }}" type="image/webp">
+                        <img src="{{ asset('images/clio rouge.png') }}" 
+                             alt="Renault Clio" 
+                             loading="lazy"
+                             class="w-full h-48 object-cover">
+                    </picture>
                     <div class="p-6">
                         <h3 class="text-xl font-bold text-joel-red mb-2">Renault Clio</h3>
                         <p class="text-gray-700 mb-4">
@@ -178,10 +181,13 @@
                 </div>
                 
                 <div class="bg-white rounded-lg shadow-lg overflow-hidden hover-lift transition-all duration-300">
-                    <img src="{{ asset('images/TWINGO BLANC.png') }}" 
-                         alt="Renault Twingo" 
-                         loading="lazy"
-                         class="w-full h-48 object-cover">
+                    <picture>
+                        <source srcset="{{ asset('images/TWINGO BLANC.webp') }}" type="image/webp">
+                        <img src="{{ asset('images/TWINGO BLANC.png') }}" 
+                             alt="Renault Twingo" 
+                             loading="lazy"
+                             class="w-full h-48 object-cover">
+                    </picture>
                     <div class="p-6">
                         <h3 class="text-xl font-bold text-joel-red mb-2">Renault Twingo</h3>
                         <p class="text-gray-700 mb-4">
@@ -196,10 +202,13 @@
                 </div>
                 
                 <div class="bg-white rounded-lg shadow-lg overflow-hidden hover-lift transition-all duration-300">
-                    <img src="{{ asset('images/vehicle_sample.jpg') }}" 
-                         alt="Véhicule de tourisme" 
-                         loading="lazy"
-                         class="w-full h-48 object-cover">
+                    <picture>
+                        <source srcset="{{ asset('images/vehicle_sample.webp') }}" type="image/webp">
+                        <img src="{{ asset('images/vehicle_sample.jpg') }}" 
+                             alt="Véhicule de tourisme" 
+                             loading="lazy"
+                             class="w-full h-48 object-cover">
+                    </picture>
                     <div class="p-6">
                         <h3 class="text-xl font-bold text-joel-red mb-2">Nos autres modèles</h3>
                         <p class="text-gray-700 mb-4">

@@ -70,10 +70,13 @@
             <div class="relative overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300">
 
                 <!-- Image -->
-                <img src="{{ asset('uploads/vehicules/' ~ vehicule.image) }}"
-                     alt="{{ vehicule.marque }} {{ vehicule.modele }}"
-                     loading="lazy"
-                     class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105">
+                <picture>
+                    <source srcset="{{ asset('uploads/vehicules/' ~ vehicule.image|replace({'.png': '.webp', '.jpg': '.webp', '.jpeg': '.webp'})) }}" type="image/webp">
+                    <img src="{{ asset('uploads/vehicules/' ~ vehicule.image) }}"
+                         alt="{{ vehicule.marque }} {{ vehicule.modele }}"
+                         loading="lazy"
+                         class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105">
+                </picture>
 
                 <!-- MOBILE : toujours visible -->
                 <div class="mobile-overlay">

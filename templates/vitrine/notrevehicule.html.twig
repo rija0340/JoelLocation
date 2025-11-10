@@ -16,10 +16,13 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div class="flex justify-center">
                 <div class="image_voiture">
-                    <img src="{{ asset('uploads/vehicules/' ~ vehicule.image) }}" 
-                         alt="{{ vehicule.modele }}" 
-                         loading="lazy"
-                         class="max-w-full h-auto rounded-xl shadow-xl">
+                    <picture>
+                        <source srcset="{{ asset('uploads/vehicules/' ~ vehicule.image|replace({'.png': '.webp', '.jpg': '.webp', '.jpeg': '.webp'})) }}" type="image/webp">
+                        <img src="{{ asset('uploads/vehicules/' ~ vehicule.image) }}" 
+                             alt="{{ vehicule.modele }}" 
+                             loading="lazy"
+                             class="max-w-full h-auto rounded-xl shadow-xl">
+                    </picture>
                 </div>
             </div>
             

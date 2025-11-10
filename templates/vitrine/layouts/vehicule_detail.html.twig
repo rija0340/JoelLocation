@@ -15,7 +15,10 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             <!-- Vehicle Image -->
             <div class="bg-white rounded-lg shadow-lg p-4">
-                <img src="{{ vehicule_data.image }}" alt="{{ vehicule_data.titre }}" loading="lazy" class="w-full h-auto rounded-lg">
+                <picture>
+                    <source srcset="{{ vehicule_data.image|replace({'.png': '.webp', '.jpg': '.webp', '.jpeg': '.webp'}) }}" type="image/webp">
+                    <img src="{{ vehicule_data.image }}" alt="{{ vehicule_data.titre }}" loading="lazy" class="w-full h-auto rounded-lg">
+                </picture>
             </div>
 
             <!-- Vehicle Details -->
