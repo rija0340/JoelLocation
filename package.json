@@ -37,6 +37,7 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^7.1.0",
     "@tailwindcss/postcss": "^4.1.17",
     "datejs": "^1.0.0-rc3",
     "jquery": "^3.7.1",

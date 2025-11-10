@@ -1,7 +1,7 @@
 {
   "build/vitrine.css": "/build/vitrine.bf9e491b.css",
   "build/vitrine.js": "/build/vitrine.5bae0caa.js",
-  "build/vitrine_styles.css": "/build/vitrine_styles.7598d920.css",
+  "build/vitrine_styles.css": "/build/vitrine_styles.2d83be3b.css",
   "build/vitrine_styles.js": "/build/vitrine_styles.bea30e98.js",
   "build/admin_base.css": "/build/admin_base.bd9b4bbd.css",
   "build/admin_base.js": "/build/admin_base.17f72cbf.js",
@@ -16,7 +16,11 @@
   "build/runtime.js": "/build/runtime.da40a629.js",
   "build/images/iStock-177820652.jpg": "/build/images/iStock-177820652.17652885.jpg",
   "build/images/iStock-1209047751.jpg": "/build/images/iStock-1209047751.59bca675.jpg",
+  "build/fonts/fa-solid-900.woff2": "/build/fonts/fa-solid-900.8ae0d375.woff2",
+  "build/fonts/fa-brands-400.woff2": "/build/fonts/fa-brands-400.1c5c7716.woff2",
   "build/fonts/pxiByp8kv8JHgFVrLFj_Z11lFc-K.woff2": "/build/fonts/pxiByp8kv8JHgFVrLFj_Z11lFc-K.0bce9acf.woff2",
+  "build/fonts/fa-regular-400.woff2": "/build/fonts/fa-regular-400.6f05ca9a.woff2",
   "build/fonts/pxiByp8kv8JHgFVrLFj_Z1xlFQ.woff2": "/build/fonts/pxiByp8kv8JHgFVrLFj_Z1xlFQ.7f0cadcc.woff2",
-  "build/fonts/pxiByp8kv8JHgFVrLFj_Z1JlFc-K.woff2": "/build/fonts/pxiByp8kv8JHgFVrLFj_Z1JlFc-K.6b623e61.woff2"
+  "build/fonts/pxiByp8kv8JHgFVrLFj_Z1JlFc-K.woff2": "/build/fonts/pxiByp8kv8JHgFVrLFj_Z1JlFc-K.6b623e61.woff2",
+  "build/fonts/fa-v4compatibility.woff2": "/build/fonts/fa-v4compatibility.e4340c52.woff2"
 }
