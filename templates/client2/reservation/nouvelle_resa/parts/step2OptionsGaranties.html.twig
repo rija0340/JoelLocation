@@ -19,11 +19,14 @@
 					<div class="w-full lg:w-1/3">
 						<div class="rounded-lg overflow-hidden bg-gray-100">
 							<div class="relative w-full h-40 flex items-center justify-center">
-								<img src="{{asset('images/options_garanties/CONDUCTEUR_ADDITIONNEL.png')}}"
-									 alt="Conducteur additionnel"
-									 loading="lazy"
-									 class="w-full h-full object-cover"
-									 onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
+								<picture>
+									<source srcset="{{asset('images/options_garanties/CONDUCTEUR_ADDITIONNEL.webp')}}" type="image/webp">
+									<img src="{{asset('images/options_garanties/CONDUCTEUR_ADDITIONNEL.png')}}"
+										 alt="Conducteur additionnel"
+										 loading="lazy"
+										 class="w-full h-full object-cover"
+										 onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
+								</picture>
 								<div class="hidden absolute inset-0 flex items-center justify-center">
 									<i class="fas fa-user-plus text-5xl text-joel-red"></i>
 								</div>
@@ -58,11 +61,14 @@
 					<div class="w-full lg:w-1/3">
 						<div class="rounded-lg overflow-hidden bg-gray-100">
 							<div class="relative w-full h-40 flex items-center justify-center">
-								<img src="{{asset('images/options_garanties/SIEGE.jpg')}}"
-									 alt="Siège bébé / enfant"
-									 loading="lazy"
-									 class="w-full h-full object-cover"
-									 onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
+								<picture>
+									<source srcset="{{asset('images/options_garanties/SIEGE.webp')}}" type="image/webp">
+									<img src="{{asset('images/options_garanties/SIEGE.jpg')}}"
+										 alt="Siège bébé / enfant"
+										 loading="lazy"
+										 class="w-full h-full object-cover"
+										 onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
+								</picture>
 								<div class="hidden absolute inset-0 flex items-center justify-center">
 									<i class="fas fa-child text-5xl text-joel-red"></i>
 								</div>
@@ -139,11 +145,14 @@
 							<div class="w-full lg:w-1/3">
 								<div class="rounded-lg overflow-hidden bg-gray-100">
 									<div class="relative w-full h-40 flex items-center justify-center">
-										<img src="{{asset(image_url)}}"
-											 alt="{{ option.appelation }}"
-											 loading="lazy"
-											 class="w-full h-full object-cover"
-											 onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
+										<picture>
+											<source srcset="{{asset(image_url|replace({'.png': '.webp', '.jpg': '.webp', '.jpeg': '.webp'}))}}" type="image/webp">
+											<img src="{{asset(image_url)}}"
+												 alt="{{ option.appelation }}"
+												 loading="lazy"
+												 class="w-full h-full object-cover"
+												 onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
+										</picture>
 										<div class="hidden absolute inset-0 flex items-center justify-center">
 											<i class="fas fa-cog text-5xl text-joel-red"></i>
 										</div>
@@ -196,11 +205,14 @@
 						<div class="w-full lg:w-1/3">
 							<div class="rounded-lg overflow-hidden bg-gray-100">
 								<div class="relative w-full h-40 flex items-center justify-center">
-									<img src="{{asset(image_url)}}"
-										 alt="{{ garantie.appelation }}"
-										 loading="lazy"
-										 class="w-full h-full object-cover"
-										 onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
+									<picture>
+										<source srcset="{{asset(image_url|replace({'.png': '.webp', '.jpg': '.webp', '.jpeg': '.webp'}))}}" type="image/webp">
+										<img src="{{asset(image_url)}}"
+											 alt="{{ garantie.appelation }}"
+											 loading="lazy"
+											 class="w-full h-full object-cover"
+											 onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
+									</picture>
 									<div class="hidden absolute inset-0 flex items-center justify-center">
 										<i class="fas fa-shield-alt text-5xl text-joel-red"></i>
 									</div>

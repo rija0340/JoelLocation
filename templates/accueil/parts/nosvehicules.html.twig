@@ -9,7 +9,10 @@
 				<div class="single-portfolio col-md-3">
 					<div class="inner">
 						<div class="portfolio-img">
-							<img src="uploads/vehicules/{{ vehicule.image }}" alt="{{ vehicule.modele }}">
+							<picture>
+								<source srcset="{{ asset('uploads/vehicules/' ~ vehicule.image|replace({'.png': '.webp', '.jpg': '.webp', '.jpeg': '.webp'})) }}" type="image/webp">
+								<img src="{{ asset('uploads/vehicules/' ~ vehicule.image) }}" alt="{{ vehicule.modele }}">
+							</picture>
 
 							<div class="hover-content">
 								<div style="margin-bottom:100px">
