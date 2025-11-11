@@ -8,7 +8,15 @@
 /public/bundles/
 /var/
 /vendor/
-/public/uploads/
+# Ignore everything inside uploads/
+public/uploads/**
+
+# But allow all .webp files anywhere inside it
+!public/uploads/**/*.webp
+
+# Also allow folders themselves, so Git can see inside them
+!public/uploads/**/
+
 /documentation/
 .env.test
 ###< symfony/framework-bundle ###
