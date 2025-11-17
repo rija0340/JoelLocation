@@ -5,6 +5,16 @@
 {% block stylesheets %}
     {{ parent() }}
     <style>
+        /* ─────── HERO SLIDER OVERLAY ─────── */
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.4) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
         /* ─────── MOBILE : titre + bouton toujours visibles ─────── */
         .mobile-overlay {
             position: absolute;
@@ -66,13 +76,14 @@
                          height="1080"
                          class="object-cover w-full h-full">
                 </picture>
+                <div class="hero-overlay"></div>
                 <div class="absolute inset-0 flex items-center justify-center">
                     <div class="container mx-auto px-4 text-center text-white">
                         <div class="max-w-3xl mx-auto animate-fade-in">
-                            <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+                            <h1 class="text-5xl md:text-8xl lg:text-9xl font-bold mb-6 leading-tight">
                                 <span class="text-joel-red">JOEL</span> LOCATION
                             </h1>
-                            <p class="text-lg md:text-xl lg:text-2xl mb-8 text-gray-200">
+                            <p class="text-lg md:text-2xl lg:text-3xl mb-8 text-gray-200">
                                 Votre partenaire de confiance pour la location de véhicules en Guadeloupe
                             </p>
                             <div class="flex flex-col sm:flex-row gap-4 justify-center">
@@ -109,13 +120,14 @@
                          height="1080"
                          class="object-cover w-full h-full">
                 </picture>
+                <div class="hero-overlay"></div>
                 <div class="absolute inset-0 flex items-center justify-center">
                     <div class="container mx-auto px-4 text-center text-white">
                         <div class="max-w-3xl mx-auto animate-fade-in">
-                            <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                            <h2 class="text-4xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight">
                                 Roulez en toute <span class="text-joel-red">tranquillité</span>
                             </h2>
-                            <p class="text-lg md:text-xl lg:text-2xl mb-8 text-gray-200">
+                            <p class="text-lg md:text-2xl lg:text-3xl mb-8 text-gray-200">
                                 Des prix imbattables pour une expérience de qualité
                             </p>
                             <div class="flex flex-col sm:flex-row gap-4 justify-center">
@@ -148,13 +160,14 @@
                          height="1080"
                          class="object-cover w-full h-full">
                 </picture>
+                <div class="hero-overlay"></div>
                 <div class="absolute inset-0 flex items-center justify-center">
                     <div class="container mx-auto px-4 text-center text-white">
                         <div class="max-w-3xl mx-auto animate-fade-in">
-                            <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                            <h2 class="text-4xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight">
                                  <span class="text-joel-red">JOEL</span> LOCATION
                             </h2>
-                            <p class="text-lg md:text-xl lg:text-2xl mb-8 text-gray-200">
+                            <p class="text-lg md:text-2xl lg:text-3xl mb-8 text-gray-200">
                                 Explorez la Guadeloupe avec nos véhicules de qualité
                             </p>
                             <div class="flex flex-col sm:flex-row gap-4 justify-center">
