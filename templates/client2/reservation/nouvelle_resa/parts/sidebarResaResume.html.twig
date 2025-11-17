@@ -15,10 +15,15 @@
 				{{ devis.vehicule.marque }} {{ devis.vehicule.modele }}
 			</h4>
 			<div class="rounded-lg overflow-hidden bg-gray-50 p-4">
-				<img src="{{ vich_uploader_asset(devis.vehicule, 'imageFile') }}"
-					 alt="{{ devis.vehicule.marque }} {{ devis.vehicule.modele }}"
-					 loading="lazy"
-					 class="w-full h-48 object-contain rounded-lg">
+				{% set image_path = vich_uploader_asset(devis.vehicule, 'imageFile') %}
+				{% set webp_path = image_path|replace({'.jpg': '.webp', '.png': '.webp', '.jpeg': '.webp'}) %}
+				<picture>
+					<source srcset="{{ webp_path }}" type="image/webp">
+					<img src="{{ image_path }}" 
+						 alt="{{ devis.vehicule.marque }} {{ devis.vehicule.modele }}"
+						 loading="lazy"
+						 class="w-full h-48 object-contain rounded-lg">
+				</picture>
 			</div>
 		</div>
 	</div>

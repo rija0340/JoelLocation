@@ -17,9 +17,14 @@
         <div class="flex flex-col lg:flex-row gap-6">
             {# Image véhicule #}
             <div class="lg:w-1/4 text-center">
-                <img src="{{ vich_uploader_asset(vehicule, 'imageFile') }}" alt="Photo {{ vehicule.marque }} {{ vehicule.modele }}"
-                     loading="lazy"
-                     class="rounded-lg shadow w-full h-56 object-cover mb-4 lg:mb-0">
+                {% set image_path = vich_uploader_asset(vehicule, 'imageFile') %}
+                {% set webp_path = image_path|replace({'.jpg': '.webp', '.png': '.webp', '.jpeg': '.webp'}) %}
+                <picture>
+                    <source srcset="{{ webp_path }}" type="image/webp">
+                    <img src="{{ image_path }}" alt="Photo {{ vehicule.marque }} {{ vehicule.modele }}"
+                         loading="lazy"
+                         class="rounded-lg shadow w-full h-56 object-cover mb-4 lg:mb-0">
+                </picture>
             </div>
 
             {# Informations véhicule #}

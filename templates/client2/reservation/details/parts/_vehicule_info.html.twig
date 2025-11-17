@@ -5,7 +5,12 @@
 		</h4>
 		<div class="space-y-3">
 			<div class="flex justify-center">
-				<img src="{{ vich_uploader_asset(reservation.vehicule, 'imageFile') }}" alt="{{ reservation.vehicule.image }}" loading="lazy" class="h-40 w-auto object-contain max-h-40"/>
+				{% set image_path = vich_uploader_asset(reservation.vehicule, 'imageFile') %}
+				{% set webp_path = image_path|replace({'.jpg': '.webp', '.png': '.webp', '.jpeg': '.webp'}) %}
+				<picture>
+					<source srcset="{{ webp_path }}" type="image/webp">
+					<img src="{{ image_path }}" alt="{{ reservation.vehicule.image }}" loading="lazy" class="h-40 w-auto object-contain max-h-40"/>
+				</picture>
 			</div>
 			<div>
 				<h5 class="font-bold mb-2 text-lg">{{ reservation.vehicule.marque }}

@@ -25,7 +25,10 @@
 		<div class="border-b border-gray-200 pb-2">
 			<div class="text-lg font-semibold">{{devis.vehicule.marque}}
 				{{devis.vehicule.modele}}</div>
-			<img src="/uploads/vehicules/{{ devis.vehicule.image }}" alt="{{ devis.vehicule.image }}" loading="lazy" class="rounded-lg" style="width : 20%;">
+			<picture>
+				<source srcset="/uploads/vehicules/{{ devis.vehicule.image|replace({'.jpg': '.webp', '.png': '.webp', '.jpeg': '.webp'}) }}" type="image/webp">
+				<img src="/uploads/vehicules/{{ devis.vehicule.image }}" alt="{{ devis.vehicule.image }}" loading="lazy" class="rounded-lg" style="width : 20%;">
+			</picture>
 
 		</div>
 		<div>

@@ -37,7 +37,12 @@
 				class="grid grid-cols-1 md:grid-cols-3 gap-6">
 				<!-- Vehicle Image -->
 				<div class="aspect-video">
-					<img src="{{ vich_uploader_asset(devis.vehicule, 'imageFile') }}" alt="{{ devis.vehicule.marque }} {{ devis.vehicule.modele }}" loading="lazy" class="w-full h-full object-cover rounded-lg">
+					{% set image_path = vich_uploader_asset(devis.vehicule, 'imageFile') %}
+					{% set webp_path = image_path|replace({'.jpg': '.webp', '.png': '.webp', '.jpeg': '.webp'}) %}
+					<picture>
+						<source srcset="{{ webp_path }}" type="image/webp">
+						<img src="{{ image_path }}" alt="{{ devis.vehicule.marque }} {{ devis.vehicule.modele }}" loading="lazy" class="w-full h-full object-cover rounded-lg">
+					</picture>
 				</div>
 
 				<!-- Details Section -->
