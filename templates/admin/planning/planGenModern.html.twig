@@ -141,8 +141,26 @@
                 <h4>Véhicules</h4>
             </div>
             
-            <div class="vehicle-list" id="vehicleList">
-                <!-- Vehicles will be populated by JS -->
+            <div class="vehicle-list-wrapper">
+                <div class="vehicle-section">
+                    <div class="section-header">
+                        <span class="badge bg-primary" id="visibleCount">0</span>
+                        <span class="section-title">Affichés</span>
+                    </div>
+                    <div class="vehicle-list" id="vehicleListVisible">
+                        <!-- Visible vehicles populated by JS -->
+                    </div>
+                </div>
+                
+                <div class="vehicle-section hidden-section">
+                    <div class="section-header">
+                        <span class="badge bg-secondary" id="hiddenCount">0</span>
+                        <span class="section-title">Masqués</span>
+                    </div>
+                    <div class="vehicle-list" id="vehicleListHidden">
+                        <!-- Hidden vehicles populated by JS -->
+                    </div>
+                </div>
             </div>
         </div>
 

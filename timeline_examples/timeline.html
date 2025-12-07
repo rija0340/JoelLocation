@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Booking Timeline</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="timeline.css">
+</head>
+<body>
+    <div class="timeline-container">
+        <!-- Header Controls -->
+        <div class="timeline-header">
+            <div class="header-left">
+                <h1 class="page-title">Car Booking Timeline</h1>
+                <div class="header-stats">
+                    <span class="stat-item">
+                        <span class="stat-label">Total Cars:</span>
+                        <span class="stat-value" id="totalCars">-</span>
+                    </span>
+                    <span class="stat-item">
+                        <span class="stat-label">Active Bookings:</span>
+                        <span class="stat-value" id="activeBookings">-</span>
+                    </span>
+                    <span class="stat-item">
+                        <span class="stat-label">Utilization:</span>
+                        <span class="stat-value" id="utilization">-</span>
+                    </span>
+                </div>
+            </div>
+            <div class="header-controls">
+                <!-- Range Controls -->
+                <div class="range-controls">
+                    <button class="control-btn" id="zoomInBtn" title="Zoom In">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="M21 21l-4.35-4.35"/>
+                            <line x1="11" y1="8" x2="11" y2="14"/>
+                            <line x1="8" y1="11" x2="14" y2="11"/>
+                        </svg>
+                    </button>
+                    <button class="control-btn" id="zoomOutBtn" title="Zoom Out">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="M21 21l-4.35-4.35"/>
+                            <line x1="8" y1="11" x2="14" y2="11"/>
+                        </svg>
+                    </button>
+                    <button class="control-btn" id="resetZoomBtn" title="Reset View">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 3v5h5"/>
+                            <path d="M3 8a9 9 0 0 0 9 9h2a9 9 0 0 0 9-9V3"/>
+                            <path d="M3 8h5"/>
+                            <path d="M8 3v5"/>
+                        </svg>
+                    </button>
+                </div>
+                
+                <!-- Date Range Display -->
+                <div class="date-range-display">
+                    <span class="date-label">Viewing:</span>
+                    <span class="date-range" id="dateRangeDisplay">-</span>
+                </div>
+                
+                <!-- Quick Range Buttons -->
+                <div class="quick-range-controls">
+                    <button class="quick-btn" data-range="7">7 Days</button>
+                    <button class="quick-btn" data-range="30">30 Days</button>
+                    <button class="quick-btn" data-range="90">3 Months</button>
+                    <button class="quick-btn" data-range="365">1 Year</button>
+                </div>
+                
+                <!-- Add Booking Button -->
+                <button class="btn btn-primary" id="addBookingBtn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    Add Booking
+                </button>
+            </div>
+        </div>
+
+        <!-- Timeline Content -->
+        <div class="timeline-content">
+            <!-- Car List Panel -->
+            <div class="car-list-panel">
+                <div class="car-list-header">
+                    <h3>Fleet</h3>
+                    <div class="car-list-controls">
+                        <input type="text" placeholder="Search cars..." id="carSearchInput" class="search-input">
+                    </div>
+                </div>
+                <div class="car-list" id="carList">
+                    <!-- Cars will be populated dynamically -->
+                </div>
+            </div>
+
+            <!-- Timeline Panel -->
+            <div class="timeline-panel">
+                <!-- Timeline Header -->
+                <div class="timeline-header-panel">
+                    <div class="timeline-dates" id="timelineDates">
+                        <!-- Date headers will be populated dynamically -->
+                    </div>
+                </div>
+                
+                <!-- Timeline Grid -->
+                <div class="timeline-grid" id="timelineGrid">
+                    <!-- Grid lines will be populated dynamically -->
+                </div>
+                
+                <!-- Booking Bars Container -->
+                <div class="booking-container" id="bookingContainer">
+                    <!-- Booking bars will be populated dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Booking Modal -->
+    <div class="modal-overlay" id="bookingModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Add New Booking</h3>
+                <button class="modal-close" id="modalClose">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <form class="modal-body" id="bookingForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="bookingCar">Car</label>
+                        <select id="bookingCar" name="car" required>
+                            <option value="">Select Car</option>
+                        </select>
+                        <span class="error-message" id="carError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookingCustomer">Customer</label>
+                        <input type="text" id="bookingCustomer" name="customer" placeholder="Customer name" required>
+                        <span class="error-message" id="customerError"></span>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="bookingStart">Start Date</label>
+                        <input type="datetime-local" id="bookingStart" name="start" required>
+                        <span class="error-message" id="startError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookingEnd">End Date</label>
+                        <input type="datetime-local" id="bookingEnd" name="end" required>
+                        <span class="error-message" id="endError"></span>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="bookingStatus">Status</label>
+                        <select id="bookingStatus" name="status" required>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="pending">Pending</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookingNotes">Notes</label>
+                        <textarea id="bookingNotes" name="notes" rows="2" placeholder="Additional notes..."></textarea>
+                    </div>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="cancelBookingBtn">Cancel</button>
+                <button type="submit" class="btn btn-primary" form="bookingForm" id="saveBookingBtn">Save Booking</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Details Modal -->
+    <div class="modal-overlay" id="bookingDetailsModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Booking Details</h3>
+                <button class="modal-close" id="detailsModalClose">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body" id="bookingDetailsContent">
+                <!-- Booking details will be populated dynamically -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="editBookingBtn">Edit Booking</button>
+                <button type="button" class="btn btn-danger" id="deleteBookingBtn">Delete Booking</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="timeline.js"></script>
+</body>
+</html>
