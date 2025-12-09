@@ -40,7 +40,7 @@ class FraisSupplResa
     /**
      * @ORM\Column(type="float")
      */
-    private $totalHT;
+    private $totalTTC;
 
     /**
      * @ORM\ManyToOne(targetEntity=reservation::class, inversedBy="fraisSupplResas")
@@ -101,14 +101,14 @@ class FraisSupplResa
         return $this;
     }
 
-    public function getTotalHT(): ?float
+    public function getTotalTTC(): ?float
     {
-        return $this->totalHT;
+        return $this->totalTTC;
     }
 
-    public function setTotalHT(float $totalHT): self
+    public function setTotalTTC(float $totalTTC): self
     {
-        $this->totalHT = $totalHT;
+        $this->totalTTC = $totalTTC;
 
         return $this;
     }
@@ -128,5 +128,23 @@ class FraisSupplResa
     public function __toString()
     {
         return $this->description;
+    }
+
+    /**
+     * Retourne la désignation (alias pour description)
+     */
+    public function getDesignation(): ?string
+    {
+        return $this->description;
+    }
+
+    /**
+     * Calcule le prix HT à partir du TTC
+     * TVA Guadeloupe = 8.5%
+     */
+    public function getTotalHT(): float
+    {
+        $taxe = 0.085;
+        return $this->totalTTC / (1 + $taxe);
     }
 }

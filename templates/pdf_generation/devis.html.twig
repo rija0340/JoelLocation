@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+		<title>Devis de location</title>
+		<style>
+			{% if isPreview %}
+			/* A4 preview styling */
+			body {
+				background: #f0f0f0;
+				padding: 20px;
+				display: flex;
+				justify-content: center;
+				align-items: flex-start;
+				min-height: 100vh;
+			}
+
+			.a4-paper {
+				width: 210mm;
+				min-height: 297mm;
+				background: white;
+				box-shadow: 0 0 20px rgba(0,0,0,0.1);
+				padding: 10mm;
+				margin: 10px auto;
+				position: relative;
+			}
+			{% endif %}
+
+			* {
+				padding: 0;
+				margin: 0;
+			}
+
+			#body {
+				margin: 0 40px 40px;
+			}
+			#footer {
+				position: absolute;
+				bottom: 0;
+				width: 100%;
+				padding: 10px;
+			}
+
+			.table-bordered th,
+			.table-bordered td {
+				border: 1px solid #dee2e6 !important;
+			}
+
+			.logo {
+
+				display: inline-block;
+				vertical-align: top;
+				/* width: 350px; */
+
+			}
+
+			.joellocation {
+				font-family: 'Arial', sans-serif;
+				font-size: 16px;
+				line-height: 1.5;
+				color: #333;
+				margin-bottom: 1em;
+			}
+			.details_facture {
+
+				display: inline-block;
+				vertical-align: top;
+				padding-top: 30px;
+				font-size: 14px;
+				/* width: 350px; */
+
+			}
+
+
+			.adresse {
+				display: inline-block;
+				vertical-align: top;
+				padding-left: 300px;
+
+			}
+			.details_client {
+				display: inline-block;
+				vertical-align: top;
+				padding-left: 250px;
+				padding-top: 10px;
+				font-size: 14px;
+			}
+
+			.conditions_reglement {
+
+				display: inline-block;
+				vertical-align: top;
+				padding-top: 20px;
+				font-size: 13px;
+
+			}
+			.details-prix {
+				font-size: 14px;
+			}
+
+			/* .table1 {
+				display: inline-block;
+				vertical-align: top;
+
+				width: 245px;
+			} */
+			.table1 {
+				display: inline-block;
+				vertical-align: top;
+				width: 245px;
+				float: right;
+				font-size: 13px;
+			}
+
+			.table-border {
+
+				border-collapse: collapse;
+				border: 1px solid black;
+			}
+
+			.table-border td {
+
+				border-collapse: collapse;
+				border: 1px solid black;
+			}
+
+			.text-white {
+				color: #fff !important;
+			}
+
+			.bg-danger {
+				background-color: red !important;
+			}
+
+			.bg-pink {
+				background-color: #faf2f0 !important;
+
+			}
+
+			.p-0 {
+				padding: 0 !important;
+			}
+
+			.m-0 {
+				margin: 0 !important;
+			}
+
+			.p-2 {
+				padding: 2px !important;
+			}
+
+			.p-5 {
+				padding: 5px !important;
+			}
+
+			.m-2 {
+				margin: 2px !important;
+			}
+
+			.text-center {
+				text-align: center !important;
+			}
+
+			.text-right {
+				text-align: right !important;
+			}
+
+			.fs-10 {
+				font-size: 10px;
+			}
+
+			.fs-12 {
+				font-size: 12px;
+			}
+
+			.text-uppercase {
+				text-transform: uppercase !important;
+			}
+
+			#note {
+				margin-top: 25px;
+				font-size: 13px;
+			}
+
+			.signature {
+				padding-left: 250px;
+				font-weight: bold;
+				padding-top: 25px;
+			}
+		</style>
+	</head>
+	<body>
+		{% if isPreview %}
+		<div class="a4-paper">
+		{% endif %}
+		<section>
+			<div class="entete"><img src="{{ entete }}" alt="entete" width="800px" height="40px" type="images/png"></div>
+		</section>
+		<section
+			id="body">
+			{# logo et adresse #}
+			<div class="logo"><img src="{{ logo }}" alt="logo" width="auto" height="80px" type="images/png"></div>
+			<div class="adresse">
+				<strong class="joellocation">JOELLOCATION</strong><br>
+				94 chemin de la hache<br>
+				97160 Le Moule<br>
+				Tél: 0690737674 / 0767321447<br>
+				Email: joel@joellocation.com<br>
+				SIRET : 87868990000016<br>
+			</div>
+			<br>
+			<div class="details_facture">
+				<strong>Devis N°
+					{{ devis.numero }}</strong><br>
+				Date de création :
+				{{ devis.dateCreation|date('d-m-Y') }}<br>
+				Date d'échéance  :
+				{{ devis.dateCreation|date_modify("+7 day")|date('d-m-Y') }}
+			</div>
+			<div class="details_client">
+				<strong>
+					<span>
+						{{ devis.client.sexe ? devis.client.sexe : '' }}
+					</span>
+					{{ devis.client.nom | upper }}
+					{{ devis.client.prenom | upper }}</strong>
+				<br>
+				{{ devis.client.adresse }}
+				{% if devis.client.complementAdresse %}
+					<br>
+					{{ devis.client.complementAdresse }}
+				{% endif %}
+				<br>
+				{{devis.client.codePostal}}
+				{{ devis.client.ville }}
+			</div>
+			<div style="margin-top: 10px; margin-bottom: 10px">
+				<strong>Objet :
+				</strong>
+				Location
+				{{ devis.vehicule.marque }}
+				{{ devis.vehicule.modele }}
+				du
+				{{ devis.dateDepart|date('d/m/Y') }}
+				au
+				{{ devis.dateRetour|date('d/m/Y') }}</div>
+			{# table gauche droite, info client et conducteurs #}
+			<div class="">
+				<table class=" p-0 details-prix " style="width : 100%;">
+					<thead class="bg-danger text-white">
+						<tr>
+							<th>Désignation</th>
+							<th>Qté</th>
+							<th>Prix U.</th>
+							<th>Prix HT</th>
+							<th>TTC</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="bg-pink">
+							<td class="p-5">
+								<strong>{{ devis.vehicule.marque }}
+									{{ devis.vehicule.modele }}</strong>
+								<br>
+								Location de véhicule pour
+								{{ devis.duree }}
+								{%  if devis.duree == 1 %}
+									jour.
+								{% else %}
+									jours.
+								{% endif %}
+								<br>
+								Retrait le
+								{{ devis.dateDepart|date('d/m/Y') }}. Lieu :
+								{{ devis.agenceDepart }}.
+								<br>
+								Retour le
+								{{ devis.dateRetour|date('d/m/Y') }}. Lieu :
+								{{ devis.agenceRetour }}.
+							</td>
+							<td class="text-right p-5">{{ devis.duree }}j</td>
+							<td class="text-right p-5">{{ prixUnitVehiculeHT|number_format(2,","," ") }}</td>
+							<td class="text-right p-5">{{ tarifVehiculeHT|number_format(2,","," ") }}</td>
+							<td class="text-right p-5">{{ tarifVehiculeTTC|number_format(2,","," ") }}</td>
+						</tr>
+						{% if devis.conducteur %}
+							<tr class="bg-pink">
+								<td class="p-5">
+									Conducteur additionnel
+								</td>
+								<td class="text-right p-5">1</td>
+								{# prix ht unitaire #}
+								<td class="text-right p-5">{{ prixConductHT|number_format(2,","," ") }}</td>
+								<td class="text-right p-5">{{ prixConductHT|number_format(2,","," ") }}</td>
+								<td class="text-right p-5">{{ prixConductTTC|number_format(2,","," ") }}</td>
+							</tr>
+						{% endif %}
+						{% for option in devis.devisOptions %}
+							<tr class="bg-pink">
+								<td class="p-5">
+									{{ option.opt.appelation }}
+								</td>
+								<td class="text-right p-5">{{option.quantity}}</td>
+								{% set optionTotalHT = optionsHT[option.id].ht_price %}
+								<td class="text-right p-5">{{ (optionTotalHT / option.quantity)|number_format(2,","," ") }}</td>
+								<td class="text-right p-5">{{ optionTotalHT|number_format(2,","," ") }}</td>
+								<td class="text-right p-5">{{ (option.opt.prix * option.quantity)|number_format(2,","," ") }}</td>
+							</tr>
+						{% endfor %}
+
+						{% for garantie in devis.garanties %}
+							<tr class="bg-pink">
+								<td class="p-5">
+									{{ garantie.appelation }}
+								</td>
+								<td class="text-right p-5">1</td>
+								{% set garantieHT = garantiesHT[garantie.id].ht_price %}
+								<td class="text-right p-5">{{ garantieHT|number_format(2,","," ") }}</td>
+								<td class="text-right p-5">{{ garantieHT|number_format(2,","," ") }}</td>
+								<td class="text-right p-5">{{ garantie.prix|number_format(2,","," ") }}</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			{# logo et adresse #}
+			<div class="conditions_reglement">
+				<strong>
+					Conditions de règlement
+				</strong><br>
+				<br>
+				Possibilité de payer par espèces, CB, chèque, chèque vacances,
+				<br>
+				virement bancaire.<br>
+				Possibilité de payer en plusieurs fois.<br>
+				Aucun escompte n'est consenti pour règlement anticipé.<br>
+				Tout incident de paiement est passible d'intérêt de retard. Le montant
+				<br>
+				des pénalités résulte de l'application aux sommes restant dues d'un
+				<br>
+				taux d'intérêt légal en vigueur au moment de l'incident. L'indemnité
+				<br>
+				forfaitaire pour frais de recouvrement due au créancier en cas de
+				<br>
+				retard de paiement est de 80EUR (quatre vingt euros).
+			</div>
+			<div class="table1 ">
+				<table style="width : 100%">
+					<tr class="bg-pink">
+						<td class="p-5">Montant HT</td>
+						<td class="text-right p-5">{{ prixTotalHT|number_format(2,","," ") }}€</td>
+					</tr>
+					<tr>
+						<td class="p-5">Total TVA {{ (taxRate * 100)|number_format(1) }} %</td>
+						<td class="text-right p-5">{{ taxAmount|number_format(2,","," ") }}€</td>
+					</tr>
+					<tr class="bg-danger text-white">
+						<td class="p-5">Total TTC</td>
+						<td class="text-right p-5">{{ prixTotalTTC|number_format(2,","," ")  }}</td>
+					</tr>
+				</table>
+			</div>
+			<div id="note">
+				<strong>
+					Note
+				</strong>
+				<br>
+				Caution: 800€ (carte bancaire non débitée)
+				<br>
+				Assurance responsabilité civile + accident causé au tiers inclus.
+				<br>
+				Deuxième conducteur gratuit.<br>
+				Âge minimum pour le conducteur: 21 ans et 2 ans de permis.<br>
+				En acceptant ce devis (par email, ou devis signé),
+				<br>
+				vous acceptez aux Conditions Générales de Location.<br>
+				Merci de confirmer votre réservation avant la date d'expiration.<br>
+				Au plaisir de vous compter parmi nos clients.<br>
+			</div>
+			<div class="">
+				<div class="signature">Signature</div>
+			</div>
+		</section>
+		<section id="footer " class="bg-danger">
+			<div class=" text-white text-center fs-12">
+				SIRET : 87868990000016 APE: 7711A
+				<br>
+				N°TVA FR40878689900
+				<br>
+				www.joellocation.com
+			</div>
+		</section>
+		{% if isPreview %}
+		</div>
+		{% endif %}
+	</body>
+</html>

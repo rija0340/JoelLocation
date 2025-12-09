@@ -86,7 +86,7 @@ class ReservationHelper
         $result = false;
         foreach ($vehiculesInvolved as $veh) {
             if (in_array($vehicule, $vehiculesInvolved)) {
-                $result =  true;
+                $result = true;
             } else {
                 $result = false;
             }
@@ -108,7 +108,7 @@ class ReservationHelper
             $pastReservations = $this->reservationRepo->findLastReservations($vehicule, $date);
             if ($pastReservations != null) {
                 $datesFin = [];
-                foreach ($pastReservations as  $res) {
+                foreach ($pastReservations as $res) {
                     array_push($datesFin, $res->getDateFin());
                 }
                 $dateRetour = max($datesFin);
@@ -133,7 +133,7 @@ class ReservationHelper
 
             if ($nextReservations != null) {
                 $datesDepart = [];
-                foreach ($nextReservations as  $res) {
+                foreach ($nextReservations as $res) {
                     array_push($datesDepart, $res->getDateDebut());
                 }
                 $datesDepart = min($datesDepart);
@@ -164,24 +164,24 @@ class ReservationHelper
     {
         $somme = 0;
         foreach ($reservation->getFraisSupplResas() as $frais) {
-            $somme = $somme + $frais->getTotalHT();
+            $somme = $somme + $frais->getTotalTTC();
         }
-        $prix = $this->tarifsHelper->calculTarifTTCfromHT($somme);
+        // $prix = $this->tarifsHelper->calculTarifTTCfromHT($somme);
 
-        return $prix;
-    }
-
-    /** 
-     * @return float total frais supplementaire
-     */
-    public function getTotalFraisHT($reservation)
-    {
-        $somme = 0;
-        foreach ($reservation->getFraisSupplResas() as $frais) {
-            $somme = $somme + $frais->getTotalHT();
-        }
         return $somme;
     }
+
+    // /** 
+    //  * @return float total frais supplementaire
+    //  */
+    // public function getTotalFraisHT($reservation)
+    // {
+    //     $somme = 0;
+    //     foreach ($reservation->getFraisSupplResas() as $frais) {
+    //         $somme = $somme + $frais->getTotalHT();
+    //     }
+    //     return $somme;
+    // }
 
     /** 
      * @return float total frais supplementaire
@@ -217,11 +217,11 @@ class ReservationHelper
             $optionsFromRequest["2"] = [$this->optionsRepo->find(2), intval($request->get('siege_2'))];
         }
         if (!is_null($request->get('siege_3')) && $request->get('siege_3') != "0") {
-            $optionsFromRequest["3"] =  [$this->optionsRepo->find(3), intval($request->get('siege_3'))];
+            $optionsFromRequest["3"] = [$this->optionsRepo->find(3), intval($request->get('siege_3'))];
         }
         if ($request->get('checkboxOptions') != null) {
             //rehausse gratuit id = 4  dans bdd 
-            foreach ($request->get('checkboxOptions') as  $value) {
+            foreach ($request->get('checkboxOptions') as $value) {
                 $optionsFromRequest[$value] = [$this->optionsRepo->find(intval($value)), 1];
             }
         }
@@ -241,7 +241,7 @@ class ReservationHelper
     {
         foreach ($optionsArray as $option) {
             $optId = $option[0]->getId();
-            $optEntity =  $this->optionsRepo->find(intval($optId));
+            $optEntity = $this->optionsRepo->find(intval($optId));
             $devisOption = new DevisOption();
             $devisOption->setOpt($optEntity);
             // check if entity is instance of devis 
@@ -378,24 +378,24 @@ class ReservationHelper
             $tarifVehicule = $resaSession->getTarifVehicule();
         } else {
             if (!is_null($resaSession->getVehicule()) && !is_null($dateDepart) && !is_null($dateRetour)) {
-                $tarifVehicule  = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
+                $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
             } else {
                 $tarifVehicule = 0;
             }
         }
-        $devis  = $this->setOptionsFromSessionToDevis($resaSession, $devis);
+        $devis = $this->setOptionsFromSessionToDevis($resaSession, $devis);
         $devis->setTarifVehicule($tarifVehicule);
 
         $options = $resaSession->getOptions();
 
-        $hasConducteur = $resaSession->getConducteur() == "true"  ? true : false;
+        $hasConducteur = $resaSession->getConducteur() == "true" ? true : false;
         $devis->setConducteur($hasConducteur);
         $tarifTotal = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $options, $devis->getGaranties(), $hasConducteur);
         $devis->setPrix($tarifTotal);
         $devis->setTransformed(false);
         $devis->setPrixOptions($this->tarifsHelper->sommeTarifsOptions($options, $devis->getConducteur()));
         $devis->setPrixGaranties($this->tarifsHelper->sommeTarifsGaranties($this->garantiesObjectsFromSession($resaSession)));
-        return  $devis;
+        return $devis;
     }
 
     //return an array of objects of options or null

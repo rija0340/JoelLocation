@@ -74,7 +74,7 @@ $(document).ready(function () {
             console.log('length : ' + $('.prixUnitaire').length);
 
             var idQuantite = $(this).attr('id').replace('prixUnitaire', 'quantite');
-            var idTotalHT = $(this).attr('id').replace('prixUnitaire', 'totalHT');
+            var idTotalHT = $(this).attr('id').replace('prixUnitaire', 'totalTTC');
 
             idQuantite = '#' + idQuantite;
             idTotalHT = '#' + idTotalHT;
@@ -90,7 +90,7 @@ $(document).ready(function () {
 
             console.log('length : ' + $('.quantite').length);
             var idPrixUnitaire = $(this).attr('id').replace('quantite', 'prixUnitaire');
-            var idTotalHT = $(this).attr('id').replace('quantite', 'totalHT');
+            var idTotalHT = $(this).attr('id').replace('quantite', 'totalTTC');
 
             idPrixUnitaire = '#' + idPrixUnitaire;
             idTotalHT = '#' + idTotalHT;

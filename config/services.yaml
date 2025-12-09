@@ -32,18 +32,18 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-    
+
     # Custom transport definitions
     main.mailer.transport:
         class: Symfony\Component\Mailer\Transport\TransportInterface
         factory: ['Symfony\Component\Mailer\Transport', 'fromDsn']
         arguments: ['%env(MAIN_MAILER_DSN)%']
-    
+
     yahoo.mailer.transport:
         class: Symfony\Component\Mailer\Transport\TransportInterface
         factory: ['Symfony\Component\Mailer\Transport', 'fromDsn']
         arguments: ['%env(YAHOO_MAILER_DSN)%']
-    
+
     # Inject the transports into SymfonyMailer
     # App\Service\SymfonyMailer:
     #     arguments:
@@ -53,15 +53,15 @@ services:
         # Payment Provider Factory
     App\Classe\Payment\PaymentProviderFactory:
         arguments:
-            $providerConfigs: 
+            $providerConfigs:
                 # stripe:
                 #     api_key: '%env(STRIPE_API_KEY)%'
                 paypal:
                     client_id: '%env(PAYPAL_CLIENT_ID)%'
-                    client_secret: '%env(PAYPAL_CLIENT_SECRET)%' 
+                    client_secret: '%env(PAYPAL_CLIENT_SECRET)%'
                     sandbox: '%env(bool:PAYPAL_SANDBOX)%'
             $logger: '@monolog.logger.payment'
-    
+
     # Main Payment Service
     App\Classe\Payment\PaymentService:
         arguments:
@@ -71,3 +71,8 @@ services:
     App\EventSubscriber\PaymentSubscriber:
         tags:
             - { name: kernel.event_subscriber }
+
+    # PDF Generation Service
+    App\Service\PdfGenerationService:
+        arguments:
+            $kernelProjectDir: '%kernel.project_dir%'

@@ -236,7 +236,7 @@ class ReservationController extends AbstractController
         $formCollectionFraisSupplResa->handleRequest($request);
 
         //extraction d'un conducteur parmi les conducteurs du client
-        $conducteurs =  $reservation->getConducteursClient();
+        $conducteurs = $reservation->getConducteursClient();
         $conducteur = $conducteurs[0];
 
         //form pour ajout paiement
@@ -310,8 +310,8 @@ class ReservationController extends AbstractController
         //gestion annulation reservation
         if ($formAnnulation->isSubmitted() && $formAnnulation->isValid()) {
             $annulationEntity = $formAnnulation->getData();
-            $montant = $formAnnulation->get('montant')->getData();  
-            $cancellationSuccess = $this->reservationStateService->cancelReservation($request, $reservation,$annulationEntity,$montant);
+            $montant = $formAnnulation->get('montant')->getData();
+            $cancellationSuccess = $this->reservationStateService->cancelReservation($request, $reservation, $annulationEntity, $montant);
 
             if (!$cancellationSuccess) {
                 $this->flashy->success('Cette réservation est déjà annulée');
@@ -345,7 +345,7 @@ class ReservationController extends AbstractController
             'formAnnulation' => $formAnnulation->createView(),
             'appelPaiement' => $appelPaiement,
             'formCollectionFraisSupplResa' => $formCollectionFraisSupplResa->createView(),
-            'totalFraisHT' => $reservationHelper->getTotalFraisHT($reservation),
+            // 'totalFraisHT' => $reservationHelper->getTotalFraisHT($reservation),
             'totalFraisTTC' => $reservationHelper->getTotalFraisTTC($reservation),
             'prixResaTTC' => $reservationHelper->getPrixResaTTC($reservation),
             'totalResaFraisTTC' => $reservationHelper->getTotalResaFraisTTC($reservation),
@@ -364,7 +364,7 @@ class ReservationController extends AbstractController
 
             $reservation = $this->reservationRepo->findOneBy(['reference' => $reference]);
 
-            $dateDepart =  $request->query->get("dateDepart");
+            $dateDepart = $request->query->get("dateDepart");
             $dateRetour = $request->query->get("dateRetour");
             $immatriculation = $request->query->get("vehicule");
 
@@ -375,11 +375,11 @@ class ReservationController extends AbstractController
             $reservation->setVehicule($vehicule);
             //tarif vehicule si custom est renseigné
             if ($request->query->has('has-custom-tarif') && $request->query->get('has-custom-tarif') == 'true') {
-                $tarifVeh =  intval($request->query->get("custom-tarif"));
+                $tarifVeh = intval($request->query->get("custom-tarif"));
             } else {
                 //on garde le tarif du véhicule si pas de custom 
                 // $tarifVeh = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
-                $tarifVeh =  $reservation->getTarifVehicule();
+                $tarifVeh = $reservation->getTarifVehicule();
             }
             //duree
             $duree = $this->dateHelper->calculDuree($dateDepart, $dateRetour);
@@ -515,7 +515,7 @@ class ReservationController extends AbstractController
         $form->handleRequest($request);
 
         //serializer options et garanties de devis
-        $dataOptions =  $this->reservationHelper->getOptionsGarantiesAllAndData($entity)["dataOptions"];
+        $dataOptions = $this->reservationHelper->getOptionsGarantiesAllAndData($entity)["dataOptions"];
         $dataGaranties = $this->reservationHelper->getOptionsGarantiesAllAndData($entity)["dataGaranties"];
         $allOptions = $this->reservationHelper->getOptionsGarantiesAllAndData($entity)["allOptions"];
         $allGaranties = $this->reservationHelper->getOptionsGarantiesAllAndData($entity)["allGaranties"];
@@ -601,7 +601,7 @@ class ReservationController extends AbstractController
         }
 
 
-        $template  = $routeName === 'validation_step2' ? 'client2/reservation/nouvelle_resa/step3.html.twig' :  'admin/devis_reservation/options_garanties/edit.html.twig';
+        $template = $routeName === 'validation_step2' ? 'client2/reservation/nouvelle_resa/step3.html.twig' : 'admin/devis_reservation/options_garanties/edit.html.twig';
         return $this->render($template, [
             'form' => $form->createView(),
             'devis' => $entity,
@@ -619,7 +619,7 @@ class ReservationController extends AbstractController
             'tarifVehicule' => $entity->getTarifVehicule(),
             'duree' => $entity->getDuree(),
             'prixConductSuppl' => $this->tarifsHelper->getPrixConducteurSupplementaire(),
-            'step'=>'validation'
+            'step' => 'validation'
         ]);
     }
     private function getCancelPath(string $routeName, $entityId): string
@@ -628,10 +628,10 @@ class ReservationController extends AbstractController
             $route = "reservation_show";
             return $this->generateUrl($route, ['id' => $entityId]);
         } else if ($routeName == "devis_optionsGaranties_edit") {
-            $route  = "devis_show";
+            $route = "devis_show";
             return $this->generateUrl($route, ['id' => $entityId]);
         } else if ($routeName == "validation_step2") {
-            $route  = "client_reservations";
+            $route = "client_reservations";
             return $this->generateUrl($route);
         }
     }
@@ -646,7 +646,7 @@ class ReservationController extends AbstractController
         $mail = $reservation->getClient()->getMail();
         $nom = $reservation->getClient()->getNom();
         $mdp = uniqid();
-        $content = "Bonjour, " . '<br>' .  "voici vos identifications de connexion." . '<br>' . " Mot de passe: " . $mdp . '<br>' . "Email : votre email";
+        $content = "Bonjour, " . '<br>' . "voici vos identifications de connexion." . '<br>' . " Mot de passe: " . $mdp . '<br>' . "Email : votre email";
 
         $reservation->getClient()->setPassword($passwordEncoder->encodePassword(
             $reservation->getClient(),
@@ -698,7 +698,7 @@ class ReservationController extends AbstractController
     public function addConducteur(Request $request, Reservation $reservation): Response
     {
 
-        $conducteur  = new Conducteur();
+        $conducteur = new Conducteur();
         $form = $this->createForm(ConducteurType::class, $conducteur);
         $form->handleRequest($request);
 
@@ -718,7 +718,7 @@ class ReservationController extends AbstractController
             $this->flashy->success('Le conducteur a bienc été ajouté');
             return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
         }
-        
+
         $conducteurs = $this->conducteurRepo->findBy(['client' => $reservation->getClient()]);
         $nbConducteurs = count($conducteurs);
 
@@ -733,8 +733,8 @@ class ReservationController extends AbstractController
 
 
         return $this->render('admin/reservation/crud/conducteur/new.html.twig', [
-            'conducteurs'=>$conducteurs,
-            'nbConducteurs'=>$nbConducteurs,
+            'conducteurs' => $conducteurs,
+            'nbConducteurs' => $nbConducteurs,
             'form' => $form->createView(),
             'reservation' => $reservation,
             'routeReferer' => 'reservation_show'
@@ -750,13 +750,13 @@ class ReservationController extends AbstractController
     {
         //extracion mail from string format : "nom prenom (mail)"
         $conducteurs = $request->request->get('selectedConducteurs');
-        
-        $conducteur =  $this->conducteurRepo->find(intval($conducteurs[0]));
+
+        $conducteur = $this->conducteurRepo->find(intval($conducteurs[0]));
 
         $reservation = $this->reservationRepo->find($request->request->get('idReservation'));
 
         foreach ($conducteurs as $key => $conducteur) {
-            $conducteur =  $this->conducteurRepo->find(intval($conducteur));
+            $conducteur = $this->conducteurRepo->find(intval($conducteur));
             $reservation->addConducteursClient($conducteur);
         }
 
@@ -850,7 +850,7 @@ class ReservationController extends AbstractController
     /**
      * @Route("/backoffice/reservation/retour-anticipe/{id}", name="reservation_retour_anticipe", methods={"GET", "POST"})
      */
-    public function retourAnticipe(Request $request,  Reservation $reservation): Response
+    public function retourAnticipe(Request $request, Reservation $reservation): Response
     {
         $this->reservationStateService->processEarlyReturn($reservation);
 
@@ -898,7 +898,7 @@ class ReservationController extends AbstractController
     public function reservationsByVehicule(Vehicule $vehicule): Response
     {
 
-        $reservations  = $this->reservationRepo->findBy(['vehicule' => $vehicule]);
+        $reservations = $this->reservationRepo->findBy(['vehicule' => $vehicule]);
 
         return $this->render('admin/reservation/liste_par_vehicule/index.html.twig', [
             'reservations' => $reservations,

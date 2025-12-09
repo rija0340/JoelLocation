@@ -333,8 +333,8 @@
 								</td>
 								<td class="text-right">{{ frais.quantite }}j</td>
 								<td class="text-right">{{ frais.prixUnitaire|number_format(2,","," ") }}</td>
-								<td class="text-right">{{ frais.totalHT|number_format(2,","," ") }}</td>
-								<td class="text-right">{{ (frais.totalHT + ( frais.totalHT * taxe))|number_format(2,","," ") }}</td>
+								<td class="text-right">{#{{  frais.totalHT|number_format(2,","," ") }} #} -  </td>
+								<td class="text-right">{{ totalFraisSupplTTC|number_format(2,","," ") }}</td>
 							</tr>
 						{% endfor %}
 						{% if reservation.conducteur %}

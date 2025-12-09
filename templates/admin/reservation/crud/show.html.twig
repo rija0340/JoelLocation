@@ -640,7 +640,7 @@
 							<th>Description</th>
 							<th>Prix u.</th>
 							<th>Quantité</th>
-							<th>Prix HT</th>
+							<th>Prix TTC</th>
 							<th>Actions</th>
 						</tr>
 					</thead>
@@ -715,8 +715,9 @@
 			</div>
 			<div class="col-md-4 col-sm-4 col-xs-4">
 				<div class="text-right">
-					{{totalFraisHT|number_format(2,","," ")}}
-					€
+					{#{{totalFraisHT|number_format(2,","," ")}}
+					€#}
+					-
 				</div>
 			</div>
 
@@ -968,7 +969,7 @@
 	<td>{{form_widget(form.description)}}</td>
 	<td style="width : 80px">{{form_widget(form.prixUnitaire, {attr:{'class':'prixUnitaire'}})}}</td>
 	<td style="width : 80px">{{form_widget(form.quantite, {attr:{'class':'quantite'}})}}</td>
-	<td style="width : 80px">{{form_widget(form.totalHT, {attr:{'class':'totalHT'}})}}</td>
+	<td style="width : 80px">{{form_widget(form.totalTTC, {attr:{'class':'totalTTC'}})}}</td>
 	<td style="width : 120px">
 		<button title="Supprimer" class="btn btn-danger" type="button" data-action="delete" data-target="block_{{id}}" onclick="return confirm('Voulez-vous supprimer cette ligne?')">
 			<i class="fa fa-trash"></i>

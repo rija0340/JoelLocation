@@ -58,9 +58,9 @@ class PdfController extends AbstractController
     /**
      * @Route("/generer/devis-pdf/{hashedId}", name="devis_pdf", methods={"GET"})
      */
-    public function devisPDF(Pdf $knpSnappyPdf,  $hashedId)
+    public function devisPDF(Pdf $knpSnappyPdf, $hashedId)
     {
-        $devis  = $this->devisRepo->findByHashedId($hashedId);
+        $devis = $this->devisRepo->findByHashedId($hashedId);
         //get reservation using hashed 
 
         // Configure Dompdf according to your needs7
@@ -86,7 +86,8 @@ class PdfController extends AbstractController
             'prixTotalTTC' => $devis->getPrix(),
             'taxeRate' => $this->tarifsHelper->getTaxe(),
             'tarifVehiculeTTC' => $devis->getTarifVehicule(),
-            'prixConductTTC' => $this->tarifsHelper->getPrixConducteurSupplementaire()
+            'prixConductTTC' => $this->tarifsHelper->getPrixConducteurSupplementaire(),
+            'isPreview' => false
 
         ]);
 
@@ -117,7 +118,7 @@ class PdfController extends AbstractController
     {
 
         //get reservation using hashed 
-        $reservation  = $this->reservationRepo->findByHashedId($hashedId);
+        $reservation = $this->reservationRepo->findByHashedId($hashedId);
 
         // Configure Dompdf according to your needs7
         $pdfOptions = new Options();
@@ -158,21 +159,21 @@ class PdfController extends AbstractController
         }
 
         //total a payer  = prix de la réservation - somme paiements déjà effectués
-        $sommePaiements =  $reservation->getSommePaiements();
+        $sommePaiements = $reservation->getSommePaiements();
 
         // $restePayerTTC = $this->reservationHelper->getPrixTTC($restePayerHT);
 
 
         //frais supplémentaires
-        $totalFraisSupplHT = 0;
+        $totalFraisSupplTTC = 0;
         foreach ($reservation->getFraisSupplResas() as $fraisSuppl) {
-            $totalFraisSupplHT += $fraisSuppl->getTotalHT();
+            $totalFraisSupplTTC += $fraisSuppl->getTotalTTC();
         }
 
-        $totalFraisSupplTTC = $this->tarifsHelper->calculTarifTTCfromHT($totalFraisSupplHT);
+        // $totalFraisSupplTTC = $this->tarifsHelper->calculTarifTTCfromHT($totalFraisSupplHT);
 
         $totalTTC = $reservation->getPrix() + $totalFraisSupplTTC;
-        $restePayerTTC = ($reservation->getPrix()  + $totalFraisSupplTTC)   - $sommePaiements;
+        $restePayerTTC = ($reservation->getPrix() + $totalFraisSupplTTC) - $sommePaiements;
 
         $html = $this->renderView('admin/reservation/pdf/contrat_pdf.html.twig', [
 
@@ -187,7 +188,8 @@ class PdfController extends AbstractController
             'totalTTC' => $totalTTC,
             'restePayerTTC' => $restePayerTTC,
             'totalFraisSupplTTC' => $totalFraisSupplTTC,
-            'numContrat' => $this->getNumFacture($reservation, "CO")
+            'numContrat' => $this->getNumFacture($reservation, "CO"),
+            'isPreview' => false
 
 
         ]);
@@ -216,16 +218,16 @@ class PdfController extends AbstractController
     /**
      * @Route("/generer/facture-pdf/{hashedId}", name="facture_pdf", methods={"GET"},requirements={"id":"\d+"})
      */
-    public function facturePDF(Pdf $knpSnappyPdf,  $hashedId)
+    public function facturePDF(Pdf $knpSnappyPdf, $hashedId)
     {
 
         //get reservation using hashed 
-        $reservation  = $this->reservationRepo->findByHashedId($hashedId);
-        $sommeFraisTotalHT = 0;
-        
-        foreach ($reservation->getFraisSupplResas() as $resa) {
-            $sommeFraisTotalHT = $sommeFraisTotalHT + $resa->getTotalHT();
-        }
+        $reservation = $this->reservationRepo->findByHashedId($hashedId);
+        // $sommeFraisTotalTTC = 0;
+
+        // foreach ($reservation->getFraisSupplResas() as $resa) {
+        //     $sommeFraisTotalTTC = $sommeFraisTotalTTC + $resa->getTotalTTC();
+        // }
 
         // Configure Dompdf according to your needs7
         $pdfOptions = new Options();
@@ -246,9 +248,9 @@ class PdfController extends AbstractController
         //le prix frais supplémentaire est déja en HT
         // $prixFraisSupplHT =  $reservation->getFraisSupplResas();
 
-        $prixFraisSupplHT = 0;
+        $totalFraisSupplTTC = 0;
         foreach ($reservation->getFraisSupplResas() as $key => $value) {
-            $prixFraisSupplHT += $value->getTotalHT();
+            $totalFraisSupplTTC += $value->getTotalTTC();
         }
 
         $tarifVehiculeTTC = $reservation->getTarifVehicule();
@@ -258,7 +260,7 @@ class PdfController extends AbstractController
         $prixUnitHT = $prixHT / $reservation->getDuree();
         $prixTTC = $prixTaxe + $prixHT;
 
-        $prixTotalHT = $prixHT + $sommeFraisTotalHT;
+        $prixTotalHT = $prixHT + $totalFraisSupplTTC;
 
         $prixTaxeTotal = $this->tarifsHelper->calculTaxeFromHT($prixTotalHT);
         $prixTotalTTC = $prixTotalHT + $prixTaxeTotal;
@@ -273,8 +275,7 @@ class PdfController extends AbstractController
             'numeroFacture' => $this->getNumFacture($reservation, 'FA'),
             'frais' => $reservation->getFraisSupplResas(),
             'tarifVehiculeTTC' => $tarifVehiculeTTC,
-            'sommeFraisTotalHT' => $sommeFraisTotalHT,
-            'prixFraisSupplHT' => $prixFraisSupplHT,
+            'totalFraisSupplTTC' => $totalFraisSupplTTC,
             'prixHT' => $prixHT,
             'prixTotalHT' => $prixTotalHT,
             'prixTaxeTotal' => $prixTaxeTotal,
@@ -282,8 +283,8 @@ class PdfController extends AbstractController
             'prixTotalTTC' => $prixTotalTTC,
             'prixTTC' => $prixTTC,
             'taxe' => $this->tarifsHelper->getTaxe(),
-            'prixConductTTC' => $this->tarifsHelper->getPrixConducteurSupplementaire()
-
+            'prixConductTTC' => $this->tarifsHelper->getPrixConducteurSupplementaire(),
+            'isPreview' => false
 
         ]);
 
@@ -310,16 +311,16 @@ class PdfController extends AbstractController
     /**
      * @Route("/generer/avoir-pdf/{hashedId}", name="avoir_pdf", methods={"GET"},requirements={"id":"\d+"})
      */
-    public function avoirPDF(Pdf $knpSnappyPdf,  $hashedId)
+    public function avoirPDF(Pdf $knpSnappyPdf, $hashedId)
     {
 
         //get reservation using hashed 
-        $reservation  = $this->reservationRepo->findByHashedId($hashedId);
+        $reservation = $this->reservationRepo->findByHashedId($hashedId);
         $annulationEntity = $this->annulationReservationRepo->findOneBy(['reservation' => $reservation]);
         $idAnnulation = $annulationEntity->getId();
 
         $sommeFraisTotalHT = 0;
-        
+
         foreach ($reservation->getFraisSupplResas() as $resa) {
             $sommeFraisTotalHT = $sommeFraisTotalHT + $resa->getTotalHT();
         }
@@ -354,7 +355,7 @@ class PdfController extends AbstractController
         $prixTaxe = $this->tarifsHelper->calculTaxeFromHT($prixHT);
 
         $durree = $reservation->getDuree();
-        
+
         $prixUnitHT = $prixHT / $durree;
         $prixTTC = $prixTaxe + $prixHT;
 
@@ -383,7 +384,8 @@ class PdfController extends AbstractController
             'prixTTC' => $prixTTC,
             'taxe' => $this->tarifsHelper->getTaxe(),
             'prixConductTTC' => $this->tarifsHelper->getPrixConducteurSupplementaire(),
-            'montantAvoir'=> $annulationEntity->getMontantAvoir()
+            'montantAvoir' => $annulationEntity->getMontantAvoir(),
+            'isPreview' => false
 
         ]);
 
@@ -459,9 +461,8 @@ class PdfController extends AbstractController
             'prixTotalTTC' => $prixTotalTTC,
             'prixTTC' => $prixTTC,
             'taxe' => $this->tarifsHelper->getTaxe(),
-            'prixConductTTC' => $this->tarifsHelper->getPrixConducteurSupplementaire()
-
-
+            'prixConductTTC' => $this->tarifsHelper->getPrixConducteurSupplementaire(),
+            'isPreview' => false
         ]);
 
         /* return new PdfResponse(
@@ -522,7 +523,7 @@ class PdfController extends AbstractController
         $entete_src = 'data:image/png;base64,' . $entete_data;
 
         $devis = $this->createMockDevisForPreview();
-        
+
         return $this->render('admin/reservation/pdf/devis_pdf.html.twig', [
             'logo' => $logo_src,
             'entete' => $entete_src,
@@ -543,7 +544,7 @@ class PdfController extends AbstractController
         $logo = $this->getParameter('logo') . '/Joellocation-logo-resized.png';
         $logo_data = base64_encode(file_get_contents($logo));
         $logo_src = 'data:image/png;base64,' . $logo_data;
-        
+
         $vehicule = $this->getParameter('logo') . '/contrat/picture_contrat.PNG';
         $vehicule_data = base64_encode(file_get_contents($vehicule));
         $vehicule_src = 'data:image/png;base64,' . $vehicule_data;
@@ -553,7 +554,7 @@ class PdfController extends AbstractController
         $entete_src = 'data:image/png;base64,' . $entete_data;
 
         $reservation = $this->createMockReservationForPreview();
-        
+
         // construction de tableau pour options
         $allOptions = [];
         foreach ($reservation->getOptions() as $option) {
@@ -569,12 +570,12 @@ class PdfController extends AbstractController
         }
 
         // frais supplémentaires
-        $totalFraisSupplHT = 0;
+        $totalFraisSupplTTC = 0;
         foreach ($reservation->getFraisSupplResas() as $fraisSuppl) {
-            $totalFraisSupplHT += $fraisSuppl->getTotalHT();
+            $totalFraisSupplTTC += $fraisSuppl->getTotalTTC();
         }
 
-        $totalFraisSupplTTC = $this->tarifsHelper->calculTarifTTCfromHT($totalFraisSupplHT);
+        // $totalFraisSupplTTC = $this->tarifsHelper->calculTarifTTCfromHT($totalFraisSupplHT);
 
         $totalTTC = $reservation->getPrix() + $totalFraisSupplTTC;
         $sommePaiements = $reservation->getSommePaiements();
@@ -605,13 +606,13 @@ class PdfController extends AbstractController
         $logo = $this->getParameter('logo') . '/Joellocation-logo-resized.png';
         $logo_data = base64_encode(file_get_contents($logo));
         $logo_src = 'data:image/png;base64,' . $logo_data;
-        
+
         $entete = $this->getParameter('logo') . '/pdf/entete-joellocation.PNG';
         $entete_data = base64_encode(file_get_contents($entete));
         $entete_src = 'data:image/png;base64,' . $entete_data;
-        
+
         $reservation = $this->createMockReservationForPreview();
-        
+
         $createdAt = $this->datehelper->dateNow();
         $devis = $this->devisRepo->find(intval($reservation->getNumDevis()));
 
@@ -668,11 +669,11 @@ class PdfController extends AbstractController
         $logo = $this->getParameter('logo') . '/Joellocation-logo-resized.png';
         $logo_data = base64_encode(file_get_contents($logo));
         $logo_src = 'data:image/png;base64,' . $logo_data;
-        
+
         $entete = $this->getParameter('logo') . '/pdf/entete-joellocation.PNG';
         $entete_data = base64_encode(file_get_contents($entete));
         $entete_src = 'data:image/png;base64,' . $entete_data;
-        
+
         $reservation = $this->createMockReservationForPreview();
         $createdAt = $this->datehelper->dateNow();
         $devis = $this->devisRepo->find(intval($reservation->getNumDevis()));
@@ -693,7 +694,7 @@ class PdfController extends AbstractController
         $prixTaxe = $this->tarifsHelper->calculTaxeFromHT($prixHT);
 
         $durree = $reservation->getDuree();
-        
+
         $prixUnitHT = $prixHT / $durree;
         $prixTTC = $prixTaxe + $prixHT;
 
@@ -741,13 +742,13 @@ class PdfController extends AbstractController
         $logo = $this->getParameter('logo') . '/Joellocation-logo-resized.png';
         $logo_data = base64_encode(file_get_contents($logo));
         $logo_src = 'data:image/png;base64,' . $logo_data;
-        
+
         $entete = $this->getParameter('logo') . '/pdf/entete-joellocation.PNG';
         $entete_data = base64_encode(file_get_contents($entete));
         $entete_src = 'data:image/png;base64,' . $entete_data;
-        
+
         $devis = $this->createMockDevisForPreview();
-        
+
         $createdAt = $this->datehelper->dateNow();
 
         $tarifVehiculeTTC = $devis->getTarifVehicule();
@@ -823,40 +824,40 @@ class PdfController extends AbstractController
     private function createMockDevisForPreview()
     {
         $devis = new Devis();
-        
+
         // Use reflection to set ID for the devis since it doesn't have a setId method
         $reflection = new \ReflectionClass($devis);
         $property = $reflection->getProperty('id');
         $property->setAccessible(true);
         $property->setValue($devis, 1);
-        
+
         $devis->setNumero('DEV-001');
         $devis->setDateDepart(new \DateTime());
         $devis->setDateRetour((new \DateTime())->modify('+3 days'));
         $devis->setPrix(250.00);
         $devis->setTarifVehicule(200.00);
-        
+
         // Create mock client
         $client = $this->createMockClient();
         $devis->setClient($client);
-        
+
         // Create mock vehicle
         $vehicule = $this->createMockVehicule();
         $devis->setVehicule($vehicule);
-        
+
         return $devis;
     }
 
     private function createMockReservationForPreview(): Reservation
     {
         $reservation = new Reservation();
-        
+
         // Use reflection to set ID for the reservation since it doesn't have a setId method
         $reflection = new \ReflectionClass($reservation);
         $property = $reflection->getProperty('id');
         $property->setAccessible(true);
         $property->setValue($reservation, 1);
-        
+
         $reservation->setReference('RES-001');
         $reservation->setDateDebut(new \DateTime());
         $reservation->setDateFin((new \DateTime())->modify('+3 days'));
@@ -865,21 +866,21 @@ class PdfController extends AbstractController
         $reservation->setTarifVehicule(400.00);
         $reservation->setNumDevis(1);
         $reservation->setDuree(3);
-        
+
         // Create mock client
         $client = $this->createMockClient();
         $reservation->setClient($client);
-        
+
         // Create mock vehicle
         $vehicule = $this->createMockVehicule();
         $reservation->setVehicule($vehicule);
-        
+
         // Use reflection to set sommePaiements directly since it's calculated and we don't have a setter
         $reflection = new \ReflectionClass($reservation);
         $property = $reflection->getProperty('sommePaiements');
         $property->setAccessible(true);
         $property->setValue($reservation, 200.00); // Set a mock value
-        
+
         return $reservation;
     }
 
@@ -900,13 +901,13 @@ class PdfController extends AbstractController
         $modele = new \App\Entity\Modele();
         $marque->setLibelle('Peugeot');
         $modele->setLibelle('208');
-        
+
         // Use reflection to set ID for the vehicle since it doesn't have a setId method
         $reflection = new \ReflectionClass($vehicule);
         $property = $reflection->getProperty('id');
         $property->setAccessible(true);
         $property->setValue($vehicule, 1);
-        
+
         $vehicule->setMarque($marque);
         $vehicule->setModele($modele);
         return $vehicule;

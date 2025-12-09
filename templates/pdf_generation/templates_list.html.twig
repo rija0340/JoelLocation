@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Preview List</title>
+</head>
+<body>
+    <h1>PDF Templates Preview</h1>
+    <ul>
+        {% for template in templates %}
+            <li><a href="{{ path(template.route) }}">{{ template.name }}</a> - {{ template.description }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

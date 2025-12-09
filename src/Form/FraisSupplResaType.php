@@ -22,7 +22,7 @@ class FraisSupplResaType extends AbstractType
             ->add('quantite', NumberType::class, [
                 'invalid_message' => 'Ce doit être un nombre',
             ])
-            ->add('totalHT', NumberType::class, [
+            ->add('totalTTC', NumberType::class, [
                 'invalid_message' => 'Ce doit être un nombre',
             ]);
     }
