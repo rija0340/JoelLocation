@@ -1,0 +1,43 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}Test PDF{% endblock %}
+
+{% block current_page %}
+    <h2><i class="fa fa-file-pdf-o"></i> Tests PDF</h2>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Templates PDF <small>Prévisualisation et tests</small></h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class="row">
+                    {% for key, template in templates %}
+                        <div class="col-md-4 col-sm-6 col-xs-12">
+                            <div class="card mb-4 shadow-sm" style="border: 1px solid #e5e5e5;">
+                                <div class="card-header {{ template.color }} text-white">
+                                    <h4 class="my-0 font-weight-normal" style="color: white;"><i class="fa {{ template.icon }}"></i> {{ template.name }}</h4>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text">{{ template.description }}</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="btn-group">
+                                            <a href="{{ path('testing_pdf_preview', {'type': key}) }}" target="_blank" class="btn btn-sm btn-default">
+                                                <i class="fa fa-eye"></i> Prévisualiser HTML
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

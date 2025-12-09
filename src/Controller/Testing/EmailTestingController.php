@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Admin\Testing;
+namespace App\Controller\Testing;
 
 use App\Entity\Devis;
 use App\Entity\Reservation;
@@ -11,18 +11,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * Controller to test all email types
- * @Route("/admin/testing/email")
+ * @Route("/testing/email")
+ * @IsGranted("ROLE_SUPER_ADMIN")
  */
 class EmailTestingController extends AbstractController
 {
     private $emailManagerService;
     private $emailService;
-    private $recepient_mail = 'contact@joellocation.com';
+    private $recepient_mail = 'rakotoarinelinarija@gmail.com';
 
-    public function __construct(EmailManagerService $emailManagerService,EmailService $emailService)
+    public function __construct(EmailManagerService $emailManagerService, EmailService $emailService)
     {
         $this->emailManagerService = $emailManagerService;
         $this->emailService = $emailService;
@@ -43,7 +45,7 @@ class EmailTestingController extends AbstractController
     {
         // Create a mock devis for testing
         $devis = $this->createMockDevis();
-        
+
         try {
             $this->emailManagerService->sendDevis($request, $devis);
             $this->addFlash('success', 'Email devis sent successfully!');
@@ -61,7 +63,7 @@ class EmailTestingController extends AbstractController
     {
         // Create a mock reservation for testing
         $reservation = $this->createMockReservation();
-        
+
         try {
             $this->emailManagerService->sendContrat($request, $reservation);
             $this->addFlash('success', 'Email contrat sent successfully!');
@@ -79,7 +81,7 @@ class EmailTestingController extends AbstractController
     {
         // Create a mock reservation for testing
         $reservation = $this->createMockReservation();
-        
+
         try {
             $this->emailManagerService->sendFacture($request, $reservation);
             $this->addFlash('success', 'Email facture sent successfully!');
@@ -97,12 +99,12 @@ class EmailTestingController extends AbstractController
     {
         // Create a mock reservation for testing
         $reservation = $this->createMockReservation();
-        
+
         try {
-            $this->emailManagerService->sendAvoir($request, $reservation,200);
-            $this->addFlash('success', 'Email avoir sent successfully!');
+            $this->emailManagerService->sendAvoir($request, $reservation, 200);
+            $this->addFlash('success', 'Email facture sent successfully!');
         } catch (\Exception $e) {
-            $this->addFlash('error', 'Failed to send avoir email: ' . $e->getMessage());
+            $this->addFlash('error', 'Failed to send facture email: ' . $e->getMessage());
         }
 
         return $this->redirectToRoute('email_testing_index');
@@ -116,7 +118,7 @@ class EmailTestingController extends AbstractController
         // Create a mock user for testing
         $user = $this->createMockUser();
         $token = 'test-token-' . uniqid();
-        
+
         try {
             $this->emailManagerService->sendValidationInscription($user, $token);
             $this->addFlash('success', 'Email validation inscription sent successfully!');
@@ -140,11 +142,11 @@ class EmailTestingController extends AbstractController
             'message' => 'This is a test message from email testing controller.',
             'sujet' => 'Test Contact Email'
         ];
-        
+
         try {
             $response = $this->emailService->send(
                 $this->recepient_mail, // to
-                $data['sujet'], // subject
+                $objet, // subject
                 'admin/templates_email/formulaire_contact.html.twig', // template
                 $data // context
             );
@@ -183,7 +185,7 @@ class EmailTestingController extends AbstractController
             try {
                 $response = $this->emailService->send(
                     $this->recepient_mail, // to
-                    $data['objet'], // subject
+                    $objet, // subject
                     'admin/templates_email/formulaire_contact.html.twig', // template
                     $data // context
                 );
@@ -206,7 +208,7 @@ class EmailTestingController extends AbstractController
         // Create a mock reservation for testing
         $reservation = $this->createMockReservation();
         $montant = 150.50;
-        
+
         try {
             $this->emailManagerService->sendPaiementConfirmation($reservation, $montant);
             $this->addFlash('success', 'Email paiement confirmation sent successfully!');
@@ -224,7 +226,7 @@ class EmailTestingController extends AbstractController
     {
         // Create a mock reservation for testing
         $reservation = $this->createMockReservation();
-        
+
         try {
             $this->emailManagerService->sendAppelPaiement($reservation);
             $this->addFlash('success', 'Email appel paiement sent successfully!');
@@ -300,7 +302,7 @@ class EmailTestingController extends AbstractController
     public function testAllEmails(Request $request): Response
     {
         $results = [];
-        
+
         // Test all email types
         try {
             // Test devis email
@@ -310,9 +312,7 @@ class EmailTestingController extends AbstractController
         } catch (\Exception $e) {
             $results[] = ['type' => 'Devis', 'status' => 'error', 'message' => 'Failed to send devis email: ' . $e->getMessage()];
         }
-        
-        sleep(60); // 1-minute delay between emails
-        
+
         try {
             // Test contrat email
             $reservation = $this->createMockReservation();
@@ -321,9 +321,7 @@ class EmailTestingController extends AbstractController
         } catch (\Exception $e) {
             $results[] = ['type' => 'Contrat', 'status' => 'error', 'message' => 'Failed to send contrat email: ' . $e->getMessage()];
         }
-        
-        sleep(60); // 1-minute delay between emails
-        
+
         try {
             // Test facture email
             $reservation = $this->createMockReservation();
@@ -332,20 +330,7 @@ class EmailTestingController extends AbstractController
         } catch (\Exception $e) {
             $results[] = ['type' => 'Facture', 'status' => 'error', 'message' => 'Failed to send facture email: ' . $e->getMessage()];
         }
-        
-        sleep(60); // 1-minute delay between emails
-        
-        try {
-            // Test avoir email
-            $reservation = $this->createMockReservation();
-            $this->emailManagerService->sendAvoir($request, $reservation, 200);
-            $results[] = ['type' => 'Avoir', 'status' => 'success', 'message' => 'Email avoir sent successfully'];
-        } catch (\Exception $e) {
-            $results[] = ['type' => 'Avoir', 'status' => 'error', 'message' => 'Failed to send avoir email: ' . $e->getMessage()];
-        }
-        
-        sleep(60); // 1-minute delay between emails
-        
+
         try {
             // Test validation inscription email
             $user = $this->createMockUser();
@@ -355,9 +340,7 @@ class EmailTestingController extends AbstractController
         } catch (\Exception $e) {
             $results[] = ['type' => 'Validation Inscription', 'status' => 'error', 'message' => 'Failed to send validation inscription email: ' . $e->getMessage()];
         }
-        
-        sleep(60); // 1-minute delay between emails
-        
+
         try {
             // Test contact email
             $data = [
@@ -372,9 +355,7 @@ class EmailTestingController extends AbstractController
         } catch (\Exception $e) {
             $results[] = ['type' => 'Contact', 'status' => 'error', 'message' => 'Failed to send contact email: ' . $e->getMessage()];
         }
-        
-        sleep(60); // 1-minute delay between emails
-        
+
         try {
             // Test paiement confirmation email
             $reservation = $this->createMockReservation();
@@ -384,9 +365,7 @@ class EmailTestingController extends AbstractController
         } catch (\Exception $e) {
             $results[] = ['type' => 'Paiement Confirmation', 'status' => 'error', 'message' => 'Failed to send paiement confirmation email: ' . $e->getMessage()];
         }
-        
-        sleep(60); // 1-minute delay between emails
-        
+
         try {
             // Test appel paiement email
             $reservation = $this->createMockReservation();
@@ -395,29 +374,7 @@ class EmailTestingController extends AbstractController
         } catch (\Exception $e) {
             $results[] = ['type' => 'Appel Paiement', 'status' => 'error', 'message' => 'Failed to send appel paiement email: ' . $e->getMessage()];
         }
-        
-        sleep(60); // 1-minute delay between emails
-        
-        try {
-            // Test base email (send a simple test email)
-            $baseEmailResult = $this->emailService->send(
-                $this->recepient_mail,
-                'Test Base Email',
-                'admin/templates_email/base_email.html.twig',
-                [
-                    'name' => 'Test User',
-                    'content' => 'This is a test of the base email template.'
-                ]
-            );
-            if ($baseEmailResult) {
-                $results[] = ['type' => 'Base Email', 'status' => 'success', 'message' => 'Base email sent successfully'];
-            } else {
-                $results[] = ['type' => 'Base Email', 'status' => 'error', 'message' => 'Failed to send base email'];
-            }
-        } catch (\Exception $e) {
-            $results[] = ['type' => 'Base Email', 'status' => 'error', 'message' => 'Failed to send base email: ' . $e->getMessage()];
-        }
-        
+
         return $this->render('email_testing/results.html.twig', [
             'results' => $results
         ]);
@@ -510,7 +467,7 @@ class EmailTestingController extends AbstractController
     // private function createMockReservation(): Reservation
     // {
     //     $reservation = new Reservation();
-        
+
     //     // Set basic properties
     //     $reservation->setId(1);
     //     $reservation->setReference('TEST-RESA-001');
@@ -519,15 +476,15 @@ class EmailTestingController extends AbstractController
     //     $reservation->setDateReservation(new \DateTime());
     //     $reservation->setPrix(500.00);
     //     $reservation->setSommePaiements(200.00);
-        
+
     //     // Create mock client
     //     $client = $this->createMockClient();
     //     $reservation->setClient($client);
-        
+
     //     // Create mock vehicle
     //     $vehicule = $this->createMockVehicule();
     //     $reservation->setVehicule($vehicule);
-        
+
     //     return $reservation;
     // }
 
@@ -562,13 +519,13 @@ class EmailTestingController extends AbstractController
         $modele = new \App\Entity\Modele();
         $marque->setLibelle('Peugeot');
         $modele->setLibelle('208');
-        
+
         // Use reflection to set ID for the vehicle since it doesn't have a setId method
         $reflection = new \ReflectionClass($vehicule);
         $property = $reflection->getProperty('id');
         $property->setAccessible(true);
         $property->setValue($vehicule, 1);
-        
+
         $vehicule->setMarque($marque);
         $vehicule->setModele($modele);
         return $vehicule;
@@ -580,26 +537,26 @@ class EmailTestingController extends AbstractController
     private function createMockDevis()
     {
         $devis = new Devis();
-        
+
         // Set basic properties
         // Use reflection to set ID for the devis since it doesn't have a setId method
         $reflection = new \ReflectionClass($devis);
         $property = $reflection->getProperty('id');
         $property->setAccessible(true);
         $property->setValue($devis, 1);
-        
+
         $devis->setNumero('TEST-001');
         $devis->setDateDepart(new \DateTime());
         $devis->setDateRetour((new \DateTime())->modify('+3 days'));
-        
+
         // Create mock client
         $client = $this->createMockClient();
         $devis->setClient($client);
-        
+
         // Create mock vehicle
         $vehicule = $this->createMockVehicule();
         $devis->setVehicule($vehicule);
-        
+
         return $devis;
     }
 
@@ -609,14 +566,14 @@ class EmailTestingController extends AbstractController
     private function createMockReservation(): Reservation
     {
         $reservation = new Reservation();
-        
+
         // Set basic properties
         // Use reflection to set ID for the reservation since it doesn't have a setId method
         $reflection = new \ReflectionClass($reservation);
         $property = $reflection->getProperty('id');
         $property->setAccessible(true);
         $property->setValue($reservation, 1);
-        
+
         $reservation->setReference('TEST-RESA-001');
         $reservation->setDateDebut(new \DateTime());
         $reservation->setDateFin((new \DateTime())->modify('+3 days'));
@@ -624,15 +581,15 @@ class EmailTestingController extends AbstractController
         $reservation->setPrix(500.00);
         $reservation->setDuree(3);
         // $reservation->setSommePaiements(200.00);
-        
+
         // Create mock client
         $client = $this->createMockClient();
         $reservation->setClient($client);
-        
+
         // Create mock vehicle
         $vehicule = $this->createMockVehicule();
         $reservation->setVehicule($vehicule);
-        
+
         return $reservation;
     }
 
@@ -642,22 +599,22 @@ class EmailTestingController extends AbstractController
     private function createMockAnnulationReservation(?Reservation $reservation = null): \App\Entity\AnnulationReservation
     {
         $annulation = new \App\Entity\AnnulationReservation();
-        
+
         // Use reflection to set ID for the annulation since it doesn't have a setId method
         $reflection = new \ReflectionClass($annulation);
         $property = $reflection->getProperty('id');
         $property->setAccessible(true);
         $property->setValue($annulation, 1);
-        
+
         $annulation->setCreatedAt(new \DateTime());
         $annulation->setMotif('Test annulation motif');
         $annulation->setType('avoir');
         $annulation->setMontantAvoir(200.00);
-        
+
         if ($reservation) {
             $annulation->setReservation($reservation);
         }
-        
+
         return $annulation;
     }
 
