@@ -1,0 +1,319 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}Entrées Bloquantes{% endblock %}
+
+{% block current_page %}
+    <h2><i class="fa fa-lock"></i> Entrées Bloquantes</h2>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Entrées Bloquantes <small>Réservations et Stop Sales</small></h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <p class="text-muted">
+                    Vue détaillée de toutes les réservations et stop sales qui bloquent les véhicules pour une période donnée.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filter Form -->
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2><i class="fa fa-filter"></i> Filtrer par Période</h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <form method="get" action="{{ path('availability_testing_blocking_entries') }}" class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="date_debut">Date de Début</label>
+                                <input type="datetime-local" 
+                                       class="form-control" 
+                                       id="date_debut" 
+                                       name="date_debut" 
+                                       value="{{ date_debut }}">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="date_fin">Date de Fin</label>
+                                <input type="datetime-local" 
+                                       class="form-control" 
+                                       id="date_fin" 
+                                       name="date_fin" 
+                                       value="{{ date_fin }}">
+                            </div>
+                        </div>
+                        <div class="col-md-4" style="padding-top: 25px;">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa fa-search me-2"></i> Filtrer
+                            </button>
+                            <a href="{{ path('availability_testing_index') }}" class="btn btn-default">
+                                <i class="fa fa-arrow-left me-1"></i> Retour
+                            </a>
+                            <a href="{{ path('testing_home') }}" class="btn btn-info">
+                                <i class="fa fa-home me-1"></i> Testing Hub
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Summary Cards -->
+<div class="row tile_count">
+    <div class="col-md-4 col-sm-4 col-xs-12 tile_stats_count">
+        <span class="count_top"><i class="fa fa-list"></i> Total Entrées Bloquantes</span>
+        <div class="count">{{ blocking_entries|length }}</div>
+    </div>
+    <div class="col-md-4 col-sm-4 col-xs-12 tile_stats_count">
+        <span class="count_top"><i class="fa fa-calendar text-primary"></i> Réservations</span>
+        <div class="count" style="color: #337ab7;">{{ reservations_only|length }}</div>
+    </div>
+    <div class="col-md-4 col-sm-4 col-xs-12 tile_stats_count">
+        <span class="count_top"><i class="fa fa-ban text-warning"></i> Stop Sales</span>
+        <div class="count" style="color: #f0ad4e;">{{ stop_sales|length }}</div>
+    </div>
+</div>
+
+<!-- All Blocking Entries with Tabs -->
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Détails</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs bar_tabs" role="tablist">
+                    <li role="presentation" class="active">
+                        <a href="#all" role="tab" data-toggle="tab">
+                            Toutes ({{ blocking_entries|length }})
+                        </a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#reservations" role="tab" data-toggle="tab">
+                            Réservations ({{ reservations_only|length }})
+                        </a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#stopsales" role="tab" data-toggle="tab">
+                            Stop Sales ({{ stop_sales|length }})
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <!-- All Entries Tab -->
+                    <div role="tabpanel" class="tab-pane fade active in" id="all">
+                        {% if blocking_entries|length > 0 %}
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr class="headings">
+                                            <th>ID</th>
+                                            <th>Type</th>
+                                            <th>Véhicule</th>
+                                            <th>Référence</th>
+                                            <th>Période</th>
+                                            <th>Client</th>
+                                            <th>Statut</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for entry in blocking_entries %}
+                                            <tr>
+                                                <td>{{ entry.id }}</td>
+                                                <td>
+                                                    {% if entry.codeReservation == 'stopSale' %}
+                                                        <span class="label label-warning">
+                                                            <i class="fa fa-ban me-1"></i> Stop Sale
+                                                        </span>
+                                                    {% else %}
+                                                        <span class="label label-primary">
+                                                            <i class="fa fa-calendar me-1"></i> Réservation
+                                                        </span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {% if entry.vehicule %}
+                                                        <strong>{{ entry.vehicule.immatriculation }}</strong>
+                                                        <br><small class="text-muted">{{ entry.vehicule.marque.libelle }} {{ entry.vehicule.modele.libelle }}</small>
+                                                    {% else %}
+                                                        <span class="text-muted">N/A</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td><code>{{ entry.reference|default('-') }}</code></td>
+                                                <td>
+                                                    {{ entry.dateDebut|date('d/m/Y H:i') }}
+                                                    <br><small class="text-muted">→ {{ entry.dateFin|date('d/m/Y H:i') }}</small>
+                                                </td>
+                                                <td>
+                                                    {% if entry.client %}
+                                                        {{ entry.client.nom }} {{ entry.client.prenom }}
+                                                    {% else %}
+                                                        <span class="text-muted">-</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {% if entry.canceled %}
+                                                        <span class="label label-default">Annulée</span>
+                                                    {% elseif entry.archived %}
+                                                        <span class="label label-dark">Archivée</span>
+                                                    {% elseif entry.reported %}
+                                                        <span class="label label-info">Reportée</span>
+                                                    {% else %}
+                                                        <span class="label label-success">Active</span>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="text-center" style="padding: 60px 20px;">
+                                <i class="fa fa-check-circle fa-4x text-success" style="margin-bottom: 15px;"></i>
+                                <h4>Aucune Entrée Bloquante</h4>
+                                <p class="text-muted">Tous les véhicules sont disponibles pour cette période.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Reservations Only Tab -->
+                    <div role="tabpanel" class="tab-pane fade" id="reservations">
+                        {% if reservations_only|length > 0 %}
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr class="headings" style="background: #337ab7; color: white;">
+                                            <th>ID</th>
+                                            <th>Véhicule</th>
+                                            <th>Référence</th>
+                                            <th>Période</th>
+                                            <th>Client</th>
+                                            <th>Prix</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for entry in reservations_only %}
+                                            <tr>
+                                                <td>{{ entry.id }}</td>
+                                                <td>
+                                                    {% if entry.vehicule %}
+                                                        <strong>{{ entry.vehicule.immatriculation }}</strong>
+                                                    {% else %}
+                                                        <span class="text-muted">N/A</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td><code>{{ entry.reference|default('-') }}</code></td>
+                                                <td>
+                                                    {{ entry.dateDebut|date('d/m/Y H:i') }} - {{ entry.dateFin|date('d/m/Y H:i') }}
+                                                </td>
+                                                <td>
+                                                    {% if entry.client %}
+                                                        {{ entry.client.nom }} {{ entry.client.prenom }}
+                                                    {% else %}
+                                                        <span class="text-muted">-</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>{{ entry.prix|default(0)|number_format(2, ',', ' ') }} €</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="text-center" style="padding: 40px 20px;">
+                                <p class="text-muted">Aucune réservation pour cette période.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Stop Sales Only Tab -->
+                    <div role="tabpanel" class="tab-pane fade" id="stopsales">
+                        {% if stop_sales|length > 0 %}
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr class="headings" style="background: #f0ad4e; color: #333;">
+                                            <th>ID</th>
+                                            <th>Véhicule</th>
+                                            <th>Période</th>
+                                            <th>Commentaire</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for entry in stop_sales %}
+                                            <tr>
+                                                <td>{{ entry.id }}</td>
+                                                <td>
+                                                    {% if entry.vehicule %}
+                                                        <strong>{{ entry.vehicule.immatriculation }}</strong>
+                                                        <br><small class="text-muted">{{ entry.vehicule.marque.libelle }} {{ entry.vehicule.modele.libelle }}</small>
+                                                    {% else %}
+                                                        <span class="text-muted">N/A</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {{ entry.dateDebut|date('d/m/Y H:i') }}
+                                                    <br><small class="text-muted">→ {{ entry.dateFin|date('d/m/Y H:i') }}</small>
+                                                </td>
+                                                <td>{{ entry.commentaire|default('-') }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="text-center" style="padding: 40px 20px;">
+                                <p class="text-muted">Aucun stop sale pour cette période.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .tile_count .tile_stats_count {
+        border-bottom: none;
+        padding: 15px;
+        text-align: center;
+        background: #fff;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .tile_count .count {
+        font-size: 32px;
+        font-weight: 600;
+    }
+    .tile_count .count_top {
+        font-size: 12px;
+        color: #888;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+</style>
+{% endblock %}

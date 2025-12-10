@@ -1,105 +1,189 @@
-{% extends 'base.html.twig' %}
+{% extends 'base2.html.twig' %}
 
 {% block title %}Email Testing Interface{% endblock %}
 
-{% block body %}
-<div class="container mt-5">
-    <h1>Email Testing Interface</h1>
-    
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success">
-            {{ message }}
-        </div>
-    {% endfor %}
-    
-    {% for message in app.flashes('error') %}
-        <div class="alert alert-danger">
-            {{ message }}
-        </div>
-    {% endfor %}
-    
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5>Document Emails</h5>
+{% block current_page %}
+    <h2><i class="fa fa-envelope"></i> Tests Email</h2>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Interface de Test Email <small>Envoi de mails de test</small></h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                {% for message in app.flashes('success') %}
+                    <div class="alert alert-success alert-dismissible fade in">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+                
+                {% for message in app.flashes('error') %}
+                    <div class="alert alert-danger alert-dismissible fade in">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+                
+                <div class="row">
+                    <!-- Document Emails -->
+                    <div class="col-md-6 col-sm-12 col-xs-12">
+                        <div class="card mb-4 shadow-sm" style="border: 1px solid #e5e5e5; border-radius: 10px;">
+                            <div class="card-header bg-primary text-white" style="border-radius: 10px 10px 0 0; padding: 15px 20px;">
+                                <h4 class="my-0" style="color: white; margin: 0;">
+                                    <i class="fa fa-file-text me-2"></i> Emails Documents
+                                </h4>
+                            </div>
+                            <div class="card-body" style="padding: 20px;">
+                                <p class="text-muted mb-3">Test emails pour l'envoi de documents aux clients.</p>
+                                <div class="btn-group-vertical w-100">
+                                    <a href="{{ path('email_testing_devis') }}" class="btn btn-primary mb-2">
+                                        <i class="fa fa-file-text-o me-2"></i> Test Email Devis
+                                    </a>
+                                    <a href="{{ path('email_testing_contrat') }}" class="btn btn-primary mb-2">
+                                        <i class="fa fa-file me-2"></i> Test Email Contrat
+                                    </a>
+                                    <a href="{{ path('email_testing_facture') }}" class="btn btn-primary mb-2">
+                                        <i class="fa fa-money me-2"></i> Test Email Facture
+                                    </a>
+                                    <a href="{{ path('email_testing_avoir') }}" class="btn btn-primary mb-2">
+                                        <i class="fa fa-undo me-2"></i> Test Email Avoir
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Account & Contact Emails -->
+                    <div class="col-md-6 col-sm-12 col-xs-12">
+                        <div class="card mb-4 shadow-sm" style="border: 1px solid #e5e5e5; border-radius: 10px;">
+                            <div class="card-header bg-secondary text-white" style="border-radius: 10px 10px 0 0; padding: 15px 20px;">
+                                <h4 class="my-0" style="color: white; margin: 0;">
+                                    <i class="fa fa-user me-2"></i> Emails Compte & Contact
+                                </h4>
+                            </div>
+                            <div class="card-body" style="padding: 20px;">
+                                <p class="text-muted mb-3">Test emails pour la gestion des comptes et formulaires de contact.</p>
+                                <div class="btn-group-vertical w-100">
+                                    <a href="{{ path('email_testing_validation_inscription') }}" class="btn btn-secondary mb-2">
+                                        <i class="fa fa-check-circle me-2"></i> Test Validation Inscription
+                                    </a>
+                                    <a href="{{ path('email_testing_contact') }}" class="btn btn-secondary mb-2">
+                                        <i class="fa fa-envelope me-2"></i> Test Email Contact
+                                    </a>
+                                    <a href="{{ path('email_testing_contact_form') }}" class="btn btn-secondary mb-2">
+                                        <i class="fa fa-edit me-2"></i> Test Contact Form (Données personnalisées)
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <p>Test emails for sending documents to clients.</p>
-                    <a href="{{ path('email_testing_devis') }}" class="btn btn-primary mb-2">Test Devis Email</a>
-                    <a href="{{ path('email_testing_contrat') }}" class="btn btn-primary mb-2">Test Contrat Email</a>
-                    <a href="{{ path('email_testing_facture') }}" class="btn btn-primary mb-2">Test Facture Email</a>
-                    <a href="{{ path('email_testing_avoir') }}" class="btn btn-primary mb-2">Test Avoir Email</a>
+                
+                <div class="row">
+                    <!-- Payment Emails -->
+                    <div class="col-md-6 col-sm-12 col-xs-12">
+                        <div class="card mb-4 shadow-sm" style="border: 1px solid #e5e5e5; border-radius: 10px;">
+                            <div class="card-header bg-info text-white" style="border-radius: 10px 10px 0 0; padding: 15px 20px;">
+                                <h4 class="my-0" style="color: white; margin: 0;">
+                                    <i class="fa fa-credit-card me-2"></i> Emails Paiement
+                                </h4>
+                            </div>
+                            <div class="card-body" style="padding: 20px;">
+                                <p class="text-muted mb-3">Test emails pour les notifications de paiement.</p>
+                                <div class="btn-group-vertical w-100">
+                                    <a href="{{ path('email_testing_paiement_confirmation') }}" class="btn btn-info mb-2">
+                                        <i class="fa fa-check me-2"></i> Test Confirmation Paiement
+                                    </a>
+                                    <a href="{{ path('email_testing_appel_paiement') }}" class="btn btn-info mb-2">
+                                        <i class="fa fa-bell me-2"></i> Test Appel Paiement
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Test All -->
+                    <div class="col-md-6 col-sm-12 col-xs-12">
+                        <div class="card mb-4 shadow-sm" style="border: 1px solid #e5e5e5; border-radius: 10px;">
+                            <div class="card-header bg-warning" style="border-radius: 10px 10px 0 0; padding: 15px 20px;">
+                                <h4 class="my-0" style="color: #333; margin: 0;">
+                                    <i class="fa fa-bolt me-2"></i> Tous les Emails
+                                </h4>
+                            </div>
+                            <div class="card-body" style="padding: 20px;">
+                                <p class="text-muted mb-3">Testez tous les types d'emails en une seule fois.</p>
+                                <a href="{{ path('email_testing_all') }}" class="btn btn-warning btn-lg w-100">
+                                    <i class="fa fa-play me-2"></i> Tester Tous les Emails
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="col-md-6">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5>Account & Contact Emails</h5>
-                </div>
-                <div class="card-body">
-                    <p>Test emails for account management and contact forms.</p>
-                    <a href="{{ path('email_testing_validation_inscription') }}" class="btn btn-secondary mb-2">Test Validation Inscription</a>
-                    <a href="{{ path('email_testing_contact') }}" class="btn btn-secondary mb-2">Test Contact Email</a>
-                    <a href="{{ path('email_testing_contact_form') }}" class="btn btn-secondary mb-2">Test Contact Form (Custom Data)</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5>Payment Related Emails</h5>
-                </div>
-                <div class="card-body">
-                    <p>Test emails for payment notifications.</p>
-                    <a href="{{ path('email_testing_paiement_confirmation') }}" class="btn btn-info mb-2">Test Paiement Confirmation</a>
-                    <a href="{{ path('email_testing_appel_paiement') }}" class="btn btn-info mb-2">Test Appel Paiement</a>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-md-6">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5>All Emails</h5>
-                </div>
-                <div class="card-body">
-                    <p>Test all email types at once.</p>
-                    <a href="{{ path('email_testing_all') }}" class="btn btn-warning">Test All Emails</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="card mb-4">
-        <div class="card-header">
-            <h5>Instructions</h5>
-        </div>
-        <div class="card-body">
-            <ol>
-                <li>Click on any button above to send a test email of that type</li>
-                <li>Check your email inbox (or spam folder) for the test email</li>
-                <li>Look at the flash messages to see if the email was sent successfully</li>
-                <li>If an email fails, check the error message for debugging information</li>
-            </ol>
-            <p><strong>Note:</strong> These emails use mock data for testing purposes only.</p>
-        </div>
-    </div>
-    
-    <div class="card">
-        <div class="card-header">
-            <h5>Template Preview</h5>
-        </div>
-        <div class="card-body">
-            <p>Preview templates without generating files:</p>
-            <a href="{{ path('email_testing_templates_list') }}" class="btn btn-success me-2">View Email Templates</a>
-            <a href="{{ path('testing_pdf_index') }}" class="btn btn-info">View PDF Templates</a>
         </div>
     </div>
 </div>
+
+<!-- Instructions -->
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Instructions <small>Comment utiliser cette interface</small></h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <ol>
+                    <li>Cliquez sur n'importe quel bouton ci-dessus pour envoyer un email de test de ce type</li>
+                    <li>Vérifiez votre boîte de réception (ou dossier spam) pour l'email de test</li>
+                    <li>Regardez les messages flash pour voir si l'email a été envoyé avec succès</li>
+                    <li>Si un email échoue, vérifiez le message d'erreur pour les informations de débogage</li>
+                </ol>
+                <p><strong>Note:</strong> Ces emails utilisent des données fictives à des fins de test uniquement.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Template Preview -->
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Prévisualisation Templates <small>Sans génération de fichiers</small></h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <a href="{{ path('email_testing_templates_list') }}" class="btn btn-success me-2">
+                    <i class="fa fa-eye me-2"></i> Voir Templates Email
+                </a>
+                <a href="{{ path('testing_pdf_index') }}" class="btn btn-info me-2">
+                    <i class="fa fa-file-pdf-o me-2"></i> Voir Templates PDF
+                </a>
+                <a href="{{ path('testing_home') }}" class="btn btn-default">
+                    <i class="fa fa-arrow-left me-2"></i> Retour au Testing Hub
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+    .card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.12) !important;
+    }
+    .btn-group-vertical .btn {
+        text-align: left;
+        border-radius: 5px !important;
+    }
+</style>
 {% endblock %}

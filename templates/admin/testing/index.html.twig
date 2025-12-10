@@ -1,0 +1,88 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}Testing Hub{% endblock %}
+
+{% block current_page %}
+    <h2><i class="fa fa-flask"></i> Testing Hub</h2>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Interfaces de Test <small>Super Admin uniquement</small></h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class="alert alert-warning">
+                    <i class="fa fa-exclamation-triangle me-2"></i>
+                    <strong>Attention:</strong> Ces interfaces sont réservées aux super administrateurs pour le développement et le débogage.
+                </div>
+
+                <div class="row">
+                    {% for key, module in modules %}
+                        <div class="col-md-4 col-sm-6 col-xs-12">
+                            <div class="card mb-4 shadow-sm" style="border: 1px solid #e5e5e5; border-radius: 10px; overflow: hidden;">
+                                <div class="card-header {{ module.color }} text-white" style="padding: 15px 20px;">
+                                    <h4 class="my-0 font-weight-normal" style="color: white; margin: 0;">
+                                        <i class="fa {{ module.icon }} me-2"></i> {{ module.name }}
+                                    </h4>
+                                </div>
+                                <div class="card-body" style="padding: 20px;">
+                                    <p class="card-text text-muted mb-3">{{ module.description }}</p>
+                                    
+                                    <div class="mb-3">
+                                        <strong style="font-size: 12px; color: #888;">Fonctionnalités:</strong>
+                                        <ul class="list-unstyled mt-2" style="font-size: 13px;">
+                                            {% for feature in module.features %}
+                                                <li style="padding: 3px 0;">
+                                                    <i class="fa fa-check text-success me-1"></i> {{ feature }}
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="d-grid">
+                                        <a href="{{ path(module.route) }}" class="btn btn-primary">
+                                            <i class="fa fa-arrow-right me-1"></i> Accéder
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+    }
+    .card-header h4 {
+        font-size: 16px;
+        font-weight: 600;
+    }
+    .card-text {
+        font-size: 14px;
+        line-height: 1.5;
+    }
+    .btn-primary {
+        border-radius: 5px;
+        padding: 10px 20px;
+    }
+    .list-unstyled li {
+        border-bottom: 1px dashed #eee;
+    }
+    .list-unstyled li:last-child {
+        border-bottom: none;
+    }
+</style>
+{% endblock %}

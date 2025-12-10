@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Vehicule;
 use App\Service\DateHelper;
 use App\Service\TarifsHelper;
+use App\Service\VehicleAvailabilityService;
 use App\Repository\MarqueRepository;
 use App\Repository\ModeleRepository;
 use App\Repository\VehiculeRepository;
@@ -27,6 +28,7 @@ class VehiculeDataController extends AbstractController
     private $tarifsHelper;
     private $dateHelper;
     private $reservationHelper;
+    private $vehicleAvailabilityService;
 
     public function __construct(
         VehiculeRepository $vehiculeRepo,
@@ -35,7 +37,8 @@ class VehiculeDataController extends AbstractController
         ReservationRepository $reservationRepo,
         TarifsHelper $tarifsHelper,
         DateHelper $dateHelper,
-        ReservationHelper $reservationHelper
+        ReservationHelper $reservationHelper,
+        VehicleAvailabilityService $vehicleAvailabilityService
     ) {
 
         $this->vehiculeRepo = $vehiculeRepo;
@@ -45,6 +48,7 @@ class VehiculeDataController extends AbstractController
         $this->tarifsHelper = $tarifsHelper;
         $this->dateHelper = $dateHelper;
         $this->reservationHelper = $reservationHelper;
+        $this->vehicleAvailabilityService = $vehicleAvailabilityService;
     }
 
     /**
@@ -62,9 +66,8 @@ class VehiculeDataController extends AbstractController
         $datas = array();
         $data = array();
         $listeUnique = [];
-        $listeVehiculesDispo = array();
-        $reservations = $this->reservationRepo->findReservationIncludeDates($dateDebut, $dateFin);
-        $listeVehiculesDispo = $this->reservationHelper->getVehiculesDisponible($reservations);
+        // Use VehicleAvailabilityService which considers both reservations AND stop sales
+        $listeVehiculesDispo = $this->vehicleAvailabilityService->getAvailableVehicles($dateDebut, $dateFin);
 
         foreach ($listeVehiculesDispo as $key => $vehicule) {
             $data[$key]['marque'] = $vehicule->getMarque()->getLibelle();
@@ -75,7 +78,7 @@ class VehiculeDataController extends AbstractController
 
         //data2 => liste véhicule sans immatriculation
         $data2 = array();
-        foreach ($listeUnique as $key =>  $v) {
+        foreach ($listeUnique as $key => $v) {
 
             $marque = $this->marqueRepo->findOneBy(['libelle' => $v['marque']]);
             $modele = $this->modeleRepo->findOneBy(['libelle' => $v['modele']]);
@@ -123,23 +126,29 @@ class VehiculeDataController extends AbstractController
         $dateDebut = new \DateTime($dateDepart);
         $dateFin = new \DateTime($dateRetour);
 
-        $listeUnique = [];
-        $listeVehiculesDispo = [];
-        $reservation =  $refResa != "" ? $this->reservationRepo->findOneBy(['reference' => $refResa]) : null;
+        // Use the new VehicleAvailabilityService which considers BOTH reservations AND stop sales
+        $listeVehiculesDispo = $this->vehicleAvailabilityService->getAvailableVehicles($dateDebut, $dateFin);
+
+        // If we're editing an existing reservation, include its vehicle even if it would otherwise be unavailable
+        $reservation = $refResa != "" ? $this->reservationRepo->findOneBy(['reference' => $refResa]) : null;
         $vehiculeResa = !is_null($reservation) ? $reservation->getVehicule() : null;
-        $reservations = $this->reservationRepo->findReservationIncludeDates($dateDebut, $dateFin);
-        $listeVehiculesDispo = $this->reservationHelper->getVehiculesDisponible($reservations);
+
         if (!is_null($vehiculeResa)) {
-            //reservation qui peuvent se chevaucher avec la resa actuel pour les dates
-            $resaByParams = $this->reservationRepo->findReservationIncludeDates($dateDebut, $dateFin, $vehiculeResa);
-            // dd($resaByParams);
-            if (count($resaByParams) == 1 && $resaByParams[0]->getReference() == $refResa) {
-                array_push($listeVehiculesDispo, $vehiculeResa);
+            // Check if the current vehicle is NOT already in the list
+            $vehicleIds = array_map(function ($v) {
+                return $v->getId();
+            }, $listeVehiculesDispo);
+            if (!in_array($vehiculeResa->getId(), $vehicleIds)) {
+                // Only add it if the only blocking entry is the current reservation itself
+                $resaByParams = $this->reservationRepo->findReservationIncludeDates($dateDebut, $dateFin, $vehiculeResa);
+                if (count($resaByParams) == 1 && $resaByParams[0]->getReference() == $refResa) {
+                    array_push($listeVehiculesDispo, $vehiculeResa);
+                }
             }
         }
 
         $data2 = array();
-        foreach ($listeVehiculesDispo as $key =>  $vehicule) {
+        foreach ($listeVehiculesDispo as $key => $vehicule) {
 
             $data2[$key]['id'] = $vehicule->getId();
             $data2[$key]['marque'] = $vehicule->getMarque()->getLibelle();

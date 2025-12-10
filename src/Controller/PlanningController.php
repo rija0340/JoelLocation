@@ -5,6 +5,7 @@ namespace App\Controller;
 use DateTime;
 use App\Service\DateHelper;
 use App\Service\ReservationHelper;
+use App\Service\VehicleAvailabilityService;
 use App\Repository\VehiculeRepository;
 use App\Repository\ReservationRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,15 +24,22 @@ class PlanningController extends AbstractController
     private $vehiculeRepo;
     private $dateHelper;
     private $reservationHelper;
+    private $vehicleAvailabilityService;
 
 
-    public function __construct(ReservationHelper $reservationHelper, DateHelper $dateHelper, ReservationRepository $reservationRepo, VehiculeRepository $vehiculeRepo)
-    {
+    public function __construct(
+        ReservationHelper $reservationHelper,
+        DateHelper $dateHelper,
+        ReservationRepository $reservationRepo,
+        VehiculeRepository $vehiculeRepo,
+        VehicleAvailabilityService $vehicleAvailabilityService
+    ) {
 
         $this->reservationRepo = $reservationRepo;
         $this->vehiculeRepo = $vehiculeRepo;
         $this->dateHelper = $dateHelper;
         $this->reservationHelper = $reservationHelper;
+        $this->vehicleAvailabilityService = $vehicleAvailabilityService;
     }
 
     /**
@@ -268,8 +276,11 @@ class PlanningController extends AbstractController
 
             $date = $defaultDate;
         }
-        //tableau contenant  les véhicules disponilbes
-        $vehiculesDisponible = $this->reservationHelper->getVehiculesDisponible($reservations);
+        //tableau contenant  les véhicules disponilbes - using new service that considers stop sales
+        // Create date range: from date to date + 1 day (for single date check)
+        $dateEnd = clone $date;
+        $dateEnd->modify('+1 day');
+        $vehiculesDisponible = $this->vehicleAvailabilityService->getAvailableVehicles($date, $dateEnd);
 
         // tableau contenant listes des reservations passé des véhicules dispobibles 
         $listPastReservations = $this->reservationHelper->getPastReservations($vehiculesDisponible, $date);

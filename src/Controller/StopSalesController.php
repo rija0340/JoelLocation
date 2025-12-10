@@ -8,6 +8,7 @@ use App\Form\StopSalesType;
 use App\Service\DateHelper;
 use App\Service\TarifsHelper;
 use App\Service\VehiculeHelper;
+use App\Service\VehicleAvailabilityService;
 use App\Repository\UserRepository;
 use App\Service\ReservationHelper;
 use App\Repository\MarqueRepository;
@@ -42,6 +43,7 @@ class StopSalesController extends AbstractController
     private $flashy;
     private $reservationHelper;
     private $vehiculeHelper;
+    private $vehicleAvailabilityService;
 
     public function __construct(
         FlashyNotifier $flashy,
@@ -57,7 +59,8 @@ class StopSalesController extends AbstractController
         OptionsRepository $optionsRepo,
         GarantieRepository $garantiesRepo,
         ReservationHelper $reservationHelper,
-        VehiculeHelper $vehiculeHelper
+        VehiculeHelper $vehiculeHelper,
+        VehicleAvailabilityService $vehicleAvailabilityService
     ) {
 
         $this->reservationRepo = $reservationRepo;
@@ -74,6 +77,7 @@ class StopSalesController extends AbstractController
         $this->flashy = $flashy;
         $this->reservationHelper = $reservationHelper;
         $this->vehiculeHelper = $vehiculeHelper;
+        $this->vehicleAvailabilityService = $vehicleAvailabilityService;
     }
     /**
      * @Route("/backoffice/stop_sales", name="stop_sales", methods={"GET","POST"})
@@ -88,10 +92,10 @@ class StopSalesController extends AbstractController
         $listeStopSales = new Reservation();
         $reservation = new Reservation();
 
-        $listeStopSales =  $reservationRepository->findStopSales();
+        $listeStopSales = $reservationRepository->findStopSales();
 
         $listeStopSalesWithoutVehiculeVendu = [];
-        foreach ($listeStopSales as  $resa) {
+        foreach ($listeStopSales as $resa) {
             $vehicule = $resa->getVehicule();
 
             if (!$this->vehiculeHelper->isVehiculeVendu($vehicule)) {
@@ -109,7 +113,35 @@ class StopSalesController extends AbstractController
 
             //ajouter option vendu au véhicule 
             $vehicule = $this->vehiculeRepo->find($request->request->get('select'));
-            $vehicule =  $this->setVehiculeOptions($request, $vehicule);
+
+            if ($vehicule === null) {
+                $this->flashy->error("Veuillez sélectionner un véhicule");
+                return $this->redirectToRoute('stop_sales');
+            }
+
+            // Check for overlapping stop sales for this vehicle
+            $dateDebut = $formStopSales->getData()->getDateDebut();
+            $dateFin = $formStopSales->getData()->getDateFin();
+
+            $existingBlockingEntries = $this->reservationRepo->findAllBlockingEntriesForDates($dateDebut, $dateFin, $vehicule);
+
+            // Filter to only show stop sales (not reservations)
+            $existingStopSales = array_filter($existingBlockingEntries, function ($entry) {
+                return $entry->getCodeReservation() === 'stopSale';
+            });
+
+            if (count($existingStopSales) > 0) {
+                $existingDates = [];
+                foreach ($existingStopSales as $existing) {
+                    $existingDates[] = $existing->getDateDebut()->format('d/m/Y') . ' - ' . $existing->getDateFin()->format('d/m/Y');
+                }
+                $this->flashy->warning(
+                    "Ce véhicule a déjà " . count($existingStopSales) . " stop sale(s) pour cette période: " .
+                    implode(', ', $existingDates) . ". Le nouveau stop sale a quand même été créé."
+                );
+            }
+
+            $vehicule = $this->setVehiculeOptions($request, $vehicule);
             $reservation->setVehicule($vehicule);
 
             $reservation->setCodeReservation('stopSale');
@@ -132,7 +164,7 @@ class StopSalesController extends AbstractController
     /**
      * @Route("/backoffice/stopSalesNew", name="stopSalesNew", methods={"GET","POST"})
      */
-    public function stopSalesNew(Request $request, VehiculeRepository $vehiculeRepository,  UserRepository $userRepo): Response
+    public function stopSalesNew(Request $request, VehiculeRepository $vehiculeRepository, UserRepository $userRepo): Response
     {
 
 
@@ -163,7 +195,7 @@ class StopSalesController extends AbstractController
      */
     public function editStopSale(Request $request, Reservation $reservation, ReservationRepository $reservationRepository): Response
     {
-        $listeStopSales =  $reservationRepository->findStopSales();
+        $listeStopSales = $reservationRepository->findStopSales();
 
         // dd($reservation);
         $formStopSales = $this->createForm(StopSalesType::class, $reservation);
@@ -178,7 +210,7 @@ class StopSalesController extends AbstractController
             }
             //ajouter option vendu au véhicule 
             $vehicule = $this->vehiculeRepo->find($request->request->get('select'));
-            $vehicule =  $this->setVehiculeOptions($request, $vehicule);
+            $vehicule = $this->setVehiculeOptions($request, $vehicule);
 
             $reservation->setVehicule($vehicule);
             $this->getDoctrine()->getManager()->flush();
@@ -204,7 +236,7 @@ class StopSalesController extends AbstractController
 
         $fields = $request->request->get('stop_sales');
         $venduValue = isset($fields['vendu']) ? $fields['vendu'] : 0;
-        $dateVente =  isset($fields['dateVente']) ? $fields['dateVente'] : $currentDate;
+        $dateVente = isset($fields['dateVente']) ? $fields['dateVente'] : $currentDate;
         $optionsArray = ['vendu' => $venduValue, 'dateVente' => $dateVente];
 
         $vehicule->setOptions($optionsArray);

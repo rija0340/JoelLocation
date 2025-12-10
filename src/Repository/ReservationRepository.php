@@ -5,6 +5,7 @@ namespace App\Repository;
 use DateTime;
 use DateTimeZone;
 use App\Entity\Reservation;
+use App\Entity\Vehicule;
 use App\Service\DateHelper;
 use App\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -38,7 +39,7 @@ class ReservationRepository extends ServiceEntityRepository
     {
 
         // find all reservations whose have not been payed completely
-        $nouvelleResas =  $this->findNouvelleReservations();
+        $nouvelleResas = $this->findNouvelleReservations();
         $resasNonSoldes = [];
         foreach ($nouvelleResas as $resa) {
             if ($resa->getSommePaiements() < $resa->getPrix()) {
@@ -353,7 +354,7 @@ class ReservationRepository extends ServiceEntityRepository
      */
     public function findReservationIncludeDates($dateDebut, $dateFin, $vehicule = null)
     {
-        $qb =  $this->createQueryBuilder('r')
+        $qb = $this->createQueryBuilder('r')
             ->where("(r.date_debut BETWEEN :dateDebut AND :dateFin) OR (r.date_fin BETWEEN :dateDebut AND :dateFin) OR (r.date_debut <= :dateDebut AND r.date_fin >= :dateFin)")
             ->andWhere("(r.canceled = FALSE OR r.canceled IS NULL)")
             ->andWhere("r.archived = FALSE")
@@ -374,7 +375,6 @@ class ReservationRepository extends ServiceEntityRepository
      * @return Reservation[] Returns an array of Reservation objects
      */
     public function findReservationExludeDates($dateDebut, $dateFin)
-
     {
         return $this->createQueryBuilder('r')
             ->where('   :dateFin < r.date_debut  AND :dateDebut < r.date_debut ')
@@ -688,7 +688,7 @@ class ReservationRepository extends ServiceEntityRepository
 
     public function findAppelPaiement()
     {
-        $reservations =  $this->findReservationsSansStopSales();
+        $reservations = $this->findReservationsSansStopSales();
         $array = [];
         foreach ($reservations as $reservation) {
             if ($reservation->getPrix() > $reservation->getSommePaiements()) {
@@ -696,6 +696,92 @@ class ReservationRepository extends ServiceEntityRepository
             }
         }
         return $array;
+    }
+
+    /**
+     * Find all blocking entries (reservations AND stop sales) for a given date range.
+     * This is the main method to use for checking vehicle availability.
+     * 
+     * @param \DateTime $dateDebut Start date of the requested period
+     * @param \DateTime $dateFin End date of the requested period
+     * @param Vehicule|null $vehicule Optional vehicle to filter by
+     * @return Reservation[] Array of reservations/stop sales that block the date range
+     */
+    public function findAllBlockingEntriesForDates(\DateTime $dateDebut, \DateTime $dateFin, $vehicule = null): array
+    {
+        $qb = $this->createQueryBuilder('r')
+            // Date overlap conditions: any overlap between the reservation and requested dates
+            ->where("(r.date_debut BETWEEN :dateDebut AND :dateFin) OR (r.date_fin BETWEEN :dateDebut AND :dateFin) OR (r.date_debut <= :dateDebut AND r.date_fin >= :dateFin)")
+            // Must not be canceled
+            ->andWhere("(r.canceled = FALSE OR r.canceled IS NULL)")
+            // Must not be archived
+            ->andWhere("(r.archived = FALSE OR r.archived IS NULL)")
+            // Must not be reported (postponed)
+            ->andWhere("(r.reported = FALSE OR r.reported IS NULL)")
+            // Include both regular reservations (code = 'devisTransformé') AND stop sales (code = 'stopSale')
+            ->andWhere("(r.code_reservation = 'devisTransformé' OR r.code_reservation = 'stopSale')")
+            ->setParameter('dateDebut', $dateDebut)
+            ->setParameter('dateFin', $dateFin);
+
+        if ($vehicule !== null) {
+            $qb->andWhere('r.vehicule = :vehicule')
+                ->setParameter('vehicule', $vehicule);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Find only stop sales that block a given date range.
+     * 
+     * @param \DateTime $dateDebut Start date of the requested period
+     * @param \DateTime $dateFin End date of the requested period
+     * @param Vehicule|null $vehicule Optional vehicle to filter by
+     * @return Reservation[] Array of stop sales that block the date range
+     */
+    public function findStopSalesForDates(\DateTime $dateDebut, \DateTime $dateFin, $vehicule = null): array
+    {
+        $qb = $this->createQueryBuilder('r')
+            ->where("(r.date_debut BETWEEN :dateDebut AND :dateFin) OR (r.date_fin BETWEEN :dateDebut AND :dateFin) OR (r.date_debut <= :dateDebut AND r.date_fin >= :dateFin)")
+            ->andWhere("(r.canceled = FALSE OR r.canceled IS NULL)")
+            ->andWhere("(r.archived = FALSE OR r.archived IS NULL)")
+            ->andWhere("r.code_reservation = 'stopSale'")
+            ->setParameter('dateDebut', $dateDebut)
+            ->setParameter('dateFin', $dateFin);
+
+        if ($vehicule !== null) {
+            $qb->andWhere('r.vehicule = :vehicule')
+                ->setParameter('vehicule', $vehicule);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Find only regular reservations (not stop sales) that block a given date range.
+     * 
+     * @param \DateTime $dateDebut Start date of the requested period
+     * @param \DateTime $dateFin End date of the requested period
+     * @param Vehicule|null $vehicule Optional vehicle to filter by
+     * @return Reservation[] Array of reservations that block the date range
+     */
+    public function findReservationsOnlyForDates(\DateTime $dateDebut, \DateTime $dateFin, $vehicule = null): array
+    {
+        $qb = $this->createQueryBuilder('r')
+            ->where("(r.date_debut BETWEEN :dateDebut AND :dateFin) OR (r.date_fin BETWEEN :dateDebut AND :dateFin) OR (r.date_debut <= :dateDebut AND r.date_fin >= :dateFin)")
+            ->andWhere("(r.canceled = FALSE OR r.canceled IS NULL)")
+            ->andWhere("(r.archived = FALSE OR r.archived IS NULL)")
+            ->andWhere("(r.reported = FALSE OR r.reported IS NULL)")
+            ->andWhere("r.code_reservation = 'devisTransformé'")
+            ->setParameter('dateDebut', $dateDebut)
+            ->setParameter('dateFin', $dateFin);
+
+        if ($vehicule !== null) {
+            $qb->andWhere('r.vehicule = :vehicule')
+                ->setParameter('vehicule', $vehicule);
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
     public function findByHashedId(string $hashedId)

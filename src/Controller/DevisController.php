@@ -18,6 +18,7 @@ use App\Form\EditClientReservationType;
 use App\Form\Devis\OptionsGarantiesType;
 use App\Repository\ReservationRepository;
 use App\Service\EmailManagerService;
+use App\Service\VehicleAvailabilityService;
 use Doctrine\ORM\EntityManagerInterface;
 
 // Include Dompdf required namespaces
@@ -47,6 +48,7 @@ class DevisController extends AbstractController
     private $emailManagerService;
     private $reservationHelper;
     private $reservationRepo;
+    private $vehicleAvailabilityService;
 
 
 
@@ -64,8 +66,8 @@ class DevisController extends AbstractController
         ReserverDevis $reserverDevis,
         EmailManagerService $emailManagerService,
         ReservationHelper $reservationHelper,
-        ReservationRepository $reservationRepo
-
+        ReservationRepository $reservationRepo,
+        VehicleAvailabilityService $vehicleAvailabilityService
     ) {
 
         $this->vehiculeRepo = $vehiculeRepo;
@@ -82,6 +84,7 @@ class DevisController extends AbstractController
         $this->emailManagerService = $emailManagerService;
         $this->reservationHelper = $reservationHelper;
         $this->reservationRepo = $reservationRepo;
+        $this->vehicleAvailabilityService = $vehicleAvailabilityService;
     }
 
     /**
@@ -105,7 +108,7 @@ class DevisController extends AbstractController
     public function newDevis(Request $request): Response
     {
 
-        $idClient =  $request->query->get('idClient');
+        $idClient = $request->query->get('idClient');
 
         if ($request->isXmlHttpRequest() || $idClient != null) {
 
@@ -124,7 +127,7 @@ class DevisController extends AbstractController
             $vehiculeIM = $request->query->get('vehiculeIM');
             $conducteur = $request->query->get('conducteur');
             $arrayOptionsID = (array) $request->query->get('arrayOptionsID');
-            $arrayGarantiesID = (array)$request->query->get('arrayGarantiesID');
+            $arrayGarantiesID = (array) $request->query->get('arrayGarantiesID');
 
             $dateDepart = new \DateTime($dateTimeDepart);
             $dateRetour = new \DateTime($dateTimeRetour);
@@ -205,11 +208,17 @@ class DevisController extends AbstractController
      */
     public function show(Devis $devis, Request $request): Response
     {
-        //check si vehicule devis est déjà utilisé dans une reservation
-        $reservations = $this->reservationRepo->findReservationIncludeDates($devis->getDateDepart(), $devis->getDateRetour());
-        $vehiculeIsNotAvailable = $this->reservationHelper->vehiculeIsInvolved($reservations, $devis->getVehicule());
+        //check si vehicule devis est déjà utilisé dans une reservation OR stop sale (using new service)
+        $vehiculeIsNotAvailable = !$this->vehicleAvailabilityService->isVehicleAvailable(
+            $devis->getVehicule(),
+            $devis->getDateDepart(),
+            $devis->getDateRetour()
+        );
         if ($vehiculeIsNotAvailable) {
-            $vehiculesAvailable = $this->reservationHelper->getVehiculesDisponible($reservations);
+            $vehiculesAvailable = $this->vehicleAvailabilityService->getAvailableVehicles(
+                $devis->getDateDepart(),
+                $devis->getDateRetour()
+            );
         } else {
             $vehiculesAvailable = null;
         }
@@ -290,14 +299,14 @@ class DevisController extends AbstractController
      */
     public function reserver(Request $request, Devis $devis)
     {
-        //check si vehicule devis est déjà utilisé dans une reservation
-        $reservations = $this->reservationRepo->findReservationIncludeDates($devis->getDateDepart(), $devis->getDateRetour());
-        $vehiculeIsNotAvailable = $this->reservationHelper->vehiculeIsInvolved($reservations, $devis->getVehicule());
+        //check si vehicule devis est déjà utilisé dans une reservation OR stop sale (using new service)
+        $vehiculeIsNotAvailable = !$this->vehicleAvailabilityService->isVehicleAvailable(
+            $devis->getVehicule(),
+            $devis->getDateDepart(),
+            $devis->getDateRetour()
+        );
         if ($vehiculeIsNotAvailable) {
             return $this->redirectToRoute('devis_show', ['id' => $devis->getId(), 'fromReserver' => true]);
-            $vehiculesAvailable = $this->reservationHelper->getVehiculesDisponible($reservations);
-        } else {
-            $vehiculesAvailable = null;
         }
 
         $this->reserverDevis->reserver($devis, "null", true);
@@ -436,7 +445,7 @@ class DevisController extends AbstractController
         $mail = $devis->getClient()->getMail();
         $nom = $devis->getClient()->getNom();
         $mdp = uniqid();
-        $content = "Bonjour, " . '<br>' .  "voici vos identifications de connexion." . '<br>' . " Mot de passe: " . $mdp . '<br>' . "Email : votre email";
+        $content = "Bonjour, " . '<br>' . "voici vos identifications de connexion." . '<br>' . " Mot de passe: " . $mdp . '<br>' . "Email : votre email";
 
         $devis->getClient()->setPassword($passwordEncoder->encodePassword(
             $devis->getClient(),

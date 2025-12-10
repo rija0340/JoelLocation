@@ -184,9 +184,9 @@ class VenteComptoirController extends AbstractController
         $dateDepart = $this->reservationSession->getDateDepart();
         $dateRetour = $this->reservationSession->getDateRetour();
 
-        //un tableau contenant les véhicules utilisées dans les reservations se déroulant entre 
+        //un tableau contenant les véhicules utilisées dans les reservations ET stop sales se déroulant entre 
         //$dateDepart et $dateRetour
-        $reservations = $this->reservationRepo->findReservationIncludeDates($dateDepart, $dateRetour);
+        $reservations = $this->reservationRepo->findAllBlockingEntriesForDates($dateDepart, $dateRetour);
         $vehiculesDisponible = $this->reservationHelper->getVehiculesDisponible($reservations);
 
         //ajout id véhicule dans session, erreur si on stock directement 
@@ -199,7 +199,7 @@ class VenteComptoirController extends AbstractController
 
             //si les deux sont renseignés, on prend le tarif journalier
             if ($tarifVehiculeJournalier != null) {
-                $duree =  $this->dateHelper->calculDuree($dateDepart, $dateRetour);
+                $duree = $this->dateHelper->calculDuree($dateDepart, $dateRetour);
 
                 if (!is_null($duree)) {
                     $tarifVehicule = $tarifVehiculeJournalier * $duree;
@@ -401,7 +401,7 @@ class VenteComptoirController extends AbstractController
             $client = null;
 
             $routeName = $request->attributes->get('_route');
-            
+
             // dd($routeName);
             if (strpos($routeName, 'client') !== false) {
                 // dd('ato izy madalo');
@@ -451,7 +451,7 @@ class VenteComptoirController extends AbstractController
      */
     public function saveDevisSendMail(Request $request): Response
     {
-        $client  = $this->getClient($request);
+        $client = $this->getClient($request);
         $result = $this->saveDevis($client);
 
         if ($result != "devisExist") {
