@@ -1,0 +1,51 @@
+<div class="signature-pad-container border rounded p-3 bg-light text-center">
+    <canvas id="signature-pad" class="border bg-white" width="600" height="300"
+        style="touch-action: none; max-width: 100%;"></canvas>
+    <div class="mt-2">
+        <button type="button" class="btn btn-secondary btn-sm" id="clear-signature">
+            <i class="fa fa-eraser me-1"></i> Effacer
+        </button>
+    </div>
+    <input type="hidden" name="signature_data" id="signature_data">
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var canvas = document.getElementById('signature-pad');
+        var signaturePad = new SignaturePad(canvas, {
+            backgroundColor: 'rgb(255, 255, 255)'
+        });
+
+        // Resize canvas for high DPI screens
+        function resizeCanvas() {
+            var ratio = Math.max(window.devicePixelRatio || 1, 1);
+            canvas.width = canvas.offsetWidth * ratio;
+            canvas.height = canvas.offsetHeight * ratio;
+            canvas.getContext("2d").scale(ratio, ratio);
+            signaturePad.clear(); // otherwise isEmpty() might return incorrect value
+        }
+
+        window.addEventListener("resize", resizeCanvas);
+        resizeCanvas();
+
+        document.getElementById('clear-signature').addEventListener('click', function () {
+            signaturePad.clear();
+            document.getElementById('signature_data').value = '';
+        });
+
+        // On form submit, put signature data into hidden input
+        var form = canvas.closest('form');
+        if (form) {
+            form.addEventListener('submit', function (e) {
+                if (signaturePad.isEmpty()) {
+                    e.preventDefault();
+                    alert("Veuillez signer le document avant de valider.");
+                } else {
+                    var data = signaturePad.toDataURL('image/png');
+                    document.getElementById('signature_data').value = data;
+                }
+            });
+        }
+    });
+</script>

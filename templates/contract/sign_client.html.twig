@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Signature du Contrat #{{ contract.id }}{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0"><i class="fa fa-file-signature me-2"></i>Signature du Contrat de Location</h3>
+                </div>
+                <div class="card-body">
+                    {# Alertes #}
+                    {% for message in app.flashes('error') %}
+                    <div class="alert alert-danger">{{ message }}</div>
+                    {% endfor %}
+                    {% for message in app.flashes('success') %}
+                    <div class="alert alert-success">{{ message }}</div>
+                    {% endfor %}
+
+                    {# Informations Réservation #}
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5><i class="fa fa-info-circle me-2"></i>Détails</h5>
+                            <ul class="list-unstyled">
+                                <li><strong>Référence:</strong> {{ contract.reservation.reference }}</li>
+                                <li><strong>Client:</strong> {{ contract.reservation.client.mail }}</li>
+                                <li><strong>Véhicule:</strong> {{ contract.reservation.vehicule.immatriculation }}</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6 text-md-end">
+                            <h5><i class="fa fa-euro-sign me-2"></i>Paiement</h5>
+                            {% if is_paid %}
+                            <span class="badge bg-success fs-6">
+                                <i class="fa fa-check me-1"></i> Réservation Soldée
+                            </span>
+                            {% else %}
+                            <span class="badge bg-danger fs-6">
+                                <i class="fa fa-times me-1"></i> Paiement en attente
+                            </span>
+                            <p class="text-danger small mt-2">
+                                Vous devez régler la totalité de la réservation avant de pouvoir signer.
+                            </p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    {# Contenu du Contrat #}
+                    <div class="contract-content bg-light p-4 border rounded mb-4"
+                        style="max-height: 400px; overflow-y: auto; font-family: 'Courier New', Courier, monospace;">
+                        <pre style="white-space: pre-wrap;">{{ contract.contractContent }}</pre>
+                    </div>
+
+                    {# Zone de Signature #}
+                    {% if is_paid and not contract.isSignedByClient %}
+                    <div class="signature-section">
+                        <h4 class="mb-3">Votre Signature</h4>
+                        <p class="text-muted mb-3">
+                            Veuillez signer dans le cadre ci-dessous en utilisant votre souris ou votre doigt (sur écran
+                            tactile).
+                            En signant, vous acceptez les conditions générales de location.
+                        </p>
+
+                        <form method="post" action="{{ path('contract_sign_client_process', {id: contract.id}) }}">
+                            {% include 'contract/_signature_pad.html.twig' %}
+
+                            <div class="d-grid gap-2 mt-4">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fa fa-pen-nib me-2"></i> Valider et Signer le Contrat
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    {% elseif contract.isSignedByClient %}
+                    <div class="alert alert-success text-center py-4">
+                        <h4><i class="fa fa-check-circle me-2"></i> Contrat Signé</h4>
+                        <p class="mb-0">Vous avez déjà signé ce contrat le {{ contract.signatures|filter(s =>
+                            s.signatureType == 'client')|first.signedAt|date('d/m/Y à H:i') }}.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

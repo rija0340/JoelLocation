@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Validation Admin - Contrat #{{ contract.id }}{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-sm border-info">
+                <div class="card-header bg-info text-white">
+                    <h3 class="mb-0"><i class="fa fa-user-shield me-2"></i>Validation Administrateur</h3>
+                </div>
+                <div class="card-body">
+                    {# Alertes #}
+                    {% for message in app.flashes('error') %}
+                    <div class="alert alert-danger">{{ message }}</div>
+                    {% endfor %}
+                    {% for message in app.flashes('success') %}
+                    <div class="alert alert-success">{{ message }}</div>
+                    {% endfor %}
+
+                    {# Informations #}
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5><i class="fa fa-info-circle me-2"></i>Contrat #{{ contract.id }}</h5>
+                            <ul class="list-unstyled">
+                                <li><strong>Client:</strong> {{ contract.reservation.client.mail }}</li>
+                                <li><strong>Statut actuel:</strong> {{ contract.contractStatus }}</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6 text-md-end">
+                            <h5><i class="fa fa-check-double me-2"></i>Pré-requis</h5>
+                            {% if contract.isSignedByClient %}
+                            <span class="badge bg-success fs-6 mb-2 d-block">
+                                <i class="fa fa-check me-1"></i> Signé par le client
+                            </span>
+                            <small class="text-muted">
+                                Le {{ contract.signatures|filter(s => s.signatureType ==
+                                'client')|first.signedAt|date('d/m/Y H:i') }}
+                            </small>
+                            {% else %}
+                            <span class="badge bg-warning text-dark fs-6">
+                                <i class="fa fa-clock me-1"></i> En attente signature client
+                            </span>
+                            <p class="text-danger small mt-2">
+                                Le client doit signer avant validation administrative.
+                            </p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    {# Contenu #}
+                    <div class="contract-content bg-light p-4 border rounded mb-4"
+                        style="max-height: 400px; overflow-y: auto;">
+                        <pre style="white-space: pre-wrap; font-size: 0.9em;">{{ contract.contractContent }}</pre>
+                    </div>
+
+                    {# Zone de Signature #}
+                    {% if contract.isSignedByClient and not contract.isSignedByAdmin %}
+                    <div class="signature-section">
+                        <h4 class="mb-3">Signature Administrateur</h4>
+                        <p class="text-muted mb-3">
+                            En tant qu'administrateur, validez ce contrat en apposant votre signature.
+                        </p>
+
+                        <form method="post" action="{{ path('contract_sign_admin_process', {id: contract.id}) }}">
+                            {% include 'contract/_signature_pad.html.twig' %}
+
+                            <div class="d-grid gap-2 mt-4">
+                                <button type="submit" class="btn btn-info text-white btn-lg">
+                                    <i class="fa fa-stamp me-2"></i> Valider le Contrat
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    {% elseif contract.isSignedByAdmin %}
+                    <div class="alert alert-success text-center py-4">
+                        <h4><i class="fa fa-check-double me-2"></i> Contrat Entièrement Validé</h4>
+                        <p class="mb-0">Ce contrat est finalisé et verrouillé.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

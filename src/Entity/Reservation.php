@@ -10,6 +10,7 @@ use App\Service\TarifsHelper;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use App\Entity\Contract;
 use App\Entity\OptionsGarantiesInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 //use resrvationphoto
@@ -33,6 +34,7 @@ class Reservation implements OptionsGarantiesInterface
         $this->fraisSupplResas = new ArrayCollection();
         $this->devisOptions = new ArrayCollection();
         $this->photos = new ArrayCollection();
+        $this->contracts = new ArrayCollection();
     }
 
     /**
@@ -246,6 +248,11 @@ class Reservation implements OptionsGarantiesInterface
      * @ORM\OneToMany(targetEntity=ReservationPhoto::class, mappedBy="reservation", cascade={"persist", "remove"})
      */
     private $photos;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Contract::class, mappedBy="reservation", cascade={"persist", "remove"})
+     */
+    private $contracts;
 
     public function getId(): ?int
     {
@@ -884,5 +891,64 @@ class Reservation implements OptionsGarantiesInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Contract>
+     */
+    public function getContracts(): Collection
+    {
+        return $this->contracts;
+    }
+
+    public function addContract(Contract $contract): self
+    {
+        if (!$this->contracts->contains($contract)) {
+            $this->contracts[] = $contract;
+            $contract->setReservation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContract(Contract $contract): self
+    {
+        if ($this->contracts->removeElement($contract)) {
+            // set the owning side to null (unless already changed)
+            if ($contract->getReservation() === $this) {
+                $contract->setReservation(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get the most recent contract for this reservation
+     */
+    public function getMostRecentContract(): ?Contract
+    {
+        $contracts = $this->getContracts();
+        if ($contracts->isEmpty()) {
+            return null;
+        }
+
+        $latestContract = null;
+        foreach ($contracts as $contract) {
+            if (!$latestContract || $contract->getCreatedAt() > $latestContract->getCreatedAt()) {
+                $latestContract = $contract;
+            }
+        }
+
+        return $latestContract;
+    }
+
+    /**
+     * Check if this reservation has a fully signed contract
+     */
+    public function hasFullySignedContract(): bool
+    {
+        $latestContract = $this->getMostRecentContract();
+        return $latestContract && $latestContract->getContractStatus() === Contract::STATUS_FULLY_SIGNED;
     }
 }

@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contract Signed Successfully{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Contract Signed Successfully!</h3>
+                    </div>
+                    <div class="card-body text-center">
+                        <div class="mb-4">
+                            <i class="fas fa-check-circle text-success" style="font-size: 5rem;"></i>
+                        </div>
+                        <h4>Your contract has been successfully signed</h4>
+                        <p class="lead">Reservation: {{ reservation.reference }}</p>
+                        
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5>Contract Details</h5>
+                                        <p><strong>Status:</strong> 
+                                            <span class="badge 
+                                                {% if contract.contractStatus == 'client_signed' %}badge-warning
+                                                {% elseif contract.contractStatus == 'fully_signed' %}badge-success
+                                                {% else %}badge-secondary
+                                                {% endif %}">
+                                                {{ contract.contractStatus|replace({'_': ' '})|title }}
+                                            </span>
+                                        </p>
+                                        <p><strong>Vehicle:</strong> {{ reservation.vehicule.immatriculation }}</p>
+                                        <p><strong>Period:</strong> {{ reservation.dateDebut|date('Y-m-d H:i') }} to {{ reservation.dateFin|date('Y-m-d H:i') }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5>Next Steps</h5>
+                                        {% if contract.contractStatus == 'client_signed' %}
+                                            <p>The admin will review and sign the contract. You will be notified when the process is complete.</p>
+                                        {% elseif contract.contractStatus == 'fully_signed' %}
+                                            <p>Your reservation is now complete. You can pick up your vehicle at the agreed time.</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <a href="{{ path('reservation_show', {'id': reservation.id}) }}" class="btn btn-primary">View Reservation</a>
+                            {% if app.user and is_granted('ROLE_ADMIN') %}
+                                <a href="{{ path('admin_reservation_show', {'id': reservation.id}) }}" class="btn btn-secondary">Back to Admin Panel</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,170 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Verify Contract Signatures{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Contract Verification</h1>
+        
+        <div class="card">
+            <div class="card-header">
+                <h3>Contract Information</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Reservation:</strong> {{ contract.reference }}</p>
+                        <p><strong>Contract Status:</strong> 
+                            <span class="badge 
+                                {% if contract.contractStatus == 'unsigned' %}badge-secondary
+                                {% elseif contract.contractStatus == 'client_signed' %}badge-warning
+                                {% elseif contract.contractStatus == 'admin_signed' %}badge-info
+                                {% elseif contract.contractStatus == 'fully_signed' %}badge-success
+                                {% else %}badge-danger
+                                {% endif %}">
+                                {{ contract.contractStatus|replace({'_': ' '})|title }}
+                            </span>
+                        </p>
+                        <p><strong>Created:</strong> {{ contract.createdAt|date('Y-m-d H:i:s') }}</p>
+                        {% if contract.updatedAt %}
+                            <p><strong>Last Updated:</strong> {{ contract.updatedAt|date('Y-m-d H:i:s') }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Client:</strong> {{ contract.reservation.client.email }}</p>
+                        <p><strong>Vehicle:</strong> {{ contract.reservation.vehicule.immatriculation }}</p>
+                        <p><strong>Period:</strong> {{ contract.reservation.dateDebut|date('Y-m-d H:i') }} to {{ contract.reservation.dateFin|date('Y-m-d H:i') }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-header">
+                <h3>Verification Results</h3>
+            </div>
+            <div class="card-body">
+                <div class="alert 
+                    {% if verification_report.verification_result.valid %}alert-success
+                    {% else %}alert-danger
+                    {% endif %}">
+                    <h4>
+                        <i class="fas 
+                            {% if verification_report.verification_result.valid %}fa-check-circle
+                            {% else %}fa-times-circle
+                            {% endif %}"></i>
+                        Contract Status: 
+                        {% if verification_report.verification_result.valid %}
+                            Valid
+                        {% else %}
+                            Invalid
+                        {% endif %}
+                    </h4>
+                    <p>The contract signatures are 
+                        {% if verification_report.verification_result.valid %}
+                            cryptographically valid and have not been tampered with.
+                        {% else %}
+                            invalid or have been tampered with.
+                        {% endif %}
+                    </p>
+                </div>
+                
+                <h4>Signature Details</h4>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Signed At</th>
+                                <th>Valid</th>
+                                <th>Timestamp Valid</th>
+                                <th>IP Address</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for signature in verification_report.signatures %}
+                                <tr>
+                                    <td>{{ signature.type|title }}</td>
+                                    <td>{{ signature.signed_at|date('Y-m-d H:i:s') }}</td>
+                                    <td>
+                                        <span class="
+                                            {% if signature.valid %}text-success
+                                            {% else %}text-danger
+                                            {% endif %}">
+                                            {{ signature.valid ? 'Yes' : 'No' }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="
+                                            {% if signature.timestamp_valid %}text-success
+                                            {% else %}text-warning
+                                            {% endif %}">
+                                            {{ signature.timestamp_valid ? 'Yes' : 'No' }}
+                                        </span>
+                                    </td>
+                                    <td>{{ signature.ip_address ?: 'N/A' }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-header">
+                <h3>Contract Content Hash</h3>
+            </div>
+            <div class="card-body">
+                <pre>{{ contract.contractHash }}</pre>
+                <button class="btn btn-sm btn-secondary" onclick="copyToClipboard('{{ contract.contractHash }}')">
+                    Copy Hash
+                </button>
+            </div>
+        </div>
+        
+        <div class="mt-4">
+            <a href="{{ path('admin_reservation_show', {'id': contract.reservation.id}) }}" class="btn btn-primary">Back to Reservation</a>
+            {% if contract.contractContent %}
+                <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#contractContentModal">
+                    View Contract Content
+                </button>
+            {% endif %}
+        </div>
+    </div>
+    
+    {% if contract.contractContent %}
+    <!-- Contract Content Modal -->
+    <div class="modal fade" id="contractContentModal" tabindex="-1" aria-labelledby="contractContentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="contractContentModalLabel">Contract Content</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <pre>{{ contract.contractContent }}</pre>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                // Show a temporary notification
+                const originalText = event.target.innerHTML;
+                event.target.innerHTML = 'Copied!';
+                setTimeout(() => {
+                    event.target.innerHTML = originalText;
+                }, 2000);
+            }).catch(function(err) {
+                console.error('Failed to copy: ', err);
+            });
+        }
+    </script>
+{% endblock %}

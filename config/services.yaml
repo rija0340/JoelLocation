@@ -76,3 +76,19 @@ services:
     App\Service\PdfGenerationService:
         arguments:
             $kernelProjectDir: '%kernel.project_dir%'
+
+    # Signature-related services
+    App\Service\SignatureService: ~
+
+    App\Service\TsaClient:
+        arguments:
+            $httpClient: '@http_client'
+            $tsaUrl: '%env(TSA_URL)%'
+            $username: '%env(TSA_USERNAME)%'
+            $password: '%env(TSA_PASSWORD)%'
+
+    App\Service\ContractService: ~
+
+    App\Service\SignatureVerificationService: ~
+
+    App\Service\ContractGeneratorService: ~
