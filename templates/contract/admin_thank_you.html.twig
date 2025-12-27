@@ -1,0 +1,68 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Contract Signed Successfully{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Contract Signed Successfully!</h3>
+                    </div>
+                    <div class="card-body text-center">
+                        <div class="mb-4">
+                            <i class="fas fa-check-circle text-success" style="font-size: 5rem;"></i>
+                        </div>
+                        <h4>The contract has been successfully signed by admin</h4>
+                        <p class="lead">Reservation: {{ reservation.reference }}</p>
+                        
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5>Contract Details</h5>
+                                        <p><strong>Status:</strong> 
+                                            <span class="badge 
+                                                {% if contract.contractStatus == 'fully_signed' %}badge-success
+                                                {% else %}badge-warning
+                                                {% endif %}">
+                                                {{ contract.contractStatus|replace({'_': ' '})|title }}
+                                            </span>
+                                        </p>
+                                        <p><strong>Vehicle:</strong> {{ reservation.vehicule.immatriculation }}</p>
+                                        <p><strong>Period:</strong> {{ reservation.dateDebut|date('Y-m-d H:i') }} to {{ reservation.dateFin|date('Y-m-d H:i') }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5>Signatures</h5>
+                                        {% for signature in contract.signatures %}
+                                            <p>
+                                                <strong>{{ signature.signatureType|title }}:</strong> 
+                                                {% if signature.signatureValid %}
+                                                    <span class="text-success">Verified</span>
+                                                {% else %}
+                                                    <span class="text-danger">Invalid</span>
+                                                {% endif %}
+                                                ({{ signature.signedAt|date('Y-m-d H:i:s') }})
+                                            </p>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <a href="{{ path('admin_reservation_show', {'id': reservation.id}) }}" class="btn btn-primary">Back to Reservation</a>
+                            <a href="{{ path('contract_verify', {'id': contract.id}) }}" class="btn btn-secondary">Verify Contract</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,325 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Vérification du Contrat #{{ contract.id }}{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ path('test_signature_flow') }}">Test Signature</a></li>
+                    <li class="breadcrumb-item active">Vérification Contrat</li>
+                </ol>
+            </nav>
+
+            <h1 class="mb-3">
+                <i class="fa fa-shield-alt me-2"></i>
+                Vérification du Contrat #{{ contract.id }}
+            </h1>
+        </div>
+    </div>
+
+    {# Verification Status #}
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card {% if verificationResult.valid %}border-success{% else %}border-danger{% endif %}">
+                <div
+                    class="card-header {% if verificationResult.valid %}bg-success{% else %}bg-danger{% endif %} text-white">
+                    <h4 class="mb-0">
+                        {% if verificationResult.valid %}
+                        <i class="fa fa-check-circle me-2"></i> Toutes les Signatures sont Valides
+                        {% else %}
+                        <i class="fa fa-times-circle me-2"></i> Certaines Signatures sont Invalides
+                        {% endif %}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0">
+                        {% if verificationResult.valid %}
+                        Le contrat et toutes ses signatures ont été vérifiés cryptographiquement. L'intégrité du
+                        document est confirmée.
+                        {% else %}
+                        Une ou plusieurs signatures n'ont pas passé la vérification cryptographique. Le document
+                        pourrait avoir été modifié.
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        {# Contract Info #}
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fa fa-file-contract me-2"></i>Informations du Contrat</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-sm">
+                        <tr>
+                            <th style="width: 40%;">ID:</th>
+                            <td>{{ contract.id }}</td>
+                        </tr>
+                        <tr>
+                            <th>Statut:</th>
+                            <td>
+                                {% set status = contract.contractStatus %}
+                                {% if status == 'unsigned' %}
+                                <span class="badge bg-secondary">Non signé</span>
+                                {% elseif status == 'client_signed' %}
+                                <span class="badge bg-warning">Signé par le client</span>
+                                {% elseif status == 'admin_signed' %}
+                                <span class="badge bg-info">Signé par l'admin</span>
+                                {% elseif status == 'fully_signed' %}
+                                <span class="badge bg-success">Entièrement signé</span>
+                                {% else %}
+                                <span class="badge bg-dark">{{ status }}</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Créé le:</th>
+                            <td>{{ contract.createdAt|date('d/m/Y H:i:s') }}</td>
+                        </tr>
+                        {% if contract.updatedAt %}
+                        <tr>
+                            <th>Modifié le:</th>
+                            <td>{{ contract.updatedAt|date('d/m/Y H:i:s') }}</td>
+                        </tr>
+                        {% endif %}
+                        <tr>
+                            <th>Réservation:</th>
+                            <td>#{{ contract.reservation.id }} - {{ contract.reservation.reference ?? 'N/A' }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        {# Hash Info #}
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fa fa-fingerprint me-2"></i>Empreinte du Document</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted small mb-2">Hash SHA-256 du contenu du contrat:</p>
+                    <div class="bg-light p-3 rounded">
+                        <code style="font-size: 12px; word-break: break-all;">{{ contract.contractHash }}</code>
+                    </div>
+                    <p class="text-muted small mt-3 mb-0">
+                        <i class="fa fa-info-circle me-1"></i>
+                        Ce hash est utilisé pour vérifier que le document n'a pas été modifié après sa création.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Signatures Details #}
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0"><i class="fa fa-pen-nib me-2"></i>Détails des Signatures ({{
+                        verificationResult.details|length }})</h5>
+                </div>
+                <div class="card-body">
+                    {% if verificationResult.details|length > 0 %}
+                    {% for detail in verificationResult.details %}
+                    {% set signature = detail.signature %}
+                    <div class="card mb-3 {% if detail.valid %}border-success{% else %}border-danger{% endif %}">
+                        <div
+                            class="card-header {% if detail.valid %}bg-success{% else %}bg-danger{% endif %} text-white d-flex justify-content-between align-items-center">
+                            <span>
+                                <i
+                                    class="fa {% if signature.signatureType == 'client' %}fa-user{% else %}fa-user-shield{% endif %} me-2"></i>
+                                Signature {{ signature.signatureType|capitalize }}
+                            </span>
+                            <span
+                                class="badge {% if detail.valid %}bg-light text-success{% else %}bg-light text-danger{% endif %}">
+                                {% if detail.valid %}
+                                <i class="fa fa-check me-1"></i> Valide
+                                {% else %}
+                                <i class="fa fa-times me-1"></i> Invalide
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6>Informations</h6>
+                                    <table class="table table-sm">
+                                        <tr>
+                                            <th>ID:</th>
+                                            <td>{{ signature.id }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Type:</th>
+                                            <td>
+                                                {% if signature.signatureType == 'client' %}
+                                                <span class="badge bg-primary">Client</span>
+                                                {% else %}
+                                                <span class="badge bg-secondary">Admin</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Signé le:</th>
+                                            <td>{{ signature.signedAt|date('d/m/Y H:i:s') }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>IP:</th>
+                                            <td>{{ signature.ipAddress ?? 'N/A' }}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Horodatage TSA</h6>
+                                    {% if signature.timestampToken %}
+                                    <div class="alert alert-success py-2 mb-2">
+                                        <i class="fa fa-clock me-1"></i> Token TSA présent
+                                    </div>
+                                    {% if signature.timestampVerifiedAt %}
+                                    <small class="text-muted">
+                                        Vérifié le: {{ signature.timestampVerifiedAt|date('d/m/Y H:i:s') }}
+                                    </small>
+                                    {% endif %}
+                                    {% else %}
+                                    <div class="alert alert-warning py-2 mb-0">
+                                        <i class="fa fa-exclamation-triangle me-1"></i> Pas de token TSA
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <h6>Données Cryptographiques</h6>
+                                    <div class="accordion" id="signatureAccordion{{ signature.id }}">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header">
+                                                <button class="accordion-button collapsed py-2" type="button"
+                                                    data-bs-toggle="collapse"
+                                                    data-bs-target="#signatureData{{ signature.id }}">
+                                                    <small>Voir la signature (Base64)</small>
+                                                </button>
+                                            </h2>
+                                            <div id="signatureData{{ signature.id }}"
+                                                class="accordion-collapse collapse">
+                                                <div class="accordion-body">
+                                                    <code
+                                                        style="font-size: 10px; word-break: break-all;">{{ signature.signatureData }}</code>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header">
+                                                <button class="accordion-button collapsed py-2" type="button"
+                                                    data-bs-toggle="collapse"
+                                                    data-bs-target="#publicKey{{ signature.id }}">
+                                                    <small>Voir la clé publique</small>
+                                                </button>
+                                            </h2>
+                                            <div id="publicKey{{ signature.id }}" class="accordion-collapse collapse">
+                                                <div class="accordion-body">
+                                                    <pre
+                                                        style="font-size: 10px; margin: 0;">{{ signature.publicKeyData }}</pre>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% if signature.timestampToken %}
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header">
+                                                <button class="accordion-button collapsed py-2" type="button"
+                                                    data-bs-toggle="collapse"
+                                                    data-bs-target="#timestampToken{{ signature.id }}">
+                                                    <small>Voir le token TSA</small>
+                                                </button>
+                                            </h2>
+                                            <div id="timestampToken{{ signature.id }}"
+                                                class="accordion-collapse collapse">
+                                                <div class="accordion-body">
+                                                    <code
+                                                        style="font-size: 10px; word-break: break-all;">{{ signature.timestampToken }}</code>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="alert alert-warning mb-0">
+                        <i class="fa fa-exclamation-triangle me-2"></i>
+                        Aucune signature trouvée pour ce contrat.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Contract Content #}
+    {% if contract.contractContent %}
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0"><i class="fa fa-file-alt me-2"></i>Contenu du Contrat</h5>
+                </div>
+                <div class="card-body">
+                    <pre class="bg-light p-3 rounded mb-0"
+                        style="white-space: pre-wrap; font-size: 13px;">{{ contract.contractContent }}</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {# Actions #}
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex gap-2">
+                <a href="{{ path('test_signature_flow') }}" class="btn btn-secondary">
+                    <i class="fa fa-arrow-left me-1"></i> Retour aux Tests
+                </a>
+                <form action="{{ path('test_signature_cleanup', {id: contract.id}) }}" method="POST" class="d-inline"
+                    onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce contrat ?');">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fa fa-trash me-1"></i> Supprimer ce Contrat
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+
+    .card-header {
+        border-radius: 8px 8px 0 0 !important;
+    }
+
+    .accordion-button:not(.collapsed) {
+        background-color: #e7f3ff;
+        color: #0c63e4;
+    }
+
+    code,
+    pre {
+        background: #f8f9fa;
+    }
+</style>
+{% endblock %}

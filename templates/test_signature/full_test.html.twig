@@ -1,0 +1,413 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Test Complet de Signature - Réservation #{{ reservation.id }}{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ path('test_signature_flow') }}">Test Signature</a></li>
+                    <li class="breadcrumb-item active">Test Complet</li>
+                </ol>
+            </nav>
+
+            <h1 class="mb-3">
+                <i class="fa fa-file-signature me-2"></i>
+                Test Complet du Flux de Signature
+            </h1>
+            <p class="text-muted">Réservation #{{ reservation.id }} - {{ reservation.reference ?? 'Sans référence' }}
+            </p>
+        </div>
+    </div>
+
+    {# Status Overview #}
+    <div class="row mb-4">
+        <div class="col-12">
+            <div
+                class="card {% if testResults.overall_status is defined and testResults.overall_status == 'success' %}border-success{% else %}border-danger{% endif %}">
+                <div
+                    class="card-header {% if testResults.overall_status is defined and testResults.overall_status == 'success' %}bg-success{% else %}bg-danger{% endif %} text-white">
+                    <h4 class="mb-0">
+                        {% if testResults.overall_status is defined and testResults.overall_status == 'success' %}
+                        <i class="fa fa-check-circle me-2"></i> Test Réussi !
+                        {% else %}
+                        <i class="fa fa-times-circle me-2"></i> Test Échoué
+                        {% endif %}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    {% if testResults.message is defined %}
+                    <p class="mb-0 lead">{{ testResults.message }}</p>
+                    {% endif %}
+                    {% if testResults.error is defined %}
+                    <div class="alert alert-danger mt-3">
+                        <strong>Erreur:</strong> {{ testResults.error }}
+                        {% if testResults.error_trace is defined %}
+                        <hr>
+                        <details>
+                            <summary>Stack trace</summary>
+                            <pre class="mb-0 mt-2" style="font-size: 11px;">{{ testResults.error_trace }}</pre>
+                        </details>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Reservation Info #}
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fa fa-calendar me-2"></i>Informations Réservation</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-sm mb-0">
+                        <tr>
+                            <th>ID:</th>
+                            <td>{{ reservation.id }}</td>
+                        </tr>
+                        <tr>
+                            <th>Référence:</th>
+                            <td>{{ reservation.reference ?? 'N/A' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Client:</th>
+                            <td>{{ reservation.client ? reservation.client.mail : 'N/A' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Véhicule:</th>
+                            <td>{{ reservation.vehicule ? reservation.vehicule.immatriculation : 'N/A' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Période:</th>
+                            <td>
+                                {% if reservation.dateDebut and reservation.dateFin %}
+                                {{ reservation.dateDebut|date('d/m/Y H:i') }} → {{ reservation.dateFin|date('d/m/Y H:i')
+                                }}
+                                {% else %}
+                                N/A
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Prix:</th>
+                            <td>{{ reservation.prix ?? 'N/A' }} €</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        {% if contract %}
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fa fa-file-contract me-2"></i>Contrat Créé</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-sm mb-0">
+                        <tr>
+                            <th>ID Contrat:</th>
+                            <td>{{ contract.id }}</td>
+                        </tr>
+                        <tr>
+                            <th>Statut:</th>
+                            <td>
+                                {% set status = contract.contractStatus %}
+                                {% if status == 'unsigned' %}
+                                <span class="badge bg-secondary">Non signé</span>
+                                {% elseif status == 'client_signed' %}
+                                <span class="badge bg-warning">Signé par le client</span>
+                                {% elseif status == 'admin_signed' %}
+                                <span class="badge bg-info">Signé par l'admin</span>
+                                {% elseif status == 'fully_signed' %}
+                                <span class="badge bg-success">Entièrement signé</span>
+                                {% else %}
+                                <span class="badge bg-dark">{{ status }}</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Hash:</th>
+                            <td><code style="font-size: 10px;">{{ contract.contractHash[:32] }}...</code></td>
+                        </tr>
+                        <tr>
+                            <th>Créé le:</th>
+                            <td>{{ contract.createdAt|date('d/m/Y H:i:s') }}</td>
+                        </tr>
+                        <tr>
+                            <th>Signatures:</th>
+                            <td>{{ contract.signatures|length }} signature(s)</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    {# Test Steps Timeline #}
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0"><i class="fa fa-list-ol me-2"></i>Étapes du Test</h5>
+                </div>
+                <div class="card-body">
+                    <div class="timeline">
+                        {# Step 1: Contract Creation #}
+                        {% if testResults.contract_creation is defined %}
+                        <div class="timeline-item mb-4">
+                            <div class="d-flex align-items-start">
+                                <div class="timeline-marker {% if testResults.contract_creation.success %}bg-success{% else %}bg-danger{% endif %} rounded-circle me-3"
+                                    style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                                    <i
+                                        class="fa {% if testResults.contract_creation.success %}fa-check{% else %}fa-times{% endif %} text-white"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">1. Création du Contrat</h6>
+                                    <p class="text-muted small mb-2">Génération du contrat et calcul du hash SHA-256</p>
+                                    <div class="bg-light p-2 rounded">
+                                        <small>
+                                            <strong>Contract ID:</strong> {{ testResults.contract_creation.contract_id
+                                            }}<br>
+                                            <strong>Hash:</strong>
+                                            <code>{{ testResults.contract_creation.contract_hash[:40] }}...</code><br>
+                                            <strong>Statut:</strong> {{ testResults.contract_creation.contract_status }}
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {# Step 2: Client Keypair #}
+                        {% if testResults.client_keypair is defined %}
+                        <div class="timeline-item mb-4">
+                            <div class="d-flex align-items-start">
+                                <div class="timeline-marker {% if testResults.client_keypair.success %}bg-success{% else %}bg-danger{% endif %} rounded-circle me-3"
+                                    style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                                    <i
+                                        class="fa {% if testResults.client_keypair.success %}fa-check{% else %}fa-times{% endif %} text-white"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">2. Génération Clés Client</h6>
+                                    <p class="text-muted small mb-2">Génération de la paire de clés RSA 2048 bits pour
+                                        le client</p>
+                                    <span class="badge bg-success">Clés générées</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {# Step 3: Client Signature #}
+                        {% if testResults.client_signature is defined %}
+                        <div class="timeline-item mb-4">
+                            <div class="d-flex align-items-start">
+                                <div class="timeline-marker {% if testResults.client_signature.success %}bg-success{% else %}bg-danger{% endif %} rounded-circle me-3"
+                                    style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                                    <i
+                                        class="fa {% if testResults.client_signature.success %}fa-check{% else %}fa-times{% endif %} text-white"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">3. Signature Client</h6>
+                                    <p class="text-muted small mb-2">Création et enregistrement de la signature du
+                                        client</p>
+                                    <div class="bg-light p-2 rounded">
+                                        <small>
+                                            <strong>ID Signature:</strong> {{ testResults.client_signature.signature_id
+                                            }}<br>
+                                            <strong>Signé le:</strong> {{ testResults.client_signature.signed_at }}<br>
+                                            <strong>Horodatage TSA:</strong>
+                                            {% if testResults.client_signature.has_timestamp %}
+                                            <span class="text-success">Oui</span>
+                                            {% else %}
+                                            <span class="text-warning">Non</span>
+                                            {% endif %}
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {# Step 4: After Client Signature #}
+                        {% if testResults.after_client_signature is defined %}
+                        <div class="timeline-item mb-4">
+                            <div class="d-flex align-items-start">
+                                <div class="timeline-marker bg-info rounded-circle me-3"
+                                    style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fa fa-info text-white"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">4. État après signature client</h6>
+                                    <p class="text-muted small mb-2">Vérification du changement de statut du contrat</p>
+                                    <span class="badge bg-warning">{{ testResults.after_client_signature.contract_status
+                                        }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {# Step 5: Admin Keypair #}
+                        {% if testResults.admin_keypair is defined %}
+                        <div class="timeline-item mb-4">
+                            <div class="d-flex align-items-start">
+                                <div class="timeline-marker {% if testResults.admin_keypair.success %}bg-success{% else %}bg-danger{% endif %} rounded-circle me-3"
+                                    style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                                    <i
+                                        class="fa {% if testResults.admin_keypair.success %}fa-check{% else %}fa-times{% endif %} text-white"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">5. Génération Clés Admin</h6>
+                                    <p class="text-muted small mb-2">Génération de la paire de clés RSA 2048 bits pour
+                                        l'admin</p>
+                                    <span class="badge bg-success">Clés générées</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {# Step 6: Admin Signature #}
+                        {% if testResults.admin_signature is defined %}
+                        <div class="timeline-item mb-4">
+                            <div class="d-flex align-items-start">
+                                <div class="timeline-marker {% if testResults.admin_signature.success %}bg-success{% else %}bg-danger{% endif %} rounded-circle me-3"
+                                    style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                                    <i
+                                        class="fa {% if testResults.admin_signature.success %}fa-check{% else %}fa-times{% endif %} text-white"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">6. Signature Admin</h6>
+                                    <p class="text-muted small mb-2">Création et enregistrement de la signature de
+                                        l'administrateur</p>
+                                    <div class="bg-light p-2 rounded">
+                                        <small>
+                                            <strong>ID Signature:</strong> {{ testResults.admin_signature.signature_id
+                                            }}<br>
+                                            <strong>Signé le:</strong> {{ testResults.admin_signature.signed_at }}<br>
+                                            <strong>Horodatage TSA:</strong>
+                                            {% if testResults.admin_signature.has_timestamp %}
+                                            <span class="text-success">Oui</span>
+                                            {% else %}
+                                            <span class="text-warning">Non</span>
+                                            {% endif %}
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {# Step 7: After Admin Signature #}
+                        {% if testResults.after_admin_signature is defined %}
+                        <div class="timeline-item mb-4">
+                            <div class="d-flex align-items-start">
+                                <div class="timeline-marker {% if testResults.after_admin_signature.is_fully_signed %}bg-success{% else %}bg-warning{% endif %} rounded-circle me-3"
+                                    style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                                    <i
+                                        class="fa {% if testResults.after_admin_signature.is_fully_signed %}fa-check{% else %}fa-clock{% endif %} text-white"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">7. État Final</h6>
+                                    <p class="text-muted small mb-2">Vérification du statut final du contrat</p>
+                                    {% if testResults.after_admin_signature.is_fully_signed %}
+                                    <span class="badge bg-success">Entièrement signé ✓</span>
+                                    {% else %}
+                                    <span class="badge bg-warning">{{ testResults.after_admin_signature.contract_status
+                                        }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {# Step 8: Verification #}
+                        {% if testResults.verification is defined %}
+                        <div class="timeline-item">
+                            <div class="d-flex align-items-start">
+                                <div class="timeline-marker {% if testResults.verification.all_valid %}bg-success{% else %}bg-danger{% endif %} rounded-circle me-3"
+                                    style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                                    <i
+                                        class="fa {% if testResults.verification.all_valid %}fa-shield-alt{% else %}fa-exclamation-triangle{% endif %} text-white"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">8. Vérification Cryptographique</h6>
+                                    <p class="text-muted small mb-2">Validation de toutes les signatures</p>
+                                    <div class="bg-light p-2 rounded">
+                                        <small>
+                                            <strong>Toutes valides:</strong>
+                                            {% if testResults.verification.all_valid %}
+                                            <span class="text-success">Oui ✓</span>
+                                            {% else %}
+                                            <span class="text-danger">Non ✗</span>
+                                            {% endif %}<br>
+                                            <strong>Nombre de signatures:</strong> {{
+                                            testResults.verification.signature_count }}<br>
+                                            {% for detail in testResults.verification.details %}
+                                            <span
+                                                class="badge {% if detail.valid %}bg-success{% else %}bg-danger{% endif %} me-1">
+                                                {{ detail.type }}: {% if detail.valid %}✓{% else %}✗{% endif %}
+                                            </span>
+                                            {% endfor %}
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Actions #}
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex gap-2">
+                <a href="{{ path('test_signature_flow') }}" class="btn btn-secondary">
+                    <i class="fa fa-arrow-left me-1"></i> Retour
+                </a>
+                {% if contract %}
+                <a href="{{ path('test_verify_contract', {id: contract.id}) }}" class="btn btn-info">
+                    <i class="fa fa-search me-1"></i> Voir Vérification Détaillée
+                </a>
+                <form action="{{ path('test_signature_cleanup', {id: contract.id}) }}" method="POST" class="d-inline"
+                    onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce contrat de test ?');">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fa fa-trash me-1"></i> Supprimer le Contrat de Test
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+
+    .card-header {
+        border-radius: 8px 8px 0 0 !important;
+    }
+
+    .timeline-marker {
+        flex-shrink: 0;
+    }
+
+    code {
+        background: #f8f9fa;
+        padding: 2px 4px;
+        border-radius: 3px;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,397 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Signature System Test{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="mb-3">
+                <i class="fa fa-pen-nib me-2"></i>
+                Test du Système de Signature Électronique
+            </h1>
+            <p class="text-muted">Cette interface permet de tester tous les composants du système de signature
+                électronique.</p>
+        </div>
+    </div>
+
+    {# Status Overview #}
+    <div class="row mb-4">
+        <div class="col-12">
+            <div
+                class="card {% if results.status is defined and results.status == 'success' %}border-success{% elseif results.status is defined and results.status == 'error' %}border-danger{% else %}border-warning{% endif %}">
+                <div
+                    class="card-header {% if results.status is defined and results.status == 'success' %}bg-success text-white{% elseif results.status is defined and results.status == 'error' %}bg-danger text-white{% else %}bg-warning{% endif %}">
+                    <h4 class="mb-0">
+                        {% if results.status is defined and results.status == 'success' %}
+                        <i class="fa fa-check-circle me-2"></i> Système Opérationnel
+                        {% elseif results.status is defined and results.status == 'error' %}
+                        <i class="fa fa-times-circle me-2"></i> Erreur Détectée
+                        {% else %}
+                        <i class="fa fa-info-circle me-2"></i> Test Partiel
+                        {% endif %}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    {% if results.message is defined %}
+                    <p class="mb-0">{{ results.message }}</p>
+                    {% endif %}
+                    {% if results.error is defined and results.error %}
+                    <div class="alert alert-danger mt-3 mb-0">
+                        <strong>Erreur:</strong> {{ results.error }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Component Tests #}
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fa fa-cogs me-2"></i>Tests des Composants</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover mb-0">
+                        <tbody>
+                            <tr>
+                                <td><i class="fa fa-database me-2"></i>Entités Doctrine</td>
+                                <td class="text-end">
+                                    {% if results.entities_created %}
+                                    <span class="badge bg-success"><i class="fa fa-check"></i> OK</span>
+                                    {% else %}
+                                    <span class="badge bg-danger"><i class="fa fa-times"></i> Échec</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa fa-server me-2"></i>Service de Signature</td>
+                                <td class="text-end">
+                                    {% if results.signature_service_working %}
+                                    <span class="badge bg-success"><i class="fa fa-check"></i> OK</span>
+                                    {% else %}
+                                    <span class="badge bg-danger"><i class="fa fa-times"></i> Échec</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa fa-key me-2"></i>Génération de Clés RSA</td>
+                                <td class="text-end">
+                                    {% if results.key_generation %}
+                                    <span class="badge bg-success"><i class="fa fa-check"></i> OK</span>
+                                    {% else %}
+                                    <span class="badge bg-danger"><i class="fa fa-times"></i> Échec</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa fa-hashtag me-2"></i>Génération Hash SHA-256</td>
+                                <td class="text-end">
+                                    {% if results.hash_generation %}
+                                    <span class="badge bg-success"><i class="fa fa-check"></i> OK</span>
+                                    {% else %}
+                                    <span class="badge bg-danger"><i class="fa fa-times"></i> Échec</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa fa-pen me-2"></i>Création de Signature</td>
+                                <td class="text-end">
+                                    {% if results.signature_creation %}
+                                    <span class="badge bg-success"><i class="fa fa-check"></i> OK</span>
+                                    {% else %}
+                                    <span class="badge bg-danger"><i class="fa fa-times"></i> Échec</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa fa-check-double me-2"></i>Vérification de Signature</td>
+                                <td class="text-end">
+                                    {% if results.signature_verification %}
+                                    <span class="badge bg-success"><i class="fa fa-check"></i> OK</span>
+                                    {% else %}
+                                    <span class="badge bg-danger"><i class="fa fa-times"></i> Échec</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa fa-clock me-2"></i>Service TSA (Horodatage)</td>
+                                <td class="text-end">
+                                    {% if results.tsa_service %}
+                                    <span class="badge bg-success"><i class="fa fa-check"></i> OK</span>
+                                    {% else %}
+                                    <span class="badge bg-danger"><i class="fa fa-times"></i> Échec</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fa fa-info-circle me-2"></i>Détails Techniques</h5>
+                </div>
+                <div class="card-body">
+                    {% if detailedResults is defined and detailedResults|length > 0 %}
+                    <div class="accordion" id="detailsAccordion">
+                        {% if detailedResults.key_generation is defined %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#keyDetails">
+                                    <i class="fa fa-key me-2"></i>Clés RSA
+                                </button>
+                            </h2>
+                            <div id="keyDetails" class="accordion-collapse collapse" data-bs-parent="#detailsAccordion">
+                                <div class="accordion-body">
+                                    <small>
+                                        <strong>Clé privée:</strong> {{
+                                        detailedResults.key_generation.private_key_length }} caractères<br>
+                                        <strong>Clé publique:</strong> {{
+                                        detailedResults.key_generation.public_key_length }} caractères<br>
+                                        <code class="d-block mt-2"
+                                            style="font-size: 10px; word-break: break-all;">{{ detailedResults.key_generation.public_key_preview }}</code>
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if detailedResults.hash_generation is defined %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#hashDetails">
+                                    <i class="fa fa-hashtag me-2"></i>Hash SHA-256
+                                </button>
+                            </h2>
+                            <div id="hashDetails" class="accordion-collapse collapse"
+                                data-bs-parent="#detailsAccordion">
+                                <div class="accordion-body">
+                                    <small>
+                                        <strong>Taille du contenu:</strong> {{
+                                        detailedResults.hash_generation.content_length }} caractères<br>
+                                        <strong>Hash ({{ detailedResults.hash_generation.hash_length }}
+                                            car):</strong><br>
+                                        <code class="d-block mt-1"
+                                            style="font-size: 11px; word-break: break-all;">{{ detailedResults.hash_generation.hash }}</code>
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if detailedResults.signature_creation is defined %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#signatureDetails">
+                                    <i class="fa fa-pen me-2"></i>Signature
+                                </button>
+                            </h2>
+                            <div id="signatureDetails" class="accordion-collapse collapse"
+                                data-bs-parent="#detailsAccordion">
+                                <div class="accordion-body">
+                                    <small>
+                                        <strong>Taille:</strong> {{ detailedResults.signature_creation.signature_length
+                                        }} caractères<br>
+                                        <code class="d-block mt-1"
+                                            style="font-size: 10px; word-break: break-all;">{{ detailedResults.signature_creation.signature_preview }}</code>
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if detailedResults.signature_verification is defined %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#verificationDetails">
+                                    <i class="fa fa-check-double me-2"></i>Vérification
+                                </button>
+                            </h2>
+                            <div id="verificationDetails" class="accordion-collapse collapse"
+                                data-bs-parent="#detailsAccordion">
+                                <div class="accordion-body">
+                                    <small>
+                                        <strong>Signature originale valide:</strong>
+                                        {% if detailedResults.signature_verification.original_valid %}
+                                        <span class="text-success">Oui</span>
+                                        {% else %}
+                                        <span class="text-danger">Non</span>
+                                        {% endif %}<br>
+                                        <strong>Détection de falsification:</strong>
+                                        {% if detailedResults.signature_verification.tampered_test %}
+                                        <span class="text-success">Fonctionne</span>
+                                        {% else %}
+                                        <span class="text-danger">Échec</span>
+                                        {% endif %}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if detailedResults.tsa_service is defined %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#tsaDetails">
+                                    <i class="fa fa-clock me-2"></i>Horodatage TSA
+                                </button>
+                            </h2>
+                            <div id="tsaDetails" class="accordion-collapse collapse" data-bs-parent="#detailsAccordion">
+                                <div class="accordion-body">
+                                    <small>
+                                        <strong>URL TSA:</strong> {{ detailedResults.tsa_service.tsa_url }}<br>
+                                        <strong>Taille du token:</strong> {{ detailedResults.tsa_service.token_length }}
+                                        caractères<br>
+                                        <strong>Vérification:</strong>
+                                        {% if detailedResults.tsa_service.verification_passed %}
+                                        <span class="text-success">Passée</span>
+                                        {% else %}
+                                        <span class="text-danger">Échouée</span>
+                                        {% endif %}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% else %}
+                    <p class="text-muted mb-0">Aucun détail disponible.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Full Test with Reservation #}
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fa fa-play-circle me-2"></i>Test Complet avec Réservation</h5>
+                </div>
+                <div class="card-body">
+                    <p class="mb-3">Sélectionnez une réservation pour tester le flux complet de signature (client +
+                        admin) :</p>
+
+                    {% if reservations|length > 0 %}
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Référence</th>
+                                    <th>Client</th>
+                                    <th>Véhicule</th>
+                                    <th>Période</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for reservation in reservations %}
+                                <tr>
+                                    <td>{{ reservation.id }}</td>
+                                    <td>{{ reservation.reference ?? 'N/A' }}</td>
+                                    <td>{{ reservation.client ? reservation.client.mail : 'N/A' }}</td>
+                                    <td>{{ reservation.vehicule ? reservation.vehicule.immatriculation : 'N/A' }}</td>
+                                    <td>
+                                        {% if reservation.dateDebut and reservation.dateFin %}
+                                        {{ reservation.dateDebut|date('d/m/Y') }} - {{ reservation.dateFin|date('d/m/Y')
+                                        }}
+                                        {% else %}
+                                        N/A
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{{ path('test_signature_full', {id: reservation.id}) }}"
+                                            class="btn btn-sm btn-primary">
+                                            <i class="fa fa-play me-1"></i> Tester
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-warning mb-0">
+                        <i class="fa fa-exclamation-triangle me-2"></i>
+                        Aucune réservation disponible pour le test. Veuillez d'abord créer une réservation.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# System Overview #}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0"><i class="fa fa-book me-2"></i>Aperçu du Système</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6><i class="fa fa-shield-alt me-2"></i>Caractéristiques de Sécurité</h6>
+                            <ul class="list-unstyled">
+                                <li><i class="fa fa-check text-success me-2"></i>Chiffrement RSA 2048 bits</li>
+                                <li><i class="fa fa-check text-success me-2"></i>Hachage SHA-256 pour l'intégrité</li>
+                                <li><i class="fa fa-check text-success me-2"></i>Intégration TSA pour l'horodatage</li>
+                                <li><i class="fa fa-check text-success me-2"></i>Signatures client et admin séparées
+                                </li>
+                                <li><i class="fa fa-check text-success me-2"></i>Journalisation IP et User-Agent</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="fa fa-gavel me-2"></i>Conformité Légale</h6>
+                            <ul class="list-unstyled">
+                                <li><i class="fa fa-check text-success me-2"></i>Conforme eIDAS (AdES)</li>
+                                <li><i class="fa fa-check text-success me-2"></i>Non-répudiation cryptographique</li>
+                                <li><i class="fa fa-check text-success me-2"></i>Preuve de date et heure</li>
+                                <li><i class="fa fa-check text-success me-2"></i>Vérification d'intégrité</li>
+                                <li><i class="fa fa-check text-success me-2"></i>Audit trail complet</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+
+    .card-header {
+        border-radius: 8px 8px 0 0 !important;
+    }
+
+    .accordion-button:not(.collapsed) {
+        background-color: #e7f3ff;
+        color: #0c63e4;
+    }
+
+    .table th {
+        white-space: nowrap;
+    }
+
+    .badge {
+        font-size: 12px;
+    }
+</style>
+{% endblock %}
