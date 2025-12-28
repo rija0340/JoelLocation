@@ -344,7 +344,27 @@
 					</tr>
 					<tr class="bg-danger text-white">
 						<td class="p-5">Total TTC</td>
-						<td class="text-right p-5">{{ (prixTotalTTC)|number_format(2,","," ")  }}</td>
+						<td class="text-right p-5">{{ (prixTotalTTC)|number_format(2,","," ") }}€</td>
+					</tr>
+					{% for paiement in reservation.paiements %}
+						<tr class="bg-pink">
+							<td class="p-5">Paiement par
+								{{ paiement.modePaiement.libelle }}
+								<br>
+								le
+								{{ paiement.datePaiement|date('d/m/Y') }}
+							</td>
+							<td class="text-right p-5">
+								{{ paiement.montant|number_format(2,","," ") }}
+								€
+							</td>
+						</tr>
+					{% endfor %}
+					<tr class="bg-danger text-white">
+						<td class="p-5">Reste à payer</td>
+						<td class="text-right p-5">
+							{{ ((prixTotalTTC) - reservation.sommePaiements)|number_format(2,","," ") }}€
+						</td>
 					</tr>
 				</table>
 			</div>
