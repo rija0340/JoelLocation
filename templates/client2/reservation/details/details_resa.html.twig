@@ -15,14 +15,140 @@
       {% include 'client2/reservation/details/parts/_client_info.html.twig' with {'reservation': reservation} %}
     </div>
     <div class="md:w-2/3 space-y-6">
-      {% include 'client2/reservation/details/parts/_rental_period.html.twig' with {'reservation': reservation, 'type': type} %}
+      {% include 'client2/reservation/details/parts/_rental_period.html.twig' with {'reservation': reservation, 'type':
+      type} %}
       {% if type != 'devis' %}
-        {% include 'client2/reservation/details/parts/_conductors.html.twig' with {'reservation': reservation} %}
+      {% include 'client2/reservation/details/parts/_conductors.html.twig' with {'reservation': reservation} %}
       {% endif %}
-      {% include 'client2/reservation/details/parts/_options_garanties.html.twig' with {'reservation': reservation, 'prixConductSuppl': prixConductSuppl} %}
-      {% include 'client2/reservation/details/parts/_payment_summary.html.twig' with {'reservation': reservation, 'type': type} %}
+      {% include 'client2/reservation/details/parts/_options_garanties.html.twig' with {'reservation': reservation,
+      'prixConductSuppl': prixConductSuppl} %}
+      {% include 'client2/reservation/details/parts/_payment_summary.html.twig' with {'reservation': reservation,
+      'type': type} %}
+      <!-- Signature Section -->
+      <div id="section-signature" class="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
+        <h2 class="text-xl font-bold text-joel-dark mb-4 border-b border-gray-100 pb-2">
+          <i class="fas fa-file-signature text-joel-red mr-2"></i>Contrat & Signatures
+        </h2>
 
+        {% set latestContract = reservation.contracts|last %}
+
+        {% if not latestContract or not latestContract.isSignedByClient %}
+        <div class="text-center py-4">
+          <p class="text-gray-600 mb-4">Votre contrat est prêt à être signé.</p>
+          <a href="{{ path('contract_sign_client_reservation', {'id': reservation.id}) }}"
+            class="inline-block bg-blue-600 hover:bg-blue-700 font-bold px-6 py-3 rounded-lg text-lg transition-colors duration-200 shadow-md transform hover:scale-105">
+            <i class="fas fa-pen-nib mr-2"></i>Signer le contrat électronique
+          </a>
+        </div>
+        {% else %}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Client Signature -->
+          <div class="border border-blue-500 rounded-lg overflow-hidden">
+            <div class="bg-blue-500 text-white p-3 font-bold flex items-center">
+              <i class="fas fa-user mr-2"></i>Signature Client
+            </div>
+            <div class="p-4 bg-white">
+              {% if latestContract.isSignedByClient %}
+              {% set clientSig = latestContract.signatures|filter(s => s.signatureType == 'client')|first %}
+              {% if clientSig %}
+              <div class="space-y-3 text-sm">
+                <p><span class="font-semibold text-gray-600">Date de signature:</span> {{ clientSig.signedAt|date('d/m/Y
+                  H:i:s') }}</p>
+                <p><span class="font-semibold text-gray-600">Adresse IP:</span> {{ clientSig.ipAddress }}</p>
+
+                <div class="flex items-center space-x-4">
+                  <p class="flex items-center">
+                    <span class="font-semibold text-gray-600 mr-2">Validité:</span>
+                    {% if clientSig.signatureValid %}
+                    <span class="text-green-600 font-medium"><i class="fas fa-check"></i> Valide</span>
+                    {% else %}
+                    <span class="text-red-600 font-medium"><i class="fas fa-times"></i> Non valide</span>
+                    {% endif %}
+                  </p>
+                </div>
+
+                {% if clientSig.timestampToken %}
+                <p class="flex items-center">
+                  <span class="font-semibold text-gray-600 mr-2">Horodatage certifié:</span>
+                  <span class="text-green-600 font-medium"><i class="fas fa-check-circle"></i> Oui</span>
+                </p>
+                {% endif %}
+
+                {% if clientSig.signatureImage %}
+                <div class="mt-2">
+                  <p class="font-semibold text-gray-600 mb-1">Signature visuelle:</p>
+                  <div class="border p-2 bg-white inline-block rounded">
+                    <img src="{{ clientSig.signatureImage }}" alt="Signature Client" class="h-20 w-auto object-contain">
+                  </div>
+                </div>
+                {% endif %}
+              </div>
+              {% endif %}
+              {% else %}
+              <p class="text-gray-500 italic text-center py-4">En attente de signature...</p>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Admin Signature -->
+          <div class="border border-green-500 rounded-lg overflow-hidden">
+            <div class="bg-green-500 text-white p-3 font-bold flex items-center">
+              <i class="fas fa-building mr-2"></i>Signature Administrateur
+            </div>
+            <div class="p-4 bg-white">
+              {% if latestContract.isSignedByAdmin %}
+              {% set adminSig = latestContract.signatures|filter(s => s.signatureType == 'admin')|first %}
+              {% if adminSig %}
+              <div class="space-y-3 text-sm">
+                <p><span class="font-semibold text-gray-600">Date de signature:</span> {{ adminSig.signedAt|date('d/m/Y
+                  H:i:s') }}</p>
+                <p><span class="font-semibold text-gray-600">Adresse IP:</span> {{ adminSig.ipAddress }}</p>
+
+                <div class="flex items-center space-x-4">
+                  <p class="flex items-center">
+                    <span class="font-semibold text-gray-600 mr-2">Validité:</span>
+                    {% if adminSig.signatureValid %}
+                    <span class="text-green-600 font-medium"><i class="fas fa-check"></i> Valide</span>
+                    {% else %}
+                    <span class="text-red-600 font-medium"><i class="fas fa-times"></i> Non valide</span>
+                    {% endif %}
+                  </p>
+                </div>
+
+                {% if adminSig.timestampToken %}
+                <p class="flex items-center">
+                  <span class="font-semibold text-gray-600 mr-2">Horodatage certifié:</span>
+                  <span class="text-green-600 font-medium"><i class="fas fa-check-circle"></i> Oui</span>
+                </p>
+                {% endif %}
+
+                {% if adminSig.signatureImage %}
+                <div class="mt-2">
+                  <p class="font-semibold text-gray-600 mb-1">Signature visuelle:</p>
+                  <div class="border p-2 bg-white inline-block rounded">
+                    <img src="{{ adminSig.signatureImage }}" alt="Signature Agence" class="h-20 w-auto object-contain">
+                  </div>
+                </div>
+                {% endif %}
+              </div>
+              {% endif %}
+              {% else %}
+              <p class="text-gray-500 italic text-center py-4">En attente de signature...</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 text-center">
+          <a href="{{ path('contract_sign_client_reservation', {'id': reservation.id}) }}"
+            class="text-blue-600 hover:text-blue-800 underline text-sm">
+            Consulter le contrat signé
+          </a>
+        </div>
+        {% endif %}
+      </div>
     </div>
+
   </div>
   {% include 'client2/reservation/details/parts/_modal_conducteur.html.twig' with {'reservation': reservation} %}
 </div>

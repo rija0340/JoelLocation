@@ -45,6 +45,18 @@ class ContractController extends AbstractController
             throw $this->createNotFoundException('Réservation introuvable');
         }
 
+        // Check if the current user is authenticated and is the client of this reservation
+        if (!$this->isGranted('ROLE_CLIENT')) {
+            // Redirect to login if not authenticated
+            return $this->redirectToRoute('app_login');
+        }
+
+        $user = $this->getUser();
+        if ($user !== $reservation->getClient()) {
+            // If the logged-in user is not the client of this reservation, deny access
+            throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à signer ce contrat.');
+        }
+
         // Get or create the contract automatically
         $contract = $this->contractService->getOrCreateContract($reservation);
 
@@ -71,7 +83,7 @@ class ContractController extends AbstractController
     }
 
     /**
-     * @Route("/sign/{id}", name="contract_sign_client", methods={"GET"})
+     * @Route("/espaceclient/sign/{id}", name="contract_sign_client", methods={"GET"})
      */
     public function signClient(int $id): Response
     {
@@ -79,6 +91,18 @@ class ContractController extends AbstractController
 
         if (!$contract) {
             throw $this->createNotFoundException('Contrat introuvable');
+        }
+
+        // Check if the current user is authenticated and is the client of this reservation
+        if (!$this->isGranted('ROLE_CLIENT')) {
+            // Redirect to login if not authenticated
+            return $this->redirectToRoute('app_login');
+        }
+
+        $user = $this->getUser();
+        if ($user !== $contract->getReservation()->getClient()) {
+            // If the logged-in user is not the client of this reservation, deny access
+            throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à signer ce contrat.');
         }
 
         $isPaid = $this->contractService->isReservationPaid($contract->getReservation());
@@ -90,13 +114,25 @@ class ContractController extends AbstractController
     }
 
     /**
-     * @Route("/sign/{id}/process", name="contract_sign_client_process", methods={"POST"})
+     * @Route("/espaceclient/sign/{id}/process", name="contract_sign_client_process", methods={"POST"})
      */
     public function processClientSignature(Request $request, int $id): Response
     {
         $contract = $this->contractRepository->find($id);
         if (!$contract) {
             throw $this->createNotFoundException('Contrat introuvable');
+        }
+
+        // Check if the current user is authenticated and is the client of this reservation
+        if (!$this->isGranted('ROLE_CLIENT')) {
+            // Redirect to login if not authenticated
+            return $this->redirectToRoute('app_login');
+        }
+
+        $user = $this->getUser();
+        if ($user !== $contract->getReservation()->getClient()) {
+            // If the logged-in user is not the client of this reservation, deny access
+            throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à signer ce contrat.');
         }
 
         $signatureImage = $request->request->get('signature_data');
@@ -119,7 +155,7 @@ class ContractController extends AbstractController
             // Process the signature
             // Note: We store the visual signature (base64 image) in the 'signatureData' field for now,
             // but ideally we should separate visual representation from cryptographic data.
-            // For this implementation, we'll store the crypto signature as the main data, 
+            // For this implementation, we'll store the crypto signature as the main data,
             // and we might want to store the image separately or encoded.
             // Let's store the crypto signature for security, but we acknowledge the visual one was provided.
 
@@ -134,7 +170,7 @@ class ContractController extends AbstractController
             );
 
             $this->addFlash('success', 'Contrat signé avec succès !');
-            return $this->redirectToRoute('contract_sign_client', ['id' => $id]);
+            return $this->redirectToRoute('client_reservation_show', ['id' => $contract->getReservation()->getId()]);
 
         } catch (\Exception $e) {
             $this->addFlash('error', 'Erreur lors de la signature : ' . $e->getMessage());
@@ -193,7 +229,10 @@ class ContractController extends AbstractController
             );
 
             $this->addFlash('success', 'Contrat validé par l\'administrateur !');
-            return $this->redirectToRoute('contract_sign_admin', ['id' => $id]);
+            // Redirect to reservation details with anchor to signature section
+            return $this->redirectToRoute('reservation_show', [
+                'id' => $contract->getReservation()->getId()
+            ]);
 
         } catch (\Exception $e) {
             $this->addFlash('error', 'Erreur lors de la validation : ' . $e->getMessage());

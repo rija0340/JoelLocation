@@ -5,977 +5,1115 @@
 
 
 {% block stylesheets %}
-	<!-- Datatables -->
-	<link href="{{ asset('admin/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet">
-	<link href="{{ asset('admin/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css') }}" rel="stylesheet">
-	<link href="{{ asset('admin/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css') }}" rel="stylesheet">
-	<link href="{{ asset('admin/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css') }}" rel="stylesheet">
-	<link
-	href="{{ asset('admin/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css') }}" rel="stylesheet">
-	<!-- Font Awesome -->
-	<link href="{{ asset('admin/vendors/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
-	<link href="{{ asset('css/admin/detail.css') }}" rel="stylesheet">
+<!-- Datatables -->
+<link href="{{ asset('admin/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet">
+<link href="{{ asset('admin/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css') }}" rel="stylesheet">
+<link href="{{ asset('admin/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css') }}"
+	rel="stylesheet">
+<link href="{{ asset('admin/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css') }}"
+	rel="stylesheet">
+<link href="{{ asset('admin/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css') }}" rel="stylesheet">
+<!-- Font Awesome -->
+<link href="{{ asset('admin/vendors/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
+<link href="{{ asset('css/admin/detail.css') }}" rel="stylesheet">
 
 
-	<style>
-		.photo-drop-zone {
-			border: 3px dashed #dee2e6;
-			border-radius: 15px;
-			padding: 60px 20px;
-			text-align: center;
-			background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-			cursor: pointer;
-			transition: all 0.3s ease;
-			min-height: 200px;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-		}
+<style>
+	.photo-drop-zone {
+		border: 3px dashed #dee2e6;
+		border-radius: 15px;
+		padding: 60px 20px;
+		text-align: center;
+		background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+		cursor: pointer;
+		transition: all 0.3s ease;
+		min-height: 200px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
 
-		.photo-drop-zone:hover,
-		.photo-drop-zone.dragover {
-			border-color: #007bff;
-			background: linear-gradient(135deg, #e7f3ff 0%, #cce7ff 100%);
-			transform: translateY(-2px);
-			box-shadow: 0 8px 25px rgba(0, 123, 255, 0.15);
-		}
+	.photo-drop-zone:hover,
+	.photo-drop-zone.dragover {
+		border-color: #007bff;
+		background: linear-gradient(135deg, #e7f3ff 0%, #cce7ff 100%);
+		transform: translateY(-2px);
+		box-shadow: 0 8px 25px rgba(0, 123, 255, 0.15);
+	}
 
-		.drop-zone-content {
-			color: #6c757d;
-		}
+	.drop-zone-content {
+		color: #6c757d;
+	}
 
-		.photo-card {
-			transition: all 0.3s ease;
-			border: none;
-			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-			border-radius: 15px;
-			overflow: hidden;
-		}
+	.photo-card {
+		transition: all 0.3s ease;
+		border: none;
+		box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+		border-radius: 15px;
+		overflow: hidden;
+	}
 
-		.photo-card:hover {
-			transform: translateY(-5px);
-			box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-		}
+	.photo-card:hover {
+		transform: translateY(-5px);
+		box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+	}
 
-		.photo-wrapper {
-			position: relative;
-			overflow: hidden;
-			background: #f8f9fa;
-		}
+	.photo-wrapper {
+		position: relative;
+		overflow: hidden;
+		background: #f8f9fa;
+	}
 
+	.photo-thumbnail {
+		width: 100%;
+		height: 200px;
+		object-fit: cover;
+		transition: transform 0.3s ease;
+	}
+
+	.photo-card:hover .photo-thumbnail {
+		transform: scale(1.05);
+	}
+
+	.photo-overlay {
+		top: 0;
+		left: 0;
+		background: rgba(0, 0, 0, 0.8);
+		opacity: 0;
+		transition: opacity 0.3s ease;
+	}
+
+	.photo-card:hover .photo-overlay {
+		opacity: 1;
+	}
+
+	.btn-delete {
+		--bs-btn-hover-bg: #dc3545;
+		--bs-btn-hover-border-color: #dc3545;
+	}
+
+	.progress {
+		border-radius: 10px;
+		overflow: hidden;
+	}
+
+	.alert {
+		border-radius: 10px;
+		border: none;
+		box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+	}
+
+	/* Modal customization */
+	.modal-content.photo {
+		background: rgba(0, 0, 0, 0.9) !important;
+	}
+
+	.btn-close-white {
+		background: transparent url("data:image/svg+xml, %3csvg xmlns='http://www.w3.org / 2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath d='m.94 8.56 5.66 5.66L8 12.82l-5.66-5.66L8 1.5l1.4 1.4L3.74 8.56l5.66 5.66L8 15.62l-5.66-5.66L8 4.3l1.4 1.4L3.74 11.36z'/%3e%3c/svg%3e") center/1em auto no-repeat;
+		border: 2px solid rgba(255, 255, 255, 0.3);
+		border-radius: 50%;
+		width: 40px;
+		height: 40px;
+		transition: all 0.3s ease;
+	}
+
+	.btn-close-white:hover {
+		background-color: rgba(255, 255, 255, 0.1);
+		border-color: rgba(255, 255, 255, 0.5);
+	}
+
+	@media(max-width: 768px) {
 		.photo-thumbnail {
-			width: 100%;
-			height: 200px;
-			object-fit: cover;
-			transition: transform 0.3s ease;
+			height: 150px;
 		}
 
-		.photo-card:hover .photo-thumbnail {
-			transform: scale(1.05);
+		.photo-drop-zone {
+			padding: 40px 15px;
+			min-height: 150px;
 		}
+	}
 
-		.photo-overlay {
-			top: 0;
-			left: 0;
-			background: rgba(0, 0, 0, 0.8);
-			opacity: 0;
-			transition: opacity 0.3s ease;
+	@media(max-width: 576px) {
+		.photo-thumbnail {
+			height: 120px;
 		}
-
-		.photo-card:hover .photo-overlay {
-			opacity: 1;
-		}
-
-		.btn-delete {
-			--bs-btn-hover-bg: #dc3545;
-			--bs-btn-hover-border-color: #dc3545;
-		}
-
-		.progress {
-			border-radius: 10px;
-			overflow: hidden;
-		}
-
-		.alert {
-			border-radius: 10px;
-			border: none;
-			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-		}
-
-		/* Modal customization */
-		.modal-content.photo {
-			background: rgba(0, 0, 0, 0.9) !important;
-		}
-
-		.btn-close-white {
-			background: transparent url("data:image/svg+xml, %3csvg xmlns='http://www.w3.org / 2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath d='m.94 8.56 5.66 5.66L8 12.82l-5.66-5.66L8 1.5l1.4 1.4L3.74 8.56l5.66 5.66L8 15.62l-5.66-5.66L8 4.3l1.4 1.4L3.74 11.36z'/%3e%3c/svg%3e") center/1em auto no-repeat;
-			border: 2px solid rgba(255, 255, 255, 0.3);
-			border-radius: 50%;
-			width: 40px;
-			height: 40px;
-			transition: all 0.3s ease;
-		}
-
-		.btn-close-white:hover {
-			background-color: rgba(255, 255, 255, 0.1);
-			border-color: rgba(255, 255, 255, 0.5);
-		}
-
-		@media(max-width: 768px) {
-			.photo-thumbnail {
-				height: 150px;
-			}
-
-			.photo-drop-zone {
-				padding: 40px 15px;
-				min-height: 150px;
-			}
-		}
-
-		@media(max-width: 576px) {
-			.photo-thumbnail {
-				height: 120px;
-			}
-		}
-	</style>
+	}
+</style>
 
 
 {% endblock %}
 
 {% block current_page %}
-	<div class="text-info">
-		<i class="fa fa-folder-open"></i>
-		Détails de la réservation -
-		<br>
-		<span>{{ reservation.reference }}</span>
-	</div>
+<div class="text-info">
+	<i class="fa fa-folder-open"></i>
+	Détails de la réservation -
+	<br>
+	<span>{{ reservation.reference }}</span>
+</div>
 {% endblock %}
 
 {% block current_page_right %}
-	<div class="font-weight-bold">
-		<span class="text-info">
-			<i class="fa fa-dashboard"></i>
-			Tableau de bord
-		</span>
-		> Détail de la réservation
-	</div>
+<div class="font-weight-bold">
+	<span class="text-info">
+		<i class="fa fa-dashboard"></i>
+		Tableau de bord
+	</span>
+	> Détail de la réservation
+</div>
 {% endblock %}
 
 
 {% block content %}
 
-	{# utile pour autocompletion #}
-	<input
-	type="hidden" value="{{ reservation.id }}" id="idReservation">
-	<!-- div contenant extra information utile pour javascript -->
-	<div class="hide">
-		<span class="js-vehCarb">{{ reservation.vehicule.carburation }}</span>
-		<span class="js-vehIM">{{ reservation.vehicule.immatriculation }}</span>
+{# utile pour autocompletion #}
+<input type="hidden" value="{{ reservation.id }}" id="idReservation">
+<!-- div contenant extra information utile pour javascript -->
+<div class="hide">
+	<span class="js-vehCarb">{{ reservation.vehicule.carburation }}</span>
+	<span class="js-vehIM">{{ reservation.vehicule.immatriculation }}</span>
+</div>
+<!-- top tiles -->
+<div class="x_panel">
+
+	<div class="d-flex bd-highlight">
+		<div class="p-2  bd-highlight">
+			<div class="btn-group mb-4">
+				<button type="button" class="btn btn-danger dropdown-toggle text-white font-weight-bold"
+					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					Réservation
+				</button>
+				<div class="dropdown-menu">
+					<a class="dropdown-item" data-toggle="modal" data-target=".modalReportReservation">Reporter la
+						réservation</a>
+					<a class="dropdown-item" href="#">Mail de confirmation</a>
+					{# on ne peut pas annuler si déjà canceled ou terminé #}
+					{# {% if reservation.canceled == false and reservation.dateFin|date('d/m/Y') > "now"|date('d/m/Y')
+					%} #}
+					{% if reservation.canceled == false %}
+					<a class="dropdown-item" data-toggle="modal" data-target=".modalAnnulation">Annuler la
+						réservation</a>
+					{% endif %}
+					<a class="dropdown-item" href="#">Fermer le contrat</a>
+					<a class="dropdown-item" href="{{ path('reservation_archive', {'id':reservation.id}) }}">Archiver la
+						réservation</a>
+				</div>
+			</div>
+		</div>
+		<div class="p-2 w-100 flex-grow text-center bd-highlight">
+			<div class="">
+
+				<h3 class="m-0 text-danger">
+
+					{{ reservation.canceled ? ' <i class="fa fa-warning"></i> Resa annulée' : '' }}</h3>
+			</div>
+		</div>
 	</div>
-	<!-- top tiles -->
-	<div class="x_panel">
 
-		<div class="d-flex bd-highlight">
-			<div class="p-2  bd-highlight">
-				<div class="btn-group mb-4">
-					<button type="button" class="btn btn-danger dropdown-toggle text-white font-weight-bold" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Réservation
-					</button>
-					<div class="dropdown-menu">
-						<a class="dropdown-item" data-toggle="modal" data-target=".modalReportReservation">Reporter la réservation</a>
-						<a class="dropdown-item" href="#">Mail de confirmation</a>
-						{# on ne peut pas annuler si déjà canceled ou terminé #}
-						{# {% if reservation.canceled == false and reservation.dateFin|date('d/m/Y') >  "now"|date('d/m/Y')  %} #}
-						{% if reservation.canceled == false %}
-							<a class="dropdown-item" data-toggle="modal" data-target=".modalAnnulation">Annuler la réservation</a>
-						{% endif %}
-						<a class="dropdown-item" href="#">Fermer le contrat</a>
-						<a class="dropdown-item" href="{{ path('reservation_archive', {'id':reservation.id}) }}">Archiver la réservation</a>
-					</div>
-				</div>
-			</div>
-			<div class="p-2 w-100 flex-grow text-center bd-highlight">
-				<div class="">
+	<div class="x_title mb-0">
+		<h2>
+			<i class="fa fa-chevron-right"></i>INFORMATIONS CLIENT
+		</h2>
+		<div class="clearfix"></div>
+	</div>
+	{# <div class="x_content"></div> #}
+	<div>
+		<button type="button" class="btn btn-outline-dark text-uppercase p-1" data-toggle="modal"
+			data-target=".modalKM">
+			<i class="fa  fa-car"></i>
+			kilometrage
+		</button>
 
-					<h3 class="m-0 text-danger">
+		<a href="{{ path('contrat_pdf', {'hashedId': hashedId}) }}" type="button" id=""
+			class="btn btn-outline-danger text-uppercase p-1">
+			<i class="fa fa-newspaper-o"></i>
+			Générer le contrat</a>
 
-						{{ reservation.canceled ?  ' <i class="fa fa-warning"></i> Resa annulée' : '' }}</h3>
-				</div>
-			</div>
-		</div>
+		<a href="{{ path('envoyer_contrat', {'id': reservation.id}) }}" type="button" id=""
+			class="btn btn-outline-success text-uppercase p-1">
+			<i class="fa fa-newspaper-o"></i>
+			Envoyer le contrat</a>
 
-		<div class="x_title mb-0">
-			<h2>
-				<i class="fa fa-chevron-right"></i>INFORMATIONS CLIENT
-			</h2>
-			<div class="clearfix"></div>
-		</div>
-		{# <div class="x_content"></div> #}
-		<div>
-			<button type="button" class="btn btn-outline-dark text-uppercase p-1" data-toggle="modal" data-target=".modalKM">
-				<i class="fa  fa-car"></i>
-				kilometrage
-			</button>
+		{# <button type="button" class="btn btn-outline-info text-uppercase p-1" id="genererFacturePDF"><i
+				class="fa fa-send (alias)"></i>générer facture</button> #}
 
-			<a href="{{ path('contrat_pdf', {'hashedId': hashedId}) }}" type="button" id="" class="btn btn-outline-danger text-uppercase p-1">
-				<i class="fa fa-newspaper-o"></i>
-				Générer le contrat</a>
+		<a href="{{ path('facture_pdf', {'hashedId': hashedId}) }}" type="button"
+			class="btn btn-outline-info text-uppercase p-1">
+			<i class="fa fa-send (alias)"></i>
+			générer facture</a>
 
-			<a href="{{ path('envoyer_contrat', {'id': reservation.id}) }}" type="button" id="" class="btn btn-outline-success text-uppercase p-1">
-				<i class="fa fa-newspaper-o"></i>
-				Envoyer le contrat</a>
+		<a href="{{ path('envoyer_facture', {'id': reservation.id}) }}" type="button"
+			class="btn btn-outline-secondary text-uppercase p-1">
+			<i class="fa fa-send (alias)"></i>
+			Envoyer facture</a>
 
-			{# <button type="button" class="btn btn-outline-info text-uppercase p-1" id="genererFacturePDF"><i class="fa fa-send (alias)"></i>générer facture</button> #}
-
-			<a href="{{ path('facture_pdf', {'hashedId': hashedId}) }}" type="button" class="btn btn-outline-info text-uppercase p-1">
-				<i class="fa fa-send (alias)"></i>
-				générer facture</a>
-
-			<a href="{{ path('envoyer_facture', {'id': reservation.id}) }}" type="button" class="btn btn-outline-secondary text-uppercase p-1">
-				<i class="fa fa-send (alias)"></i>
-				Envoyer facture</a>
+	</div>
+	<div class="row mt-3">
+		<div class="col-md-2">
+			<img src="{{ vich_uploader_asset(reservation.vehicule, 'imageFile') }}"
+				alt="{{ reservation.vehicule.image }}" class="img-circle  " style="width : 180px;">
 
 		</div>
-		<div class="row mt-3">
-			<div class="col-md-2">
-				<img src="{{ vich_uploader_asset(reservation.vehicule, 'imageFile') }}" alt="{{ reservation.vehicule.image }}" class="img-circle  " style="width : 180px;">
-
-			</div>
-			<div class="col-md-10 info_client">
-				<div class="row">
-					<div class="col-md-4">
-						<span class="label_client">Client :</span>
-						<span class="js-prenom_client">{{ reservation.client.prenom }}
-						</span>
-						<span class="js-nom_client">{{ reservation.client.nom }}</span>
-					</div>
-					<div class="col-md-4">
-						<span class="label_client">Email :</span>
-						<span class="js-email_client">{{ reservation.client.mail }}</span>
-					</div>
-					<div class="col-md-4">
-						<span class="label_client">Téléphone(s):</span>
-						<span class="js-tel_client">{{ reservation.client.telephone }}</span>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-12">
-						<span class="label_client">adresse:</span>
-						<span class="js-adresse_client">{{ reservation.client.adresse }}</span>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-4">
-						<span class="label_client">Référence :</span>
-					</div>
-					<div class="col-md-4">
-						<span class="label_client">Date de création :</span>
-						<span>{{ reservation.dateReservation|date('Y-m-d H:i') }}</span>
-					</div>
-					<div class="col-md-4">
-						<span class="label_client">Catégorie :</span>
-						<span class="js-categorie">{{ reservation.vehicule.marque }}{{ reservation.vehicule.modele }}</span>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-4">
-						<span class="label_client">Véhicule :</span>
-						<span class="js-vehicule">{{ reservation.vehicule }}</span>
-						<span class="js-idVehicule hide">{{ reservation.vehicule.id }}</span>
-					</div>
-
-				</div>
-
-				<div class="row">
-					<div class="col-md-3">
-						<span class="label_client">Km départ :
-
-							{{ reservation.kmDepart }}
-							Km
-						</span>
-					</div>
-					<div class="col-md-3">
-						<span class="label_client">Km retour :
-							{{ reservation.kmRetour }}
-							Km</span>
-					</div>
-					<div class="col-md-3">
-						<span class="label_client">Date mise à jour km :
-							{{ reservation.dateKm ? reservation.dateKm|date('d/m/Y') : "" }}</span>
-					</div>
-					<div class="col-md-3">
-						<span class="label_client">Km saisie par :
-						</span>
-						{% if reservation.saisisseurKm %}
-							{{ reservation.saisisseurKm.nom }}
-						{% endif %}
-					</div>
-				</div>
-				<div class=" text-center">
-					<a type="button" class="btn btn-primary text-nowrap" href="{{ path('reservation_infosClient_edit', {'id': reservation.id}) }}">
-						<i class="fa fa-user mr-1"></i>Modifier les informations</a>
-					<a href="{{ path('reservation_retour_anticipe', {'id' : reservation.id }) }}" type="button" class="btn btn-dark text-nowrap" onclick="return confirm('Voulez-vous continuer l'opération ?')">
-						<i class="fa fa-reply-all mr-1"></i>Retour anticipé</a>
-					<a type="button" class="btn btn-warning text-nowrap" href="{{ path('reservation_edit', {'id': reservation.id} ) }}">
-						<i class=" fa fa-cog"></i>
-						Modifier la réservation</a>
-					<a type="button" class="btn btn-danger text-nowrap" href="{{ path('reservation_optionsGaranties_edit', {'id': reservation.id} ) }}">
-						<i class="fa fa-edit (alias)"></i>
-						Modifier les options & garanties</a>
-					<a href="{{ path('reservation_ident_connex', {'id' : reservation.id }) }}" type="button" class="btn btn-violet text-nowrap">
-						<i class="fa  fa-send-o (alias)"></i>
-						Envoyer les identifians de connexion</a>
-				</div>
-			</div>
-		</div>
-
-		<div class="x_title">
-			<h2>
-				<i class="fa fa-chevron-right"></i>INFORMATIONS CONDUCTEUR(S)
-			</h2>
-			<div class="clearfix"></div>
-		</div>
-		<div class="x_content ">
-			{% if reservation.conducteursClient|length < 2 %}
-				<div class="text-center">
-
-					<a href="{{ path('add_conducteur', {'reservation' : reservation.id}) }}" type="submit" class="btn btn-primary">
-						<i class="fa fa-plus"></i>
-						Ajouter conducteur</a>
-				</div>
-			{% endif %}
-
-			{# conducteurs du client #}
-			{% set i = 1 %}
-			{% for conducteur in reservation.conducteursClient %}
-
-				<div class="x_title">
-					<h4 class="text-danger font-weight-bold mb-0">Conducteur n°
-						{{ i }}</h4>
-				</div>
-				{# <p class="text-success font-weight-bold font-italic">Conducteur principal</p> #}
-				<div class="row info_conducteur">
-					<div class="col-md-2">
-						<span class="">
-							<strong>
-								Nom/Prénom :{{ conducteur.nom }}
-							</strong>
-							{{ conducteur.prenom }}
-						</span>
-					</div>
-					<div class="col-md-2">
-						<span class="">
-							<strong>Permis :
-							</strong>
-							{{ conducteur.numeroPermis }}
-						</span>
-					</div>
-					<div class="col-md-2">
-						<span class="">
-							<strong>Expiration :</strong>
-							{{ conducteur.dateExpiration|date('d/m/Y') }}
-						</span>
-					</div>
-					<div class="col-md-3">
-						<span class="">
-							<strong>Date délivrance :</strong>
-							{{ conducteur.dateDelivrance|date('d/m/Y') }}
-						</span>
-					</div>
-					<div class="col-md-3">
-						<span class="">
-							<strong>Ville délivrance :</strong>
-							{{ conducteur.villeDelivrance }}
-						</span>
-					</div>
-					<div class="col-md-3">
-						<span class="">
-							<strong>Date de naissance :</strong>
-							{{ conducteur.dateNaissance|date('d/m/Y') }}
-						</span>
-					</div>
-					<div class="col-md-3">
-						<span class="">
-							<strong>Ville de naissance :</strong>
-							{{ conducteur.villeNaissance }}
-						</span>
-					</div>
-					<div class="col-md-3">
-						<span class="">
-							<strong>Numéro téléphone :</strong>
-							{{ conducteur.telephone }}
-						</span>
-					</div>
-					<div class="col-md-2">
-						<a class="btn btn-warning" href="{{ path('reservation_conducteur_edit', {'id' : conducteur.id, 'reservation' : reservation.id}) }}">
-							<i class="fa fa-reply"></i>
-						</a>
-						<form method="post" action="{{ path('reservation_conducteur_delete', {'id': conducteur.id, 'reservation' : reservation.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer ce conducteur ?');">
-							<input type="hidden" name="_method" value="DELETE">
-							<input type="hidden" name="reservation" value="{{ reservation.id }}">
-
-							<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ conducteur.id) }}">
-							<button class="btn btn-danger">
-								<i class="fa fa-close (alias)" aria-hidden="true"></i>
-							</button>
-						</form>
-					</div>
-				</div>
-				{% set i = i + 1 %}
-			{% endfor %}
-			{% set i = 1 %}
-
-		</div>
-
-
-		<div class="x_title">
-			<h2>
-				<i class="fa fa-chevron-right"></i>PHOTOS VEHICULE
-			</h2>
-			<div class="clearfix"></div>
-		</div>
-		<div class="x_content">
-			<div class="container-fluid">
-				<div
-					class="reservation-photos-section">
-					<!-- Messages d'upload -->
-					<div class="row">
-						<div class="col-12">
-							<div id="upload-messages"></div>
-						</div>
-					</div>
-
-					<!-- Zone de drag & drop -->
-					<div class="row mb-4">
-						<div class="col-12">
-							<div id="photo-drop-zone" class="photo-drop-zone">
-								<div class="drop-zone-content">
-									<i class="fas fa-cloud-upload-alt fa-3x mb-3 text-primary"></i>
-									<h5 class="mb-2">Glissez-déposez vos photos ici</h5>
-									<p class="mb-2">ou
-										<strong>cliquez pour sélectionner</strong>
-									</p>
-									<small class="text-muted">Formats acceptés : JPG, PNG, GIF (max 1.5MB par photo)</small>
-								</div>
-								<input type="file" id="photo-input" multiple accept="image/*" style="display: none;">
-							</div>
-						</div>
-					</div>
-
-					<!-- Barre de progression -->
-					<div class="row">
-						<div class="col-12">
-							<div id="upload-progress" class="progress mb-4" style="display: none; height: 20px;">
-								<div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 100%">
-									<span class="fw-bold">Upload en cours...</span>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<!-- Container des photos -->
-					<div class="row">
-						<div class="col-12">
-							<div
-								id="photos-container" class="row g-3"><!-- Les photos seront chargées ici via JavaScript -->
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		{# périod de location #}
-		<div class="x_title">
-			<h2>
-				<i class="fa fa-chevron-right"></i>période de location
-			</h2>
-
-			<div class="clearfix"></div>
-		</div>
-		<div class="x_content periode_location">
+		<div class="col-md-10 info_client">
 			<div class="row">
-				<div class="col-md-6">
-					<span class="label_periode">Départ :</span>
-					<br>
-					<span class="js-agenceDepart">{{ reservation.agenceDepart }}
+				<div class="col-md-4">
+					<span class="label_client">Client :</span>
+					<span class="js-prenom_client">{{ reservation.client.prenom }}
 					</span>
-					<br>
-					<span class="js-dateDepart">{{ reservation.dateDebut|date('d-m-Y H:i') }}</span>
+					<span class="js-nom_client">{{ reservation.client.nom }}</span>
 				</div>
-				<div class="col-md-6">
-					<span class="label_periode">Retour :</span>
-					<br>
-					<span class="js-agenceRetour">{{ reservation.agenceRetour }}
-					</span>
-					<br>
-					<span class="js-dateRetour">{{ reservation.dateFin|date('d-m-Y H:i') }}</span>
-
+				<div class="col-md-4">
+					<span class="label_client">Email :</span>
+					<span class="js-email_client">{{ reservation.client.mail }}</span>
 				</div>
-				<div class="col-md-6">
-					<span class="label_periode">
-						Vol arrivée :
-					</span>
-					<br>
-					{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.numVolRetour : "" }}
+				<div class="col-md-4">
+					<span class="label_client">Téléphone(s):</span>
+					<span class="js-tel_client">{{ reservation.client.telephone }}</span>
 				</div>
-				<div class="col-md-6">
-					<strong class="label_periode">Vol retour :</strong>
-					<br>
-					{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.numVolAller : "" }}
-
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<span class="label_client">adresse:</span>
+					<span class="js-adresse_client">{{ reservation.client.adresse }}</span>
 				</div>
-				<div class="col-md-6">
-					<span class="label_periode">Nombre de personne :</span>
-					<br>
-					{% if reservation.client.infosResa %}
-						Adulte(s):
-						{{ reservation.client.infosResa.nbrAdultes }}
-					{% else %}
-						Adulte(s):--
-					{% endif %}
-
-					{% if reservation.client.infosResa %}
-						Enfant(s):
-						{{ reservation.client.infosResa.nbrEnfants }},
-					{% else %}
-						Enfant(s): --
-
-					{% endif %}
-					{% if reservation.client.infosResa %}
-						Bébé(s):
-						{{ reservation.client.infosResa.nbrBebes }}
-					{% else %}
-						Bébé(s): 0,
-					{% endif %}
+			</div>
+			<div class="row">
+				<div class="col-md-4">
+					<span class="label_client">Référence :</span>
 				</div>
-				<div class="col-md-6">
-					<span class="label_periode">Note client :</span>
-					<div class="alert alert-secondary" role="alert"></div>
+				<div class="col-md-4">
+					<span class="label_client">Date de création :</span>
+					<span>{{ reservation.dateReservation|date('Y-m-d H:i') }}</span>
 				</div>
-				<div class="col-md-6">
-					<span class="label_periode">Informations internes :</span>
-					<div class="alert alert-secondary" role="alert"></div>
+				<div class="col-md-4">
+					<span class="label_client">Catégorie :</span>
+					<span class="js-categorie">{{ reservation.vehicule.marque }}{{ reservation.vehicule.modele }}</span>
 				</div>
-				<div class="col-md-6">
-					<span class="label_periode">Motif annulation :</span>
-					<div class="alert alert-secondary" role="alert"></div>
+			</div>
+			<div class="row">
+				<div class="col-md-4">
+					<span class="label_client">Véhicule :</span>
+					<span class="js-vehicule">{{ reservation.vehicule }}</span>
+					<span class="js-idVehicule hide">{{ reservation.vehicule.id }}</span>
 				</div>
 
 			</div>
-			<div>
-				<h3 class="text-center">
-					SOIT
-					<span class="js-duree" style="color:red">{{ reservation.duree }}
-						JOUR(S)</span>
-					DE LOCATION
-				</h3>
+
+			<div class="row">
+				<div class="col-md-3">
+					<span class="label_client">Km départ :
+
+						{{ reservation.kmDepart }}
+						Km
+					</span>
+				</div>
+				<div class="col-md-3">
+					<span class="label_client">Km retour :
+						{{ reservation.kmRetour }}
+						Km</span>
+				</div>
+				<div class="col-md-3">
+					<span class="label_client">Date mise à jour km :
+						{{ reservation.dateKm ? reservation.dateKm|date('d/m/Y') : "" }}</span>
+				</div>
+				<div class="col-md-3">
+					<span class="label_client">Km saisie par :
+					</span>
+					{% if reservation.saisisseurKm %}
+					{{ reservation.saisisseurKm.nom }}
+					{% endif %}
+				</div>
+			</div>
+			<div class=" text-center">
+				<a type="button" class="btn btn-primary text-nowrap"
+					href="{{ path('reservation_infosClient_edit', {'id': reservation.id}) }}">
+					<i class="fa fa-user mr-1"></i>Modifier les informations</a>
+				<a href="{{ path('reservation_retour_anticipe', {'id' : reservation.id }) }}" type="button"
+					class="btn btn-dark text-nowrap" onclick="return confirm('Voulez-vous continuer l\'opération ?')">
+					<i class="fa fa-reply-all mr-1"></i>Retour anticipé</a>
+				<a type="button" class="btn btn-warning text-nowrap"
+					href="{{ path('reservation_edit', {'id': reservation.id} ) }}">
+					<i class=" fa fa-cog"></i>
+					Modifier la réservation</a>
+				<a type="button" class="btn btn-danger text-nowrap"
+					href="{{ path('reservation_optionsGaranties_edit', {'id': reservation.id} ) }}">
+					<i class="fa fa-edit (alias)"></i>
+					Modifier les options & garanties</a>
+				<a href="{{ path('reservation_ident_connex', {'id' : reservation.id }) }}" type="button"
+					class="btn btn-violet text-nowrap">
+					<i class="fa  fa-send-o (alias)"></i>
+					Envoyer les identifians de connexion</a>
+				<a href="#section-signature" type="button" class="btn btn-info text-nowrap">
+					<i class="fa fa-file-signature"></i>
+					Signature contrat</a>
 			</div>
 		</div>
-		{# options et garanties souscrites #}
-		<div class="x_title">
-			<h2>
-				<i class="fa fa-chevron-right"></i>options et garanties souscrites
-			</h2>
-			<div class="clearfix"></div>
-		</div>
-		<div class="x_content options_garanties">
-			<p class="font-weight-bold label">
-				Option(s) souscrite(s):
-			</p>
-			<ul class="">
-				{% if reservation.conducteur ==1 %}
-					<li>Conducteur</li>
-				{% endif %}
-				{# {% for option in reservation.options %}
-																																																																																																	<li class="js-siege">{{ option }}</li>
-																																																																																																{% endfor %} #}
-
-				{% for option in reservation.devisOptions %}
-
-					<li class="js-siege">{{option.opt.appelation}}
-						{% if option.opt.appelation matches '/Siège/' %}
-							({{ 'nbr : '~  option.quantity}})
-						{% endif %}
-						-
-						{{(option.opt.prix * option.quantity)|number_format(2,","," ")}}€
-					</li>
-				{% endfor %}
-			</ul>
-			{# <p class="font-italic">Aucune option souscrite.</p> #}
-			<p class="font-weight-bold label">
-				Garantie(s) souscrite(s):
-			</p>
-			<ul class="">
-				{% for gar in reservation.garanties %}
-					<li class="js-garantie">{{ gar }}
-						-
-						{{(gar.prix )|number_format(2,","," ")}}€</li>
-				{% endfor %}
-			</ul>
-			{# <p class="font-italic">Aucune garantie souscrite.</p> #}
-			<p class="font-weight-bold label">
-				Taxes de dépassement horaire
-			</p>
-			<p class="font-italic">Pas de dépassement d'horaire</p>
-
-		</div>
-		<div class="x_title">
-			<h2>
-				<i class="fa fa-chevron-right"></i>Frais supplémentaires
-			</h2>
-			<div class="clearfix"></div>
-		</div>
-		<div
-			class="x_content mb-5">
-			{# options et garanties souscrites #}
-
-
-			{% form_theme formCollectionFraisSupplResa _self %}
-
-			{{form_start(formCollectionFraisSupplResa)}}
-			<div class="form-group">
-				<table class="table table-bordered {% if reservation.fraisSupplResas|length == 0 %} hide {% endif %} " id="frais-table">
-					<thead>
-						<tr>
-							<th>Description</th>
-							<th>Prix u.</th>
-							<th>Quantité</th>
-							<th>Prix TTC</th>
-							<th>Actions</th>
-						</tr>
-					</thead>
-					<tbody>
-
-						{{form_widget(formCollectionFraisSupplResa)}}
-
-					</tbody>
-				</table>
-			</div>
-			<button id="btnSaveFrais" class="btn btn-danger {% if reservation.fraisSupplResas|length == 0 %} hide {% endif %}" type="submit">Enregistrer</button>
-			{{form_end(formCollectionFraisSupplResa)}}</tr>
 	</div>
-	{# Montant de la reservation #}
+
 	<div class="x_title">
-		<div class="row">
-			<div class="col-auto pl-2">
-				<h2>
-					<i class="fa fa-chevron-right"></i>montant de la réservation TTC
-				</h2>
-			</div>
-			<div class="col-auto ml-auto d-flex align-items-center">
-				<div class="js-prix">
-					{{ (prixResaTTC + totalFraisTTC)|number_format(2,","," ") }}
-					€
-				</div>
-			</div>
-		</div>
+		<h2>
+			<i class="fa fa-chevron-right"></i>INFORMATIONS CONDUCTEUR(S)
+		</h2>
 		<div class="clearfix"></div>
 	</div>
 	<div class="x_content ">
-		<div class="row">
-			<div class="col-md-8 col-sm-8 col-xs-8">
-				<i class="fa fa-chevron-right"></i>Location NDMR
-				{{ reservation.duree }}
-				jours
-			</div>
-			<div class="col-md-4 col-sm-4 col-xs-4">
-				<div class="text-right">
-					{{ reservation.tarifVehicule|number_format(2,","," ") }}€
+		{% if reservation.conducteursClient|length < 2 %} <div class="text-center">
+
+			<a href="{{ path('add_conducteur', {'reservation' : reservation.id}) }}" type="submit"
+				class="btn btn-primary">
+				<i class="fa fa-plus"></i>
+				Ajouter conducteur</a>
+	</div>
+	{% endif %}
+
+	{# conducteurs du client #}
+	{% set i = 1 %}
+	{% for conducteur in reservation.conducteursClient %}
+
+	<div class="x_title">
+		<h4 class="text-danger font-weight-bold mb-0">Conducteur n°
+			{{ i }}</h4>
+	</div>
+	{# <p class="text-success font-weight-bold font-italic">Conducteur principal</p> #}
+	<div class="row info_conducteur">
+		<div class="col-md-2">
+			<span class="">
+				<strong>
+					Nom/Prénom :{{ conducteur.nom }}
+				</strong>
+				{{ conducteur.prenom }}
+			</span>
+		</div>
+		<div class="col-md-2">
+			<span class="">
+				<strong>Permis :
+				</strong>
+				{{ conducteur.numeroPermis }}
+			</span>
+		</div>
+		<div class="col-md-2">
+			<span class="">
+				<strong>Expiration :</strong>
+				{{ conducteur.dateExpiration|date('d/m/Y') }}
+			</span>
+		</div>
+		<div class="col-md-3">
+			<span class="">
+				<strong>Date délivrance :</strong>
+				{{ conducteur.dateDelivrance|date('d/m/Y') }}
+			</span>
+		</div>
+		<div class="col-md-3">
+			<span class="">
+				<strong>Ville délivrance :</strong>
+				{{ conducteur.villeDelivrance }}
+			</span>
+		</div>
+		<div class="col-md-3">
+			<span class="">
+				<strong>Date de naissance :</strong>
+				{{ conducteur.dateNaissance|date('d/m/Y') }}
+			</span>
+		</div>
+		<div class="col-md-3">
+			<span class="">
+				<strong>Ville de naissance :</strong>
+				{{ conducteur.villeNaissance }}
+			</span>
+		</div>
+		<div class="col-md-3">
+			<span class="">
+				<strong>Numéro téléphone :</strong>
+				{{ conducteur.telephone }}
+			</span>
+		</div>
+		<div class="col-md-2">
+			<a class="btn btn-warning"
+				href="{{ path('reservation_conducteur_edit', {'id' : conducteur.id, 'reservation' : reservation.id}) }}">
+				<i class="fa fa-reply"></i>
+			</a>
+			<form method="post"
+				action="{{ path('reservation_conducteur_delete', {'id': conducteur.id, 'reservation' : reservation.id}) }}"
+				onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer ce conducteur ?');">
+				<input type="hidden" name="_method" value="DELETE">
+				<input type="hidden" name="reservation" value="{{ reservation.id }}">
+
+				<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ conducteur.id) }}">
+				<button class="btn btn-danger">
+					<i class="fa fa-close (alias)" aria-hidden="true"></i>
+				</button>
+			</form>
+		</div>
+	</div>
+	{% set i = i + 1 %}
+	{% endfor %}
+	{% set i = 1 %}
+
+</div>
+
+
+<div class="x_title">
+	<h2>
+		<i class="fa fa-chevron-right"></i>PHOTOS VEHICULE
+	</h2>
+	<div class="clearfix"></div>
+</div>
+<div class="x_content">
+	<div class="container-fluid">
+		<div class="reservation-photos-section">
+			<!-- Messages d'upload -->
+			<div class="row">
+				<div class="col-12">
+					<div id="upload-messages"></div>
 				</div>
 			</div>
 
-			<div class="col-md-8 col-sm-8 col-xs-8">
-				<i class="fa fa-chevron-right"></i>Total dépassements horaires
-			</div>
-			<div class="col-md-4 col-sm-4 col-xs-4">
-				<div class="text-right">
-					0.00 €
+			<!-- Zone de drag & drop -->
+			<div class="row mb-4">
+				<div class="col-12">
+					<div id="photo-drop-zone" class="photo-drop-zone">
+						<div class="drop-zone-content">
+							<i class="fas fa-cloud-upload-alt fa-3x mb-3 text-primary"></i>
+							<h5 class="mb-2">Glissez-déposez vos photos ici</h5>
+							<p class="mb-2">ou
+								<strong>cliquez pour sélectionner</strong>
+							</p>
+							<small class="text-muted">Formats acceptés : JPG, PNG, GIF (max 1.5MB par photo)</small>
+						</div>
+						<input type="file" id="photo-input" multiple accept="image/*" style="display: none;">
+					</div>
 				</div>
 			</div>
 
-			<div class="col-md-8 col-sm-8 col-xs-8">
-				<i class="fa fa-chevron-right"></i>Total options souscrites
-			</div>
-			<div class="col-md-4 col-sm-4 col-xs-4">
-				<div class="text-right">{{ reservation.prixOptions|number_format(2,","," ") }}€</div>
-			</div>
-
-			<div class="col-md-8 col-sm-8 col-xs-8">
-				<i class="fa fa-chevron-right"></i>Total garanties souscrites
-
-			</div>
-			<div class="col-md-4 col-sm-4 col-xs-4">
-				<div class="text-right">
-					{{ reservation.prixGaranties|number_format(2,","," ") }}
-					€
-				</div>
-			</div>
-			<div class="col-md-8 col-sm-8 col-xs-8">
-				<i class="fa fa-chevron-right"></i>Montant frais supplémentaires HT
-			</div>
-			<div class="col-md-4 col-sm-4 col-xs-4">
-				<div class="text-right">
-					{#{{totalFraisHT|number_format(2,","," ")}}
-					€#}
-					-
+			<!-- Barre de progression -->
+			<div class="row">
+				<div class="col-12">
+					<div id="upload-progress" class="progress mb-4" style="display: none; height: 20px;">
+						<div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+							role="progressbar" style="width: 100%">
+							<span class="fw-bold">Upload en cours...</span>
+						</div>
+					</div>
 				</div>
 			</div>
 
-			<div class="col-md-8 col-sm-8 col-xs-8">
-				<i class="fa fa-chevron-right"></i>Montant à régler TTC
-			</div>
-			<div class="col-md-4 col-sm-4 col-xs-4">
-				<div class="text-right">
-					{{ (totalFraisTTC + prixResaTTC)|number_format(2,","," ") }}
-					€
+			<!-- Container des photos -->
+			<div class="row">
+				<div class="col-12">
+					<div id="photos-container" class="row g-3"><!-- Les photos seront chargées ici via JavaScript -->
+					</div>
 				</div>
 			</div>
+		</div>
+	</div>
 
+{# périod de location #}
+<div class="x_title">
+	<h2>
+		<i class="fa fa-chevron-right"></i>période de location
+	</h2>
 
+	<div class="clearfix"></div>
+</div>
+<div class="x_content periode_location">
+	<div class="row">
+		<div class="col-md-6">
+			<span class="label_periode">Départ :</span>
+			<br>
+			<span class="js-agenceDepart">{{ reservation.agenceDepart }}
+			</span>
+			<br>
+			<span class="js-dateDepart">{{ reservation.dateDebut|date('d-m-Y H:i') }}</span>
+		</div>
+		<div class="col-md-6">
+			<span class="label_periode">Retour :</span>
+			<br>
+			<span class="js-agenceRetour">{{ reservation.agenceRetour }}
+			</span>
+			<br>
+			<span class="js-dateRetour">{{ reservation.dateFin|date('d-m-Y H:i') }}</span>
+
+		</div>
+		<div class="col-md-6">
+			<span class="label_periode">
+				Vol arrivée :
+			</span>
+			<br>
+			{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.numVolRetour : "" }}
+		</div>
+		<div class="col-md-6">
+			<strong class="label_periode">Vol retour :</strong>
+			<br>
+			{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.numVolAller : "" }}
+
+		</div>
+		<div class="col-md-6">
+			<span class="label_periode">Nombre de personne :</span>
+			<br>
+			{% if reservation.client.infosResa %}
+			Adulte(s):
+			{{ reservation.client.infosResa.nbrAdultes }}
+			{% else %}
+			Adulte(s):--
+			{% endif %}
+
+			{% if reservation.client.infosResa %}
+			Enfant(s):
+			{{ reservation.client.infosResa.nbrEnfants }},
+			{% else %}
+			Enfant(s): --
+
+			{% endif %}
+			{% if reservation.client.infosResa %}
+			Bébé(s):
+			{{ reservation.client.infosResa.nbrBebes }}
+			{% else %}
+			Bébé(s): 0,
+			{% endif %}
+		</div>
+		<div class="col-md-6">
+			<span class="label_periode">Note client :</span>
+			<div class="alert alert-secondary" role="alert"></div>
+		</div>
+		<div class="col-md-6">
+			<span class="label_periode">Informations internes :</span>
+			<div class="alert alert-secondary" role="alert"></div>
+		</div>
+		<div class="col-md-6">
+			<span class="label_periode">Motif annulation :</span>
+			<div class="alert alert-secondary" role="alert"></div>
 		</div>
 
 	</div>
-
-	{# options et garanties souscrites #}
-	<div class="x_title">
-		<h2>
-			<i class="fa fa-chevron-right"></i>réglement(s)
-		</h2>
-		<div class="clearfix"></div>
+	<div>
+		<h3 class="text-center">
+			SOIT
+			<span class="js-duree" style="color:red">{{ reservation.duree }}
+				JOUR(S)</span>
+			DE LOCATION
+		</h3>
 	</div>
-	<div class="x_content">
+</div>
+{# options et garanties souscrites #}
+<div class="x_title">
+	<h2>
+		<i class="fa fa-chevron-right"></i>options et garanties souscrites
+	</h2>
+	<div class="clearfix"></div>
+</div>
+<div class="x_content options_garanties">
+	<p class="font-weight-bold label">
+		Option(s) souscrite(s):
+	</p>
+	<ul class="">
+		{% if reservation.conducteur ==1 %}
+		<li>Conducteur</li>
+		{% endif %}
+		{# {% for option in reservation.options %}
+		<li class="js-siege">{{ option }}</li>
+		{% endfor %} #}
 
-		{% if reservation.sommePaiements < totalResaFraisTTC %}
-			<div class="d-flex justify-content-end">
-				<div class="btn-group mb-1">
-					<button type="button" class="btn btn-danger dropdown-toggle font-weight-bold " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Autre réglement
+		{% for option in reservation.devisOptions %}
+
+		<li class="js-siege">{{option.opt.appelation}}
+			{% if option.opt.appelation matches '/Siège/' %}
+			({{ 'nbr : '~ option.quantity}})
+			{% endif %}
+			-
+			{{(option.opt.prix * option.quantity)|number_format(2,","," ")}}€
+		</li>
+		{% endfor %}
+	</ul>
+	{# <p class="font-italic">Aucune option souscrite.</p> #}
+	<p class="font-weight-bold label">
+		Garantie(s) souscrite(s):
+	</p>
+	<ul class="">
+		{% for gar in reservation.garanties %}
+		<li class="js-garantie">{{ gar }}
+			-
+			{{(gar.prix )|number_format(2,","," ")}}€</li>
+		{% endfor %}
+	</ul>
+	{# <p class="font-italic">Aucune garantie souscrite.</p> #}
+	<p class="font-weight-bold label">
+		Taxes de dépassement horaire
+	</p>
+	<p class="font-italic">Pas de dépassement d'horaire</p>
+
+</div>
+<div class="x_title">
+	<h2>
+		<i class="fa fa-chevron-right"></i>Frais supplémentaires
+	</h2>
+	<div class="clearfix"></div>
+</div>
+<div class="x_content mb-5">
+	{# options et garanties souscrites #}
+
+
+	{% form_theme formCollectionFraisSupplResa _self %}
+
+	{{form_start(formCollectionFraisSupplResa)}}
+	<div class="form-group">
+		<table class="table table-bordered {% if reservation.fraisSupplResas|length == 0 %} hide {% endif %} "
+			id="frais-table">
+			<thead>
+				<tr>
+					<th>Description</th>
+					<th>Prix u.</th>
+					<th>Quantité</th>
+					<th>Prix TTC</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+
+				{{form_widget(formCollectionFraisSupplResa)}}
+
+			</tbody>
+		</table>
+	</div>
+	<button id="btnSaveFrais" class="btn btn-danger {% if reservation.fraisSupplResas|length == 0 %} hide {% endif %}"
+		type="submit">Enregistrer</button>
+	{{form_end(formCollectionFraisSupplResa)}}</tr>
+</div>
+{# Montant de la reservation #}
+<div class="x_title">
+	<div class="row">
+		<div class="col-auto pl-2">
+			<h2>
+				<i class="fa fa-chevron-right"></i>montant de la réservation TTC
+			</h2>
+		</div>
+		<div class="col-auto ml-auto d-flex align-items-center">
+			<div class="js-prix">
+				{{ (prixResaTTC + totalFraisTTC)|number_format(2,","," ") }}
+				€
+			</div>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+</div>
+<div class="x_content ">
+	<div class="row">
+		<div class="col-md-8 col-sm-8 col-xs-8">
+			<i class="fa fa-chevron-right"></i>Location NDMR
+			{{ reservation.duree }}
+			jours
+		</div>
+		<div class="col-md-4 col-sm-4 col-xs-4">
+			<div class="text-right">
+				{{ reservation.tarifVehicule|number_format(2,","," ") }}€
+			</div>
+		</div>
+
+		<div class="col-md-8 col-sm-8 col-xs-8">
+			<i class="fa fa-chevron-right"></i>Total dépassements horaires
+		</div>
+		<div class="col-md-4 col-sm-4 col-xs-4">
+			<div class="text-right">
+				0.00 €
+			</div>
+		</div>
+
+		<div class="col-md-8 col-sm-8 col-xs-8">
+			<i class="fa fa-chevron-right"></i>Total options souscrites
+		</div>
+		<div class="col-md-4 col-sm-4 col-xs-4">
+			<div class="text-right">{{ reservation.prixOptions|number_format(2,","," ") }}€</div>
+		</div>
+
+		<div class="col-md-8 col-sm-8 col-xs-8">
+			<i class="fa fa-chevron-right"></i>Total garanties souscrites
+
+		</div>
+		<div class="col-md-4 col-sm-4 col-xs-4">
+			<div class="text-right">
+				{{ reservation.prixGaranties|number_format(2,","," ") }}
+				€
+			</div>
+		</div>
+		<div class="col-md-8 col-sm-8 col-xs-8">
+			<i class="fa fa-chevron-right"></i>Montant frais supplémentaires HT
+		</div>
+		<div class="col-md-4 col-sm-4 col-xs-4">
+			<div class="text-right">
+				{#{{totalFraisHT|number_format(2,","," ")}}
+				€#}
+				-
+			</div>
+		</div>
+
+		<div class="col-md-8 col-sm-8 col-xs-8">
+			<i class="fa fa-chevron-right"></i>Montant à régler TTC
+		</div>
+		<div class="col-md-4 col-sm-4 col-xs-4">
+			<div class="text-right">
+				{{ (totalFraisTTC + prixResaTTC)|number_format(2,","," ") }}
+				€
+			</div>
+		</div>
+
+
+	</div>
+
+</div>
+
+{# options et garanties souscrites #}
+<div class="x_title">
+	<h2>
+		<i class="fa fa-chevron-right"></i>réglement(s)
+	</h2>
+	<div class="clearfix"></div>
+</div>
+<div class="x_content">
+
+	{% if reservation.sommePaiements < totalResaFraisTTC %} <div class="d-flex justify-content-end">
+		<div class="btn-group mb-1">
+			<button type="button" class="btn btn-danger dropdown-toggle font-weight-bold " data-toggle="dropdown"
+				aria-haspopup="true" aria-expanded="false">
+				Autre réglement
+			</button>
+			<div class="dropdown-menu">
+				<button class="dropdown-item" id="btnAjouterPaiement">Ajouter un paiement</button>
+				{# <button class="dropdown-item" id="btnRelancePaiementSolde">Relance paiement solde</button> #}
+				{% if appelPaiement is not null %}
+				<a type="button" href="{{ path('envoi_email_appel_paiement_index', {'id': appelPaiement.id}) }}"
+					class="dropdown-item">
+					Relance paiement solde
+				</a>
+				{% endif %}
+			</div>
+		</div>
+</div>
+{% endif %}
+<div id="formAjoutPaiement" class="hide">
+	{{ form_start(formAjoutPaiement) }}
+	<div class="row">
+		<div class="col-md-3">
+			<label for="">Mode paiement :
+			</label>
+			{{ form_widget(formAjoutPaiement.modePaiement) }}
+		</div>
+		<div class="col-md-3">
+			<label for="">Montant :
+			</label>
+			{{ form_widget(formAjoutPaiement.montant) }}
+		</div>
+		<div class="col-md-3">
+			<label for="">Date paiement :
+			</label>
+			{{ form_widget(formAjoutPaiement.datePaiement) }}
+		</div>
+		<div class="col-2">
+			<label for="" class="text-white">d</label><br>
+			<button type="submit" class="btn btn-danger">Enregistrer</button>
+		</div>
+	</div>
+	{{ form_end(formAjoutPaiement) }}
+</div>
+<table class="table table-bordered text-center mt-2">
+	<thead class="bg-dark text-white text-uppercase">
+		<tr>
+			<th>date</th>
+			<th>type</th>
+			<th>méthode</th>
+			<th>référence</th>
+			<th>montant</th>
+			<th>motif</th>
+			<th>action</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% if reservation.paiements|length > 0 %}
+		{% for paiement in reservation.paiements %}
+		<tr>
+			<td>{{ paiement.datePaiement|date('d/m/Y H:i') }}</td>
+			<td>Débit</td>
+			<td>{{ paiement.modePaiement.libelle }}</td>
+			<td></td>
+			<td>{{ paiement.montant|number_format(2,","," ") }}</td>
+			<td></td>
+			<td>
+				<form method="post"
+					action="{{ path('reservation_paiement_delete', {'id': paiement.id, 'reservation' : reservation.id}) }}"
+					onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer ce paiement ?');">
+					<input type="hidden" name="_method" value="DELETE">
+					<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ paiement.id) }}">
+					<button class="btn btn-danger">
+						<i class="fa fa-trash (alias)" aria-hidden="true"></i>
+						Supprimer
 					</button>
-					<div class="dropdown-menu">
-						<button class="dropdown-item" id="btnAjouterPaiement">Ajouter un paiement</button>
-						{# <button class="dropdown-item" id="btnRelancePaiementSolde">Relance paiement solde</button> #}
-						{% if appelPaiement is not null %}
-							<a type="button" href="{{ path('envoi_email_appel_paiement_index', {'id': appelPaiement.id}) }}" class="dropdown-item">
-								Relance paiement solde
-							</a>
+				</form>
+			</td>
+		</tr>
+		{% endfor %}
+		{% else %}
+		<tr>
+			<td colspan="7">
+				Aucun paiement effectué
+			</td>
+		</tr>
+
+		</td>
+		{% endif %}
+	</tbody>
+</table>
+
+<div class="row">
+	<div class="col-md-8 col-sm-8 col-xs-8">
+		<i class="fa fa-chevron-right"></i>Total des règlements effectués :
+	</div>
+
+	<div class="col-md-4 col-sm-4 col-xs-4">
+		<div class="text-right">
+			{{ reservation.sommePaiements|number_format(2,","," ") }}€
+		</div>
+	</div>
+
+	<div class="col-md-8 col-sm-8 col-xs-8">
+		<i class="fa fa-chevron-right"></i>Solde
+	</div>
+	<div class="col-md-4 col-sm-4 col-xs-4">
+		<div class="text-right">
+			{{ ((totalFraisTTC + prixResaTTC) - reservation.sommePaiements)|number_format(2,","," ") }}€
+		</div>
+	</div>
+</div>
+
+
+{# avis client #}
+<div class="x_title">
+	<h2>
+		<i class="fa fa-chevron-right"></i>avis client
+	</h2>
+	<div class="clearfix"></div>
+</div>
+
+{% if reservation.avis %}
+
+<div class="x_content">
+	<div class="row">
+		<div class="col-md-4">
+			<div class="row">
+				<div class="col-auto">
+					Global
+				</div>
+				<div class="col-auto">
+					<div class="x_content">
+						{% for i in 1..(reservation.avis.global) %}
+						<i class="fa fa-star"></i>
+						{% endfor %}
+						{% if reservation.avis.global != 5 %}
+						{% for j in 1..(5 - reservation.avis.global) %}
+						<i class="fa fa-star-o"></i>
+						{% endfor %}
 						{% endif %}
 					</div>
 				</div>
 			</div>
-		{% endif %}
-		<div id="formAjoutPaiement" class="hide">
-			{{ form_start(formAjoutPaiement) }}
+		</div>
+		<div class="col-md-4">
 			<div class="row">
-				<div class="col-md-3">
-					<label for="">Mode paiement :
-					</label>
-					{{ form_widget(formAjoutPaiement.modePaiement) }}
+				<div class="col-auto">
+					Ponctualité
 				</div>
-				<div class="col-md-3">
-					<label for="">Montant :
-					</label>
-					{{ form_widget(formAjoutPaiement.montant) }}
-				</div>
-				<div class="col-md-3">
-					<label for="">Date paiement :
-					</label>
-					{{ form_widget(formAjoutPaiement.datePaiement) }}
-				</div>
-				<div class="col-2">
-					<label for="" class="text-white">d</label><br>
-					<button type="submit" class="btn btn-danger">Enregistrer</button>
+				<div class="col-auto">
+					<div class="x_content">
+						{% for i in 1..(reservation.avis.ponctualite) %}
+						<i class="fa fa-star"></i>
+						{% endfor %}
+						{% if reservation.avis.ponctualite != 5 %}
+						{% for j in 1..(5 - reservation.avis.ponctualite) %}
+						<i class="fa fa-star-o"></i>
+						{% endfor %}
+						{% endif %}
+					</div>
 				</div>
 			</div>
-			{{ form_end(formAjoutPaiement) }}
 		</div>
-		<table class="table table-bordered text-center mt-2">
-			<thead class="bg-dark text-white text-uppercase">
-				<tr>
-					<th>date</th>
-					<th>type</th>
-					<th>méthode</th>
-					<th>référence</th>
-					<th>montant</th>
-					<th>motif</th>
-					<th>action</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% if reservation.paiements|length > 0 %}
-					{% for paiement in reservation.paiements %}
-						<tr>
-							<td>{{ paiement.datePaiement|date('d/m/Y H:i') }}</td>
-							<td>Débit</td>
-							<td>{{ paiement.modePaiement.libelle }}</td>
-							<td></td>
-							<td>{{ paiement.montant|number_format(2,","," ") }}</td>
-							<td></td>
-							<td>
-								<form method="post" action="{{ path('reservation_paiement_delete', {'id': paiement.id, 'reservation' : reservation.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer ce paiement ?');">
-									<input type="hidden" name="_method" value="DELETE">
-									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ paiement.id) }}">
-									<button class="btn btn-danger">
-										<i class="fa fa-trash (alias)" aria-hidden="true"></i>
-										Supprimer
-									</button>
-								</form>
-							</td>
-						</tr>
-					{% endfor %}
+		<div class="col-md-4">
+			<div class="row">
+				<div class="col-auto">
+					Accueil
+				</div>
+				<div class="col-auto">
+					<div class="x_content">
+						{% for i in 1..(reservation.avis.accueil) %}
+						<i class="fa fa-star"></i>
+						{% endfor %}
+						{% if reservation.avis.accueil != 5 %}
+						{% for j in 1..(5 - reservation.avis.accueil) %}
+						<i class="fa fa-star-o"></i>
+						{% endfor %}
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="row">
+				<div class="col-auto">
+					Service:
+				</div>
+				<div class="col-auto">
+					<div class="x_content">
+						{% for i in 1..(reservation.avis.service) %}
+						<i class="fa fa-star"></i>
+						{% endfor %}
+						{% if reservation.avis.service != 5 %}
+						{% for j in 1..(5 - reservation.avis.service) %}
+						<i class="fa fa-star-o"></i>
+						{% endfor %}
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% else %}
+<div class="text-center">
+	Aucun avis pour cette réservation
+</div>
+{% endif %}
+
+{# Signature électronique du contrat #}
+<div class="x_title" id="section-signature">
+	<h2>
+		<i class="fa fa-chevron-right"></i>Signature électronique du contrat
+	</h2>
+	<div class="clearfix"></div>
+</div>
+<div class="x_content">
+	{% set latestContract = null %}
+	{% for contract in reservation.contracts %}
+	{% if latestContract is null or contract.createdAt > latestContract.createdAt %}
+	{% set latestContract = contract %}
+	{% endif %}
+	{% endfor %}
+
+	{% if latestContract %}
+	{# Contract exists - show status and details #}
+	<div class="row mb-3">
+		<div class="col-md-12">
+			<div class="alert 
+						{% if latestContract.contractStatus == 'fully_signed' %}alert-success
+						{% elseif latestContract.contractStatus == 'client_signed' %}alert-info
+						{% elseif latestContract.contractStatus == 'admin_signed' %}alert-warning
+						{% else %}alert-secondary{% endif %}">
+				<strong>Statut du contrat:</strong>
+				{% if latestContract.contractStatus == 'fully_signed' %}
+				<span class="badge badge-success"><i class="fa fa-check-circle"></i> Complètement signé</span>
+				{% elseif latestContract.contractStatus == 'client_signed' %}
+				<span class="badge badge-info"><i class="fa fa-user"></i> Signé par le client (en attente admin)</span>
+				{% elseif latestContract.contractStatus == 'admin_signed' %}
+				<span class="badge badge-warning"><i class="fa fa-user-secret"></i> Signé par l'admin (en attente
+					client)</span>
 				{% else %}
-					<tr>
-						<td colspan="7">
-							Aucun paiement effectué
-						</td>
-					</tr>
+				<span class="badge badge-secondary"><i class="fa fa-clock-o"></i> Non signé</span>
+				{% endif %}
+			</div>
+		</div>
+	</div>
 
-				</td>
-			{% endif %}
-		</tbody>
-	</table>
-
+	{# Signatures details #}
 	<div class="row">
-		<div class="col-md-8 col-sm-8 col-xs-8">
-			<i class="fa fa-chevron-right"></i>Total des règlements effectués :
-		</div>
-
-		<div class="col-md-4 col-sm-4 col-xs-4">
-			<div class="text-right">
-				{{ reservation.sommePaiements|number_format(2,","," ") }}€
+		{% for signature in latestContract.signatures %}
+		<div class="col-md-6 mb-3">
+			<div
+				class="card {% if signature.signatureType == 'client' %}border-primary{% else %}border-success{% endif %}">
+				<div
+					class="card-header {% if signature.signatureType == 'client' %}bg-primary{% else %}bg-success{% endif %} text-white">
+					<i
+						class="fa {% if signature.signatureType == 'client' %}fa-user{% else %}fa-user-secret{% endif %}"></i>
+					Signature {{ signature.signatureType == 'client' ? 'Client' : 'Administrateur' }}
+				</div>
+				<div class="card-body">
+					<p><strong>Date de signature:</strong> {{ signature.signedAt|date('d/m/Y H:i:s') }}</p>
+					<p><strong>Adresse IP:</strong> {{ signature.ipAddress ?? 'Non disponible' }}</p>
+					<p><strong>Validité:</strong>
+						{% if signature.signatureValid %}
+						<span class="text-success"><i class="fa fa-check"></i> Valide</span>
+						{% else %}
+						<span class="text-danger"><i class="fa fa-times"></i> Non valide</span>
+						{% endif %}
+					</p>
+					{% if signature.timestampToken %}
+					<p><strong>Horodatage certifié:</strong>
+						<span class="text-success"><i class="fa fa-clock-o"></i> Oui</span>
+					</p>
+					{% endif %}
+					{% if signature.signatureImage %}
+					<div class="mt-2">
+						<strong>Signature visuelle:</strong>
+						<div class="border p-2 bg-white mt-1" style="max-width: 300px; max-height: 150px; overflow: hidden;">
+							<img src="{{ signature.signatureImage }}" alt="Signature" class="img-fluid" style="max-height: 100px; width: auto;">
+						</div>
+					</div>
+					{% endif %}
+				</div>
 			</div>
 		</div>
-
-		<div class="col-md-8 col-sm-8 col-xs-8">
-			<i class="fa fa-chevron-right"></i>Solde
-		</div>
-		<div class="col-md-4 col-sm-4 col-xs-4">
-			<div class="text-right">
-				{{ ((totalFraisTTC + prixResaTTC) - reservation.sommePaiements)|number_format(2,","," ") }}€
-			</div>
-		</div>
+		{% endfor %}
 	</div>
 
-
-	{# avis client #}
-	<div class="x_title">
-		<h2>
-			<i class="fa fa-chevron-right"></i>avis client
-		</h2>
-		<div class="clearfix"></div>
-	</div>
-
-	{% if reservation.avis %}
-
-		<div class="x_content">
-			<div class="row">
-				<div class="col-md-4">
-					<div class="row">
-						<div class="col-auto">
-							Global
-						</div>
-						<div class="col-auto">
-							<div class="x_content">
-								{% for i in 1..(reservation.avis.global) %}
-									<i class="fa fa-star"></i>
-								{% endfor %}
-								{% if reservation.avis.global != 5 %}
-									{% for j in 1..(5 - reservation.avis.global) %}
-										<i class="fa fa-star-o"></i>
-									{% endfor %}
-								{% endif %}
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-4">
-					<div class="row">
-						<div class="col-auto">
-							Ponctualité
-						</div>
-						<div class="col-auto">
-							<div class="x_content">
-								{% for i in 1..(reservation.avis.ponctualite) %}
-									<i class="fa fa-star"></i>
-								{% endfor %}
-								{% if reservation.avis.ponctualite != 5 %}
-									{% for j in 1..(5 - reservation.avis.ponctualite) %}
-										<i class="fa fa-star-o"></i>
-									{% endfor %}
-								{% endif %}
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-4">
-					<div class="row">
-						<div class="col-auto">
-							Accueil
-						</div>
-						<div class="col-auto">
-							<div class="x_content">
-								{% for i in 1..(reservation.avis.accueil) %}
-									<i class="fa fa-star"></i>
-								{% endfor %}
-								{% if reservation.avis.accueil != 5 %}
-									{% for j in 1..(5 - reservation.avis.accueil) %}
-										<i class="fa fa-star-o"></i>
-									{% endfor %}
-								{% endif %}
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-4">
-					<div class="row">
-						<div class="col-auto">
-							Service:
-						</div>
-						<div class="col-auto">
-							<div class="x_content">
-								{% for i in 1..(reservation.avis.service) %}
-									<i class="fa fa-star"></i>
-								{% endfor %}
-								{% if reservation.avis.service != 5 %}
-									{% for j in 1..(5 - reservation.avis.service) %}
-										<i class="fa fa-star-o"></i>
-									{% endfor %}
-								{% endif %}
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+	{# Action buttons #}
+	<div class="row mt-3">
+		<div class="col-12 text-center">
+			{# Signature Client button removed #}
+			{% if not latestContract.isSignedByAdmin() %}
+			<a href="{{ path('contract_sign_admin_reservation', {'id': reservation.id}) }}" class="btn btn-success">
+				<i class="fa fa-pencil"></i> Signature Admin
+			</a>
+			{% endif %}
+			{% if latestContract.contractStatus == 'fully_signed' %}
+			<span class="text-success font-weight-bold">
+				<i class="fa fa-check-circle"></i> Contrat complètement signé
+			</span>
+			{% endif %}
 		</div>
+	</div>
 	{% else %}
-		<div class="text-center">
-			Aucun avis pour cette réservation
-		</div>
+	{# No contract yet - show button to create and sign #}
+	<div class="text-center">
+		<p class="text-muted mb-3">Aucun contrat électronique n'a encore été créé pour cette réservation.</p>
+		<a href="{{ path('contract_sign_admin_reservation', {'id': reservation.id}) }}" class="btn btn-primary btn-lg">
+			<i class="fa fa-file-signature"></i> Créer et signer le contrat électronique
+		</a>
+	</div>
 	{% endif %}
 </div>
+</div>
 <!-- Large modal -->
-{# <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Large modal</button> #}
+{# <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Large
+	modal</button> #}
 {% include "admin/reservation/crud/modal/modalKM.html.twig" %}
 {% include "admin/reservation/crud/modal/modalReportReservation.html.twig" %}
 {# modal pour annulation #}
 {% include "admin/reservation/crud/modal/modalAnnulation.html.twig" %}
-{# fin modal #}{% endblock %}{# block representant personnalisation affichage du champ collection_frais_suppl_resa #}{#form represente le champ addfrais #}{% block collection_frais_suppl_resa_widget  %}
+{# fin modal #}{% endblock %}{# block representant personnalisation affichage du champ collection_frais_suppl_resa
+#}{#form represente le champ addfrais #}{% block collection_frais_suppl_resa_widget %}
 
 {{form_widget(form)}}
 <div class="form-group">
 	<button type="button" id="add-frais" class="btn btn-secondary">Ajouter ligne</button>
 </div>{% endblock %}{% block collection_entry_row %}
-{{form_widget(form)}}{% endblock %}{# pour chaque entry -> sous champs dans fraistype #}{# form dans le bloc represente une entry (un sous champ) #}{% block collection_entry_widget %}
+{{form_widget(form)}}{% endblock %}{# pour chaque entry -> sous champs dans fraistype #}{# form dans le bloc represente
+une entry (un sous champ) #}{% block collection_entry_widget %}
 <tr id="block_{{id}}" class="table-ligne text-center">
 	<td>{{form_widget(form.description)}}</td>
 	<td style="width : 80px">{{form_widget(form.prixUnitaire, {attr:{'class':'prixUnitaire'}})}}</td>
 	<td style="width : 80px">{{form_widget(form.quantite, {attr:{'class':'quantite'}})}}</td>
 	<td style="width : 80px">{{form_widget(form.totalTTC, {attr:{'class':'totalTTC'}})}}</td>
 	<td style="width : 120px">
-		<button title="Supprimer" class="btn btn-danger" type="button" data-action="delete" data-target="block_{{id}}" onclick="return confirm('Voulez-vous supprimer cette ligne?')">
+		<button title="Supprimer" class="btn btn-danger" type="button" data-action="delete" data-target="block_{{id}}"
+			onclick="return confirm('Voulez-vous supprimer cette ligne?')">
 			<i class="fa fa-trash"></i>
 		</button>
 	</td>
-</tr>{% endblock %}{% block javascripts %}<!-- Datatables --><script src="{{ asset('admin/vendors/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+</tr>{% endblock %}{% block javascripts %}<!-- Datatables -->
+<script src="{{ asset('admin/vendors/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('admin/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
 <script src="{{ asset('admin/vendors/datatables.net-buttons/js/dataTables.buttons.min.js') }}"></script>
 <script src="{{ asset('admin/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js') }}"></script>
@@ -993,26 +1131,28 @@
 <script src="{{ asset('js/admin/jspdf.min.js') }}"></script>
 <script src="{{ asset('js/admin/jspdf.plugin.autotable.js') }}"></script>
 <script src="{{ asset('js/admin/factureJsPDF.js') }}"></script>
-{% if reservation.sommePaiements < totalResaFraisTTC %}
-	<script src="{{ asset('js/admin/reservation/ajout_paiement.js') }}"></script>
+{% if reservation.sommePaiements < totalResaFraisTTC %} <script
+	src="{{ asset('js/admin/reservation/ajout_paiement.js') }}">
+	</script>
 	<script src="{{ asset('js/admin/reservation/relance_paiement_solde.js') }}"></script>
 	<script src="{{ asset('js/admin/reservation/ajout_frais.js') }}"></script>
-{% endif %}
-{# generer facture avec jsPDf mais doomPDF est plus pratique à cause des conditions à considerer #}
-{# // <script src="{{asset('js/admin/reservation/generer_facture.js')}}"></script> #}
+	{% endif %}
+	{# generer facture avec jsPDf mais doomPDF est plus pratique à cause des conditions à considerer #}
+	{# //
+	<script src="{{asset('js/admin/reservation/generer_facture.js')}}"></script> #}
 
-<script src="{{asset('js/admin/reservation/frais_suppl_resa.js')}}"></script>
-<script src="{{asset('js/admin/reservation/resa_photo.js')}}"></script>
+	<script src="{{asset('js/admin/reservation/frais_suppl_resa.js')}}"></script>
+	<script src="{{asset('js/admin/reservation/resa_photo.js')}}"></script>
 
-<script>
-	document.addEventListener('DOMContentLoaded', function () { // Initialiser l'uploader avec l'ID de la réservation
-const uploader = new ReservationPhotoUploader({
-reservationId: {{ reservation.id }},
-dropZoneId: 'photo-drop-zone',
-fileInputId: 'photo-input',
-photosContainerId: 'photos-container',
-progressBarId: 'upload-progress',
-messageContainerId: 'upload-messages'
+	<script>
+		document.addEventListener('DOMContentLoaded', function () { // Initialiser l'uploader avec l'ID de la réservation
+			const uploader = new ReservationPhotoUploader({
+				reservationId: {{ reservation.id }},
+			dropZoneId: 'photo-drop-zone',
+			fileInputId: 'photo-input',
+			photosContainerId: 'photos-container',
+			progressBarId: 'upload-progress',
+			messageContainerId: 'upload-messages'
 });
 });
-</script>{% endblock %}
+	</script>{% endblock %}

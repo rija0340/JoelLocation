@@ -1,12 +1,20 @@
-<div class="signature-pad-container border rounded p-3 bg-light text-center">
-    <canvas id="signature-pad" class="border bg-white" width="600" height="300"
-        style="touch-action: none; max-width: 100%;"></canvas>
-    <div class="mt-2">
-        <button type="button" class="btn btn-secondary btn-sm" id="clear-signature">
+<div class="signature-pad-container border rounded-2 p-3 bg-white shadow-sm text-center" style="max-width: 500px; margin: 0 auto;">
+    <div class="mb-2">
+        <canvas id="signature-pad" class="border rounded bg-white" width="500" height="200"
+            style="touch-action: none; max-width: 100%; border: 2px dashed #dee2e6 !important;"></canvas>
+    </div>
+    <div class="d-flex justify-content-center gap-2 mb-2">
+        <button type="button" class="btn btn-outline-danger btn-sm px-3" id="clear-signature">
             <i class="fa fa-eraser me-1"></i> Effacer
+        </button>
+        <button type="button" class="btn btn-outline-primary btn-sm px-3" id="save-signature">
+            <i class="fa fa-save me-1"></i> Sauvegarder
         </button>
     </div>
     <input type="hidden" name="signature_data" id="signature_data">
+    <div>
+        <small class="text-muted">Dessinez votre signature dans le cadre ci-dessus</small>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
@@ -14,7 +22,10 @@
     document.addEventListener('DOMContentLoaded', function () {
         var canvas = document.getElementById('signature-pad');
         var signaturePad = new SignaturePad(canvas, {
-            backgroundColor: 'rgb(255, 255, 255)'
+            backgroundColor: 'rgb(255, 255, 255)',
+            penColor: 'rgb(0, 0, 0)',
+            minWidth: 0.5,
+            maxWidth: 2.5
         });
 
         // Resize canvas for high DPI screens
@@ -32,6 +43,16 @@
         document.getElementById('clear-signature').addEventListener('click', function () {
             signaturePad.clear();
             document.getElementById('signature_data').value = '';
+        });
+
+        document.getElementById('save-signature').addEventListener('click', function () {
+            if (signaturePad.isEmpty()) {
+                alert("Veuillez signer le document avant de sauvegarder.");
+            } else {
+                var data = signaturePad.toDataURL('image/png');
+                document.getElementById('signature_data').value = data;
+                alert("Signature sauvegardée !");
+            }
         });
 
         // On form submit, put signature data into hidden input

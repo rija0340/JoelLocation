@@ -11,11 +11,11 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class ContractService
 {
-    private ContractRepository $contractRepository;
-    private ContractSignatureRepository $contractSignatureRepository;
-    private EntityManagerInterface $entityManager;
-    private SignatureService $signatureService;
-    private TsaClient $tsaClient;
+    private $contractRepository;
+    private $contractSignatureRepository;
+    private $entityManager;
+    private $signatureService;
+    private $tsaClient;
 
     public function __construct(
         ContractRepository $contractRepository,
@@ -95,9 +95,10 @@ class ContractService
         bool $skipPaymentCheck = false,
         ?string $signatureImage = null
     ): ContractSignature {
-        // Validation: Reservation must be paid
-        if (!$skipPaymentCheck && !$this->isReservationPaid($contract->getReservation())) {
-            throw new \Exception("La réservation doit être entièrement payée avant la signature du contrat.");
+        // Note: Payment check has been removed - contracts can be signed without full payment
+
+        if ($contract->isSignedByClient()) {
+            throw new \Exception("Le client a déjà signé ce contrat.");
         }
 
         // Request timestamp from TSA
@@ -111,7 +112,8 @@ class ContractService
             $publicKeyData,
             $ipAddress,
             $userAgent,
-            $timestampToken
+            $timestampToken,
+            $signatureImage
         );
 
         return $signature;
@@ -129,8 +131,12 @@ class ContractService
         ?string $signatureImage = null
     ): ContractSignature {
         // Validation: Client must have signed first
-        if (!$contract->isSignedByClient()) {
-            throw new \Exception("Le client doit signer le contrat avant l'administrateur.");
+        // if (!$contract->isSignedByClient()) {
+        //     throw new \Exception("Le client doit signer le contrat avant l'administrateur.");
+        // }
+
+        if ($contract->isSignedByAdmin()) {
+            throw new \Exception("L'administrateur a déjà signé ce contrat.");
         }
 
         // Request timestamp from TSA
