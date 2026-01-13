@@ -1,155 +1,196 @@
 {# Template factorisé pour les cartes de réservation #}
 {% set config = {
-  'devis': {
-    'reference_field': 'numero',
-    'date_creation_field': 'dateCreation',
-    'date_debut_field': 'dateDepart',
-    'date_fin_field': 'dateRetour',
-    'badge_text': 'Devis',
-    'show_actions': true,
-    'actions': ['details', 'download', 'validate']
-  },
-  'encours': {
-    'reference_field': 'reference',
-    'date_creation_field': 'dateReservation',
-    'date_debut_field': 'dateDebut',
-    'date_fin_field': 'dateFin',
-    'badge_text': 'En cours',
-    'show_actions': true,
-    'actions': ['details']
-  },
-  'avenir': {
-    'reference_field': 'reference',
-    'date_creation_field': 'dateReservation',
-    'date_debut_field': 'dateDebut',
-    'date_fin_field': 'dateFin',
-    'badge_text': 'À venir',
-    'show_actions': true,
-    'actions': ['details']
-  },
-  'termine': {
-    'reference_field': 'reference',
-    'date_creation_field': 'dateReservation',
-    'date_debut_field': 'dateDebut',
-    'date_fin_field': 'dateFin',
-    'badge_text': 'Terminé',
-    'show_actions': true,
-    'actions': ['details']
-  }
+'devis': {
+'reference_field': 'numero',
+'date_creation_field': 'dateCreation',
+'date_debut_field': 'dateDepart',
+'date_fin_field': 'dateRetour',
+'badge_text': 'Devis',
+'show_actions': true,
+'actions': ['details', 'download', 'validate']
+},
+'encours': {
+'reference_field': 'reference',
+'date_creation_field': 'dateReservation',
+'date_debut_field': 'dateDebut',
+'date_fin_field': 'dateFin',
+'badge_text': 'En cours',
+'show_actions': true,
+'actions': ['details']
+},
+'avenir': {
+'reference_field': 'reference',
+'date_creation_field': 'dateReservation',
+'date_debut_field': 'dateDebut',
+'date_fin_field': 'dateFin',
+'badge_text': 'À venir',
+'show_actions': true,
+'actions': ['details']
+},
+'termine': {
+'reference_field': 'reference',
+'date_creation_field': 'dateReservation',
+'date_debut_field': 'dateDebut',
+'date_fin_field': 'dateFin',
+'badge_text': 'Terminé',
+'show_actions': true,
+'actions': ['details']
+}
 } %}
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 	{% if reservations|length > 0 %}
-		{% for reserv in reservations %}
-			<div class="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow transition-shadow duration-200 flex flex-col">
-				<!-- Header with number and type -->
-				<div class="border-b border-gray-200 p-4 flex justify-between items-center">
-					<div class="font-semibold text-joel-dark text-base">
-						{% if type == 'devis' %}
-							Devis: {{ reserv.numero }}
-						{% else %}
-							Réf: {{ reserv.reference }}
-						{% endif %}
+	{% for reserv in reservations %}
+	<div
+		class="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow transition-shadow duration-200 flex flex-col">
+		<!-- Header with number and type -->
+		<div class="border-b border-gray-200 p-4 flex justify-between items-center">
+			<div class="font-semibold text-joel-dark text-base">
+				{% if type == 'devis' %}
+				Devis: {{ reserv.numero }}
+				{% else %}
+				Réf: {{ reserv.reference }}
+				{% endif %}
+			</div>
+			<span
+				class="bg-{% if type == 'devis' %}gray-500{% elseif type == 'encours' %}joel-red{% elseif type == 'avenir' %}blue-500{% else %}green-500{% endif %} text-white rounded-full px-3 py-1 text-sm whitespace-nowrap">
+				{{ config[type].badge_text }}
+			</span>
+		</div>
+
+		<!-- Card body with 3 columns in a single row -->
+		<div class="flex flex-col md:flex-row p-3 gap-2">
+			<!-- Column 1: Vehicle Image -->
+			<div class="md:w-1/3 flex justify-center items-start">
+				{% set image_path = vich_uploader_asset(reserv.vehicule, 'imageFile') %}
+				{% set webp_path = image_path|replace({'.jpg': '.webp', '.png': '.webp', '.jpeg': '.webp'}) %}
+				<picture>
+					<source srcset="{{ webp_path }}" type="image/webp">
+					<img src="{{ image_path }}" alt="{{ reserv.vehicule.image }}" loading="lazy"
+						class="h-50 w-auto object-contain max-h-40">
+				</picture>
+			</div>
+
+			<!-- Column 2: Vehicle Information -->
+			<div class="md:w-1/3 bg-gray-50 rounded-lg p-3">
+				<h6 class="text-joel-red font-semibold text-base mb-2 flex items-center">
+					<i class="fa fa-car mr-2"></i> Véhicule
+				</h6>
+				<div class="text-base text-gray-700 space-y-1">
+					<div class="flex">
+						<i class="fa fa-car text-joel-red mr-2 w-4"></i>
+						<span class="font-medium">{{ reserv.vehicule.marque }} {{ reserv.vehicule.modele }}</span>
 					</div>
-					<span class="bg-{% if type == 'devis' %}gray-500{% elseif type == 'encours' %}joel-red{% elseif type == 'avenir' %}blue-500{% else %}green-500{% endif %} text-white rounded-full px-3 py-1 text-sm whitespace-nowrap">
-						{{ config[type].badge_text }}
-					</span>
-				</div>
-				
-				<!-- Card body with 3 columns in a single row -->
-				<div class="flex flex-col md:flex-row p-3 gap-2">
-					<!-- Column 1: Vehicle Image -->
-					<div class="md:w-1/3 flex justify-center items-start">
-						{% set image_path = vich_uploader_asset(reserv.vehicule, 'imageFile') %}
-						{% set webp_path = image_path|replace({'.jpg': '.webp', '.png': '.webp', '.jpeg': '.webp'}) %}
-						<picture>
-							<source srcset="{{ webp_path }}" type="image/webp">
-							<img src="{{ image_path }}" alt="{{ reserv.vehicule.image }}" loading="lazy" class="h-50 w-auto object-contain max-h-40">
-						</picture>
+					<div class="flex">
+						<i class="fa fa-gas-pump text-joel-red mr-2 w-4"></i>
+						<span>{{ reserv.vehicule.carburation }}</span>
 					</div>
-					
-					<!-- Column 2: Vehicle Information -->
-					<div class="md:w-1/3 bg-gray-50 rounded-lg p-3">
-						<h6 class="text-joel-red font-semibold text-base mb-2 flex items-center">
-							<i class="fa fa-car mr-2"></i> Véhicule
-						</h6>
-						<div class="text-base text-gray-700 space-y-1">
-							<div class="flex">
-								<i class="fa fa-car text-joel-red mr-2 w-4"></i>
-								<span class="font-medium">{{ reserv.vehicule.marque }} {{ reserv.vehicule.modele }}</span>
-							</div>
-							<div class="flex">
-								<i class="fa fa-gas-pump text-joel-red mr-2 w-4"></i>
-								<span>{{ reserv.vehicule.carburation }}</span>
-							</div>
-							<div class="flex">
-								<i class="fa fa-cog text-joel-red mr-2 w-4"></i>
-								<span>{{ reserv.vehicule.vitesse }}</span>
-							</div>
-							<div class="flex">
-								<i class="fa fa-users text-joel-red mr-2 w-4"></i>
-								<span>{{ reserv.vehicule.passagers }} passagers</span>
-							</div>
-						</div>
+					<div class="flex">
+						<i class="fa fa-cog text-joel-red mr-2 w-4"></i>
+						<span>{{ reserv.vehicule.vitesse }}</span>
 					</div>
-					
-					<!-- Column 3: Reservation Information -->
-					<div class="md:w-1/3 bg-gray-50 rounded-lg p-3">
-						<h6 class="text-joel-red font-semibold text-base mb-2 flex items-center">
-							<i class="fa fa-file-alt mr-2"></i> Réservation
-						</h6>
-						<div class="text-base text-gray-700 space-y-1">
-							<div class="flex items-center">
-								<i class="fa fa-calendar text-joel-red mr-2 w-4"></i>
-								<span class="font-medium">Du {{ attribute(reserv, config[type].date_debut_field)|date('d/m/Y') }}</span>
-							</div>
-							<div class="flex items-center">
-								<i class="fa fa-calendar text-joel-red mr-2 w-4"></i>
-								<span class="font-medium">Au {{ attribute(reserv, config[type].date_fin_field)|date('d/m/Y') }}</span>
-							</div>
-							<div class="flex items-center">
-								<i class="fa fa-clock text-joel-red mr-2 w-4"></i>
-								<span>{{ reserv.duree }} jour{{ reserv.duree > 1 ? 's' : '' }}</span>
-							</div>
-							<div class="flex justify-between w-full">
-								<div class="flex items-center">
-									<i class="fa fa-tag text-joel-red mr-2 w-4"></i>
-									<span>Prix: {{ reserv.prix }}€</span>
-								</div>
-							</div>
-							{% if type != 'devis' %}
-								<div class="flex items-center">
-									<i class="fa fa-file text-joel-red mr-2 w-4"></i>
-									<span>Réf: {{ reserv.reference }}</span>
-								</div>
-							{% endif %}
-						</div>
+					<div class="flex">
+						<i class="fa fa-users text-joel-red mr-2 w-4"></i>
+						<span>{{ reserv.vehicule.passagers }} passagers</span>
 					</div>
 				</div>
-				
-				<!-- Bottom: Actions -->
-				<div class="p-3 flex flex-wrap gap-2 justify-end">
-					{% if config[type].show_actions %}
-						{% if 'details' in config[type].actions %}
-							<a href="{{ path(type == 'devis' ? 'client_devis_show' : 'client_reservation_show', {'id': reserv.id}) }}" class="border border-joel-dark text-joel-dark hover:bg-joel-dark hover:text-white px-3 py-2 rounded text-base font-medium transition-colors duration-200 min-w-[100px] text-center">
-								<i class="fa fa-info-circle mr-1"></i>Détails
-							</a>
-						{% endif %}
-						{% if 'download' in config[type].actions %}
-							<a href="{{ path('devis_pdf', {'hashedId': reserv.id|sha1}) }}" class="border border-joel-dark text-joel-dark hover:bg-joel-dark hover:text-white px-3 py-2 rounded text-base font-medium transition-colors duration-200 min-w-[100px] text-center">
-								<i class="fa fa-download mr-1"></i>PDF
-							</a>
-						{% endif %}
-						{% if 'validate' in config[type].actions and (date(attribute(reserv, config[type].date_debut_field)) > date("now") or reserv.transformed == true) %}
-							<a href="{{ path('validation_step2', {'id': reserv.id}) }}" class="bg-joel-red hover:bg-joel-red-dark text-white px-3 py-2 rounded text-base font-medium transition-colors duration-200 min-w-[100px] text-center">
-								<i class="fas fa-check mr-1"></i>Valider
-							</a>
-						{% endif %}
+			</div>
+
+			<!-- Column 3: Reservation Information -->
+			<div class="md:w-1/3 bg-gray-50 rounded-lg p-3">
+				<h6 class="text-joel-red font-semibold text-base mb-2 flex items-center">
+					<i class="fa fa-file-alt mr-2"></i> Réservation
+				</h6>
+				<div class="text-base text-gray-700 space-y-1">
+					<div class="flex items-center">
+						<i class="fa fa-calendar text-joel-red mr-2 w-4"></i>
+						<span class="font-medium">Du {{ attribute(reserv, config[type].date_debut_field)|date('d/m/Y')
+							}}</span>
+					</div>
+					<div class="flex items-center">
+						<i class="fa fa-calendar text-joel-red mr-2 w-4"></i>
+						<span class="font-medium">Au {{ attribute(reserv, config[type].date_fin_field)|date('d/m/Y')
+							}}</span>
+					</div>
+					<div class="flex items-center">
+						<i class="fa fa-clock text-joel-red mr-2 w-4"></i>
+						<span>{{ reserv.duree }} jour{{ reserv.duree > 1 ? 's' : '' }}</span>
+					</div>
+					<div class="flex justify-between w-full">
+						<div class="flex items-center">
+							<i class="fa fa-tag text-joel-red mr-2 w-4"></i>
+							<span>Prix: {{ reserv.prix }}€</span>
+						</div>
+					</div>
+					{% if type != 'devis' %}
+					<div class="flex items-center">
+						<i class="fa fa-file text-joel-red mr-2 w-4"></i>
+						<span>Réf: {{ reserv.reference }}</span>
+					</div>
 					{% endif %}
 				</div>
 			</div>
-		{% endfor %}
+		</div>
+
+		<!-- Bottom: Actions -->
+		<div class="p-3 flex flex-wrap gap-2 justify-end">
+			{# Signature Status Info #}
+			{% if type != 'devis' %}
+			{% set latestContract = reserv.contracts|last %}
+			{% if latestContract %}
+			<div class="flex items-center mr-auto text-xs text-gray-500 gap-2">
+				<span class="font-medium mr-1">Contrat:</span>
+				<span
+					class="flex items-center gap-1 {{ latestContract.isSignedByClient ? 'text-green-600' : 'text-gray-400' }}"
+					title="Signature Client">
+					<i class="fas {{ latestContract.isSignedByClient ? 'fa-check-circle' : 'fa-circle' }}"></i> Client
+				</span>
+				<span
+					class="flex items-center gap-1 {{ latestContract.isSignedByAdmin ? 'text-green-600' : 'text-gray-400' }}"
+					title="Signature Agence">
+					<i class="fas {{ latestContract.isSignedByAdmin ? 'fa-check-circle' : 'fa-circle' }}"></i> Agence
+				</span>
+			</div>
+			{% endif %}
+			{% endif %}
+
+			{% if config[type].show_actions %}
+			{% if 'details' in config[type].actions %}
+			<a href="{{ path(type == 'devis' ? 'client_devis_show' : 'client_reservation_show', {'id': reserv.id}) }}"
+				class="border border-joel-dark text-joel-dark hover:bg-joel-dark hover:text-white px-3 py-2 rounded text-base font-medium transition-colors duration-200 min-w-[100px] text-center">
+				<i class="fa fa-info-circle mr-1"></i>Détails
+			</a>
+			{% endif %}
+			{% if 'download' in config[type].actions %}
+			<a href="{{ path('devis_pdf', {'hashedId': reserv.id|sha1}) }}"
+				class="border border-joel-dark text-joel-dark hover:bg-joel-dark hover:text-white px-3 py-2 rounded text-base font-medium transition-colors duration-200 min-w-[100px] text-center">
+				<i class="fa fa-download mr-1"></i>PDF
+			</a>
+			{% endif %}
+			{% if 'validate' in config[type].actions and (date(attribute(reserv, config[type].date_debut_field)) >
+			date("now") or reserv.transformed == true) %}
+
+			{# Client Signature Button #}
+			{% if type != 'devis' %}
+			{% set latestContract = reserv.contracts|last %}
+			{% if not latestContract or not latestContract.isSignedByClient %}
+			<a href="{{ path('contract_sign_client_reservation', {'id': reserv.id}) }}"
+				class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded text-base font-medium transition-colors duration-200 min-w-[100px] text-center">
+				<i class="fas fa-file-signature mr-1"></i>Signer
+			</a>
+			{% endif %}
+			{% endif %}
+
+			<a href="{{ path('validation_step2', {'id': reserv.id}) }}"
+				class="bg-joel-red hover:bg-joel-red-dark text-white px-3 py-2 rounded text-base font-medium transition-colors duration-200 min-w-[100px] text-center">
+				<i class="fas fa-check mr-1"></i>Valider
+			</a>
+			{% endif %}
+			{% endif %}
+		</div>
+	</div>
+	{% endfor %}
 	{% else %}
-		{% include 'client2/reservation/parts/empty_state.html.twig' with {'type': type} %}
+	{% include 'client2/reservation/parts/empty_state.html.twig' with {'type': type} %}
 	{% endif %}
 </div>
