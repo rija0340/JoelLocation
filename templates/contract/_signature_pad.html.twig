@@ -1,19 +1,27 @@
-<div class="signature-pad-container border rounded-2 p-3 bg-white shadow-sm text-center" style="max-width: 500px; margin: 0 auto;">
-    <div class="mb-2">
-        <canvas id="signature-pad" class="border rounded bg-white" width="500" height="200"
-            style="touch-action: none; max-width: 100%; border: 2px dashed #dee2e6 !important;"></canvas>
+<div class="signature-pad-container bg-white text-center w-full">
+    <div class="mb-4 signature-pad-frame mx-auto" style="max-width: 532px;">
+        <div class="signature-pad-canvas-wrapper bg-gray-50 p-2 border-2 border-gray-200 rounded-xl">
+            <canvas id="signature-pad" class="bg-white mx-auto cursor-crosshair block" width="500" height="200"
+                style="touch-action: none; max-width: 100%; border: 1px solid #dee2e6; border-radius: 0.5rem;"></canvas>
+        </div>
     </div>
-    <div class="d-flex justify-content-center gap-2 mb-2">
-        <button type="button" class="btn btn-outline-danger btn-sm px-3" id="clear-signature">
-            <i class="fa fa-eraser me-1"></i> Effacer
+    <div class="flex justify-center flex-wrap gap-3 mb-4 d-flex justify-content-center">
+        <button type="button"
+            class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 transition-colors shadow-sm btn btn-outline-secondary"
+            id="clear-signature">
+            <i class="fa fa-eraser mr-2 text-danger"></i> Effacer
         </button>
-        <button type="button" class="btn btn-outline-primary btn-sm px-3" id="save-signature">
-            <i class="fa fa-save me-1"></i> Sauvegarder
+        <button type="button"
+            class="inline-flex items-center px-4 py-2 border border-joel-red rounded-lg text-sm font-semibold text-joel-red bg-white hover:bg-joel-red hover:text-white transition-all shadow-sm btn btn-outline-primary"
+            style="border-color: #af0000; color: #af0000;" id="save-signature">
+            <i class="fa fa-save mr-2"></i> Prévisualiser
         </button>
     </div>
     <input type="hidden" name="signature_data" id="signature_data">
     <div>
-        <small class="text-muted">Dessinez votre signature dans le cadre ci-dessus</small>
+        <p class="text-xs text-gray-400">
+            <i class="fa fa-mouse-pointer mr-1"></i> Utilisez votre souris ou écran tactile pour signer
+        </p>
     </div>
 </div>
 
@@ -31,10 +39,17 @@
         // Resize canvas for high DPI screens
         function resizeCanvas() {
             var ratio = Math.max(window.devicePixelRatio || 1, 1);
-            canvas.width = canvas.offsetWidth * ratio;
-            canvas.height = canvas.offsetHeight * ratio;
+            var container = canvas.parentElement;
+            var width = container.offsetWidth;
+
+            // Limit width if container is very large
+            if (width > 500) width = 500;
+
+            canvas.style.width = width + "px";
+            canvas.width = width * ratio;
+            canvas.height = 200 * ratio; // Keep height fixed
             canvas.getContext("2d").scale(ratio, ratio);
-            signaturePad.clear(); // otherwise isEmpty() might return incorrect value
+            signaturePad.clear();
         }
 
         window.addEventListener("resize", resizeCanvas);
@@ -43,15 +58,32 @@
         document.getElementById('clear-signature').addEventListener('click', function () {
             signaturePad.clear();
             document.getElementById('signature_data').value = '';
+
+            // Visual feedback
+            canvas.style.borderColor = '#e5e7eb';
         });
 
         document.getElementById('save-signature').addEventListener('click', function () {
             if (signaturePad.isEmpty()) {
-                alert("Veuillez signer le document avant de sauvegarder.");
+                alert("Veuillez signer le document avant de continuer.");
             } else {
                 var data = signaturePad.toDataURL('image/png');
                 document.getElementById('signature_data').value = data;
-                alert("Signature sauvegardée !");
+
+                // Visual feedback
+                canvas.style.borderColor = '#af0000';
+
+                // You could show a small toast or change button text
+                const btn = this;
+                const originalHtml = btn.innerHTML;
+                btn.innerHTML = '<i class="fa fa-check mr-2"></i> Prêt !';
+                btn.classList.replace('text-joel-red', 'text-green-600');
+                btn.classList.replace('border-joel-red', 'border-green-600');
+                setTimeout(() => {
+                    btn.innerHTML = originalHtml;
+                    btn.classList.replace('text-green-600', 'text-joel-red');
+                    btn.classList.replace('border-green-600', 'border-joel-red');
+                }, 2000);
             }
         });
 
@@ -61,6 +93,11 @@
             form.addEventListener('submit', function (e) {
                 if (signaturePad.isEmpty()) {
                     e.preventDefault();
+
+                    // Shake effect on canvas
+                    canvas.classList.add('animate-shake');
+                    setTimeout(() => canvas.classList.remove('animate-shake'), 500);
+
                     alert("Veuillez signer le document avant de valider.");
                 } else {
                     var data = signaturePad.toDataURL('image/png');
@@ -70,3 +107,36 @@
         }
     });
 </script>
+
+<style>
+    @keyframes shake {
+
+        0%,
+        100% {
+            transform: translateX(0);
+        }
+
+        25% {
+            transform: translateX(-5px);
+        }
+
+        75% {
+            transform: translateX(5px);
+        }
+    }
+
+    .animate-shake {
+        animation: shake 0.2s ease-in-out 0s 2;
+        border-color: #ef4444 !important;
+    }
+
+    .signature-pad-canvas-wrapper {
+        background-color: #f8f9fa;
+        border: 2px solid #e9ecef;
+        padding: 8px;
+        border-radius: 12px;
+        display: inline-block;
+        width: 100%;
+        box-sizing: border-box;
+    }
+</style>

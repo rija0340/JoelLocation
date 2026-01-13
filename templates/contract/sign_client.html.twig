@@ -3,118 +3,192 @@
 {% block title %}Signature du Contrat #{{ contract.id }}{% endblock %}
 
 {% block body %}
-<div class="container py-4">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card border-0 shadow-sm rounded-2">
-                <div class="card-header bg-primary text-white text-center py-3" style="background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);">
-                    <h3 class="mb-0 fw-bold">
-                        <i class="fa fa-file-contract me-2"></i>Signature du Contrat
-                    </h3>
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100 mb-10">
+        <!-- Header -->
+        <div class="bg-joel-beige/20 px-8 py-10 text-center relative overflow-hidden border-b border-gray-200">
+            <!-- Decorative icon in background -->
+            <div class="absolute -right-10 -bottom-10 opacity-10 transform rotate-12">
+                <i class="fa fa-file-contract text-joel-red text-9xl"></i>
+            </div>
+
+            <h1 class="text-3xl font-bold mb-2 relative z-10 text-joel-red">
+                <i class="fa fa-file-contract mr-3"></i>Signature du Contrat
+            </h1>
+            <p class="text-gray-600 font-semibold relative z-10">Contrat #{{ contract.id }} - Réservation {{
+                contract.reservation.reference }}</p>
+        </div>
+
+        <div class="p-8">
+            {# Flash Messages #}
+            {% for message in app.flashes('error') %}
+            <div class="mb-6 flex items-center p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-r-lg"
+                role="alert">
+                <div class="flex-shrink-0 mr-3">
+                    <i class="fa fa-exclamation-triangle"></i>
+                </div>
+                <div class="text-sm font-medium">
+                    {{ message }}
+                </div>
+                <button type="button" class="ml-auto -mx-1.5 -my-1.5 p-1.5 text-red-500 hover:bg-red-100 rounded-lg"
+                    onclick="this.parentElement.remove()">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            {% endfor %}
+
+            {% for message in app.flashes('success') %}
+            <div class="mb-6 flex items-center p-4 bg-green-50 border-l-4 border-green-500 text-green-700 rounded-r-lg"
+                role="alert">
+                <div class="flex-shrink-0 mr-3">
+                    <i class="fa fa-check-circle"></i>
+                </div>
+                <div class="text-sm font-medium">
+                    {{ message }}
+                </div>
+                <button type="button" class="ml-auto -mx-1.5 -my-1.5 p-1.5 text-green-500 hover:bg-green-100 rounded-lg"
+                    onclick="this.parentElement.remove()">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            {% endfor %}
+
+            {# Reservation Quick Info #}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <div class="bg-gray-50 rounded-xl p-5 border border-gray-200 transition-all hover:border-joel-red/30">
+                    <div class="flex items-center mb-1">
+                        <i class="fa fa-info-circle text-joel-red mr-2"></i>
+                        <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Référence Réservation</h3>
+                    </div>
+                    <p class="text-lg font-bold text-joel-dark">{{ contract.reservation.reference }}</p>
                 </div>
 
-                <div class="card-body p-4">
-                    {# Alertes #}
-                    {% for message in app.flashes('error') %}
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <i class="fa fa-exclamation-triangle me-2"></i>{{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <div class="bg-gray-50 rounded-xl p-5 border border-gray-200 transition-all hover:border-joel-red/30">
+                    <div class="flex items-center mb-1">
+                        <i class="fa fa-car text-joel-red mr-2"></i>
+                        <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Véhicule</h3>
                     </div>
-                    {% endfor %}
-                    {% for message in app.flashes('success') %}
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <i class="fa fa-check-circle me-2"></i>{{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                    {% endfor %}
-
-                    {# Informations Réservation #}
-                    <div class="row mb-4 g-3">
-                        <div class="col-md-6">
-                            <div class="border rounded p-3 bg-light">
-                                <h6 class="text-primary mb-2">
-                                    <i class="fa fa-info-circle me-1"></i>Référence
-                                </h6>
-                                <p class="mb-0">{{ contract.reservation.reference }}</p>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="border rounded p-3 bg-light">
-                                <h6 class="text-primary mb-2">
-                                    <i class="fa fa-car me-1"></i>Véhicule
-                                </h6>
-                                <p class="mb-0">{{ contract.reservation.vehicule.immatriculation }}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <hr class="my-4">
-
-                    {# Contenu du Contrat #}
-                    <div class="contract-content bg-light border rounded p-3 mb-4"
-                        style="max-height: 300px; overflow-y: auto; font-family: 'Courier New', Courier, monospace;">
-                        <h6 class="text-primary mb-2">
-                            <i class="fa fa-file-alt me-1"></i>Contenu du Contrat
-                        </h6>
-                        <pre class="mb-0" style="white-space: pre-wrap; font-size: 0.9rem; line-height: 1.4;">{{ contract.contractContent }}</pre>
-                    </div>
-
-                    {# Zone de Signature #}
-                    {% if not contract.isSignedByClient %}
-                    <div class="signature-section">
-                        <div class="text-center mb-3">
-                            <h5 class="text-primary mb-2">
-                                <i class="fa fa-pen-alt me-2"></i>Votre Signature
-                            </h5>
-                            <p class="text-muted mb-3" style="font-size: 0.9rem;">
-                                Veuillez signer dans le cadre ci-dessous en utilisant votre souris ou votre doigt (sur écran tactile).
-                            </p>
-                        </div>
-
-                        <form method="post" action="{{ path('contract_sign_client_process', {id: contract.id}) }}">
-                            <div class="d-flex justify-content-center mb-3">
-                                {% include 'contract/_signature_pad.html.twig' %}
-                            </div>
-
-                            <div class="d-grid gap-2 mt-4">
-                                <button type="submit" class="btn btn-primary py-2 rounded-2 fw-bold">
-                                    <i class="fa fa-file-signature me-2"></i>Signer le Contrat
-                                </button>
-
-                                <a href="{{ path('client_reservation_show', {'id': contract.reservation.id}) }}"
-                                   class="btn btn-outline-secondary py-2 rounded-2">
-                                    <i class="fa fa-arrow-left me-2"></i>Retour à la réservation
-                                </a>
-                            </div>
-                        </form>
-                    </div>
-                    {% else %}
-                    <div class="alert alert-success text-center py-4 rounded-2">
-                        <div class="d-flex flex-column align-items-center">
-                            <i class="fa fa-check-circle text-success" style="font-size: 2.5rem;"></i>
-                            <h5 class="mt-2 mb-2 fw-bold">Contrat Signé avec Succès !</h5>
-                            <p class="mb-0" style="font-size: 0.9rem;">
-                                Vous avez signé ce contrat le
-                                <strong>{{ contract.signatures|filter(s => s.signatureType == 'client')|first.signedAt|date('d/m/Y à H:i') }}</strong>.
-                            </p>
-
-                            <div class="mt-3 d-flex gap-2 flex-wrap justify-content-center">
-                                <a href="{{ path('client_reservation_show', {'id': contract.reservation.id}) }}"
-                                   class="btn btn-primary btn-sm me-1">
-                                    <i class="fa fa-arrow-left me-1"></i>Retour
-                                </a>
-                                <a href="{{ path('contract_download_client', {'id': contract.id}) }}"
-                                   class="btn btn-outline-primary btn-sm">
-                                    <i class="fa fa-download me-1"></i>Télécharger
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    {% endif %}
+                    <p class="text-lg font-bold text-joel-dark">
+                        {{ contract.reservation.vehicule.marque.libelle }} {{
+                        contract.reservation.vehicule.modele.libelle }}
+                        <span class="text-sm font-normal text-gray-500 ml-2">({{
+                            contract.reservation.vehicule.immatriculation }})</span>
+                    </p>
                 </div>
             </div>
+
+            <hr class="border-gray-100 mb-8">
+
+            {# Contract Content Preview #}
+            <div class="mb-10">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-bold text-joel-dark flex items-center">
+                        <i class="fa fa-file-alt text-joel-red mr-3"></i>Contenu du Contrat
+                    </h2>
+                    <span
+                        class="text-xs bg-gray-100 text-gray-500 px-3 py-1 rounded-full font-semibold uppercase">Document
+                        Officiel</span>
+                </div>
+
+                <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 relative">
+                    <div class="prose prose-sm max-w-none overflow-y-auto max-h-[400px] text-gray-700 font-mono leading-relaxed"
+                        style="white-space: pre-wrap; font-size: 0.85rem;">
+                        {{ contract.contractContent }}
+                    </div>
+
+                    <!-- Fade effect at bottom if content is long -->
+                    <div
+                        class="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-gray-50/80 to-transparent pointer-events-none rounded-b-xl">
+                    </div>
+                </div>
+                <p class="mt-2 text-xs text-gray-400 italic">
+                    <i class="fa fa-scroll mr-1"></i> Veuillez faire défiler le texte ci-dessus pour lire l'intégralité
+                    des clauses contractuelles.
+                </p>
+            </div>
+
+            {# Signature Section #}
+            {% if not contract.isSignedByClient %}
+            <div class="bg-joel-beige/30 rounded-2xl p-8 border border-joel-beige">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-bold text-joel-dark mb-2">Signature Électronique</h2>
+                    <p class="text-gray-600 max-w-md mx-auto">
+                        Veuillez signer dans le cadre ci-dessous en utilisant votre souris ou votre doigt. Cette
+                        signature a pleine valeur juridique.
+                    </p>
+                </div>
+
+                <form method="post" action="{{ path('contract_sign_client_process', {id: contract.id}) }}"
+                    class="space-y-8">
+                    <div
+                        class="bg-white p-4 rounded-xl shadow-inner border border-gray-200 inline-block mx-auto w-full max-w-[532px]">
+                        {% include 'contract/_signature_pad.html.twig' %}
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="{{ path('client_reservation_show', {'id': contract.reservation.id}) }}"
+                            class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 rounded-xl font-bold text-gray-600 bg-white hover:bg-gray-50 transition-colors order-2 sm:order-1">
+                            <i class="fa fa-arrow-left mr-2"></i>Retour à la réservation
+                        </a>
+
+                        <button type="submit"
+                            class="inline-flex items-center justify-center px-8 py-3 border border-transparent rounded-xl font-bold text-white bg-joel-red hover:bg-joel-red-dark shadow-lg shadow-joel-red/20 transition-all hover:scale-[1.02] active:scale-95 btn-submit-signature order-1 sm:order-2">
+                            <i class="fa fa-file-signature mr-2"></i>Confirmer et Signer
+                        </button>
+                    </div>
+                </form>
+            </div>
+            {% else %}
+            <div class="bg-green-50 border border-green-100 rounded-2xl p-10 text-center">
+                <div
+                    class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-green-100 text-green-600 mb-6">
+                    <i class="fa fa-check-double text-3xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Contrat Signé avec Succès !</h2>
+                <p class="text-gray-600 mb-8 max-w-sm mx-auto">
+                    Votre signature a été enregistrée le
+                    <span class="font-bold text-green-700">{{ contract.signatures|filter(s => s.signatureType ==
+                        'client')|first.signedAt|date('d/m/Y à H:i') }}</span>.
+                </p>
+
+                <div class="flex flex-wrap gap-4 justify-center">
+                    <a href="{{ path('client_reservation_show', {'id': contract.reservation.id}) }}"
+                        class="inline-flex items-center px-6 py-3 bg-white border border-gray-200 rounded-xl font-bold text-gray-700 hover:bg-gray-50 transition-colors shadow-sm">
+                        <i class="fa fa-arrow-left mr-2 font-light"></i>Retour aux détails
+                    </a>
+                    <a href="{{ contract_download_client is defined ? path('contract_download_client', {'id': contract.id}) : '#' }}"
+                        class="inline-flex items-center px-8 py-3 bg-joel-red text-white rounded-xl font-bold hover:bg-joel-red-dark transition-colors shadow-lg shadow-joel-red/20">
+                        <i class="fa fa-download mr-2"></i>Télécharger le Contrat (PDF)
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Help / Security Footer -->
+    <div class="flex flex-col md:flex-row items-center justify-between text-gray-400 text-xs px-4 mb-12">
+        <div class="flex items-center mb-4 md:mb-0">
+            <i class="fa fa-shield-alt mr-2"></i> Signature électronique sécurisée conforme eIDAS
+        </div>
+        <div class="flex gap-6">
+            <span>Identification IP enregistrée</span>
+            <span>Horodatage certifié</span>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    // Visual feedback for signature submission
+    document.querySelector('form')?.addEventListener('submit', function () {
+        const btn = this.querySelector('.btn-submit-signature');
+        if (btn) {
+            btn.innerHTML = '<i class="fa fa-spinner fa-spin mr-2"></i> Traitement...';
+            btn.disabled = true;
+            btn.classList.add('opacity-75', 'cursor-not-allowed');
+        }
+    });
+</script>
 {% endblock %}
