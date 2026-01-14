@@ -246,6 +246,10 @@
 			<i class="fa fa-send (alias)"></i>
 			Envoyer facture</a>
 
+		<a href="#section-signature" type="button" class="btn btn-outline-primary text-uppercase p-1">
+			<i class="fa fa-pencil"></i>
+			Signature contrat</a>
+
 	</div>
 	<div class="row mt-3">
 		<div class="col-md-2">
@@ -506,584 +510,589 @@
 		</div>
 	</div>
 
-{# périod de location #}
-<div class="x_title">
-	<h2>
-		<i class="fa fa-chevron-right"></i>période de location
-	</h2>
+	{# périod de location #}
+	<div class="x_title">
+		<h2>
+			<i class="fa fa-chevron-right"></i>période de location
+		</h2>
 
-	<div class="clearfix"></div>
-</div>
-<div class="x_content periode_location">
-	<div class="row">
-		<div class="col-md-6">
-			<span class="label_periode">Départ :</span>
-			<br>
-			<span class="js-agenceDepart">{{ reservation.agenceDepart }}
-			</span>
-			<br>
-			<span class="js-dateDepart">{{ reservation.dateDebut|date('d-m-Y H:i') }}</span>
-		</div>
-		<div class="col-md-6">
-			<span class="label_periode">Retour :</span>
-			<br>
-			<span class="js-agenceRetour">{{ reservation.agenceRetour }}
-			</span>
-			<br>
-			<span class="js-dateRetour">{{ reservation.dateFin|date('d-m-Y H:i') }}</span>
-
-		</div>
-		<div class="col-md-6">
-			<span class="label_periode">
-				Vol arrivée :
-			</span>
-			<br>
-			{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.numVolRetour : "" }}
-		</div>
-		<div class="col-md-6">
-			<strong class="label_periode">Vol retour :</strong>
-			<br>
-			{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.numVolAller : "" }}
-
-		</div>
-		<div class="col-md-6">
-			<span class="label_periode">Nombre de personne :</span>
-			<br>
-			{% if reservation.client.infosResa %}
-			Adulte(s):
-			{{ reservation.client.infosResa.nbrAdultes }}
-			{% else %}
-			Adulte(s):--
-			{% endif %}
-
-			{% if reservation.client.infosResa %}
-			Enfant(s):
-			{{ reservation.client.infosResa.nbrEnfants }},
-			{% else %}
-			Enfant(s): --
-
-			{% endif %}
-			{% if reservation.client.infosResa %}
-			Bébé(s):
-			{{ reservation.client.infosResa.nbrBebes }}
-			{% else %}
-			Bébé(s): 0,
-			{% endif %}
-		</div>
-		<div class="col-md-6">
-			<span class="label_periode">Note client :</span>
-			<div class="alert alert-secondary" role="alert"></div>
-		</div>
-		<div class="col-md-6">
-			<span class="label_periode">Informations internes :</span>
-			<div class="alert alert-secondary" role="alert"></div>
-		</div>
-		<div class="col-md-6">
-			<span class="label_periode">Motif annulation :</span>
-			<div class="alert alert-secondary" role="alert"></div>
-		</div>
-
+		<div class="clearfix"></div>
 	</div>
-	<div>
-		<h3 class="text-center">
-			SOIT
-			<span class="js-duree" style="color:red">{{ reservation.duree }}
-				JOUR(S)</span>
-			DE LOCATION
-		</h3>
-	</div>
-</div>
-{# options et garanties souscrites #}
-<div class="x_title">
-	<h2>
-		<i class="fa fa-chevron-right"></i>options et garanties souscrites
-	</h2>
-	<div class="clearfix"></div>
-</div>
-<div class="x_content options_garanties">
-	<p class="font-weight-bold label">
-		Option(s) souscrite(s):
-	</p>
-	<ul class="">
-		{% if reservation.conducteur ==1 %}
-		<li>Conducteur</li>
-		{% endif %}
-		{# {% for option in reservation.options %}
-		<li class="js-siege">{{ option }}</li>
-		{% endfor %} #}
-
-		{% for option in reservation.devisOptions %}
-
-		<li class="js-siege">{{option.opt.appelation}}
-			{% if option.opt.appelation matches '/Siège/' %}
-			({{ 'nbr : '~ option.quantity}})
-			{% endif %}
-			-
-			{{(option.opt.prix * option.quantity)|number_format(2,","," ")}}€
-		</li>
-		{% endfor %}
-	</ul>
-	{# <p class="font-italic">Aucune option souscrite.</p> #}
-	<p class="font-weight-bold label">
-		Garantie(s) souscrite(s):
-	</p>
-	<ul class="">
-		{% for gar in reservation.garanties %}
-		<li class="js-garantie">{{ gar }}
-			-
-			{{(gar.prix )|number_format(2,","," ")}}€</li>
-		{% endfor %}
-	</ul>
-	{# <p class="font-italic">Aucune garantie souscrite.</p> #}
-	<p class="font-weight-bold label">
-		Taxes de dépassement horaire
-	</p>
-	<p class="font-italic">Pas de dépassement d'horaire</p>
-
-</div>
-<div class="x_title">
-	<h2>
-		<i class="fa fa-chevron-right"></i>Frais supplémentaires
-	</h2>
-	<div class="clearfix"></div>
-</div>
-<div class="x_content mb-5">
-	{# options et garanties souscrites #}
-
-
-	{% form_theme formCollectionFraisSupplResa _self %}
-
-	{{form_start(formCollectionFraisSupplResa)}}
-	<div class="form-group">
-		<table class="table table-bordered {% if reservation.fraisSupplResas|length == 0 %} hide {% endif %} "
-			id="frais-table">
-			<thead>
-				<tr>
-					<th>Description</th>
-					<th>Prix u.</th>
-					<th>Quantité</th>
-					<th>Prix TTC</th>
-					<th>Actions</th>
-				</tr>
-			</thead>
-			<tbody>
-
-				{{form_widget(formCollectionFraisSupplResa)}}
-
-			</tbody>
-		</table>
-	</div>
-	<button id="btnSaveFrais" class="btn btn-danger {% if reservation.fraisSupplResas|length == 0 %} hide {% endif %}"
-		type="submit">Enregistrer</button>
-	{{form_end(formCollectionFraisSupplResa)}}</tr>
-</div>
-{# Montant de la reservation #}
-<div class="x_title">
-	<div class="row">
-		<div class="col-auto pl-2">
-			<h2>
-				<i class="fa fa-chevron-right"></i>montant de la réservation TTC
-			</h2>
-		</div>
-		<div class="col-auto ml-auto d-flex align-items-center">
-			<div class="js-prix">
-				{{ (prixResaTTC + totalFraisTTC)|number_format(2,","," ") }}
-				€
+	<div class="x_content periode_location">
+		<div class="row">
+			<div class="col-md-6">
+				<span class="label_periode">Départ :</span>
+				<br>
+				<span class="js-agenceDepart">{{ reservation.agenceDepart }}
+				</span>
+				<br>
+				<span class="js-dateDepart">{{ reservation.dateDebut|date('d-m-Y H:i') }}</span>
 			</div>
-		</div>
-	</div>
-	<div class="clearfix"></div>
-</div>
-<div class="x_content ">
-	<div class="row">
-		<div class="col-md-8 col-sm-8 col-xs-8">
-			<i class="fa fa-chevron-right"></i>Location NDMR
-			{{ reservation.duree }}
-			jours
-		</div>
-		<div class="col-md-4 col-sm-4 col-xs-4">
-			<div class="text-right">
-				{{ reservation.tarifVehicule|number_format(2,","," ") }}€
+			<div class="col-md-6">
+				<span class="label_periode">Retour :</span>
+				<br>
+				<span class="js-agenceRetour">{{ reservation.agenceRetour }}
+				</span>
+				<br>
+				<span class="js-dateRetour">{{ reservation.dateFin|date('d-m-Y H:i') }}</span>
+
 			</div>
-		</div>
-
-		<div class="col-md-8 col-sm-8 col-xs-8">
-			<i class="fa fa-chevron-right"></i>Total dépassements horaires
-		</div>
-		<div class="col-md-4 col-sm-4 col-xs-4">
-			<div class="text-right">
-				0.00 €
+			<div class="col-md-6">
+				<span class="label_periode">
+					Vol arrivée :
+				</span>
+				<br>
+				{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.numVolRetour : "" }}
 			</div>
-		</div>
+			<div class="col-md-6">
+				<strong class="label_periode">Vol retour :</strong>
+				<br>
+				{{ reservation.client.infosVolResa ? reservation.client.infosVolResa.numVolAller : "" }}
 
-		<div class="col-md-8 col-sm-8 col-xs-8">
-			<i class="fa fa-chevron-right"></i>Total options souscrites
-		</div>
-		<div class="col-md-4 col-sm-4 col-xs-4">
-			<div class="text-right">{{ reservation.prixOptions|number_format(2,","," ") }}€</div>
-		</div>
-
-		<div class="col-md-8 col-sm-8 col-xs-8">
-			<i class="fa fa-chevron-right"></i>Total garanties souscrites
-
-		</div>
-		<div class="col-md-4 col-sm-4 col-xs-4">
-			<div class="text-right">
-				{{ reservation.prixGaranties|number_format(2,","," ") }}
-				€
 			</div>
-		</div>
-		<div class="col-md-8 col-sm-8 col-xs-8">
-			<i class="fa fa-chevron-right"></i>Montant frais supplémentaires HT
-		</div>
-		<div class="col-md-4 col-sm-4 col-xs-4">
-			<div class="text-right">
-				{#{{totalFraisHT|number_format(2,","," ")}}
-				€#}
-				-
-			</div>
-		</div>
+			<div class="col-md-6">
+				<span class="label_periode">Nombre de personne :</span>
+				<br>
+				{% if reservation.client.infosResa %}
+				Adulte(s):
+				{{ reservation.client.infosResa.nbrAdultes }}
+				{% else %}
+				Adulte(s):--
+				{% endif %}
 
-		<div class="col-md-8 col-sm-8 col-xs-8">
-			<i class="fa fa-chevron-right"></i>Montant à régler TTC
-		</div>
-		<div class="col-md-4 col-sm-4 col-xs-4">
-			<div class="text-right">
-				{{ (totalFraisTTC + prixResaTTC)|number_format(2,","," ") }}
-				€
-			</div>
-		</div>
+				{% if reservation.client.infosResa %}
+				Enfant(s):
+				{{ reservation.client.infosResa.nbrEnfants }},
+				{% else %}
+				Enfant(s): --
 
-
-	</div>
-
-</div>
-
-{# options et garanties souscrites #}
-<div class="x_title">
-	<h2>
-		<i class="fa fa-chevron-right"></i>réglement(s)
-	</h2>
-	<div class="clearfix"></div>
-</div>
-<div class="x_content">
-
-	{% if reservation.sommePaiements < totalResaFraisTTC %} <div class="d-flex justify-content-end">
-		<div class="btn-group mb-1">
-			<button type="button" class="btn btn-danger dropdown-toggle font-weight-bold " data-toggle="dropdown"
-				aria-haspopup="true" aria-expanded="false">
-				Autre réglement
-			</button>
-			<div class="dropdown-menu">
-				<button class="dropdown-item" id="btnAjouterPaiement">Ajouter un paiement</button>
-				{# <button class="dropdown-item" id="btnRelancePaiementSolde">Relance paiement solde</button> #}
-				{% if appelPaiement is not null %}
-				<a type="button" href="{{ path('envoi_email_appel_paiement_index', {'id': appelPaiement.id}) }}"
-					class="dropdown-item">
-					Relance paiement solde
-				</a>
+				{% endif %}
+				{% if reservation.client.infosResa %}
+				Bébé(s):
+				{{ reservation.client.infosResa.nbrBebes }}
+				{% else %}
+				Bébé(s): 0,
 				{% endif %}
 			</div>
+			<div class="col-md-6">
+				<span class="label_periode">Note client :</span>
+				<div class="alert alert-secondary" role="alert"></div>
+			</div>
+			<div class="col-md-6">
+				<span class="label_periode">Informations internes :</span>
+				<div class="alert alert-secondary" role="alert"></div>
+			</div>
+			<div class="col-md-6">
+				<span class="label_periode">Motif annulation :</span>
+				<div class="alert alert-secondary" role="alert"></div>
+			</div>
+
 		</div>
-</div>
-{% endif %}
-<div id="formAjoutPaiement" class="hide">
-	{{ form_start(formAjoutPaiement) }}
-	<div class="row">
-		<div class="col-md-3">
-			<label for="">Mode paiement :
-			</label>
-			{{ form_widget(formAjoutPaiement.modePaiement) }}
-		</div>
-		<div class="col-md-3">
-			<label for="">Montant :
-			</label>
-			{{ form_widget(formAjoutPaiement.montant) }}
-		</div>
-		<div class="col-md-3">
-			<label for="">Date paiement :
-			</label>
-			{{ form_widget(formAjoutPaiement.datePaiement) }}
-		</div>
-		<div class="col-2">
-			<label for="" class="text-white">d</label><br>
-			<button type="submit" class="btn btn-danger">Enregistrer</button>
+		<div>
+			<h3 class="text-center">
+				SOIT
+				<span class="js-duree" style="color:red">{{ reservation.duree }}
+					JOUR(S)</span>
+				DE LOCATION
+			</h3>
 		</div>
 	</div>
-	{{ form_end(formAjoutPaiement) }}
-</div>
-<table class="table table-bordered text-center mt-2">
-	<thead class="bg-dark text-white text-uppercase">
-		<tr>
-			<th>date</th>
-			<th>type</th>
-			<th>méthode</th>
-			<th>référence</th>
-			<th>montant</th>
-			<th>motif</th>
-			<th>action</th>
-		</tr>
-	</thead>
-	<tbody>
-		{% if reservation.paiements|length > 0 %}
-		{% for paiement in reservation.paiements %}
-		<tr>
-			<td>{{ paiement.datePaiement|date('d/m/Y H:i') }}</td>
-			<td>Débit</td>
-			<td>{{ paiement.modePaiement.libelle }}</td>
-			<td></td>
-			<td>{{ paiement.montant|number_format(2,","," ") }}</td>
-			<td></td>
-			<td>
-				<form method="post"
-					action="{{ path('reservation_paiement_delete', {'id': paiement.id, 'reservation' : reservation.id}) }}"
-					onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer ce paiement ?');">
-					<input type="hidden" name="_method" value="DELETE">
-					<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ paiement.id) }}">
-					<button class="btn btn-danger">
-						<i class="fa fa-trash (alias)" aria-hidden="true"></i>
-						Supprimer
-					</button>
-				</form>
-			</td>
-		</tr>
-		{% endfor %}
-		{% else %}
-		<tr>
-			<td colspan="7">
-				Aucun paiement effectué
-			</td>
-		</tr>
-
-		</td>
-		{% endif %}
-	</tbody>
-</table>
-
-<div class="row">
-	<div class="col-md-8 col-sm-8 col-xs-8">
-		<i class="fa fa-chevron-right"></i>Total des règlements effectués :
+	{# options et garanties souscrites #}
+	<div class="x_title">
+		<h2>
+			<i class="fa fa-chevron-right"></i>options et garanties souscrites
+		</h2>
+		<div class="clearfix"></div>
 	</div>
+	<div class="x_content options_garanties">
+		<p class="font-weight-bold label">
+			Option(s) souscrite(s):
+		</p>
+		<ul class="">
+			{% if reservation.conducteur ==1 %}
+			<li>Conducteur</li>
+			{% endif %}
+			{# {% for option in reservation.options %}
+			<li class="js-siege">{{ option }}</li>
+			{% endfor %} #}
 
-	<div class="col-md-4 col-sm-4 col-xs-4">
-		<div class="text-right">
-			{{ reservation.sommePaiements|number_format(2,","," ") }}€
+			{% for option in reservation.devisOptions %}
+
+			<li class="js-siege">{{option.opt.appelation}}
+				{% if option.opt.appelation matches '/Siège/' %}
+				({{ 'nbr : '~ option.quantity}})
+				{% endif %}
+				-
+				{{(option.opt.prix * option.quantity)|number_format(2,","," ")}}€
+			</li>
+			{% endfor %}
+		</ul>
+		{# <p class="font-italic">Aucune option souscrite.</p> #}
+		<p class="font-weight-bold label">
+			Garantie(s) souscrite(s):
+		</p>
+		<ul class="">
+			{% for gar in reservation.garanties %}
+			<li class="js-garantie">{{ gar }}
+				-
+				{{(gar.prix )|number_format(2,","," ")}}€</li>
+			{% endfor %}
+		</ul>
+		{# <p class="font-italic">Aucune garantie souscrite.</p> #}
+		<p class="font-weight-bold label">
+			Taxes de dépassement horaire
+		</p>
+		<p class="font-italic">Pas de dépassement d'horaire</p>
+
+	</div>
+	<div class="x_title">
+		<h2>
+			<i class="fa fa-chevron-right"></i>Frais supplémentaires
+		</h2>
+		<div class="clearfix"></div>
+	</div>
+	<div class="x_content mb-5">
+		{# options et garanties souscrites #}
+
+
+		{% form_theme formCollectionFraisSupplResa _self %}
+
+		{{form_start(formCollectionFraisSupplResa)}}
+		<div class="form-group">
+			<table class="table table-bordered {% if reservation.fraisSupplResas|length == 0 %} hide {% endif %} "
+				id="frais-table">
+				<thead>
+					<tr>
+						<th>Description</th>
+						<th>Prix u.</th>
+						<th>Quantité</th>
+						<th>Prix TTC</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+
+					{{form_widget(formCollectionFraisSupplResa)}}
+
+				</tbody>
+			</table>
 		</div>
+		<button id="btnSaveFrais"
+			class="btn btn-danger {% if reservation.fraisSupplResas|length == 0 %} hide {% endif %}"
+			type="submit">Enregistrer</button>
+		{{form_end(formCollectionFraisSupplResa)}}</tr>
 	</div>
-
-	<div class="col-md-8 col-sm-8 col-xs-8">
-		<i class="fa fa-chevron-right"></i>Solde
-	</div>
-	<div class="col-md-4 col-sm-4 col-xs-4">
-		<div class="text-right">
-			{{ ((totalFraisTTC + prixResaTTC) - reservation.sommePaiements)|number_format(2,","," ") }}€
-		</div>
-	</div>
-</div>
-
-
-{# avis client #}
-<div class="x_title">
-	<h2>
-		<i class="fa fa-chevron-right"></i>avis client
-	</h2>
-	<div class="clearfix"></div>
-</div>
-
-{% if reservation.avis %}
-
-<div class="x_content">
-	<div class="row">
-		<div class="col-md-4">
-			<div class="row">
-				<div class="col-auto">
-					Global
-				</div>
-				<div class="col-auto">
-					<div class="x_content">
-						{% for i in 1..(reservation.avis.global) %}
-						<i class="fa fa-star"></i>
-						{% endfor %}
-						{% if reservation.avis.global != 5 %}
-						{% for j in 1..(5 - reservation.avis.global) %}
-						<i class="fa fa-star-o"></i>
-						{% endfor %}
-						{% endif %}
-					</div>
+	{# Montant de la reservation #}
+	<div class="x_title">
+		<div class="row">
+			<div class="col-auto pl-2">
+				<h2>
+					<i class="fa fa-chevron-right"></i>montant de la réservation TTC
+				</h2>
+			</div>
+			<div class="col-auto ml-auto d-flex align-items-center">
+				<div class="js-prix">
+					{{ (prixResaTTC + totalFraisTTC)|number_format(2,","," ") }}
+					€
 				</div>
 			</div>
 		</div>
-		<div class="col-md-4">
-			<div class="row">
-				<div class="col-auto">
-					Ponctualité
-				</div>
-				<div class="col-auto">
-					<div class="x_content">
-						{% for i in 1..(reservation.avis.ponctualite) %}
-						<i class="fa fa-star"></i>
-						{% endfor %}
-						{% if reservation.avis.ponctualite != 5 %}
-						{% for j in 1..(5 - reservation.avis.ponctualite) %}
-						<i class="fa fa-star-o"></i>
-						{% endfor %}
-						{% endif %}
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-4">
-			<div class="row">
-				<div class="col-auto">
-					Accueil
-				</div>
-				<div class="col-auto">
-					<div class="x_content">
-						{% for i in 1..(reservation.avis.accueil) %}
-						<i class="fa fa-star"></i>
-						{% endfor %}
-						{% if reservation.avis.accueil != 5 %}
-						{% for j in 1..(5 - reservation.avis.accueil) %}
-						<i class="fa fa-star-o"></i>
-						{% endfor %}
-						{% endif %}
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-4">
-			<div class="row">
-				<div class="col-auto">
-					Service:
-				</div>
-				<div class="col-auto">
-					<div class="x_content">
-						{% for i in 1..(reservation.avis.service) %}
-						<i class="fa fa-star"></i>
-						{% endfor %}
-						{% if reservation.avis.service != 5 %}
-						{% for j in 1..(5 - reservation.avis.service) %}
-						<i class="fa fa-star-o"></i>
-						{% endfor %}
-						{% endif %}
-					</div>
-				</div>
-			</div>
-		</div>
+		<div class="clearfix"></div>
 	</div>
-</div>
-{% else %}
-<div class="text-center">
-	Aucun avis pour cette réservation
-</div>
-{% endif %}
+	<div class="x_content ">
+		<div class="row">
+			<div class="col-md-8 col-sm-8 col-xs-8">
+				<i class="fa fa-chevron-right"></i>Location NDMR
+				{{ reservation.duree }}
+				jours
+			</div>
+			<div class="col-md-4 col-sm-4 col-xs-4">
+				<div class="text-right">
+					{{ reservation.tarifVehicule|number_format(2,","," ") }}€
+				</div>
+			</div>
 
-{# Signature électronique du contrat #}
-<div class="x_title" id="section-signature">
-	<h2>
-		<i class="fa fa-chevron-right"></i>Signature électronique du contrat
-	</h2>
-	<div class="clearfix"></div>
-</div>
-<div class="x_content">
-	{% set latestContract = null %}
-	{% for contract in reservation.contracts %}
-	{% if latestContract is null or contract.createdAt > latestContract.createdAt %}
-	{% set latestContract = contract %}
+			<div class="col-md-8 col-sm-8 col-xs-8">
+				<i class="fa fa-chevron-right"></i>Total dépassements horaires
+			</div>
+			<div class="col-md-4 col-sm-4 col-xs-4">
+				<div class="text-right">
+					0.00 €
+				</div>
+			</div>
+
+			<div class="col-md-8 col-sm-8 col-xs-8">
+				<i class="fa fa-chevron-right"></i>Total options souscrites
+			</div>
+			<div class="col-md-4 col-sm-4 col-xs-4">
+				<div class="text-right">{{ reservation.prixOptions|number_format(2,","," ") }}€</div>
+			</div>
+
+			<div class="col-md-8 col-sm-8 col-xs-8">
+				<i class="fa fa-chevron-right"></i>Total garanties souscrites
+
+			</div>
+			<div class="col-md-4 col-sm-4 col-xs-4">
+				<div class="text-right">
+					{{ reservation.prixGaranties|number_format(2,","," ") }}
+					€
+				</div>
+			</div>
+			<div class="col-md-8 col-sm-8 col-xs-8">
+				<i class="fa fa-chevron-right"></i>Montant frais supplémentaires HT
+			</div>
+			<div class="col-md-4 col-sm-4 col-xs-4">
+				<div class="text-right">
+					{#{{totalFraisHT|number_format(2,","," ")}}
+					€#}
+					-
+				</div>
+			</div>
+
+			<div class="col-md-8 col-sm-8 col-xs-8">
+				<i class="fa fa-chevron-right"></i>Montant à régler TTC
+			</div>
+			<div class="col-md-4 col-sm-4 col-xs-4">
+				<div class="text-right">
+					{{ (totalFraisTTC + prixResaTTC)|number_format(2,","," ") }}
+					€
+				</div>
+			</div>
+
+
+		</div>
+
+	</div>
+
+	{# options et garanties souscrites #}
+	<div class="x_title">
+		<h2>
+			<i class="fa fa-chevron-right"></i>réglement(s)
+		</h2>
+		<div class="clearfix"></div>
+	</div>
+	<div class="x_content">
+
+		{% if reservation.sommePaiements < totalResaFraisTTC %} <div class="d-flex justify-content-end">
+			<div class="btn-group mb-1">
+				<button type="button" class="btn btn-danger dropdown-toggle font-weight-bold " data-toggle="dropdown"
+					aria-haspopup="true" aria-expanded="false">
+					Autre réglement
+				</button>
+				<div class="dropdown-menu">
+					<button class="dropdown-item" id="btnAjouterPaiement">Ajouter un paiement</button>
+					{# <button class="dropdown-item" id="btnRelancePaiementSolde">Relance paiement solde</button> #}
+					{% if appelPaiement is not null %}
+					<a type="button" href="{{ path('envoi_email_appel_paiement_index', {'id': appelPaiement.id}) }}"
+						class="dropdown-item">
+						Relance paiement solde
+					</a>
+					{% endif %}
+				</div>
+			</div>
+	</div>
 	{% endif %}
-	{% endfor %}
+	<div id="formAjoutPaiement" class="hide">
+		{{ form_start(formAjoutPaiement) }}
+		<div class="row">
+			<div class="col-md-3">
+				<label for="">Mode paiement :
+				</label>
+				{{ form_widget(formAjoutPaiement.modePaiement) }}
+			</div>
+			<div class="col-md-3">
+				<label for="">Montant :
+				</label>
+				{{ form_widget(formAjoutPaiement.montant) }}
+			</div>
+			<div class="col-md-3">
+				<label for="">Date paiement :
+				</label>
+				{{ form_widget(formAjoutPaiement.datePaiement) }}
+			</div>
+			<div class="col-2">
+				<label for="" class="text-white">d</label><br>
+				<button type="submit" class="btn btn-danger">Enregistrer</button>
+			</div>
+		</div>
+		{{ form_end(formAjoutPaiement) }}
+	</div>
+	<table class="table table-bordered text-center mt-2">
+		<thead class="bg-dark text-white text-uppercase">
+			<tr>
+				<th>date</th>
+				<th>type</th>
+				<th>méthode</th>
+				<th>référence</th>
+				<th>montant</th>
+				<th>motif</th>
+				<th>action</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% if reservation.paiements|length > 0 %}
+			{% for paiement in reservation.paiements %}
+			<tr>
+				<td>{{ paiement.datePaiement|date('d/m/Y H:i') }}</td>
+				<td>Débit</td>
+				<td>{{ paiement.modePaiement.libelle }}</td>
+				<td></td>
+				<td>{{ paiement.montant|number_format(2,","," ") }}</td>
+				<td></td>
+				<td>
+					<form method="post"
+						action="{{ path('reservation_paiement_delete', {'id': paiement.id, 'reservation' : reservation.id}) }}"
+						onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer ce paiement ?');">
+						<input type="hidden" name="_method" value="DELETE">
+						<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ paiement.id) }}">
+						<button class="btn btn-danger">
+							<i class="fa fa-trash (alias)" aria-hidden="true"></i>
+							Supprimer
+						</button>
+					</form>
+				</td>
+			</tr>
+			{% endfor %}
+			{% else %}
+			<tr>
+				<td colspan="7">
+					Aucun paiement effectué
+				</td>
+			</tr>
 
-	{% if latestContract %}
-	{# Contract exists - show status and details #}
-	<div class="row mb-3">
-		<div class="col-md-12">
-			<div class="alert 
+			</td>
+			{% endif %}
+		</tbody>
+	</table>
+
+	<div class="row">
+		<div class="col-md-8 col-sm-8 col-xs-8">
+			<i class="fa fa-chevron-right"></i>Total des règlements effectués :
+		</div>
+
+		<div class="col-md-4 col-sm-4 col-xs-4">
+			<div class="text-right">
+				{{ reservation.sommePaiements|number_format(2,","," ") }}€
+			</div>
+		</div>
+
+		<div class="col-md-8 col-sm-8 col-xs-8">
+			<i class="fa fa-chevron-right"></i>Solde
+		</div>
+		<div class="col-md-4 col-sm-4 col-xs-4">
+			<div class="text-right">
+				{{ ((totalFraisTTC + prixResaTTC) - reservation.sommePaiements)|number_format(2,","," ") }}€
+			</div>
+		</div>
+	</div>
+
+
+	{# avis client #}
+	<div class="x_title">
+		<h2>
+			<i class="fa fa-chevron-right"></i>avis client
+		</h2>
+		<div class="clearfix"></div>
+	</div>
+
+	{% if reservation.avis %}
+
+	<div class="x_content">
+		<div class="row">
+			<div class="col-md-4">
+				<div class="row">
+					<div class="col-auto">
+						Global
+					</div>
+					<div class="col-auto">
+						<div class="x_content">
+							{% for i in 1..(reservation.avis.global) %}
+							<i class="fa fa-star"></i>
+							{% endfor %}
+							{% if reservation.avis.global != 5 %}
+							{% for j in 1..(5 - reservation.avis.global) %}
+							<i class="fa fa-star-o"></i>
+							{% endfor %}
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="row">
+					<div class="col-auto">
+						Ponctualité
+					</div>
+					<div class="col-auto">
+						<div class="x_content">
+							{% for i in 1..(reservation.avis.ponctualite) %}
+							<i class="fa fa-star"></i>
+							{% endfor %}
+							{% if reservation.avis.ponctualite != 5 %}
+							{% for j in 1..(5 - reservation.avis.ponctualite) %}
+							<i class="fa fa-star-o"></i>
+							{% endfor %}
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="row">
+					<div class="col-auto">
+						Accueil
+					</div>
+					<div class="col-auto">
+						<div class="x_content">
+							{% for i in 1..(reservation.avis.accueil) %}
+							<i class="fa fa-star"></i>
+							{% endfor %}
+							{% if reservation.avis.accueil != 5 %}
+							{% for j in 1..(5 - reservation.avis.accueil) %}
+							<i class="fa fa-star-o"></i>
+							{% endfor %}
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="row">
+					<div class="col-auto">
+						Service:
+					</div>
+					<div class="col-auto">
+						<div class="x_content">
+							{% for i in 1..(reservation.avis.service) %}
+							<i class="fa fa-star"></i>
+							{% endfor %}
+							{% if reservation.avis.service != 5 %}
+							{% for j in 1..(5 - reservation.avis.service) %}
+							<i class="fa fa-star-o"></i>
+							{% endfor %}
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% else %}
+	<div class="text-center">
+		Aucun avis pour cette réservation
+	</div>
+	{% endif %}
+
+	{# Signature électronique du contrat #}
+	<div class="x_title" id="section-signature">
+		<h2>
+			<i class="fa fa-chevron-right"></i>Signature électronique du contrat
+		</h2>
+		<div class="clearfix"></div>
+	</div>
+	<div class="x_content">
+		{% set latestContract = null %}
+		{% for contract in reservation.contracts %}
+		{% if latestContract is null or contract.createdAt > latestContract.createdAt %}
+		{% set latestContract = contract %}
+		{% endif %}
+		{% endfor %}
+
+		{% if latestContract %}
+		{# Contract exists - show status and details #}
+		<div class="row mb-3">
+			<div class="col-md-12">
+				<div class="alert 
 						{% if latestContract.contractStatus == 'fully_signed' %}alert-success
 						{% elseif latestContract.contractStatus == 'client_signed' %}alert-info
 						{% elseif latestContract.contractStatus == 'admin_signed' %}alert-warning
 						{% else %}alert-secondary{% endif %}">
-				<strong>Statut du contrat:</strong>
+					<strong>Statut du contrat:</strong>
+					{% if latestContract.contractStatus == 'fully_signed' %}
+					<span class="badge badge-success"><i class="fa fa-check-circle"></i> Complètement signé</span>
+					{% elseif latestContract.contractStatus == 'client_signed' %}
+					<span class="badge badge-info"><i class="fa fa-user"></i> Signé par le client (en attente
+						admin)</span>
+					{% elseif latestContract.contractStatus == 'admin_signed' %}
+					<span class="badge badge-warning"><i class="fa fa-user-secret"></i> Signé par l'admin (en attente
+						client)</span>
+					{% else %}
+					<span class="badge badge-secondary"><i class="fa fa-clock-o"></i> Non signé</span>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+
+		{# Signatures details #}
+		<div class="row">
+			{% for signature in latestContract.signatures %}
+			<div class="col-md-6 mb-3">
+				<div
+					class="card {% if signature.signatureType == 'client' %}border-primary{% else %}border-success{% endif %}">
+					<div
+						class="card-header {% if signature.signatureType == 'client' %}bg-primary{% else %}bg-success{% endif %} text-white">
+						<i
+							class="fa {% if signature.signatureType == 'client' %}fa-user{% else %}fa-user-secret{% endif %}"></i>
+						Signature {{ signature.signatureType == 'client' ? 'Client' : 'Administrateur' }}
+					</div>
+					<div class="card-body">
+						<p><strong>Date de signature:</strong> {{ signature.signedAt|date('d/m/Y H:i:s') }}</p>
+						<p><strong>Adresse IP:</strong> {{ signature.ipAddress ?? 'Non disponible' }}</p>
+						<p><strong>Validité:</strong>
+							{% if signature.signatureValid %}
+							<span class="text-success"><i class="fa fa-check"></i> Valide</span>
+							{% else %}
+							<span class="text-danger"><i class="fa fa-times"></i> Non valide</span>
+							{% endif %}
+						</p>
+						{% if signature.timestampToken %}
+						<p><strong>Horodatage certifié:</strong>
+							<span class="text-success"><i class="fa fa-clock-o"></i> Oui</span>
+						</p>
+						{% endif %}
+						{% if signature.signatureImage %}
+						<div class="mt-2">
+							<strong>Signature visuelle:</strong>
+							<div class="border p-2 bg-white mt-1"
+								style="max-width: 300px; max-height: 150px; overflow: hidden;">
+								<img src="{{ signature.signatureImage }}" alt="Signature" class="img-fluid"
+									style="max-height: 100px; width: auto;">
+							</div>
+						</div>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+
+		{# Action buttons #}
+		<div class="row mt-3">
+			<div class="col-12 text-center">
+				{# Signature Client button removed #}
+				{% if not latestContract.isSignedByAdmin() %}
+				<a href="{{ path('contract_sign_admin_reservation', {'id': reservation.id}) }}" class="btn btn-success">
+					<i class="fa fa-pencil"></i> Signature Admin
+				</a>
+				{% endif %}
 				{% if latestContract.contractStatus == 'fully_signed' %}
-				<span class="badge badge-success"><i class="fa fa-check-circle"></i> Complètement signé</span>
-				{% elseif latestContract.contractStatus == 'client_signed' %}
-				<span class="badge badge-info"><i class="fa fa-user"></i> Signé par le client (en attente admin)</span>
-				{% elseif latestContract.contractStatus == 'admin_signed' %}
-				<span class="badge badge-warning"><i class="fa fa-user-secret"></i> Signé par l'admin (en attente
-					client)</span>
-				{% else %}
-				<span class="badge badge-secondary"><i class="fa fa-clock-o"></i> Non signé</span>
+				<span class="text-success font-weight-bold">
+					<i class="fa fa-check-circle"></i> Contrat complètement signé
+				</span>
 				{% endif %}
 			</div>
 		</div>
-	</div>
-
-	{# Signatures details #}
-	<div class="row">
-		{% for signature in latestContract.signatures %}
-		<div class="col-md-6 mb-3">
-			<div
-				class="card {% if signature.signatureType == 'client' %}border-primary{% else %}border-success{% endif %}">
-				<div
-					class="card-header {% if signature.signatureType == 'client' %}bg-primary{% else %}bg-success{% endif %} text-white">
-					<i
-						class="fa {% if signature.signatureType == 'client' %}fa-user{% else %}fa-user-secret{% endif %}"></i>
-					Signature {{ signature.signatureType == 'client' ? 'Client' : 'Administrateur' }}
-				</div>
-				<div class="card-body">
-					<p><strong>Date de signature:</strong> {{ signature.signedAt|date('d/m/Y H:i:s') }}</p>
-					<p><strong>Adresse IP:</strong> {{ signature.ipAddress ?? 'Non disponible' }}</p>
-					<p><strong>Validité:</strong>
-						{% if signature.signatureValid %}
-						<span class="text-success"><i class="fa fa-check"></i> Valide</span>
-						{% else %}
-						<span class="text-danger"><i class="fa fa-times"></i> Non valide</span>
-						{% endif %}
-					</p>
-					{% if signature.timestampToken %}
-					<p><strong>Horodatage certifié:</strong>
-						<span class="text-success"><i class="fa fa-clock-o"></i> Oui</span>
-					</p>
-					{% endif %}
-					{% if signature.signatureImage %}
-					<div class="mt-2">
-						<strong>Signature visuelle:</strong>
-						<div class="border p-2 bg-white mt-1" style="max-width: 300px; max-height: 150px; overflow: hidden;">
-							<img src="{{ signature.signatureImage }}" alt="Signature" class="img-fluid" style="max-height: 100px; width: auto;">
-						</div>
-					</div>
-					{% endif %}
-				</div>
-			</div>
-		</div>
-		{% endfor %}
-	</div>
-
-	{# Action buttons #}
-	<div class="row mt-3">
-		<div class="col-12 text-center">
-			{# Signature Client button removed #}
-			{% if not latestContract.isSignedByAdmin() %}
-			<a href="{{ path('contract_sign_admin_reservation', {'id': reservation.id}) }}" class="btn btn-success">
-				<i class="fa fa-pencil"></i> Signature Admin
+		{% else %}
+		{# No contract yet - show button to create and sign #}
+		<div class="text-center">
+			<p class="text-muted mb-3">Aucun contrat électronique n'a encore été créé pour cette réservation.</p>
+			<a href="{{ path('contract_sign_admin_reservation', {'id': reservation.id}) }}"
+				class="btn btn-primary btn-lg">
+				<i class="fa fa-file-signature"></i> Créer et signer le contrat électronique
 			</a>
-			{% endif %}
-			{% if latestContract.contractStatus == 'fully_signed' %}
-			<span class="text-success font-weight-bold">
-				<i class="fa fa-check-circle"></i> Contrat complètement signé
-			</span>
-			{% endif %}
 		</div>
+		{% endif %}
 	</div>
-	{% else %}
-	{# No contract yet - show button to create and sign #}
-	<div class="text-center">
-		<p class="text-muted mb-3">Aucun contrat électronique n'a encore été créé pour cette réservation.</p>
-		<a href="{{ path('contract_sign_admin_reservation', {'id': reservation.id}) }}" class="btn btn-primary btn-lg">
-			<i class="fa fa-file-signature"></i> Créer et signer le contrat électronique
-		</a>
-	</div>
-	{% endif %}
-</div>
 </div>
 <!-- Large modal -->
 {# <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Large
@@ -1153,6 +1162,6 @@ une entry (un sous champ) #}{% block collection_entry_widget %}
 			photosContainerId: 'photos-container',
 			progressBarId: 'upload-progress',
 			messageContainerId: 'upload-messages'
-});
+			});
 });
 	</script>{% endblock %}
