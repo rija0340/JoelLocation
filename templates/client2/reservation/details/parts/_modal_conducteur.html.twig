@@ -1,13 +1,13 @@
-<input type="checkbox" id="modalConducteurToggle" class="modal-toggle" />
-<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden" id="modalConducteur">
-  <div class="bg-white rounded-lg max-w-3xl w-full mx-4 p-6">
+<!-- Modal using JavaScript instead of checkbox hack -->
+<div class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden" id="modalConducteur" style="display: none;">
+  <div class="bg-white rounded-lg max-w-3xl w-full mx-4 p-6 relative border border-black">
     <h5 class="text-xl font-bold flex items-center gap-2 mb-4">
       <i class="fa fa-plus"></i>
       Ajouter un conducteur à la réservation
     </h5>
     {{ render(controller('App\\Controller\\Client\\ReservationController::listeConducteurs',{'id' : reservation.id})) }}
     <div class="flex justify-end mt-6">
-      <label for="modalConducteurToggle" class="border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-lg transition-all duration-300">Fermer</label>
+      <button type="button" id="closeModalConducteur" class="border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-lg transition-all duration-300">Fermer</button>
     </div>
   </div>
 </div>

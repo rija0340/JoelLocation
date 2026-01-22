@@ -67,10 +67,18 @@ services:
         arguments:
             $factory: '@App\Classe\Payment\PaymentProviderFactory'
             $defaultProvider: '%env(DEFAULT_PAYMENT_PROVIDER)%'
+            
+    App\Service\EmailService:
+        arguments:
+            $senderEmail: '%env(MAILER_SENDER)%'
 
     App\EventSubscriber\PaymentSubscriber:
         tags:
             - { name: kernel.event_subscriber }
+
+    App\EventListener\ContractSignedByClientEventListener:
+        tags:
+            - { name: kernel.event_listener, event: 'client.contract.signed', method: 'onContractSignedByClient' }
 
     # PDF Generation Service
     App\Service\PdfGenerationService:

@@ -1,86 +1,115 @@
-<div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-	<div class="p-4">
-		<h4 class="text-xl font-semibold text-joel-red flex items-center mb-3">
-			<i class="fa fa-calendar-alt mr-2"></i> Période de Location
+<div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+	<div class="p-5">
+		<h4
+			class="text-lg font-bold text-gray-900 flex items-center mb-5 pb-2 border-b border-gray-50 uppercase tracking-tight">
+			<i class="fa fa-calendar-alt mr-2 text-gray-400"></i> Période de Location
 		</h4>
-		<div class="space-y-4">
-			<div class="flex flex-col md:flex-row gap-4">
+		<div class="space-y-6">
+			<div class="flex flex-col md:flex-row gap-6">
 				<!-- Departure -->
-				<div class="flex-1 bg-gray-50 rounded-lg p-3">
-					<div class="flex items-center mb-2">
-						<i class="fa fa-plane-departure text-joel-red mr-2"></i>
-						<h6 class="font-semibold text-base">Départ</h6>
-					</div>
-					<div class="text-base space-y-1 ml-6">
-						<div class="flex">
-							<i class="fa fa-calendar text-joel-red mr-2 w-4"></i>
-							<span>
-								{% if type == 'devis' %}
-									{{ reservation.dateDepart|date('d/m/Y') }} à {{ reservation.dateDepart|date('H:i') }}
-								{% else %}
-									{{ reservation.dateDebut|date('d/m/Y') }} à {{ reservation.dateDebut|date('H:i') }}
-								{% endif %}
-							</span>
+				<div class="flex-1 bg-gray-50/50 rounded-xl p-4 border border-gray-100">
+					<div class="flex items-center mb-3">
+						<div class="bg-gray-900 text-white p-2 rounded-lg mr-3 shadow-sm">
+							<i class="fa fa-plane-departure text-xs"></i>
 						</div>
-						<div class="flex">
-							<i class="fa fa-map-marker text-joel-red mr-2 w-4"></i>
-							<span>{{ reservation.agenceDepart }}</span>
+						<h6 class="font-bold text-gray-900">DÉPART</h6>
+					</div>
+					<div class="space-y-3">
+						<div class="flex items-start">
+							<i class="fa fa-calendar text-gray-400 mt-1 mr-3 w-4"></i>
+							<div class="flex flex-col">
+								<span class="text-xs text-gray-500 font-bold uppercase tracking-wider">Date &
+									Heure</span>
+								<span class="text-base font-bold text-gray-900">
+									{% if type == 'devis' %}
+									{{ reservation.dateDepart|date('d/m/Y') }} <span
+										class="text-gray-400 font-normal">à</span> {{ reservation.dateDepart|date('H:i')
+									}}
+									{% else %}
+									{{ reservation.dateDebut|date('d/m/Y') }} <span
+										class="text-gray-400 font-normal">à</span> {{ reservation.dateDebut|date('H:i')
+									}}
+									{% endif %}
+								</span>
+							</div>
+						</div>
+						<div class="flex items-start">
+							<i class="fa fa-map-marker-alt text-gray-400 mt-1 mr-3 w-4"></i>
+							<div class="flex flex-col">
+								<span class="text-xs text-gray-500 font-bold uppercase tracking-wider">Lieu</span>
+								<span class="text-sm font-semibold text-gray-700">{{ reservation.agenceDepart }}</span>
+							</div>
 						</div>
 					</div>
 				</div>
-				
+
 				<!-- Return -->
-				<div class="flex-1 bg-gray-50 rounded-lg p-3">
-					<div class="flex items-center mb-2">
-						<i class="fa fa-plane-arrival text-joel-red mr-2"></i>
-						<h6 class="font-semibold text-base">Retour</h6>
-					</div>
-					<div class="text-base space-y-1 ml-6">
-						<div class="flex">
-							<i class="fa fa-calendar text-joel-red mr-2 w-4"></i>
-							<span>
-								{% if type == 'devis' %}
-									{{ reservation.dateRetour|date('d/m/Y') }} à {{ reservation.dateRetour|date('H:i') }}
-								{% else %}
-									{{ reservation.dateFin|date('d/m/Y') }} à {{ reservation.dateFin|date('H:i') }}
-								{% endif %}
-							</span>
+				<div class="flex-1 bg-gray-50/50 rounded-xl p-4 border border-gray-100">
+					<div class="flex items-center mb-3">
+						<div class="bg-gray-100 text-gray-900 p-2 rounded-lg mr-3 shadow-sm">
+							<i class="fa fa-plane-arrival text-xs"></i>
 						</div>
-						<div class="flex">
-							<i class="fa fa-map-marker text-joel-red mr-2 w-4"></i>
-							<span>{{ reservation.agenceRetour }}</span>
+						<h6 class="font-bold text-gray-900">RETOUR</h6>
+					</div>
+					<div class="space-y-3">
+						<div class="flex items-start">
+							<i class="fa fa-calendar text-gray-400 mt-1 mr-3 w-4"></i>
+							<div class="flex flex-col">
+								<span class="text-xs text-gray-500 font-bold uppercase tracking-wider">Date &
+									Heure</span>
+								<span class="text-base font-bold text-gray-900">
+									{% if type == 'devis' %}
+									{{ reservation.dateRetour|date('d/m/Y') }} <span
+										class="text-gray-400 font-normal">à</span> {{ reservation.dateRetour|date('H:i')
+									}}
+									{% else %}
+									{{ reservation.dateFin|date('d/m/Y') }} <span
+										class="text-gray-400 font-normal">à</span> {{ reservation.dateFin|date('H:i') }}
+									{% endif %}
+								</span>
+							</div>
+						</div>
+						<div class="flex items-start">
+							<i class="fa fa-map-marker-alt text-gray-400 mt-1 mr-3 w-4"></i>
+							<div class="flex flex-col">
+								<span class="text-xs text-gray-500 font-bold uppercase tracking-wider">Lieu</span>
+								<span class="text-sm font-semibold text-gray-700">{{ reservation.agenceRetour }}</span>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			
-			<div class="bg-gray-50 rounded-lg p-3">
-				<div class="flex flex-col md:flex-row gap-4">
+
+			<div class="bg-white border-t border-gray-100 pt-5">
+				<div class="flex flex-col md:flex-row gap-8">
 					<div class="flex-1">
-						<div class="flex items-center mb-1">
-							<i class="fa fa-clock text-joel-red mr-2"></i>
-							<h6 class="font-semibold text-base">Durée</h6>
+						<div class="flex items-center mb-2">
+							<i class="fa fa-clock text-gray-400 mr-2"></i>
+							<h6 class="font-bold text-gray-900 text-sm uppercase tracking-wide">Durée totale</h6>
 						</div>
-						<p class="text-base ml-6 font-medium">{{ reservation.duree }} jours</p>
+						<p class="text-2xl font-black text-gray-900 ml-6">{{ reservation.duree }} <span
+								class="text-gray-400 font-medium text-lg italic">jours</span></p>
 					</div>
 					<div class="flex-1">
-						<div class="flex items-center mb-1">
-							<i class="fa fa-users text-joel-red mr-2"></i>
-							<h6 class="font-semibold text-base">Nombre de personnes</h6>
+						<div class="flex items-center mb-2">
+							<i class="fa fa-users text-gray-400 mr-2"></i>
+							<h6 class="font-bold text-gray-900 text-sm uppercase tracking-wide">Voyageurs</h6>
 						</div>
-						<div class="text-base ml-6">
-							<div class="flex flex-col space-y-1">
-								<div class="flex items-center">
-									<i class="fa fa-user mr-1"></i>
-									<span class="font-medium">
-										Adultes: {{ reservation.client.infosResa ? reservation.client.infosResa.nbrAdultes : "non renseigné" }}
-									</span>
+						<div class="ml-6 flex items-center gap-6">
+							<div class="flex items-center">
+								<i class="fa fa-user text-gray-300 mr-2"></i>
+								<div class="flex flex-col">
+									<span class="text-[10px] text-gray-400 font-bold uppercase">Adultes</span>
+									<span class="font-bold text-gray-900">{{ reservation.client.infosResa ?
+										reservation.client.infosResa.nbrAdultes : "-" }}</span>
 								</div>
-								<div class="flex items-center">
-									<i class="fa fa-child mr-1"></i>
-									<span class="font-medium">
-										Enfants: {{ reservation.client.infosResa ? reservation.client.infosResa.nbrEnfants : "non renseigné" }}
-									</span>
+							</div>
+							<div class="flex items-center">
+								<i class="fa fa-baby text-gray-300 mr-2"></i>
+								<div class="flex flex-col">
+									<span class="text-[10px] text-gray-400 font-bold uppercase">Enfants</span>
+									<span class="font-bold text-gray-900">{{ reservation.client.infosResa ?
+										reservation.client.infosResa.nbrEnfants : "0" }}</span>
 								</div>
 							</div>
 						</div>

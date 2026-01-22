@@ -1,21 +1,28 @@
-<div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-	<div class="p-4">
-		<h4 class="text-xl font-semibold text-joel-red flex items-center mb-3">
-			<i class="fa fa-user mr-2"></i> Client
+<div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+	<div class="p-5">
+		<h4
+			class="text-lg font-bold text-gray-900 flex items-center mb-4 pb-2 border-b border-gray-50 uppercase tracking-tight">
+			<i class="fa fa-user mr-2 text-gray-400"></i> Client
 		</h4>
-		<div class="bg-gray-50 rounded-lg p-3 space-y-2">
-			<div class="flex">
-				<i class="fa fa-id-card text-joel-red mr-2 w-4"></i>
-				<span class="text-xl">{{ reservation.client.nom }}
-					{{ reservation.client.prenom }}</span>
+		<div class="bg-gray-50/50 rounded-xl p-4 space-y-4">
+			<div class="flex items-center">
+				<div class="bg-white p-2 rounded-lg shadow-sm mr-3">
+					<i class="fa fa-id-card text-gray-500 w-4 h-4 flex items-center justify-center"></i>
+				</div>
+				<span class="text-lg font-bold text-gray-900">{{ reservation.client.nom }} {{ reservation.client.prenom
+					}}</span>
 			</div>
-			<div class="flex">
-				<i class="fa fa-envelope text-joel-red mr-2 w-4"></i>
-				<span class="text-xl">{{ reservation.client.mail }}</span>
+			<div class="flex items-center">
+				<div class="bg-white p-2 rounded-lg shadow-sm mr-3">
+					<i class="fa fa-envelope text-gray-400 w-4 h-4 flex items-center justify-center"></i>
+				</div>
+				<span class="text-sm font-medium text-gray-700 break-all">{{ reservation.client.mail }}</span>
 			</div>
-			<div class="flex">
-				<i class="fa fa-phone text-joel-red mr-2 w-4"></i>
-				<span class="text-xl">{{ reservation.client.telephone }}</span>
+			<div class="flex items-center">
+				<div class="bg-white p-2 rounded-lg shadow-sm mr-3">
+					<i class="fa fa-phone text-gray-400 w-4 h-4 flex items-center justify-center"></i>
+				</div>
+				<span class="text-base font-bold text-gray-900">{{ reservation.client.telephone }}</span>
 			</div>
 		</div>
 	</div>

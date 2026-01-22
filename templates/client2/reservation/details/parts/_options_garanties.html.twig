@@ -1,67 +1,75 @@
-<div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-	<div class="p-4">
-		<h4 class="text-xl font-semibold text-joel-red flex items-center mb-3">
-			<i class="fa fa-cogs mr-2"></i> Options & Garanties
+<div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+	<div class="p-5">
+		<h4
+			class="text-lg font-bold text-gray-900 flex items-center mb-5 pb-2 border-b border-gray-50 uppercase tracking-tight">
+			<i class="fa fa-layer-group mr-2 text-gray-400"></i> Options & Garanties
 		</h4>
-		<div class="space-y-4">
-			<div class="bg-gray-50 rounded-lg p-3">
-				<h6 class="font-semibold text-base mb-2 flex items-center">
-					<i class="fa fa-plus-circle text-joel-red mr-2"></i>
-					Options Sélectionnées
+		<div class="space-y-6">
+			<div>
+				<h6 class="text-[10px] font-black text-gray-400 mb-3 flex items-center uppercase tracking-widest">
+					<i class="fa fa-plus-circle text-gray-300 mr-2"></i>
+					Sélectionnées
 				</h6>
-				<div class="space-y-2 text-base">
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
 					{% if reservation.conducteur %}
-						<div class="flex justify-between items-center py-1 text-base">
-							<div class="flex items-center">
-								<i class="fa fa-user-plus text-joel-red mr-2 w-4"></i>
-								<span>Conducteur Additionnel</span>
-							</div>
-							<span class="font-medium">{{ prixConductSuppl }}€</span>
+					<div
+						class="flex justify-between items-center px-4 py-3 bg-gray-50 rounded-xl border border-gray-100">
+						<div class="flex items-center">
+							<i class="fa fa-user-plus text-gray-400 mr-3 w-4"></i>
+							<span class="text-sm font-bold text-gray-800">Conducteur Additionnel</span>
 						</div>
+						<span class="text-sm font-black text-gray-900">{{ prixConductSuppl }}€</span>
+					</div>
 					{% endif %}
 					{% for option in reservation.devisOptions %}
-						<div class="flex justify-between items-center py-1 text-base">
-							<div class="flex items-center">
-								<i class="fa fa-check text-joel-red mr-2 w-4"></i>
-								<span>
-									{{ option.opt.appelation }}
-									{% if option.opt.appelation matches '/Siège/' %}
-										<span class="text-gray-600">(x{{ option.quantity }})</span>
-									{% endif %}
-								</span>
-							</div>
-							<span class="font-medium">{{ (option.opt.prix * option.quantity)|number_format(2,","," ") }}€</span>
+					<div
+						class="flex justify-between items-center px-4 py-3 bg-gray-50 rounded-xl border border-gray-100">
+						<div class="flex items-center">
+							<i class="fa fa-check-circle text-gray-400 mr-3 w-4"></i>
+							<span class="text-sm font-bold text-gray-800">
+								{{ option.opt.appelation }}
+								{% if option.opt.appelation matches '/Siège/' %}
+								<span class="text-gray-400 font-medium ml-1">x{{ option.quantity }}</span>
+								{% endif %}
+							</span>
 						</div>
+						<span class="text-sm font-black text-gray-900">{{ (option.opt.prix *
+							option.quantity)|number_format(2,","," ") }}€</span>
+					</div>
 					{% else %}
-						{% if not reservation.conducteur %}
-						<div class="text-gray-500 py-2 text-center text-base flex items-center justify-center gap-2">
-							<i class="fa fa-info-circle"></i>
-							Aucune option sélectionnée
-						</div>
-						{% endif %}
+					{% if not reservation.conducteur %}
+					<div
+						class="col-span-full border border-dashed border-gray-200 rounded-xl py-6 text-center text-sm text-gray-400 flex flex-col items-center justify-center gap-2">
+						<i class="fa fa-info-circle text-xl opacity-20"></i>
+						Aucune option sélectionnée
+					</div>
+					{% endif %}
 					{% endfor %}
 				</div>
 			</div>
-			
-			<div class="bg-gray-50 rounded-lg p-3">
-				<h6 class="font-semibold text-base mb-2 flex items-center">
-					<i class="fa fa-shield-alt text-joel-red mr-2"></i>
-					Couverture Assurance
+
+			<div>
+				<h6 class="text-[10px] font-black text-gray-400 mb-3 flex items-center uppercase tracking-widest">
+					<i class="fa fa-shield-alt text-gray-300 mr-2"></i>
+					Assurances
 				</h6>
-				<div class="space-y-2 text-base">
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
 					{% for garantie in reservation.garanties %}
-						<div class="flex justify-between items-center py-1 text-base">
-							<div class="flex items-center">
-								<i class="fa fa-shield text-joel-red mr-2 w-4"></i>
-								<span>{{ garantie }}</span>
-							</div>
-							<span class="font-medium">{{ (garantie.prix)|number_format(2,","," ") }}€</span>
+					<div
+						class="flex justify-between items-center px-4 py-3 bg-white border border-gray-200 rounded-xl shadow-sm">
+						<div class="flex items-center">
+							<i class="fa fa-shield text-green-500 mr-3 w-4"></i>
+							<span class="text-sm font-bold text-gray-800">{{ garantie }}</span>
 						</div>
+						<span class="text-xs font-black bg-gray-100 px-2 py-1 rounded text-gray-600">{{
+							(garantie.prix)|number_format(2,","," ") }}€</span>
+					</div>
 					{% else %}
-						<div class="text-gray-500 py-2 text-center text-base flex items-center justify-center gap-2">
-							<i class="fa fa-info-circle"></i>
-							Aucune garantie sélectionnée
-						</div>
+					<div
+						class="col-span-full border border-dashed border-gray-200 rounded-xl py-6 text-center text-sm text-gray-400 flex flex-col items-center justify-center gap-2">
+						<i class="fa fa-info-circle text-xl opacity-20"></i>
+						Aucune garantie sélectionnée
+					</div>
 					{% endfor %}
 				</div>
 			</div>

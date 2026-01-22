@@ -882,6 +882,15 @@ class ReservationController extends AbstractController
     }
 
     /**
+     * @Route("/backoffice/reservation/envoyer-demande-signature/{id}", name="envoyer_demande_signature", methods={"GET","POST"},requirements={"id":"\d+"})
+     */
+    public function envoyerDemandeSignature(Request $request, Reservation $reservation): Response
+    {
+        $this->emailManagerService->sendSignatureRequest($request, $reservation);
+        return $this->redirectToRoute('reservation_show', ['id' => $reservation->getId()]);
+    }
+
+    /**
      * @Route("/backoffice/reservation/envoyer-facture-pdf/{id}", name="envoyer_facture", methods={"GET","POST"},requirements={"id":"\d+"})
      */
     public function envoyerFacture(Request $request, Reservation $reservation): Response
