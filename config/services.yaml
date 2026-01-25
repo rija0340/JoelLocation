@@ -100,3 +100,8 @@ services:
     App\Service\SignatureVerificationService: ~
 
     App\Service\ContractGeneratorService: ~
+
+    # Signature Logger Service - explicitly inject the signature logger channel
+    App\Service\SignatureLoggerService:
+        arguments:
+            $signatureLogger: '@monolog.logger.signature'

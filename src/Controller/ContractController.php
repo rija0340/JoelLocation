@@ -4,6 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Contract;
 use App\Event\ContractSignedByClientEvent;
+use App\Event\ContractSignatureStartedEvent;
+use App\Event\ContractSignatureCompletedEvent;
+use App\Entity\ContractSignature;
 use App\Repository\ContractRepository;
 use App\Service\ContractService;
 use App\Service\SignatureService;
@@ -168,13 +171,22 @@ class ContractController extends AbstractController
         }
 
         try {
+            // Dispatch signature started event
+            $startEvent = new ContractSignatureStartedEvent(
+                $contract,
+                ContractSignature::TYPE_CLIENT,
+                $request->getClientIp(),
+                $request->headers->get('User-Agent')
+            );
+            $this->eventDispatcher->dispatch($startEvent, ContractSignatureStartedEvent::NAME);
+
             $keypair = $this->signatureService->generateKeypair();
             $cryptoSignature = $this->signatureService->createSignature(
                 $contract->getContractHash(),
                 $keypair['private_key']
             );
 
-            $this->contractService->processClientSignature(
+            $signature = $this->contractService->processClientSignature(
                 $contract,
                 $cryptoSignature,
                 $keypair['public_key'],
@@ -184,13 +196,21 @@ class ContractController extends AbstractController
                 $signatureImage
             );
 
+            // Dispatch signature completed event
+            $completeEvent = new ContractSignatureCompletedEvent(
+                $contract,
+                $signature,
+                ContractSignature::TYPE_CLIENT
+            );
+            $this->eventDispatcher->dispatch($completeEvent, ContractSignatureCompletedEvent::NAME);
+
             $this->addFlash('success', 'Contrat signé avec succès !');
 
             // Dispatch event to notify admin that the client has signed
             $baseUrl = $this->generateUrl('reservation_show', ['id' => $contract->getReservation()->getId()], \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL);
             $event = new ContractSignedByClientEvent($contract->getReservation(), $baseUrl);
             $this->eventDispatcher->dispatch($event, ContractSignedByClientEvent::NAME);
-            
+
             if ($isValidHash) {
                 return $this->redirectToRoute('client_reservation_signature_hash', ['hashedId' => $hash]);
             }
@@ -238,6 +258,15 @@ class ContractController extends AbstractController
         }
 
         try {
+            // Dispatch signature started event
+            $startEvent = new ContractSignatureStartedEvent(
+                $contract,
+                ContractSignature::TYPE_ADMIN,
+                $request->getClientIp(),
+                $request->headers->get('User-Agent')
+            );
+            $this->eventDispatcher->dispatch($startEvent, ContractSignatureStartedEvent::NAME);
+
             // Generate admin keypair (simulated for this flow)
             $keypair = $this->signatureService->generateKeypair();
 
@@ -246,7 +275,7 @@ class ContractController extends AbstractController
                 $keypair['private_key']
             );
 
-            $this->contractService->processAdminSignature(
+            $signature = $this->contractService->processAdminSignature(
                 $contract,
                 $cryptoSignature,
                 $keypair['public_key'],
@@ -254,6 +283,14 @@ class ContractController extends AbstractController
                 $request->headers->get('User-Agent'),
                 $signatureImage // The visual signature image
             );
+
+            // Dispatch signature completed event
+            $completeEvent = new ContractSignatureCompletedEvent(
+                $contract,
+                $signature,
+                ContractSignature::TYPE_ADMIN
+            );
+            $this->eventDispatcher->dispatch($completeEvent, ContractSignatureCompletedEvent::NAME);
 
             $this->addFlash('success', 'Contrat validé par l\'administrateur !');
             // Redirect to reservation details with anchor to signature section

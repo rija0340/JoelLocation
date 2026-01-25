@@ -76,9 +76,9 @@ security:
         - { path: ^/etat, roles: ROLE_ADMIN }
         - { path: ^/etat/reservation, roles: ROLE_ADMIN }        
         - { path: ^/faq, roles: ROLE_ADMIN }
-        - { path: ^/signature-contrat, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/contract/sign/reservation/\d+/[a-f0-9]+, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/contract/sign/\d+/[a-f0-9]+, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/signature-contrat, roles: ROLE_CLIENT }
+        - { path: ^/contract/sign/reservation/\d+/[a-f0-9]+, roles: ROLE_CLIENT }
+        - { path: ^/contract/sign/\d+/[a-f0-9]+, roles: ROLE_CLIENT }
         - { path: ^/validation-email, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         # - { path: ^/payment/{id}/edit, roles: ROLE_ADMIN }
         # - { path: ^/payment/, roles: ROLE_ADMIN }

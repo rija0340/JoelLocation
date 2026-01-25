@@ -8,8 +8,8 @@ use Psr\Log\LoggerInterface;
 
 class ContractSignedByClientEventListener
 {
-    private EmailManagerService $emailManagerService;
-    private LoggerInterface $logger;
+    private $emailManagerService;
+    private $logger;
 
     public function __construct(EmailManagerService $emailManagerService, LoggerInterface $logger)
     {
@@ -18,7 +18,7 @@ class ContractSignedByClientEventListener
     }
 
     public function onContractSignedByClient(ContractSignedByClientEvent $event): void
-    { 
+    {
         try {
             $this->emailManagerService->notifyAdminContractSigned($event->getReservation());
             $this->logger->info('Admin notified about contract signature', [

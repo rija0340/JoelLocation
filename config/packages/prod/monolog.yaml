@@ -1,5 +1,5 @@
 monolog:
-    channels: ['payment']
+    channels: ['payment', 'signature']
     handlers:
         main:
             type: fingers_crossed
@@ -21,3 +21,11 @@ monolog:
             type: console
             process_psr_3_messages: false
             channels: ["!event", "!doctrine"]
+
+        signature:
+            type: rotating_file
+            path: '%kernel.logs_dir%/signature/contract-signature.log'
+            level: info
+            channels: ['signature']
+            max_files: 30
+            formatter: monolog.formatter.json
