@@ -8,6 +8,7 @@ use App\Entity\Reservation;
 use App\Repository\ContractRepository;
 use App\Repository\ContractSignatureRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Service\SignatureLoggerService;
 
 class ContractService
 {
@@ -16,19 +17,22 @@ class ContractService
     private $entityManager;
     private $signatureService;
     private $tsaClient;
+    private $signatureLogger;
 
     public function __construct(
         ContractRepository $contractRepository,
         ContractSignatureRepository $contractSignatureRepository,
         EntityManagerInterface $entityManager,
         SignatureService $signatureService,
-        TsaClient $tsaClient
+        TsaClient $tsaClient,
+        SignatureLoggerService $signatureLogger
     ) {
         $this->contractRepository = $contractRepository;
         $this->contractSignatureRepository = $contractSignatureRepository;
         $this->entityManager = $entityManager;
         $this->signatureService = $signatureService;
         $this->tsaClient = $tsaClient;
+        $this->signatureLogger = $signatureLogger;
     }
 
     /**
@@ -82,6 +86,23 @@ class ContractService
 
         // Update contract status based on signature type
         $this->updateContractStatus($contract, $signatureType);
+
+        // Log signature creation
+        $this->signatureLogger->logSignatureCreated(
+            $contract,
+            $contractSignature,
+            base64_encode(substr($signatureData, 0, 20)) . '...', // Safe preview
+            $publicKeyData
+        );
+
+        // Log timestamp if present
+        if ($timestampToken) {
+            $this->signatureLogger->logTimestampTokenReceived(
+                $contract,
+                $contractSignature,
+                $timestampToken
+            );
+        }
 
         return $contractSignature;
     }

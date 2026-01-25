@@ -211,6 +211,8 @@ class PdfTestingController extends AbstractController
             'restePayerTTC' => $restePayerTTC,
             'totalFraisSupplTTC' => $totalFraisSupplTTC,
             'numContrat' => $this->pdfGenerationService->getNumFacture($reservation, "CO"),
+            'clientSignature' => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', // Red dot
+            'adminSignature' => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', // Red dot
             'isPreview' => true
         ]);
     }

@@ -148,8 +148,10 @@ class ContractController extends AbstractController
             throw $this->createNotFoundException('Contrat introuvable');
         }
 
+        $isValidHash = ($hash && sha1($contract->getReservation()->getId()) === $hash);
+
         // Check if the current user is authenticated and is the client of this reservation
-        if (!$this->isGranted('ROLE_CLIENT')) {
+        if (!$isValidHash && !$this->isGranted('ROLE_CLIENT')) {
             // Redirect to login if not authenticated
             return $this->redirectToRoute('app_login');
         }
@@ -285,6 +287,8 @@ class ContractController extends AbstractController
 
             // Dispatch signature completed event
             $completeEvent = new ContractSignatureCompletedEvent(
+                $contract,
+                $signature,
                 ContractSignature::TYPE_ADMIN
             );
             $this->eventDispatcher->dispatch($completeEvent, ContractSignatureCompletedEvent::NAME);
@@ -292,6 +296,7 @@ class ContractController extends AbstractController
             $this->addFlash('success', 'Contrat validé par l\'administrateur !');
             // Redirect to reservation details with anchor to signature section
             return $this->redirectToRoute('reservation_show', [
+                'id' => $contract->getReservation()->getId()
             ]);
 
         } catch (\Exception $e) {

@@ -133,6 +133,22 @@ Le TSA (Time Stamping Authority) est une **autorité de confiance externe** qui 
 - En cas de litige, le token TSA prouve que le document existait à ce moment précis
 - L'identification du signataire se fait par le système lui-même (contexte utilisateur, métadonnées)
 
+### Authentification avec le TSA
+
+**Quand l'authentification est nécessaire** :
+- **Services TSA privés ou commerciaux** : Certains services TSA peuvent nécessiter une authentification pour des raisons de sécurité ou de limitation d'utilisation
+- **Limitation de débit** : L'authentification permet de suivre l'utilisation par utilisateur/client
+- **Accès aux fonctionnalités premium** : Certaines fonctionnalités avancées peuvent être réservées aux utilisateurs authentifiés
+
+**Fonctionnement de l'authentification** :
+- Le constructeur de la classe TsaClient accepte des paramètres optionnels `$username` et `$password`
+- Si ces paramètres sont fournis, ils seront utilisés pour l'authentification de base lors de l'appel à la TSA
+- Lors de l'envoi de la requête HTTP, si les identifiants sont configurés, ils sont ajoutés avec `'auth_basic' => [$this->username, $this->password]`
+
+**Cas d'utilisation sans authentification** :
+- Le service utilise FreeTSA par défaut (`https://freetsa.org/tsa`) qui est un service gratuit et ne nécessite pas d'authentification
+- Pour les services publics gratuits comme FreeTSA, aucune authentification n'est requise
+
 ---
 
 ## Partie 3 : L'Implémentation dans Symfony (Comment c'est codé ?)

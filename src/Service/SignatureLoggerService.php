@@ -13,8 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class SignatureLoggerService
 {
-    private LoggerInterface $signatureLogger;
-    private string $environment;
+    private $signatureLogger;
+    private $environment;
 
     public function __construct(LoggerInterface $signatureLogger, string $environment = 'dev')
     {
@@ -55,6 +55,7 @@ class SignatureLoggerService
         $this->signatureLogger->info('Cryptographic signature created', [
             'contract_id' => $contract->getId(),
             'contract_signature_id' => $contractSignature->getId(),
+            'reservation_reference' => $contract->getReservation()->getReference(),
             'signature_type' => $contractSignature->getSignatureType(),
             'crypto_signature_preview' => $cryptoSignaturePreview,
             'public_key_preview' => $publicKeyPreview ? substr($publicKeyPreview, 0, 32) : null,
@@ -75,9 +76,10 @@ class SignatureLoggerService
         $this->signatureLogger->info('Timestamp token received from TSA', [
             'contract_id' => $contract->getId(),
             'contract_signature_id' => $contractSignature->getId(),
+            'reservation_reference' => $contract->getReservation()->getReference(),
             'tsa_service' => 'FreeTSA',
             'timestamp_token_preview' => $timestampTokenPreview ? substr($timestampTokenPreview, 0, 32) : 'none',
-            'timestamp_verified_at' => $contractSignature->getTimestampVerifiedAt() ? 
+            'timestamp_verified_at' => $contractSignature->getTimestampVerifiedAt() ?
                 $contractSignature->getTimestampVerifiedAt()->format('Y-m-d H:i:s.u') : null,
             'timestamp' => (new \DateTime())->format('Y-m-d H:i:s.u'),
         ]);
@@ -95,6 +97,7 @@ class SignatureLoggerService
             'contract_id' => $contract->getId(),
             'contract_signature_id' => $contractSignature->getId(),
             'reservation_id' => $contract->getReservation()->getId(),
+            'reservation_reference' => $contract->getReservation()->getReference(),
             'signature_type' => $signatureType,
             'contract_status' => $contract->getContractStatus(),
             'signed_at' => $contractSignature->getSignedAt()->format('Y-m-d H:i:s.u'),
@@ -115,10 +118,11 @@ class SignatureLoggerService
         bool $verificationResult
     ): void {
         $level = $verificationResult ? 'info' : 'warning';
-        
+
         $this->signatureLogger->$level('Signature verification attempt', [
             'contract_id' => $contract->getId(),
             'contract_signature_id' => $contractSignature->getId(),
+            'reservation_reference' => $contract->getReservation()->getReference(),
             'signature_type' => $contractSignature->getSignatureType(),
             'verification_result' => $verificationResult ? 'valid' : 'invalid',
             'signed_at' => $contractSignature->getSignedAt()->format('Y-m-d H:i:s.u'),
@@ -139,10 +143,11 @@ class SignatureLoggerService
         ?string $originalHash = null
     ): void {
         $level = $integrityValid ? 'info' : 'error';
-        
+
         $this->signatureLogger->$level('Contract integrity check', [
             'contract_id' => $contract->getId(),
             'reservation_id' => $contract->getReservation()->getId(),
+            'reservation_reference' => $contract->getReservation()->getReference(),
             'integrity_valid' => $integrityValid,
             'current_hash_preview' => substr($contract->getContractHash(), 0, 16),
             'original_hash_preview' => $originalHash ? substr($originalHash, 0, 16) : null,
@@ -153,7 +158,8 @@ class SignatureLoggerService
     /**
      * Log contract full signature status
      */
-    public function logContractSignatureStatus(Contract $contract): void {
+    public function logContractSignatureStatus(Contract $contract): void
+    {
         $signatures = $contract->getSignatures();
         $clientSignature = null;
         $adminSignature = null;
@@ -169,6 +175,7 @@ class SignatureLoggerService
         $this->signatureLogger->info('Contract signature status updated', [
             'contract_id' => $contract->getId(),
             'reservation_id' => $contract->getReservation()->getId(),
+            'reservation_reference' => $contract->getReservation()->getReference(),
             'contract_status' => $contract->getContractStatus(),
             'is_fully_signed' => $contract->getContractStatus() === 'fully_signed',
             'client_signed' => $clientSignature !== null,
@@ -193,6 +200,7 @@ class SignatureLoggerService
         $this->signatureLogger->error('Signature process error', [
             'contract_id' => $contract->getId(),
             'reservation_id' => $contract->getReservation()->getId(),
+            'reservation_reference' => $contract->getReservation()->getReference(),
             'signature_type' => $signatureType,
             'error_message' => $exception->getMessage(),
             'error_code' => $exception->getCode(),
@@ -213,6 +221,7 @@ class SignatureLoggerService
     ): void {
         $this->signatureLogger->error('TSA communication error', [
             'contract_id' => $contract->getId(),
+            'reservation_reference' => $contract->getReservation()->getReference(),
             'tsa_operation' => $operation,
             'tsa_service' => 'FreeTSA',
             'error_message' => $exception->getMessage(),
@@ -231,6 +240,7 @@ class SignatureLoggerService
         $this->signatureLogger->warning('Duplicate signature attempt detected', [
             'contract_id' => $contract->getId(),
             'reservation_id' => $contract->getReservation()->getId(),
+            'reservation_reference' => $contract->getReservation()->getReference(),
             'signature_type' => $signatureType,
             'existing_signature_count' => count($contract->getSignatures()),
             'timestamp' => (new \DateTime())->format('Y-m-d H:i:s.u'),
@@ -282,12 +292,12 @@ class SignatureLoggerService
         if (!$ip) {
             return null;
         }
-        
+
         // Simple check for common patterns (not a full GeoIP implementation)
         if (strpos($ip, '127.0.0.1') === 0 || strpos($ip, '::1') === 0) {
             return 'LOCAL';
         }
-        
+
         // Could integrate MaxMind GeoIP2 here for production
         return null;
     }
@@ -298,7 +308,7 @@ class SignatureLoggerService
     private function getTimeDifference(\DateTime $from, \DateTime $to): string
     {
         $interval = $from->diff($to);
-        
+
         if ($interval->d > 0) {
             return $interval->d . ' day(s)';
         }
@@ -308,7 +318,7 @@ class SignatureLoggerService
         if ($interval->i > 0) {
             return $interval->i . ' minute(s)';
         }
-        
+
         return $interval->s . ' second(s)';
     }
 }

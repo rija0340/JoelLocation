@@ -244,6 +244,40 @@ class PdfGenerationService
         $totalHT = $totalTTC / (1 + $taxRate);
         $taxAmount = $totalTTC - $totalHT;
 
+        // Get contract signatures
+        $clientSignature = null;
+        $adminSignature = null;
+
+        $contracts = $reservation->getContracts();
+        $latestContract = null;
+
+        // Find latest contract
+        if (count($contracts) > 0) {
+            foreach ($contracts as $contract) {
+                if (!$latestContract || $contract->getCreatedAt() > $latestContract->getCreatedAt()) {
+                    $latestContract = $contract;
+                }
+            }
+        }
+
+        if ($latestContract) {
+            foreach ($latestContract->getSignatures() as $signature) {
+                if ($signature->getSignatureType() === 'client' && $signature->getSignatureImage()) {
+                    $img = $signature->getSignatureImage();
+                    if (strpos($img, 'data:image') === false) {
+                        $img = 'data:image/png;base64,' . $img;
+                    }
+                    $clientSignature = $img;
+                } elseif ($signature->getSignatureType() === 'admin' && $signature->getSignatureImage()) {
+                    $img = $signature->getSignatureImage();
+                    if (strpos($img, 'data:image') === false) {
+                        $img = 'data:image/png;base64,' . $img;
+                    }
+                    $adminSignature = $img;
+                }
+            }
+        }
+
         $html = $this->renderView('pdf_generation/contrat.html.twig', [
             'logo' => $imageData['logo'],
             'entete' => $imageData['entete'],
@@ -260,6 +294,8 @@ class PdfGenerationService
             'restePayerTTC' => $restePayerTTC,
             'totalFraisSupplTTC' => $totalFraisSupplTTC,
             'numContrat' => $this->getNumFacture($reservation, "CO"),
+            'clientSignature' => $clientSignature,
+            'adminSignature' => $adminSignature,
             'isPreview' => false
         ]);
 
@@ -279,7 +315,9 @@ class PdfGenerationService
             'taxRate' => $taxRate,
             'restePayerTTC' => $restePayerTTC,
             'totalFraisSupplTTC' => $totalFraisSupplTTC,
-            'numContrat' => $this->getNumFacture($reservation, "CO")
+            'numContrat' => $this->getNumFacture($reservation, "CO"),
+            'clientSignature' => $clientSignature,
+            'adminSignature' => $adminSignature
         ];
     }
 
