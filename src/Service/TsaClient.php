@@ -10,18 +10,18 @@ use Exception;
 
 class TsaClient
 {
-    private HttpClientInterface $httpClient;
-    private string $tsaUrl;
-    private string $username;
-    private string $password;
+    private $httpClient;
+    private $tsaUrl;
+    private $username;
+    private $password;
 
     public function __construct(HttpClientInterface $httpClient, string $tsaUrl = null, string $username = null, string $password = null)
     {
         $this->httpClient = $httpClient;
         // Default to FreeTSA if no URL provided
-        $this->tsaUrl = $tsaUrl ?? 'https://freetsa.org/tsa';
-        $this->username = $username ?? '';
-        $this->password = $password ?? '';
+        $this->tsaUrl = $tsaUrl ? 'https://freetsa.org/tsa' : '';
+        $this->username = $username ? $username : '';
+        $this->password = $password ? $password : '';
     }
 
     /**
@@ -34,7 +34,6 @@ class TsaClient
         try {
             // This is where you would send the actual request to a TSA
             // Example implementation for FreeTSA would be:
-            
             /*
             $response = $this->httpClient->request('POST', $this->tsaUrl, [
                 'headers' => [
@@ -42,7 +41,6 @@ class TsaClient
                 ],
                 'body' => $this->createTimestampRequest($hash),
             ]);
-            
             if ($response->getStatusCode() === 200) {
                 return $response->getContent();
             }
@@ -54,7 +52,6 @@ class TsaClient
         } catch (Exception $e) {
             // Log error and return null
             error_log("TSA request failed: " . $e->getMessage());
-            
             // Return simulated response in case of failure
             return $this->createSimulatedTimestampResponse($hash);
         }
@@ -67,7 +64,6 @@ class TsaClient
     {
         // In a real implementation, this would verify the timestamp token
         // with the TSA using their verification mechanism
-        
         // For now, we'll implement a basic check
         if (empty($token)) {
             return false;
@@ -89,14 +85,12 @@ class TsaClient
     {
         // Create a timestamp request according to RFC 3161
         // This is a simplified version
-        
         // The actual implementation would depend on the TSA's API requirements
         $request = [
             'hash' => $hash,
             'algorithm' => 'SHA-256',
             'time' => time(),
         ];
-        
         return json_encode($request);
     }
 
@@ -114,7 +108,6 @@ class TsaClient
         // In a real scenario, this would be cryptographically signed by the TSA
         return base64_encode(json_encode($timestampInfo));
     }
-    
     /**
      * Get the current configured TSA URL
      */

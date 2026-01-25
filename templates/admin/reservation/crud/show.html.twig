@@ -246,10 +246,6 @@
 			<i class="fa fa-send (alias)"></i>
 			Envoyer facture</a>
 
-		<a href="#section-signature" type="button" class="btn btn-outline-primary text-uppercase p-1">
-			<i class="fa fa-pencil"></i>
-			Signature contrat</a>
-
 	</div>
 	<div class="row mt-3">
 		<div class="col-md-2">
@@ -993,7 +989,8 @@
 	<div class="x_content">
 		{% set latestContract = null %}
 		{% for contract in reservation.contracts %}
-		{% if latestContract is null or contract.createdAt > latestContract.createdAt %}
+		{% if latestContract is null or contract.createdAt > latestContract.createdAt or (contract.createdAt ==
+		latestContract.createdAt and contract.id > latestContract.id) %}
 		{% set latestContract = contract %}
 		{% endif %}
 		{% endfor %}
@@ -1003,17 +1000,18 @@
 		<div class="row mb-3">
 			<div class="col-md-12">
 				<div class="alert 
-						{% if latestContract.contractStatus == 'fully_signed' %}alert-success
-						{% elseif latestContract.contractStatus == 'client_signed' %}alert-info
-						{% elseif latestContract.contractStatus == 'admin_signed' %}alert-warning
+						{% if latestContract.contractStatus == 'fully_signed' or (latestContract.isSignedByClient() and latestContract.isSignedByAdmin()) %}alert-success
+						{% elseif latestContract.contractStatus == 'client_signed' or latestContract.isSignedByClient() %}alert-info
+						{% elseif latestContract.contractStatus == 'admin_signed' or latestContract.isSignedByAdmin() %}alert-warning
 						{% else %}alert-secondary{% endif %}">
 					<strong>Statut du contrat:</strong>
-					{% if latestContract.contractStatus == 'fully_signed' %}
+					{% if latestContract.contractStatus == 'fully_signed' or (latestContract.isSignedByClient() and
+					latestContract.isSignedByAdmin()) %}
 					<span class="badge badge-success"><i class="fa fa-check-circle"></i> Complètement signé</span>
-					{% elseif latestContract.contractStatus == 'client_signed' %}
+					{% elseif latestContract.contractStatus == 'client_signed' or latestContract.isSignedByClient() %}
 					<span class="badge badge-info"><i class="fa fa-user"></i> Signé par le client (en attente
 						admin)</span>
-					{% elseif latestContract.contractStatus == 'admin_signed' %}
+					{% elseif latestContract.contractStatus == 'admin_signed' or latestContract.isSignedByAdmin() %}
 					<span class="badge badge-warning"><i class="fa fa-user-secret"></i> Signé par l'admin (en attente
 						client)</span>
 					{% else %}
@@ -1070,12 +1068,19 @@
 		<div class="row mt-3">
 			<div class="col-12 text-center">
 				{# Signature Client button removed #}
+				{% if not latestContract.isSignedByClient() %}
+				<a href="{{ path('envoyer_demande_signature', {'id': reservation.id}) }}" class="btn btn-primary">
+					<i class="fa fa-paper-plane"></i> Envoyer demande de signature
+				</a>
+				{% endif %}
+
 				{% if not latestContract.isSignedByAdmin() %}
 				<a href="{{ path('contract_sign_admin_reservation', {'id': reservation.id}) }}" class="btn btn-success">
 					<i class="fa fa-pencil"></i> Signature Admin
 				</a>
 				{% endif %}
-				{% if latestContract.contractStatus == 'fully_signed' %}
+				{% if latestContract.contractStatus == 'fully_signed' or (latestContract.isSignedByClient() and
+				latestContract.isSignedByAdmin()) %}
 				<span class="text-success font-weight-bold">
 					<i class="fa fa-check-circle"></i> Contrat complètement signé
 				</span>
@@ -1086,9 +1091,12 @@
 		{# No contract yet - show button to create and sign #}
 		<div class="text-center">
 			<p class="text-muted mb-3">Aucun contrat électronique n'a encore été créé pour cette réservation.</p>
+			<a href="{{ path('envoyer_demande_signature', {'id': reservation.id}) }}" class="btn btn-primary btn-lg">
+				<i class="fa fa-paper-plane"></i> Envoyer demande de signature au client
+			</a>
 			<a href="{{ path('contract_sign_admin_reservation', {'id': reservation.id}) }}"
-				class="btn btn-primary btn-lg">
-				<i class="fa fa-file-signature"></i> Créer et signer le contrat électronique
+				class="btn btn-success btn-lg">
+				<i class="fa fa-file-signature"></i> Créer et signer le contrat (Admin)
 			</a>
 		</div>
 		{% endif %}
@@ -1162,6 +1170,6 @@ une entry (un sous champ) #}{% block collection_entry_widget %}
 			photosContainerId: 'photos-container',
 			progressBarId: 'upload-progress',
 			messageContainerId: 'upload-messages'
-			});
+});
 });
 	</script>{% endblock %}

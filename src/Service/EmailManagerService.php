@@ -44,6 +44,44 @@ class EmailManagerService
         $this->sendDocument($request, $resa, 'contrat');
     }
 
+    public function sendSignatureRequest(Request $request, Reservation $resa)
+    {
+        $baseUrl = $this->site->getBaseUrl($request);
+        $signatureLink = $baseUrl . $this->router->generate('client_reservation_signature_hash', ['hashedId' => sha1($resa->getId())]);
+
+        $name = $resa->getClient()->getNom();
+        $email = $resa->getClient()->getMail();
+
+        try {
+            $emailSent = $this->emailService->sendSignatureRequest($email, $name, $signatureLink, $resa->getReference());
+            if ($emailSent) {
+                $this->emailLoggerService->logEmail($resa, 'signature_request', "success");
+                $this->emailNotifierService->notifyContratSent($resa->getReference());
+            } else {
+                $this->emailLoggerService->logEmail($resa, 'signature_request', "failed");
+                $this->emailNotifierService->notifyContratNotSent($resa->getReference());
+            }
+        } catch (\Exception $e) {
+            $this->emailLoggerService->logEmail($resa, 'signature_request', "failed", $e->getMessage());
+            $this->emailNotifierService->notifyContratNotSent($resa->getReference());
+        }
+    }
+
+    public function notifyAdminContractSigned(Reservation $resa)
+    {
+        // Link to admin reservation show page
+        // Since we are in a service, we might not have a full request context for baseUrl, 
+        // but router->generate with ABSOLUTE_URL should work if configured.
+        $adminLink = $this->router->generate('reservation_show', ['id' => $resa->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+
+        try {
+            $this->emailService->notifyAdminContractSigned($resa->getReference(), $resa->getClient()->getNom(), $adminLink);
+        } catch (\Exception $e) {
+            // Log error but don't block
+            // $this->logger->error(...)
+        }
+    }
+
     public function sendFacture(Request $request, Reservation $resa)
     {
         $this->sendDocument($request, $resa, 'facture');
@@ -79,7 +117,7 @@ class EmailManagerService
             if ($sendNotification) {
                 $this->emailNotifierService->notifyValidationNotSent();
             }
-            
+
             // Re-throw if needed for further handling by caller
             throw $e;
         }
@@ -110,7 +148,7 @@ class EmailManagerService
         try {
             $method = 'send' . ucfirst($type);
             $emailSent = false;
-            
+
             if ($type === 'contrat' && !empty($photos)) {
                 $emailSent = $this->emailService->$method($email, $name, ucfirst($type), $documentLink, $photos);
             } elseif ($type === 'avoir' && $montant !== null) {
@@ -121,9 +159,9 @@ class EmailManagerService
 
             if ($emailSent) {
                 $this->emailLoggerService->logEmail($entity, $type, "success");
-                
+
                 // Notify based on type
-                switch($type) {
+                switch ($type) {
                     case 'devis':
                         $this->emailNotifierService->notifyDevisSent($reference);
                         break;
@@ -136,9 +174,9 @@ class EmailManagerService
                 }
             } else {
                 $this->emailLoggerService->logEmail($entity, $type, "failed");
-                
+
                 // Notify based on type
-                switch($type) {
+                switch ($type) {
                     case 'devis':
                         $this->emailNotifierService->notifyDevisNotSent($reference);
                         break;
@@ -152,9 +190,9 @@ class EmailManagerService
             }
         } catch (\Exception $e) {
             $this->emailLoggerService->logEmail($entity, $type, "failed", $e->getMessage());
-            
+
             // Notify based on type
-            switch($type) {
+            switch ($type) {
                 case 'devis':
                     $this->emailNotifierService->notifyDevisNotSent($reference);
                     break;
@@ -244,7 +282,7 @@ class EmailManagerService
         } catch (\Exception $e) {
             $this->emailLoggerService->logAppelPaiementEmail($reservation, 'failed', $e->getMessage());
             $this->emailNotifierService->notifyAppelPaiementNotSent();
-            
+
             throw $e;
         }
     }

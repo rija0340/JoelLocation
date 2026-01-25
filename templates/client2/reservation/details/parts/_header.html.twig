@@ -1,9 +1,10 @@
-<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
-	<div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 mb-2 sm:mb-0">
-		<h1 class="text-2xl text-joel-red font-bold flex flex-wrap items-center gap-2">
-			<span class="text-lg">{{ type|lower == 'devis' ? 'DEVIS' : 'RÉSERVATION' }}
-				-</span>
-			<span class="bg-joel-red text-white rounded-full px-3 py-0.5 text-sm font-medium">
+<div
+	class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 border-b border-gray-100 pb-4">
+	<div class="flex flex-col gap-1 mb-2 sm:mb-0">
+		<h1 class="text-3xl text-gray-900 font-extrabold flex items-center gap-3">
+			<span class="tracking-tight">{{ type|lower == 'devis' ? 'DEVIS' : 'RÉSERVATION' }}</span>
+			<span
+				class="bg-gray-900 text-white rounded px-3 py-1 text-sm font-bold tracking-widest border-l-4 border-joel-red">
 				{% if type|lower == 'devis' and reservation.numero is defined %}
 				{{ reservation.numero }}
 				{% else %}
@@ -11,49 +12,51 @@
 				{% endif %}
 			</span>
 		</h1>
-		<small class="text-sm font-medium text-gray-600">
-			Créé le
-			{% if type|lower == 'devis' %}
-			{{ reservation.dateCreation|date('d/m/Y') }}
-			{% else %}
-			{{ reservation.dateReservation|date('d/m/Y') }}
+		<div class="flex items-center gap-3 text-sm font-medium text-gray-500">
+			<span><i class="far fa-calendar-alt mr-1"></i> Créé le
+				{% if type|lower == 'devis' %}
+				{{ reservation.dateCreation|date('d/m/Y') }}
+				{% else %}
+				{{ reservation.dateReservation|date('d/m/Y') }}
+				{% endif %}</span>
+
+			{% if type != 'devis' and reservation.contracts is defined %}
+			{% set latestContract = reservation.contracts|last %}
+			{% if latestContract %}
+			<div class="flex gap-2">
+				<span
+					class="flex items-center gap-1 {{ latestContract.isSignedByClient ? 'text-green-600' : 'text-gray-400' }}">
+					<i
+						class="fas {{ latestContract.isSignedByClient ? 'fa-check-circle' : 'fa-circle-notch fa-spin' }} text-[10px]"></i>
+					Client
+				</span>
+				<span
+					class="flex items-center gap-1 {{ latestContract.isSignedByAdmin ? 'text-green-600' : 'text-gray-400' }}">
+					<i
+						class="fas {{ latestContract.isSignedByAdmin ? 'fa-check-circle' : 'fa-circle-notch fa-spin' }} text-[10px]"></i>
+					Agence
+				</span>
+			</div>
 			{% endif %}
-		</small>
-	</div>
-
-	<div class="flex flex-col sm:flex-row items-center gap-2 mt-2 sm:mt-0">
-		{% if type != 'devis' and reservation.contracts is defined %}
-		{% set latestContract = reservation.contracts|last %}
-		{% if latestContract %}
-		<div class="flex gap-2">
-			<span
-				class="px-2 py-1 text-xs rounded-full {{ latestContract.isSignedByClient ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-gray-100 text-gray-600 border border-gray-200' }}">
-				<i class="fas {{ latestContract.isSignedByClient ? 'fa-check' : 'fa-hourglass-start' }} mr-1"></i>
-				Client
-			</span>
-			<span
-				class="px-2 py-1 text-xs rounded-full {{ latestContract.isSignedByAdmin ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-gray-100 text-gray-600 border border-gray-200' }}">
-				<i class="fas {{ latestContract.isSignedByAdmin ? 'fa-check' : 'fa-hourglass-start' }} mr-1"></i>
-				Agence
-			</span>
+			{% endif %}
 		</div>
-		{% endif %}
-		{% endif %}
 	</div>
 
-	<div class="flex flex-col sm:flex-row gap-1 sm:gap-2">
+	<div class="flex flex-col sm:flex-row gap-2">
 		{% if type == 'devis' %}
 		{% include 'client2/reservation/details/parts/_action_buttons.html.twig' with {'reservation': reservation} %}
 		{% endif %}
+		{% if type != 'devis' %}
 		<a href="#section-signature"
-			class="border border-joel-red text-joel-red hover:bg-joel-red hover:text-white px-3 py-1.5 rounded-lg flex items-center gap-1 transition-colors duration-200">
-			<i class="fas fa-pen-nib text-sm"></i>
-			<span class="text-base">Signature</span>
+			class="bg-joel-red text-white hover:bg-joel-red-dark px-4 py-2 rounded font-bold flex items-center gap-2 transition-all duration-200 shadow-sm hover:shadow-md">
+			<i class="fas fa-file-signature"></i>
+			<span>Signer le contrat</span>
 		</a>
+		{% endif %}
 		<a href="{{ path('client_reservations') }}"
-			class="border border-gray-300 text-gray-700 text-base hover:bg-gray-100 px-3 py-1.5 rounded-lg flex items-center gap-1">
-			<i class="fas fa-reply text-sm"></i>
-			<span class="text-base">Retour</span>
+			class="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 px-4 py-2 rounded font-bold flex items-center gap-2 transition-all duration-200">
+			<i class="fas fa-chevron-left"></i>
+			<span>Retour</span>
 		</a>
 	</div>
 </div>

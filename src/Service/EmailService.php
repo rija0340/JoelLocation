@@ -22,7 +22,8 @@ class EmailService
     private $emailLogger;
     private $requestStack;
     private $site;
-    private const SENDER = "contact@joellocation.com";
+    // private const SENDER = "contact@joellocation.com";
+    private string $senderEmail;
 
     public function __construct(
         MailerInterface $mailer,
@@ -32,7 +33,8 @@ class EmailService
         TransportInterface $mainTransport,
         TransportInterface $yahooTransport,
         RequestStack $requestStack,
-        Site $site
+        Site $site,
+        string $senderEmail
     ) {
         $this->mailer = $mailer;
         $this->twig = $twig;
@@ -42,6 +44,7 @@ class EmailService
         $this->emailLogger = $emailLogger;
         $this->requestStack = $requestStack;
         $this->site = $site;
+        $this->senderEmail = $senderEmail;
         $this->context = [
             'phone_number1' => '06 90 73 76 74',
             'phone_number2' => '07 67 32 14 47',
@@ -139,6 +142,28 @@ class EmailService
         return $this->send($to, "Appel à paiement", 'admin/templates_email/appel_paiement.html.twig', $context);
     }
 
+    public function sendSignatureRequest(string $to, string $name, string $signatureLink, string $reference)
+    {
+        $context = [
+            'name' => $name,
+            'signatureLink' => $signatureLink,
+            'reference' => $reference,
+        ];
+        return $this->send($to, "Signature de votre contrat - Réservation #$reference", 'admin/templates_email/signature_request.html.twig', $context);
+    }
+
+    public function notifyAdminContractSigned(string $reference, string $clientName, string $adminLink)
+    {
+        $context = [
+            'reference' => $reference,
+            'clientName' => $clientName,
+            'adminLink' => $adminLink,
+        ];
+        // Send to admin email address instead of sender
+        $adminEmail = $_ENV['ADMIN_EMAIL'] ?? $this->senderEmail;
+        return $this->send($adminEmail, "Contrat signé par le client - #$reference", 'admin/templates_email/admin_contract_signed.html.twig', $context);
+    }
+
     private function generateValidationUrl(string $token): string
     {
         $request = $this->requestStack->getCurrentRequest();
@@ -148,24 +173,38 @@ class EmailService
 
     private function createBaseEmailAndSend(string $to, string $subject, string $template, array $attachments = [], array $emailContext = [])
     {
+        // Determine if logos should be included based on template
+        $includeLogos = !$this->shouldSkipLogos($template);
+
         if (strpos($to, '@yahoo.com') !== false) {
             $emailContext['replyToEmail'] = 'contact@joellocation.com';
-            $htmlContent = $this->twig->render($template, array_merge($emailContext, [
-                'logo' => 'images/Joel-Location-new.png',
-                'facebook-icon' => 'images/logos/icons8-facebook-48.png',
-                'instagram-icon' => 'images/logos/icons8-instagram-48.png',
-                'youtube-icon' => 'images/logos/icons8-youtube-48.png'
-            ]));
 
-            $email = (new Email())
-                ->from('joel.mandret@yahoo.com')
-                ->to($to)
-                ->subject($subject)
-                ->html($htmlContent)
-                ->embed(fopen('images/Joel-Location-new.png', 'r'), 'logo')
-                ->embed(fopen('images/logos/icons8-facebook-48.png', 'r'), 'facebook-icon')
-                ->embed(fopen('images/logos/icons8-instagram-48.png', 'r'), 'instagram-icon')
-                ->embed(fopen('images/logos/icons8-youtube-48.png', 'r'), 'youtube-icon');
+            if ($includeLogos) {
+                $htmlContent = $this->twig->render($template, array_merge($emailContext, [
+                    'logo' => 'images/Joel-Location-new.png',
+                    'facebook-icon' => 'images/logos/icons8-facebook-48.png',
+                    'instagram-icon' => 'images/logos/icons8-instagram-48.png',
+                    'youtube-icon' => 'images/logos/icons8-youtube-48.png'
+                ]));
+
+                $email = (new Email())
+                    ->from($this->senderEmail)
+                    ->to($to)
+                    ->subject($subject)
+                    ->html($htmlContent)
+                    ->embed(fopen('images/Joel-Location-new.png', 'r'), 'logo')
+                    ->embed(fopen('images/logos/icons8-facebook-48.png', 'r'), 'facebook-icon')
+                    ->embed(fopen('images/logos/icons8-instagram-48.png', 'r'), 'instagram-icon')
+                    ->embed(fopen('images/logos/icons8-youtube-48.png', 'r'), 'youtube-icon');
+            } else {
+                $htmlContent = $this->twig->render($template, $emailContext);
+
+                $email = (new Email())
+                    ->from($this->senderEmail)
+                    ->to($to)
+                    ->subject($subject)
+                    ->html($htmlContent);
+            }
 
             // Add attachments
             if (!empty($attachments)) {
@@ -189,15 +228,20 @@ class EmailService
             }
         } else {
             $smtpMail = (new TemplatedEmail())
-                ->from(self::SENDER)
+                ->from($this->senderEmail)
                 ->to($to)
                 ->subject($subject)
                 ->htmlTemplate($template)
-                ->embedFromPath('images/Joel-Location-new.png', 'logo', 'image/png')
-                ->embedFromPath('images/logos/icons8-facebook-48.png', 'facebook-icon', 'image/png')
-                ->embedFromPath('images/logos/icons8-instagram-48.png', 'instagram-icon', 'image/png')
-                ->embedFromPath('images/logos/icons8-youtube-48.png', 'youtube-icon', 'image/png')
                 ->context($emailContext);
+
+            // Only embed logos if not skipping them
+            if ($includeLogos) {
+                $smtpMail
+                    ->embedFromPath('images/Joel-Location-new.png', 'logo', 'image/png')
+                    ->embedFromPath('images/logos/icons8-facebook-48.png', 'facebook-icon', 'image/png')
+                    ->embedFromPath('images/logos/icons8-instagram-48.png', 'instagram-icon', 'image/png')
+                    ->embedFromPath('images/logos/icons8-youtube-48.png', 'youtube-icon', 'image/png');
+            }
 
             // Add attachments
             foreach ($attachments as $attachmentPath) {
@@ -218,5 +262,16 @@ class EmailService
                 return false;
             }
         }
+    }
+
+    private function shouldSkipLogos(string $template): bool
+    {
+        // List of templates that should not include logos
+        $templatesWithoutLogos = [
+            'admin/templates_email/admin_contract_signed.html.twig',
+            // Add other templates here if needed
+        ];
+
+        return in_array($template, $templatesWithoutLogos);
     }
 }

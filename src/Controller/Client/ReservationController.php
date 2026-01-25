@@ -112,11 +112,31 @@ class ReservationController extends AbstractController
      */
     public function detailsReservation(Reservation $reservation, Request $request): Response
     {
-        $conducteurs =  $this->conducteurRepo->findBy(['client' => $this->getUser()]);
+        $conducteurs = $this->conducteurRepo->findBy(['client' => $this->getUser()]);
         return $this->render('client2/reservation/details/details_resa.html.twig', [
             'reservation' => $reservation,
             'conducteurs' => $conducteurs,
             'prixConductSuppl' => $this->tarifsHelper->getPrixConducteurSupplementaire()
+        ]);
+    }
+
+    /**
+     * @Route("/signature-contrat/{hashedId}", name="client_reservation_signature_hash", methods={"GET"})
+     */
+    public function signatureReservationHash(string $hashedId): Response
+    {
+        $reservation = $this->reservationRepo->findByHashedId($hashedId);
+        if (!$reservation) {
+            throw $this->createNotFoundException('Réservation non trouvée.');
+        }
+
+        $conducteurs = $reservation->getClient()->getConducteurs();
+
+        return $this->render('client2/reservation/details/details_resa.html.twig', [
+            'reservation' => $reservation,
+            'conducteurs' => $conducteurs,
+            'prixConductSuppl' => $this->tarifsHelper->getPrixConducteurSupplementaire(),
+            'hashedId' => $hashedId
         ]);
     }
 
@@ -212,7 +232,7 @@ class ReservationController extends AbstractController
 
             //check if the driver is already included in this reservation
             foreach ($allDrivers as $driver) {
-                if (!in_array($driver->getId(),  $idAddedDrivers)) {
+                if (!in_array($driver->getId(), $idAddedDrivers)) {
                     array_push($avalaibleDrivers, $driver);
                 }
             }

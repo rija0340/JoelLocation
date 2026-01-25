@@ -2,178 +2,269 @@
 
 {% block title %}Signature du Contrat #{{ contract.id }}{% endblock %}
 
+{% block stylesheets %}
+<style>
+    .modern-card {
+        background: #ffffff;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(0, 0, 0, 0.03);
+    }
+
+    .signature-pad-container {
+        border: 2px dashed #e2e8f0;
+        transition: all 0.3s ease;
+    }
+
+    .signature-pad-container:hover {
+        border-color: #e53e3e;
+        background-color: #fff5f5;
+    }
+
+    .status-card {
+        transition: all 0.3s ease;
+    }
+
+    .status-card.active {
+        border-left: 4px solid #e53e3e;
+    }
+
+    .btn-primary {
+        background-color: #e53e3e;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #c53030;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(229, 62, 62, 0.25);
+    }
+
+    .btn-secondary {
+        background-color: #2d3748;
+        transition: all 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+        background-color: #1a202c;
+        transform: translateY(-2px);
+    }
+
+    .contract-content {
+        max-height: 400px;
+        overflow-y: auto;
+        background-color: #fafafa;
+        border: 1px solid #e2e8f0;
+    }
+
+    .security-footer {
+        background-color: #2d3748;
+        color: #cbd5e0;
+    }
+</style>
+{% endblock %}
+
 {% block body %}
-<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100 mb-10">
-        <!-- Header -->
-        <div class="bg-joel-beige/20 px-8 py-10 text-center relative overflow-hidden border-b border-gray-200">
-            <!-- Decorative icon in background -->
-            <div class="absolute -right-10 -bottom-10 opacity-10 transform rotate-12">
-                <i class="fa fa-file-contract text-joel-red text-9xl"></i>
+<div class="min-h-screen py-8 bg-gray-50">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="modern-card rounded-2xl overflow-hidden mb-8">
+            <!-- Header -->
+            <div class="bg-black px-8 py-10 text-center">
+                <h1 class="text-3xl font-bold mb-2 text-white uppercase tracking-wide flex items-center justify-center">
+                    <i class="fa fa-file-signature mr-3 text-joel-red"></i>Signature du Contrat
+                </h1>
+                <div class="flex items-center justify-center gap-4 mt-4">
+                    <p class="text-gray-300 font-medium text-sm">CONTRAT #{{ contract.id }}</p>
+                    <span class="w-1 h-1 bg-gray-600 rounded-full"></span>
+                    <p class="text-gray-300 font-medium text-sm">RÉSERVATION {{ contract.reservation.reference }}</p>
+                </div>
             </div>
 
-            <h1 class="text-3xl font-bold mb-2 relative z-10 text-joel-red">
-                <i class="fa fa-file-contract mr-3"></i>Signature du Contrat
-            </h1>
-            <p class="text-gray-600 font-semibold relative z-10">Contrat #{{ contract.id }} - Réservation {{
-                contract.reservation.reference }}</p>
-        </div>
-
-        <div class="p-8">
-            {# Flash Messages #}
-            {% for message in app.flashes('error') %}
-            <div class="mb-6 flex items-center p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-r-lg"
-                role="alert">
-                <div class="flex-shrink-0 mr-3">
-                    <i class="fa fa-exclamation-triangle"></i>
-                </div>
-                <div class="text-sm font-medium">
-                    {{ message }}
-                </div>
-                <button type="button" class="ml-auto -mx-1.5 -my-1.5 p-1.5 text-red-500 hover:bg-red-100 rounded-lg"
-                    onclick="this.parentElement.remove()">
-                    <i class="fa fa-times"></i>
-                </button>
-            </div>
-            {% endfor %}
-
-            {% for message in app.flashes('success') %}
-            <div class="mb-6 flex items-center p-4 bg-green-50 border-l-4 border-green-500 text-green-700 rounded-r-lg"
-                role="alert">
-                <div class="flex-shrink-0 mr-3">
-                    <i class="fa fa-check-circle"></i>
-                </div>
-                <div class="text-sm font-medium">
-                    {{ message }}
-                </div>
-                <button type="button" class="ml-auto -mx-1.5 -my-1.5 p-1.5 text-green-500 hover:bg-green-100 rounded-lg"
-                    onclick="this.parentElement.remove()">
-                    <i class="fa fa-times"></i>
-                </button>
-            </div>
-            {% endfor %}
-
-            {# Reservation Quick Info #}
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                <div class="bg-gray-50 rounded-xl p-5 border border-gray-200 transition-all hover:border-joel-red/30">
-                    <div class="flex items-center mb-1">
-                        <i class="fa fa-info-circle text-joel-red mr-2"></i>
-                        <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Référence Réservation</h3>
+            <div class="p-6 md:p-8">
+                {# Flash Messages #}
+                {% for message in app.flashes('error') %}
+                <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-lg" role="alert">
+                    <div class="flex items-center">
+                        <i class="fa fa-exclamation-triangle mr-2 text-red-500"></i>
+                        <div class="font-medium">{{ message }}</div>
                     </div>
-                    <p class="text-lg font-bold text-joel-dark">{{ contract.reservation.reference }}</p>
+                </div>
+                {% endfor %}
+
+                {% for message in app.flashes('success') %}
+                <div class="mb-6 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 rounded-lg" role="alert">
+                    <div class="flex items-center">
+                        <i class="fa fa-check-circle mr-2 text-green-500"></i>
+                        <div class="font-medium">{{ message }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+
+                {# Status Summary #}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <!-- Client Status -->
+                    <div
+                        class="status-card rounded-xl p-5 border {{ contract.isSignedByClient ? 'active bg-green-50 border-green-100' : 'bg-gray-50 border-gray-100' }}">
+                        <h3 class="text-sm font-bold flex items-center mb-3 text-gray-600 uppercase tracking-wide">
+                            <i
+                                class="fa fa-user-circle mr-2 {{ contract.isSignedByClient ? 'text-green-500' : 'text-gray-400' }}"></i>
+                            Ma Signature
+                        </h3>
+                        {% if contract.isSignedByClient %}
+                        <p class="text-sm text-gray-800 font-bold">
+                            <i class="fa fa-check-circle mr-1 text-green-500"></i> DOCUMENT SIGNÉ
+                        </p>
+                        <p class="text-xs text-gray-500 mt-1">{{ contract.signatures|filter(s => s.signatureType ==
+                            'client')|first.signedAt|date('d/m/Y à H:i') }}</p>
+                        {% else %}
+                        <p class="text-sm text-gray-700 font-medium">
+                            <i class="fa fa-clock-o mr-1 text-joel-red"></i> Signature Requise
+                        </p>
+                        {% endif %}
+                    </div>
+
+                    <!-- Admin Status -->
+                    <div
+                        class="status-card rounded-xl p-5 border {{ contract.isSignedByAdmin ? 'active bg-green-50 border-green-100' : 'bg-gray-50 border-gray-100' }}">
+                        <h3 class="text-sm font-bold flex items-center mb-3 text-gray-600 uppercase tracking-wide">
+                            <i
+                                class="fa fa-building mr-2 {{ contract.isSignedByAdmin ? 'text-green-500' : 'text-gray-400' }}"></i>
+                            Statut Agence
+                        </h3>
+                        {% if contract.isSignedByAdmin %}
+                        <p class="text-sm text-gray-800 font-bold">
+                            <i class="fa fa-check-circle mr-1 text-green-500"></i> VALIDÉ PAR L'AGENCE
+                        </p>
+                        {% else %}
+                        <p class="text-sm text-gray-600">
+                            <i class="fa fa-hourglass-start mr-1 text-gray-400"></i> En cours de validation
+                        </p>
+                        {% endif %}
+                    </div>
                 </div>
 
-                <div class="bg-gray-50 rounded-xl p-5 border border-gray-200 transition-all hover:border-joel-red/30">
-                    <div class="flex items-center mb-1">
-                        <i class="fa fa-car text-joel-red mr-2"></i>
-                        <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Véhicule</h3>
+                {# Reservation Quick Info #}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                    <div class="bg-gray-50 rounded-xl p-5 flex items-center">
+                        <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center mr-4 text-gray-500">
+                            <i class="fa fa-hashtag text-lg"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs font-bold text-gray-500 uppercase tracking-wide">Référence</span>
+                            <p class="text-lg font-bold text-gray-900">{{ contract.reservation.reference }}</p>
+                        </div>
                     </div>
-                    <p class="text-lg font-bold text-joel-dark">
-                        {{ contract.reservation.vehicule.marque.libelle }} {{
-                        contract.reservation.vehicule.modele.libelle }}
-                        <span class="text-sm font-normal text-gray-500 ml-2">({{
-                            contract.reservation.vehicule.immatriculation }})</span>
+
+                    <div class="bg-gray-50 rounded-xl p-5 flex items-center">
+                        <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center mr-4 text-gray-500">
+                            <i class="fa fa-car text-lg"></i>
+                        </div>
+                        <div class="text-sm">
+                            <span class="text-xs font-bold text-gray-500 uppercase tracking-wide">Véhicule</span>
+                            <p class="font-bold text-gray-900">
+                                {{ contract.reservation.vehicule.marque.libelle }} {{
+                                contract.reservation.vehicule.modele.libelle }}
+                                <span class="text-xs bg-gray-200 px-2 py-0.5 rounded ml-1">
+                                    {{ contract.reservation.vehicule.immatriculation }}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="border-gray-100 mb-10">
+
+                {# Contract Content Preview #}
+                <div class="mb-10">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-bold text-gray-800 flex items-center uppercase tracking-wide">
+                            <i class="fa fa-file-alt text-gray-400 mr-3"></i>Contenu du Contrat
+                        </h2>
+                        <span class="text-xs bg-gray-800 text-white px-3 py-1 rounded-full font-bold uppercase">
+                            Document Officiel
+                        </span>
+                    </div>
+
+                    <div class="contract-content rounded-xl p-6">
+                        <div class="text-gray-700 leading-relaxed" style="white-space: pre-wrap; font-size: 0.9rem;">
+                            {{ contract.contractContent }}
+                        </div>
+                    </div>
+                    <p class="mt-3 text-xs text-gray-500 text-center">
+                        <i class="fa fa-info-circle mr-1"></i> Veuillez parcourir l'intégralité du document avant de
+                        signer
                     </p>
                 </div>
-            </div>
 
-            <hr class="border-gray-100 mb-8">
-
-            {# Contract Content Preview #}
-            <div class="mb-10">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-xl font-bold text-joel-dark flex items-center">
-                        <i class="fa fa-file-alt text-joel-red mr-3"></i>Contenu du Contrat
-                    </h2>
-                    <span
-                        class="text-xs bg-gray-100 text-gray-500 px-3 py-1 rounded-full font-semibold uppercase">Document
-                        Officiel</span>
-                </div>
-
-                <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 relative">
-                    <div class="prose prose-sm max-w-none overflow-y-auto max-h-[400px] text-gray-700 font-mono leading-relaxed"
-                        style="white-space: pre-wrap; font-size: 0.85rem;">
-                        {{ contract.contractContent }}
+                {# Signature Section #}
+                {% if not contract.isSignedByClient %}
+                <div class="bg-black rounded-2xl p-8 text-center">
+                    <div class="text-center mb-8">
+                        <h2 class="text-2xl font-bold text-white mb-2 uppercase tracking-wide">Apposer votre signature
+                        </h2>
+                        <p class="text-gray-300 max-w-md mx-auto">
+                            Signez simplement dans le cadre ci-dessous à l'aide de votre souris ou de votre doigt.
+                        </p>
                     </div>
 
-                    <!-- Fade effect at bottom if content is long -->
+                    <form method="post"
+                        action="{{ hash is defined and hash ? path('contract_sign_client_process_hash', {id: contract.id, hash: hash}) : path('contract_sign_client_process', {id: contract.id}) }}"
+                        class="space-y-8">
+                        <div class="signature-pad-container p-4 rounded-xl inline-block mx-auto w-full max-w-[532px]">
+                            {% include 'contract/_signature_pad.html.twig' %}
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
+                            <a href="{{ hash is defined and hash ? path('client_reservation_signature_hash', {'hashedId': hash}) : path('client_reservation_show', {'id': contract.reservation.id}) }}"
+                                class="flex-1 px-6 py-3 rounded-lg font-bold text-white bg-gray-700 hover:bg-gray-600 transition-all uppercase text-sm">
+                                <i class="fa fa-arrow-left mr-2"></i>Retour
+                            </a>
+
+                            <button type="submit"
+                                class="flex-1 px-6 py-3 rounded-lg font-bold text-white btn-primary uppercase text-sm btn-submit-signature">
+                                <i class="fa fa-file-signature mr-2"></i>Signer & Valider
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                {% else %}
+                <div class="bg-green-50 border border-green-100 rounded-2xl p-10 text-center">
                     <div
-                        class="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-gray-50/80 to-transparent pointer-events-none rounded-b-xl">
+                        class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-green-100 text-green-600 mb-6">
+                        <i class="fa fa-check-double text-3xl"></i>
                     </div>
-                </div>
-                <p class="mt-2 text-xs text-gray-400 italic">
-                    <i class="fa fa-scroll mr-1"></i> Veuillez faire défiler le texte ci-dessus pour lire l'intégralité
-                    des clauses contractuelles.
-                </p>
-            </div>
-
-            {# Signature Section #}
-            {% if not contract.isSignedByClient %}
-            <div class="bg-joel-beige/30 rounded-2xl p-8 border border-joel-beige">
-                <div class="text-center mb-8">
-                    <h2 class="text-2xl font-bold text-joel-dark mb-2">Signature Électronique</h2>
-                    <p class="text-gray-600 max-w-md mx-auto">
-                        Veuillez signer dans le cadre ci-dessous en utilisant votre souris ou votre doigt. Cette
-                        signature a pleine valeur juridique.
+                    <h2 class="text-2xl font-bold text-gray-900 mb-3 uppercase tracking-wide">Contrat Signé !</h2>
+                    <p class="text-gray-600 mb-8 max-w-md mx-auto">
+                        Votre signature a été enregistrée avec succès le
+                        <span class="font-bold text-gray-800">{{ contract.signatures|filter(s => s.signatureType ==
+                            'client')|first.signedAt|date('d/m/Y à H:i') }}</span>.
                     </p>
-                </div>
 
-                <form method="post" action="{{ path('contract_sign_client_process', {id: contract.id}) }}"
-                    class="space-y-8">
-                    <div
-                        class="bg-white p-4 rounded-xl shadow-inner border border-gray-200 inline-block mx-auto w-full max-w-[532px]">
-                        {% include 'contract/_signature_pad.html.twig' %}
-                    </div>
-
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                        <a href="{{ path('client_reservation_show', {'id': contract.reservation.id}) }}"
-                            class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 rounded-xl font-bold text-gray-600 bg-white hover:bg-gray-50 transition-colors order-2 sm:order-1">
-                            <i class="fa fa-arrow-left mr-2"></i>Retour à la réservation
+                    <div class="flex flex-wrap gap-4 justify-center">
+                        <a href="{{ hash is defined and hash ? path('client_reservation_signature_hash', {'hashedId': hash}) : path('client_reservation_show', {'id': contract.reservation.id}) }}"
+                            class="px-6 py-3 bg-white border border-gray-300 rounded-lg font-bold text-gray-800 hover:bg-gray-50 transition-all uppercase text-sm">
+                            <i class="fa fa-arrow-left mr-2"></i>Retour
                         </a>
-
-                        <button type="submit"
-                            class="inline-flex items-center justify-center px-8 py-3 border border-transparent rounded-xl font-bold text-white bg-joel-red hover:bg-joel-red-dark shadow-lg shadow-joel-red/20 transition-all hover:scale-[1.02] active:scale-95 btn-submit-signature order-1 sm:order-2">
-                            <i class="fa fa-file-signature mr-2"></i>Confirmer et Signer
-                        </button>
+                        <a href="{{ contract_download_client is defined ? path('contract_download_client', {'id': contract.id}) : '#' }}"
+                            class="px-6 py-3 btn-secondary text-white rounded-lg font-bold text-sm hover:opacity-90 transition-all uppercase">
+                            <i class="fa fa-download mr-2"></i>Télécharger le PDF
+                        </a>
                     </div>
-                </form>
-            </div>
-            {% else %}
-            <div class="bg-green-50 border border-green-100 rounded-2xl p-10 text-center">
-                <div
-                    class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-green-100 text-green-600 mb-6">
-                    <i class="fa fa-check-double text-3xl"></i>
                 </div>
-                <h2 class="text-2xl font-bold text-gray-800 mb-2">Contrat Signé avec Succès !</h2>
-                <p class="text-gray-600 mb-8 max-w-sm mx-auto">
-                    Votre signature a été enregistrée le
-                    <span class="font-bold text-green-700">{{ contract.signatures|filter(s => s.signatureType ==
-                        'client')|first.signedAt|date('d/m/Y à H:i') }}</span>.
-                </p>
+                {% endif %}
+            </div>
+        </div>
 
-                <div class="flex flex-wrap gap-4 justify-center">
-                    <a href="{{ path('client_reservation_show', {'id': contract.reservation.id}) }}"
-                        class="inline-flex items-center px-6 py-3 bg-white border border-gray-200 rounded-xl font-bold text-gray-700 hover:bg-gray-50 transition-colors shadow-sm">
-                        <i class="fa fa-arrow-left mr-2 font-light"></i>Retour aux détails
-                    </a>
-                    <a href="{{ contract_download_client is defined ? path('contract_download_client', {'id': contract.id}) : '#' }}"
-                        class="inline-flex items-center px-8 py-3 bg-joel-red text-white rounded-xl font-bold hover:bg-joel-red-dark transition-colors shadow-lg shadow-joel-red/20">
-                        <i class="fa fa-download mr-2"></i>Télécharger le Contrat (PDF)
-                    </a>
+        <!-- Help / Security Footer -->
+        <div class="security-footer rounded-xl p-4 text-center text-sm mt-8">
+            <div class="flex flex-col md:flex-row items-center justify-center gap-4">
+                <div class="flex items-center">
+                    <i class="fa fa-shield-alt mr-2"></i> Signature sécurisée certifiée eIDAS
+                </div>
+                <div class="flex gap-4">
+                    <span><i class="fa fa-map-marker-alt mr-1"></i> IP TRACÉE</span>
+                    <span><i class="fa fa-clock mr-1"></i> HORODATAGE</span>
                 </div>
             </div>
-            {% endif %}
-        </div>
-    </div>
-
-    <!-- Help / Security Footer -->
-    <div class="flex flex-col md:flex-row items-center justify-between text-gray-400 text-xs px-4 mb-12">
-        <div class="flex items-center mb-4 md:mb-0">
-            <i class="fa fa-shield-alt mr-2"></i> Signature électronique sécurisée conforme eIDAS
-        </div>
-        <div class="flex gap-6">
-            <span>Identification IP enregistrée</span>
-            <span>Horodatage certifié</span>
         </div>
     </div>
 </div>

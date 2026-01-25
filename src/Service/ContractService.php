@@ -74,6 +74,9 @@ class ContractService
             $signatureImage
         );
 
+        // Add signature to contract collection to ensure updateContractStatus sees it
+        $contract->addSignature($contractSignature);
+
         // Save the signature to the database
         $this->contractSignatureRepository->save($contractSignature, true);
 

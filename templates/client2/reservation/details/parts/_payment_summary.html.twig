@@ -1,105 +1,103 @@
-<div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-    <div class="p-4">
-        <h4 class="text-2xl font-semibold text-joel-red flex items-center mb-3">
-            <i class="fa fa-file-invoice mr-2"></i> Résumé des Paiements
+<div class="bg-gray-900 border border-gray-800 rounded-2xl shadow-2xl overflow-hidden text-white">
+    <div class="p-6">
+        <h4 class="text-xl font-black flex items-center mb-6 uppercase tracking-[0.2em]">
+            <i class="fa fa-file-invoice mr-3 text-joel-red"></i> Paiements
         </h4>
-        <div class="space-y-4">
-            <div class="bg-gray-50 rounded-lg p-3">
-                <h6 class="font-semibold text-lg mb-2 flex items-center">
-                    <i class="fa fa-calculator text-joel-red mr-2"></i>
-                    Détail du Montant
+        <div class="space-y-6">
+            <div class="bg-white/5 rounded-2xl p-5 backdrop-blur-sm border border-white/10">
+                <h6 class="text-[10px] font-black text-gray-400 mb-4 flex items-center uppercase tracking-[0.2em]">
+                    <i class="fa fa-calculator mr-2"></i> Composition du prix
                 </h6>
-                <div class="space-y-2 text-base">
-                    <div class="flex justify-between py-1">
-                        <div class="flex items-center">
-                            <i class="fa fa-car text-joel-red mr-2 w-4"></i>
+                <div class="space-y-3">
+                    <div class="flex justify-between text-sm py-1 border-b border-white/5">
+                        <div class="flex items-center text-gray-300">
+                            <i class="fa fa-car mr-3 w-4 opacity-30"></i>
                             <span>Location Véhicule</span>
                         </div>
-                        <span class="font-medium">{{ reservation.tarifVehicule }}€</span>
+                        <span class="font-bold">{{ reservation.tarifVehicule }}€</span>
                     </div>
-                    <div class="flex justify-between py-1">
-                        <div class="flex items-center">
-                            <i class="fa fa-cog text-joel-red mr-2 w-4"></i>
+                    <div class="flex justify-between text-sm py-1 border-b border-white/5">
+                        <div class="flex items-center text-gray-300">
+                            <i class="fa fa-cog mr-3 w-4 opacity-30"></i>
                             <span>Options</span>
                         </div>
-                        <span class="font-medium">{{ reservation.prixOptions }}€</span>
+                        <span class="font-bold">{{ reservation.prixOptions }}€</span>
                     </div>
-                    <div class="flex justify-between py-1">
-                        <div class="flex items-center">
-                            <i class="fa fa-shield text-joel-red mr-2 w-4"></i>
+                    <div class="flex justify-between text-sm py-1 border-b border-white/5">
+                        <div class="flex items-center text-gray-300">
+                            <i class="fa fa-shield mr-3 w-4 opacity-30"></i>
                             <span>Garanties</span>
                         </div>
-                        <span class="font-medium">{{ reservation.prixGaranties }}€</span>
+                        <span class="font-bold">{{ reservation.prixGaranties }}€</span>
                     </div>
-                    <div class="flex justify-between py-1">
-                        <div class="flex items-center">
-                            <i class="fa fa-clock text-joel-red mr-2 w-4"></i>
-                            <span>Dépassements horaires</span>
+
+                    <div class="flex justify-between py-4 mt-2 items-center">
+                        <div class="flex flex-col">
+                            <span class="text-[10px] text-gray-500 font-black uppercase tracking-widest">A payer au
+                                total</span>
+                            <span class="text-3xl font-black text-white tracking-tighter">{{ reservation.prix }}€</span>
                         </div>
-                        <span class="font-medium">0€</span>
-                    </div>
-                    <div class="flex justify-between py-1 font-medium border-t border-gray-300 pt-2">
-                        <div class="text-lg">Sous-total</div>
-                        <div class="text-lg">{{ reservation.prix }}€</div>
-                    </div>
-                    <div class="flex justify-between py-1">
-                        <div class="flex items-center">
-                            <i class="fa fa-tag text-joel-red mr-2 w-4"></i>
-                            <span>Remise</span>
+                        <div class="bg-joel-red text-white p-3 rounded-xl shadow-lg shadow-joel-red/30">
+                            <i class="fa fa-credit-card text-xl"></i>
                         </div>
-                        <span class="font-medium">0€</span>
-                    </div>
-                    <div class="flex justify-between py-2 mt-2 bg-joel-red text-white rounded font-bold items-center">
-                        <div class="text-xl">Montant Total</div>
-                        <div class="text-xl">{{ reservation.prix }}€</div>
                     </div>
                 </div>
             </div>
-            
-            {% if type != 'devis' %}
-                <div class="bg-gray-50 rounded-lg p-3">
-                    <h6 class="font-semibold text-lg mb-2 flex items-center">
-                        <i class="fa fa-history text-joel-red mr-2"></i>
-                        Historique des Paiements
-                    </h6>
-                    <div class="space-y-2 text-base">
-                        {% for paiement in reservation.paiements %}
-                            <div class="flex justify-between items-center py-1">
-                                <div>
-                                    <div class="flex items-center">
-                                        <i class="fa fa-money-bill-wave text-joel-red mr-2"></i>
-                                        <span>{{ paiement.datePaiement|date('d/m/Y ') }}</span>
-                                    </div>
-                                    <div class="ml-6 text-gray-600 text-sm">{{ paiement.modePaiement.libelle }}</div>
-                                </div>
-                                <span class="font-medium bg-gray-200 text-gray-800 text-base px-3 py-1 rounded">{{ paiement.montant }}€</span>
-                            </div>
-                        {% else %}
-                            <div class="text-gray-500 py-2 text-center text-base flex items-center justify-center gap-2">
-                                <i class="fa fa-info-circle"></i>
-                                Aucun paiement enregistré
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
 
-                {% if reservation.prix == reservation.sommePaiements %}
-                    <div class="bg-green-100 text-green-800 p-3 rounded-lg flex items-center gap-2 mb-0">
-                        <i class="fas fa-check-circle text-lg"></i>
-                        <span class="font-medium text-lg">Payé Intégralement</span>
-                    </div>
-                {% else %}
-                    <div class="bg-yellow-100 text-yellow-800 p-3 rounded-lg space-y-2 mb-0">
-                        <div class="flex justify-between text-base">
-                            <span>Total payé:</span>
-                            <strong>{{ reservation.sommePaiements }}€</strong>
+            {% if type != 'devis' %}
+            <div class="bg-white/5 rounded-2xl p-5 border border-white/10">
+                <h6 class="text-[10px] font-black text-gray-400 mb-4 flex items-center uppercase tracking-[0.2em]">
+                    <i class="fa fa-history mr-2"></i> Transactions
+                </h6>
+                <div class="space-y-3">
+                    {% for paiement in reservation.paiements %}
+                    <div class="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/5">
+                        <div class="flex items-center">
+                            <div
+                                class="w-8 h-8 rounded-lg bg-green-500/20 text-green-400 flex items-center justify-center mr-3 font-bold text-xs">
+                                <i class="fa fa-check"></i>
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="text-xs font-bold">{{ paiement.datePaiement|date('d/m/Y') }}</span>
+                                <span class="text-[10px] text-gray-500 uppercase font-medium">{{
+                                    paiement.modePaiement.libelle }}</span>
+                            </div>
                         </div>
-                        <div class="flex justify-between text-base">
-                            <span>Solde restant:</span>
-                            <strong>{{ reservation.prix - reservation.sommePaiements }}€</strong>
-                        </div>
+                        <span class="font-black text-green-400">{{ paiement.montant }}€</span>
                     </div>
-                {% endif %}
+                    {% else %}
+                    <div
+                        class="text-gray-500 py-6 text-center text-xs flex flex-col items-center justify-center gap-3 border border-dashed border-white/10 rounded-xl">
+                        <i class="fa fa-info-circle text-2xl opacity-10"></i>
+                        Aucun paiement à ce jour
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            {% if reservation.prix == reservation.sommePaiements %}
+            <div
+                class="bg-green-500/20 border border-green-500/30 text-green-400 p-4 rounded-xl flex items-center justify-center gap-3">
+                <i class="fas fa-check-double shadow-sm"></i>
+                <span class="font-black text-xs uppercase tracking-widest">SÉJOUR ENTIÈREMENT RÉGLÉ</span>
+            </div>
+            {% else %}
+            <div class="bg-white text-gray-900 p-5 rounded-2xl space-y-3 shadow-xl">
+                <div class="flex justify-between text-xs font-bold text-gray-500 uppercase tracking-widest">
+                    <span>Déjà réglé</span>
+                    <span>{{ reservation.sommePaiements }}€</span>
+                </div>
+                <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
+                    {% set percent = (reservation.sommePaiements / reservation.prix * 100)|round %}
+                    <div class="bg-joel-red h-full rounded-full" style="width: {{ percent }}%"></div>
+                </div>
+                <div class="flex justify-between items-end">
+                    <span class="text-[10px] font-black text-gray-400 uppercase tracking-tighter">Solde à régler</span>
+                    <span class="text-xl font-black text-joel-red">{{ reservation.prix - reservation.sommePaiements
+                        }}€</span>
+                </div>
+            </div>
+            {% endif %}
             {% endif %}
         </div>
     </div>

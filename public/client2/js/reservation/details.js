@@ -1,40 +1,64 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
   // Handle hover effects for conductor cards
-  document.querySelectorAll('.conductor-card').forEach(card => {
-    card.addEventListener('mouseenter', () => {
+  var conductorCards = document.querySelectorAll('.conductor-card');
+  conductorCards.forEach(function(card) {
+    card.addEventListener('mouseenter', function() {
       card.classList.add('shadow-md');
     });
-    card.addEventListener('mouseleave', () => {
+    card.addEventListener('mouseleave', function() {
       card.classList.remove('shadow-md');
     });
   });
 
-  // Confirmation for delete actions
-  document.querySelectorAll('form[onsubmit*="confirm"]').forEach(form => {
-    form.addEventListener('submit', (e) => {
-      if (!confirm('Êtes-vous sûre de vouloir supprimer ce conducteur ?')) {
-        e.preventDefault();
-      }
-    });
-  });
-
   // Print functionality
-  document.querySelectorAll('.btn').forEach(button => {
-    if (button.textContent.includes('Imprimer')) {
-      button.addEventListener('click', () => {
+  var buttons = document.querySelectorAll('.btn');
+  buttons.forEach(function(button) {
+    if (button.textContent && button.textContent.includes('Imprimer')) {
+      button.addEventListener('click', function() {
         window.print();
       });
     }
   });
 
-  // Modal toggle
-  const modalToggle = document.getElementById('modalConducteurToggle');
-  const modal = document.getElementById('modalConducteur');
-  modalToggle?.addEventListener('change', () => {
-    if (modalToggle.checked) {
-      modal.classList.add('modal-open');
-    } else {
-      modal.classList.remove('modal-open');
+  // Modal toggle for conducteur
+  var modalToggle = document.getElementById('modalConducteurToggle');
+  var modal = document.getElementById('modalConducteur');
+
+  if (modalToggle && modal) {
+    var modalContent = modal.querySelector('.bg-white');
+
+    function openModal() {
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      modal.classList.add('opacity-100');
+      if (modalContent) {
+        modalContent.classList.remove('scale-95');
+        modalContent.classList.add('scale-100');
+      }
     }
-  });
+
+    function closeModal() {
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      modal.classList.remove('opacity-100');
+      if (modalContent) {
+        modalContent.classList.add('scale-95');
+        modalContent.classList.remove('scale-100');
+      }
+    }
+
+    modalToggle.addEventListener('change', function() {
+      if (modalToggle.checked) {
+        openModal();
+      } else {
+        closeModal();
+      }
+    });
+
+    // Close modal when clicking on backdrop
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        modalToggle.checked = false;
+        closeModal();
+      }
+    });
+  }
 });

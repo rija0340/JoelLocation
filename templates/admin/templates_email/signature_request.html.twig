@@ -1,0 +1,80 @@
+{# templates/admin/templates_email/signature_request.html.twig #}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+        .email-container {
+            max-width: 500px;
+            margin: 0 auto;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .banner {
+            background-color: #f8ecec;
+            padding: 5px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .logo {
+            max-height: 100px;
+            height: 100px;
+            width: auto;
+        }
+
+        .content {
+            padding: 20px;
+            background-color: #ffffff;
+            text-align: justify;
+        }
+
+        .footer {
+            padding: 20px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .btn {
+            background-color: #ff0b09;
+            font-size: 14px;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 12px 20px;
+            color: #ffffff;
+            border-radius: 5px;
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="email-container">
+        <div class="banner"><img src="cid:logo" alt="Company Logo" class="logo"></div>
+        <div class="content">
+            <p>Bonjour {{name}},</p>
+            <p>Votre contrat de location pour la réservation <strong>#{{reference}}</strong> est prêt.</p>
+            <p>Nous vous invitons à le consulter et à le signer électroniquement en cliquant sur le bouton ci-dessous :
+            </p>
+            <div class="text-center" style="margin: 30px 0;">
+                <a href="{{signatureLink}}" class="btn">Signer mon contrat</a>
+            </div>
+            <p>Cette étape est nécessaire pour finaliser votre réservation. Si vous avez des questions, n'hésitez pas à
+                nous contacter.</p>
+            <p>Merci de votre confiance en <strong><span style="color: red;">Joel</span>Location</strong>.</p>
+            <p>Cordiales salutations.</p>
+        </div>
+        <div class="footer">
+            <p>Tel : {{ phone_number1 }} / {{ phone_number2 }}</p>
+            <p><a href="{{ website_url }}" style="color: black; font-weight: bold; text-decoration: none;">https://<span
+                        style="color: red;">joel</span>location.com/</a></p>
+        </div>
+    </div>
+</body>
+
+</html>
