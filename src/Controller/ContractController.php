@@ -227,6 +227,117 @@ class ContractController extends AbstractController
     }
 
     /**
+     * Signature client effectuée dans le backoffice (à côté de l'admin)
+     * ATTENTION: Cette méthode a une valeur juridique plus faible qu'une signature depuis l'espace client
+     * 
+     * @Route("/admin/sign/client/reservation/{id}", name="contract_sign_client_in_backoffice_reservation", methods={"GET"})
+     */
+    public function signClientInBackofficeByReservation(int $id): Response
+    {
+        $reservation = $this->entityManager->getRepository(\App\Entity\Reservation::class)->find($id);
+
+        if (!$reservation) {
+            throw $this->createNotFoundException('Réservation introuvable');
+        }
+
+        // Get or create the contract automatically
+        $contract = $this->contractService->getOrCreateContract($reservation);
+
+        // Redirect to the actual contract signing page
+        return $this->redirectToRoute('contract_sign_client_in_backoffice', ['id' => $contract->getId()]);
+    }
+
+    /**
+     * Affiche le formulaire de signature client dans le backoffice
+     * 
+     * @Route("/admin/sign/client/{id}", name="contract_sign_client_in_backoffice", methods={"GET"})
+     */
+    public function signClientInBackoffice(int $id): Response
+    {
+        $contract = $this->contractRepository->find($id);
+
+        if (!$contract) {
+            throw $this->createNotFoundException('Contrat introuvable');
+        }
+
+        return $this->render('contract/sign_client_backoffice.html.twig', [
+            'contract' => $contract,
+        ]);
+    }
+
+    /**
+     * Traite la signature client effectuée dans le backoffice
+     * 
+     * @Route("/admin/sign/client/{id}/process", name="contract_sign_client_in_backoffice_process", methods={"POST"})
+     */
+    public function processClientSignatureInBackoffice(Request $request, int $id): Response
+    {
+        $contract = $this->contractRepository->find($id);
+        if (!$contract) {
+            throw $this->createNotFoundException('Contrat introuvable');
+        }
+
+        $signatureImage = $request->request->get('signature_data');
+        $confirmBackoffice = $request->request->get('confirm_backoffice');
+
+        if (empty($signatureImage)) {
+            $this->addFlash('error', 'La signature est requise.');
+            return $this->redirectToRoute('contract_sign_client_in_backoffice', ['id' => $id]);
+        }
+
+        if (!$confirmBackoffice) {
+            $this->addFlash('error', 'Vous devez confirmer que le client signe en votre présence.');
+            return $this->redirectToRoute('contract_sign_client_in_backoffice', ['id' => $id]);
+        }
+
+        try {
+            // Dispatch signature started event
+            $startEvent = new ContractSignatureStartedEvent(
+                $contract,
+                ContractSignature::TYPE_CLIENT,
+                $request->getClientIp(),
+                $request->headers->get('User-Agent') . ' [BACKOFFICE]'  // Marqueur pour indiquer signature en backoffice
+            );
+            $this->eventDispatcher->dispatch($startEvent, ContractSignatureStartedEvent::NAME);
+
+            $keypair = $this->signatureService->generateKeypair();
+            $cryptoSignature = $this->signatureService->createSignature(
+                $contract->getContractHash(),
+                $keypair['private_key']
+            );
+
+            $signature = $this->contractService->processClientSignature(
+                $contract,
+                $cryptoSignature,
+                $keypair['public_key'],
+                $request->getClientIp() . ' [BACKOFFICE]',  // Marqueur pour indiquer signature en backoffice
+                $request->headers->get('User-Agent') . ' [BACKOFFICE]',
+                false,
+                $signatureImage
+            );
+
+            // Dispatch signature completed event
+            $completeEvent = new ContractSignatureCompletedEvent(
+                $contract,
+                $signature,
+                ContractSignature::TYPE_CLIENT
+            );
+            $this->eventDispatcher->dispatch($completeEvent, ContractSignatureCompletedEvent::NAME);
+
+            $this->addFlash('success', 'Signature client enregistrée avec succès (effectuée en backoffice) !');
+
+            // Redirect to reservation details with anchor to signature section
+            return $this->redirectToRoute('reservation_show', [
+                'id' => $contract->getReservation()->getId()
+            ]);
+
+        } catch (\Exception $e) {
+            $this->addFlash('error', 'Erreur lors de la signature : ' . $e->getMessage());
+            return $this->redirectToRoute('contract_sign_client_in_backoffice', ['id' => $id]);
+        }
+    }
+
+    /**
      * @Route("/admin/sign/{id}", name="contract_sign_admin", methods={"GET"})
      */
     public function signAdmin(int $id): Response

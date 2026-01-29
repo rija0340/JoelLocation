@@ -110,11 +110,22 @@
                             Ma Signature
                         </h3>
                         {% if contract.isSignedByClient %}
+                        {% set clientSig = contract.signatures|filter(s => s.signatureType == 'client')|first %}
                         <p class="text-sm text-gray-800 font-bold">
                             <i class="fa fa-check-circle mr-1 text-green-500"></i> DOCUMENT SIGNÉ
                         </p>
-                        <p class="text-xs text-gray-500 mt-1">{{ contract.signatures|filter(s => s.signatureType ==
-                            'client')|first.signedAt|date('d/m/Y à H:i') }}</p>
+                        <p class="text-xs text-gray-500 mt-1">{{ clientSig.signedAt|date('d/m/Y à H:i') }}</p>
+                        {% if clientSig.ipAddress is defined and '[BACKOFFICE]' in clientSig.ipAddress %}
+                        <span
+                            class="inline-block mt-2 text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full font-medium">
+                            <i class="fa fa-building mr-1"></i> Signé en agence
+                        </span>
+                        {% else %}
+                        <span
+                            class="inline-block mt-2 text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full font-medium">
+                            <i class="fa fa-laptop mr-1"></i> Signé depuis l'espace client
+                        </span>
+                        {% endif %}
                         {% else %}
                         <p class="text-sm text-gray-700 font-medium">
                             <i class="fa fa-clock-o mr-1 text-joel-red"></i> Signature Requise
@@ -227,25 +238,42 @@
                     </form>
                 </div>
                 {% else %}
+                {% set clientSig = contract.signatures|filter(s => s.signatureType == 'client')|first %}
+                {% set isBackoffice = clientSig.ipAddress is defined and '[BACKOFFICE]' in clientSig.ipAddress %}
                 <div class="bg-green-50 border border-green-100 rounded-2xl p-10 text-center">
                     <div
-                        class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-green-100 text-green-600 mb-6">
-                        <i class="fa fa-check-double text-3xl"></i>
+                        class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-green-100 text-green-600 mb-6 p-4">
+                        <i class="fa fa-check-double text-4xl"></i>
                     </div>
                     <h2 class="text-2xl font-bold text-gray-900 mb-3 uppercase tracking-wide">Contrat Signé !</h2>
-                    <p class="text-gray-600 mb-8 max-w-md mx-auto">
+                    <p class="text-gray-600 mb-4 max-w-md mx-auto">
                         Votre signature a été enregistrée avec succès le
-                        <span class="font-bold text-gray-800">{{ contract.signatures|filter(s => s.signatureType ==
-                            'client')|first.signedAt|date('d/m/Y à H:i') }}</span>.
+                        <span class="font-bold text-gray-800">{{ clientSig.signedAt|date('d/m/Y à H:i') }}</span>.
                     </p>
+
+                    {# Indication du lieu de signature #}
+                    <div class="mb-8">
+                        {% if isBackoffice %}
+                        <span
+                            class="inline-block text-sm bg-orange-100 text-orange-700 px-4 py-2 rounded-full font-medium">
+                            <i class="fa fa-building mr-2"></i> Signature effectuée en agence
+                        </span>
+                        {% else %}
+                        <span class="inline-block text-sm bg-blue-100 text-blue-700 px-4 py-2 rounded-full font-medium">
+                            <i class="fa fa-laptop mr-2"></i> Signature effectuée depuis votre espace client
+                        </span>
+                        {% endif %}
+                    </div>
 
                     <div class="flex flex-wrap gap-4 justify-center">
                         <a href="{{ hash is defined and hash ? path('client_reservation_signature_hash', {'hashedId': hash}) : path('client_reservation_show', {'id': contract.reservation.id}) }}"
                             class="px-6 py-3 bg-white border border-gray-300 rounded-lg font-bold text-gray-800 hover:bg-gray-50 transition-all uppercase text-sm">
                             <i class="fa fa-arrow-left mr-2"></i>Retour
                         </a>
-                        <a href="{{ contract_download_client is defined ? path('contract_download_client', {'id': contract.id}) : '#' }}"
-                            class="px-6 py-3 btn-secondary text-white rounded-lg font-bold text-sm hover:opacity-90 transition-all uppercase">
+                        {% set reservationHashedId = contract.reservation.id|sha1 %}
+                        <a href="{{ path('contrat_pdf', {'hashedId': reservationHashedId}) }}"
+                            class="px-6 py-3 btn-secondary text-white rounded-lg font-bold text-sm hover:opacity-90 transition-all uppercase"
+                            target="_blank">
                             <i class="fa fa-download mr-2"></i>Télécharger le PDF
                         </a>
                     </div>

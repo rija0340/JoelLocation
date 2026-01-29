@@ -580,6 +580,133 @@ Ce système de journalisation renforcerait la preuve judiciaire en fournissant u
 
 ---
 
+## Partie 6 : Signature en Backoffice vs Espace Client (Risques et Implications)
+
+### Contexte : Pourquoi cette question se pose ?
+
+Il arrive parfois qu'un client arrive directement à l'agence sans avoir pu signer le contrat depuis son espace client, notamment :
+- **Absence de connexion internet** : Le client n'a pas pu accéder à son email ou son espace client
+- **Urgence** : Pour aller plus vite, le client préfère signer sur place
+- **Problèmes techniques** : Difficultés d'accès au compte client
+
+Dans ce cas, l'admin peut proposer de faire signer le client directement dans le backoffice, à côté de sa propre signature.
+
+### ⚠️ Ce qu'on perd avec la signature en backoffice
+
+#### 1. **Affaiblissement de la preuve d'identité du signataire**
+
+| Critère | Espace Client | Backoffice |
+|---------|---------------|------------|
+| Connexion au compte personnel | ✓ Le client est connecté à SON compte | ✗ C'est l'admin qui est connecté |
+| Adresse IP tracée | ✓ IP du client (domicile/mobile) | ⚠️ IP de l'agence (partagée) |
+| Session utilisateur | ✓ Session du client authentifié | ✗ Session de l'admin |
+| Preuve d'authentification | ✓ Forte (email + mot de passe client) | ⚠️ Faible (présence physique uniquement) |
+
+**Impact juridique** : En cas de contestation, le client pourrait arguer : *"Ce n'est pas moi qui ai signé, c'est l'admin qui a fait signer quelqu'un d'autre à ma place"*. La preuve repose alors uniquement sur le témoignage de l'admin.
+
+#### 2. **Perte de la traçabilité individuelle**
+
+- **User-Agent** : Enregistre le navigateur de l'admin, pas celui du client
+- **Horodatage contextuel** : Le timestamp TSA est valide, mais ne prouve pas QUI a physiquement signé
+- **Historique de connexion** : Pas de trace de connexion du client à son propre compte
+
+#### 3. **Risque de contestation plus élevé**
+
+```
+Scénario problématique :
+──────────────────────────────────────────────────────────────────────────
+CLIENT (6 mois plus tard) : "Je n'ai jamais signé ce contrat !"
+
+AGENCE : "Voici la signature électronique avec timestamp TSA"
+
+CLIENT : "Cette signature a été faite depuis votre ordinateur,
+          avec votre compte admin. Comment prouvez-vous que c'est MOI
+          qui l'ai signée et pas quelqu'un d'autre ?"
+
+AGENCE : "Euh... l'admin qui était présent peut témoigner..."
+
+TRIBUNAL : "C'est une preuve testimoniale (faible), pas une preuve
+            cryptographique forte de l'identité du signataire."
+──────────────────────────────────────────────────────────────────────────
+```
+
+#### 4. **Réduction de la valeur probante**
+
+| Type de preuve | Signature Espace Client | Signature Backoffice |
+|----------------|------------------------|---------------------|
+| Signature cryptographique | ✓ Valide | ✓ Valide |
+| Horodatage TSA | ✓ Valide | ✓ Valide |
+| Preuve d'identité numérique | ✓ Forte | ⚠️ Faible |
+| Non-répudiation | ✓ Difficile à contester | ⚠️ Plus facile à contester |
+
+### ✅ Ce qu'on conserve malgré tout
+
+Même avec une signature en backoffice, vous conservez :
+
+1. **La signature cryptographique RSA** : Le hash du contrat est bien signé
+2. **Le timestamp TSA** : Preuve de la date/heure via un tiers de confiance
+3. **L'image de la signature visuelle** : La signature manuscrite dessinée
+4. **L'intégrité du contrat** : Impossible de modifier le contrat après signature
+5. **La traçabilité partielle** : IP, User-Agent, date/heure (de l'agence)
+
+### 📋 Bonnes pratiques si signature en backoffice est inévitable
+
+Si vous devez faire signer un client dans le backoffice, voici comment renforcer la preuve :
+
+#### 1. **Documentation complémentaire obligatoire**
+
+```
+✓ Faire signer un document papier attestant la signature électronique
+✓ Prendre une photo/copie de la pièce d'identité du client
+✓ Noter le nom complet, numéro de pièce d'identité, date et heure
+✓ Faire signer devant un témoin (un autre employé si possible)
+```
+
+#### 2. **Ajout de métadonnées supplémentaires**
+
+Dans les notes du contrat ou de la réservation, mentionner :
+- "Signature effectuée en agence le [DATE] à [HEURE]"
+- "Client identifié via CNI/Passeport n° [NUMÉRO]"
+- "Signature effectuée par [NOM_ADMIN] en présence de [TÉMOIN]"
+
+#### 3. **Envoi de confirmation au client**
+
+Après la signature, envoyer immédiatement un email au client :
+- Résumé du contrat signé
+- PDF du contrat avec les signatures
+- Demander confirmation par email si possible
+
+### 📊 Tableau comparatif des risques
+
+| Aspect | Espace Client | Backoffice | Risque ajouté |
+|--------|---------------|------------|---------------|
+| Identification du signataire | Authentification forte | Présence physique | 🔴 Élevé |
+| Non-répudiation | Très difficile à contester | Contestable | 🟠 Moyen |
+| Valeur juridique | Maximale | Réduite | 🟠 Moyen |
+| Recevabilité en tribunal | Preuve numérique complète | Preuve partielle + testimoniale | 🟠 Moyen |
+| Risque de fraude interne | Quasi nul | Possible | 🔴 Élevé |
+
+### 🎯 Recommandation finale
+
+| Situation | Recommandation |
+|-----------|----------------|
+| **Cas nominal** | ✅ Toujours privilégier la signature depuis l'espace client |
+| **Client sans accès email** | ⚠️ Demander au client de se connecter à son email sur son téléphone |
+| **Urgence absolue** | ⚠️ Signature backoffice + documentation papier renforcée |
+| **Client refuse de signer depuis son espace** | ❓ S'interroger sur les motivations et documenter clairement |
+
+### Conclusion
+
+La signature en backoffice N'EST PAS INVALIDE, mais elle est **juridiquement plus faible** qu'une signature depuis l'espace client. Les éléments cryptographiques (hash, RSA, TSA) restent valides, mais la preuve de l'IDENTITÉ du signataire est affaiblie.
+
+**En cas de litige** :
+- Signature espace client = Preuve numérique forte
+- Signature backoffice = Preuve numérique + preuve testimoniale nécessaire
+
+Si la signature en backoffice est inévitable, il est **impératif** de renforcer la documentation (pièce d'identité, témoin, confirmation email) pour compenser la perte de traçabilité numérique de l'identité du signataire.
+
+---
+
 ## Résumé Final
 
 ### En une phrase

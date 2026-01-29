@@ -1043,6 +1043,15 @@
 							<span class="text-danger"><i class="fa fa-times"></i> Non valide</span>
 							{% endif %}
 						</p>
+						{% if signature.signatureType == 'client' %}
+						<p><strong>Lieu de signature:</strong>
+							{% if signature.ipAddress is defined and '[BACKOFFICE]' in signature.ipAddress %}
+							<span class="badge badge-warning"><i class="fa fa-building"></i> En agence</span>
+							{% else %}
+							<span class="badge badge-info"><i class="fa fa-laptop"></i> Espace client</span>
+							{% endif %}
+						</p>
+						{% endif %}
 						{% if signature.timestampToken %}
 						<p><strong>Horodatage certifié:</strong>
 							<span class="text-success"><i class="fa fa-clock-o"></i> Oui</span>
@@ -1079,6 +1088,14 @@
 					<i class="fa fa-pencil"></i> Signature Admin
 				</a>
 				{% endif %}
+
+				{% if not latestContract.isSignedByClient() %}
+				<a href="{{ path('contract_sign_client_in_backoffice_reservation', {'id': reservation.id}) }}"
+					class="btn btn-warning"
+					title="Faire signer le client directement en agence (valeur juridique réduite)">
+					<i class="fa fa-user"></i> Signature Client (sur place)
+				</a>
+				{% endif %}
 				{% if latestContract.contractStatus == 'fully_signed' or (latestContract.isSignedByClient() and
 				latestContract.isSignedByAdmin()) %}
 				<span class="text-success font-weight-bold">
@@ -1097,6 +1114,11 @@
 			<a href="{{ path('contract_sign_admin_reservation', {'id': reservation.id}) }}"
 				class="btn btn-success btn-lg">
 				<i class="fa fa-file-signature"></i> Créer et signer le contrat (Admin)
+			</a>
+			<a href="{{ path('contract_sign_client_in_backoffice_reservation', {'id': reservation.id}) }}"
+				class="btn btn-warning btn-lg"
+				title="Faire signer le client directement en agence (valeur juridique réduite)">
+				<i class="fa fa-user"></i> Signature Client (sur place)
 			</a>
 		</div>
 		{% endif %}

@@ -1,0 +1,223 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}Signature Client (Backoffice) - Contrat #{{ contract.id }}{% endblock %}
+
+{% block stylesheets %}
+<!-- Font Awesome -->
+<link href="{{ asset('admin/vendors/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
+<link href="{{ asset('css/admin/detail.css') }}" rel="stylesheet">
+<style>
+    .signature-canvas-container {
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        background: #fff;
+        padding: 10px;
+        margin-bottom: 15px;
+    }
+
+    .signature-canvas-container canvas {
+        width: 100%;
+        height: 200px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .warning-box {
+        background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+        border: 2px solid #f39c12;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .warning-box h5 {
+        color: #856404;
+        margin-bottom: 15px;
+    }
+
+    .warning-box ul {
+        color: #856404;
+        margin-bottom: 0;
+    }
+
+    .warning-box li {
+        margin-bottom: 8px;
+    }
+
+    .confirmation-checkbox {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        border: 2px solid #6c757d;
+        margin-bottom: 20px;
+    }
+
+    .confirmation-checkbox label {
+        cursor: pointer;
+        font-weight: 500;
+    }
+
+    .confirmation-checkbox input[type="checkbox"] {
+        transform: scale(1.3);
+        margin-right: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block current_page %}
+<div class="text-warning">
+    <i class="fa fa-user"></i>
+    Signature Client (Backoffice)
+    <br>
+    <span>Résa: {{ contract.reservation.reference }}</span>
+</div>
+{% endblock %}
+
+{% block current_page_right %}
+<div class="font-weight-bold">
+    <span class="text-info">
+        <i class="fa fa-dashboard"></i>
+        Tableau de bord
+    </span>
+    > <a href="{{ path('reservation_show', {'id': contract.reservation.id}) }}">Détail réservation</a>
+    > Signature Client (Backoffice)
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="x_panel">
+    <div class="x_title">
+        <h2>
+            <i class="fa fa-user"></i> Signature Client en Backoffice - Contrat #{{ contract.id }}
+        </h2>
+        <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+        {# Alertes #}
+        {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">{{ message }}</div>
+        {% endfor %}
+        {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+
+        {# Avertissement important #}
+        <!-- <div class="warning-box">
+            <h5><i class="fa fa-exclamation-triangle mr-2 "></i>Attention : Signature en Backoffice</h5>
+            <p class="mb-2">Cette signature a une <strong>valeur juridique réduite</strong> par rapport à une signature
+                depuis l'espace client :</p>
+            <ul>
+                <li><strong>Pas de preuve d'authentification du client</strong> : Le client n'est pas connecté à son
+                    propre compte</li>
+                <li><strong>IP de l'agence</strong> : L'adresse IP enregistrée est celle de l'agence, pas celle du
+                    client</li>
+                <li><strong>Risque de contestation</strong> : En cas de litige, le client pourrait contester avoir signé
+                </li>
+                <li><strong>Preuve testimoniale requise</strong> : Votre témoignage sera nécessaire comme preuve
+                    complémentaire</li>
+            </ul>
+            <hr>
+            <p class="mb-0"><strong>Recommandation :</strong> Vérifiez l'identité du client (CNI/Passeport) et notez le
+                numéro du document dans les observations de la réservation.</p>
+        </div> -->
+
+        {# Informations #}
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <h5><i class="fa fa-info-circle mr-1"></i>Informations du contrat</h5>
+                <ul class="list-unstyled">
+                    <li><strong>Référence:</strong> {{ contract.reservation.reference }}</li>
+                    <li><strong>Client:</strong> {{ contract.reservation.client.prenom }} {{
+                        contract.reservation.client.nom }}</li>
+                    <li><strong>Email:</strong> {{ contract.reservation.client.mail }}</li>
+                    <li><strong>Véhicule:</strong> {{ contract.reservation.vehicule.immatriculation }}</li>
+                    <li><strong>Statut actuel:</strong>
+                        <span class="badge 
+							{% if contract.contractStatus == 'fully_signed' %}badge-success
+							{% elseif contract.contractStatus == 'admin_signed' %}badge-warning
+							{% else %}badge-secondary{% endif %}">
+                            {{ contract.contractStatus }}
+                        </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                {# Afficher si l'admin a déjà signé #}
+                {% if contract.isSignedByAdmin %}
+                <div class="alert alert-success">
+                    <i class="fa fa-check-circle mr-1"></i>
+                    <strong>Signature Admin :</strong> Déjà effectuée
+                </div>
+                {% else %}
+                <div class="alert alert-info">
+                    <i class="fa fa-info-circle mr-1"></i>
+                    <strong>Signature Admin :</strong> En attente
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <hr>
+
+        {# Contenu du contrat #}
+        <div class="mb-4">
+            <h5><i class="fa fa-file-text mr-1"></i>Contenu du contrat</h5>
+            <div class="bg-light p-3 border rounded" style="max-height: 300px; overflow-y: auto;">
+                <pre style="white-space: pre-wrap; font-size: 0.9em; margin: 0;">{{ contract.contractContent }}</pre>
+            </div>
+        </div>
+
+        {# Zone de Signature #}
+        {% if not contract.isSignedByClient %}
+        <div class="signature-section mt-4">
+            <div class="x_title">
+                <h4><i class="fa fa-pencil mr-1"></i>Signature du Client (effectuée en présence de l'administrateur)
+                </h4>
+                <div class="clearfix"></div>
+            </div>
+
+            <p class="text-muted mb-3">
+                Le client doit signer ci-dessous en votre présence. Assurez-vous d'avoir vérifié son identité.
+            </p>
+
+            <form method="post" action="{{ path('contract_sign_client_in_backoffice_process', {id: contract.id}) }}">
+                {% include 'contract/_signature_pad.html.twig' %}
+
+                {# Confirmation obligatoire #}
+                <div class="confirmation-checkbox">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="confirm_backoffice" id="confirmBackoffice"
+                            value="1" required>
+                        <label class="form-check-label" for="confirmBackoffice">
+                            <i class="fa fa-hand-paper-o mr-1"></i>
+                            Je confirme que le client <strong>{{ contract.reservation.client.prenom }} {{
+                                contract.reservation.client.nom }}</strong>
+                            est physiquement présent et signe ce contrat en ma présence, après vérification de son
+                            identité.
+                        </label>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-warning btn-lg">
+                        <i class="fa fa-user-check mr-1"></i> Enregistrer la Signature Client
+                    </button>
+                    <a href="{{ path('reservation_show', {'id': contract.reservation.id}) }}"
+                        class="btn btn-secondary btn-lg ml-2">
+                        <i class="fa fa-arrow-left mr-1"></i> Retour
+                    </a>
+                </div>
+            </form>
+        </div>
+        {% else %}
+        <div class="alert alert-success text-center py-4">
+            <h4><i class="fa fa-check-circle mr-1"></i> Signature Client Déjà Enregistrée</h4>
+            <p class="mb-0">Le client a déjà signé ce contrat.</p>
+            <a href="{{ path('reservation_show', {'id': contract.reservation.id}) }}" class="btn btn-primary mt-3">
+                <i class="fa fa-arrow-left mr-1"></i> Retour aux détails de la réservation
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
