@@ -1,6 +1,6 @@
 {% extends 'base2.html.twig' %}
 
-{% block title %}Validation Admin - État des Lieux - Départ #{{ contract.id }}{% endblock %}
+{% block title %}Validation Admin - État des Lieux - Retour #{{ contract.id }}{% endblock %}
 
 {% block stylesheets %}
 <!-- Font Awesome -->
@@ -26,8 +26,8 @@
 
 {% block current_page %}
 <div class="text-info">
-    <i class="fa fa-file-signature"></i>
-    Signature Admin - État des Lieux - Départ
+    <i class="fa fa-undo"></i>
+    Signature Admin - État des Lieux - Retour
     <br>
     <span>Résa: {{ contract.reservation.reference }}</span>
 </div>
@@ -40,7 +40,7 @@
         Tableau de bord
     </span>
     > <a href="{{ path('reservation_show', {'id': contract.reservation.id}) }}">Détail réservation</a>
-    > Signature Admin
+    > Signature Admin (Retour)
 </div>
 {% endblock %}
 
@@ -48,7 +48,7 @@
 <div class="x_panel">
     <div class="x_title">
         <h2>
-            <i class="fa fa-user-shield"></i> Validation Administrateur - État des Lieux - Départ #{{ contract.id }}
+            <i class="fa fa-user-shield"></i> Validation Administrateur - État des Lieux - Retour #{{ contract.id }}
         </h2>
         <div class="clearfix"></div>
     </div>
@@ -64,63 +64,56 @@
         {# Informations #}
         <div class="row mb-4">
             <div class="col-md-6">
-                <h5><i class="fa fa-info-circle mr-1"></i>Informations du contrat</h5>
+                <h5><i class="fa fa-info-circle mr-1"></i>Informations de la réservation</h5>
                 <ul class="list-unstyled">
                     <li><strong>Référence:</strong> {{ contract.reservation.reference }}</li>
                     <li><strong>Client:</strong> {{ contract.reservation.client.prenom }} {{
                         contract.reservation.client.nom }}</li>
                     <li><strong>Email:</strong> {{ contract.reservation.client.mail }}</li>
-                    <li><strong>Véhicule:</strong> {{ contract.reservation.vehicule.immatriculation }}</li>
-                    <li><strong>Statut actuel:</strong>
-                        <span class="badge 
-							{% if contract.contractStatus == 'fully_signed' %}badge-success
-							{% elseif contract.contractStatus == 'client_signed' %}badge-info
-							{% else %}badge-secondary{% endif %}">
-                            {{ contract.contractStatus }}
-                        </span>
+                    <li><strong>Véhicule:</strong> {{ contract.reservation.vehicule.marque }} {{
+                        contract.reservation.vehicule.modele }} ({{ contract.reservation.vehicule.immatriculation }})
                     </li>
+                    <li><strong>Date de retour:</strong> {{ contract.reservation.dateFin|date('d/m/Y H:i') }}</li>
                 </ul>
             </div>
             <div class="col-md-6 text-right">
-                {# "Pré-requis" section removed #}
+                <div class="badge badge-info p-2 mb-2">
+                    <i class="fa fa-clock-o mr-1"></i> Statut Départ : SIGNÉ
+                </div>
+                <br>
+                {% if is_signed_by_client %}
+                <div class="badge badge-success p-2">
+                    <i class="fa fa-check mr-1"></i> Client a signé le retour
+                </div>
+                {% else %}
+                <div class="badge badge-warning p-2">
+                    <i class="fa fa-hourglass-start mr-1"></i> Client n'a pas encore signé le retour
+                </div>
+                {% endif %}
             </div>
         </div>
 
         <hr>
 
-        {# Contenu du contrat #}
-        <div class="mb-4">
-            <h5><i class="fa fa-file-text mr-1"></i>Contenu du contrat</h5>
-            <div class="bg-light p-3 border rounded" style="max-height: 300px; overflow-y: auto;">
-                <pre style="white-space: pre-wrap; font-size: 0.9em; margin: 0;">{{ contract.contractContent }}</pre>
-            </div>
-        </div>
-
         {# Zone de Signature #}
-        {% if not contract.isSignedByAdmin %}
+        {% if not is_signed_by_admin %}
         <div class="signature-section mt-4">
             <div class="x_title">
-                <h4><i class="fa fa-pencil mr-1"></i>Signature Administrateur (Départ)</h4>
+                <h4><i class="fa fa-pencil mr-1"></i>Signature Administrateur (Retour)</h4>
                 <div class="clearfix"></div>
             </div>
 
-            {% if not contract.isSignedByClient %}
-            <div class="alert alert-info mb-3">
-                <i class="fa fa-info-circle mr-1"></i>
-                Le client n'a pas encore signé ce contrat. Vous pouvez signer en premier.
-            </div>
-            {% endif %}
-
             <p class="text-muted mb-3">
-                En tant qu'administrateur, validez ce contrat en apposant votre signature.
+                En tant qu'administrateur, validez le retour du véhicule en apposant votre signature.
             </p>
 
-            <form method="post" action="{{ path('contract_sign_admin_process', {id: contract.id}) }}">
+            <form method="post" action="{{ path('vehicle_checkout_sign_process', {id: contract.id}) }}">
+                <input type="hidden" name="signature_type" value="admin">
                 {% include 'contract/_signature_pad.html.twig' %}
 
                 <div class="text-center mt-4">
                     <button type="submit" class="btn btn-success btn-lg">
-                        <i class="fa fa-stamp mr-1"></i> Valider le Départ
+                        <i class="fa fa-stamp mr-1"></i> Valider le Retour
                     </button>
                     <a href="{{ path('reservation_show', {'id': contract.reservation.id}) }}"
                         class="btn btn-secondary btn-lg ml-2">
@@ -129,10 +122,18 @@
                 </div>
             </form>
         </div>
-        {% elseif contract.isSignedByAdmin %}
+        {% else %}
         <div class="alert alert-success text-center py-4">
-            <h4><i class="fa fa-check-double mr-1"></i> Contrat Entièrement Validé</h4>
-            <p class="mb-0">Ce contrat est finalisé et verrouillé.</p>
+            <h4><i class="fa fa-check-double mr-1"></i> État des Lieux Retour Validé</h4>
+            <p class="mb-0">Votre signature a été enregistrée.</p>
+            <div class="mt-3">
+                {% for sig in contract.signatures %}
+                {% if sig.documentType == 'checkout' and sig.signatureType == 'admin' %}
+                <img src="{{ sig.signatureImage }}" alt="Signature Admin"
+                    style="max-height: 100px; background: white; padding: 10px; border-radius: 8px;">
+                {% endif %}
+                {% endfor %}
+            </div>
             <a href="{{ path('reservation_show', {'id': contract.reservation.id}) }}" class="btn btn-primary mt-3">
                 <i class="fa fa-arrow-left mr-1"></i> Retour aux détails de la réservation
             </a>

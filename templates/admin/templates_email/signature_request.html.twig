@@ -58,11 +58,12 @@
         <div class="banner"><img src="cid:logo" alt="Company Logo" class="logo"></div>
         <div class="content">
             <p>Bonjour {{name}},</p>
-            <p>Votre contrat de location pour la réservation <strong>#{{reference}}</strong> est prêt.</p>
+            <p>Votre {{ documentLabel|default('contrat de location') }} pour la réservation
+                <strong>#{{reference}}</strong> est prêt.</p>
             <p>Nous vous invitons à le consulter et à le signer électroniquement en cliquant sur le bouton ci-dessous :
             </p>
             <div class="text-center" style="margin: 30px 0;">
-                <a href="{{signatureLink}}" class="btn">Signer mon contrat</a>
+                <a href="{{signatureLink}}" class="btn">Signer mon {{ documentLabel|default('contrat') }}</a>
             </div>
             <p>Cette étape est nécessaire pour finaliser votre réservation. Si vous avez des questions, n'hésitez pas à
                 nous contacter.</p>

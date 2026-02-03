@@ -23,7 +23,7 @@ class EmailService
     private $requestStack;
     private $site;
     // private const SENDER = "contact@joellocation.com";
-    private string $senderEmail;
+    private $senderEmail;
 
     public function __construct(
         MailerInterface $mailer,
@@ -87,12 +87,12 @@ class EmailService
         ];
         return $this->send($to, $subject, 'admin/templates_email/facture.html.twig', $context, $attachments);
     }
-    public function sendAvoir(string $to, string $name, string $subject, $avoirLink, $montant ,array $attachments = [])
+    public function sendAvoir(string $to, string $name, string $subject, $avoirLink, $montant, array $attachments = [])
     {
         $context = [
             'avoirLink' => $avoirLink,
             'name' => $name,
-            'montant'=> $montant
+            'montant' => $montant
         ];
         return $this->send($to, $subject, 'admin/templates_email/avoir.html.twig', $context, $attachments);
     }
@@ -109,7 +109,7 @@ class EmailService
     public function sendContact(array $data)
     {
         $emailContext = array_merge($this->context, $data);
-        return $this->send(self::SENDER, "Contact", 'admin/templates_email/formulaire_contact.html.twig', $emailContext);
+        return $this->send($this->senderEmail, "Contact", 'admin/templates_email/formulaire_contact.html.twig', $emailContext);
     }
 
     public function sendPaiementConfirmation(string $to, string $name, string $reference, float $montant, string $vehicule, \DateTime $dateDebut, \DateTime $dateFin)
@@ -142,14 +142,15 @@ class EmailService
         return $this->send($to, "Appel à paiement", 'admin/templates_email/appel_paiement.html.twig', $context);
     }
 
-    public function sendSignatureRequest(string $to, string $name, string $signatureLink, string $reference)
+    public function sendSignatureRequest(string $to, string $name, string $signatureLink, string $reference, string $documentLabel = 'contrat')
     {
         $context = [
             'name' => $name,
             'signatureLink' => $signatureLink,
             'reference' => $reference,
+            'documentLabel' => $documentLabel,
         ];
-        return $this->send($to, "Signature de votre contrat - Réservation #$reference", 'admin/templates_email/signature_request.html.twig', $context);
+        return $this->send($to, "Signature de votre $documentLabel - Réservation #$reference", 'admin/templates_email/signature_request.html.twig', $context);
     }
 
     public function notifyAdminContractSigned(string $reference, string $clientName, string $adminLink)

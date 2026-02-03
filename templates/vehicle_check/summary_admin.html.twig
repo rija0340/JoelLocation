@@ -1,0 +1,215 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}Récapitulatif des États des Lieux #{{ contract.id }}{% endblock %}
+
+{% block stylesheets %}
+<link href="{{ asset('css/admin/detail.css') }}" rel="stylesheet">
+<style>
+    .summary-card {
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        margin-bottom: 2rem;
+    }
+
+    .status-signed {
+        color: #28a745;
+        font-weight: bold;
+    }
+
+    .status-pending {
+        color: #ffc107;
+        font-weight: bold;
+    }
+
+    .signature-box {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 15px;
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .signature-img {
+        max-height: 100px;
+        max-width: 100%;
+    }
+
+    .document-section {
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        margin-bottom: 20px;
+    }
+
+    .section-header {
+        border-bottom: 2px solid #f1f1f1;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+</style>
+{% endblock %}
+
+{% block current_page %}
+<div class="text-info">
+    <i class="fa fa-clipboard-check"></i>
+    Récapitulatif signatures
+    <br>
+    <span>Résa: {{ contract.reservation.reference }}</span>
+</div>
+{% endblock %}
+
+{% block current_page_right %}
+<div class="font-weight-bold">
+    <span class="text-info">
+        <i class="fa fa-dashboard"></i>
+        Tableau de bord
+    </span>
+    > <a href="{{ path('reservation_show', {'id': contract.reservation.id}) }}">Détail réservation</a>
+    > Récapitulatif
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="x_panel">
+    <div class="x_title">
+        <h2><i class="fa fa-file-text-o"></i> Récapitulatif des signatures - Contrat #{{ contract.id }}</h2>
+        <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+
+        {# Info Réservation #}
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <h5><i class="fa fa-info-circle mr-1"></i>Détails</h5>
+                <p class="mb-1"><strong>Référence :</strong> {{ reservation.reference }}</p>
+                <p class="mb-1"><strong>Client :</strong> {{ reservation.client.nom }} {{ reservation.client.prenom }}
+                </p>
+                <p class="mb-1"><strong>Véhicule :</strong> {{ reservation.vehicule.marque }} {{
+                    reservation.vehicule.modele }} ({{ reservation.vehicule.immatriculation }})</p>
+            </div>
+            <div class="col-md-6 text-right">
+                <a href="{{ path('reservation_show', {id: reservation.id}) }}" class="btn btn-secondary">
+                    <i class="fa fa-arrow-left mr-1"></i> Retour à la réservation
+                </a>
+            </div>
+        </div>
+
+        <hr>
+
+        {# Section Départ #}
+        <div class="document-section">
+            <div class="section-header">
+                <h4 class="mb-0 text-primary"><i class="fa fa-car mr-2"></i> État des lieux - Départ (Contrat)</h4>
+                <div class="badge badge-{{ checkin_status == 'fully_signed' ? 'success' : 'warning' }} p-2">
+                    {{ checkin_status == 'fully_signed' ? 'ENTIÈREMENT SIGNÉ' : 'EN ATTENTE' }}
+                </div>
+            </div>
+
+            <div class="row">
+                {# Client Signature #}
+                <div class="col-md-6">
+                    <h5>Signature Client</h5>
+                    <div
+                        class="signature-box {{ contract.isSignedByClient('contract') ? 'border-success' : 'border-warning' }}">
+                        {% if contract.isSignedByClient('contract') %}
+                        {% for sig in checkin_signatures|filter(s => s.signatureType == 'client') %}
+                        <img src="{{ sig.signatureImage }}" class="signature-img" alt="Signature Client">
+                        <div class="text-muted mt-2 small">
+                            Signé le {{ sig.signedAt|date('d/m/Y à H:i') }}<br>
+                            IP: {{ sig.ipAddress }}
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <div class="py-4 text-muted"> <i class="fa fa-clock-o mr-1"></i> En attente </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {# Admin Signature #}
+                <div class="col-md-6">
+                    <h5>Signature Admin</h5>
+                    <div
+                        class="signature-box {{ contract.isSignedByAdmin('contract') ? 'border-success' : 'border-warning' }}">
+                        {% if contract.isSignedByAdmin('contract') %}
+                        {% for sig in checkin_signatures|filter(s => s.signatureType == 'admin') %}
+                        <img src="{{ sig.signatureImage }}" class="signature-img" alt="Signature Admin">
+                        <div class="text-muted mt-2 small">
+                            Validé le {{ sig.signedAt|date('d/m/Y à H:i') }}
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <div class="py-4 text-muted"> <i class="fa fa-clock-o mr-1"></i> En attente </div>
+                        <a href="{{ path('contract_sign_admin', {id: contract.id}) }}"
+                            class="btn btn-sm btn-outline-primary mt-2">Signer maintenant</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Section Retour #}
+        <div class="document-section">
+            <div class="section-header">
+                <h4 class="mb-0 text-success"><i class="fa fa-undo mr-2"></i> État des lieux - Retour (Remise)</h4>
+                <div class="badge badge-{{ checkout_status == 'fully_signed' ? 'success' : 'warning' }} p-2">
+                    {{ checkout_status == 'fully_signed' ? 'ENTIÈREMENT SIGNÉ' : 'EN ATTENTE' }}
+                </div>
+            </div>
+
+            {% if not can_sign_checkout %}
+            <div class="alert alert-warning">
+                <i class="fa fa-lock mr-2"></i> La signature du retour sera disponible une fois que le départ sera
+                entièrement signé.
+            </div>
+            {% else %}
+            <div class="row">
+                {# Client Signature #}
+                <div class="col-md-6">
+                    <h5>Signature Client</h5>
+                    <div
+                        class="signature-box {{ contract.isSignedByClient('checkout') ? 'border-success' : 'border-warning' }}">
+                        {% if contract.isSignedByClient('checkout') %}
+                        {% for sig in checkout_signatures|filter(s => s.signatureType == 'client') %}
+                        <img src="{{ sig.signatureImage }}" class="signature-img" alt="Signature Client">
+                        <div class="text-muted mt-2 small">
+                            Signé le {{ sig.signedAt|date('d/m/Y à H:i') }}<br>
+                            IP: {{ sig.ipAddress }}
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <div class="py-4 text-muted"> <i class="fa fa-clock-o mr-1"></i> En attente </div>
+                        <a href="{{ path('vehicle_checkout_sign_client_backoffice', {id: contract.id}) }}"
+                            class="btn btn-sm btn-outline-warning mt-2">Faire signer sur place</a>
+                        {% endif %}
+                    </div>
+                </div>
+                {# Admin Signature #}
+                <div class="col-md-6">
+                    <h5>Signature Admin</h5>
+                    <div
+                        class="signature-box {{ contract.isSignedByAdmin('checkout') ? 'border-success' : 'border-warning' }}">
+                        {% if contract.isSignedByAdmin('checkout') %}
+                        {% for sig in checkout_signatures|filter(s => s.signatureType == 'admin') %}
+                        <img src="{{ sig.signatureImage }}" class="signature-img" alt="Signature Admin">
+                        <div class="text-muted mt-2 small">
+                            Validé le {{ sig.signedAt|date('d/m/Y à H:i') }}
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <div class="py-4 text-muted"> <i class="fa fa-clock-o mr-1"></i> En attente </div>
+                        <a href="{{ path('vehicle_checkout_sign_admin', {id: contract.id}) }}"
+                            class="btn btn-sm btn-outline-success mt-2">Signer maintenant</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}

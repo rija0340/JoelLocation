@@ -15,11 +15,24 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Contract
 {
+    // Statuts pour le contrat
     public const STATUS_UNSIGNED = 'unsigned';
     public const STATUS_CLIENT_SIGNED = 'client_signed';
     public const STATUS_ADMIN_SIGNED = 'admin_signed';
     public const STATUS_FULLY_SIGNED = 'fully_signed';
     public const STATUS_DECLINED = 'declined';
+
+    // Statuts pour l'état des lieux départ (checkin)
+    public const CHECKIN_STATUS_UNSIGNED = 'checkin_unsigned';
+    public const CHECKIN_STATUS_CLIENT_SIGNED = 'checkin_client_signed';
+    public const CHECKIN_STATUS_ADMIN_SIGNED = 'checkin_admin_signed';
+    public const CHECKIN_STATUS_FULLY_SIGNED = 'checkin_fully_signed';
+
+    // Statuts pour l'état des lieux retour (checkout)
+    public const CHECKOUT_STATUS_UNSIGNED = 'checkout_unsigned';
+    public const CHECKOUT_STATUS_CLIENT_SIGNED = 'checkout_client_signed';
+    public const CHECKOUT_STATUS_ADMIN_SIGNED = 'checkout_admin_signed';
+    public const CHECKOUT_STATUS_FULLY_SIGNED = 'checkout_fully_signed';
 
     public const VALID_STATUSES = [
         self::STATUS_UNSIGNED,
@@ -201,25 +214,110 @@ class Contract
         return $this;
     }
 
-    public function isSignedByClient(): bool
+    /**
+     * Vérifie si le client a signé pour un type de document spécifique
+     */
+    public function isSignedByClient(string $documentType = ContractSignature::DOC_CONTRACT): bool
     {
         foreach ($this->signatures as $signature) {
-            if ($signature->getSignatureType() === ContractSignature::TYPE_CLIENT) {
+            if (
+                $signature->getSignatureType() === ContractSignature::TYPE_CLIENT
+                && $signature->getDocumentType() === $documentType
+            ) {
                 return true;
             }
         }
         return false;
     }
 
-    public function isSignedByAdmin(): bool
+    /**
+     * Vérifie si l'admin a signé pour un type de document spécifique
+     */
+    public function isSignedByAdmin(string $documentType = ContractSignature::DOC_CONTRACT): bool
     {
         foreach ($this->signatures as $signature) {
-            if ($signature->getSignatureType() === ContractSignature::TYPE_ADMIN) {
+            if (
+                $signature->getSignatureType() === ContractSignature::TYPE_ADMIN
+                && $signature->getDocumentType() === $documentType
+            ) {
                 return true;
             }
         }
         return false;
     }
+
+    /**
+     * Vérifie si un document est entièrement signé (client + admin)
+     */
+    public function isFullySigned(string $documentType = ContractSignature::DOC_CONTRACT): bool
+    {
+        return $this->isSignedByClient($documentType) && $this->isSignedByAdmin($documentType);
+    }
+
+    /**
+     * Vérifie si la signature checkout est possible (le départ/contrat doit être signé)
+     */
+    public function canSignCheckout(): bool
+    {
+        return $this->isFullySigned(ContractSignature::DOC_CONTRACT);
+    }
+
+    /**
+     * Récupère le statut d'un type de document spécifique
+     */
+    public function getDocumentStatus(string $documentType = ContractSignature::DOC_CONTRACT): string
+    {
+        $hasClient = $this->isSignedByClient($documentType);
+        $hasAdmin = $this->isSignedByAdmin($documentType);
+
+        if ($hasClient && $hasAdmin) {
+            switch ($documentType) {
+                case ContractSignature::DOC_CONTRACT:
+                    return self::STATUS_FULLY_SIGNED;
+                case ContractSignature::DOC_CHECKIN:
+                    return self::CHECKIN_STATUS_FULLY_SIGNED;
+                case ContractSignature::DOC_CHECKOUT:
+                    return self::CHECKOUT_STATUS_FULLY_SIGNED;
+                default:
+                    return 'fully_signed';
+            }
+        } elseif ($hasClient) {
+            switch ($documentType) {
+                case ContractSignature::DOC_CONTRACT:
+                    return self::STATUS_CLIENT_SIGNED;
+                case ContractSignature::DOC_CHECKIN:
+                    return self::CHECKIN_STATUS_CLIENT_SIGNED;
+                case ContractSignature::DOC_CHECKOUT:
+                    return self::CHECKOUT_STATUS_CLIENT_SIGNED;
+                default:
+                    return 'client_signed';
+            }
+        } elseif ($hasAdmin) {
+            switch ($documentType) {
+                case ContractSignature::DOC_CONTRACT:
+                    return self::STATUS_ADMIN_SIGNED;
+                case ContractSignature::DOC_CHECKIN:
+                    return self::CHECKIN_STATUS_ADMIN_SIGNED;
+                case ContractSignature::DOC_CHECKOUT:
+                    return self::CHECKOUT_STATUS_ADMIN_SIGNED;
+                default:
+                    return 'admin_signed';
+            }
+        }
+
+        switch ($documentType) {
+            case ContractSignature::DOC_CONTRACT:
+                return self::STATUS_UNSIGNED;
+            case ContractSignature::DOC_CHECKIN:
+                return self::CHECKIN_STATUS_UNSIGNED;
+            case ContractSignature::DOC_CHECKOUT:
+                return self::CHECKOUT_STATUS_UNSIGNED;
+            default:
+                return 'unsigned';
+        }
+    }
+
+
 
     public static function getValidStatuses(): array
     {

@@ -13,12 +13,24 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class ContractSignature
 {
+    // Types de signataires
     public const TYPE_CLIENT = 'client';
     public const TYPE_ADMIN = 'admin';
 
     public const VALID_TYPES = [
         self::TYPE_CLIENT,
         self::TYPE_ADMIN
+    ];
+
+    // Types de documents à signer
+    public const DOC_CONTRACT = 'contract';
+    public const DOC_CHECKIN = 'checkin';   // État des lieux départ
+    public const DOC_CHECKOUT = 'checkout'; // État des lieux retour
+
+    public const VALID_DOC_TYPES = [
+        self::DOC_CONTRACT,
+        self::DOC_CHECKIN,
+        self::DOC_CHECKOUT
     ];
 
     /**
@@ -44,6 +56,14 @@ class ContractSignature
      * @Assert\Choice(callback={"App\Entity\ContractSignature", "getValidTypes"})
      */
     private $signatureType;
+
+    /**
+     * @ORM\Column(type="string", length=20)
+     * @Groups({"contract:read", "signature:read"})
+     * @Assert\NotBlank
+     * @Assert\Choice(callback={"App\Entity\ContractSignature", "getValidDocTypes"})
+     */
+    private $documentType = self::DOC_CONTRACT;
 
     /**
      * @ORM\Column(type="text")
@@ -129,6 +149,22 @@ class ContractSignature
         }
 
         $this->signatureType = $signatureType;
+
+        return $this;
+    }
+
+    public function getDocumentType(): ?string
+    {
+        return $this->documentType;
+    }
+
+    public function setDocumentType(string $documentType): self
+    {
+        if (!in_array($documentType, self::VALID_DOC_TYPES)) {
+            throw new \InvalidArgumentException("Invalid document type: {$documentType}");
+        }
+
+        $this->documentType = $documentType;
 
         return $this;
     }
@@ -250,5 +286,10 @@ class ContractSignature
     public static function getValidTypes(): array
     {
         return self::VALID_TYPES;
+    }
+
+    public static function getValidDocTypes(): array
+    {
+        return self::VALID_DOC_TYPES;
     }
 }

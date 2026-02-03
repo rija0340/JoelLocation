@@ -65,7 +65,8 @@ class ContractService
         ?string $ipAddress = null,
         ?string $userAgent = null,
         ?string $timestampToken = null,
-        ?string $signatureImage = null
+        ?string $signatureImage = null,
+        string $documentType = ContractSignature::DOC_CONTRACT
     ): ContractSignature {
         $contractSignature = $this->signatureService->createContractSignature(
             $contract,
@@ -75,7 +76,8 @@ class ContractService
             $ipAddress,
             $userAgent,
             $timestampToken,
-            $signatureImage
+            $signatureImage,
+            $documentType
         );
 
         // Add signature to contract collection to ensure updateContractStatus sees it
@@ -85,7 +87,9 @@ class ContractService
         $this->contractSignatureRepository->save($contractSignature, true);
 
         // Update contract status based on signature type
-        $this->updateContractStatus($contract, $signatureType);
+        if ($documentType === ContractSignature::DOC_CONTRACT) {
+            $this->updateContractStatus($contract, $signatureType);
+        }
 
         // Log signature creation
         $this->signatureLogger->logSignatureCreated(
@@ -117,12 +121,30 @@ class ContractService
         ?string $ipAddress = null,
         ?string $userAgent = null,
         bool $skipPaymentCheck = false,
-        ?string $signatureImage = null
+        ?string $signatureImage = null,
+        string $documentType = ContractSignature::DOC_CONTRACT
     ): ContractSignature {
-        // Note: Payment check has been removed - contracts can be signed without full payment
+        // Vérifier si le client a déjà signé ce type de document
+        if ($contract->isSignedByClient($documentType)) {
+            switch ($documentType) {
+                case ContractSignature::DOC_CONTRACT:
+                    $docLabel = 'la signature de départ (contrat)';
+                    break;
+                case ContractSignature::DOC_CHECKIN:
+                    $docLabel = 'la signature de départ';
+                    break;
+                case ContractSignature::DOC_CHECKOUT:
+                    $docLabel = 'l\'état des lieux de retour';
+                    break;
+                default:
+                    $docLabel = 'ce document';
+            }
+            throw new \Exception("Le client a déjà signé {$docLabel}.");
+        }
 
-        if ($contract->isSignedByClient()) {
-            throw new \Exception("Le client a déjà signé ce contrat.");
+        // Pour le checkout, vérifier que le checkin est signé
+        if ($documentType === ContractSignature::DOC_CHECKOUT && !$contract->canSignCheckout()) {
+            throw new \Exception("La signature de départ (contrat) doit être effectuée avant le retour.");
         }
 
         // Request timestamp from TSA
@@ -137,7 +159,8 @@ class ContractService
             $ipAddress,
             $userAgent,
             $timestampToken,
-            $signatureImage
+            $signatureImage,
+            $documentType
         );
 
         return $signature;
@@ -152,15 +175,30 @@ class ContractService
         string $publicKeyData,
         ?string $ipAddress = null,
         ?string $userAgent = null,
-        ?string $signatureImage = null
+        ?string $signatureImage = null,
+        string $documentType = ContractSignature::DOC_CONTRACT
     ): ContractSignature {
-        // Validation: Client must have signed first
-        // if (!$contract->isSignedByClient()) {
-        //     throw new \Exception("Le client doit signer le contrat avant l'administrateur.");
-        // }
+        // Vérifier si l'admin a déjà signé ce type de document
+        if ($contract->isSignedByAdmin($documentType)) {
+            switch ($documentType) {
+                case ContractSignature::DOC_CONTRACT:
+                    $docLabel = 'la signature de départ (contrat)';
+                    break;
+                case ContractSignature::DOC_CHECKIN:
+                    $docLabel = 'la signature de départ';
+                    break;
+                case ContractSignature::DOC_CHECKOUT:
+                    $docLabel = 'l\'état des lieux de retour';
+                    break;
+                default:
+                    $docLabel = 'ce document';
+            }
+            throw new \Exception("L'administrateur a déjà signé {$docLabel}.");
+        }
 
-        if ($contract->isSignedByAdmin()) {
-            throw new \Exception("L'administrateur a déjà signé ce contrat.");
+        // Pour le checkout, vérifier que le checkin est signé
+        if ($documentType === ContractSignature::DOC_CHECKOUT && !$contract->canSignCheckout()) {
+            throw new \Exception("La signature de départ (contrat) doit être effectuée avant le retour.");
         }
 
         // Request timestamp from TSA
@@ -175,7 +213,8 @@ class ContractService
             $ipAddress,
             $userAgent,
             $timestampToken,
-            $signatureImage
+            $signatureImage,
+            $documentType
         );
 
         return $signature;

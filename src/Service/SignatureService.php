@@ -71,11 +71,13 @@ class SignatureService
         ?string $ipAddress = null,
         ?string $userAgent = null,
         ?string $timestampToken = null,
-        ?string $signatureImage = null
+        ?string $signatureImage = null,
+        string $documentType = ContractSignature::DOC_CONTRACT
     ): ContractSignature {
         $contractSignature = new ContractSignature();
         $contractSignature->setContract($contract);
         $contractSignature->setSignatureType($signatureType);
+        $contractSignature->setDocumentType($documentType);
         $contractSignature->setSignatureData($signatureData);
         $contractSignature->setPublicKeyData($publicKeyData);
         $contractSignature->setIpAddress($ipAddress);

@@ -47,7 +47,7 @@ class EmailManagerService
     public function sendSignatureRequest(Request $request, Reservation $resa)
     {
         $baseUrl = $this->site->getBaseUrl($request);
-        $signatureLink = $baseUrl . $this->router->generate('client_reservation_signature_hash', ['hashedId' => sha1($resa->getId())]);
+        $signatureLink = $baseUrl . $this->router->generate('contract_sign_client_reservation', ['id' => $resa->getId()]);
 
         $name = $resa->getClient()->getNom();
         $email = $resa->getClient()->getMail();
@@ -64,6 +64,46 @@ class EmailManagerService
         } catch (\Exception $e) {
             $this->emailLoggerService->logEmail($resa, 'signature_request', "failed", $e->getMessage());
             $this->emailNotifierService->notifyContratNotSent($resa->getReference());
+        }
+    }
+
+    public function sendCheckinSignatureRequest(Request $request, Reservation $resa)
+    {
+        $baseUrl = $this->site->getBaseUrl($request);
+        $signatureLink = $baseUrl . $this->router->generate('client_checkin_sign_hash', ['hashedId' => sha1($resa->getId())]);
+
+        $name = $resa->getClient()->getNom();
+        $email = $resa->getClient()->getMail();
+
+        try {
+            $emailSent = $this->emailService->sendSignatureRequest($email, $name, $signatureLink, $resa->getReference(), 'État des lieux départ');
+            if ($emailSent) {
+                $this->emailLoggerService->logEmail($resa, 'checkin_signature_request', "success");
+            } else {
+                $this->emailLoggerService->logEmail($resa, 'checkin_signature_request', "failed");
+            }
+        } catch (\Exception $e) {
+            $this->emailLoggerService->logEmail($resa, 'checkin_signature_request', "failed", $e->getMessage());
+        }
+    }
+
+    public function sendCheckoutSignatureRequest(Request $request, Reservation $resa)
+    {
+        $baseUrl = $this->site->getBaseUrl($request);
+        $signatureLink = $baseUrl . $this->router->generate('client_checkout_sign', ['id' => $resa->getId()]);
+
+        $name = $resa->getClient()->getNom();
+        $email = $resa->getClient()->getMail();
+
+        try {
+            $emailSent = $this->emailService->sendSignatureRequest($email, $name, $signatureLink, $resa->getReference(), 'État des lieux retour');
+            if ($emailSent) {
+                $this->emailLoggerService->logEmail($resa, 'checkout_signature_request', "success");
+            } else {
+                $this->emailLoggerService->logEmail($resa, 'checkout_signature_request', "failed");
+            }
+        } catch (\Exception $e) {
+            $this->emailLoggerService->logEmail($resa, 'checkout_signature_request', "failed", $e->getMessage());
         }
     }
 
