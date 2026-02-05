@@ -222,11 +222,7 @@
                     <div class="flex flex-wrap gap-4 justify-center">
                         <a href="{{ hashedId is defined and hashedId ? path('client_reservation_signature_hash', {'hashedId': hashedId}) : path('client_reservation_show', {'id': contract.reservation.id}) }}"
                             class="px-6 py-3 bg-white border border-gray-300 rounded-lg font-bold text-gray-800 hover:bg-gray-50 transition-all uppercase text-sm">
-                            <i class="fa fa-arrow-left mr-2"></i>Retour
-                        </a>
-                        <a href="{{ path('client_vehicle_check_summary_hash', {hashedId: hashedId|default(contract.reservation.id|sha1)}) }}"
-                            class="px-6 py-3 btn-secondary text-white rounded-lg font-bold text-sm hover:opacity-90 transition-all uppercase">
-                            <i class="fa fa-clipboard-list mr-2"></i>Voir le Récapitulatif
+                            <i class="fa fa-arrow-left mr-2"></i>Retour au tableau de bord
                         </a>
                     </div>
                 </div>

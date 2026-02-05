@@ -12,8 +12,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use App\Event\ContractSignatureStartedEvent;
 use App\Event\ContractSignatureCompletedEvent;
+use App\Event\CheckoutSignedByClientEvent;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class CheckinCheckoutController extends AbstractController
@@ -202,6 +204,11 @@ class CheckinCheckoutController extends AbstractController
 
             $this->addFlash('success', "Signature de l'état des lieux retour enregistrée !");
 
+            // Dispatch event to notify admin that the client has signed the checkout
+            $baseUrl = $this->generateUrl('reservation_show', ['id' => $reservation->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+            $checkoutEvent = new CheckoutSignedByClientEvent($reservation, $baseUrl);
+            $this->eventDispatcher->dispatch($checkoutEvent, CheckoutSignedByClientEvent::NAME);
+
             return $this->redirectToRoute('client_reservation_show', ['id' => $id]);
 
         } catch (\Exception $e) {
@@ -273,6 +280,11 @@ class CheckinCheckoutController extends AbstractController
 
             $this->addFlash('success', "Signature de l'état des lieux retour enregistrée !");
 
+            // Dispatch event to notify admin that the client has signed the checkout
+            $baseUrl = $this->generateUrl('reservation_show', ['id' => $reservation->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+            $checkoutEvent = new CheckoutSignedByClientEvent($reservation, $baseUrl);
+            $this->eventDispatcher->dispatch($checkoutEvent, CheckoutSignedByClientEvent::NAME);
+
             return $this->redirectToRoute('client_checkout_sign_hash', ['hashedId' => $hashedId]);
 
         } catch (\Exception $e) {
@@ -281,40 +293,4 @@ class CheckinCheckoutController extends AbstractController
         }
     }
 
-    /**
-     * @Route("/recapitulatif-signatures/{hashedId}", name="client_vehicle_check_summary_hash", methods={"GET"})
-     */
-    public function summaryHash(string $hashedId): Response
-    {
-        $reservation = $this->reservationRepository->findByHashedId($hashedId);
-        if (!$reservation) {
-            throw $this->createNotFoundException('Réservation non trouvée.');
-        }
-
-        $contract = $this->contractService->getOrCreateContract($reservation);
-
-        // Récupérer les signatures par type
-        $checkinSignatures = [];
-        $checkoutSignatures = [];
-
-        foreach ($contract->getSignatures() as $signature) {
-            if ($signature->getDocumentType() === ContractSignature::DOC_CONTRACT) { // Use DOC_CONTRACT for departure
-                $checkinSignatures[] = $signature;
-            } elseif ($signature->getDocumentType() === ContractSignature::DOC_CHECKOUT) {
-                $checkoutSignatures[] = $signature;
-            }
-        }
-
-        return $this->render('vehicle_check/summary_client.html.twig', [
-            'contract' => $contract,
-            'reservation' => $reservation,
-            'checkin_status' => $contract->getDocumentStatus(ContractSignature::DOC_CONTRACT),
-            'checkout_status' => $contract->getDocumentStatus(ContractSignature::DOC_CHECKOUT),
-            'checkin_signatures' => $checkinSignatures,
-            'checkout_signatures' => $checkoutSignatures,
-            'can_sign_checkout' => $contract->canSignCheckout(),
-            'is_client_view' => true,
-            'hashedId' => $hashedId,
-        ]);
-    }
 }

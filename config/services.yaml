@@ -80,6 +80,10 @@ services:
         tags:
             - { name: kernel.event_listener, event: 'client.contract.signed', method: 'onContractSignedByClient' }
 
+    App\EventListener\CheckoutSignedByClientEventListener:
+        tags:
+            - { name: kernel.event_listener, event: 'client.checkout.signed', method: 'onCheckoutSignedByClient' }
+
     # PDF Generation Service
     App\Service\PdfGenerationService:
         arguments:

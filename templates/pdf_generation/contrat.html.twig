@@ -903,42 +903,50 @@
 						</tr>
 					</tbody>
 				</table>
-				{# table dessous table recu de depot #}
-				<table id="recap_table" class="table-border" style="width : 100%">
-					<tbody class="fs-12">
-						<tr>
-							<td>Date départ</td>
-							<td class="text-nowrap">{{ reservation.dateDebut|date('d/m/Y H:i') }}</td>
-							<td>Date retour</td>
-							<td class="text-nowrap">{{ reservation.dateFin|date('d/m/Y H:i') }}</td>
-						</tr>
-						<tr>
-							<td style="height: 50px;">JOELLOCATION</td>
-							<td style="height: 50px;">
-							{% if adminSignature is not empty %}
-								<img src="{{ adminSignature }}" width="150px">
-							{% endif %}
+					{# table dessous table recu de depot #}
+					<table id="recap_table" class="table-border" style="width : 100%">
+						<tbody class="fs-12">
+							<tr>
+								<td>Date départ</td>
+								<td class="text-nowrap">{{ reservation.dateDebut|date('d/m/Y H:i') }}</td>
+								<td>Date retour</td>
+								<td class="text-nowrap">{{ reservation.dateFin|date('d/m/Y H:i') }}</td>
+							</tr>
+							<tr>
+								<td style="height: 50px;">JOELLOCATION</td>
+								<td style="height: 50px;">
+									{% if adminSignature is not empty %}
+									<img src="{{ adminSignature }}" width="100px">
+									{% endif %}
 
-							
-							</td>
-							<td style="height: 50px;">JOELLOCATION</td>
-							<td style="height: 50px;"></td>
-						</tr>
-						<tr>
-							<td class="luetapprove">Locataire (lu et apprové)
-								<span class="text-white">
-									lorem lorem lorem lorem lorem lorem</span>
-							</td>
-							<td class="luetapprove">
-							{% if clientSignature is not empty %}
-								<img src={{clientSignature}} width="150px">
-							{% endif %}
-							</td>
-							<td class="luetapprove">Locataire</td>
-							<td class="luetapprove"></td>
-						</tr>
-					</tbody>
-				</table>
+
+								</td>
+								<td style="height: 50px;">JOELLOCATION</td>
+								<td style="height: 50px;">
+									{% if adminCheckoutSignature is not empty %}
+									<img src={{adminCheckoutSignature}} width="100px">
+									{% endif %}
+								</td>
+							</tr>
+							<tr>
+								<td class="luetapprove">Locataire (lu et apprové)
+									<span class="text-white">
+										lorem lorem lorem lorem lorem lorem</span>
+								</td>
+								<td class="luetapprove">
+									{% if clientSignature is not empty %}
+									<img src={{clientSignature}} width="100px">
+									{% endif %}
+								</td>
+								<td class="luetapprove">Locataire</td>
+								<td class="luetapprove">
+									{% if clientCheckoutSignature is not empty %}
+									<img src={{clientCheckoutSignature}} width="100px">
+									{% endif %}
+								</td>
+							</tr>
+						</tbody>
+					</table>
 				<table>
 					<tbody>
 						<tr>

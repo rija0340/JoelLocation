@@ -165,6 +165,18 @@ class EmailService
         return $this->send($adminEmail, "Contrat signé par le client - #$reference", 'admin/templates_email/admin_contract_signed.html.twig', $context);
     }
 
+    public function notifyAdminCheckoutSigned(string $reference, string $clientName, string $adminLink)
+    {
+        $context = [
+            'reference' => $reference,
+            'clientName' => $clientName,
+            'adminLink' => $adminLink,
+        ];
+        // Send to admin email address instead of sender
+        $adminEmail = $_ENV['ADMIN_EMAIL'] ?? $this->senderEmail;
+        return $this->send($adminEmail, "État des lieux retour signé - #$reference", 'admin/templates_email/admin_checkout_signed.html.twig', $context);
+    }
+
     private function generateValidationUrl(string $token): string
     {
         $request = $this->requestStack->getCurrentRequest();

@@ -1,0 +1,50 @@
+{# templates/admin/templates_email/admin_checkout_signed.html.twig #}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+        .email-container {
+            max-width: 500px;
+            margin: 0 auto;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .content {
+            padding: 20px;
+            background-color: #ffffff;
+        }
+
+        .btn {
+            background-color: #17a2b8;
+            font-size: 14px;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 12px 20px;
+            color: #ffffff;
+            border-radius: 5px;
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="email-container">
+        <div class="content">
+            <h3>État des lieux retour signé !</h3>
+            <p>Le client <strong>{{clientName}}</strong> vient de signer l'état des lieux de retour pour la réservation
+                <strong>#{{reference}}</strong>.
+            </p>
+            <p>L'état des lieux de retour est maintenant en attente de votre signature ou prêt pour la suite des
+                opérations.</p>
+            <div style="margin: 30px 0; text-align: center;">
+                <a href="{{adminLink}}" class="btn">Voir la réservation</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

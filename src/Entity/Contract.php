@@ -259,7 +259,7 @@ class Contract
      */
     public function canSignCheckout(): bool
     {
-        return $this->isFullySigned(ContractSignature::DOC_CONTRACT);
+        return $this->isSignedByClient(ContractSignature::DOC_CONTRACT);
     }
 
     /**

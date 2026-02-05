@@ -14,6 +14,7 @@
 {% endblock %}
 
 {% block body %}
+{% set latestContract = reservation.contracts|last %}
 <div class="bg-gray-50/50 min-h-screen -mt-20 -mx-6">
   <!-- Offset the padding from base template if needed, or just style internally -->
   <div class="py-4 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
@@ -42,13 +43,12 @@
         'type': type} %}
 
         <!-- Signature Section -->
-        <div id="section-signature" class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+        <div id="section-signature" class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden mb-8">
           <div class="bg-gray-900 px-8 py-6 flex items-center justify-between">
             <h2 class="text-xl font-black text-white flex items-center uppercase tracking-widest">
-              <i class="fas fa-file-signature text-joel-red mr-3"></i>Contrat & Signatures
+              <i class="fas fa-file-signature text-joel-red mr-3"></i>Contrat & Signatures Départ
             </h2>
-            {% if reservation.contracts|last and (reservation.contracts|last).isSignedByClient and
-            (reservation.contracts|last).isSignedByAdmin %}
+            {% if reservation.contracts|last and (reservation.contracts|last).isFullySigned('contract') %}
             <span
               class="bg-green-500/20 text-green-400 text-xs px-3 py-1 rounded-full font-bold uppercase tracking-tighter shadow-inner">Document
               clôturé</span>
@@ -56,35 +56,40 @@
           </div>
 
           <div class="p-8">
-            {% set latestContract = reservation.contracts|last %}
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <!-- Client Signature -->
+              <!-- Client Signature Départ -->
               <div
                 class="group border border-gray-200 rounded-2xl overflow-hidden shadow-sm transition-all duration-300 hover:shadow-md hover:border-gray-300">
                 <div
                   class="bg-gray-50 border-b border-gray-100 p-4 font-black text-gray-900 flex items-center justify-between uppercase tracking-tighter text-sm">
                   <div class="flex items-center">
-                    <i class="fas fa-user-circle mr-2 text-gray-400"></i>Signature Client
+                    <i class="fas fa-user-circle mr-2 text-gray-400"></i>Signature Client (Départ)
                   </div>
-                  {% if latestContract and latestContract.isSignedByClient %}
+                  {% if latestContract and latestContract.isSignedByClient('contract') %}
                   <i class="fas fa-check-circle text-green-500"></i>
                   {% endif %}
                 </div>
-                <div class="p-6 bg-white min-h-[200px] flex flex-col justify-center">
-                  {% if latestContract and latestContract.isSignedByClient %}
-                  {% set clientSig = latestContract.signatures|filter(s => s.signatureType == 'client')|first %}
+                <div class="p-6 bg-white min-h-[220px] flex flex-col justify-center">
+                  {% if latestContract and latestContract.isSignedByClient('contract') %}
+                  {% set clientSig = latestContract.signatures|filter(s => s.signatureType == 'client' and
+                  s.documentType == 'contract')|first %}
                   {% if clientSig %}
                   <div class="space-y-4 text-sm text-black">
                     <div class="flex flex-col border-l-2 border-gray-100 pl-4 py-1">
-                      <span class="text-[10px] text-gray-400 font-black uppercase tracking-widest mb-1">Date
-                        certificative</span>
+                      <span class="text-[10px] text-gray-400 font-black uppercase tracking-widest mb-1">Date &
+                        Lieu</span>
                       <p class="font-bold text-gray-900">{{ clientSig.signedAt|date('d/m/Y H:i:s') }}</p>
-                    </div>
-                    <div class="flex flex-col border-l-2 border-gray-100 pl-4 py-1">
-                      <span class="text-[10px] text-gray-400 font-black uppercase tracking-widest mb-1">Identité
-                        numérique (IP)</span>
-                      <p class="font-medium text-gray-700">{{ clientSig.ipAddress }}</p>
+                      <p class="mt-1">
+                        {% if clientSig.ipAddress is defined and '[BACKOFFICE]' in clientSig.ipAddress %}
+                        <span
+                          class="bg-amber-100 text-amber-700 text-[10px] px-2 py-0.5 rounded font-black uppercase"><i
+                            class="fas fa-building mr-1"></i>En Agence</span>
+                        {% else %}
+                        <span class="bg-blue-100 text-blue-700 text-[10px] px-2 py-0.5 rounded font-black uppercase"><i
+                            class="fas fa-laptop mr-1"></i>Espace Client</span>
+                        {% endif %}
+                      </p>
                     </div>
 
                     {% if clientSig.signatureImage %}
@@ -105,7 +110,7 @@
                     </div>
                     <p class="text-gray-900 font-bold mb-5 italic text-sm">En attente de votre paraphe</p>
                     <a href="{{ hashedId is defined ? path('contract_sign_client_reservation_hash', {'id': reservation.id, 'hash': hashedId}) : path('contract_sign_client_reservation', {'id': reservation.id}) }}"
-                      class="w-full bg-gray-900 hover:bg-black text-white font-black px-6 py-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-gray-400/50 uppercase tracking-widest text-[10px]">
+                      class="w-full bg-gray-900 hover:bg-black text-white font-black px-6 py-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-gray-400/50 uppercase tracking-widest text-[10px] text-center">
                       Signer mon contrat
                     </a>
                   </div>
@@ -113,21 +118,22 @@
                 </div>
               </div>
 
-              <!-- Admin Signature -->
+              <!-- Admin Signature Départ -->
               <div
                 class="group border border-gray-200 rounded-2xl overflow-hidden shadow-sm transition-all duration-300 hover:shadow-md hover:border-gray-300">
                 <div
                   class="bg-gray-50 border-b border-gray-100 p-4 font-black text-gray-900 flex items-center justify-between uppercase tracking-tighter text-sm">
                   <div class="flex items-center">
-                    <i class="fas fa-building mr-2 text-gray-400"></i>Signature Agence
+                    <i class="fas fa-building mr-2 text-gray-400"></i>Signature Agence (Départ)
                   </div>
-                  {% if latestContract and latestContract.isSignedByAdmin %}
+                  {% if latestContract and latestContract.isSignedByAdmin('contract') %}
                   <i class="fas fa-check-circle text-green-500"></i>
                   {% endif %}
                 </div>
-                <div class="p-6 bg-white min-h-[200px] flex flex-col justify-center">
-                  {% if latestContract and latestContract.isSignedByAdmin %}
-                  {% set adminSig = latestContract.signatures|filter(s => s.signatureType == 'admin')|first %}
+                <div class="p-6 bg-white min-h-[220px] flex flex-col justify-center">
+                  {% if latestContract and latestContract.isSignedByAdmin('contract') %}
+                  {% set adminSig = latestContract.signatures|filter(s => s.signatureType == 'admin' and s.documentType
+                  == 'contract')|first %}
                   {% if adminSig %}
                   <div class="space-y-4 text-sm text-black">
                     <div class="flex flex-col border-l-2 border-green-100 pl-4 py-1">
@@ -166,18 +172,145 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
 
-            {% if latestContract and latestContract.isSignedByClient %}
-            <div class="mt-8 text-center border-t border-gray-50 pt-8">
-              <a href="{{ hashedId is defined ? path('contract_sign_client_reservation_hash', {'id': reservation.id, 'hash': hashedId}) : path('contract_sign_client_reservation', {'id': reservation.id}) }}"
-                class="inline-flex items-center text-gray-500 hover:text-black font-bold text-sm transition-all group">
-                <span class="border-b-2 border-gray-100 group-hover:border-black pb-1">Consulter le dossier complet du
-                  contrat et les horodatages</span>
-                <i
-                  class="fas fa-arrow-right ml-2 text-xs opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all"></i>
-              </a>
-            </div>
+        <!-- Signature Return Section -->
+        <div id="section-signature-retour"
+          class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+          <div class="bg-gray-900 px-8 py-6 flex items-center justify-between">
+            <h2 class="text-xl font-black text-white flex items-center uppercase tracking-widest">
+              <i class="fas fa-undo text-joel-red mr-3"></i>État des Lieux Retour (Remise)
+            </h2>
+            {% if latestContract and latestContract.isFullySigned('checkout') %}
+            <span
+              class="bg-green-500/20 text-green-400 text-xs px-3 py-1 rounded-full font-bold uppercase tracking-tighter shadow-inner">Validé</span>
             {% endif %}
+          </div>
+
+          <div class="p-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <!-- Client Signature Retour -->
+              <div
+                class="group border border-gray-200 rounded-2xl overflow-hidden shadow-sm transition-all duration-300 hover:shadow-md hover:border-gray-300">
+                <div
+                  class="bg-gray-50 border-b border-gray-100 p-4 font-black text-gray-900 flex items-center justify-between uppercase tracking-tighter text-sm">
+                  <div class="flex items-center">
+                    <i class="fas fa-user-circle mr-2 text-gray-400"></i>Ma Signature (Retour)
+                  </div>
+                  {% if latestContract and latestContract.isSignedByClient('checkout') %}
+                  <i class="fas fa-check-circle text-green-500"></i>
+                  {% endif %}
+                </div>
+                <div class="p-6 bg-white min-h-[220px] flex flex-col justify-center">
+                  {% if not latestContract or not latestContract.canSignCheckout() %}
+                  <div class="text-center py-4 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-gray-50 text-gray-300 rounded-full flex items-center justify-center mb-3">
+                      <i class="fas fa-lock text-xl"></i>
+                    </div>
+                    <p class="text-gray-400 font-bold text-[10px] uppercase tracking-widest">Indisponible</p>
+                  </div>
+                  {% elseif latestContract.isSignedByClient('checkout') %}
+                  {% set clientSig = latestContract.signatures|filter(s => s.signatureType == 'client' and
+                  s.documentType == 'checkout')|first %}
+                  {% if clientSig %}
+                  <div class="space-y-4 text-sm text-black">
+                    <div class="flex flex-col border-l-2 border-gray-100 pl-4 py-1">
+                      <span class="text-[10px] text-gray-400 font-black uppercase tracking-widest mb-1">Date &
+                        Lieu</span>
+                      <p class="font-bold text-gray-900">{{ clientSig.signedAt|date('d/m/Y H:i:s') }}</p>
+                      <p class="mt-1">
+                        {% if clientSig.ipAddress is defined and '[BACKOFFICE]' in clientSig.ipAddress %}
+                        <span
+                          class="bg-amber-100 text-amber-700 text-[10px] px-2 py-0.5 rounded font-black uppercase"><i
+                            class="fas fa-building mr-1"></i>En Agence</span>
+                        {% else %}
+                        <span class="bg-blue-100 text-blue-700 text-[10px] px-2 py-0.5 rounded font-black uppercase"><i
+                            class="fas fa-laptop mr-1"></i>Espace Client</span>
+                        {% endif %}
+                      </p>
+                    </div>
+
+                    {% if clientSig.signatureImage %}
+                    <div class="mt-4">
+                      <div class="border border-gray-100 p-3 bg-gray-50 inline-block rounded-xl shadow-inner">
+                        <img src="{{ clientSig.signatureImage }}" alt="Signature Client"
+                          class="h-16 w-auto object-contain mix-blend-multiply">
+                      </div>
+                    </div>
+                    {% endif %}
+                  </div>
+                  {% endif %}
+                  {% else %}
+                  <div class="text-center py-4 flex flex-col items-center">
+                    <div
+                      class="w-16 h-16 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center mb-4 shadow-inner">
+                      <i class="fas fa-undo-alt text-2xl"></i>
+                    </div>
+                    <p class="text-gray-900 font-bold mb-5 italic text-sm">Retour à signer</p>
+                    <a href="{{ hashedId is defined ? path('client_checkout_sign_hash', {'hashedId': hashedId}) : path('client_checkout_sign', {'id': reservation.id}) }}"
+                      class="w-full bg-gray-900 hover:bg-black text-white font-black px-6 py-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-gray-400/50 uppercase tracking-widest text-[10px] text-center">
+                      Signer le Retour
+                    </a>
+                  </div>
+                  {% endif %}
+                </div>
+              </div>
+
+              <!-- Admin Signature Retour -->
+              <div
+                class="group border border-gray-200 rounded-2xl overflow-hidden shadow-sm transition-all duration-300 hover:shadow-md hover:border-gray-300">
+                <div
+                  class="bg-gray-50 border-b border-gray-100 p-4 font-black text-gray-900 flex items-center justify-between uppercase tracking-tighter text-sm">
+                  <div class="flex items-center">
+                    <i class="fas fa-building mr-2 text-gray-400"></i>Validation Agence (Retour)
+                  </div>
+                  {% if latestContract and latestContract.isSignedByAdmin('checkout') %}
+                  <i class="fas fa-check-circle text-green-500"></i>
+                  {% endif %}
+                </div>
+                <div class="p-6 bg-white min-h-[220px] flex flex-col justify-center">
+                  {% if latestContract and latestContract.isSignedByAdmin('checkout') %}
+                  {% set adminSig = latestContract.signatures|filter(s => s.signatureType == 'admin' and s.documentType
+                  == 'checkout')|first %}
+                  {% if adminSig %}
+                  <div class="space-y-4 text-sm text-black">
+                    <div class="flex flex-col border-l-2 border-green-100 pl-4 py-1">
+                      <span class="text-[10px] text-gray-400 font-black uppercase tracking-widest mb-1">Validation
+                        Agence</span>
+                      <p class="font-bold text-gray-900">{{ adminSig.signedAt|date('d/m/Y H:i:s') }}</p>
+                    </div>
+
+                    {% if adminSig.signatureImage %}
+                    <div class="mt-4">
+                      <div class="border border-green-50/50 p-3 bg-green-50/20 inline-block rounded-xl">
+                        <img src="{{ adminSig.signatureImage }}" alt="Signature Agence"
+                          class="h-16 w-auto object-contain mix-blend-multiply opacity-80">
+                      </div>
+                    </div>
+                    {% endif %}
+                  </div>
+                  {% else %}
+                  <div class="text-center py-4 flex flex-col items-center text-xs">
+                    <div
+                      class="w-16 h-16 bg-green-50 text-green-500 rounded-full flex items-center justify-center mb-4">
+                      <i class="fas fa-certificate text-2xl"></i>
+                    </div>
+                    <p class="text-green-800 font-bold uppercase tracking-widest">Validé par l'agence</p>
+                  </div>
+                  {% endif %}
+                  {% else %}
+                  <div class="text-center py-4 flex flex-col items-center">
+                    <div class="w-16 h-16 bg-gray-50 text-gray-300 rounded-full flex items-center justify-center mb-4">
+                      <i class="fas fa-hourglass-half text-2xl"></i>
+                    </div>
+                    <p class="text-gray-400 font-bold italic py-4 text-[10px] uppercase tracking-widest">En attente de
+                      restitution</p>
+                  </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

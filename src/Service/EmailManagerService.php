@@ -122,6 +122,19 @@ class EmailManagerService
         }
     }
 
+    public function notifyAdminCheckoutSigned(Reservation $resa)
+    {
+        // Link to admin reservation show page
+        $adminLink = $this->router->generate('reservation_show', ['id' => $resa->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+
+        try {
+            $this->emailService->notifyAdminCheckoutSigned($resa->getReference(), $resa->getClient()->getNom(), $adminLink);
+        } catch (\Exception $e) {
+            // Log error but don't block
+            // $this->logger->error(...)
+        }
+    }
+
     public function sendFacture(Request $request, Reservation $resa)
     {
         $this->sendDocument($request, $resa, 'facture');

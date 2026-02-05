@@ -1010,7 +1010,7 @@
 					<strong>Statut de la signature Départ:</strong>
 					{% if latestContract.contractStatus == 'fully_signed' or (latestContract.isSignedByClient() and
 					latestContract.isSignedByAdmin()) %}
-					<span class="badge badge-success"><i class="fa fa-check-circle"></i> Complètement signé</span>
+					<span class="badge badge-success"><i class="fa fa-check-circle"></i> ENTIÈREMENT SIGNÉ</span>
 					{% elseif latestContract.contractStatus == 'client_signed' or latestContract.isSignedByClient() %}
 					<span class="badge badge-info"><i class="fa fa-user"></i> Signé par le client (en attente
 						admin)</span>
@@ -1026,7 +1026,7 @@
 
 		{# Signatures details #}
 		<div class="row">
-			{% for signature in latestContract.signatures %}
+			{% for signature in latestContract.signatures|filter(s => s.documentType == 'contract') %}
 			<div class="col-md-6 mb-3">
 				<div
 					class="card {% if signature.signatureType == 'client' %}border-primary{% else %}border-success{% endif %}">
@@ -1048,7 +1048,7 @@
 						</p>
 						{% if signature.signatureType == 'client' %}
 						<p><strong>Lieu de signature:</strong>
-							{% if signature.ipAddress is defined and '[BACKOFFICE]' in signature.ipAddress %}
+							{% if signature.ipAddress is defined and '[BACKOFFICE]' in signature.ipAddress or signature.userAgent is defined and '[BACKOFFICE]' in signature.userAgent %}
 							<span class="badge badge-warning"><i class="fa fa-building"></i> En agence</span>
 							{% else %}
 							<span class="badge badge-info"><i class="fa fa-laptop"></i> Espace client</span>
@@ -1102,7 +1102,7 @@
 				{% if latestContract.contractStatus == 'fully_signed' or (latestContract.isSignedByClient() and
 				latestContract.isSignedByAdmin()) %}
 				<span class="text-success font-weight-bold">
-					<i class="fa fa-check-circle"></i> Contrat complètement signé
+					<i class="fa fa-check-circle"></i> Contrat entièrement signé
 				</span>
 				{% endif %}
 			</div>
@@ -1128,112 +1128,140 @@
 	</div>
 </div>
 
-
+{# Signature État des Lieux - Retour #}
+<div class="x_title" id="section-etat-lieux">
+	<h2>
+		<i class="fa fa-undo"></i> Signature État des Lieux - Retour (Remise)
+	</h2>
+	<div class="clearfix"></div>
+</div>
 <div class="x_content">
 	{% set latestContract = null %}
 	{% for contract in reservation.contracts %}
-	{% if latestContract is null or contract.createdAt > latestContract.createdAt %}
+	{% if latestContract is null or contract.createdAt > latestContract.createdAt or (contract.createdAt ==
+	latestContract.createdAt and contract.id > latestContract.id) %}
 	{% set latestContract = contract %}
 	{% endif %}
 	{% endfor %}
 
 	{% if latestContract %}
-	<div class="row">
-		{# État des lieux Retour #}
+	{# Contract exists - show status and details #}
+	<div class="row mb-3">
 		<div class="col-md-12">
-			<div
-				class="card mb-3 {% if latestContract.isFullySigned('checkout') %}border-success{% elseif not latestContract.canSignCheckout() %}border-secondary{% else %}border-warning{% endif %}">
-				<div
-					class="card-header {% if latestContract.isFullySigned('checkout') %}bg-success{% elseif not latestContract.canSignCheckout() %}bg-secondary{% else %}bg-warning{% endif %} text-white">
-					<i class="fa fa-undo mr-2"></i>
-					État des lieux - Retour
-					{% if latestContract.isFullySigned('checkout') %}
-					<i class="fa fa-check-circle float-right"></i>
-					{% endif %}
-				</div>
-				<div class="card-body">
-					{% if not latestContract.canSignCheckout() %}
-					<div class="alert alert-secondary">
-						<i class="fa fa-lock mr-2"></i>
-						<strong>Bloqué</strong> - Le départ doit être signé avant
-					</div>
-					<p class="text-muted small">
-						L'état des lieux de retour ne peut être signé que lorsque le départ est complètement signé.
-					</p>
-					{% elseif latestContract.isFullySigned('checkout') %}
-					<div class="alert alert-success">
-						<i class="fa fa-check-circle mr-2"></i>
-						<strong>Signé</strong> par le client et l'administrateur
-					</div>
-					<p class="text-muted">
-						<i class="fa fa-calendar mr-1"></i>
-						Signé le {{ latestContract.signatures|filter(s => s.documentType ==
-						'checkout')|first.signedAt|date('d/m/Y à H:i') }}
-					</p>
-					{% elseif latestContract.isSignedByClient('checkout') %}
-					<div class="alert alert-info">
-						<i class="fa fa-user-check mr-2"></i>
-						Signé par le <strong>client</strong>, en attente de la signature admin
-					</div>
-					{% elseif latestContract.isSignedByAdmin('checkout') %}
-					<div class="alert alert-warning">
-						<i class="fa fa-user-shield mr-2"></i>
-						Signé par <strong>l'admin</strong>, en attente de la signature client
-					</div>
-					{% else %}
-					<div class="alert alert-secondary">
-						<i class="fa fa-clock mr-2"></i>
-						En attente des signatures
-					</div>
-					{% endif %}
-
-					<div class="row mt-3">
-						<div class="col-12 text-center">
-							{% if latestContract.canSignCheckout() %}
-							{% if not latestContract.isSignedByClient('checkout') %}
-							<a href="{{ path('vehicle_checkout_send_email', {'id': latestContract.id}) }}"
-								class="btn btn-primary">
-								<i class="fa fa-paper-plane mr-2"></i> Envoyer demande par email
-							</a>
-							{% endif %}
-
-							{% if not latestContract.isSignedByAdmin('checkout') %}
-							<a href="{{ path('vehicle_checkout_sign_admin', {'id': latestContract.id}) }}"
-								class="btn btn-success">
-								<i class="fa fa-pencil mr-2"></i> Signature Admin
-							</a>
-							{% endif %}
-
-							{% if not latestContract.isSignedByClient('checkout') %}
-							<a href="{{ path('vehicle_checkout_sign_client_backoffice', {'id': latestContract.id}) }}"
-								class="btn btn-warning" title="Faire signer le client directement en agence">
-								<i class="fa fa-user mr-2"></i> Signature Client (sur place)
-							</a>
-							{% endif %}
-
-							{% if latestContract.isFullySigned('checkout') %}
-							<a href="{{ path('vehicle_check_summary', {'id': latestContract.id}) }}"
-								class="btn btn-info">
-								<i class="fa fa-eye mr-2"></i> Voir les signatures
-							</a>
-							{% endif %}
-							{% else %}
-							<button class="btn btn-secondary" disabled>
-								<i class="fa fa-lock mr-2"></i> Signer le retour (bloqué)
-							</button>
-							{% endif %}
-						</div>
-					</div>
-				</div>
+			<div class="alert
+					{% if latestContract.isFullySigned('checkout') %}alert-success
+					{% elseif latestContract.isSignedByClient('checkout') %}alert-info
+					{% elseif latestContract.isSignedByAdmin('checkout') %}alert-warning
+					{% elseif not latestContract.canSignCheckout() %}alert-secondary
+					{% else %}alert-secondary{% endif %}">
+				<strong>Statut de la signature Retour:</strong>
+				{% if latestContract.isFullySigned('checkout') %}
+				<span class="badge badge-success"><i class="fa fa-check-circle"></i> ENTIÈREMENT SIGNÉ</span>
+				{% elseif latestContract.isSignedByClient('checkout') %}
+				<span class="badge badge-info"><i class="fa fa-user"></i> Signé par le client (en attente admin)</span>
+				{% elseif latestContract.isSignedByAdmin('checkout') %}
+				<span class="badge badge-warning"><i class="fa fa-user-secret"></i> Signé par l'admin (en attente client)</span>
+				{% elseif not latestContract.canSignCheckout() %}
+				<span class="badge badge-secondary"><i class="fa fa-lock"></i> Bloqué - Départ non signé</span>
+				{% else %}
+				<span class="badge badge-secondary"><i class="fa fa-clock-o"></i> Non signé</span>
+				{% endif %}
 			</div>
 		</div>
 	</div>
 
-	<div class="text-center mt-3">
-		<a href="{{ path('vehicle_check_summary', {'id': latestContract.id}) }}" class="btn btn-info">
-			<i class="fa fa-clipboard-list mr-2"></i> Voir le récapitulatif complet
-		</a>
-	</div>
+	{# Check if checkout signing is allowed #}
+	{% if latestContract.canSignCheckout() %}
+		{# Signatures details #}
+		<div class="row">
+			{% for signature in latestContract.signatures|filter(s => s.documentType == 'checkout') %}
+			<div class="col-md-6 mb-3">
+				<div
+					class="card {% if signature.signatureType == 'client' %}border-primary{% else %}border-success{% endif %}">
+					<div
+						class="card-header {% if signature.signatureType == 'client' %}bg-primary{% else %}bg-success{% endif %} text-white">
+						<i
+							class="fa {% if signature.signatureType == 'client' %}fa-user{% else %}fa-user-secret{% endif %}"></i>
+						Signature {{ signature.signatureType == 'client' ? 'Client' : 'Administrateur' }}
+					</div>
+					<div class="card-body">
+						<p><strong>Date de signature:</strong> {{ signature.signedAt|date('d/m/Y H:i:s') }}</p>
+						<p><strong>Adresse IP:</strong> {{ signature.ipAddress ?? 'Non disponible' }}</p>
+						<p><strong>Validité:</strong>
+							{% if signature.signatureValid %}
+							<span class="text-success"><i class="fa fa-check"></i> Valide</span>
+							{% else %}
+							<span class="text-danger"><i class="fa fa-times"></i> Non valide</span>
+							{% endif %}
+						</p>
+						{% if signature.signatureType == 'client' %}
+						<p><strong>Lieu de signature:</strong>
+							{% if signature.ipAddress is defined and '[BACKOFFICE]' in signature.ipAddress or signature.userAgent is defined and '[BACKOFFICE]' in signature.userAgent %}
+							<span class="badge badge-warning"><i class="fa fa-building"></i> En agence</span>
+							{% else %}
+							<span class="badge badge-info"><i class="fa fa-laptop"></i> Espace client</span>
+							{% endif %}
+						</p>
+						{% endif %}
+						{% if signature.timestampToken %}
+						<p><strong>Horodatage certifié:</strong>
+							<span class="text-success"><i class="fa fa-clock-o"></i> Oui</span>
+						</p>
+						{% endif %}
+						{% if signature.signatureImage %}
+						<div class="mt-2">
+							<strong>Signature visuelle:</strong>
+							<div class="border p-2 bg-white mt-1"
+								style="max-width: 300px; max-height: 150px; overflow: hidden;">
+								<img src="{{ signature.signatureImage }}" alt="Signature" class="img-fluid"
+									style="max-height: 100px; width: auto;">
+							</div>
+						</div>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+
+		{# Action buttons #}
+		<div class="row mt-3">
+			<div class="col-12 text-center">
+				{% if not latestContract.isSignedByClient('checkout') %}
+				<a href="{{ path('vehicle_checkout_send_email', {'id': latestContract.id}) }}"
+					class="btn btn-primary">
+					<i class="fa fa-paper-plane"></i> Envoyer demande par email
+				</a>
+				{% endif %}
+
+				{% if not latestContract.isSignedByAdmin('checkout') %}
+				<a href="{{ path('vehicle_checkout_sign_admin', {'id': latestContract.id}) }}"
+					class="btn btn-success">
+					<i class="fa fa-pencil"></i> Signature Admin
+				</a>
+				{% endif %}
+
+				{% if not latestContract.isSignedByClient('checkout') %}
+				<a href="{{ path('vehicle_checkout_sign_client_backoffice', {'id': latestContract.id}) }}"
+					class="btn btn-warning" title="Faire signer le client directement en agence">
+					<i class="fa fa-user"></i> Signature Client (sur place)
+				</a>
+				{% endif %}
+
+				{% if latestContract.isFullySigned('checkout') %}
+				<span class="text-success font-weight-bold">
+					<i class="fa fa-check-circle"></i> État des lieux retour entièrement signé
+				</span>
+				{% endif %}
+			</div>
+		</div>
+	{% else %}
+		{# Checkout signing not allowed #}
+		<div class="alert alert-secondary">
+			<i class="fa fa-lock mr-2"></i>
+			<strong>Bloqué</strong> - L'état des lieux de retour ne peut être signé que lorsque le départ est complètement signé.
+		</div>
+	{% endif %}
 	{% else %}
 	<div class="alert alert-info">
 		<i class="fa fa-info-circle mr-2"></i>

@@ -152,8 +152,8 @@ class CheckinCheckoutController extends AbstractController
                     $contract,
                     $cryptoSignature,
                     $keypair['public_key'],
-                    $request->getClientIp(),
-                    $request->headers->get('User-Agent'),
+                    $request->getClientIp() . ($this->getUser() ? ' [BACKOFFICE]' : ''),
+                    $request->headers->get('User-Agent') . ($this->getUser() ? ' [BACKOFFICE]' : ''),
                     false,
                     $signatureImage,
                     ContractSignature::DOC_CHECKOUT
@@ -192,43 +192,6 @@ class CheckinCheckoutController extends AbstractController
         }
     }
 
-    /**
-     * Vue récapitulative des signatures (checkin et checkout)
-     * 
-     * @Route("/summary/{id}", name="vehicle_check_summary", methods={"GET"})
-     */
-    public function summary(int $id): Response
-    {
-        $contract = $this->contractRepository->find($id);
-        if (!$contract) {
-            throw $this->createNotFoundException('Contrat introuvable');
-        }
-
-        $reservation = $contract->getReservation();
-
-        // Récupérer les signatures par type
-        $checkinSignatures = [];
-        $checkoutSignatures = [];
-
-        foreach ($contract->getSignatures() as $signature) {
-            if ($signature->getDocumentType() === ContractSignature::DOC_CONTRACT) { // Departure is now Contract
-                $checkinSignatures[] = $signature;
-            } elseif ($signature->getDocumentType() === ContractSignature::DOC_CHECKOUT) {
-                $checkoutSignatures[] = $signature;
-            }
-        }
-
-        return $this->render('vehicle_check/summary_admin.html.twig', [
-            'contract' => $contract,
-            'reservation' => $reservation,
-            'checkin_status' => $contract->getDocumentStatus(ContractSignature::DOC_CONTRACT),
-            'checkout_status' => $contract->getDocumentStatus(ContractSignature::DOC_CHECKOUT),
-            'checkin_signatures' => $checkinSignatures,
-            'checkout_signatures' => $checkoutSignatures,
-            'can_sign_checkout' => $contract->canSignCheckout(),
-        ]);
-
-    }
 
 
 

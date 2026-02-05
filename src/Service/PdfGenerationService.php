@@ -247,6 +247,8 @@ class PdfGenerationService
         // Get contract signatures
         $clientSignature = null;
         $adminSignature = null;
+        $clientCheckoutSignature = null;
+        $adminCheckoutSignature = null;
 
         $contracts = $reservation->getContracts();
         $latestContract = null;
@@ -262,18 +264,34 @@ class PdfGenerationService
 
         if ($latestContract) {
             foreach ($latestContract->getSignatures() as $signature) {
-                if ($signature->getSignatureType() === 'client' && $signature->getSignatureImage()) {
-                    $img = $signature->getSignatureImage();
-                    if (strpos($img, 'data:image') === false) {
-                        $img = 'data:image/png;base64,' . $img;
+                $signatureType = $signature->getSignatureType();
+                $documentType = $signature->getDocumentType();
+                $signatureImage = $signature->getSignatureImage();
+
+                if (!$signatureImage) {
+                    continue;
+                }
+
+                $img = $signatureImage;
+                if (strpos($img, 'data:image') === false) {
+                    $img = 'data:image/png;base64,' . $img;
+                }
+
+                // Signatures de départ (contract)
+                if ($documentType === 'contract' || $documentType === 'checkin') {
+                    if ($signatureType === 'client') {
+                        $clientSignature = $img;
+                    } elseif ($signatureType === 'admin') {
+                        $adminSignature = $img;
                     }
-                    $clientSignature = $img;
-                } elseif ($signature->getSignatureType() === 'admin' && $signature->getSignatureImage()) {
-                    $img = $signature->getSignatureImage();
-                    if (strpos($img, 'data:image') === false) {
-                        $img = 'data:image/png;base64,' . $img;
+                }
+                // Signatures de checkout (remise)
+                elseif ($documentType === 'checkout') {
+                    if ($signatureType === 'client') {
+                        $clientCheckoutSignature = $img;
+                    } elseif ($signatureType === 'admin') {
+                        $adminCheckoutSignature = $img;
                     }
-                    $adminSignature = $img;
                 }
             }
         }
@@ -296,6 +314,8 @@ class PdfGenerationService
             'numContrat' => $this->getNumFacture($reservation, "CO"),
             'clientSignature' => $clientSignature,
             'adminSignature' => $adminSignature,
+            'clientCheckoutSignature' => $clientCheckoutSignature,
+            'adminCheckoutSignature' => $adminCheckoutSignature,
             'isPreview' => false
         ]);
 
@@ -317,7 +337,9 @@ class PdfGenerationService
             'totalFraisSupplTTC' => $totalFraisSupplTTC,
             'numContrat' => $this->getNumFacture($reservation, "CO"),
             'clientSignature' => $clientSignature,
-            'adminSignature' => $adminSignature
+            'adminSignature' => $adminSignature,
+            'clientCheckoutSignature' => $clientCheckoutSignature,
+            'adminCheckoutSignature' => $adminCheckoutSignature
         ];
     }
 
