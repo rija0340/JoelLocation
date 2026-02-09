@@ -484,6 +484,14 @@
 						</div>
 						<input type="file" id="photo-input" multiple accept="image/*" style="display: none;">
 					</div>
+					<!-- Bouton pour prendre une photo avec l'appareil (visible uniquement si caméra disponible) -->
+					<div id="camera-button-container" class="text-center mt-3" style="display: none;">
+						<button type="button" id="btn-take-photo" class="btn btn-success btn-lg">
+							<i class="fa fa-camera mr-2"></i> Prendre une photo
+						</button>
+						<input type="file" id="camera-input" accept="image/*" capture="environment"
+							style="display: none;">
+					</div>
 				</div>
 			</div>
 
@@ -1048,7 +1056,8 @@
 						</p>
 						{% if signature.signatureType == 'client' %}
 						<p><strong>Lieu de signature:</strong>
-							{% if signature.ipAddress is defined and '[BACKOFFICE]' in signature.ipAddress or signature.userAgent is defined and '[BACKOFFICE]' in signature.userAgent %}
+							{% if signature.ipAddress is defined and '[BACKOFFICE]' in signature.ipAddress or
+							signature.userAgent is defined and '[BACKOFFICE]' in signature.userAgent %}
 							<span class="badge badge-warning"><i class="fa fa-building"></i> En agence</span>
 							{% else %}
 							<span class="badge badge-info"><i class="fa fa-laptop"></i> Espace client</span>
@@ -1160,7 +1169,8 @@
 				{% elseif latestContract.isSignedByClient('checkout') %}
 				<span class="badge badge-info"><i class="fa fa-user"></i> Signé par le client (en attente admin)</span>
 				{% elseif latestContract.isSignedByAdmin('checkout') %}
-				<span class="badge badge-warning"><i class="fa fa-user-secret"></i> Signé par l'admin (en attente client)</span>
+				<span class="badge badge-warning"><i class="fa fa-user-secret"></i> Signé par l'admin (en attente
+					client)</span>
 				{% elseif not latestContract.canSignCheckout() %}
 				<span class="badge badge-secondary"><i class="fa fa-lock"></i> Bloqué - Départ non signé</span>
 				{% else %}
@@ -1172,95 +1182,95 @@
 
 	{# Check if checkout signing is allowed #}
 	{% if latestContract.canSignCheckout() %}
-		{# Signatures details #}
-		<div class="row">
-			{% for signature in latestContract.signatures|filter(s => s.documentType == 'checkout') %}
-			<div class="col-md-6 mb-3">
+	{# Signatures details #}
+	<div class="row">
+		{% for signature in latestContract.signatures|filter(s => s.documentType == 'checkout') %}
+		<div class="col-md-6 mb-3">
+			<div
+				class="card {% if signature.signatureType == 'client' %}border-primary{% else %}border-success{% endif %}">
 				<div
-					class="card {% if signature.signatureType == 'client' %}border-primary{% else %}border-success{% endif %}">
-					<div
-						class="card-header {% if signature.signatureType == 'client' %}bg-primary{% else %}bg-success{% endif %} text-white">
-						<i
-							class="fa {% if signature.signatureType == 'client' %}fa-user{% else %}fa-user-secret{% endif %}"></i>
-						Signature {{ signature.signatureType == 'client' ? 'Client' : 'Administrateur' }}
-					</div>
-					<div class="card-body">
-						<p><strong>Date de signature:</strong> {{ signature.signedAt|date('d/m/Y H:i:s') }}</p>
-						<p><strong>Adresse IP:</strong> {{ signature.ipAddress ?? 'Non disponible' }}</p>
-						<p><strong>Validité:</strong>
-							{% if signature.signatureValid %}
-							<span class="text-success"><i class="fa fa-check"></i> Valide</span>
-							{% else %}
-							<span class="text-danger"><i class="fa fa-times"></i> Non valide</span>
-							{% endif %}
-						</p>
-						{% if signature.signatureType == 'client' %}
-						<p><strong>Lieu de signature:</strong>
-							{% if signature.ipAddress is defined and '[BACKOFFICE]' in signature.ipAddress or signature.userAgent is defined and '[BACKOFFICE]' in signature.userAgent %}
-							<span class="badge badge-warning"><i class="fa fa-building"></i> En agence</span>
-							{% else %}
-							<span class="badge badge-info"><i class="fa fa-laptop"></i> Espace client</span>
-							{% endif %}
-						</p>
+					class="card-header {% if signature.signatureType == 'client' %}bg-primary{% else %}bg-success{% endif %} text-white">
+					<i
+						class="fa {% if signature.signatureType == 'client' %}fa-user{% else %}fa-user-secret{% endif %}"></i>
+					Signature {{ signature.signatureType == 'client' ? 'Client' : 'Administrateur' }}
+				</div>
+				<div class="card-body">
+					<p><strong>Date de signature:</strong> {{ signature.signedAt|date('d/m/Y H:i:s') }}</p>
+					<p><strong>Adresse IP:</strong> {{ signature.ipAddress ?? 'Non disponible' }}</p>
+					<p><strong>Validité:</strong>
+						{% if signature.signatureValid %}
+						<span class="text-success"><i class="fa fa-check"></i> Valide</span>
+						{% else %}
+						<span class="text-danger"><i class="fa fa-times"></i> Non valide</span>
 						{% endif %}
-						{% if signature.timestampToken %}
-						<p><strong>Horodatage certifié:</strong>
-							<span class="text-success"><i class="fa fa-clock-o"></i> Oui</span>
-						</p>
+					</p>
+					{% if signature.signatureType == 'client' %}
+					<p><strong>Lieu de signature:</strong>
+						{% if signature.ipAddress is defined and '[BACKOFFICE]' in signature.ipAddress or
+						signature.userAgent is defined and '[BACKOFFICE]' in signature.userAgent %}
+						<span class="badge badge-warning"><i class="fa fa-building"></i> En agence</span>
+						{% else %}
+						<span class="badge badge-info"><i class="fa fa-laptop"></i> Espace client</span>
 						{% endif %}
-						{% if signature.signatureImage %}
-						<div class="mt-2">
-							<strong>Signature visuelle:</strong>
-							<div class="border p-2 bg-white mt-1"
-								style="max-width: 300px; max-height: 150px; overflow: hidden;">
-								<img src="{{ signature.signatureImage }}" alt="Signature" class="img-fluid"
-									style="max-height: 100px; width: auto;">
-							</div>
+					</p>
+					{% endif %}
+					{% if signature.timestampToken %}
+					<p><strong>Horodatage certifié:</strong>
+						<span class="text-success"><i class="fa fa-clock-o"></i> Oui</span>
+					</p>
+					{% endif %}
+					{% if signature.signatureImage %}
+					<div class="mt-2">
+						<strong>Signature visuelle:</strong>
+						<div class="border p-2 bg-white mt-1"
+							style="max-width: 300px; max-height: 150px; overflow: hidden;">
+							<img src="{{ signature.signatureImage }}" alt="Signature" class="img-fluid"
+								style="max-height: 100px; width: auto;">
 						</div>
-						{% endif %}
 					</div>
+					{% endif %}
 				</div>
 			</div>
-			{% endfor %}
 		</div>
+		{% endfor %}
+	</div>
 
-		{# Action buttons #}
-		<div class="row mt-3">
-			<div class="col-12 text-center">
-				{% if not latestContract.isSignedByClient('checkout') %}
-				<a href="{{ path('vehicle_checkout_send_email', {'id': latestContract.id}) }}"
-					class="btn btn-primary">
-					<i class="fa fa-paper-plane"></i> Envoyer demande par email
-				</a>
-				{% endif %}
+	{# Action buttons #}
+	<div class="row mt-3">
+		<div class="col-12 text-center">
+			{% if not latestContract.isSignedByClient('checkout') %}
+			<a href="{{ path('vehicle_checkout_send_email', {'id': latestContract.id}) }}" class="btn btn-primary">
+				<i class="fa fa-paper-plane"></i> Envoyer demande par email
+			</a>
+			{% endif %}
 
-				{% if not latestContract.isSignedByAdmin('checkout') %}
-				<a href="{{ path('vehicle_checkout_sign_admin', {'id': latestContract.id}) }}"
-					class="btn btn-success">
-					<i class="fa fa-pencil"></i> Signature Admin
-				</a>
-				{% endif %}
+			{% if not latestContract.isSignedByAdmin('checkout') %}
+			<a href="{{ path('vehicle_checkout_sign_admin', {'id': latestContract.id}) }}" class="btn btn-success">
+				<i class="fa fa-pencil"></i> Signature Admin
+			</a>
+			{% endif %}
 
-				{% if not latestContract.isSignedByClient('checkout') %}
-				<a href="{{ path('vehicle_checkout_sign_client_backoffice', {'id': latestContract.id}) }}"
-					class="btn btn-warning" title="Faire signer le client directement en agence">
-					<i class="fa fa-user"></i> Signature Client (sur place)
-				</a>
-				{% endif %}
+			{% if not latestContract.isSignedByClient('checkout') %}
+			<a href="{{ path('vehicle_checkout_sign_client_backoffice', {'id': latestContract.id}) }}"
+				class="btn btn-warning" title="Faire signer le client directement en agence">
+				<i class="fa fa-user"></i> Signature Client (sur place)
+			</a>
+			{% endif %}
 
-				{% if latestContract.isFullySigned('checkout') %}
-				<span class="text-success font-weight-bold">
-					<i class="fa fa-check-circle"></i> État des lieux retour entièrement signé
-				</span>
-				{% endif %}
-			</div>
+			{% if latestContract.isFullySigned('checkout') %}
+			<span class="text-success font-weight-bold">
+				<i class="fa fa-check-circle"></i> État des lieux retour entièrement signé
+			</span>
+			{% endif %}
 		</div>
+	</div>
 	{% else %}
-		{# Checkout signing not allowed #}
-		<div class="alert alert-secondary">
-			<i class="fa fa-lock mr-2"></i>
-			<strong>Bloqué</strong> - L'état des lieux de retour ne peut être signé que lorsque le départ est complètement signé.
-		</div>
+	{# Checkout signing not allowed #}
+	<div class="alert alert-secondary">
+		<i class="fa fa-lock mr-2"></i>
+		<strong>Bloqué</strong> - L'état des lieux de retour ne peut être signé que lorsque le départ est complètement
+		signé.
+	</div>
 	{% endif %}
 	{% else %}
 	<div class="alert alert-info">
@@ -1331,7 +1341,8 @@ une entry (un sous champ) #}{% block collection_entry_widget %}
 	<script src="{{asset('js/admin/reservation/resa_photo.js')}}"></script>
 
 	<script>
-		document.addEventListener('DOMContentLoaded', function () { // Initialiser l'uploader avec l'ID de la réservation
+		document.addEventListener('DOMContentLoaded', function () {
+			// Initialiser l'uploader avec l'ID de la réservation
 			const uploader = new ReservationPhotoUploader({
 				reservationId: {{ reservation.id }},
 			dropZoneId: 'photo-drop-zone',
@@ -1339,6 +1350,46 @@ une entry (un sous champ) #}{% block collection_entry_widget %}
 			photosContainerId: 'photos-container',
 			progressBarId: 'upload-progress',
 			messageContainerId: 'upload-messages'
-});
-});
+			});
+
+		// Gestion de l'affichage du bouton caméra (uniquement sur mobile/tablette)
+		const cameraBtnContainer = document.getElementById('camera-button-container');
+		const btnTakePhoto = document.getElementById('btn-take-photo');
+		const cameraInput = document.getElementById('camera-input');
+
+		function isMobileDevice() {
+			return (
+				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+				(navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1) // iPad Pro detection
+			);
+		}
+
+		// On affiche le bouton uniquement sur mobile/tablette
+		if (isMobileDevice()) {
+			if (cameraBtnContainer) {
+				cameraBtnContainer.style.display = 'block';
+			}
+		}
+
+		// Clic sur le bouton "Prendre une photo"
+		if (btnTakePhoto) {
+			btnTakePhoto.addEventListener('click', function () {
+				if (cameraInput) {
+					cameraInput.click();
+				}
+			});
+		}
+
+		// Changement sur l'input caméra (quand une photo est prise)
+		if (cameraInput) {
+			cameraInput.addEventListener('change', function (e) {
+				const files = Array.from(e.target.files);
+				if (files.length > 0) {
+					uploader.uploadFiles(files);
+					// Reset pour permettre de reprendre la même photo si besoin
+					this.value = '';
+				}
+			});
+		}
+		});
 	</script>{% endblock %}
