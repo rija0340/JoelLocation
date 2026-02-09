@@ -1,5 +1,5 @@
 monolog:
-    channels: ['payment']
+    channels: ['payment', 'signature']
     handlers:
         main:
             type: fingers_crossed
@@ -13,6 +13,13 @@ monolog:
             level: info
             channels: ['payment']
             max_files: 10
+        signature:
+            type: rotating_file
+            path: '%kernel.logs_dir%/signature/contract-signature.log'
+            level: info
+            channels: ['signature']
+            max_files: 30
+            formatter: monolog.formatter.json
         nested:
             type: stream
             path: "%kernel.logs_dir%/%kernel.environment%.log"
