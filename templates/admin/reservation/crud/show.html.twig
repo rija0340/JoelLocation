@@ -824,53 +824,53 @@
 		</div>
 		{{ form_end(formAjoutPaiement) }}
 	</div>
-	<table class="table table-bordered text-center mt-2">
-		<thead class="bg-dark text-white text-uppercase">
-			<tr>
-				<th>date</th>
-				<th>type</th>
-				<th>méthode</th>
-				<th>référence</th>
-				<th>montant</th>
-				<th>motif</th>
-				<th>action</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% if reservation.paiements|length > 0 %}
-			{% for paiement in reservation.paiements %}
-			<tr>
-				<td>{{ paiement.datePaiement|date('d/m/Y H:i') }}</td>
-				<td>Débit</td>
-				<td>{{ paiement.modePaiement.libelle }}</td>
-				<td></td>
-				<td>{{ paiement.montant|number_format(2,","," ") }}</td>
-				<td></td>
-				<td>
-					<form method="post"
-						action="{{ path('reservation_paiement_delete', {'id': paiement.id, 'reservation' : reservation.id}) }}"
-						onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer ce paiement ?');">
-						<input type="hidden" name="_method" value="DELETE">
-						<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ paiement.id) }}">
-						<button class="btn btn-danger">
-							<i class="fa fa-trash (alias)" aria-hidden="true"></i>
-							Supprimer
-						</button>
-					</form>
-				</td>
-			</tr>
-			{% endfor %}
-			{% else %}
-			<tr>
-				<td colspan="7">
-					Aucun paiement effectué
-				</td>
-			</tr>
-
-			</td>
-			{% endif %}
-		</tbody>
-	</table>
+	<div class="table-responsive">
+		<table class="table table-bordered text-center mt-2">
+			<thead class="bg-dark text-white text-uppercase">
+				<tr>
+					<th>date</th>
+					<th>type</th>
+					<th>méthode</th>
+					<th>référence</th>
+					<th>montant</th>
+					<th>motif</th>
+					<th>action</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% if reservation.paiements|length > 0 %}
+				{% for paiement in reservation.paiements %}
+				<tr>
+					<td>{{ paiement.datePaiement|date('d/m/Y H:i') }}</td>
+					<td>Débit</td>
+					<td>{{ paiement.modePaiement.libelle }}</td>
+					<td></td>
+					<td>{{ paiement.montant|number_format(2,","," ") }}</td>
+					<td></td>
+					<td>
+						<form method="post"
+							action="{{ path('reservation_paiement_delete', {'id': paiement.id, 'reservation' : reservation.id}) }}"
+							onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer ce paiement ?');">
+							<input type="hidden" name="_method" value="DELETE">
+							<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ paiement.id) }}">
+							<button class="btn btn-danger">
+								<i class="fa fa-trash (alias)" aria-hidden="true"></i>
+								Supprimer
+							</button>
+						</form>
+					</td>
+				</tr>
+				{% endfor %}
+				{% else %}
+				<tr>
+					<td colspan="7">
+						Aucun paiement effectué
+					</td>
+				</tr>
+				{% endif %}
+			</tbody>
+		</table>
+	</div>
 
 	<div class="row">
 		<div class="col-md-8 col-sm-8 col-xs-8">
@@ -992,7 +992,7 @@
 
 	{# Signature État des Lieux - Départ #}
 	<div class="x_title" id="section-signature">
-		<h2>
+		<h2 style="white-space: normal; line-height: 1.5; font-size: 18px;">
 			<i class="fa fa-file-text"></i> Signature État des Lieux - Départ (Contrat)
 		</h2>
 		<div class="clearfix"></div>
@@ -1138,8 +1138,9 @@
 </div>
 
 {# Signature État des Lieux - Retour #}
+{# Signature État des Lieux - Retour #}
 <div class="x_title" id="section-etat-lieux">
-	<h2>
+	<h2 style="white-space: normal; line-height: 1.5; font-size: 18px;">
 		<i class="fa fa-undo"></i> Signature État des Lieux - Retour (Remise)
 	</h2>
 	<div class="clearfix"></div>
