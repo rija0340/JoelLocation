@@ -1358,10 +1358,8 @@ une entry (un sous champ) #}{% block collection_entry_widget %}
 		const cameraInput = document.getElementById('camera-input');
 
 		function isMobileDevice() {
-			return (
-				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-				(navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1) // iPad Pro detection
-			);
+			// Détection stricte via User Agent pour éviter l'affichage sur Desktop
+			return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 		}
 
 		// On affiche le bouton uniquement sur mobile/tablette

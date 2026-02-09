@@ -195,38 +195,111 @@ class ReservationPhotoUploader {
     // MODIFIED: Function now accepts imageName
     openFullscreen(imageUrl, imageName) {
         let modal = document.getElementById('imageModal');
-        if (!modal) {
-            modal = document.createElement('div');
-            modal.className = 'modal fade';
-            modal.id = 'imageModal';
-            modal.setAttribute('tabindex', '-1');
-            // MODIFIED: Added modal-title element
-            modal.innerHTML = `
-                <div class="modal-dialog modal-xl modal-dialog-centered">
-                    <div class="modal-content photo bg-transparent border-0">
-                        <div class="modal-header border-0 pb-2 text-white align-items-center">
-                            <h5 class="modal-title" id="modalImageTitle"></h5>
-                            <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body text-center p-0">
-                            <img id="modalImage" class="img-fluid" style="max-height: 90vh;">
-                        </div>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(modal);
+        if (modal) {
+            modal.remove();
         }
 
-        // ADDED: Get references to modal elements
-        const modalImage = document.getElementById('modalImage');
-        const modalTitle = document.getElementById('modalImageTitle');
+        modal = document.createElement('div');
+        modal.className = 'modal fade';
+        modal.id = 'imageModal';
+        modal.setAttribute('tabindex', '-1');
+        modal.setAttribute('role', 'dialog');
+        modal.setAttribute('aria-hidden', 'true');
 
-        // ADDED: Set image source and title text
-        modalImage.src = imageUrl;
-        modalTitle.textContent = imageName || 'Untitled';
+        // Z-index très élevé pour être sûr d'être au dessus de tout
+        modal.style.zIndex = '100000';
 
-        const bsModal = new bootstrap.Modal(modal);
-        bsModal.show();
+        modal.innerHTML = `
+            <div class="modal-dialog" role="document" style="max-width: 100%; margin: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+                <div class="modal-content" style="background: rgba(0,0,0,0.95); border: none; width: 100%; height: 100%; display: flex; flex-direction: column;">
+                    
+                    <!-- Header avec bouton close classique -->
+                    <div style="position: absolute; top: 0; right: 0; padding: 15px; z-index: 10001;">
+                        <button type="button" class="close-modal-btn" style="background: none; border: none; color: white; font-size: 30px; cursor: pointer;">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+
+                    <!-- Titre -->
+                    <div style="position: absolute; top: 15px; left: 15px; right: 60px; z-index: 10000;">
+                        <h5 class="text-white text-truncate" style="margin: 0; font-size: 1.1rem;">${imageName || 'Aperçu'}</h5>
+                    </div>
+
+                    <!-- Corps avec l'image -->
+                    <div class="modal-body" style="flex: 1; padding: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; width: 100%; height: 100%;">
+                        <img id="modalImage" src="${imageUrl}" style="max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; box-shadow: 0 0 20px rgba(0,0,0,0.5);">
+                    </div>
+
+                    <!-- Footer avec gros bouton close (utile sur mobile) -->
+                    <div style="position: absolute; bottom: 20px; left: 0; width: 100%; display: flex; justify-content: center; z-index: 10001; pointer-events: none;">
+                        <button type="button" class="close-modal-btn btn btn-light rounded-circle shadow" style="width: 50px; height: 50px; padding: 0; display: flex; align-items: center; justify-content: center; pointer-events: auto;">
+                            <i class="fa fa-times" style="font-size: 20px;"></i>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+
+        // Définition de la fonction de fermeture pour réutilisation
+        const closeModal = () => {
+            if (typeof $ !== 'undefined' && $.fn.modal) {
+                $(modal).modal('hide');
+            } else {
+                try {
+                    const bsModal = bootstrap.Modal.getInstance(modal);
+                    if (bsModal) bsModal.hide();
+                    else {
+                        // Fallback si l'instance n'est pas trouvée (ex: pas encore créée ou déjà détruite)
+                        modal.classList.remove('show');
+                        modal.style.display = 'none';
+                        document.body.classList.remove('modal-open');
+                        const backdrop = document.querySelector('.modal-backdrop');
+                        if (backdrop) backdrop.remove();
+                        modal.remove();
+                    }
+                } catch (e) {
+                    // Dernier recours manuel
+                    modal.remove();
+                    document.body.classList.remove('modal-open');
+                    const backdrop = document.querySelector('.modal-backdrop');
+                    if (backdrop) backdrop.remove();
+                }
+            }
+        };
+
+        // Ouverture du modal
+        if (typeof $ !== 'undefined' && $.fn.modal) {
+            $(modal).modal('show');
+            // Force le focus pour l'accessibilité
+            $(modal).on('shown.bs.modal', function () {
+                $('#modalImage').focus();
+            });
+        } else {
+            const bsModal = new bootstrap.Modal(modal);
+            bsModal.show();
+        }
+
+        // Attachement des événements de fermeture sur TOUS les boutons close
+        const closeBtns = modal.querySelectorAll('.close-modal-btn');
+        closeBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                closeModal();
+            });
+        });
+
+        // Fermeture sur clic image
+        const img = document.getElementById('modalImage');
+        if (img) {
+            img.addEventListener('click', (e) => {
+                // Optionnel : ne pas fermer si l'utilisateur veut zoomer ? 
+                // Pour l'instant on ferme comme demandé implicitement pour une expérience "rapide"
+                closeModal();
+            });
+        }
     }
 
 
