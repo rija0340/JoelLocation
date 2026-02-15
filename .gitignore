@@ -43,3 +43,4 @@ yarn-error.log
 
 docs/
 .grok
+start.sh
