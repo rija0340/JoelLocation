@@ -61,7 +61,33 @@ class ReservationPhotoUploader {
         this.showProgress(true);
 
         const formData = new FormData();
-        imageFiles.forEach(file => {
+
+        // Indicateur de traitement global
+        if (this.messageContainer) {
+            this.messageContainer.innerHTML = `
+                <div class="alert alert-info" role="alert">
+                    <i class="fa fa-spinner fa-spin"></i> Traitement et envoi en cours...
+                </div>
+            `;
+        }
+
+        // Traitement parallèle des images
+        const processingPromises = imageFiles.map(async file => {
+            try {
+                // On compresse si l'image fait plus de 1MB
+                if (file.size > 1024 * 1024) {
+                    return await this.compressImage(file);
+                }
+                return file;
+            } catch (error) {
+                console.error('Erreur compression pour ' + file.name, error);
+                return file; // Fallback sur l'original
+            }
+        });
+
+        const processedFiles = await Promise.all(processingPromises);
+
+        processedFiles.forEach(file => {
             formData.append('photos[]', file);
         });
 
@@ -89,6 +115,66 @@ class ReservationPhotoUploader {
             this.showProgress(false);
             this.fileInput.value = '';
         }
+    }
+
+    /**
+     * Compresse une image côté client
+     * @param {File} file 
+     * @param {number} maxWidth 
+     * @param {number} quality 
+     * @returns {Promise<File>}
+     */
+    compressImage(file, maxWidth = 1920, quality = 0.7) {
+        return new Promise((resolve, reject) => {
+            let fileName = file.name;
+            // On s'assure que l'extension est bien .jpg car on convertit en JPEG
+            if (!fileName.toLowerCase().endsWith('.jpg') && !fileName.toLowerCase().endsWith('.jpeg')) {
+                // Remplace l'extension existante ou ajoute .jpg
+                fileName = fileName.replace(/\.[^/.]+$/, "") + ".jpg";
+            }
+
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = event => {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+
+                    // Calcul des nouvelles dimensions en gardant le ratio
+                    if (width > maxWidth || height > maxWidth) {
+                        if (width > height) {
+                            height = Math.round((height * maxWidth) / width);
+                            width = maxWidth;
+                        } else {
+                            width = Math.round((width * maxWidth) / height);
+                            height = maxWidth;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    ctx.canvas.toBlob((blob) => {
+                        if (!blob) {
+                            reject(new Error('Canvas is empty'));
+                            return;
+                        }
+                        const newFile = new File([blob], fileName, {
+                            type: 'image/jpeg',
+                            lastModified: Date.now()
+                        });
+                        resolve(newFile);
+                    }, 'image/jpeg', quality); // Compression JPEG
+                };
+                img.onerror = error => reject(error);
+            };
+            reader.onerror = error => reject(error);
+        });
     }
 
     async loadExistingPhotos() {
