@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Reservation;
 use App\Entity\ReservationPhoto;
+use App\Repository\ReservationPhotoRepository;
 use Psr\Log\LoggerInterface;
 use ZipArchive;
 
@@ -12,12 +13,14 @@ class PhotoZipService
     private $projectDir;
     private $logger;
     private $photoDir;
+    private $resaPhotoRepo;
 
-    public function __construct(string $projectDir, LoggerInterface $logger)
+    public function __construct(string $projectDir, LoggerInterface $logger, ReservationPhotoRepository $resaPhotoRepo)
     {
         $this->projectDir = $projectDir;
         $this->logger = $logger;
         $this->photoDir = $projectDir . '/public/uploads/reservation_photos/';
+        $this->resaPhotoRepo = $resaPhotoRepo;
     }
 
     /**
@@ -29,11 +32,12 @@ class PhotoZipService
      */
     public function createZipForReservation(Reservation $reservation, string $type): ?string
     {
-        $photos = $reservation->getPhotos()->filter(function (ReservationPhoto $photo) use ($type) {
-            return $photo->getType() === $type;
-        });
+        $photos = $this->resaPhotoRepo->findBy([
+            'reservation' => $reservation,
+            'type' => $type
+        ]);
 
-        if ($photos->isEmpty()) {
+        if (empty($photos)) {
             return null;
         }
 

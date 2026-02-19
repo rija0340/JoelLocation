@@ -56,10 +56,14 @@ class ReservationPhotoController extends AbstractController
 
         $this->entityManager->flush();
 
-        // Update IDs after flush
-        $photos = $reservation->getPhotos();
+        // Return only photos of the requested type
+        $photosList = $this->resaPhotoRepo->findBy([
+            'reservation' => $reservation,
+            'type' => $type
+        ]);
+
         $result = [];
-        foreach ($photos as $photo) {
+        foreach ($photosList as $photo) {
             $result[] = [
                 'id' => $photo->getId(),
                 'image' => $photo->getImage(),
@@ -100,20 +104,21 @@ class ReservationPhotoController extends AbstractController
     public function listPhotos(Request $request, Reservation $reservation): JsonResponse
     {
         $type = $request->query->get('type');
-        $photosList = $reservation->getPhotos();
 
+        $criteria = ['reservation' => $reservation];
         if ($type) {
-            $photosList = $photosList->filter(function (ReservationPhoto $photo) use ($type) {
-                return $photo->getType() === $type;
-            });
+            $criteria['type'] = $type;
         }
+
+        $photosList = $this->resaPhotoRepo->findBy($criteria, ['updatedAt' => 'DESC']);
 
         $photos = [];
         foreach ($photosList as $photo) {
             $photos[] = [
                 'id' => $photo->getId(),
                 'image' => $photo->getImage(),
-                'url' => $photo->getImageUrl()
+                'url' => $photo->getImageUrl(),
+                'type' => $photo->getType()
             ];
         }
 
