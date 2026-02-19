@@ -18,7 +18,7 @@ class ReservationPhotoController extends AbstractController
     private $entityManager;
     private $resaPhotoRepo;
 
-    public function __construct(EntityManagerInterface $entityManager,ReservationPhotoRepository $resaPhotoRepo)
+    public function __construct(EntityManagerInterface $entityManager, ReservationPhotoRepository $resaPhotoRepo)
     {
         $this->entityManager = $entityManager;
         $this->resaPhotoRepo = $resaPhotoRepo;
@@ -30,20 +30,22 @@ class ReservationPhotoController extends AbstractController
     public function uploadPhotos(Request $request, Reservation $reservation): JsonResponse
     {
         $uploadedFiles = $request->files->get('photos');
-        
+        $type = $request->request->get('type', 'depart');
+
         if (!$uploadedFiles) {
             return new JsonResponse(['error' => 'Aucun fichier reçu'], 400);
         }
 
         $uploadedPhotos = [];
-        
+
         foreach ($uploadedFiles as $uploadedFile) {
             /** @var UploadedFile $uploadedFile */
             if ($uploadedFile->isValid()) {
                 $photo = new ReservationPhoto();
                 $photo->setReservation($reservation);
                 $photo->setImageFile($uploadedFile);
-                
+                $photo->setType($type);
+
                 $this->entityManager->persist($photo);
                 $uploadedPhotos[] = [
                     'id' => null, // Will be set after flush
@@ -51,9 +53,9 @@ class ReservationPhotoController extends AbstractController
                 ];
             }
         }
-        
+
         $this->entityManager->flush();
-        
+
         // Update IDs after flush
         $photos = $reservation->getPhotos();
         $result = [];
@@ -64,7 +66,7 @@ class ReservationPhotoController extends AbstractController
                 'url' => $photo->getImageUrl()
             ];
         }
-        
+
         return new JsonResponse([
             'success' => true,
             'photos' => $result,
@@ -86,7 +88,7 @@ class ReservationPhotoController extends AbstractController
         try {
             $this->entityManager->remove($photo);
             $this->entityManager->flush();
-            
+
             return new JsonResponse(['success' => true, 'message' => 'Photo supprimée avec succès']);
         } catch (\Exception $e) {
             return new JsonResponse(['error' => 'Erreur lors de la suppression'], 500);
@@ -95,17 +97,26 @@ class ReservationPhotoController extends AbstractController
     /**
      * @Route("/backoffice/reservation/{id}/photos", name="reservation_photos_list", methods={"GET"})
      */
-    public function listPhotos(Reservation $reservation): JsonResponse
+    public function listPhotos(Request $request, Reservation $reservation): JsonResponse
     {
+        $type = $request->query->get('type');
+        $photosList = $reservation->getPhotos();
+
+        if ($type) {
+            $photosList = $photosList->filter(function (ReservationPhoto $photo) use ($type) {
+                return $photo->getType() === $type;
+            });
+        }
+
         $photos = [];
-        foreach ($reservation->getPhotos() as $photo) {
+        foreach ($photosList as $photo) {
             $photos[] = [
                 'id' => $photo->getId(),
                 'image' => $photo->getImage(),
                 'url' => $photo->getImageUrl()
             ];
         }
-        
+
         return new JsonResponse(['photos' => $photos]);
     }
 }

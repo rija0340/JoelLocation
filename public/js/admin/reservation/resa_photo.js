@@ -1,6 +1,7 @@
 class ReservationPhotoUploader {
     constructor(options) {
         this.reservationId = options.reservationId;
+        this.type = options.type || 'depart'; // Default to 'depart'
         this.dropZone = document.getElementById(options.dropZoneId);
         this.fileInput = document.getElementById(options.fileInputId);
         this.photosContainer = document.getElementById(options.photosContainerId);
@@ -61,6 +62,7 @@ class ReservationPhotoUploader {
         this.showProgress(true);
 
         const formData = new FormData();
+        formData.append('type', this.type); // Add type to form data
 
         // Indicateur de traitement global
         if (this.messageContainer) {
@@ -179,7 +181,7 @@ class ReservationPhotoUploader {
 
     async loadExistingPhotos() {
         try {
-            const response = await fetch(`/backoffice/reservation/${this.reservationId}/photos`);
+            const response = await fetch(`/backoffice/reservation/${this.reservationId}/photos?type=${this.type}`);
             const result = await response.json();
 
             // Assuming result.photos is an array of {id, url, name}

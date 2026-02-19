@@ -102,4 +102,21 @@ class ReservationPhoto
         }
         return null;
     }
+
+    /**
+     * @ORM\Column(type="string", length=20)
+     */
+    private $type = 'depart';
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
 }

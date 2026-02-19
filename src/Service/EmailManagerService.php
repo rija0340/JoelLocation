@@ -19,19 +19,22 @@ class EmailManagerService
     private $emailNotifierService;
     private $router;
     private $site;
+    private $photoZipService;
 
     public function __construct(
         EmailService $emailService,
         EmailLoggerService $emailLoggerService,
         EmailNotifierService $emailNotifierService,
         UrlGeneratorInterface $router,
-        Site $site
+        Site $site,
+        PhotoZipService $photoZipService
     ) {
         $this->emailService = $emailService;
         $this->emailLoggerService = $emailLoggerService;
         $this->emailNotifierService = $emailNotifierService;
         $this->router = $router;
         $this->site = $site;
+        $this->photoZipService = $photoZipService;
     }
 
     public function sendDevis(Request $request, Devis $devis)
@@ -186,15 +189,17 @@ class EmailManagerService
         $email = $entity->getClient()->getMail();
         $reference = ($entity instanceof Devis) ? $entity->getNumero() : $entity->getReference();
 
-        // Prepare photo attachments for contracts
+        // Prepare photo attachments for contracts (ZIP files for Depart and Remise)
         $photos = [];
         if ($type === 'contrat' && $entity instanceof Reservation) {
-            foreach ($entity->getPhotos() as $photo) {
-                // Vérifier que le fichier existe avant de l'ajouter
-                $photoPath = 'uploads/reservation_photos/' . $photo->getImage();
-                if ($photo->getImage() && file_exists($photoPath)) {
-                    $photos[] = $photoPath; // Juste le chemin
-                }
+            $zipDepart = $this->photoZipService->createZipForReservation($entity, 'depart');
+            if ($zipDepart) {
+                $photos[] = $zipDepart;
+            }
+
+            $zipRemise = $this->photoZipService->createZipForReservation($entity, 'remise');
+            if ($zipRemise) {
+                $photos[] = $zipRemise;
             }
         }
 
