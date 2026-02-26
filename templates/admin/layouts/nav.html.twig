@@ -117,11 +117,19 @@
 						</ul>
 					</li>
 					<li>
-						<a href="{{path('tarifs_index')}}">
+						<a>
 							<i class="fa fa-money"></i>
 							Tarifs
 							<span class="fa fa-chevron-right"></span>
 						</a>
+						<ul class="nav child_menu">
+							<li>
+								<a href="{{path('tarifs_index')}}">Liste des tarifs</a>
+							</li>
+							<li>
+								<a href="{{path('tarifs_simulateur')}}">Simulateur de tarifs</a>
+							</li>
+						</ul>
 					</li>
 					<li>
 						<a href="{{path('step1')}}">

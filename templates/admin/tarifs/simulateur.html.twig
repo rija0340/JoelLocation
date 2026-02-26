@@ -1,0 +1,421 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}Simulateur de tarifs{% endblock %}
+
+{% block stylesheets %}
+    <link href="{{ asset('css/admin/tarifs.css')}}" rel="stylesheet">
+    <style>
+        .simulateur-form .form-group {
+            margin-bottom: 20px;
+        }
+        .simulateur-form label {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .resultats-box {
+            background: #f7f7f7;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .resultats-box h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        .total-box {
+            background: #27ae60;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .detail-mois-table {
+            margin-top: 20px;
+        }
+        .detail-mois-table th {
+            background: #34495e;
+            color: white;
+        }
+        .options-grid, .garanties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+        .option-card, .garantie-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .option-card:hover, .garantie-card:hover {
+            border-color: #3498db;
+            box-shadow: 0 2px 5px rgba(52, 152, 219, 0.3);
+        }
+        .option-card.selected, .garantie-card.selected {
+            border-color: #27ae60;
+            background: #e8f8f5;
+        }
+        .option-card input, .garantie-card input {
+            margin-right: 10px;
+        }
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        .loading-spinner i {
+            font-size: 32px;
+            color: #3498db;
+        }
+        .erreur-box {
+            display: none;
+            background: #ffe6e6;
+            border: 1px solid #ff4444;
+            color: #cc0000;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+    </style>
+{% endblock %}
+
+{% block current_page %}
+    <h2>
+        <i class="fa fa-calculator"></i>
+        Simulateur de tarifs
+    </h2>
+{% endblock %}
+
+{% block content %}
+<div class="x_panel">
+    <div class="x_title">
+        <div class="row">
+            <div class="col-auto">
+                <h2>
+                    <i class="fa fa-calculator"></i>
+                    Simuler un tarif de réservation
+                </h2>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="x_content">
+        <form id="simulateurForm" class="simulateur-form">
+            <div class="row">
+                <!-- Section Dates -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="dateDepart">Date de départ *</label>
+                        <input type="datetime-local" class="form-control" id="dateDepart" name="dateDepart" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="dateRetour">Date de retour *</label>
+                        <input type="datetime-local" class="form-control" id="dateRetour" name="dateRetour" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Véhicule -->
+            <div class="form-group">
+                <label for="vehicule">Véhicule *</label>
+                <select class="form-control" id="vehicule" name="vehiculeId" required>
+                    <option value="">-- Sélectionner un véhicule --</option>
+                    {% for vehicule in vehicules %}
+                        <option value="{{ vehicule.id }}">
+                            {{ vehicule.marque.libelle }} {{ vehicule.modele.libelle }} 
+                            - Immat : {{ vehicule.immatriculation }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Section Options -->
+            <div class="form-group">
+                <label>Options</label>
+                <div class="options-grid">
+                    {% for option in options %}
+                        <label class="option-card">
+                            <input type="checkbox" name="options[]" value="{{ option.id }}">
+                            <strong>{{ option.appelation }}</strong>
+                            <br>
+                            <small>{{ option.description|default('') }}</small>
+                            <br>
+                            <span class="text-primary">{{ option.prix }}€</span>
+                        </label>
+                    {% endfor %}
+                </div>
+                <div class="form-group mt-3">
+                    <label class="option-card">
+                        <input type="checkbox" name="hasConducteur" value="1" id="hasConducteur">
+                        <strong>Conducteur supplémentaire</strong>
+                        <br>
+                        <span class="text-primary">50€</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Section Garanties -->
+            <div class="form-group">
+                <label>Garanties</label>
+                <div class="garanties-grid">
+                    {% for garantie in garanties %}
+                        <label class="garantie-card">
+                            <input type="checkbox" name="garanties[]" value="{{ garantie.id }}">
+                            <strong>{{ garantie.appelation }}</strong>
+                            <br>
+                            <small>{{ garantie.description|default('')|slice(0, 50) }}{{ garantie.description|length > 50 ? '...' : '' }}</small>
+                            <br>
+                            <span class="text-primary">{{ garantie.prix }}€</span>
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Bouton Calculer -->
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="fa fa-calculator"></i>
+                    Calculer le tarif
+                </button>
+            </div>
+        </form>
+
+        <!-- Loading Spinner -->
+        <div class="loading-spinner" id="loadingSpinner">
+            <i class="fa fa-spinner fa-spin"></i>
+            <p>Calcul en cours...</p>
+        </div>
+
+        <!-- Erreur -->
+        <div class="erreur-box" id="erreurBox"></div>
+
+        <!-- Résultats -->
+        <div class="resultats-box" id="resultatsBox" style="display: none;">
+            <h3><i class="fa fa-file-text"></i> Détail du tarif</h3>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Durée :</strong> <span id="dureeResult">-</span> jours</p>
+                    <p><strong>Tarif véhicule :</strong> <span id="tarifVehiculeResult">-</span>€</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Options :</strong> <span id="optionsTotalResult">-</span>€</p>
+                    <p><strong>Garanties :</strong> <span id="garantiesTotalResult">-</span>€</p>
+                </div>
+            </div>
+
+            <!-- Détail des options -->
+            <div id="optionsDetail" style="display: none;" class="mt-3">
+                <h4>Options sélectionnées :</h4>
+                <ul id="optionsList" class="list-group"></ul>
+            </div>
+
+            <!-- Détail des garanties -->
+            <div id="garantiesDetail" style="display: none;" class="mt-3">
+                <h4>Garanties sélectionnées :</h4>
+                <ul id="garantiesList" class="list-group"></ul>
+            </div>
+
+            <!-- Détail par mois (pour les réservations > 30 jours) -->
+            <div id="detailMoisSection" style="display: none;" class="mt-4">
+                <h4><i class="fa fa-calendar"></i> Détail par mois</h4>
+                <div class="table-responsive">
+                    <table class="table table-bordered detail-mois-table">
+                        <thead>
+                            <tr>
+                                <th>Mois</th>
+                                <th>Période</th>
+                                <th>Nombre de jours</th>
+                                <th>Bracket appliqué</th>
+                                <th>Prix</th>
+                            </tr>
+                        </thead>
+                        <tbody id="detailMoisBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Total -->
+            <div class="total-box">
+                Total : <span id="totalResult">-</span>€ TTC
+            </div>
+
+            <div class="alert alert-info mt-3">
+                <i class="fa fa-info-circle"></i>
+                <strong>Information :</strong> Pour les réservations de plus de 30 jours, 
+                le tarif est calculé mois par mois en appliquant le bracket (3/7/15/30 jours) 
+                pour chaque période dans chaque mois civil.
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('simulateurForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Récupération des données du formulaire
+    const dateDepart = document.getElementById('dateDepart').value;
+    const dateRetour = document.getElementById('dateRetour').value;
+    const vehiculeId = document.getElementById('vehicule').value;
+    
+    // Validation
+    if (!dateDepart || !dateRetour || !vehiculeId) {
+        afficherErreur('Veuillez remplir tous les champs obligatoires');
+        return;
+    }
+    
+    if (new Date(dateDepart) >= new Date(dateRetour)) {
+        afficherErreur('La date de retour doit être postérieure à la date de départ');
+        return;
+    }
+    
+    // Récupération des options et garanties sélectionnées
+    const options = Array.from(document.querySelectorAll('input[name="options[]"]:checked')).map(cb => cb.value);
+    const garanties = Array.from(document.querySelectorAll('input[name="garanties[]"]:checked')).map(cb => cb.value);
+    const hasConducteur = document.getElementById('hasConducteur').checked;
+    
+    // Affichage du loading
+    document.getElementById('loadingSpinner').style.display = 'block';
+    document.getElementById('resultatsBox').style.display = 'none';
+    document.getElementById('erreurBox').style.display = 'none';
+    
+    // Envoi de la requête AJAX
+    const formData = new FormData();
+    formData.append('dateDepart', dateDepart);
+    formData.append('dateRetour', dateRetour);
+    formData.append('vehiculeId', vehiculeId);
+    options.forEach(opt => formData.append('options[]', opt));
+    garanties.forEach(gar => formData.append('garanties[]', gar));
+    formData.append('hasConducteur', hasConducteur ? '1' : '0');
+    
+    fetch('{{ path("tarifs_calculate") }}', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => {
+        // Vérifier si la réponse est du JSON
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            return response.text().then(text => {
+                throw new Error('Le serveur a retourné une erreur HTML au lieu de JSON. Vérifiez les logs Symfony.');
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        document.getElementById('loadingSpinner').style.display = 'none';
+        
+        if (data.error) {
+            afficherErreur(data.error + (data.trace ? '<br/><small>Voir console pour détails</small>' : ''));
+            console.error('Erreur détaillée:', data.trace);
+            return;
+        }
+        
+        afficherResultats(data);
+    })
+    .catch(error => {
+        document.getElementById('loadingSpinner').style.display = 'none';
+        afficherErreur('Une erreur est survenue lors du calcul: ' + error.message + '<br/><small>Vérifiez la console (F12) pour plus de détails</small>');
+        console.error('Erreur complète:', error);
+    });
+});
+
+function afficherErreur(message) {
+    const erreurBox = document.getElementById('erreurBox');
+    erreurBox.textContent = message;
+    erreurBox.style.display = 'block';
+}
+
+function afficherResultats(data) {
+    const resultatsBox = document.getElementById('resultatsBox');
+    resultatsBox.style.display = 'block';
+    
+    // Durée et tarif véhicule
+    document.getElementById('dureeResult').textContent = data.duree;
+    document.getElementById('tarifVehiculeResult').textContent = data.tarifVehicule.toFixed(2);
+    
+    // Options
+    document.getElementById('optionsTotalResult').textContent = data.optionsTotal.toFixed(2);
+    const optionsList = document.getElementById('optionsList');
+    optionsList.innerHTML = '';
+    if (data.options.length > 0) {
+        document.getElementById('optionsDetail').style.display = 'block';
+        data.options.forEach(opt => {
+            const li = document.createElement('li');
+            li.className = 'list-group-item';
+            li.textContent = opt.nom + ' - ' + opt.prix.toFixed(2) + '€';
+            optionsList.appendChild(li);
+        });
+    } else {
+        document.getElementById('optionsDetail').style.display = 'none';
+    }
+    
+    // Garanties
+    document.getElementById('garantiesTotalResult').textContent = data.garantiesTotal.toFixed(2);
+    const garantiesList = document.getElementById('garantiesList');
+    garantiesList.innerHTML = '';
+    if (data.garanties.length > 0) {
+        document.getElementById('garantiesDetail').style.display = 'block';
+        data.garanties.forEach(gar => {
+            const li = document.createElement('li');
+            li.className = 'list-group-item';
+            li.textContent = gar.nom + ' - ' + gar.prix.toFixed(2) + '€';
+            garantiesList.appendChild(li);
+        });
+    } else {
+        document.getElementById('garantiesDetail').style.display = 'none';
+    }
+    
+    // Total
+    document.getElementById('totalResult').textContent = data.total.toFixed(2);
+    
+    // Détail par mois
+    const detailMoisSection = document.getElementById('detailMoisSection');
+    const detailMoisBody = document.getElementById('detailMoisBody');
+    detailMoisBody.innerHTML = '';
+    
+    if (data.detailMois && data.detailMois.length > 0) {
+        detailMoisSection.style.display = 'block';
+        data.detailMois.forEach(detail => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${detail.mois}</td>
+                <td>${detail.dateDebut} au ${detail.dateFin}</td>
+                <td>${detail.jours} jours</td>
+                <td>${detail.bracket}</td>
+                <td>${detail.prix.toFixed(2)}€</td>
+            `;
+            detailMoisBody.appendChild(tr);
+        });
+    } else {
+        detailMoisSection.style.display = 'none';
+    }
+}
+
+// Gestion des clicks sur les cartes options/garanties
+document.querySelectorAll('.option-card, .garantie-card').forEach(card => {
+    card.addEventListener('click', function(e) {
+        if (e.target.tagName !== 'INPUT') {
+            const checkbox = this.querySelector('input[type="checkbox"]');
+            checkbox.checked = !checkbox.checked;
+            this.classList.toggle('selected', checkbox.checked);
+        }
+    });
+});
+</script>
+{% endblock %}

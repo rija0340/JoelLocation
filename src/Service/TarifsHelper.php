@@ -56,28 +56,84 @@ class TarifsHelper
 
     function calculTarifVehicule($dateDepart, $dateRetour, $vehicule)
     {
-        $mois = $this->dateHelper->getMonthFullName($dateDepart);
-        $duree = $this->dateHelper->calculDuree($dateDepart, $dateRetour);
-        // $tarif = $this->tarifsRepo->findTarifs($vehicule, $mois);
         $marque = $vehicule->getMarque();
         $modele = $vehicule->getModele();
+        $duree = $this->dateHelper->calculDuree($dateDepart, $dateRetour);
 
-        $tarif = $this->tarifsRepo->findOneBy(['marque' => $marque, 'modele' => $modele, 'mois' => $mois]);
+        // Si la durée est <= 30 jours, utiliser la logique simple (mois de départ uniquement)
+        if ($duree <= 30) {
+            $mois = $this->dateHelper->getMonthFullName($dateDepart);
+            $tarif = $this->tarifsRepo->findOneBy(['marque' => $marque, 'modele' => $modele, 'mois' => $mois]);
 
-        $tarifVehicule = 0;
+            $tarifVehicule = 0;
 
-        if (!is_null($tarif)) {
+            if (!is_null($tarif)) {
+                if ($duree <= 3) $tarifVehicule = $tarif->getTroisJours();
+                elseif ($duree > 3 && $duree <= 7) $tarifVehicule = $tarif->getSeptJours();
+                elseif ($duree > 7 && $duree <= 15) $tarifVehicule = $tarif->getQuinzeJours();
+                elseif ($duree > 15) $tarifVehicule = $tarif->getTrenteJours();
+            }
 
-            if ($duree <= 3) $tarifVehicule = $tarif->getTroisJours();
-
-            if ($duree > 3 && $duree <= 7) $tarifVehicule = $tarif->getSeptJours();
-
-            if ($duree > 7 && $duree <= 15) $tarifVehicule = $tarif->getQuinzeJours();
-
-            if ($duree > 15) $tarifVehicule = $tarif->getTrenteJours();
+            return $tarifVehicule;
         }
 
-        return $tarifVehicule;
+        // Pour les durées > 30 jours : calcul mois par mois
+        return $this->calculTarifMultiMois($dateDepart, $dateRetour, $marque, $modele);
+    }
+
+    /**
+     * Calcule le tarif pour les réservations multi-mois
+     * Règle métier : découper par mois civil et appliquer le bracket de tarif pour chaque mois
+     * 
+     * @param \DateTime $dateDepart
+     * @param \DateTime $dateRetour
+     * @param Marque $marque
+     * @param Modele $modele
+     * @return float
+     */
+    private function calculTarifMultiMois($dateDepart, $dateRetour, $marque, $modele)
+    {
+        $tarifTotal = 0;
+        $dateCourante = clone $dateDepart;
+
+        while ($dateCourante < $dateRetour) {
+            // Récupérer le nom du mois courant
+            $mois = $this->dateHelper->getMonthFullName($dateCourante);
+            
+            // Récupérer le tarif pour ce mois
+            $tarif = $this->tarifsRepo->findOneBy([
+                'marque' => $marque, 
+                'modele' => $modele, 
+                'mois' => $mois
+            ]);
+
+            if (!is_null($tarif)) {
+                // Calculer la fin du mois courant
+                $finDuMois = new \DateTime($dateCourante->format('Y-m-t'));
+                
+                // Déterminer la date de fin pour cette itération (fin du mois ou date de retour)
+                $dateFinPeriode = ($finDuMois < $dateRetour) ? $finDuMois : $dateRetour;
+                
+                // Calculer le nombre de jours dans cette période
+                $joursDansPeriode = $this->dateHelper->calculDuree($dateCourante, $dateFinPeriode);
+
+                // Appliquer le bracket de tarif selon le nombre de jours
+                if ($joursDansPeriode <= 3) {
+                    $tarifTotal += $tarif->getTroisJours();
+                } elseif ($joursDansPeriode > 3 && $joursDansPeriode <= 7) {
+                    $tarifTotal += $tarif->getSeptJours();
+                } elseif ($joursDansPeriode > 7 && $joursDansPeriode <= 15) {
+                    $tarifTotal += $tarif->getQuinzeJours();
+                } elseif ($joursDansPeriode > 15) {
+                    $tarifTotal += $tarif->getTrenteJours();
+                }
+            }
+
+            // Passer au mois suivant (1er jour du mois suivant)
+            $dateCourante = new \DateTime($finDuMois->format('Y-m-d') . ' +1 day');
+        }
+
+        return $tarifTotal;
     }
 
 
