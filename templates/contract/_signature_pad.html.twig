@@ -38,6 +38,9 @@
 
         // Resize canvas for high DPI screens
         function resizeCanvas() {
+            // Save current signature data before resizing
+            var data = signaturePad.isEmpty() ? [] : signaturePad.toData();
+            
             var ratio = Math.max(window.devicePixelRatio || 1, 1);
             var container = canvas.parentElement;
             var width = container.offsetWidth;
@@ -49,10 +52,15 @@
             canvas.width = width * ratio;
             canvas.height = 200 * ratio; // Keep height fixed
             canvas.getContext("2d").scale(ratio, ratio);
-            signaturePad.clear();
+            
+            // Restore signature data after resizing
+            if (data && data.length > 0) {
+                signaturePad.fromData(data);
+            }
         }
 
-        window.addEventListener("resize", resizeCanvas);
+        // Use orientationchange instead of resize to avoid clearing on mobile scroll
+        window.addEventListener("orientationchange", resizeCanvas);
         resizeCanvas();
 
         document.getElementById('clear-signature').addEventListener('click', function () {

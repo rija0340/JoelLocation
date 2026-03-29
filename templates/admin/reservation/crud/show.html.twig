@@ -473,6 +473,16 @@
 					</div>
 					<div class="row mb-4">
 						<div class="col-12">
+							<!-- Bouton Photo - Affiché en premier sur mobile/tablete -->
+							<div id="camera-button-container-depart" class="text-center mb-3 camera-btn-container"
+								style="display: none;">
+								<button type="button" id="btn-take-photo-depart" class="btn btn-success btn-lg w-100">
+									<i class="fa fa-camera mr-2"></i> Photo DÉPART
+								</button>
+								<input type="file" id="camera-input-depart" accept="image/*" capture="environment"
+									style="display: none;">
+							</div>
+							<!-- Zone de drop - En dessous du bouton -->
 							<div id="photo-drop-zone-depart" class="photo-drop-zone">
 								<div class="drop-zone-content">
 									<i class="fas fa-cloud-upload-alt fa-3x mb-3 text-primary"></i>
@@ -481,14 +491,6 @@
 									<small class="text-muted">JPG, PNG, GIF (max 1.5MB)</small>
 								</div>
 								<input type="file" id="photo-input-depart" multiple accept="image/*"
-									style="display: none;">
-							</div>
-							<div id="camera-button-container-depart" class="text-center mt-3 camera-btn-container"
-								style="display: none;">
-								<button type="button" id="btn-take-photo-depart" class="btn btn-success btn-lg">
-									<i class="fa fa-camera mr-2"></i> Photo DÉPART
-								</button>
-								<input type="file" id="camera-input-depart" accept="image/*" capture="environment"
 									style="display: none;">
 							</div>
 						</div>
@@ -530,6 +532,17 @@
 					</div>
 					<div class="row mb-4">
 						<div class="col-12">
+							<!-- Bouton Photo - Affiché en premier sur mobile/tablete -->
+							<div id="camera-button-container-remise" class="text-center mb-3 camera-btn-container"
+								style="display: none;">
+								<button type="button" id="btn-take-photo-remise"
+									class="btn btn-warning btn-lg text-white w-100">
+									<i class="fa fa-camera mr-2"></i> Photo RETOUR
+								</button>
+								<input type="file" id="camera-input-remise" accept="image/*" capture="environment"
+									style="display: none;">
+							</div>
+							<!-- Zone de drop - En dessous du bouton -->
 							<div id="photo-drop-zone-remise" class="photo-drop-zone">
 								<div class="drop-zone-content">
 									<i class="fas fa-cloud-upload-alt fa-3x mb-3 text-warning"></i>
@@ -538,15 +551,6 @@
 									<small class="text-muted">JPG, PNG, GIF (max 1.5MB)</small>
 								</div>
 								<input type="file" id="photo-input-remise" multiple accept="image/*"
-									style="display: none;">
-							</div>
-							<div id="camera-button-container-remise" class="text-center mt-3 camera-btn-container"
-								style="display: none;">
-								<button type="button" id="btn-take-photo-remise"
-									class="btn btn-warning btn-lg text-white">
-									<i class="fa fa-camera mr-2"></i> Photo RETOUR
-								</button>
-								<input type="file" id="camera-input-remise" accept="image/*" capture="environment"
 									style="display: none;">
 							</div>
 						</div>
