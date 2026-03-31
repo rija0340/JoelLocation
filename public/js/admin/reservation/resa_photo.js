@@ -184,8 +184,9 @@ class ReservationPhotoUploader {
             const response = await fetch(`/backoffice/reservation/${this.reservationId}/photos?type=${this.type}`);
             const result = await response.json();
 
-            // Assuming result.photos is an array of {id, url, name}
-            this.displayPhotos(result.photos);
+            // Assuming result.photos is an array of {id, url, name, image}
+            this.photos = result.photos || []; // Store photos for navigation
+            this.displayPhotos(this.photos);
         } catch (error) {
             console.error('Error loading photos:', error);
         }
@@ -199,17 +200,16 @@ class ReservationPhotoUploader {
             return;
         }
 
-        photos.forEach(photo => {
-            const photoElement = this.createPhotoElement(photo);
+        photos.forEach((photo, index) => {
+            const photoElement = this.createPhotoElement(photo, index);
             this.photosContainer.appendChild(photoElement);
         });
     }
 
-    createPhotoElement(photo) {
+    createPhotoElement(photo, index) {
         const colDiv = document.createElement('div');
         colDiv.className = 'col-md-3 col-sm-4 col-6 mb-3 d-flex';
 
-        // MODIFIED: Added card-body for the name and adjusted structure
         colDiv.innerHTML = `
             <div class="card photo-card h-100 w-100">
                 <div class="photo-wrapper position-relative">
@@ -237,17 +237,15 @@ class ReservationPhotoUploader {
             this.deletePhoto(photo.id);
         });
 
-        // MODIFIED: Pass photo name to fullscreen function
         const fullscreenBtn = colDiv.querySelector('.btn-fullscreen');
         fullscreenBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            this.openFullscreen(photo.url, photo.image);
+            this.openFullscreen(index);
         });
 
-        // MODIFIED: Pass photo name to fullscreen function
         const img = colDiv.querySelector('.photo-thumbnail');
         img.addEventListener('click', () => {
-            this.openFullscreen(photo.url, photo.image);
+            this.openFullscreen(index);
         });
 
         return colDiv;
@@ -280,8 +278,10 @@ class ReservationPhotoUploader {
         }
     }
 
-    // MODIFIED: Function now accepts imageName
-    openFullscreen(imageUrl, imageName) {
+    openFullscreen(index) {
+        this.currentIndex = index;
+        const photo = this.photos[this.currentIndex];
+        
         let modal = document.getElementById('imageModal');
         if (modal) {
             modal.remove();
@@ -293,32 +293,36 @@ class ReservationPhotoUploader {
         modal.setAttribute('tabindex', '-1');
         modal.setAttribute('role', 'dialog');
         modal.setAttribute('aria-hidden', 'true');
-
-        // Z-index très élevé pour être sûr d'être au dessus de tout
         modal.style.zIndex = '100000';
 
         modal.innerHTML = `
             <div class="modal-dialog" role="document" style="max-width: 100%; margin: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
                 <div class="modal-content" style="background: rgba(0,0,0,0.95); border: none; width: 100%; height: 100%; display: flex; flex-direction: column;">
                     
-                    <!-- Header avec bouton close classique -->
                     <div style="position: absolute; top: 0; right: 0; padding: 15px; z-index: 10001;">
-                        <button type="button" class="close-modal-btn" style="background: none; border: none; color: white; font-size: 30px; cursor: pointer;">
+                        <button type="button" class="close-modal-btn" style="background: rgba(0,0,0,0.5); border: none; color: white; font-size: 30px; cursor: pointer; width: 50px; height: 50px; border-radius: 50%;">
                             <i class="fa fa-times"></i>
                         </button>
                     </div>
 
-                    <!-- Titre -->
-                    <div style="position: absolute; top: 15px; left: 15px; right: 60px; z-index: 10000;">
-                        <h5 class="text-white text-truncate" style="margin: 0; font-size: 1.1rem;">${imageName || 'Aperçu'}</h5>
+                    <div style="position: absolute; top: 15px; left: 15px; right: 80px; z-index: 10000;">
+                        <h5 id="modalTitle" class="text-white text-truncate" style="margin: 0; font-size: 1.1rem; text-shadow: 1px 1px 2px black;">${photo.image || 'Aperçu'}</h5>
+                        <div class="text-white-50 small mt-1" id="modalCounter">Photo ${this.currentIndex + 1} / ${this.photos.length}</div>
                     </div>
 
-                    <!-- Corps avec l'image -->
-                    <div class="modal-body" style="flex: 1; padding: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; width: 100%; height: 100%;">
-                        <img id="modalImage" src="${imageUrl}" style="max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; box-shadow: 0 0 20px rgba(0,0,0,0.5);">
+                    <div class="modal-body" style="flex: 1; padding: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; width: 100%; height: 100%; position: relative;">
+                        <!-- Navigation Buttons -->
+                        <button type="button" id="prevPhoto" class="nav-photo-btn" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); border: none; color: white; border-radius: 50%; width: 60px; height: 60px; z-index: 10002; display: ${this.currentIndex > 0 ? 'flex' : 'none'}; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s;">
+                            <i class="fa fa-chevron-left" style="font-size: 24px;"></i>
+                        </button>
+                        
+                        <button type="button" id="nextPhoto" class="nav-photo-btn" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); border: none; color: white; border-radius: 50%; width: 60px; height: 60px; z-index: 10002; display: ${this.currentIndex < this.photos.length - 1 ? 'flex' : 'none'}; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s;">
+                            <i class="fa fa-chevron-right" style="font-size: 24px;"></i>
+                        </button>
+
+                        <img id="modalImage" src="${photo.url}" style="max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; box-shadow: 0 0 20px rgba(0,0,0,0.5); transition: opacity 0.3s ease;">
                     </div>
 
-                    <!-- Footer avec gros bouton close (utile sur mobile) -->
                     <div style="position: absolute; bottom: 20px; left: 0; width: 100%; display: flex; justify-content: center; z-index: 10001; pointer-events: none;">
                         <button type="button" class="close-modal-btn btn btn-light rounded-circle shadow" style="width: 50px; height: 50px; padding: 0; display: flex; align-items: center; justify-content: center; pointer-events: auto;">
                             <i class="fa fa-times" style="font-size: 20px;"></i>
@@ -330,66 +334,102 @@ class ReservationPhotoUploader {
         `;
         document.body.appendChild(modal);
 
-        // Définition de la fonction de fermeture pour réutilisation
         const closeModal = () => {
+            document.removeEventListener('keydown', keyHandler);
             if (typeof $ !== 'undefined' && $.fn.modal) {
                 $(modal).modal('hide');
             } else {
-                try {
-                    const bsModal = bootstrap.Modal.getInstance(modal);
-                    if (bsModal) bsModal.hide();
-                    else {
-                        // Fallback si l'instance n'est pas trouvée (ex: pas encore créée ou déjà détruite)
-                        modal.classList.remove('show');
-                        modal.style.display = 'none';
-                        document.body.classList.remove('modal-open');
-                        const backdrop = document.querySelector('.modal-backdrop');
-                        if (backdrop) backdrop.remove();
-                        modal.remove();
-                    }
-                } catch (e) {
-                    // Dernier recours manuel
-                    modal.remove();
-                    document.body.classList.remove('modal-open');
-                    const backdrop = document.querySelector('.modal-backdrop');
-                    if (backdrop) backdrop.remove();
-                }
+                modal.classList.remove('show');
+                modal.style.display = 'none';
+                document.body.classList.remove('modal-open');
+                const backdrop = document.querySelector('.modal-backdrop');
+                if (backdrop) backdrop.remove();
+                modal.remove();
             }
         };
 
-        // Ouverture du modal
+        const keyHandler = (e) => {
+            if (e.key === 'ArrowRight') this.showNext();
+            if (e.key === 'ArrowLeft') this.showPrev();
+            if (e.key === 'Escape') closeModal();
+        };
+
+        document.addEventListener('keydown', keyHandler);
+
         if (typeof $ !== 'undefined' && $.fn.modal) {
             $(modal).modal('show');
-            // Force le focus pour l'accessibilité
-            $(modal).on('shown.bs.modal', function () {
-                $('#modalImage').focus();
-            });
         } else {
             const bsModal = new bootstrap.Modal(modal);
             bsModal.show();
         }
 
-        // Attachement des événements de fermeture sur TOUS les boutons close
         const closeBtns = modal.querySelectorAll('.close-modal-btn');
-        closeBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                closeModal();
-            });
+        closeBtns.forEach(btn => btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            closeModal();
+        }));
+
+        document.getElementById('prevPhoto').addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.showPrev();
         });
 
-        // Fermeture sur clic image
+        document.getElementById('nextPhoto').addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.showNext();
+        });
+
         const img = document.getElementById('modalImage');
         if (img) {
             img.addEventListener('click', (e) => {
-                // Optionnel : ne pas fermer si l'utilisateur veut zoomer ? 
-                // Pour l'instant on ferme comme demandé implicitement pour une expérience "rapide"
-                closeModal();
+                e.stopPropagation();
+                // On mobile, click on the right half goes next, left half goes prev
+                const rect = img.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                if (x > rect.width / 2) {
+                    this.showNext();
+                } else {
+                    this.showPrev();
+                }
             });
         }
     }
 
+    showNext() {
+        if (this.currentIndex >= this.photos.length - 1) return;
+        this.currentIndex++;
+        this.updateModalImage();
+    }
+
+    showPrev() {
+        if (this.currentIndex <= 0) return;
+        this.currentIndex--;
+        this.updateModalImage();
+    }
+
+    updateModalImage() {
+        const photo = this.photos[this.currentIndex];
+        const img = document.getElementById('modalImage');
+        const title = document.getElementById('modalTitle');
+        const counter = document.getElementById('modalCounter');
+        const prevBtn = document.getElementById('prevPhoto');
+        const nextBtn = document.getElementById('nextPhoto');
+
+        if (img) {
+            img.style.opacity = '0';
+            setTimeout(() => {
+                img.src = photo.url;
+                img.style.opacity = '1';
+                if (title) title.textContent = photo.image || 'Aperçu';
+                if (counter) counter.textContent = `Photo ${this.currentIndex + 1} / ${this.photos.length}`;
+                
+                // Update buttons visibility
+                if (prevBtn) prevBtn.style.display = (this.currentIndex > 0) ? 'flex' : 'none';
+                if (nextBtn) nextBtn.style.display = (this.currentIndex < this.photos.length - 1) ? 'flex' : 'none';
+            }, 300);
+        }
+    }
 
     showProgress(show) {
         if (this.progressBar) {

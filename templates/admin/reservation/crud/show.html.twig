@@ -122,6 +122,26 @@
 		border-color: rgba(255, 255, 255, 0.5);
 	}
 
+	.nav-photo-btn:hover {
+		background: rgba(0, 0, 0, 0.8) !important;
+		transform: translateY(-50%) scale(1.1) !important;
+	}
+
+	.nav-photo-btn {
+		transition: all 0.2s ease-in-out;
+	}
+
+	@media(max-width: 768px) {
+		.nav-photo-btn {
+			width: 45px !important;
+			height: 45px !important;
+		}
+
+		.nav-photo-btn i {
+			font-size: 18px !important;
+		}
+	}
+
 	@media(max-width: 768px) {
 		.photo-thumbnail {
 			height: 150px;
@@ -137,6 +157,20 @@
 		.photo-thumbnail {
 			height: 120px;
 		}
+	}
+
+	.camera-btn-container button {
+		padding: 20px !important;
+		font-size: 1.4rem !important;
+		font-weight: bold !important;
+		border-radius: 15px !important;
+		box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15) !important;
+		transition: all 0.2s ease !important;
+	}
+
+	.camera-btn-container button:active {
+		transform: scale(0.98);
+		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
 	}
 </style>
 
