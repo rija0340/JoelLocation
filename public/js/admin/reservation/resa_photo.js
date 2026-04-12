@@ -62,7 +62,7 @@ class ReservationPhotoUploader {
         this.showProgress(true);
 
         const formData = new FormData();
-        formData.append('type', this.type); // Add type to form data
+        formData.append('type', this.type);
 
         // Indicateur de traitement global
         if (this.messageContainer) {
@@ -72,6 +72,21 @@ class ReservationPhotoUploader {
                 </div>
             `;
         }
+
+        // Extraire les dates EXIF AVANT compression (canvas détruit les EXIF)
+        const exifDates = await Promise.all(imageFiles.map(async file => {
+            if (file.type === 'image/jpeg' || file.type === 'image/jpg') {
+                return await this.extractExifDate(file);
+            }
+            return null;
+        }));
+
+        // Envoyer les dates EXIF avec le FormData
+        exifDates.forEach((date, idx) => {
+            if (date) {
+                formData.append(`exifDate[${idx}]`, date);
+            }
+        });
 
         // Traitement parallèle des images
         const processingPromises = imageFiles.map(async file => {
@@ -83,7 +98,7 @@ class ReservationPhotoUploader {
                 return file;
             } catch (error) {
                 console.error('Erreur compression pour ' + file.name, error);
-                return file; // Fallback sur l'original
+                return file;
             }
         });
 
@@ -117,6 +132,116 @@ class ReservationPhotoUploader {
             this.showProgress(false);
             this.fileInput.value = '';
         }
+    }
+
+    /**
+     * Extract DateTimeOriginal from JPEG EXIF data before compression
+     * @param {File} file
+     * @returns {Promise<string|null>} Date string or null
+     */
+    extractExifDate(file) {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    const buffer = e.target.result;
+                    const view = new DataView(buffer);
+                    let offset = 2; // Skip SOI marker
+
+                    // Find APP1 (EXIF) marker
+                    while (offset < buffer.byteLength) {
+                        if (view.getUint16(offset) !== 0xFFE1) {
+                            // Not APP1, skip this segment
+                            const segLen = view.getUint16(offset + 2);
+                            offset += 2 + segLen;
+                            continue;
+                        }
+
+                        offset += 2; // Skip FF E1
+                        const exifLen = view.getUint16(offset);
+                        offset += 2;
+
+                        // Check "Exif\0\0"
+                        const exifStr = String.fromCharCode(
+                            view.getUint8(offset), view.getUint8(offset + 1),
+                            view.getUint8(offset + 2), view.getUint8(offset + 3),
+                            view.getUint8(offset + 4), view.getUint8(offset + 5)
+                        );
+                        if (exifStr !== 'Exif\x00\x00') {
+                            offset += exifLen - 2;
+                            continue;
+                        }
+
+                        offset += 6; // Skip Exif header
+                        const tiffStart = offset;
+                        const byteOrder = view.getUint16(offset);
+                        const littleEndian = (byteOrder === 0x4949); // "II"
+                        offset += 4; // Skip byte order + 0x002A
+                        const ifdOffset = littleEndian
+                            ? view.getUint32(offset, true)
+                            : view.getUint32(offset, false);
+
+                        // Parse IFD0
+                        const ifdPos = tiffStart + ifdOffset;
+                        const nbEntries = view.getUint16(ifdPos, littleEndian);
+                        let exifIfdOffset = null;
+
+                        for (let i = 0; i < nbEntries; i++) {
+                            const entryPos = ifdPos + 2 + (i * 12);
+                            const tag = view.getUint16(entryPos, littleEndian);
+                            if (tag === 0x8769) {
+                                // Exif IFD Pointer
+                                exifIfdOffset = littleEndian
+                                    ? view.getUint32(entryPos + 8, true)
+                                    : view.getUint32(entryPos + 8, false);
+                                break;
+                            }
+                        }
+
+                        // Parse Exif IFD for DateTimeOriginal (0x9003)
+                        if (exifIfdOffset) {
+                            const exifIfdPos = tiffStart + exifIfdOffset;
+                            const exifNbEntries = view.getUint16(exifIfdPos, littleEndian);
+
+                            for (let i = 0; i < exifNbEntries; i++) {
+                                const entryPos = exifIfdPos + 2 + (i * 12);
+                                const tag = view.getUint16(entryPos, littleEndian);
+
+                                if (tag === 0x9003) {
+                                    const valueOffset = littleEndian
+                                        ? view.getUint32(entryPos + 8, true)
+                                        : view.getUint32(entryPos + 8, false);
+
+                                    const dateStrPos = tiffStart + valueOffset;
+                                    let dateStr = '';
+                                    for (let j = 0; j < 19; j++) {
+                                        dateStr += String.fromCharCode(view.getUint8(dateStrPos + j));
+                                    }
+
+                                    // Format: "YYYY:MM:DD HH:MM:SS" -> "DD/MM/YYYY HH:MM"
+                                    const parts = dateStr.match(/(\d{4}):(\d{2}):(\d{2})\s+(\d{2}):(\d{2}):(\d{2})/);
+                                    if (parts) {
+                                        const [, y, m, d, h, min] = parts;
+                                        resolve(`${d}/${m}/${y} ${h}:${min}`);
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+
+                        resolve(null);
+                        return;
+                    }
+
+                    resolve(null);
+                } catch (err) {
+                    console.error('EXIF parse error:', err);
+                    resolve(null);
+                }
+            };
+            reader.onerror = () => resolve(null);
+            reader.readAsArrayBuffer(file.slice(0, 65536)); // Read first 64KB only (EXIF is at the start)
+        });
     }
 
     /**
