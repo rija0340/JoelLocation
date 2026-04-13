@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Page non trouvée - JOEL LOCATION</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('images/Joel-Location-new.png') }}" />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sofia+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background: linear-gradient(135deg, #EFE7DB 0%, #f5f0e8 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .error-container {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .error-code {
+            font-family: 'Sofia Sans', sans-serif;
+            font-size: 150px;
+            font-weight: 600;
+            color: #af0000;
+            line-height: 1;
+            text-shadow: 4px 4px 0 #d32f2f;
+        }
+
+        .error-message {
+            font-size: 28px;
+            color: #333;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .error-description {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 40px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .home-link {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #af0000 0%, #d32f2f 100%);
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(175, 0, 0, 0.3);
+        }
+
+        .home-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(175, 0, 0, 0.4);
+        }
+
+        .car-icon {
+            font-size: 80px;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="error-container">
+        <div class="car-icon">🚗💨</div>
+        <div class="error-code">404</div>
+        <h1 class="error-message">Page non trouvée</h1>
+        <p class="error-description">
+            Désolé, la page que vous recherchez semble avoir pris des vacances en Guadeloupe.<br>
+            Elle n'existe pas ou a peut-être été déplacée.
+        </p>
+        <a href="{{ path('accueil') }}" class="home-link">← Retour à l'accueil</a>
+    </div>
+</body>
+
+</html>
