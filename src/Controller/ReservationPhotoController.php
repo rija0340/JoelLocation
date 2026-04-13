@@ -272,8 +272,8 @@ class ReservationPhotoController extends AbstractController
         $width = imagesx($image);
         $height = imagesy($image);
         $shortestSide = min($width, $height);
-        $padding = max(20, (int) round($shortestSide * 0.02));
-        $backgroundPadding = max(12, (int) round($padding / 2));
+        $padding = max(40, (int) round($shortestSide * 0.02));
+        $backgroundPadding = max(24, (int) round($padding / 2));
         $fontFile = $this->findWatermarkFont();
         $backgroundColor = imagecolorallocatealpha($image, 0, 0, 0, 70);
         $textColor = imagecolorallocate($image, 255, 255, 255);
@@ -301,23 +301,6 @@ class ReservationPhotoController extends AbstractController
                 return;
             }
         }
-
-        $font = 5;
-        $textWidth = imagefontwidth($font) * strlen($dateText);
-        $textHeight = imagefontheight($font);
-        $x = $padding;
-        $y = $height - $padding - $textHeight;
-
-        imagefilledrectangle(
-            $image,
-            $x - $backgroundPadding,
-            $y - $backgroundPadding,
-            $x + $textWidth + $backgroundPadding,
-            $y + $textHeight + $backgroundPadding,
-            $backgroundColor
-        );
-
-        imagestring($image, $font, $x, $y, $dateText, $textColor);
     }
 
     private function findWatermarkFont(): ?string
