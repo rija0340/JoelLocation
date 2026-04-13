@@ -48,7 +48,7 @@ class ReservationPhotoController extends AbstractController
             /** @var UploadedFile $uploadedFile */
             if ($uploadedFile->isValid()) {
                 // Fallback: date actuelle si pas de date EXIF
-                $dateText = $exifDates[$index] ?? (new \DateTimeImmutable())->format('d/m/Y H:i');
+                $dateText = $exifDates[$index] ?: (new \DateTimeImmutable())->format('d/m/Y H:i');
 
                 // Add date watermark to image before saving
                 $watermarkedFile = $this->addDateWatermark($uploadedFile, $dateText);
@@ -211,7 +211,8 @@ class ReservationPhotoController extends AbstractController
             return $parsed;
         }
 
-        return null;
+        // Final fallback: date actuelle
+        return new \DateTimeImmutable();
     }
 
     private function createImageResource(string $filePath, int $imageType)
@@ -278,7 +279,7 @@ class ReservationPhotoController extends AbstractController
         $textColor = imagecolorallocate($image, 255, 255, 255);
 
         if ($fontFile !== null && function_exists('imagettfbbox') && function_exists('imagettftext')) {
-            $fontSize = max(16, min(72, (int) round($shortestSide * 0.025)));
+            $fontSize = max(28, min(120, (int) round($shortestSide * 0.05)));
             $bbox = @imagettfbbox($fontSize, 0, $fontFile, $dateText);
 
             if (is_array($bbox)) {

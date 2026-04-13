@@ -446,12 +446,6 @@ class ReservationPhotoUploader {
                         <img id="modalImage" src="${photo.url}" style="max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; box-shadow: 0 0 20px rgba(0,0,0,0.5); transition: opacity 0.3s ease;">
                     </div>
 
-                    <div style="position: absolute; bottom: 20px; left: 0; width: 100%; display: flex; justify-content: center; z-index: 10001; pointer-events: none;">
-                        <button type="button" class="close-modal-btn btn btn-light rounded-circle shadow" style="width: 50px; height: 50px; padding: 0; display: flex; align-items: center; justify-content: center; pointer-events: auto;">
-                            <i class="fa fa-times" style="font-size: 20px;"></i>
-                        </button>
-                    </div>
-
                 </div>
             </div>
         `;
