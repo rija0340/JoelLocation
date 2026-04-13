@@ -272,14 +272,14 @@ class ReservationPhotoController extends AbstractController
         $width = imagesx($image);
         $height = imagesy($image);
         $shortestSide = min($width, $height);
-        $padding = max(12, (int) round($shortestSide * 0.02));
-        $backgroundPadding = max(8, (int) round($padding / 2));
+        $padding = max(20, (int) round($shortestSide * 0.02));
+        $backgroundPadding = max(12, (int) round($padding / 2));
         $fontFile = $this->findWatermarkFont();
         $backgroundColor = imagecolorallocatealpha($image, 0, 0, 0, 70);
         $textColor = imagecolorallocate($image, 255, 255, 255);
 
         if ($fontFile !== null && function_exists('imagettfbbox') && function_exists('imagettftext')) {
-            $fontSize = 96;
+            $fontSize = max(36, min(96, (int) round($shortestSide * 0.05)));
             $bbox = @imagettfbbox($fontSize, 0, $fontFile, $dateText);
 
             if (is_array($bbox)) {
