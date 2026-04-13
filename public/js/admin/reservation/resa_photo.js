@@ -81,11 +81,9 @@ class ReservationPhotoUploader {
             return null;
         }));
 
-        // Envoyer les dates EXIF avec le FormData
-        exifDates.forEach((date, idx) => {
-            if (date) {
-                formData.append(`exifDate[${idx}]`, date);
-            }
+        // Envoyer les dates EXIF avec le FormData (TOUTES les dates, y compris null)
+        imageFiles.forEach((_, idx) => {
+            formData.append(`exifDate[${idx}]`, exifDates[idx] || '');
         });
 
         // Traitement parallèle des images

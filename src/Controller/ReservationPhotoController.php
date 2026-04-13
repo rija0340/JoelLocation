@@ -47,13 +47,8 @@ class ReservationPhotoController extends AbstractController
         foreach ($uploadedFiles as $uploadedFile) {
             /** @var UploadedFile $uploadedFile */
             if ($uploadedFile->isValid()) {
-                // Skip photos without EXIF date from client
-                if (!isset($exifDates[$index]) || empty($exifDates[$index])) {
-                    $index++;
-                    continue;
-                }
-
-                $dateText = $exifDates[$index];
+                // Fallback: date actuelle si pas de date EXIF
+                $dateText = $exifDates[$index] ?? (new \DateTimeImmutable())->format('d/m/Y H:i');
 
                 // Add date watermark to image before saving
                 $watermarkedFile = $this->addDateWatermark($uploadedFile, $dateText);
