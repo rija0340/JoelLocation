@@ -279,7 +279,7 @@ class ReservationPhotoController extends AbstractController
         $textColor = imagecolorallocate($image, 255, 255, 255);
 
         if ($fontFile !== null && function_exists('imagettfbbox') && function_exists('imagettftext')) {
-            $fontSize = max(28, min(120, (int) round($shortestSide * 0.05)));
+            $fontSize = 48;
             $bbox = @imagettfbbox($fontSize, 0, $fontFile, $dateText);
 
             if (is_array($bbox)) {
