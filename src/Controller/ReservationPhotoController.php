@@ -279,7 +279,8 @@ class ReservationPhotoController extends AbstractController
         $textColor = imagecolorallocate($image, 255, 255, 255);
 
         if ($fontFile !== null && function_exists('imagettfbbox') && function_exists('imagettftext')) {
-            $fontSize = max(36, min(96, (int) round($shortestSide * 0.05)));
+            // Reduced font size: 3% of shortest side (was 5%), min 24px, max 64px
+            $fontSize = max(24, min(64, (int) round($shortestSide * 0.03)));
             $bbox = @imagettfbbox($fontSize, 0, $fontFile, $dateText);
 
             if (is_array($bbox)) {
@@ -301,24 +302,63 @@ class ReservationPhotoController extends AbstractController
                 return;
             }
         }
+
+        // GD fallback: utiliser la plus grande police (5) pour lisibilité mobile
+        // Size remains proportional - GD font size 5 is the largest built-in font
+        $font = 5;
+        $textWidth = imagefontwidth($font) * strlen($dateText);
+        $textHeight = imagefontheight($font);
+        $x = $padding;
+        $y = $height - $padding - $textHeight;
+
+        imagefilledrectangle(
+            $image,
+            $x - $backgroundPadding,
+            $y - $backgroundPadding,
+            $x + $textWidth + $backgroundPadding,
+            $y + $textHeight + $backgroundPadding,
+            $backgroundColor
+        );
+
+        imagestring($image, $font, $x, $y, $dateText, $textColor);
     }
 
     private function findWatermarkFont(): ?string
     {
-        $fontPaths = [
-            '/var/www/html/assets/fonts/Roboto/Roboto-Bold.ttf',
-            '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf',
-            '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',
-            '/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf',
-            '/usr/share/fonts/truetype/freefont/FreeSansBold.ttf',
-            '/usr/share/fonts/truetype/ubuntu/Ubuntu-B.ttf',
-            __DIR__ . '/../../assets/fonts/DejaVuSans-Bold.ttf',
-        ];
+        // Use the project's public fonts directory with relative path
+        $projectRoot = dirname(__DIR__, 2);
+        $relativePath = $projectRoot . '/public/fonts/Roboto/Roboto-Bold.ttf';
+        
+        if (is_file($relativePath)) {
+            return $relativePath;
+        }
 
-        foreach ($fontPaths as $path) {
-            if (is_file($path)) {
-                return $path;
-            }
+        return $this->downloadFontFallback();
+    }
+
+    private function downloadFontFallback(): ?string
+    {
+        $cacheDir = sys_get_temp_dir();
+        $fontFile = $cacheDir . '/Roboto-Bold.ttf';
+
+        if (is_file($fontFile)) {
+            return $fontFile;
+        }
+
+        $fontUrl = 'https://github.com/googlefonts/roboto/raw/main/src/hinted/Roboto-Bold.ttf';
+
+        $context = stream_context_create([
+            'http' => [
+                'timeout' => 10,
+                'user_agent' => 'Mozilla/5.0'
+            ]
+        ]);
+
+        $content = @file_get_contents($fontUrl, false, $context);
+
+        if ($content !== false && strlen($content) > 1000) {
+            file_put_contents($fontFile, $content);
+            return $fontFile;
         }
 
         return null;
