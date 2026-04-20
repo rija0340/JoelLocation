@@ -1,0 +1,119 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}Tarifs V2 - Plages personnalisées
+{% endblock %}
+
+{% block stylesheets %}
+<link href="{{ asset('css/admin/tarifs.css')}}" rel="stylesheet">
+<style>
+    .range-badge {
+        display: inline-block;
+        background: #e3f2fd;
+        border: 1px solid #2196f3;
+        border-radius: 4px;
+        padding: 2px 6px;
+        margin: 2px;
+        font-size: 0.8em;
+    }
+    .active-mode-indicator {
+        background: #4caf50;
+        color: white;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 0.85em;
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
+
+{% block current_page %}
+<h2>
+    <i class="fa fa-list"></i>
+    Tarifs V2 - Plages personnalisées
+</h2>
+{% endblock %}
+
+{% block content %}
+<div class="x_panel">
+    <div class="x_title">
+        <div class="row">
+            <div class="col-auto">
+                <h2>
+                    <i class="fa fa-shopping-cart"></i>
+                    Liste des tarifs V2
+                    {% if isV2Active %}
+                        <span class="active-mode-indicator ml-3">
+                            <i class="fa fa-check-circle"></i> Mode V2 actif
+                        </span>
+                    {% endif %}
+                </h2>
+            </div>
+            <div class="col ml-auto">
+                <a href="{{ path('tarif_v2_new') }}" class="btn btn-primary float-right mr-3">
+                    <i class="fa fa-plus"></i> Nouveau tarif V2
+                </a>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="overflow-auto">
+        <table class="table table-striped table-bordered mt-5 ">
+            <tr>
+                <td></td>
+                {% for mois in listeMois %}
+                    <th class="text-center">{{mois}}</th>
+                {% endfor %}
+            </tr>
+            {% set i = 0 %}
+            {% for tarifs in tarifsParVehicule %}
+                <tr>
+                    <th>{{listeVehicules[i]}}</th>
+
+                    {% for tarif in tarifs %}
+                        {% if tarif != null %}
+                            <td style="padding: 8px;">
+                                <div class="text-center mb-2">
+                                    {% for range in tarif.tarifs %}
+                                        <span class="range-badge">
+                                            {{ range.min_days }}-{{ range.max_days }}j: {{ range.price|number_format(2, ",", " ") }}€
+                                        </span>
+                                    {% endfor %}
+                                </div>
+                                <div class="d-flex justify-content-center mt-2">
+                                    <div class="btn-group" role="group">
+                                        <button id="btnGroupDrop{{ tarif.id }}" type="button" class="btn btn-link p-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fa fa-bars"></i>
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop{{ tarif.id }}">
+                                            <a class="dropdown-item" href="{{ path('tarif_v2_edit', {'id': tarif.id}) }}">
+                                                <i class="fa fa-edit"></i> Modifier
+                                            </a>
+                                            <form method="post" action="{{ path('tarif_v2_delete', {'id': tarif.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer ce tarif?');">
+                                                <input type="hidden" name="_method" value="DELETE">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tarif.id) }}">
+                                                <button class="dropdown-item btn btn-link" style="-webkit-appearance: none">
+                                                    <i class="fa fa-trash"></i> Supprimer
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        {% else %}
+                            <td class="text-center">
+                                <span class="text-muted">-</span>
+                            </td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+                {% set i = i + 1 %}
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script src="../../js/admin/tarifs.js"></script>
+{% endblock %}

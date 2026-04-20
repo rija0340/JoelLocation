@@ -5,21 +5,27 @@ namespace App\Controller;
 use App\Entity\Garantie;
 use App\Entity\Options;
 use App\Entity\Tarifs;
+use App\Entity\TarifsV2;
 use App\Form\TarifsType;
 use App\Form\TarifEditType;
+use App\Form\TarifsV2Type;
 use App\Repository\GarantieRepository;
 use App\Repository\MarqueRepository;
 use App\Repository\ModeleRepository;
 use App\Repository\OptionsRepository;
 use App\Repository\TarifsRepository;
+use App\Repository\TarifsV2Repository;
 use App\Repository\VehiculeRepository;
 use App\Service\DateHelper;
 use App\Service\TarifsHelper;
+use App\Service\PricingModeService;
+use App\Service\PricingStrategyProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * @Route("/backoffice")
  */
@@ -32,8 +38,21 @@ class TarifsController extends AbstractController
     private $dateHelper;
     private $optionsRepo;
     private $garantiesRepo;
+    private $tarifsV2Repo;
+    private $pricingModeService;
+    private $strategyProvider;
 
-    public function __construct(DateHelper $dateHelper, TarifsHelper $tarifsHelper, MarqueRepository $marqueRepo, ModeleRepository $modeleRepo, OptionsRepository $optionsRepo, GarantieRepository $garantiesRepo)
+    public function __construct(
+        DateHelper $dateHelper, 
+        TarifsHelper $tarifsHelper, 
+        MarqueRepository $marqueRepo, 
+        ModeleRepository $modeleRepo, 
+        OptionsRepository $optionsRepo, 
+        GarantieRepository $garantiesRepo,
+        TarifsV2Repository $tarifsV2Repo,
+        PricingModeService $pricingModeService,
+        PricingStrategyProvider $strategyProvider
+    )
     {
         $this->marqueRepo = $marqueRepo;
         $this->modeleRepo = $modeleRepo;
@@ -41,6 +60,9 @@ class TarifsController extends AbstractController
         $this->dateHelper = $dateHelper;
         $this->optionsRepo = $optionsRepo;
         $this->garantiesRepo = $garantiesRepo;
+        $this->tarifsV2Repo = $tarifsV2Repo;
+        $this->pricingModeService = $pricingModeService;
+        $this->strategyProvider = $strategyProvider;
     }
 
     /**
@@ -289,11 +311,14 @@ class TarifsController extends AbstractController
         $vehicules = $vehiculeRepo->findAllVehiculesWithoutVendu();
         $options = $this->optionsRepo->findAll();
         $garanties = $this->garantiesRepo->findAll();
+        $activeMode = $this->pricingModeService->getActiveModel();
 
         return $this->render('admin/tarifs/simulateur.html.twig', [
             'vehicules' => $vehicules,
             'options' => $options,
             'garanties' => $garanties,
+            'activeMode' => $activeMode,
+            'isV2Active' => $this->pricingModeService->isV2Active(),
         ]);
     }
 
@@ -323,9 +348,10 @@ class TarifsController extends AbstractController
                 return new JsonResponse(['error' => 'Véhicule non trouvé'], 400);
             }
 
-            // Calcul du tarif véhicule
-            $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
-            $duree = $this->dateHelper->calculDuree($dateDepart, $dateRetour);
+            // Calcul du tarif véhicule via le PricingStrategyProvider
+            $strategy = $this->strategyProvider->getStrategy();
+            $tarifVehicule = $strategy->calculate($vehicule, $dateDepart, $dateRetour);
+            $duree = $this->pricingModeService->isV2Active() ? $this->dateHelper->calculDureeInclusif($dateDepart, $dateRetour) : $this->dateHelper->calculDuree($dateDepart, $dateRetour);
 
             // Récupération des options sélectionnées
             $optionsData = [];
@@ -388,6 +414,8 @@ class TarifsController extends AbstractController
                 'garanties' => $garantiesData,
                 'total' => $total,
                 'detailMois' => $detailMois,
+                'pricingModel' => $this->pricingModeService->getActiveModel(),
+                'pricingStrategy' => $strategy->getName(),
             ]);
         } catch (\Exception $e) {
             return new JsonResponse([
@@ -395,6 +423,170 @@ class TarifsController extends AbstractController
                 'trace' => $e->getTraceAsString()
             ], 500);
         }
+    }
+
+    // ==================== PRICING SETTINGS ====================
+
+    /**
+     * @Route("/tarifs/settings", name="tarifs_settings")
+     */
+    public function settings(): Response
+    {
+        return $this->render('admin/tarifs/settings.html.twig', [
+            'currentMode' => $this->pricingModeService->getActiveModel(),
+            'isV2Active' => $this->pricingModeService->isV2Active(),
+        ]);
+    }
+
+    // ==================== V2 PRICING METHODS ====================
+
+    /**
+     * @Route("/tarifs-v2", name="tarifs_v2_index")
+     */
+    public function indexV2(TarifsV2Repository $tarifsV2Repo): Response
+    {
+        $listeTarifsV2 = $tarifsV2Repo->findAll();
+        $listeMois = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+
+        $marques = $this->marqueRepo->findAll();
+        $modeles = $this->modeleRepo->findAll();
+        
+        $listeUniqueVehicules = [];
+        foreach ($marques as $marque) {
+            foreach ($modeles as $modele) {
+                if ($marque == $modele->getMarque()) {
+                    array_push($listeUniqueVehicules, $marque . " " . $modele);
+                }
+            }
+        }
+
+        $tarifsParVehicule = [];
+        foreach ($listeUniqueVehicules as $veh) {
+            $ordered = [];
+            foreach ($listeMois as $mois) {
+                $found = null;
+                foreach ($listeTarifsV2 as $tarif) {
+                    if ($tarif->getMois() == $mois && 
+                        $tarif->getMarque()->getLibelle() . " " . $tarif->getModele()->getLibelle() == $veh) {
+                        $found = $tarif;
+                        break;
+                    }
+                }
+                array_push($ordered, $found);
+            }
+            array_push($tarifsParVehicule, $ordered);
+        }
+
+        return $this->render('admin/tarifs/index_v2.html.twig', [
+            'controller_name' => 'TarifsV2Controller',
+            'tarifs' => $listeTarifsV2,
+            'listeMois' => $listeMois,
+            'listeVehicules' => $listeUniqueVehicules,
+            'tarifsParVehicule' => $tarifsParVehicule,
+            'isV2Active' => $this->pricingModeService->isV2Active(),
+        ]);
+    }
+
+    /**
+     * @Route("/tarif-v2/new", name="tarif_v2_new", methods={"GET","POST"})
+     */
+    public function newV2(Request $request): Response
+    {
+        $tarif = new TarifsV2();
+        $form = $this->createForm(TarifsV2Type::class, $tarif);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Validate no overlapping ranges
+            if ($tarif->hasOverlappingRanges()) {
+                $this->addFlash('error', 'Les plages de jours se chevauchent.');
+                return $this->render('admin/tarifs/new_v2.html.twig', [
+                    'tarif' => $tarif,
+                    'form' => $form->createView(),
+                ]);
+            }
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($tarif);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Tarif V2 créé avec succès.');
+            return $this->redirectToRoute('tarifs_v2_index');
+        }
+
+        return $this->render('admin/tarifs/new_v2.html.twig', [
+            'tarif' => $tarif,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/tarif-v2/{id}/edit", name="tarif_v2_edit", methods={"GET","POST"}, requirements={"id":"\d+"})
+     */
+    public function editV2(Request $request, TarifsV2 $tarif): Response
+    {
+        $form = $this->createForm(TarifsV2Type::class, $tarif);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Validate no overlapping ranges
+            if ($tarif->hasOverlappingRanges()) {
+                $this->addFlash('error', 'Les plages de jours se chevauchent.');
+                return $this->render('admin/tarifs/edit_v2.html.twig', [
+                    'tarif' => $tarif,
+                    'form' => $form->createView(),
+                ]);
+            }
+
+            $this->getDoctrine()->getManager()->flush();
+            $this->addFlash('success', 'Tarif V2 modifié avec succès.');
+            return $this->redirectToRoute('tarifs_v2_index');
+        }
+
+        return $this->render('admin/tarifs/edit_v2.html.twig', [
+            'tarif' => $tarif,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/tarif-v2/{id}", name="tarif_v2_delete", methods={"DELETE"}, requirements={"id":"\d+"})
+     */
+    public function deleteV2(Request $request, TarifsV2 $tarif): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $tarif->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($tarif);
+            $entityManager->flush();
+            $this->addFlash('success', 'Tarif V2 supprimé avec succès.');
+        }
+        return $this->redirectToRoute('tarifs_v2_index');
+    }
+
+    /**
+     * @Route("/tarifs/toggle-mode", name="tarifs_toggle_mode", methods={"POST"})
+     */
+    public function toggleMode(Request $request): JsonResponse
+    {
+        if (!$this->isCsrfTokenValid('toggle', $request->request->get('_token'))) {
+            return new JsonResponse(['error' => 'Token invalide'], 400);
+        }
+
+        $currentMode = $this->pricingModeService->getActiveModel();
+        
+        if ($currentMode === 'v1') {
+            $this->pricingModeService->activateV2();
+            $newMode = 'v2';
+        } else {
+            $this->pricingModeService->activateV1();
+            $newMode = 'v1';
+        }
+
+        return new JsonResponse([
+            'success' => true,
+            'new_mode' => $newMode,
+            'message' => $newMode === 'v2' ? 'Mode V2 activé' : 'Mode V1 activé',
+        ]);
     }
 
     /**
@@ -408,45 +600,149 @@ class TarifsController extends AbstractController
         $dateCourante = clone $dateDepart;
 
         while ($dateCourante < $dateRetour) {
-            $mois = $this->dateHelper->getMonthFullName($dateCourante);
-            $tarif = $this->getDoctrine()
-                ->getRepository(\App\Entity\Tarifs::class)
-                ->findOneBy(['marque' => $marque, 'modele' => $modele, 'mois' => $mois]);
-
-            if ($tarif) {
-                $finDuMois = new \DateTime($dateCourante->format('Y-m-t'));
-                $dateFinPeriode = ($finDuMois < $dateRetour) ? $finDuMois : $dateRetour;
+            $month = $this->dateHelper->getMonthFullName($dateCourante);
+            $finDuMois = new \DateTime($dateCourante->format('Y-m-t'));
+            $dateFinPeriode = ($finDuMois < $dateRetour) ? $finDuMois : $dateRetour;
+            
+            if ($this->pricingModeService->isV2Active()) {
+                $joursDansPeriode = $this->dateHelper->calculDureeInclusif($dateCourante, $dateFinPeriode);
+            } else {
                 $joursDansPeriode = $this->dateHelper->calculDuree($dateCourante, $dateFinPeriode);
-
-                $bracket = '';
-                $prix = 0;
-                if ($joursDansPeriode <= 3) {
-                    $prix = $tarif->getTroisJours();
-                    $bracket = '3 jours';
-                } elseif ($joursDansPeriode <= 7) {
-                    $prix = $tarif->getSeptJours();
-                    $bracket = '7 jours';
-                } elseif ($joursDansPeriode <= 15) {
-                    $prix = $tarif->getQuinzeJours();
-                    $bracket = '15 jours';
-                } else {
-                    $prix = $tarif->getTrenteJours();
-                    $bracket = '30 jours';
-                }
-
-                $details[] = [
-                    'mois' => $mois,
-                    'dateDebut' => $dateCourante->format('d/m/Y'),
-                    'dateFin' => $dateFinPeriode->format('d/m/Y'),
-                    'jours' => $joursDansPeriode,
-                    'bracket' => $bracket,
-                    'prix' => $prix,
-                ];
             }
+
+            $bracket = '-';
+            $prix = 0;
+
+            if ($this->pricingModeService->isV2Active()) {
+                $intervalRepo = $this->getDoctrine()->getRepository(\App\Entity\PricingInterval::class);
+                $cellRepo = $this->getDoctrine()->getRepository(\App\Entity\TarifsV2Cell::class);
+
+                // Find smallest containing interval
+                $intervals = $intervalRepo->createQueryBuilder('pi')
+                    ->where('pi.minDays <= :days')
+                    ->andWhere('pi.maxDays IS NULL OR pi.maxDays >= :days')
+                    ->setParameter('days', $joursDansPeriode)
+                    ->orderBy('pi.maxDays', 'ASC')
+                    ->addOrderBy('pi.minDays', 'ASC')
+                    ->getQuery()
+                    ->getResult();
+                
+                $interval = $intervals[0] ?? null;
+
+                if ($interval) {
+                    $bracket = $interval->getLabel();
+                    $cell = $cellRepo->findOneBy([
+                        'marque' => $marque,
+                        'modele' => $modele,
+                        'month' => $month,
+                        'pricingInterval' => $interval
+                    ]);
+                    if ($cell) {
+                        $prix = (float) $cell->getPrice() * $joursDansPeriode;
+                    }
+                }
+            } else {
+                $tarif = $this->getDoctrine()
+                    ->getRepository(\App\Entity\Tarifs::class)
+                    ->findOneBy(['marque' => $marque, 'modele' => $modele, 'mois' => $month]);
+
+                if ($tarif) {
+                    if ($joursDansPeriode <= 3) {
+                        $prix = $tarif->getTroisJours();
+                        $bracket = '3 jours';
+                    } elseif ($joursDansPeriode <= 7) {
+                        $prix = $tarif->getSeptJours();
+                        $bracket = '7 jours';
+                    } elseif ($joursDansPeriode <= 15) {
+                        $prix = $tarif->getQuinzeJours();
+                        $bracket = '15 jours';
+                    } else {
+                        $prix = $tarif->getTrenteJours();
+                        $bracket = '30 jours';
+                    }
+                }
+            }
+
+            $details[] = [
+                'mois' => $month,
+                'dateDebut' => $dateCourante->format('d/m/Y'),
+                'dateFin' => $dateFinPeriode->format('d/m/Y'),
+                'jours' => $joursDansPeriode,
+                'bracket' => $bracket,
+                'prix' => $prix,
+            ];
 
             $dateCourante = new \DateTime($finDuMois->format('Y-m-d') . ' +1 day');
         }
 
         return $details;
+    }
+
+    // ==================== V2 MATRIX INTERFACE ====================
+
+    /**
+     * @Route("/tarifs-v2/matrix", name="tarifs_v2_matrix")
+     */
+    public function matrixView(): Response
+    {
+        // Get all vehicles for the selector
+        $vehicles = [];
+        $marques = $this->marqueRepo->findAll();
+        
+        foreach ($marques as $marque) {
+            $modeles = $this->modeleRepo->findBy(['marque' => $marque]);
+            foreach ($modeles as $modele) {
+                $vehicles[] = [
+                    'marque_id' => $marque->getId(),
+                    'modele_id' => $modele->getId(),
+                    'name' => $marque->getLibelle() . ' ' . $modele->getLibelle()
+                ];
+            }
+        }
+        
+        // Get first vehicle as default
+        $defaultVehicle = $vehicles[0] ?? null;
+        
+        return $this->render('admin/tarifs/matrix.html.twig', [
+            'vehicles' => $vehicles,
+            'default_vehicle' => $defaultVehicle,
+            'isV2Active' => $this->pricingModeService->isV2Active()
+        ]);
+    }
+
+    /**
+     * @Route("/tarifs-v2/comparison", name="tarifs_v2_comparison")
+     */
+    public function comparisonView(): Response
+    {
+        $listeMois = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+        
+        return $this->render('admin/tarifs/comparison.html.twig', [
+            'months' => $listeMois,
+            'isV2Active' => $this->pricingModeService->isV2Active()
+        ]);
+    }
+
+    /**
+     * @Route("/tarifs-v2/intervals", name="tarifs_v2_intervals")
+     */
+    public function intervalsView(): Response
+    {
+        return $this->render('admin/tarifs/intervals.html.twig', [
+            'isV2Active' => $this->pricingModeService->isV2Active()
+        ]);
+    }
+
+    /**
+     * @Route("/tarifs-v2/history", name="tarifs_v2_history")
+     */
+    public function historyView(): Response
+    {
+        $listeMois = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+        
+        return $this->render('admin/tarifs/history.html.twig', [
+            'months' => $listeMois,
+            'isV2Active' => $this->pricingModeService->isV2Active()
+        ]);
     }
 }

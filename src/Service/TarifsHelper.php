@@ -3,18 +3,28 @@
 namespace App\Service;
 
 use App\Repository\TarifsRepository;
+use App\Repository\TarifsV2Repository;
+use App\Service\PricingModeService;
 
 class TarifsHelper
 {
     private $tarifsRepo;
+    private $tarifsV2Repo;
     private $dateHelper;
+    private $pricingModeService;
     private $taxe;
 
-    public function __construct(DateHelper $dateHelper, TarifsRepository $tarifsRepo)
+    public function __construct(
+        DateHelper $dateHelper, 
+        TarifsRepository $tarifsRepo, 
+        TarifsV2Repository $tarifsV2Repo,
+        PricingModeService $pricingModeService
+    )
     {
-
         $this->tarifsRepo = $tarifsRepo;
+        $this->tarifsV2Repo = $tarifsV2Repo;
         $this->dateHelper = $dateHelper;
+        $this->pricingModeService = $pricingModeService;
         $this->taxe = 0.085; //TVA = 8.5%
     }
 
@@ -30,7 +40,15 @@ class TarifsHelper
     }
 
     /**
-     * calcul le tarif total d'une réservation, 
+     * Check if V2 pricing is active
+     */
+    function isV2Active(): bool
+    {
+        return $this->pricingModeService->isV2Active();
+    }
+
+    /**
+     * calcul le tarif total d'une réservation,
      * @params tarifVehicule, options, garanties
      * tous les tarifs sont en TTC
      */
@@ -56,6 +74,12 @@ class TarifsHelper
 
     function calculTarifVehicule($dateDepart, $dateRetour, $vehicule)
     {
+        // Check which pricing model is active
+        if ($this->isV2Active()) {
+            return $this->calculTarifVehiculeV2($dateDepart, $dateRetour, $vehicule);
+        }
+
+        // V1: Original bracket system
         $marque = $vehicule->getMarque();
         $modele = $vehicule->getModele();
         $duree = $this->dateHelper->calculDuree($dateDepart, $dateRetour);
@@ -79,6 +103,32 @@ class TarifsHelper
 
         // Pour les durées > 30 jours : calcul mois par mois
         return $this->calculTarifMultiMois($dateDepart, $dateRetour, $marque, $modele);
+    }
+
+    /**
+     * V2: Calculate vehicle pricing with custom day ranges
+     */
+    function calculTarifVehiculeV2($dateDepart, $dateRetour, $vehicule)
+    {
+        $marque = $vehicule->getMarque();
+        $modele = $vehicule->getModele();
+        $duree = $this->dateHelper->calculDureeInclusif($dateDepart, $dateRetour);
+
+        // If duration <= 30 days, use single month lookup
+        if ($duree <= 30) {
+            $mois = $this->dateHelper->getMonthFullName($dateDepart);
+            $tarifV2 = $this->tarifsV2Repo->findOneByMarqueModeleMois($marque, $modele, $mois);
+
+            if ($tarifV2) {
+                $prix = $tarifV2->getPrixForDays($duree);
+                return $prix !== null ? $prix : 0;
+            }
+
+            return 0;
+        }
+
+        // For multi-month: calculate month by month
+        return $this->calculTarifMultiMoisV2($dateDepart, $dateRetour, $marque, $modele);
     }
 
     /**
@@ -126,6 +176,51 @@ class TarifsHelper
                     $tarifTotal += $tarif->getQuinzeJours();
                 } elseif ($joursDansPeriode > 15) {
                     $tarifTotal += $tarif->getTrenteJours();
+                }
+            }
+
+            // Passer au mois suivant (1er jour du mois suivant)
+            $dateCourante = new \DateTime($finDuMois->format('Y-m-d') . ' +1 day');
+        }
+
+        return $tarifTotal;
+    }
+
+    /**
+     * V2: Calcule le tarif pour les réservations multi-mois avec custom day ranges
+     *
+     * @param \DateTime $dateDepart
+     * @param \DateTime $dateRetour
+     * @param Marque $marque
+     * @param Modele $modele
+     * @return float
+     */
+    private function calculTarifMultiMoisV2($dateDepart, $dateRetour, $marque, $modele)
+    {
+        $tarifTotal = 0;
+        $dateCourante = clone $dateDepart;
+
+        while ($dateCourante < $dateRetour) {
+            // Récupérer le nom du mois courant
+            $mois = $this->dateHelper->getMonthFullName($dateCourante);
+
+            // Récupérer le tarif V2 pour ce mois
+            $tarifV2 = $this->tarifsV2Repo->findOneByMarqueModeleMois($marque, $modele, $mois);
+
+            if (!is_null($tarifV2)) {
+                // Calculer la fin du mois courant
+                $finDuMois = new \DateTime($dateCourante->format('Y-m-t'));
+
+                // Déterminer la date de fin pour cette itération (fin du mois ou date de retour)
+                $dateFinPeriode = ($finDuMois < $dateRetour) ? $finDuMois : $dateRetour;
+
+                // Calculer le nombre de jours dans cette période
+                $joursDansPeriode = $this->dateHelper->calculDureeInclusif($dateCourante, $dateFinPeriode);
+
+                // Appliquer le tarif selon les custom day ranges
+                $prix = $tarifV2->getPrixForDays($joursDansPeriode);
+                if ($prix !== null) {
+                    $tarifTotal += $prix;
                 }
             }
 

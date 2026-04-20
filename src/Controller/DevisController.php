@@ -7,6 +7,7 @@ use App\Classe\Mailjet;
 use App\Service\DateHelper;
 use App\Classe\ReserverDevis;
 use App\Service\TarifsHelper;
+use App\Service\PricingStrategyProvider;
 use App\Repository\UserRepository;
 use App\Service\ReservationHelper;
 use App\Form\DevisEditVehiculeType;
@@ -49,6 +50,7 @@ class DevisController extends AbstractController
     private $reservationHelper;
     private $reservationRepo;
     private $vehicleAvailabilityService;
+    private $strategyProvider;
 
 
 
@@ -67,7 +69,8 @@ class DevisController extends AbstractController
         EmailManagerService $emailManagerService,
         ReservationHelper $reservationHelper,
         ReservationRepository $reservationRepo,
-        VehicleAvailabilityService $vehicleAvailabilityService
+        VehicleAvailabilityService $vehicleAvailabilityService,
+        PricingStrategyProvider $strategyProvider
     ) {
 
         $this->vehiculeRepo = $vehiculeRepo;
@@ -85,6 +88,7 @@ class DevisController extends AbstractController
         $this->reservationHelper = $reservationHelper;
         $this->reservationRepo = $reservationRepo;
         $this->vehicleAvailabilityService = $vehicleAvailabilityService;
+        $this->strategyProvider = $strategyProvider;
     }
 
     /**
@@ -135,7 +139,8 @@ class DevisController extends AbstractController
             $vehicule = $this->vehiculeRepo->findByIM($vehiculeIM);
             $client = $this->userRepo->find($idClient);
             $duree = $this->dateHelper->calculDuree($dateDepart, $dateRetour);
-            $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
+            $strategy = $this->strategyProvider->getStrategy();
+            $tarifVehicule = $strategy->calculate($vehicule, $dateDepart, $dateRetour);
 
             $devis->setVehicule($vehicule);
             $devis->setClient($client);
@@ -264,7 +269,8 @@ class DevisController extends AbstractController
 
             $vehicule = $this->vehiculeRepo->find($vehicule);
 
-            $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
+            $strategy = $this->strategyProvider->getStrategy();
+            $tarifVehicule = $strategy->calculate($vehicule, $dateDepart, $dateRetour);
             $tarifTotal = $this->tarifsHelper->calculTarifTotal($tarifVehicule, $devis->getOptions(), $devis->getGaranties(), $devis->getConducteur());
 
             $devis->setPrix($tarifTotal);

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Service\DateHelper;
 use App\Service\TarifsHelper;
+use App\Service\PricingStrategyProvider;
 use App\Classe\ReservationSession;
 use App\Classe\ReserverDevis;
 use App\Form\ReservationStep1Type;
@@ -48,6 +49,7 @@ class VenteComptoirController extends AbstractController
     private $reservationHelper;
     private $emailManagerService;
     private $reserverDevis;
+    private $strategyProvider;
 
     public function __construct(
         ModeReservationRepository $modeReservationRepo,
@@ -66,7 +68,8 @@ class VenteComptoirController extends AbstractController
         ReservationHelper $reservationHelper,
         EmailManagerService $emailManagerService,
         DevisOptionRepository $devisOptionRepo,
-        ReserverDevis $reserverDevis
+        ReserverDevis $reserverDevis,
+        PricingStrategyProvider $strategyProvider
     ) {
 
         $this->reservationSession = $reservationSession;
@@ -86,6 +89,7 @@ class VenteComptoirController extends AbstractController
         $this->emailManagerService = $emailManagerService;
         $this->devisOptionRepo = $devisOptionRepo;
         $this->reserverDevis = $reserverDevis;
+        $this->strategyProvider = $strategyProvider;
     }
 
     /**
@@ -223,8 +227,9 @@ class VenteComptoirController extends AbstractController
         }
 
         $data = [];
+        $strategy = $this->strategyProvider->getStrategy();
         foreach ($vehiculesDisponible as $key => $veh) {
-            $tarif = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $veh);
+            $tarif = $strategy->calculate($veh, $dateDepart, $dateRetour);
             $data[$key]['vehicule'] = $veh;
             $data[$key]['tarif'] = $tarif;
         }
@@ -571,7 +576,8 @@ class VenteComptoirController extends AbstractController
         $dateDepart = $this->reservationSession->getDateDepart();
         $dateRetour = $this->reservationSession->getDateDepart();
         $vehicule = $this->vehiculeRepo->find($this->reservationSession->getVehicule());
-        $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
+        $strategy = $this->strategyProvider->getStrategy();
+        $tarifVehicule = $strategy->calculate($vehicule, $dateDepart, $dateRetour);
         $prixGaranties = $this->tarifsHelper->sommeTarifsGaranties($this->reservationHelper->garantiesObjectsFromSession($this->reservationSession));
 
         $conducteur = $this->reservationSession->getConducteur() == "true" ? true : false;

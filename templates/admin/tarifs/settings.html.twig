@@ -1,0 +1,216 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}Paramètres de tarification
+{% endblock %}
+
+{% block stylesheets %}
+<link href="{{ asset('css/admin/tarifs.css')}}" rel="stylesheet">
+<style>
+    .toggle-container {
+        max-width: 600px;
+        margin: 50px auto;
+    }
+    .toggle-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        padding: 30px;
+        margin-bottom: 20px;
+    }
+    .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 120px;
+        height: 60px;
+    }
+    .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+    .toggle-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #2196f3;
+        transition: .4s;
+        border-radius: 60px;
+    }
+    .toggle-slider:before {
+        position: absolute;
+        content: "";
+        height: 50px;
+        width: 50px;
+        left: 5px;
+        bottom: 5px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+    }
+    input:checked + .toggle-slider {
+        background-color: #4caf50;
+    }
+    input:checked + .toggle-slider:before {
+        transform: translateX(60px);
+    }
+    .mode-label {
+        font-size: 1.2em;
+        font-weight: bold;
+        margin-left: 15px;
+    }
+    .mode-description {
+        color: #666;
+        margin-top: 10px;
+        font-size: 0.9em;
+    }
+    .status-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 0.85em;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+    .status-active {
+        background: #4caf50;
+        color: white;
+    }
+    .status-inactive {
+        background: #9e9e9e;
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block current_page %}
+<h2>
+    <i class="fa fa-cog"></i>
+    Paramètres de tarification
+</h2>
+{% endblock %}
+
+{% block content %}
+<div class="x_panel">
+    <div class="x_title">
+        <h2><i class="fa fa-cogs"></i> Mode de tarification actif</h2>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="x_content">
+        <div class="toggle-container">
+            <div class="toggle-card">
+                <h3>Système de tarification</h3>
+                
+                <div class="d-flex align-items-center mt-4">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="pricing-toggle" 
+                               {% if isV2Active %}checked{% endif %}
+                               data-csrf="{{ csrf_token('toggle') }}">
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <div class="ml-3">
+                        <span class="mode-label" id="mode-label">
+                            {% if isV2Active %}
+                                Mode V2 - Plages personnalisées
+                            {% else %}
+                                Mode V1 - Système classique
+                            {% endif %}
+                        </span>
+                        <div class="mode-description" id="mode-description">
+                            {% if isV2Active %}
+                                Utilisation des plages de jours personnalisées pour chaque mois
+                            {% else %}
+                                Utilisation des brackets fixes (3j, 7j, 15j, 30j)
+                            {% endif %}
+                        </div>
+                        <span class="status-badge {% if isV2Active %}status-active{% else %}status-inactive{% endif %}" id="status-badge">
+                            {% if isV2Active %}
+                                <i class="fa fa-check-circle"></i> V2 Actif
+                            {% else %}
+                                <i class="fa fa-info-circle"></i> V1 Actif
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="alert alert-info mt-4">
+                    <i class="fa fa-info-circle"></i> 
+                    <strong>Information:</strong> Le changement de mode affectera immédiatement le calcul des tarifs pour toutes les nouvelles réservations.
+                    Les réservations existantes ne seront pas modifiées.
+                </div>
+
+                <div class="mt-4">
+                    <h5>Liens rapides:</h5>
+                    <a href="{{ path('tarifs_index') }}" class="btn btn-outline-primary btn-sm mr-2">
+                        <i class="fa fa-list"></i> Tarifs V1 (classique)
+                    </a>
+                    <a href="{{ path('tarifs_v2_index') }}" class="btn btn-outline-success btn-sm">
+                        <i class="fa fa-list"></i> Tarifs V2 (personnalisé)
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const toggle = document.getElementById('pricing-toggle');
+    const modeLabel = document.getElementById('mode-label');
+    const modeDesc = document.getElementById('mode-description');
+    const statusBadge = document.getElementById('status-badge');
+
+    if (toggle) {
+        toggle.addEventListener('change', function() {
+            const csrfToken = this.dataset.csrf;
+            const isV2 = this.checked;
+
+            // Send AJAX request
+            fetch('{{ path('tarifs_toggle_mode') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: `_token=${encodeURIComponent(csrfToken)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update UI
+                    if (data.new_mode === 'v2') {
+                        modeLabel.textContent = 'Mode V2 - Plages personnalisées';
+                        modeDesc.textContent = 'Utilisation des plages de jours personnalisées pour chaque mois';
+                        statusBadge.className = 'status-badge status-active';
+                        statusBadge.innerHTML = '<i class="fa fa-check-circle"></i> V2 Actif';
+                    } else {
+                        modeLabel.textContent = 'Mode V1 - Système classique';
+                        modeDesc.textContent = 'Utilisation des brackets fixes (3j, 7j, 15j, 30j)';
+                        statusBadge.className = 'status-badge status-inactive';
+                        statusBadge.innerHTML = '<i class="fa fa-info-circle"></i> V1 Actif';
+                    }
+
+                    // Show success message
+                    alert(data.message);
+                } else {
+                    alert('Erreur lors du changement de mode');
+                    // Revert toggle
+                    this.checked = !this.checked;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Erreur de communication');
+                // Revert toggle
+                this.checked = !this.checked;
+            });
+        });
+    }
+});
+</script>
+{% endblock %}

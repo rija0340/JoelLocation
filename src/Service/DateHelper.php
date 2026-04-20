@@ -127,6 +127,19 @@ class DateHelper
 
         return intval($duree->days);
     }
+
+    /**
+     * Calcule la durée incluant le premier et le dernier jour (jours calendaires)
+     * Exemple: Jan 1 à Jan 1 = 1 jour
+     * Exemple: Jan 1 à Jan 31 = 31 jours
+     * @param DateTime $dateDepart
+     * @param DateTime $dateRetour
+     * @return int
+     */
+    function calculDureeInclusif($dateDepart, $dateRetour): int
+    {
+        return $this->calculDuree($dateDepart, $dateRetour) + 1;
+    }
     function getDureeMinute($dateDepart, $dateRetour)
     {
         $duree = date_diff($dateDepart, $dateRetour);

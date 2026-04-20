@@ -8,6 +8,9 @@ use App\Repository\GarantieRepository;
 use App\Repository\OptionsRepository;
 use App\Repository\TarifsRepository;
 use App\Repository\VehiculeRepository;
+use App\Service\DateHelper;
+use App\Service\TarifsHelper;
+use App\Service\PricingStrategyProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,13 +22,22 @@ class UtilitesController extends AbstractController
 
     private $optionsRepo;
     private $garantieRepo;
+    private $tarifsHelper;
+    private $dateHelper;
+    private $strategyProvider;
 
     public function __construct(
         OptionsRepository $optionsRepo,
-        GarantieRepository $garantieRepo
+        GarantieRepository $garantieRepo,
+        TarifsHelper $tarifsHelper,
+        DateHelper $dateHelper,
+        PricingStrategyProvider $strategyProvider
     ) {
         $this->optionsRepo = $optionsRepo;
         $this->garantieRepo = $garantieRepo;
+        $this->tarifsHelper = $tarifsHelper;
+        $this->dateHelper = $dateHelper;
+        $this->strategyProvider = $strategyProvider;
     }
 
     /**
@@ -69,7 +81,8 @@ class UtilitesController extends AbstractController
         $dateRetour = $this->dateHelper->newDate($dateRetour);
 
         $vehicule = $vehiculeRepo->find($vehicule_id);
-        $tarif = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
+        $strategy = $this->strategyProvider->getStrategy();
+        $tarif = $strategy->calculate($vehicule, $dateDepart, $dateRetour);
 
         $data = array();
 

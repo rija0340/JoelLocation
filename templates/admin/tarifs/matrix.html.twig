@@ -1,0 +1,650 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}Tarifs V2 - Matrice{% endblock %}
+
+{% block stylesheets %}
+<link href="{{ asset('css/admin/tarifs.css')}}" rel="stylesheet">
+<link href="{{ asset('css/admin/tarifs_v2.css')}}" rel="stylesheet">
+<style>
+    /* ===== MATRIX SPECIFIC STYLES ===== */
+    /* These are unique to the matrix grid and not in shared CSS */
+
+    .v2-topbar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+    }
+    .v2-vehicle-select {
+        position: relative;
+        flex: 0 0 280px;
+    }
+    .v2-vehicle-select select {
+        width: 100%;
+        padding: 10px 14px;
+        border: 2px solid var(--v2-gray-200);
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--v2-gray-800);
+        background: white;
+        appearance: none;
+        cursor: pointer;
+        transition: border-color .2s;
+    }
+    .v2-vehicle-select select:focus {
+        outline: none;
+        border-color: var(--v2-primary);
+        box-shadow: 0 0 0 3px rgba(79,70,229,.1);
+    }
+    .v2-vehicle-nav {
+        display: flex;
+        gap: 4px;
+    }
+    .v2-vehicle-nav button {
+        width: 38px;
+        height: 38px;
+        border: 2px solid var(--v2-gray-200);
+        background: white;
+        border-radius: 8px;
+        cursor: pointer;
+        color: var(--v2-gray-500);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all .2s;
+    }
+    .v2-vehicle-nav button:hover {
+        border-color: var(--v2-primary);
+        color: var(--v2-primary);
+        background: var(--v2-primary-light);
+    }
+
+    .v2-status-pill.unsaved {
+        animation: pulse-bg 2s infinite;
+    }
+    @keyframes pulse-bg {
+        0%,100% { opacity: 1; }
+        50% { opacity: .7; }
+    }
+
+    .v2-dropdown {
+        position: relative;
+    }
+    .v2-dropdown-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 6px);
+        left: 0;
+        min-width: 220px;
+        background: white;
+        border: 1px solid var(--v2-gray-200);
+        border-radius: 8px;
+        box-shadow: var(--v2-shadow-lg);
+        z-index: 100;
+        padding: 6px;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+    .v2-dropdown-menu.show { display: block; }
+    .v2-dropdown-menu a {
+        display: block;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 13px;
+        color: var(--v2-gray-700);
+        text-decoration: none !important;
+        transition: background .1s;
+    }
+    .v2-dropdown-menu a:hover {
+        background: var(--v2-primary-light);
+        color: var(--v2-primary);
+    }
+
+    .v2-pct-input {
+        display: flex;
+        align-items: center;
+        border: 1.5px solid var(--v2-gray-200);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .v2-pct-input input {
+        width: 80px;
+        padding: 7px 10px;
+        border: none;
+        font-size: 13px;
+        text-align: center;
+        outline: none;
+    }
+    .v2-pct-input span {
+        padding: 7px 10px;
+        background: var(--v2-gray-50);
+        color: var(--v2-gray-500);
+        font-size: 13px;
+        font-weight: 600;
+        border-left: 1px solid var(--v2-gray-200);
+    }
+
+    /* ===== MATRIX GRID ===== */
+    .v2-matrix-card {
+        background: white;
+        border-radius: var(--v2-radius);
+        box-shadow: var(--v2-shadow);
+        overflow: hidden;
+    }
+    .v2-matrix-scroll {
+        overflow-x: auto;
+    }
+    .v2-matrix {
+        width: 100%;
+        min-width: 1100px;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+    .v2-matrix thead th {
+        background: var(--v2-gray-800);
+        color: white;
+        padding: 14px 6px;
+        text-align: center;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: .04em;
+        text-transform: uppercase;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+    .v2-matrix thead th:first-child {
+        text-align: left;
+        padding-left: 20px;
+        position: sticky;
+        left: 0;
+        z-index: 15;
+    }
+    .v2-matrix thead th.interval-col {
+        min-width: 120px;
+    }
+    .v2-matrix thead th.month-col {
+        min-width: 78px;
+    }
+    .v2-matrix thead th.action-col {
+        min-width: 60px;
+    }
+    .v2-matrix tbody tr {
+        transition: background .15s;
+    }
+    .v2-matrix tbody tr:hover {
+        background: var(--v2-primary-light);
+    }
+    .v2-matrix tbody td {
+        padding: 4px;
+        text-align: center;
+        border-bottom: 1px solid var(--v2-gray-100);
+        vertical-align: middle;
+    }
+    .v2-matrix tbody td:first-child {
+        text-align: left;
+        padding-left: 20px;
+        font-weight: 600;
+        color: var(--v2-gray-700);
+        background: var(--v2-gray-50);
+        border-right: 2px solid var(--v2-gray-300);
+        white-space: nowrap;
+        position: sticky;
+        left: 0;
+        z-index: 5;
+        box-shadow: 2px 0 4px rgba(0,0,0,0.05);
+    }
+
+    /* Price Cells */
+    .v2-cell {
+        position: relative;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all .15s;
+        margin: 2px;
+    }
+    .v2-cell:hover {
+        background: var(--v2-gray-100);
+        box-shadow: inset 0 0 0 1.5px var(--v2-primary);
+    }
+    .v2-cell.filled {
+        background: var(--v2-success-light);
+    }
+    .v2-cell.filled:hover {
+        background: #d1fae5;
+    }
+    .v2-cell.empty {
+        background: transparent;
+    }
+    .v2-cell.empty .v2-cell-text {
+        color: var(--v2-gray-300);
+    }
+    .v2-cell.modified {
+        background: var(--v2-warning-light) !important;
+        box-shadow: inset 0 0 0 2px var(--v2-warning) !important;
+    }
+    .v2-cell-text {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--v2-gray-800);
+        user-select: none;
+    }
+    .v2-cell.filled .v2-cell-text {
+        color: #065f46;
+    }
+    .v2-cell input {
+        width: 68px;
+        padding: 6px 4px;
+        border: 2px solid var(--v2-primary);
+        border-radius: 6px;
+        text-align: center;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--v2-gray-800);
+        outline: none;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(79,70,229,.15);
+    }
+
+    /* Row Actions */
+    .v2-row-actions {
+        display: flex;
+        gap: 2px;
+        justify-content: center;
+    }
+    .v2-row-actions button {
+        width: 30px;
+        height: 30px;
+        border: none;
+        background: transparent;
+        border-radius: 6px;
+        cursor: pointer;
+        color: var(--v2-gray-400);
+        font-size: 12px;
+        transition: all .15s;
+    }
+    .v2-row-actions button:hover {
+        background: var(--v2-gray-100);
+        color: var(--v2-gray-600);
+    }
+
+    /* ===== LEGEND ===== */
+    .v2-legend {
+        display: flex;
+        gap: 20px;
+        padding: 14px 18px;
+        background: white;
+        border-radius: var(--v2-radius);
+        box-shadow: var(--v2-shadow-sm);
+        margin-top: 16px;
+        font-size: 12px;
+        color: var(--v2-gray-500);
+    }
+    .v2-legend-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .v2-legend-dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 4px;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+        .v2-topbar { flex-direction: column; align-items: stretch; }
+        .v2-vehicle-select { flex: 1 1 100%; }
+        .v2-vehicle-nav { justify-content: center; }
+    }
+ </style>
+{% endblock %}
+
+{% block current_page %}
+<h2 style="display:flex;align-items:center;gap:10px;">
+    <span style="background:var(--v2-primary);color:white;width:36px;height:36px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;">
+        <i class="fa fa-th"></i>
+    </span>
+    Tarifs V2
+    {% if isV2Active %}
+        <span class="v2-badge v2-badge-success"><i class="fa fa-check-circle"></i> V2 actif</span>
+    {% endif %}
+</h2>
+{% endblock %}
+
+{% block content %}
+<div class="v2-wrapper">
+
+    <!-- Tabs -->
+    <div class="v2-tabs">
+        <a class="active" href="{{ path('tarifs_v2_matrix') }}">
+            <i class="fa fa-th"></i> Matrice
+        </a>
+        <a href="{{ path('tarifs_v2_comparison') }}">
+            <i class="fa fa-columns"></i> Comparaison
+        </a>
+        <a href="{{ path('tarifs_v2_intervals') }}">
+            <i class="fa fa-sliders"></i> Intervalles
+        </a>
+    </div>
+
+    <!-- Top Bar: Vehicle Selector -->
+    <div class="v2-topbar">
+        <div class="v2-vehicle-nav">
+            <button id="btn-prev-vehicle" title="Véhicule précédent"><i class="fa fa-chevron-left"></i></button>
+        </div>
+        <div class="v2-vehicle-select">
+            <select id="vehicle-select">
+                {% for vehicle in vehicles %}
+                    <option value="{{ vehicle.marque_id }}-{{ vehicle.modele_id }}"
+                            data-marque="{{ vehicle.marque_id }}"
+                            data-modele="{{ vehicle.modele_id }}"
+                            {% if default_vehicle and vehicle.marque_id == default_vehicle.marque_id and vehicle.modele_id == default_vehicle.modele_id %}selected{% endif %}>
+                        {{ vehicle.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="v2-vehicle-nav">
+            <button id="btn-next-vehicle" title="Véhicule suivant"><i class="fa fa-chevron-right"></i></button>
+        </div>
+
+        <div class="v2-dropdown">
+            <button class="v2-btn" id="btn-copy-from">
+                <i class="fa fa-copy"></i> Copier depuis...
+            </button>
+            <div class="v2-dropdown-menu" id="copy-from-vehicle-list">
+                {% for vehicle in vehicles %}
+                    <a href="#" data-marque="{{ vehicle.marque_id }}" data-modele="{{ vehicle.modele_id }}">
+                        {{ vehicle.name }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div style="flex:1"></div>
+
+        <span id="save-status" class="v2-status-pill saved" style="display:none;">
+            <i class="fa fa-check"></i> Sauvegardé
+        </span>
+        <span id="unsaved-status" class="v2-status-pill unsaved" style="display:none;">
+            <i class="fa fa-circle-o-notch fa-spin"></i> <span id="unsaved-count">0</span> non sauvegardées
+        </span>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="v2-toolbar">
+        <button class="v2-btn" id="btn-copy-month-to-all">
+            <i class="fa fa-calendar-check-o"></i> Copier Jan → Tous
+        </button>
+
+        <div class="v2-sep"></div>
+
+        <button class="v2-btn" type="button" id="btn-apply-percentage" title="Appliquer un pourcentage">
+            <i class="fa fa-percent"></i>
+        </button>
+        <div class="v2-pct-input">
+            <input type="number" id="percentage-input" placeholder="+/- %" step="0.1">
+            <span>%</span>
+        </div>
+
+        <div class="v2-sep"></div>
+
+        <button class="v2-btn" id="btn-export-csv">
+            <i class="fa fa-download"></i> Exporter
+        </button>
+        <button class="v2-btn" id="btn-import-csv">
+            <i class="fa fa-upload"></i> Importer
+        </button>
+
+        <div style="flex:1"></div>
+
+        <button class="v2-btn v2-btn-danger" id="btn-cancel-changes" disabled>
+            <i class="fa fa-times"></i> Annuler
+        </button>
+        <button class="v2-btn v2-btn-success" id="btn-save-all" disabled>
+            <i class="fa fa-save"></i> Tout sauvegarder
+        </button>
+    </div>
+
+    <!-- Matrix Grid -->
+    <div class="v2-matrix-card">
+        <div class="v2-matrix-scroll">
+            <table class="v2-matrix" id="matrix-table">
+                <thead>
+                    <tr>
+                        <th class="interval-col">Intervalle</th>
+                        <th class="month-col">Jan</th>
+                        <th class="month-col">F&eacute;v</th>
+                        <th class="month-col">Mar</th>
+                        <th class="month-col">Avr</th>
+                        <th class="month-col">Mai</th>
+                        <th class="month-col">Jui</th>
+                        <th class="month-col">Jul</th>
+                        <th class="month-col">Ao&ucirc;</th>
+                        <th class="month-col">Sep</th>
+                        <th class="month-col">Oct</th>
+                        <th class="month-col">Nov</th>
+                        <th class="month-col">D&eacute;c</th>
+                        <th class="action-col"></th>
+                    </tr>
+                </thead>
+                <tbody id="matrix-body">
+                    <tr><td colspan="14" class="v2-empty">
+                        <i class="fa fa-spinner fa-spin"></i>
+                        <p>Chargement...</p>
+                    </td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Legend -->
+    <div class="v2-legend">
+        <div class="v2-legend-item">
+            <div class="v2-legend-dot" style="background:#d1fae5;border:1px solid #6ee7b7;"></div>
+            <span>Prix défini</span>
+        </div>
+        <div class="v2-legend-item">
+            <div class="v2-legend-dot" style="background:var(--v2-gray-100);border:1px solid var(--v2-gray-200);"></div>
+            <span>Vide</span>
+        </div>
+        <div class="v2-legend-item">
+            <div class="v2-legend-dot" style="background:#fef3c7;border:2px solid var(--v2-warning);"></div>
+            <span>Modifié (non sauvegardé)</span>
+        </div>
+        <div style="flex:1"></div>
+        <span style="color:var(--v2-gray-400);">Cliquez sur une cellule pour modifier</span>
+    </div>
+
+    <!-- Import Modal -->
+    <div class="v2-modal-overlay" id="import-modal">
+        <div class="v2-modal">
+            <div class="v2-modal-header">
+                <h3><i class="fa fa-upload" style="color:var(--v2-primary);margin-right:8px;"></i> Importer CSV</h3>
+                <button class="v2-modal-close" id="import-modal-close">&times;</button>
+            </div>
+            <div class="v2-modal-body">
+                <div class="v2-info-box">
+                    <strong>Format :</strong> <code>marque;modele;month;interval;price</code><br>
+                    Exemple : <code>Peugeot;208;Janvier;1-2 jours;50.00</code>
+                </div>
+                <div class="v2-form-group">
+                    <label>Fichier CSV</label>
+                    <input type="file" id="import-file" accept=".csv" class="v2-form-control" style="border:2px dashed var(--v2-gray-200);padding:20px;cursor:pointer;">
+                </div>
+                <div id="import-preview" style="display:none;">
+                    <label style="font-weight:600;font-size:13px;margin-bottom:8px;display:block;">Aperçu (10 premières lignes)</label>
+                    <table class="v2-table" style="font-size:13px;">
+                        <thead>
+                            <tr><th>Marque</th><th>Mod&egrave;le</th><th>Mois</th><th>Intervalle</th><th>Prix</th></tr>
+                        </thead>
+                        <tbody id="import-preview-body"></tbody>
+                    </table>
+                </div>
+                <div id="import-results" style="display:none;">
+                    <div class="alert" id="import-results-alert" style="border-radius:8px;"></div>
+                </div>
+            </div>
+            <div class="v2-modal-footer">
+                <button class="v2-btn" id="import-modal-cancel">Annuler</button>
+                <button class="v2-btn v2-btn-primary" id="btn-import-confirm" disabled>
+                    <i class="fa fa-upload"></i> Importer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Guide Button -->
+    <div style="display:flex;justify-content:center;margin-top:20px;">
+        <button class="v2-btn v2-btn-primary" id="btn-show-guide" style="padding:10px 20px;">
+            <i class="fa fa-question-circle"></i> Guide d'utilisation - Comment ça marche ?
+        </button>
+    </div>
+
+    <!-- Guide Modal -->
+    <div class="v2-modal-overlay" id="guide-modal">
+        <div class="v2-modal" style="max-width:900px;">
+            <div class="v2-modal-header">
+                <h3><i class="fa fa-book" style="color:var(--v2-primary);margin-right:8px;"></i> Guide d'utilisation - Tarifs V2 Matrice</h3>
+                <button class="v2-modal-close" id="guide-modal-close">&times;</button>
+            </div>
+            <div class="v2-modal-body" style="padding:24px;font-size:14px;line-height:1.6;">
+                
+                <div class="v2-info-box" style="margin-bottom:20px;">
+                    <i class="fa fa-info-circle"></i> Ce guide explique toutes les fonctionnalités disponibles dans l'interface Matrice des tarifs V2.
+                </div>
+
+                <h4 style="color:var(--v2-gray-800);margin-top:20px;margin-bottom:12px;border-bottom:2px solid var(--v2-primary-light);padding-bottom:8px;">
+                    <i class="fa fa-mouse-pointer"></i> Navigation & Sélection
+                </h4>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+                    <div style="background:var(--v2-gray-50);padding:12px;border-radius:8px;">
+                        <strong style="color:var(--v2-primary);"><i class="fa fa-chevron-left"></i> <i class="fa fa-chevron-right"></i> Flèches navigation</strong><br>
+                        <small>Passe au véhicule précédent / suivant dans la liste</small>
+                    </div>
+                    <div style="background:var(--v2-gray-50);padding:12px;border-radius:8px;">
+                        <strong style="color:var(--v2-primary);"><i class="fa fa-list"></i> Sélecteur de véhicule</strong><br>
+                        <small>Liste déroulante pour choisir directement un véhicule</small>
+                    </div>
+                </div>
+
+                <h4 style="color:var(--v2-gray-800);margin-top:20px;margin-bottom:12px;border-bottom:2px solid var(--v2-success-light);padding-bottom:8px;">
+                    <i class="fa fa-pencil"></i> Édition des Prix
+                </h4>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+                    <div style="background:var(--v2-gray-50);padding:12px;border-radius:8px;">
+                        <strong style="color:var(--v2-success);"><i class="fa fa-th"></i> Cliquer une cellule</strong><br>
+                        <small>Cliquez sur n'importe quelle cellule du tableau pour modifier le prix</small>
+                    </div>
+                    <div style="background:var(--v2-gray-50);padding:12px;border-radius:8px;">
+                        <strong style="color:var(--v2-success);"><i class="fa fa-save"></i> Tout sauvegarder</strong><br>
+                        <small>Enregistre TOUTES les modifications en attente dans la base de données</small>
+                    </div>
+                    <div style="background:var(--v2-gray-50);padding:12px;border-radius:8px;">
+                        <strong style="color:var(--v2-warning);"><i class="fa fa-times"></i> Annuler</strong><br>
+                        <small>Annule toutes les modifications non sauvegardées</small>
+                    </div>
+                    <div style="background:var(--v2-gray-50);padding:12px;border-radius:8px;">
+                        <strong style="color:var(--v2-danger);"><i class="fa fa-circle"></i> Indicateur "non sauvegardées"</strong><br>
+                        <small>Affiche le nombre de modifications en attente de sauvegarde</small>
+                    </div>
+                </div>
+
+                <h4 style="color:var(--v2-gray-800);margin-top:20px;margin-bottom:12px;border-bottom:2px solid var(--v2-info-light);padding-bottom:8px;">
+                    <i class="fa fa-magic"></i> Actions Rapides
+                </h4>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+                    <div style="background:var(--v2-gray-50);padding:12px;border-radius:8px;">
+                        <strong style="color:var(--v2-info);"><i class="fa fa-calendar-check-o"></i> Copier Jan → Tous</strong><br>
+                        <small>Copie tous les prix de Janvier vers les autres mois pour ce véhicule</small>
+                    </div>
+                    <div style="background:var(--v2-gray-50);padding:12px;border-radius:8px;">
+                        <strong style="color:var(--v2-info);"><i class="fa fa-copy"></i> Copier depuis...</strong><br>
+                        <small>Copie tous les tarifs d'un autre véhicule vers le véhicule actuel</small>
+                    </div>
+                    <div style="background:var(--v2-gray-50);padding:12px;border-radius:8px;">
+                        <strong style="color:var(--v2-info);"><i class="fa fa-percent"></i> Appliquer %</strong><br>
+                        <small>Augmente ou diminue tous les prix existants d'un pourcentage (+10% ou -5%)</small>
+                    </div>
+                    <div style="background:var(--v2-gray-50);padding:12px;border-radius:8px;">
+                        <strong style="color:var(--v2-info);"><i class="fa fa-trash-o"></i> <i class="fa fa-copy"></i> Actions ligne</strong><br>
+                        <small>🗑️ Supprime toute la ligne / 📋 Copie Janvier sur tous les mois de cette ligne</small>
+                    </div>
+                </div>
+
+                <h4 style="color:var(--v2-gray-800);margin-top:20px;margin-bottom:12px;border-bottom:2px solid var(--v2-warning-light);padding-bottom:8px;">
+                    <i class="fa fa-file"></i> Import / Export
+                </h4>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+                    <div style="background:var(--v2-gray-50);padding:12px;border-radius:8px;">
+                        <strong style="color:var(--v2-warning);"><i class="fa fa-download"></i> Exporter CSV</strong><br>
+                        <small>Télécharge tous les tarifs de tous les véhicules en fichier CSV</small>
+                    </div>
+                    <div style="background:var(--v2-gray-50);padding:12px;border-radius:8px;">
+                        <strong style="color:var(--v2-warning);"><i class="fa fa-upload"></i> Importer CSV</strong><br>
+                        <small>Met à jour les tarifs existants à partir d'un fichier CSV</small>
+                    </div>
+                </div>
+
+                <h4 style="color:var(--v2-gray-800);margin-top:20px;margin-bottom:12px;border-bottom:2px solid var(--v2-gray-300);padding-bottom:8px;">
+                    <i class="fa fa-eye"></i> Légende des couleurs
+                </h4>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                    <div style="background:#ecfdf5;padding:12px;border-radius:8px;border-left:4px solid var(--v2-success);">
+                        <strong style="color:#065f46;">Vert - Prix défini</strong><br>
+                        <small>La cellule contient un prix</small>
+                    </div>
+                    <div style="background:#fffbeb;padding:12px;border-radius:8px;border-left:4px solid var(--v2-warning);">
+                        <strong style="color:#92400e;">Jaune/Orange - Modifié (non sauvegardé)</strong><br>
+                        <small>Le prix a été modifié mais pas encore enregistré</small>
+                    </div>
+                    <div style="background:#f9fafb;padding:12px;border-radius:8px;border-left:4px solid var(--v2-gray-300);">
+                        <strong style="color:var(--v2-gray-600);">Gris/Blanc - Vide</strong><br>
+                        <small>Aucun prix n'est défini pour cette cellule</small>
+                    </div>
+                    <div style="background:#eff6ff;padding:12px;border-radius:8px;border-left:4px solid var(--v2-info);">
+                        <strong style="color:#1e40af;">Survol bleu</strong><br>
+                        <small>Indique la cellule actuellement survolée par la souris</small>
+                    </div>
+                </div>
+
+                <div style="margin-top:24px;padding:16px;background:var(--v2-primary-light);border-radius:8px;border:1px solid #c7d2fe;">
+                    <strong style="color:#3730a3;"><i class="fa fa-lightbulb"></i> Astuce :</strong><br>
+                    <span style="color:#3730a3;">
+                        Cliquez sur une cellule pour éditer → Tapez le prix → Appuyez sur <kbd>Entrée</kbd> ou cliquez ailleurs → Cliquez sur <strong>"Tout sauvegarder"</strong> pour enregistrer.<br>
+                        Les modifications non sauvegardées sont indiquées en <strong>jaune/orange</strong> et comptées dans le badge "non sauvegardées".
+                    </span>
+                </div>
+
+            </div>
+            <div class="v2-modal-footer">
+                <button class="v2-btn v2-btn-primary" id="guide-modal-close-btn">
+                    <i class="fa fa-check"></i> J'ai compris
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="v2-loading" id="loading-overlay">
+        <div class="v2-spinner"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ asset('js/admin/tarifs_v2_matrix.js') }}"></script>
+<script>
+    window.tarifsV2Config = {
+        vehicles: {{ vehicles|json_encode|raw }},
+        defaultVehicle: {{ default_vehicle|json_encode|raw }}
+    };
+</script>
+{% endblock %}

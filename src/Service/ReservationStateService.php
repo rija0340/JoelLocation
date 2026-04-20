@@ -17,6 +17,7 @@ class ReservationStateService
     private $dateHelper;
     private $tarifsHelper;
     private $emailManagerService;
+    private $strategyProvider;
 
     public function __construct(
         ReservationRepository $reservationRepo,
@@ -24,7 +25,8 @@ class ReservationStateService
         EntityManagerInterface $em,
         DateHelper $dateHelper,
         TarifsHelper $tarifsHelper,
-        EmailManagerService $emailManagerService
+        EmailManagerService $emailManagerService,
+        PricingStrategyProvider $strategyProvider
     ) {
         $this->reservationRepo = $reservationRepo;
         $this->annulationResaRepo = $annulationResaRepo;
@@ -32,6 +34,7 @@ class ReservationStateService
         $this->dateHelper = $dateHelper;
         $this->tarifsHelper = $tarifsHelper;
         $this->emailManagerService = $emailManagerService;
+        $this->strategyProvider = $strategyProvider;
     }
 
     /**
@@ -69,7 +72,8 @@ class ReservationStateService
         $dateRetour = $newDateFin ?: $reservation->getDateFin();
 
         $duree = $this->dateHelper->calculDuree($dateDepart, $dateRetour);
-        $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $reservation->getVehicule());
+        $strategy = $this->strategyProvider->getStrategy();
+        $tarifVehicule = $strategy->calculate($reservation->getVehicule(), $dateDepart, $dateRetour);
 
         $reservation->setReported(true);
         $reservation->setDuree($duree);

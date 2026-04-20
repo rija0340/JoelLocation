@@ -6,6 +6,7 @@ use App\Entity\Vehicule;
 use App\Service\DateHelper;
 use App\Service\TarifsHelper;
 use App\Service\VehicleAvailabilityService;
+use App\Service\PricingStrategyProvider;
 use App\Repository\MarqueRepository;
 use App\Repository\ModeleRepository;
 use App\Repository\VehiculeRepository;
@@ -29,6 +30,7 @@ class VehiculeDataController extends AbstractController
     private $dateHelper;
     private $reservationHelper;
     private $vehicleAvailabilityService;
+    private $strategyProvider;
 
     public function __construct(
         VehiculeRepository $vehiculeRepo,
@@ -38,7 +40,8 @@ class VehiculeDataController extends AbstractController
         TarifsHelper $tarifsHelper,
         DateHelper $dateHelper,
         ReservationHelper $reservationHelper,
-        VehicleAvailabilityService $vehicleAvailabilityService
+        VehicleAvailabilityService $vehicleAvailabilityService,
+        PricingStrategyProvider $strategyProvider
     ) {
 
         $this->vehiculeRepo = $vehiculeRepo;
@@ -49,6 +52,7 @@ class VehiculeDataController extends AbstractController
         $this->dateHelper = $dateHelper;
         $this->reservationHelper = $reservationHelper;
         $this->vehicleAvailabilityService = $vehicleAvailabilityService;
+        $this->strategyProvider = $strategyProvider;
     }
 
     /**
@@ -78,13 +82,14 @@ class VehiculeDataController extends AbstractController
 
         //data2 => liste véhicule sans immatriculation
         $data2 = array();
+        $strategy = $this->strategyProvider->getStrategy();
         foreach ($listeUnique as $key => $v) {
 
             $marque = $this->marqueRepo->findOneBy(['libelle' => $v['marque']]);
             $modele = $this->modeleRepo->findOneBy(['libelle' => $v['modele']]);
 
             $vehicule = $this->vehiculeRepo->findOneBy(['marque' => $marque, 'modele' => $modele]);
-            $tarif = $this->tarifsHelper->calculTarifVehicule($dateDebut, $dateFin, $vehicule);
+            $tarif = $strategy->calculate($vehicule, $dateDebut, $dateFin);
 
             $data2[$key]['id'] = $vehicule->getId();
             $data2[$key]['marque'] = $vehicule->getMarque()->getLibelle();
@@ -148,6 +153,7 @@ class VehiculeDataController extends AbstractController
         }
 
         $data2 = array();
+        $strategy2 = $this->strategyProvider->getStrategy();
         foreach ($listeVehiculesDispo as $key => $vehicule) {
 
             $data2[$key]['id'] = $vehicule->getId();
@@ -163,7 +169,7 @@ class VehiculeDataController extends AbstractController
             $data2[$key]['portes'] = $vehicule->getPortes();
             $data2[$key]['passagers'] = $vehicule->getPassagers();
             $data2[$key]['image'] = $vehicule->getImage();
-            $data2[$key]['tarifBdd'] = $this->tarifsHelper->calculTarifVehicule($dateDebut, $dateFin, $vehicule);
+            $data2[$key]['tarifBdd'] = $strategy2->calculate($vehicule, $dateDebut, $dateFin);
         }
         return new JsonResponse($data2);
     }

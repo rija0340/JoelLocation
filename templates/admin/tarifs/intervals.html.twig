@@ -1,0 +1,102 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}Tarifs V2 - Intervals{% endblock %}
+
+{% block stylesheets %}
+<link href="{{ asset('css/admin/tarifs_v2.css') }}" rel="stylesheet">
+<style>
+    .v2-two-col {
+        display: grid;
+        grid-template-columns: 1fr 380px;
+        gap: 24px;
+    }
+    @media (max-width: 900px) {
+        .v2-two-col { grid-template-columns: 1fr; }
+    }
+    .v2-interval-list { list-style: none; padding: 0; margin: 0; }
+    .v2-form-actions { padding-top: 8px; }
+</style>
+{% endblock %}
+
+{% block current_page %}
+<h2 style="display:flex;align-items:center;gap:10px;">
+    <span style="background:var(--v2-primary);color:white;width:36px;height:36px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;">
+        <i class="fa fa-sliders"></i>
+    </span>
+    Tarifs V2 - Intervals
+    {% if isV2Active %}
+        <span class="v2-badge v2-badge-success"><i class="fa fa-check-circle"></i> V2 actif</span>
+    {% endif %}
+</h2>
+{% endblock %}
+
+{% block content %}
+<div class="v2-wrapper">
+
+    <!-- Tabs -->
+    <div class="v2-tabs">
+        <a href="{{ path('tarifs_v2_matrix') }}"><i class="fa fa-th"></i> Matrix</a>
+        <a href="{{ path('tarifs_v2_comparison') }}"><i class="fa fa-columns"></i> Comparison</a>
+        <a class="active" href="{{ path('tarifs_v2_intervals') }}"><i class="fa fa-sliders"></i> Intervals</a>
+    </div>
+
+    <div class="v2-two-col">
+        <!-- Current Intervals -->
+        <div class="v2-card">
+            <div class="v2-card-header">
+                <h5><i class="fa fa-layer-group" style="color:var(--v2-primary);margin-right:8px;"></i> Current Intervals</h5>
+            </div>
+            <div class="v2-card-body">
+                <p style="font-size:13px;color:var(--v2-gray-400);margin-top:0;">
+                    These intervals are shared across all vehicles.
+                </p>
+                <ul class="v2-interval-list" id="intervals-list">
+                    <li class="v2-empty"><i class="fa fa-spinner fa-spin"></i><p>Loading...</p></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Add New -->
+        <div>
+            <div class="v2-card" style="margin-bottom:20px;">
+                <div class="v2-card-header">
+                    <h5><i class="fa fa-plus-circle" style="color:var(--v2-success);margin-right:8px;"></i> Add Interval</h5>
+                </div>
+                <div class="v2-card-body">
+                    <form id="add-interval-form">
+                        <div class="v2-form-group">
+                            <label>From (days) *</label>
+                            <input type="number" class="v2-form-control" id="new-min-days" min="1" required placeholder="1">
+                        </div>
+                        <div class="v2-form-group">
+                            <label>To (days)</label>
+                            <input type="number" class="v2-form-control" id="new-max-days" min="1" placeholder="Leave empty for 31+">
+                            <p class="v2-form-hint">Leave empty for "and more" (e.g. 31+)</p>
+                        </div>
+                        <div class="v2-form-group">
+                            <label>Label (optional)</label>
+                            <input type="text" class="v2-form-control" id="new-label" placeholder="Auto-generated if empty">
+                        </div>
+                        <div class="v2-form-actions">
+                            <button type="submit" class="v2-btn v2-btn-primary">
+                                <i class="fa fa-plus"></i> Add Interval
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="v2-info-box">
+                <strong><i class="fa fa-info-circle"></i> Default Intervals</strong><br>
+                If none exist, the system auto-creates:<br>
+                <code>1-2j</code> <code>3-6j</code> <code>7-14j</code> <code>15-30j</code> <code>31+j</code>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ asset('js/admin/tarifs_v2_intervals.js') }}"></script>
+{% endblock %}

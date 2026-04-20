@@ -43,6 +43,7 @@ use App\Service\Site;
 use App\Service\EmailManagerService;
 use App\Service\ReservationStateService;
 use App\Service\PaymentProcessingService;
+use App\Service\PricingStrategyProvider;
 use App\Service\VehicleAvailabilityService;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -74,6 +75,7 @@ class ReservationController extends AbstractController
     private $reservationStateService;
     private $paymentProcessingService;
     private $vehicleAvailabilityService;
+    private $strategyProvider;
 
     public function __construct(
         ModePaiementRepository $modePaiementRepo,
@@ -94,7 +96,8 @@ class ReservationController extends AbstractController
         EmailManagerService $emailManagerService,
         ReservationStateService $reservationStateService,
         PaymentProcessingService $paymentProcessingService,
-        VehicleAvailabilityService $vehicleAvailabilityService
+        VehicleAvailabilityService $vehicleAvailabilityService,
+        PricingStrategyProvider $strategyProvider
 
     ) {
 
@@ -116,6 +119,7 @@ class ReservationController extends AbstractController
         $this->reservationStateService = $reservationStateService;
         $this->paymentProcessingService = $paymentProcessingService;
         $this->vehicleAvailabilityService = $vehicleAvailabilityService;
+        $this->strategyProvider = $strategyProvider;
     }
 
     /**
@@ -218,11 +222,18 @@ class ReservationController extends AbstractController
     public function show(Reservation $reservation, Request $request, ReservationHelper $reservationHelper, AnnulationReservationRepository $annulationResaRepo): Response
     {
 
-        $reservations = $this->reservationRepo->findAll();
-        foreach ($reservations as $resa) {
-            $resa->setDuree($this->dateHelper->calculDuree($resa->getDateDebut(), $resa->getDateFin()));
+        // On évite de synchroniser toutes les réservations à chaque affichage pour des raisons de performance.
+        // Si la durée n'est pas définie, on ne la calcule que pour la réservation courante, 
+        // mais normalement elle est déjà gérée lors de la création/édition.
+        if (is_null($reservation->getDuree())) {
+            $isV2 = $this->strategyProvider->isV2Active();
+            $dateDebut = $reservation->getDateDebut();
+            $dateFin = $reservation->getDateFin();
+            if ($dateDebut && $dateFin) {
+                $reservation->setDuree($isV2 ? $this->dateHelper->calculDureeInclusif($dateDebut, $dateFin) : $this->dateHelper->calculDuree($dateDebut, $dateFin));
+                $this->em->flush();
+            }
         }
-        $this->em->flush();
 
         //test nouvelle methode pour calculer diff dates
 
@@ -382,7 +393,11 @@ class ReservationController extends AbstractController
                 $tarifVeh = $reservation->getTarifVehicule();
             }
             //duree
-            $duree = $this->dateHelper->calculDuree($dateDepart, $dateRetour);
+            if ($this->strategyProvider->isV2Active()) {
+                $duree = $this->dateHelper->calculDureeInclusif($dateDepart, $dateRetour);
+            } else {
+                $duree = $this->dateHelper->calculDuree($dateDepart, $dateRetour);
+            }
             $reservation->setDuree($duree);
             $reservation->setDateDebut($dateDepart);
             $reservation->setDateFin($dateRetour);
@@ -416,7 +431,11 @@ class ReservationController extends AbstractController
             //permettre la modification de prix
             $tarifVeh = $dataForm['tarifVehicule'];
             $reservation->setVehicule($vehicule);
-            $duree = $this->dateHelper->calculDuree($form->getData()->getDateDebut(), $form->getData()->getDateFin());
+            if ($this->strategyProvider->isV2Active()) {
+                $duree = $this->dateHelper->calculDureeInclusif($form->getData()->getDateDebut(), $form->getData()->getDateFin());
+            } else {
+                $duree = $this->dateHelper->calculDuree($form->getData()->getDateDebut(), $form->getData()->getDateFin());
+            }
             $reservation->setDuree($duree);
 
             // si le prix a été modifié
@@ -425,7 +444,6 @@ class ReservationController extends AbstractController
                 $reservation->setPrix($form->getData()->getPrix());
             } else {
                 $reservation->setTarifVehicule($tarifVeh);
-                $t = $this->tarifsHelper->calculTarifVehicule($form->getData()->getDateDebut(), $form->getData()->getDateFin(), $vehicule);
                 $reservation->setPrix($this->tarifsHelper->calculTarifTotal($tarifVeh, $reservation->getOptions(), $reservation->getGaranties(), $reservation->getConducteur()));
             }
 

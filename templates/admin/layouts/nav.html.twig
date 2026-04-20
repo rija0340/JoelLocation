@@ -122,14 +122,20 @@
 							Tarifs
 							<span class="fa fa-chevron-right"></span>
 						</a>
-						<ul class="nav child_menu">
-							<li>
-								<a href="{{path('tarifs_index')}}">Liste des tarifs</a>
-							</li>
-							<li>
-								<a href="{{path('tarifs_simulateur')}}">Simulateur de tarifs</a>
-							</li>
-						</ul>
+					<ul class="nav child_menu">
+						<li>
+							<a href="{{path('tarifs_index')}}">Liste des tarifs (V1)</a>
+						</li>
+						<li>
+							<a href="{{path('tarifs_v2_matrix')}}">Tarifs V2 Matrix</a>
+						</li>
+						<li>
+							<a href="{{path('tarifs_simulateur')}}">Simulateur de tarifs</a>
+						</li>
+						<li>
+							<a href="{{path('tarifs_settings')}}">Paramètres de tarification</a>
+						</li>
+					</ul>
 					</li>
 					<li>
 						<a href="{{path('step1')}}">
@@ -248,6 +254,19 @@
 						<a href="{{path('email_index')}}">
 							<i class="fa fa-envelope"></i>
 							Emails
+							<span class="fa fa-chevron-right"></span>
+						</a>
+					</li>
+				</ul>
+			</div>
+
+			<div class="menu_section">
+				<h3>LOGS</h3>
+				<ul class="nav side-menu">
+					<li>
+						<a href="{{path('tarifs_v2_history')}}">
+							<i class="fa fa-file-text-o"></i>
+							Log History Tarifs V2
 							<span class="fa fa-chevron-right"></span>
 						</a>
 					</li>

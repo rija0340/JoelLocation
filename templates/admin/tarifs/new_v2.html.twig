@@ -1,0 +1,96 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}Créer un tarif V2
+{% endblock %}
+
+{% block stylesheets %}
+<link href="{{ asset('css/admin/tarifs.css')}}" rel="stylesheet">
+<style>
+    .range-item {
+        background: #f5f5f5;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 15px;
+        margin-bottom: 10px;
+    }
+    .range-item-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block current_page %}
+<h2>
+    <i class="fa fa-plus"></i>
+    Nouveau tarif V2
+</h2>
+{% endblock %}
+
+{% block content %}
+<div class="x_panel">
+    <div class="x_title">
+        <h2><i class="fa fa-edit"></i> Créer un nouveau tarif V2</h2>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="x_content">
+        {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+        
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Marque</label>
+            <div class="col-sm-9">
+                {{ form_widget(form.marque, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.marque) }}
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Modèle</label>
+            <div class="col-sm-9">
+                {{ form_widget(form.modele, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.modele) }}
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Mois</label>
+            <div class="col-sm-9">
+                {{ form_widget(form.mois, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.mois) }}
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Plages de tarifs</label>
+            <div class="col-sm-9">
+                <div id="ranges-container">
+                    {{ form_widget(form.tarifs, {'attr': {'class': 'ranges-list'}}) }}
+                </div>
+                <button type="button" id="add-range" class="btn btn-success mt-2">
+                    <i class="fa fa-plus"></i> Ajouter une plage
+                </button>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-sm-9 offset-sm-3">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa fa-save"></i> Enregistrer
+                </button>
+                <a href="{{ path('tarifs_v2_index') }}" class="btn btn-secondary">
+                    <i class="fa fa-times"></i> Annuler
+                </a>
+            </div>
+        </div>
+
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script src="../../js/admin/tarifs_v2.js"></script>
+{% endblock %}

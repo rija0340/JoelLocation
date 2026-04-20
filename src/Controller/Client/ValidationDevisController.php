@@ -7,6 +7,7 @@ use App\Entity\Devis;
 use App\Service\DateHelper;
 use App\Form\ClientInfoType;
 use App\Service\TarifsHelper;
+use App\Service\PricingStrategyProvider;
 use App\Repository\DevisRepository;
 use App\Repository\ReservationRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,6 +30,7 @@ class ValidationDevisController extends AbstractController
     private $em;
     private $reserverDevis;
     private $emailManagerService;
+    private $strategyProvider;
 
     public function __construct(
         ReservationRepository $reservationRepo,
@@ -38,7 +40,8 @@ class ValidationDevisController extends AbstractController
         FlashyNotifier $flashy,
         EntityManagerInterface $em,
         ReserverDevis $reserverDevis,
-        EmailManagerService $emailManagerService
+        EmailManagerService $emailManagerService,
+        PricingStrategyProvider $strategyProvider
 
 
     ) {
@@ -50,6 +53,7 @@ class ValidationDevisController extends AbstractController
         $this->em = $em;
         $this->reserverDevis = $reserverDevis;
         $this->emailManagerService = $emailManagerService;
+        $this->strategyProvider = $strategyProvider;
     }
 
     /**
@@ -123,7 +127,8 @@ class ValidationDevisController extends AbstractController
             }
         }
 
-        $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($devis->getDateDepart(), $devis->getDateRetour(), $devis->getVehicule());
+        $strategy = $this->strategyProvider->getStrategy();
+        $tarifVehicule = $strategy->calculate($devis->getVehicule(), $devis->getDateDepart(), $devis->getDateRetour());
         $duree = $this->dateHelper->calculDuree($devis->getDateDepart(), $devis->getDateRetour());
         
         // For guest booking, we skip the client comparison check

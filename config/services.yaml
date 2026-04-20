@@ -113,3 +113,18 @@ services:
     App\Service\PhotoZipService:
         arguments:
             $projectDir: '%kernel.project_dir%'
+
+    # Tarifs V2 History Logger Service
+    App\Service\TarifsV2HistoryLogger:
+        arguments:
+            $projectDir: '%kernel.project_dir%'
+
+    # Pricing Strategy Provider
+    App\Service\PricingStrategyProvider:
+        arguments:
+            $modeService: '@App\Service\PricingModeService'
+            $intervalRepo: '@App\Repository\PricingIntervalRepository'
+            $cellRepo: '@App\Repository\TarifsV2CellRepository'
+            $tarifsRepo: '@App\Repository\TarifsRepository'
+            $tarifsHelper: '@App\Service\TarifsHelper'
+            $dateHelper: '@App\Service\DateHelper'

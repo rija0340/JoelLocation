@@ -1,0 +1,126 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}Tarifs V2 - History{% endblock %}
+
+{% block stylesheets %}
+<link href="{{ asset('css/admin/tarifs_v2.css') }}" rel="stylesheet">
+<style>
+    .v2-filter-row {
+        display: flex;
+        gap: 12px;
+        align-items: flex-end;
+        flex-wrap: wrap;
+    }
+    .v2-filter-row .v2-form-group { margin-bottom: 0; flex: 1; min-width: 150px; }
+    .v2-history-scroll { overflow-x: auto; }
+    .v2-table .v2-change-cell {
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+    }
+    .v2-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 0;
+        font-size: 13px;
+        color: var(--v2-gray-400);
+    }
+</style>
+{% endblock %}
+
+{% block current_page %}
+<h2 style="display:flex;align-items:center;gap:10px;">
+    <span style="background:var(--v2-gray-800);color:white;width:36px;height:36px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;">
+        <i class="fa fa-file-text-o"></i>
+    </span>
+    Log History - Tarifs V2
+</h2>
+{% endblock %}
+
+{% block content %}
+<div class="v2-wrapper">
+
+    <!-- Statistics -->
+    <div class="v2-stat-grid">
+        <div class="v2-stat-card accent-primary">
+            <p class="v2-stat-value" id="stat-total-changes">-</p>
+            <p class="v2-stat-label">Total Changes</p>
+        </div>
+        <div class="v2-stat-card accent-success">
+            <p class="v2-stat-value" id="stat-today-changes">-</p>
+            <p class="v2-stat-label">Today</p>
+        </div>
+        <div class="v2-stat-card accent-warning">
+            <p class="v2-stat-value" id="stat-last-change">-</p>
+            <p class="v2-stat-label">Last Change</p>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="v2-toolbar">
+        <div class="v2-filter-row" style="flex:1;">
+            <div class="v2-form-group">
+                <label>Month</label>
+                <select id="filter-month" class="v2-form-control">
+                    <option value="">All months</option>
+                    {% for month in months %}
+                        <option value="{{ month }}">{{ month }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="v2-form-group">
+                <label>From</label>
+                <input type="date" class="v2-form-control" id="filter-date-from">
+            </div>
+            <div class="v2-form-group">
+                <label>To</label>
+                <input type="date" class="v2-form-control" id="filter-date-to">
+            </div>
+        </div>
+        <div class="v2-sep"></div>
+        <button class="v2-btn v2-btn-primary" id="btn-filter"><i class="fa fa-filter"></i> Filter</button>
+        <button class="v2-btn" id="btn-reset"><i class="fa fa-undo"></i> Reset</button>
+        <a href="/api/tarifs-v2/history/download" class="v2-btn">
+            <i class="fa fa-download"></i> Download
+        </a>
+    </div>
+
+    <!-- Table -->
+    <div class="v2-card">
+        <div class="v2-history-scroll">
+            <table class="v2-table" id="history-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>User</th>
+                        <th>Vehicle</th>
+                        <th>Month</th>
+                        <th>Interval</th>
+                        <th style="text-align:right;">Old</th>
+                        <th style="text-align:right;">New</th>
+                        <th style="text-align:right;">Change</th>
+                    </tr>
+                </thead>
+                <tbody id="history-body">
+                    <tr><td colspan="8">
+                        <div class="v2-empty">
+                            <i class="fa fa-spinner fa-spin"></i>
+                            <p>Loading history...</p>
+                        </div>
+                    </td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="v2-footer">
+        <span id="history-count"></span>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ asset('js/admin/tarifs_v2_history.js') }}"></script>
+{% endblock %}

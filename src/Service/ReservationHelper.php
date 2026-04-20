@@ -30,6 +30,7 @@ class ReservationHelper
     private $tarifsHelper;
     private $reservationSession;
     private $userRepo;
+    private $strategyProvider;
 
     public function __construct(
         ReservationRepository $reservationRepo,
@@ -39,7 +40,8 @@ class ReservationHelper
         GarantieRepository $garantiesRepo,
         TarifsHelper $tarifsHelper,
         ReservationSession $reservationSession,
-        UserRepository $userRepo
+        UserRepository $userRepo,
+        PricingStrategyProvider $strategyProvider
     ) {
         $this->vehiculeRepo = $vehiculeRepo;
         $this->optionsRepo = $optionsRepo;
@@ -47,8 +49,9 @@ class ReservationHelper
         $this->dateHelper = $dateHelper;
         $this->reservationRepo = $reservationRepo;
         $this->tarifsHelper = $tarifsHelper;
-        $resaSession = $reservationSession;
-        $userRepo = $userRepo;
+        $this->reservationSession = $reservationSession;
+        $this->userRepo = $userRepo;
+        $this->strategyProvider = $strategyProvider;
     }
 
     //paramètres : reservations qui sont inclus durant l'intervalle de date de début et date de fin 
@@ -362,7 +365,11 @@ class ReservationHelper
             $devis->setVehicule($vehicule);
         }
         if (!is_null($dateDepart) && !is_null($dateRetour)) {
-            $devis->setDuree($this->dateHelper->calculDuree($dateDepart, $dateRetour));
+            if ($this->strategyProvider->isV2Active()) {
+                $devis->setDuree($this->dateHelper->calculDureeInclusif($dateDepart, $dateRetour));
+            } else {
+                $devis->setDuree($this->dateHelper->calculDuree($dateDepart, $dateRetour));
+            }
         }
 
         if ($this->garantiesObjectsFromSession($resaSession) != null) {
@@ -378,7 +385,8 @@ class ReservationHelper
             $tarifVehicule = $resaSession->getTarifVehicule();
         } else {
             if (!is_null($resaSession->getVehicule()) && !is_null($dateDepart) && !is_null($dateRetour)) {
-                $tarifVehicule = $this->tarifsHelper->calculTarifVehicule($dateDepart, $dateRetour, $vehicule);
+                $strategy = $this->strategyProvider->getStrategy();
+                $tarifVehicule = $strategy->calculate($vehicule, $dateDepart, $dateRetour);
             } else {
                 $tarifVehicule = 0;
             }

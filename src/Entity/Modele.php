@@ -39,10 +39,16 @@ class Modele
      */
     private $tarifs;
 
+    /**
+     * @ORM\OneToMany(targetEntity=TarifsV2::class, mappedBy="modele")
+     */
+    private $tarifsV2;
+
     public function __construct()
     {
         $this->vehicules = new ArrayCollection();
         $this->tarifs = new ArrayCollection();
+        $this->tarifsV2 = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -137,6 +143,35 @@ class Modele
             // set the owning side to null (unless already changed)
             if ($tarif->getModele() === $this) {
                 $tarif->setModele(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|TarifsV2[]
+     */
+    public function getTarifsV2(): Collection
+    {
+        return $this->tarifsV2;
+    }
+
+    public function addTarifsV2(TarifsV2 $tarifsV2): self
+    {
+        if (!$this->tarifsV2->contains($tarifsV2)) {
+            $this->tarifsV2[] = $tarifsV2;
+            $tarifsV2->setModele($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTarifsV2(TarifsV2 $tarifsV2): self
+    {
+        if ($this->tarifsV2->removeElement($tarifsV2)) {
+            if ($tarifsV2->getModele() === $this) {
+                $tarifsV2->setModele(null);
             }
         }
 
