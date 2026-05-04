@@ -908,7 +908,13 @@
 						<tbody class="fs-12">
 							<tr>
 								<td>Date départ</td>
-								<td class="text-nowrap">{{ reservation.dateDebut|date('d/m/Y H:i') }}</td>
+								<td class="text-nowrap">
+									{% if clientSignatureDate is not null and adminSignature is not empty %}
+										{{ clientSignatureDate|date('d/m/Y H:i') }}
+									{% else %}
+										{{ reservation.dateDebut|date('d/m/Y H:i') }}
+									{% endif %}
+								</td>
 								<td>Date retour</td>
 								<td class="text-nowrap">{{ reservation.dateFin|date('d/m/Y H:i') }}</td>
 							</tr>

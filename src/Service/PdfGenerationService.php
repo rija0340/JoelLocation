@@ -249,6 +249,8 @@ class PdfGenerationService
         $adminSignature = null;
         $clientCheckoutSignature = null;
         $adminCheckoutSignature = null;
+        $clientSignatureDate = null;
+        $adminSignatureDate = null;
 
         $contracts = $reservation->getContracts();
         $latestContract = null;
@@ -281,8 +283,10 @@ class PdfGenerationService
                 if ($documentType === 'contract' || $documentType === 'checkin') {
                     if ($signatureType === 'client') {
                         $clientSignature = $img;
+                        $clientSignatureDate = $signature->getSignedAt();
                     } elseif ($signatureType === 'admin') {
                         $adminSignature = $img;
+                        $adminSignatureDate = $signature->getSignedAt();
                     }
                 }
                 // Signatures de checkout (remise)
@@ -316,6 +320,8 @@ class PdfGenerationService
             'adminSignature' => $adminSignature,
             'clientCheckoutSignature' => $clientCheckoutSignature,
             'adminCheckoutSignature' => $adminCheckoutSignature,
+            'clientSignatureDate' => $clientSignatureDate,
+            'adminSignatureDate' => $adminSignatureDate,
             'isPreview' => false
         ]);
 
@@ -339,7 +345,9 @@ class PdfGenerationService
             'clientSignature' => $clientSignature,
             'adminSignature' => $adminSignature,
             'clientCheckoutSignature' => $clientCheckoutSignature,
-            'adminCheckoutSignature' => $adminCheckoutSignature
+            'adminCheckoutSignature' => $adminCheckoutSignature,
+            'clientSignatureDate' => $clientSignatureDate,
+            'adminSignatureDate' => $adminSignatureDate
         ];
     }
 

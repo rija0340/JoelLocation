@@ -227,6 +227,8 @@ class TarifsV2ApiController extends AbstractController
         $marque = $this->marqueRepo->find($data['marque_id'] ?? 0);
         $modele = $this->modeleRepo->find($data['modele_id'] ?? 0);
         $percentage = (float) ($data['percentage'] ?? 0);
+        $intervalIds = $data['intervals_ids'] ?? null;
+        $targetMonths = $data['months'] ?? null;
         
         if (!$marque || !$modele) {
             return new JsonResponse(['error' => 'Vehicle not found'], 404);
@@ -236,7 +238,10 @@ class TarifsV2ApiController extends AbstractController
         $ipAddress = $request->getClientIp();
         
         try {
-            $results = $this->matrixService->applyPercentageChange($marque, $modele, $percentage, $user, $ipAddress);
+            $results = $this->matrixService->applyPercentageChange(
+                $marque, $modele, $percentage, $user, $ipAddress,
+                $intervalIds, $targetMonths
+            );
             
             return new JsonResponse([
                 'success' => true,

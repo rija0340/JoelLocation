@@ -387,12 +387,8 @@
         <div class="v2-sep"></div>
 
         <button class="v2-btn" type="button" id="btn-apply-percentage" title="Appliquer un pourcentage">
-            <i class="fa fa-percent"></i>
+            <i class="fa fa-percent"></i> Appliquer %
         </button>
-        <div class="v2-pct-input">
-            <input type="number" id="percentage-input" placeholder="+/- %" step="0.1">
-            <span>%</span>
-        </div>
 
         <div class="v2-sep"></div>
 
@@ -501,6 +497,53 @@
         </div>
     </div>
 
+    <!-- Percentage Modal -->
+    <div class="v2-modal-overlay" id="percentage-modal">
+        <div class="v2-modal" style="max-width:600px;">
+            <div class="v2-modal-header">
+                <h3><i class="fa fa-percent" style="color:var(--v2-primary);margin-right:8px;"></i> Appliquer un pourcentage</h3>
+                <button class="v2-modal-close" id="percentage-modal-close">&times;</button>
+            </div>
+            <div class="v2-modal-body">
+                <div class="v2-form-group">
+                    <label style="font-weight:600;font-size:13px;margin-bottom:8px;display:block;">
+                        Périodes (intervalles de jours)
+                    </label>
+                    <div style="margin-bottom:6px;">
+                        <button type="button" class="v2-btn v2-btn-sm" id="pct-select-all-intervals" style="font-size:11px;">Tout sélectionner</button>
+                        <button type="button" class="v2-btn v2-btn-sm" id="pct-deselect-all-intervals" style="font-size:11px;">Tout désélectionner</button>
+                    </div>
+                    <div id="percentage-intervals-checkboxes" style="display:flex;flex-wrap:wrap;gap:8px;">
+                    </div>
+                </div>
+                <div class="v2-form-group" style="margin-top:16px;">
+                    <label style="font-weight:600;font-size:13px;margin-bottom:8px;display:block;">
+                        Mois concernés
+                    </label>
+                    <div style="margin-bottom:6px;">
+                        <button type="button" class="v2-btn v2-btn-sm" id="pct-select-all-months" style="font-size:11px;">Tout sélectionner</button>
+                        <button type="button" class="v2-btn v2-btn-sm" id="pct-deselect-all-months" style="font-size:11px;">Tout désélectionner</button>
+                    </div>
+                    <div id="percentage-months-checkboxes" style="display:flex;flex-wrap:wrap;gap:8px;">
+                    </div>
+                </div>
+                <div class="v2-form-group" style="margin-top:16px;">
+                    <label for="percentage-modal-input" style="font-weight:600;font-size:13px;margin-bottom:8px;display:block;">Pourcentage</label>
+                    <div class="v2-pct-input">
+                        <input type="number" id="percentage-modal-input" placeholder="+/-" step="0.1">
+                        <span>%</span>
+                    </div>
+                </div>
+            </div>
+            <div class="v2-modal-footer">
+                <button class="v2-btn" id="percentage-modal-cancel">Annuler</button>
+                <button class="v2-btn v2-btn-primary" id="btn-percentage-confirm">
+                    <i class="fa fa-check"></i> Appliquer
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Guide Button -->
     <div style="display:flex;justify-content:center;margin-top:20px;">
         <button class="v2-btn v2-btn-primary" id="btn-show-guide" style="padding:10px 20px;">
@@ -571,7 +614,7 @@
                     </div>
                     <div style="background:var(--v2-gray-50);padding:12px;border-radius:8px;">
                         <strong style="color:var(--v2-info);"><i class="fa fa-percent"></i> Appliquer %</strong><br>
-                        <small>Augmente ou diminue tous les prix existants d'un pourcentage (+10% ou -5%)</small>
+                        <small>Ouvre une fenêtre pour choisir les périodes (intervalles de jours) et les mois à modifier, puis applique un % (+10% ou -5%)</small>
                     </div>
                     <div style="background:var(--v2-gray-50);padding:12px;border-radius:8px;">
                         <strong style="color:var(--v2-info);"><i class="fa fa-trash-o"></i> <i class="fa fa-copy"></i> Actions ligne</strong><br>

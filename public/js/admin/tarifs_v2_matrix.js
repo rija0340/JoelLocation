@@ -38,7 +38,6 @@ document.addEventListener('DOMContentLoaded', function() {
     btnSaveAll.addEventListener('click', saveAllChanges);
     btnCancel.addEventListener('click', cancelChanges);
     document.getElementById('btn-copy-month-to-all').addEventListener('click', copyMonthToAll);
-    document.getElementById('btn-apply-percentage').addEventListener('click', applyPercentage);
     document.getElementById('btn-export-csv').addEventListener('click', exportCsv);
 
     // Copy from dropdown
@@ -425,41 +424,125 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    async function applyPercentage() {
-        const percentage = parseFloat(document.getElementById('percentage-input').value);
-        if (isNaN(percentage)) { $.alert({ title: 'Invalide', content: 'Entrez un pourcentage valide', type: 'orange' }); return; }
-        $.confirm({
-            title: `Appliquer ${percentage > 0 ? '+' : ''}${percentage}% ?`,
-            content: 'Cela ajustera tous les prix existants pour ce véhicule.',
-            buttons: {
-                confirm: async () => {
-                    showLoading();
-                    const option = vehicleSelect.options[vehicleSelect.selectedIndex];
-                    try {
-                        const response = await fetch('/api/tarifs-v2/apply-percentage', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                marque_id: parseInt(option.dataset.marque),
-                                modele_id: parseInt(option.dataset.modele),
-                                percentage
-                            })
-                        });
-                        const result = await response.json();
-                        if (result.success) {
-                            await loadMatrix(option.dataset.marque, option.dataset.modele);
-                            $.alert({ title: 'Terminé !', content: result.message, type: 'green' });
-                        } else {
-                            $.alert({ title: 'Erreur', content: result.error, type: 'red' });
-                        }
-                    } catch (error) {
-                        $.alert({ title: 'Erreur', content: 'Erreur réseau', type: 'red' });
-                    } finally { hideLoading(); }
-                },
-                cancel: () => {}
-            }
-        });
+    // ===================== Percentage Modal =====================
+    const percentageModal = document.getElementById('percentage-modal');
+    const pctIntervalsContainer = document.getElementById('percentage-intervals-checkboxes');
+    const pctMonthsContainer = document.getElementById('percentage-months-checkboxes');
+    const pctModalInput = document.getElementById('percentage-modal-input');
+    const btnPctConfirm = document.getElementById('btn-percentage-confirm');
+
+    function openPercentageModal() {
+        populateIntervalCheckboxes();
+        populateMonthCheckboxes();
+        pctModalInput.value = '';
+        percentageModal.classList.add('show');
+        setTimeout(() => pctModalInput.focus(), 100);
     }
+
+    function closePercentageModal() {
+        percentageModal.classList.remove('show');
+    }
+
+    function populateIntervalCheckboxes() {
+        if (!intervals || intervals.length === 0) return;
+        let html = '';
+        intervals.forEach(interval => {
+            html += `<label style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:var(--v2-gray-50);border-radius:6px;font-size:13px;cursor:pointer;border:1px solid var(--v2-gray-200);">
+                <input type="checkbox" class="pct-interval-cb" value="${interval.id}" checked style="margin:0;">
+                ${interval.display_label}
+            </label>`;
+        });
+        pctIntervalsContainer.innerHTML = html;
+    }
+
+    function populateMonthCheckboxes() {
+        let html = '';
+        months.forEach(month => {
+            html += `<label style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:var(--v2-gray-50);border-radius:6px;font-size:13px;cursor:pointer;border:1px solid var(--v2-gray-200);">
+                <input type="checkbox" class="pct-month-cb" value="${month}" checked style="margin:0;">
+                ${month.substring(0, 3)}
+            </label>`;
+        });
+        pctMonthsContainer.innerHTML = html;
+    }
+
+    function setAllIntervalCheckboxes(checked) {
+        pctIntervalsContainer.querySelectorAll('.pct-interval-cb').forEach(cb => { cb.checked = checked; });
+    }
+
+    function setAllMonthCheckboxes(checked) {
+        pctMonthsContainer.querySelectorAll('.pct-month-cb').forEach(cb => { cb.checked = checked; });
+    }
+
+    function getCheckedIntervals() {
+        const ids = [];
+        pctIntervalsContainer.querySelectorAll('.pct-interval-cb:checked').forEach(cb => { ids.push(parseInt(cb.value)); });
+        return ids;
+    }
+
+    function getCheckedMonths() {
+        const names = [];
+        pctMonthsContainer.querySelectorAll('.pct-month-cb:checked').forEach(cb => { names.push(cb.value); });
+        return names;
+    }
+
+    document.getElementById('btn-apply-percentage').addEventListener('click', openPercentageModal);
+    document.getElementById('percentage-modal-close').addEventListener('click', closePercentageModal);
+    document.getElementById('percentage-modal-cancel').addEventListener('click', closePercentageModal);
+    percentageModal.addEventListener('click', (e) => {
+        if (e.target === percentageModal) closePercentageModal();
+    });
+    document.getElementById('pct-select-all-intervals').addEventListener('click', () => setAllIntervalCheckboxes(true));
+    document.getElementById('pct-deselect-all-intervals').addEventListener('click', () => setAllIntervalCheckboxes(false));
+    document.getElementById('pct-select-all-months').addEventListener('click', () => setAllMonthCheckboxes(true));
+    document.getElementById('pct-deselect-all-months').addEventListener('click', () => setAllMonthCheckboxes(false));
+
+    btnPctConfirm.addEventListener('click', async () => {
+        const percentage = parseFloat(pctModalInput.value);
+        if (isNaN(percentage)) {
+            $.alert({ title: 'Invalide', content: 'Entrez un pourcentage valide', type: 'orange' });
+            return;
+        }
+        const intervalIds = getCheckedIntervals();
+        const targetMonths = getCheckedMonths();
+        if (intervalIds.length === 0) {
+            $.alert({ title: 'Aucune période', content: 'Sélectionnez au moins une période (intervalle de jours).', type: 'orange' });
+            return;
+        }
+        if (targetMonths.length === 0) {
+            $.alert({ title: 'Aucun mois', content: 'Sélectionnez au moins un mois.', type: 'orange' });
+            return;
+        }
+        
+        closePercentageModal();
+        showLoading();
+        const option = vehicleSelect.options[vehicleSelect.selectedIndex];
+        try {
+            const body = {
+                marque_id: parseInt(option.dataset.marque),
+                modele_id: parseInt(option.dataset.modele),
+                percentage,
+                intervals_ids: intervalIds,
+                months: targetMonths
+            };
+            const response = await fetch('/api/tarifs-v2/apply-percentage', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            const result = await response.json();
+            if (result.success) {
+                await loadMatrix(option.dataset.marque, option.dataset.modele);
+                $.alert({ title: 'Terminé !', content: result.message, type: 'green' });
+            } else {
+                $.alert({ title: 'Erreur', content: result.error, type: 'red' });
+            }
+        } catch (error) {
+            $.alert({ title: 'Erreur', content: 'Erreur réseau', type: 'red' });
+        } finally {
+            hideLoading();
+        }
+    });
 
     async function copyFromVehicle(sourceMarqueId, sourceModeleId) {
         const option = vehicleSelect.options[vehicleSelect.selectedIndex];

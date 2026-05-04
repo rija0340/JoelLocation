@@ -240,19 +240,41 @@ class TarifsV2MatrixService
     }
 
     /**
-     * Apply percentage change to all prices for a vehicle
+     * Apply percentage change to prices for a vehicle, optionally filtered by intervals and months.
+     *
+     * @param int[]|null $intervalIds If provided, only cells matching these interval IDs are affected
+     * @param string[]|null $targetMonths If provided, only cells matching these month names are affected
      */
     public function applyPercentageChange(
         Marque $marque, 
         Modele $modele, 
         float $percentage, 
         User $user, 
-        ?string $ipAddress = null
+        ?string $ipAddress = null,
+        ?array $intervalIds = null,
+        ?array $targetMonths = null
     ): array {
         $changes = [];
         $cells = $this->cellRepo->findByVehicle($marque, $modele);
         
+        // Build interval label list for logging when filtering
+        $filteredIntervalLabels = [];
+        
         foreach ($cells as $cell) {
+            // Filter by interval IDs if provided
+            if ($intervalIds !== null && !empty($intervalIds)) {
+                if (!in_array($cell->getPricingInterval()->getId(), $intervalIds)) {
+                    continue;
+                }
+            }
+            
+            // Filter by months if provided
+            if ($targetMonths !== null && !empty($targetMonths)) {
+                if (!in_array($cell->getMonth(), $targetMonths)) {
+                    continue;
+                }
+            }
+            
             $currentPrice = (float) $cell->getPrice();
             $newPrice = $currentPrice * (1 + $percentage / 100);
             
@@ -267,11 +289,33 @@ class TarifsV2MatrixService
         
         $results = $this->saveCells($changes, $user, $ipAddress);
         
-        // Log bulk operation
+        // Build detailed log message
         if (count($changes) > 0) {
             $vehicleName = $marque->getLibelle() . ' ' . $modele->getLibelle();
+            
+            $logMessage = "Apply {$percentage}% change";
+            
+            // Add interval filter info to log
+            if ($intervalIds !== null && !empty($intervalIds)) {
+                $intervalLabels = [];
+                foreach ($intervalIds as $id) {
+                    $interval = $this->intervalRepo->find($id);
+                    if ($interval) {
+                        $intervalLabels[] = $interval->getLabel();
+                    }
+                }
+                if (!empty($intervalLabels)) {
+                    $logMessage .= " sur " . implode(', ', $intervalLabels);
+                }
+            }
+            
+            // Add month filter info to log
+            if ($targetMonths !== null && !empty($targetMonths)) {
+                $logMessage .= " pour " . implode(', ', $targetMonths);
+            }
+            
             $this->historyLogger->logBulkOperation(
-                "Apply {$percentage}% change",
+                $logMessage,
                 $vehicleName,
                 count($changes),
                 $user,
